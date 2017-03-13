@@ -34,7 +34,9 @@ public class ChatClearMessageResponse extends MessageHandler {
                 @Override
                 public void execute(Realm realm) {
                     final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatClearMessage.getRoomId()).findFirst();
-                    realmClientCondition.setClearId(chatClearMessage.getClearId());
+                    if (realmClientCondition != null) {
+                        realmClientCondition.setClearId(chatClearMessage.getClearId());
+                    }
                 }
             });
             G.clearMessagesUtil.onChatClearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId(), chatClearMessage.getResponse());
@@ -51,7 +53,7 @@ public class ChatClearMessageResponse extends MessageHandler {
                 }
 
                 realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatClearMessage.getRoomId()).
-                    lessThan(RealmRoomMessageFields.MESSAGE_ID, chatClearMessage.getClearId()).findAll().deleteAllFromRealm();
+                        lessThan(RealmRoomMessageFields.MESSAGE_ID, chatClearMessage.getClearId()).findAll().deleteAllFromRealm();
 
 
             }

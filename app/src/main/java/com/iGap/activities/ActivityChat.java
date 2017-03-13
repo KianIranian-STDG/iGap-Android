@@ -4253,8 +4253,6 @@ public class ActivityChat extends ActivityEnhanced
                         /**
                          * get first item in view (hint : time item should be ignore)
                          */
-                        //for (AbstractMessage message : mAdapter.getAdapterItems()) {
-                        //if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
                         Object[] object = getLocalMessage(mRoomId, startFutureMessageId, gapMessageId, 10, false, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
                         topMore = (boolean) object[1];
                         ArrayList<StructMessageInfo> structMessageInfos = (ArrayList<StructMessageInfo>) object[0];
@@ -4283,31 +4281,20 @@ public class ActivityChat extends ActivityEnhanced
                             }
                         }
 
-                        //break;
-                        //}
-                        //}
                     } else if (gapMessageId > 0) {
-                        //for (AbstractMessage message : mAdapter.getAdapterItems()) {
-                        //if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
                         /**
                          * detect old messageId that should get history from server with that
+                         * (( hint : in scroll state never should get online message with messageId = 0
+                         * in some cases maybe startFutureMessageId Equal to zero , so i used from this if.))
                          */
-                        getOnlineMessage(startFutureMessageId);
-
-                        //break;
-                        //}
-                        //}
-                    } else {
-
-                        //for (AbstractMessage message : mAdapter.getAdapterItems()) {
-                        //if (message != null && message.mMessage != null && (!message.mMessage.senderID.equals("-1") || message.mMessage.messageType == LOG) && message.mMessage.messageID != null) {
-                        if (!topMore && allowGetHistory) {
+                        if (startFutureMessageId != 0) {
                             getOnlineMessage(startFutureMessageId);
                         }
-                        //break;
-                        //}
-                        //}
+                    } else {
 
+                        if (!topMore && allowGetHistory && startFutureMessageId != 0) {
+                            getOnlineMessage(startFutureMessageId);
+                        }
                     }
 
                 } else {

@@ -71,7 +71,7 @@ public class HelperLogMessage {
          */
         String finalTypeRoom;
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
+        if (realmRoom != null && realmRoom.getType() != null) {
             typeRoom = realmRoom.getType();
 
             if (typeRoom.toString().equals("CHANNEL")) {

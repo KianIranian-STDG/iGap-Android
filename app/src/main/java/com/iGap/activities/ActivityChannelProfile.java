@@ -304,7 +304,7 @@ public class ActivityChannelProfile extends ActivityEnhanced
         ViewGroup ltLink = (ViewGroup) findViewById(R.id.layout_channel_link);
         imgPupupMenul = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
         txtDescription = (TextView) findViewById(R.id.txt_description);
-        if (role == ChannelChatRole.MEMBER) {
+        if ((role == ChannelChatRole.MEMBER) || (role == ChannelChatRole.MODERATOR)) {
             vgRootAddMember.setVisibility(View.GONE);
         }
 
