@@ -391,7 +391,7 @@ public class ActivityChat extends ActivityEnhanced
     private boolean initHash = false;
     private boolean initAttach = false;
     private boolean initEmoji = false;
-    HelperUploadFile.UpdateListener uploadUpdateListener;
+
 
 
     @Override
@@ -407,7 +407,15 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void resendMessageNeedsUpload(RealmRoomMessage message) {
                 HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(),
-                    uploadUpdateListener);
+                    new HelperUploadFile.UpdateListener() {
+                        @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                            insertItemAndUpdateAfterStartUpload(progress, struct);
+                        }
+
+                        @Override public void OnError() {
+
+                        }
+                    });
 
             }
 
@@ -514,9 +522,36 @@ public class ActivityChat extends ActivityEnhanced
         HelperNotificationAndBadge.isChatRoomNow = true;
     }
 
+    private void insertItemAndUpdateAfterStartUpload(int progress, final FileUploadStructure struct) {
+
+        if (progress == 0) {
+
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    addItemAfterStartUpload(struct);
+                }
+            });
+        } else if (progress == 100) {
+
+            String messageid = struct.messageId + "";
+            for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                AbstractMessage item = mAdapter.getAdapterItem(i);
+
+                if (item.mMessage.messageID.equals(messageid)) {
+                    if (item.mMessage.hasAttachment()) {
+                        item.mMessage.attachment.token = struct.token;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+
     private void addItemAfterStartUpload(final FileUploadStructure struct) {
 
         Log.i("ZZZ", "onUploadStarted UploadTask 5");
+
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
         if (roomMessage != null) {
@@ -534,6 +569,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         }
         realm.close();
+
     }
 
 
@@ -543,38 +579,6 @@ public class ActivityChat extends ActivityEnhanced
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
-        uploadUpdateListener = new HelperUploadFile.UpdateListener() {
-            @Override public void OnProgress(int progress, final FileUploadStructure struct) {
-                if (progress == 0) {
-
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            addItemAfterStartUpload(struct);
-                        }
-                    });
-                } else if (progress == 100) {
-
-                    String messageid = struct.messageId + "";
-                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                        AbstractMessage item = mAdapter.getAdapterItem(i);
-
-                        if (item.mMessage.messageID.equals(messageid)) {
-                            if (item.mMessage.hasAttachment()) {
-                                item.mMessage.attachment.token = struct.token;
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-
-            @Override public void OnError() {
-
-            }
-        };
-
-
 
         startPageFastInitialize();
 
@@ -3751,18 +3755,7 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
 
-                if (finalFilePath != null && finalMessageType != CONTACT) {
 
-                    HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), uploadUpdateListener);
-
-
-                } else {
-                    ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
-                    if (finalMessageType == CONTACT) {
-                        messageUtil.contact(finalMessageInfo.userInfo.firstName, finalMessageInfo.userInfo.lastName, finalMessageInfo.userInfo.phone);
-                    }
-                    messageUtil.sendMessage(Long.toString(finalMessageId));
-                }
 
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
                 if (realmRoom != null) {
@@ -3773,6 +3766,27 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         realm.close();
+
+        if (finalFilePath != null && finalMessageType != CONTACT) {
+
+            HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), new HelperUploadFile.UpdateListener() {
+                @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                    insertItemAndUpdateAfterStartUpload(progress, struct);
+                }
+
+                @Override public void OnError() {
+
+                }
+            });
+        } else {
+            ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
+            if (finalMessageType == CONTACT) {
+                messageUtil.contact(finalMessageInfo.userInfo.firstName, finalMessageInfo.userInfo.lastName, finalMessageInfo.userInfo.phone);
+            }
+            messageUtil.sendMessage(Long.toString(finalMessageId));
+        }
+
+
         if (finalMessageType == CONTACT) {
             mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo));
         }
@@ -4856,7 +4870,15 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), uploadUpdateListener);
+        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), new HelperUploadFile.UpdateListener() {
+            @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                insertItemAndUpdateAfterStartUpload(progress, struct);
+            }
+
+            @Override public void OnError() {
+
+            }
+        });
 
         StructMessageInfo messageInfo;
 
@@ -5210,12 +5232,20 @@ public class ActivityChat extends ActivityEnhanced
         //if (ll_attach_text.getVisibility() == View.VISIBLE) {
         //    //draftForFile();
         //} else {
-        final String message = edtChat.getText().toString();
+
+        String message = null;
+        try {
+            message = edtChat.getText().toString();
+        } catch (NullPointerException e) {
+        }
+
+
         if (!message.trim().isEmpty() || ((mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE))) {
 
             hasDraft = true;
 
             Realm realm = Realm.getDefaultInstance();
+            final String finalMessage = message;
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -5223,20 +5253,20 @@ public class ActivityChat extends ActivityEnhanced
                     if (realmRoom != null) {
 
                         RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
-                        draft.setMessage(message);
+                        draft.setMessage(finalMessage);
                         draft.setReplyToMessageId(replyToMessageId);
 
                         realmRoom.setDraft(draft);
 
                         if (chatType == CHAT) {
-                            new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, message, replyToMessageId);
+                            new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, finalMessage, replyToMessageId);
                         } else if (chatType == GROUP) {
-                            new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, replyToMessageId);
+                            new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, finalMessage, replyToMessageId);
                         } else if (chatType == CHANNEL) {
-                            new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, message, replyToMessageId);
+                            new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, finalMessage, replyToMessageId);
                         }
                         if (G.onDraftMessage != null) { // zamani ke mostaghim varede chat beshim bedune vorud be list room ha onDraftMessage null mishe
-                            G.onDraftMessage.onDraftMessage(mRoomId, message);
+                            G.onDraftMessage.onDraftMessage(mRoomId, finalMessage);
                         }
                     }
                 }
