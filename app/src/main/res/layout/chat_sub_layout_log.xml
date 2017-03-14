@@ -19,6 +19,7 @@
         android:gravity="center"
         android:singleLine="false"
         android:text="Today"
+        android:textColor="@color/white"
         android:textSize="@dimen/sp12"
         android:textAllCaps="false"
         />

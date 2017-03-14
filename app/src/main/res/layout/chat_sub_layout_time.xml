@@ -18,6 +18,6 @@
         android:paddingTop="@dimen/dp4"
         android:text="Today"
         android:textAllCaps="false"
-        android:textColor="@color/colorOldBlack"
+        android:textColor="@color/white"
         android:textSize="@dimen/sp12"/>
 </FrameLayout>
