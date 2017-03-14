@@ -89,7 +89,7 @@
   <string name="sending_file">درحال ارسال فایل</string>
   <string name="sending_location">درحال ارسال موقعیت</string>
   <string name="choosing_contact">درحال انتخاب مخاطب</string>
-  <string name="painting">درحال درحال نقاشی</string>
+  <string name="painting">درحال نقاشی</string>
 
   <!-- Action Box -->
   <string name="log_out">خروج</string>

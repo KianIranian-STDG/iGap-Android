@@ -4,6 +4,7 @@ import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
+import com.iGap.realm.RealmRoomFields;
 import com.iGap.request.RequestChatSetAction;
 import com.iGap.request.RequestGroupSetAction;
 import io.realm.Realm;
@@ -67,7 +68,7 @@ public class HelperSetAction {
     }
 
     /**
-     * set action for showing audience action
+     * set action for showing audience action.
      *
      * @param roomId roomId that send action from that
      * @param messageId unique number that we have in start upload and end of that
@@ -75,6 +76,26 @@ public class HelperSetAction {
      */
 
     public static void setActionFiles(long roomId, long messageId, ProtoGlobal.ClientAction action, ProtoGlobal.Room.Type chatType) {
+
+        /**
+         * if chatType not exist and can't be detected return and don't send action
+         */
+        if (chatType == null) {
+            if (roomId == 0 || messageId == 0) {
+                return;
+            }
+
+            Realm realm = Realm.getDefaultInstance();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null && realmRoom.getType() != null) {
+                chatType = realmRoom.getType();
+                realm.close();
+            } else {
+                realm.close();
+                return;
+            }
+        }
+
         if (!checkExistAction(roomId, action)) {
             int randomNumber = HelperNumerical.generateRandomNumber(8);
 

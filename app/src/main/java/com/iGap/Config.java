@@ -10,7 +10,7 @@ public class Config {
     public static final int FAKE_PM_DELAY = 10000;
     public static final int TIME_OUT_MS = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     public static final int LOOKUP_MAP_RESPONSE_OFFSET = 30000;
-    public static final int ALLOW_RECONNECT_AGAIN = (int) (15 * DateUtils.SECOND_IN_MILLIS);
+    public static final int ALLOW_RECONNECT_AGAIN = (int) (5 * DateUtils.SECOND_IN_MILLIS);
     public static final int REPEAT_CONNECTION_CHECKING = 1000;
     public static final int DEFAULT_TIME_OUT = 10000;
     public static final int INSTANCE_SUCCESSFULLY_CHECKING = 10000;
@@ -25,7 +25,7 @@ public class Config {
     public static final long LAST_SEEN_DELAY_CHECKING = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final long GROUP_SHOW_ACTIONS_COUNT = 3;
     public static final long IMAGE_CORNER = 15;
-    public static final long GET_CONTACT_LIST_TIME_OUT = (int) (20 * DateUtils.SECOND_IN_MILLIS);
+    public static final long GET_CONTACT_LIST_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final long HEART_BEAT_CHECKING_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final long UPDATING_TIME_SHOWING = (int) (5 * DateUtils.SECOND_IN_MILLIS);
     public static final long CONNECTION_OPEN_TIME_OUT = (int) (20 * DateUtils.SECOND_IN_MILLIS);
