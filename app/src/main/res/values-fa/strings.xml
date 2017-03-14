@@ -753,16 +753,16 @@
 
   <string name="Toast_time_wait">لطفا منتظر بمانید تا :</string>
   <string name="array_delete_photo_group">حذف عکس</string>
-  <string name="group_link_hint_revoke">Group Invite Link</string>
-  <string name="channel_title_convert_to_private">Convert channel to private</string>
-  <string name="channel_text_convert_to_private">Do you want Convert channel to private?</string>
-  <string name="channel_title_convert_to_public">Convert channel to public</string>
-  <string name="channel_text_convert_to_public">Do you want Convert channel to public?</string>
+  <string name="group_link_hint_revoke">لینک دعوت گروه</string>
+  <string name="channel_title_convert_to_private">تبدیل به کانال خصوصی</string>
+  <string name="channel_text_convert_to_private">آیا می خواهید این گروه را به خصوصی تبدیل کنید?</string>
+  <string name="channel_title_convert_to_public">تبدیل به کانال خصوصی</string>
+  <string name="channel_text_convert_to_public">آیا می خواهید این کانال را به عمومی تبدیل کنید?</string>
   <string name="channel_title_channel_set_username">تخصیص لینک عمومی کانال</string>
-  <string name="group_title_convert_to_private">Convert group to private</string>
-  <string name="group_text_convert_to_private">Do you want Convert group to private?</string>
+  <string name="group_title_convert_to_private">تبدیل به گروه خصوصی</string>
+  <string name="group_text_convert_to_private">آیا می خواهید این گروه را به خصوصی تبدیل کنید?</string>
   <string name="group_title_convert_to_public">تبدیل به گروه عمومی</string>
-  <string name="group_text_convert_to_public">Do you want Convert group to public?</string>
+  <string name="group_text_convert_to_public">آیا می خواهید این گروه را به عمومی تبدیل کنید?</string>
   <string name="group_title_set_username">تخصیص نام کاربری</string>
   <string name="permission_storage">Storage</string>
   <string name="you_have_to_get_storage_permision_for_continue">you have to get storage permision for continue</string>

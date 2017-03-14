@@ -309,7 +309,7 @@ public class WebSocketClient {
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - beforeTime);
 
-        if (difference >= Config.ALLOW_RECONNECT_AGAIN) {
+        if (difference >= Config.ALLOW_RECONNECT_AGAIN_NORMAL) {
             return true;
         }
 
