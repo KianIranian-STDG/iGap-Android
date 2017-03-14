@@ -23,6 +23,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -50,6 +51,7 @@ import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
 import com.iGap.helper.HelperUploadFile;
+import com.iGap.helper.HelperUrl;
 import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
@@ -493,7 +495,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         });
 
         if (description != null && !description.isEmpty()) {
-            txtDescription.setText(description);
+            txtDescription.setText(HelperUrl.setUrlLink(description, true, false, null, true));
+            txtDescription.setMovementMethod(LinkMovementMethod.getInstance());
         }
         txtChannelName.setText(title);
         txtChannelNameInfo.setText(title);
