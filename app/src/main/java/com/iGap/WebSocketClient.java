@@ -59,7 +59,11 @@ public class WebSocketClient {
                         G.socketConnection = true;
                         HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                         checkFirstResponse();
+
+                        //   HelperUploadFile.addItemFromQueue();
+
                     }
+
                     super.onConnected(websocket, headers);
                 }
 

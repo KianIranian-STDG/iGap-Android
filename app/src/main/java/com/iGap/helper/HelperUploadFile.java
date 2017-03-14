@@ -47,7 +47,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
     public static OnFileUpload onFileUpload;
     public static OnFileUploadStatusResponse onFileUploadStatusResponse;
 
-    private static int uploadingMaxsize = 3;
+    private static int uploadingMaxsize = 1;
     private static Queue<StructUpload> myQueue = new LinkedList<StructUpload>();
 
     public interface UpdateListener {
@@ -89,7 +89,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
             structUpload.chatType = chatType;
             structUpload.identity = identity;
 
-            if (FromChat && list.size() > uploadingMaxsize) {
+            if (FromChat && list.size() >= uploadingMaxsize) {
                 myQueue.add(structUpload);
                 list.put(identity, structUpload);
             } else {
@@ -369,7 +369,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
 
     //*******************************************************************************************************************
 
-    private static void addItemFromQueue() {
+    public static void addItemFromQueue() {
 
         if (myQueue.size() > 0) {
             StructUpload sp = myQueue.poll();

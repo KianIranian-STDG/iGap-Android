@@ -71,7 +71,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
-    public boolean isUploadTimout = false;
+
 
     public ProtoGlobal.Room.Type type;
 
@@ -981,8 +981,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (HelperUploadFile.isUploading(mMessage.messageID)) {
 
-            if (isUploadTimout) {
-
+            if (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                 if (G.userLogin) {
                     HelperUploadFile.reUpload(mMessage.messageID);
 
@@ -991,7 +990,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
                     contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
                     contentLoading.setVisibility(View.VISIBLE);
-                    isUploadTimout = false;
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
                 }
@@ -1238,8 +1236,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                         ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(0);
                         ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.upload, true);
-                        isUploadTimout = true;
+
                         contentLoading.setVisibility(View.GONE);
+
+                        mMessage.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
                     }
                 });
 
@@ -1274,7 +1274,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         progressBar.withDrawable(R.drawable.upload, true);
         contentLoading.setVisibility(View.GONE);
 
-        isUploadTimout = true;
     }
 
     private void hideThumbnailIf(VH holder) {
