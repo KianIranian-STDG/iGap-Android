@@ -498,7 +498,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                             bundle.putString("INVITE_LINK", inviteLink);
                             bundle.putString("TOKEN", token);
                             fragmentCreateChannel.setArguments(bundle);
-                            getActivity().getSupportFragmentManager().beginTransaction()
+                            mActivity.getSupportFragmentManager().beginTransaction()
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                                 .replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment")
                                 .commitAllowingStateLoss();
