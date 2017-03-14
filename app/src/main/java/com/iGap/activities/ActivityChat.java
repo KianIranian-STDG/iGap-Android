@@ -4638,9 +4638,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    // so update the message status ina adapter
-                    mAdapter.updateMessageStatus(messageId, status);
-                    Log.i(ActivityChat.class.getSimpleName(), status.toString());
+                    if (mAdapter != null) {
+                        mAdapter.updateMessageStatus(messageId, status);
+                    }
+
                 }
             });
         }
