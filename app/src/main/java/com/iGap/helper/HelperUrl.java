@@ -343,8 +343,7 @@ public class HelperUrl {
 
             if (isHash) {
                 if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
-
-                    insertHashLink(tmp, builder, start, messageID);
+                    if (tmp.length() > 0) insertHashLink(tmp, builder, start, messageID);
 
                     tmp = "";
                     isHash = false;
@@ -355,7 +354,7 @@ public class HelperUrl {
         }
 
         if (isHash) {
-            if (!tmp.equals("")) insertHashLink(tmp, builder, start, messageID);
+            if (tmp.length() > 0) insertHashLink(tmp, builder, start, messageID);
         }
 
         return builder;
@@ -412,8 +411,7 @@ public class HelperUrl {
                     //    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
                     //    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
                     //    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
-
-                    insertAtSignLink(tmp, builder, start);
+                    if (tmp.length() > 0) insertAtSignLink(tmp, builder, start);
 
                     tmp = "";
                     isAtSign = false;
@@ -424,7 +422,7 @@ public class HelperUrl {
         }
 
         if (isAtSign) {
-            if (!tmp.equals("")) insertAtSignLink(tmp, builder, start);
+            if (tmp.length() > 0) insertAtSignLink(tmp, builder, start);
         }
 
         return builder;
@@ -497,17 +495,22 @@ public class HelperUrl {
                     message = info[3];
                 }
 
-                if (type.equals("hash")) {
-                    insertHashLink(message, strBuilder, start, messageID);
-                } else if (type.equals("atSighn")) {
-                    insertAtSignLink(message, strBuilder, start);
-                } else if (type.equals("igapLink")) {
-                    insertIgapLink(strBuilder, start, end);
-                } else if (type.equals("igapResolve")) {
-                    insertIgapResolveLink(strBuilder, start, end);
-                } else if (type.equals("webLink")) {
-                    insertLinkSpan(strBuilder, start, end, true);
+                try {
+                    if (type.equals("hash")) {
+                        insertHashLink(message, strBuilder, start, messageID);
+                    } else if (type.equals("atSighn")) {
+                        insertAtSignLink(message, strBuilder, start);
+                    } else if (type.equals("igapLink")) {
+                        insertIgapLink(strBuilder, start, end);
+                    } else if (type.equals("igapResolve")) {
+                        insertIgapResolveLink(strBuilder, start, end);
+                    } else if (type.equals("webLink")) {
+                        insertLinkSpan(strBuilder, start, end, true);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+
                 }
+
             }
         }
 
@@ -573,7 +576,7 @@ public class HelperUrl {
             if (isAtSign) {
                 if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
 
-                    result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
+                    if (tmp.length() > 0) result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
 
                     tmp = "";
                     isAtSign = false;
@@ -584,7 +587,9 @@ public class HelperUrl {
         }
 
         if (isAtSign) {
-            if (!tmp.equals("")) result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
+            if (tmp.length() > 0) {
+                result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
+            }
         }
 
         return result;
@@ -613,8 +618,7 @@ public class HelperUrl {
 
             if (isHash) {
                 if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
-
-                    result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
+                    if (tmp.length() > 0) result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
 
                     tmp = "";
                     isHash = false;
@@ -625,7 +629,7 @@ public class HelperUrl {
         }
 
         if (isHash) {
-            result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
+            if (tmp.length() > 0) result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
         }
 
         return result;

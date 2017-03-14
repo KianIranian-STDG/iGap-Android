@@ -2,8 +2,6 @@ package com.iGap.module;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.TextView;
 import com.iGap.G;
@@ -29,8 +27,4 @@ public class HeaderTextview extends TextView {
         this.setTextColor(Color.parseColor(G.headerTextColor));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) public HeaderTextview(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        this.setTextColor(Color.parseColor(G.headerTextColor));
-    }
 }

@@ -1565,30 +1565,34 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ltSentByEnter = (TextView) findViewById(R.id.st_txt_sendEnter);
         toggleSentByEnter = (ToggleButton) findViewById(R.id.st_toggle_sendEnter);
-        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 1);
+        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
         if (checkedSendByEnter == 1) {
             toggleSentByEnter.setChecked(true);
         } else {
             toggleSentByEnter.setChecked(false);
         }
 
-        ltSentByEnter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        toggleSentByEnter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (toggleSentByEnter.isChecked()) {
-
-                    toggleSentByEnter.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
-                    editor.apply();
-                } else {
-                    toggleSentByEnter.setChecked(true);
+                if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 1);
                     editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
+                    editor.apply();
                 }
+            }
+        });
+
+        ltSentByEnter.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                toggleSentByEnter.setChecked(!toggleSentByEnter.isChecked());
+
             }
         });
 

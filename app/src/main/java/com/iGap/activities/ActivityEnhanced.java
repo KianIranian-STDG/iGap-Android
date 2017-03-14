@@ -34,16 +34,13 @@ public class ActivityEnhanced extends AppCompatActivity {
     }
 
     public void onCreate(Bundle savedInstanceState) {
-
+        checkLanguage(this);
         super.onCreate(savedInstanceState);
+
         HelperSetStatusBarColor.setColor(this);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-
-        checkLanguage(this);
-
-
     }
 
     @Override
