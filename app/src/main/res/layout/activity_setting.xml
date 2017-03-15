@@ -767,6 +767,47 @@
             android:background="@color/background_editText"
             />
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp52"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            >
+
+          <TextView
+              android:id="@+id/as_txt_show_vote"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1"
+              android:gravity="center_vertical"
+              android:text="@string/show_vote_layout_in_channel"
+              android:textColor="@color/black_register"
+              android:textSize="@dimen/sp15"
+              android:textStyle="normal"
+              />
+
+          <ToggleButton
+              android:id="@+id/as_toggle_show_vote"
+              android:layout_width="@dimen/dp44"
+              android:layout_height="@dimen/dp40"
+              android:background="@drawable/st_switch_button"
+              android:textOff=""
+              android:textOn=""
+              />
+
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background_editText"
+            />
+
+
         <TextView
             android:id="@+id/st_txt_chatBackground"
             android:layout_width="match_parent"

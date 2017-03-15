@@ -304,7 +304,7 @@ public class FragmentShowMember extends Fragment {
                     mList = memberList.where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll();
                 }
 
-                if (mList.size() > 0) {
+                if (mList.size() > 0 && getActivity() != null) {
                     mAdapter = new MemberAdapter(getActivity(), mList, realmRoom.getType(), mMainRole, userID);
                     mRecyclerView.setAdapter(mAdapter);
                 }

@@ -804,4 +804,5 @@
   <string name="there_is_no_connection_to_server">There Is No Connection To Server</string>
   <string name="empty_room">No Message yet</string>
   <string name="show_member">Show Members List</string>
+  <string name="show_vote_layout_in_channel">show vote layout in channel</string>
 </resources>

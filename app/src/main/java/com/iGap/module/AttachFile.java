@@ -132,6 +132,9 @@ public class AttachFile {
     }
 
     public static String getFilePathFromUri(Uri uri) {
+
+        if (uri == null) return null;
+
         String path;
 
         if (uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {

@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activities.ActivityChat;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperDownloadFile;
@@ -292,13 +293,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (holder.itemView.findViewById(R.id.lyt_vote) != null) {
             holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.GONE);
         }
-        if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
-            showVote(holder);
-        } else {
-            if (mMessage.forwardedFrom != null) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
-                if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                    showVote(holder);
+
+        if (ActivityChat.showVoteChannelLayout) {
+
+            if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
+                showVote(holder);
+            } else {
+                if (mMessage.forwardedFrom != null) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
+                    if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                        showVote(holder);
+                    }
                 }
             }
         }

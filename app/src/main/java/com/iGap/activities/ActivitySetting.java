@@ -1316,6 +1316,39 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        //toggle vote channel
+
+        final TextView txtVote = (TextView) findViewById(R.id.as_txt_show_vote);
+        final ToggleButton toggleVote = (ToggleButton) findViewById(R.id.as_toggle_show_vote);
+
+        int checkedEnableVote = sharedPreferences.getInt(SHP_SETTING.KEY_VOTE, 1);
+        if (checkedEnableVote == 1) {
+            toggleVote.setChecked(true);
+        } else {
+            toggleVote.setChecked(false);
+        }
+
+        toggleVote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (isChecked) {
+                    editor.putInt(SHP_SETTING.KEY_VOTE, 1);
+                    editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_VOTE, 0);
+                    editor.apply();
+                }
+            }
+        });
+
+        txtVote.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                toggleVote.setChecked(!toggleVote.isChecked());
+            }
+        });
+
 
         TextView txtPrivacySecurity = (TextView) findViewById(R.id.st_txt_privacySecurity);
         txtPrivacySecurity.setOnClickListener(new View.OnClickListener() {

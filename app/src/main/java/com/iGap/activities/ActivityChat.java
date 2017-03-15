@@ -389,6 +389,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private boolean initHash = false;
     private boolean initAttach = false;
     private boolean initEmoji = false;
+    public static boolean showVoteChannelLayout = true;
 
 
 
@@ -1074,6 +1075,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
         sendByEnter = checkedSendByEnter == 1;
+
+        int checkedEnableVote = sharedPreferences.getInt(SHP_SETTING.KEY_VOTE, 1);
+        showVoteChannelLayout = checkedEnableVote == 1;
 
         /**
          * set background
@@ -3303,7 +3307,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 if (listPathString == null || listPathString.size() < 1) {
                     listPathString = new ArrayList<>();
-                    listPathString.add(getFilePathFromUri(data.getData()));
+
+                    if (data.getData() != null) listPathString.add(getFilePathFromUri(data.getData()));
                 }
             }
             latestRequestCode = requestCode;
@@ -3522,6 +3527,21 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
 
     private void sendMessage(int requestCode, String filePath) {
+
+        if (filePath == null || filePath.length() == 0) {
+
+            if (mReplayLayout != null && userTriesReplay()) {
+                mReplayLayout.setTag(null);
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        mReplayLayout.setVisibility(View.GONE);
+                    }
+                });
+            }
+
+            return;
+        }
+
         Realm realm = Realm.getDefaultInstance();
         long messageId = SUID.id().get();
         final long updateTime = TimeUtils.currentLocalTime();
@@ -3972,20 +3992,24 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     public void run() {
 
                         for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
-                            if (messageID.mMessage != null && messageID.mMessage.messageID != null) {
-                                Long messageId = parseLong(messageID.mMessage.messageID);
-                                list.add(messageId);
+                            try {
+                                if (messageID != null && messageID.mMessage != null && messageID.mMessage.messageID != null) {
+                                    Long messageId = parseLong(messageID.mMessage.messageID);
+                                    list.add(messageId);
 
-                                // remove deleted message from adapter
-                                mAdapter.removeMessage(messageId);
+                                    // remove deleted message from adapter
+                                    mAdapter.removeMessage(messageId);
 
-                                // remove tag from edtChat if the message has deleted
-                                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                    if (messageID.mMessage.messageID.equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                        edtChat.setTag(null);
+                                    // remove tag from edtChat if the message has deleted
+                                    if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                        if (messageID.mMessage.messageID.equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                            edtChat.setTag(null);
+                                        }
                                     }
                                 }
+                            } catch (NullPointerException E) {
                             }
+
                         }
                     }
                 });
