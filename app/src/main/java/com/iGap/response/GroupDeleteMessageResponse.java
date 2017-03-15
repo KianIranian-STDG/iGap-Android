@@ -57,11 +57,9 @@ public class GroupDeleteMessageResponse extends MessageHandler {
                         }
                     }
                 }
-                G.onChatDeleteMessageResponse.onChatDeleteMessage(groupDeleteMessage.getDeleteVersion()
-                        , groupDeleteMessage.getMessageId(), groupDeleteMessage.getRoomId(), groupDeleteMessage.getResponse());
-
-
-
+                if (G.onChatDeleteMessageResponse != null) {
+                    G.onChatDeleteMessageResponse.onChatDeleteMessage(groupDeleteMessage.getDeleteVersion(), groupDeleteMessage.getMessageId(), groupDeleteMessage.getRoomId(), groupDeleteMessage.getResponse());
+                }
             }
         });
         realm.close();

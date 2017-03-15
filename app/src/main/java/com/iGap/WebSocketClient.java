@@ -14,6 +14,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.neovisionaries.ws.client.WebSocketState;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,15 @@ public class WebSocketClient {
     private static long latestConnectionTryTiming;
     private static WebSocketState connectionState;
     private static long latestConnectionOpenTime = 0;
+    private static int allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MINIMUM;
+    private static int reconnectCount;
+    private static int reconnectQueueLimitation; // this value not allowed to call reconnect method so much
+    private static ArrayList<WebSocket> webSocketArrayList = new ArrayList<>();
+    private static boolean topPermission = true;
+
+    private enum ReconnectState {
+        MINIMUM, MAXIMUM, NORMAL
+    }
 
     /**
      * add webSocketConnection listeners and try for connect
@@ -56,12 +66,13 @@ public class WebSocketClient {
                             webSocketClient.disconnect();
                         }
                     } else {
+                        reconnectCount = 0;
+                        reconnectQueueLimitation = 0;
                         G.socketConnection = true;
                         HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                         checkFirstResponse();
 
-                        //   HelperUploadFile.addItemFromQueue();
-
+                        //HelperUploadFile.addItemFromQueue();
                     }
 
                     super.onConnected(websocket, headers);
@@ -76,7 +87,6 @@ public class WebSocketClient {
                 @Override
                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                     Log.i("SOC_WebSocket", "onError");
-                    Log.i("reconnect", "1");
                     reconnect(true);
                     super.onError(websocket, cause);
                 }
@@ -128,7 +138,6 @@ public class WebSocketClient {
                     Log.i("SOC_WebSocket", "closedByServer : " + closedByServer);
                     allowForReconnecting = true;
                     G.socketConnection = false;
-                    Log.i("reconnect", "2");
                     reconnect(true);
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                 }
@@ -136,7 +145,6 @@ public class WebSocketClient {
                 @Override
                 public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                     Log.i("SOC_WebSocket_XXX", "onConnectError");
-                    Log.i("reconnect", "3");
                     reconnect(true);
                     super.onConnectError(websocket, exception);
                 }
@@ -151,7 +159,6 @@ public class WebSocketClient {
                 if (G.allowForConnect) {
                     try {
                         if (finalWs != null) {
-                            //if (timeDifference(latestConnectionTryTiming)) {
                             Log.i("SOC_WebSocket", "Connecting");
                             /**
                              * in first make connection client should set latestConnectionTryTiming time
@@ -160,7 +167,6 @@ public class WebSocketClient {
                             latestConnectionTryTiming = System.currentTimeMillis();
                             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
                             finalWs.connect();
-                            //}
                         }
                     } catch (WebSocketException e) {
                         e.printStackTrace();
@@ -180,24 +186,42 @@ public class WebSocketClient {
      */
 
     public static WebSocket getInstance() {
-
-        Log.e("DDD", "webSocketClient : " + webSocketClient);
-        if (webSocketClient != null) {
-            Log.e("DDD", "webSocketClient.isOpen() : " + webSocketClient.isOpen());
-        }
-        Log.e("DDD", "waitingForReconnecting : " + waitingForReconnecting);
-
         if (!waitingForReconnecting && (webSocketClient == null || !webSocketClient.isOpen())) {
-            Log.e("DDD", "getInstance create new");
             waitingForReconnecting = true;
             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
             checkGetInstanceSuccessfully();
+            //clearAllPreviousConnection();
             return webSocketClient = createSocketConnection();
         } else {
-            Log.e("DDD", "getInstance return old");
             return webSocketClient;
         }
     }
+
+    /**
+     * close and clear all before connection. i used this trick for avoid from duplicate connection.
+     */
+    private static void clearAllPreviousConnection() {
+        topPermission = false;
+        for (int i = 0; i < webSocketArrayList.size(); i++) {
+            if (webSocketArrayList.get(i) != null) {
+                webSocketArrayList.get(i).disconnect();
+                webSocketArrayList.set(i, null);
+            }
+        }
+        /**
+         * after this time(2000) set topPermission = true for allow reconnect.
+         * i used from this time because maybe disconnect was async and before
+         * call disconnect in this loop i set this value true and in this state
+         * my connection will be lost
+         */
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                topPermission = true;
+            }
+        }, 2000);
+    }
+
 
     /**
      * check current state of socket for insuring that
@@ -211,7 +235,6 @@ public class WebSocketClient {
             @Override
             public void run() {
                 if (webSocketClient == null || !webSocketClient.isOpen()) {
-                    Log.i("reconnect", "4");
                     reconnect(false);
                 }
             }
@@ -228,11 +251,29 @@ public class WebSocketClient {
 
     public static void reconnect(boolean force) {
 
-        if (force || (webSocketClient == null || !webSocketClient.isOpen())) {
+        if (topPermission && (force || (webSocketClient == null || !webSocketClient.isOpen()))) {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+
+                    //new connection start
+                    if (reconnectCount < 10) {
+                        allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MINIMUM;
+                    } else if (reconnectCount < 20) {
+                        allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_NORMAL;
+                    } else {
+                        allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MAXIMUM;
+                    }
+                    //new connection end
+
                     if (timeDifference(latestConnectionTryTiming) && connectionState != WebSocketState.CONNECTING && (connectionState != WebSocketState.OPEN || (HelperTimeOut.timeoutChecking(0, latestConnectionOpenTime, Config.CONNECTION_OPEN_TIME_OUT)))) {
+                        //new connection start
+                        reconnectCount++;
+                        if (reconnectQueueLimitation > 0) {
+                            reconnectQueueLimitation--;
+                        }
+                        //new connection end
+
                         HelperSetAction.clearAllActions();
                         Log.e("DDD", "reconnect 1");
                         if (allowForReconnecting) {
@@ -245,15 +286,23 @@ public class WebSocketClient {
                                 waitingForReconnecting = false;
                                 resetWebsocketInfo();
                                 WebSocketClient.getInstance();
-                                //checkSocketConnection();
+                                checkSocketConnection();
                             }
                         }
                     } else {
-                        Log.e("DDD", "try for connect");
-                        allowForReconnecting = true;
-                        waitingForReconnecting = false;
-                        Log.i("reconnect", "5");
-                        reconnect(false);
+                        //new connection start
+                        if (reconnectQueueLimitation < Config.TRY_CONNECTION_COUNT) {
+                            reconnectQueueLimitation++;
+                            //new connection end
+                            Log.i("DDD", "try for connect");
+                            allowForReconnecting = true;
+                            waitingForReconnecting = false;
+                            reconnect(false);
+                        } else {
+                            reconnectQueueLimitation--;
+                            Log.i("DDD", "queue is complete now! " + reconnectQueueLimitation);
+                        }
+
                     }
                 }
             }, Config.REPEAT_CONNECTION_CHECKING);
@@ -309,7 +358,7 @@ public class WebSocketClient {
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - beforeTime);
 
-        if (difference >= Config.ALLOW_RECONNECT_AGAIN_NORMAL) {
+        if (difference >= allowReconnectAgain) {
             return true;
         }
 
@@ -393,11 +442,11 @@ public class WebSocketClient {
                             }
                         });
                     } else {
-                        /*G.allowForConnect = false;
+                        G.allowForConnect = false;
                         WebSocket webSocket = WebSocketClient.getInstance();
                         if (webSocket != null) {
                             webSocket.disconnect();
-                        }*/
+                        }
                         //TODO [Saeed Mozaffari] [2016-09-06 12:31 PM] - go to upgrade page
                     }
                 }

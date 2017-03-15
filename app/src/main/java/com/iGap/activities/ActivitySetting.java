@@ -1896,7 +1896,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 //                Uri uri =  Uri.parse( "https://www.igap.net/en/" );
                 //                mCustomTabsHelperFragment.mayLaunchUrl(uri, null, null);
 
-                openBrowser("https://www.igap.net/en/");
+                openBrowser("https://www.igap.net/");
 
             }
         });
