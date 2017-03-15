@@ -48,7 +48,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -301,7 +300,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private TextView btnUpHash;
     private TextView btnDownHash;
     private TextView txtHashCounter;
-    private Button btnHashLayoutClose;
+    private MaterialDesignTextView btnHashLayoutClose;
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
     private ProtoGlobal.Room.Type chatType;
@@ -2686,9 +2685,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         btnDownHash = (TextView) findViewById(R.id.ac_btn_hash_down);
         txtHashCounter = (TextView) findViewById(R.id.ac_txt_hash_counter);
 
+        btnUpHash.setTextColor(Color.parseColor(G.appBarColor));
+        btnDownHash.setTextColor(Color.parseColor(G.appBarColor));
+        txtHashCounter.setTextColor(Color.parseColor(G.appBarColor));
+
+
         searchHash = new SearchHash();
 
-        btnHashLayoutClose = (Button) findViewById(R.id.ac_btn_hash_close);
+        btnHashLayoutClose = (MaterialDesignTextView) findViewById(R.id.ac_btn_hash_close);
+        btnHashLayoutClose.setTextColor(Color.parseColor(G.appBarColor));
         btnHashLayoutClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

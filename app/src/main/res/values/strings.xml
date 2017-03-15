@@ -805,4 +805,5 @@
   <string name="empty_room">No Message yet</string>
   <string name="show_member">Show Members List</string>
   <string name="show_vote_layout_in_channel">show vote layout in channel</string>
+  <string name="close">close</string>
 </resources>

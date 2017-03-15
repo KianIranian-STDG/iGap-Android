@@ -806,6 +806,7 @@
   <string name="empty_room">هنوز پیامی ندارید</string>
   <string name="show_member">نمایش اعضا</string>
   <string name="show_vote_layout_in_channel">نمایش لایه ثبت رای در کانال</string>
+  <string name="close">بستن</string>
 
 
 </resources>
