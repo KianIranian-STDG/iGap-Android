@@ -15,9 +15,9 @@
       android:layout_height="@dimen/dp60"
       android:background="@color/toolbar_background"
       android:layoutDirection="ltr"
+      android:padding="0dp"
       app:contentInsetLeft="0dp"
       app:contentInsetStart="0dp"
-      android:padding="0dp"
 
       >
 
@@ -962,11 +962,11 @@
             android:id="@+id/stns_txt_title_keep_alive_service"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/st_keep_alive_service"
             android:paddingEnd="@dimen/dp16"
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingStart="@dimen/dp16"
+            android:text="@string/st_keep_alive_service"
             android:textColor="@color/black_register"
             android:textSize="@dimen/sp16"
             android:textStyle="normal"
@@ -989,8 +989,8 @@
           <TextView
               android:id="@+id/stns_txt_keep_alive_service"
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="wrap_content"
+              android:layout_weight="1"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_text_keep_alive_service"
               android:textColor="@color/cardview_dark_background"

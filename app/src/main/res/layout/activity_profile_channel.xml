@@ -468,7 +468,7 @@
               android:textSize="@dimen/sp18"
               android:textStyle="bold"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
-              tools:ignore="MissingPrefix"
+
               />
 
           <LinearLayout

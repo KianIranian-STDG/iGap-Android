@@ -34,10 +34,10 @@
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp60"
           android:layoutDirection="ltr"
+          android:padding="0dp"
           app:contentInsetLeft="0dp"
           app:contentInsetStart="0dp"
           app:layout_collapseMode="pin"
-          android:padding="0dp"
           >
 
         <RelativeLayout
@@ -196,8 +196,8 @@
             android:gravity="center"
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
-            android:textColor="@color/green"
             android:text="@string/st_Info"
+            android:textColor="@color/green"
             android:textSize="@dimen/sp18"
             android:textStyle="bold"
             fontPath="fonts/IRANSansMobile_Bold.ttf"
@@ -480,8 +480,8 @@
 
           <TextView
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="match_parent"
+              android:layout_weight="1"
               android:gravity="center_vertical"
               android:paddingEnd="@dimen/dp16"
               android:paddingStart="@dimen/dp16"
@@ -529,8 +529,8 @@
           <TextView
               android:id="@+id/st_txt_st_toggle_dataShams"
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="match_parent"
+              android:layout_weight="1"
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_data_shams"
@@ -563,14 +563,14 @@
         <LinearLayout
             android:id="@+id/st_layout_clearCache"
             android:layout_width="match_parent"
-            android:orientation="horizontal"
             android:layout_height="@dimen/dp48"
+            android:orientation="horizontal"
             >
 
           <TextView
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="match_parent"
+              android:layout_weight="1"
               android:gravity="center_vertical"
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
@@ -685,14 +685,14 @@
         <LinearLayout
             android:id="@+id/st_layout_messageTextSize"
             android:layout_width="match_parent"
-            android:orientation="horizontal"
             android:layout_height="@dimen/dp48"
+            android:orientation="horizontal"
             >
 
           <TextView
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="match_parent"
+              android:layout_weight="1"
               android:gravity="center_vertical"
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
@@ -739,8 +739,8 @@
           <TextView
               android:id="@+id/stsp_txt_crop"
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="match_parent"
+              android:layout_weight="1"
               android:gravity="center_vertical"
               android:text="@string/st_crop"
               android:textColor="@color/black_register"
@@ -798,9 +798,9 @@
           <TextView
               android:id="@+id/st_txt_sendEnter"
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="match_parent"
               android:layout_centerInParent="true"
+              android:layout_weight="1"
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_send_by_enter"
@@ -1161,9 +1161,6 @@
             />
 
 
-
-
-
       </LinearLayout>
 
 
@@ -1342,8 +1339,8 @@
           <TextView
               android:id="@+id/st_txt_autoGif"
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="match_parent"
+              android:layout_weight="1"
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_auto_gif"
@@ -1383,8 +1380,8 @@
           <TextView
               android:id="@+id/st_txt_saveGallery"
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="match_parent"
+              android:layout_weight="1"
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_save_to_gallery"
