@@ -274,6 +274,8 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
     private void downloadFile(int position, MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
 
+        if (mList.get(position) == null || mList.get(position).getProtoWallpaper() == null) return;
+
         if (HelperDownloadFile.isDownLoading(mList.get(position).getProtoWallpaper().getFile().getToken())) {
             stopDownload(position);
         } else {

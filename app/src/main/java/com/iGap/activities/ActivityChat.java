@@ -4625,7 +4625,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         recyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
+
+                LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                int lastPosition = llm.findLastVisibleItemPosition();
+                if (lastPosition + 50 > mAdapter.getItemCount()) {
+                    recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                } else {
+                    recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                }
+
+
             }
         }, 300);
     }

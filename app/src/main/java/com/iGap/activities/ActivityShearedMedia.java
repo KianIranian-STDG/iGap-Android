@@ -103,6 +103,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     Handler handler;
     private int changesize = 0;
 
+    private RecyclerView.OnScrollListener onScrollListener;
+
     private static long countOFImage = 0;
     private static long countOFVIDEO = 0;
     private static long countOFAUDIO = 0;
@@ -176,10 +178,26 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     int position = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-                    recyclerView.getLayoutManager().removeAllViews();
-                    recyclerView.destroyDrawingCache();
-                    recyclerView.invalidateItemDecorations();
-                    recyclerView.getAdapter().notifyDataSetChanged();
+                    if (adapter instanceof ImageAdapter) {
+                        adapter = new ImageAdapter(ActivityShearedMedia.this, mNewList);
+                    } else if (adapter instanceof VideoAdapter) {
+                        adapter = new VideoAdapter(ActivityShearedMedia.this, mNewList);
+                    } else if (adapter instanceof VoiceAdapter) {
+                        adapter = new VoiceAdapter(ActivityShearedMedia.this, mNewList);
+                    } else if (adapter instanceof GifAdapter) {
+                        adapter = new GifAdapter(ActivityShearedMedia.this, mNewList);
+                    } else if (adapter instanceof FileAdapter) {
+                        adapter = new FileAdapter(ActivityShearedMedia.this, mNewList);
+                    } else if (adapter instanceof LinkAdapter) {
+                        adapter = new LinkAdapter(ActivityShearedMedia.this, mNewList);
+                    }
+
+                    recyclerView.setAdapter(adapter);
+
+
+
+
+
 
                     recyclerView.scrollToPosition(position);
 
@@ -295,24 +313,25 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         recyclerView = (RecyclerView) findViewById(R.id.asm_recycler_view_sheared_media);
         recyclerView.setItemViewCacheSize(1000);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        onScrollListener = new RecyclerView.OnScrollListener() {
+            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (isThereAnyMoreItemToLoad) {
                     if (!isSendRequestForLoading) {
 
-                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-
-                        if (adapter.getItemCount() <= lastVisiblePosition + 25) {
-
-                            new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, mFilter);
-                        }
+                        //int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                        //
+                        //if (adapter.getItemCount() <= lastVisiblePosition + 25) {
+                        //
+                        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, mFilter);
+                        //}
                     }
                 }
             }
-        });
+        };
+
+        recyclerView.addOnScrollListener(onScrollListener);
 
         openLayout();
 
@@ -694,6 +713,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     isThereAnyMoreItemToLoad = true;
                 } else {
                     isThereAnyMoreItemToLoad = false;
+
+                    if (onScrollListener != null) {
+                        recyclerView.removeOnScrollListener(onScrollListener);
+                    }
                 }
 
                 Log.e("dddd", "isThereAnyMoreItemToLoad   " + isThereAnyMoreItemToLoad + "    " + offset);
