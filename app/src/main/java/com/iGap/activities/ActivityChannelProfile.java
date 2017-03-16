@@ -1397,13 +1397,12 @@ public class ActivityChannelProfile extends ActivityEnhanced
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                hideProgressBar();
                 ActivityChannelProfile.this.finish();
                 if (ActivityChat.activityChat != null) {
                     ActivityChat.activityChat.finish();
                 }
 
-                prgWait.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
     }

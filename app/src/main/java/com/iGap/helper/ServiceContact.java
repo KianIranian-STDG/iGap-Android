@@ -25,21 +25,17 @@ public class ServiceContact extends Service {
     private MyContentObserver contentObserver;
     private long fetchContactTime;
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
+    @Nullable @Override public IBinder onBind(Intent intent) {
         return null;
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    @Override public int onStartCommand(Intent intent, int flags, int startId) {
         contentObserver = new MyContentObserver();
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
 
-            @Override
-            public void run() {
+            @Override public void run() {
                 getApplicationContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contentObserver);
             }
         }, 10000);
@@ -52,8 +48,7 @@ public class ServiceContact extends Service {
             super(null);
         }
 
-        @Override
-        public void onChange(boolean selfChange) {
+        @Override public void onChange(boolean selfChange) {
 
             final int permissionReadContact = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
             if ((permissionReadContact == PackageManager.PERMISSION_GRANTED)) {
@@ -70,35 +65,37 @@ public class ServiceContact extends Service {
 
         private void fetchContacts() {
             G.handler.post(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     try {
                         ArrayList<StructListOfContact> contactList = new ArrayList<>();
                         ContentResolver cr = G.context.getContentResolver();
                         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-                        assert cur != null;
-                        if (cur.getCount() > 0) {
-                            while (cur.moveToNext()) {
-                                StructListOfContact itemContact = new StructListOfContact();
-                                itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-                                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{
+
+                        if (cur != null) {
+                            if (cur.getCount() > 0) {
+                                while (cur.moveToNext()) {
+                                    StructListOfContact itemContact = new StructListOfContact();
+                                    itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                                    String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                                        Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] {
                                             id
-                                    }, null);
-                                    assert pCur != null;
-                                    while (pCur.moveToNext()) {
-                                        int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-                                        if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
-                                            itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                                        }, null);
+                                        if (pCur != null) {
+                                            while (pCur.moveToNext()) {
+                                                int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                                                if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
+                                                    itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                                                }
+                                            }
+                                            pCur.close();
                                         }
                                     }
-                                    pCur.close();
+                                    contactList.add(itemContact);
                                 }
-                                contactList.add(itemContact);
                             }
+                            cur.close();
                         }
-                        cur.close();
                         ArrayList<StructListOfContact> resultContactList = new ArrayList<>();
                         for (int i = 0; i < contactList.size(); i++) {
 
@@ -134,7 +131,6 @@ public class ServiceContact extends Service {
                         }
                         RequestUserContactImport listContact = new RequestUserContactImport();
                         listContact.contactImport(resultContactList, false);
-
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }
