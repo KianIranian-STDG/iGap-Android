@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.iGap.Config.ALLOW_RECONNECT_AGAIN_NORMAL;
+
 /**
  * for create and manage webSocketConnection
  */
@@ -251,27 +253,27 @@ public class WebSocketClient {
 
     public static void reconnect(boolean force) {
 
-        if (topPermission && (force || (webSocketClient == null || !webSocketClient.isOpen()))) {
+        if ((force || (webSocketClient == null || !webSocketClient.isOpen()))) { // topPermission
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
 
                     //new connection start
-                    if (reconnectCount < 10) {
-                        Log.e("DDD", "MINIMUM");
-                        allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MINIMUM;
-                    } else if (reconnectCount < 20) {
-                        Log.e("DDD", "NORMAL");
-                        allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_NORMAL;
-                    } else {
-                        Log.e("DDD", "MAXIMUM");
-                        allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MAXIMUM;
-                    }
+                    //if (reconnectCount < 10) {
+                    //    Log.e("DDD", "MINIMUM");
+                    //    allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MINIMUM;
+                    //} else if (reconnectCount < 20) {
+                    //    Log.e("DDD", "NORMAL");
+                    //    allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_NORMAL;
+                    //} else {
+                    //    Log.e("DDD", "MAXIMUM");
+                    //    allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MAXIMUM;
+                    //}
                     //new connection end
 
                     if (timeDifference(latestConnectionTryTiming) && connectionState != WebSocketState.CONNECTING && (connectionState != WebSocketState.OPEN || (HelperTimeOut.timeoutChecking(0, latestConnectionOpenTime, Config.CONNECTION_OPEN_TIME_OUT)))) {
                         //new connection start
-                        reconnectCount++;
+                        //reconnectCount++;
                         if (reconnectQueueLimitation > 0) {
                             reconnectQueueLimitation--;
                         }
@@ -363,7 +365,7 @@ public class WebSocketClient {
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - beforeTime);
 
-        if (difference >= allowReconnectAgain) {
+        if (difference >= ALLOW_RECONNECT_AGAIN_NORMAL) {
             return true;
         }
 

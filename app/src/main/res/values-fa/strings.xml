@@ -756,7 +756,7 @@
   <string name="group_link_hint_revoke">لینک دعوت گروه</string>
   <string name="channel_title_convert_to_private">تبدیل به کانال خصوصی</string>
   <string name="channel_text_convert_to_private">آیا می خواهید این گروه را به خصوصی تبدیل کنید?</string>
-  <string name="channel_title_convert_to_public">تبدیل به کانال خصوصی</string>
+  <string name="channel_title_convert_to_public">تبدیل به کانال عمومی</string>
   <string name="channel_text_convert_to_public">آیا می خواهید این کانال را به عمومی تبدیل کنید?</string>
   <string name="channel_title_channel_set_username">تخصیص لینک عمومی کانال</string>
   <string name="group_title_convert_to_private">تبدیل به گروه خصوصی</string>
@@ -764,7 +764,7 @@
   <string name="group_title_convert_to_public">تبدیل به گروه عمومی</string>
   <string name="group_text_convert_to_public">آیا می خواهید این گروه را به عمومی تبدیل کنید?</string>
   <string name="group_title_set_username">تخصیص نام کاربری</string>
-  <string name="permission_storage">ذخیره سازی</string>
+  <string name="permission_storage">محل ذخیره سازی را بدهید</string>
   <string name="you_have_to_get_storage_permision_for_continue">برای ادامه کار نیاز به مجوز ذخیره سازی می باشد</string>
   <string name="clean_up_chat_rooms">پاک سازی چت روم ها</string>
   <string name="clean_up">پاک سازی چت روم</string>
