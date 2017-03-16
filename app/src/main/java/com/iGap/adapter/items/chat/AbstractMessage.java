@@ -74,6 +74,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public boolean directionalBased = true;
 
 
+
     public ProtoGlobal.Room.Type type;
 
     enum DownLoadType {
@@ -628,6 +629,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             View forwardView = null;
             if (holder.itemView.findViewById(R.id.cslr_txt_forward_from) == null) {
                 forwardView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_forward, null);
+                forwardView.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+
+                        if (mMessage.username.length() > 0) {
+                            HelperUrl.checkUsernameAndGoToRoom(mMessage.username);
+                        }
+                    }
+                });
                 mContainer.addView(forwardView, 0);
             } else {
                 forwardView = holder.itemView.findViewById(R.id.cslr_ll_forward);
@@ -647,6 +656,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (info != null) {
                     HelperInfo.needUpdateUser(info.getId(), info.getCacheId());
                     txtForwardFrom.setText(info.getDisplayName());
+                    mMessage.username = info.getUsername();
                     if (mMessage.isSenderMe()) {
                         txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                     } else {
@@ -654,6 +664,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 } else if (mMessage.forwardedFrom.getUserId() != 0) {
                     HelperInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null);
+
                 } else {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
                     if (realmRoom != null) {
@@ -663,9 +674,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         } else {
                             txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                         }
+
+                        switch (realmRoom.getType()) {
+                            case CHANNEL:
+                                mMessage.username = realmRoom.getChannelRoom().getUsername();
+                                break;
+                            case GROUP:
+                                mMessage.username = realmRoom.getGroupRoom().getUsername();
+                                break;
+                        }
+
+
+
                     } else {
                         RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
                         if (realmRoom1 != null) {
+
+                            switch (realmRoom1.getType()) {
+                                case CHANNEL:
+                                    mMessage.username = realmRoom1.getChannelRoom().getUsername();
+                                    break;
+                                case GROUP:
+                                    mMessage.username = realmRoom1.getGroupRoom().getUsername();
+                                    break;
+                            }
+
                             HelperInfo.needUpdateRoomInfo(realmRoom1.getId());
                             txtForwardFrom.setText(realmRoom1.getTitle());
                             if (mMessage.isSenderMe()) {

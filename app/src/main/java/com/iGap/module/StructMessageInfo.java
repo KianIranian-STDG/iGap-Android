@@ -49,6 +49,7 @@ public class StructMessageInfo implements Parcelable {
     public String linkInfo = "";
     public boolean hasEmojiInText = true;
     public boolean showTime = false;
+    public String username = "";
 
     public String fileMime = "";
     public String filePic = "";
