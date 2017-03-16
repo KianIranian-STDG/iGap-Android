@@ -258,10 +258,13 @@ public class WebSocketClient {
 
                     //new connection start
                     if (reconnectCount < 10) {
+                        Log.e("DDD", "MINIMUM");
                         allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MINIMUM;
                     } else if (reconnectCount < 20) {
+                        Log.e("DDD", "NORMAL");
                         allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_NORMAL;
                     } else {
+                        Log.e("DDD", "MAXIMUM");
                         allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MAXIMUM;
                     }
                     //new connection end
@@ -286,7 +289,9 @@ public class WebSocketClient {
                                 waitingForReconnecting = false;
                                 resetWebsocketInfo();
                                 WebSocketClient.getInstance();
+                                //if (reconnectQueueLimitation <= 1) {
                                 checkSocketConnection();
+                                //}
                             }
                         }
                     } else {

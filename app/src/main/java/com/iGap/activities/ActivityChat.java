@@ -3538,7 +3538,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             if (mReplayLayout != null && userTriesReplay()) {
                 mReplayLayout.setTag(null);
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         mReplayLayout.setVisibility(View.GONE);
                     }
                 });
@@ -5752,7 +5753,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onReplyClick(RealmRoomMessage replyMessage) {
-        recyclerView.scrollToPosition(mAdapter.findPositionByMessageId(replyMessage.getMessageId()));
+
+        long replyMessageId = replyMessage.getMessageId();
+        /**
+         * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * 2)
+         * so i need to (replyMessageId / 2) again for use this messageId
+         */
+        int position = mAdapter.findPositionByMessageId((replyMessageId / 2));
+        if (position == -1) {
+            position = mAdapter.findPositionByMessageId(replyMessageId);
+        }
+
+        recyclerView.scrollToPosition(position);
     }
 
     @Override
