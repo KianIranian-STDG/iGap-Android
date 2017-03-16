@@ -275,7 +275,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                         txtFinish.setEnabled(false);
                         txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
                         txtInputLayout.setErrorEnabled(true);
-                        txtInputLayout.setError("INVALID");
+                        txtInputLayout.setError("" + getResources().getString(R.string.INVALID));
                     }
 
                 }
@@ -397,18 +397,18 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                     txtFinish.setEnabled(false);
                     txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
                     txtInputLayout.setErrorEnabled(true);
-                    txtInputLayout.setError("INVALID");
+                    txtInputLayout.setError("" + getResources().getString(R.string.INVALID));
 
                 } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
                     txtFinish.setEnabled(false);
                     txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
                     txtInputLayout.setErrorEnabled(true);
-                    txtInputLayout.setError("TAKEN");
+                    txtInputLayout.setError("" + getResources().getString(R.string.TAKEN));
                 } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.OCCUPYING_LIMIT_EXCEEDED) {
                     txtFinish.setEnabled(false);
                     txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
                     txtInputLayout.setErrorEnabled(true);
-                    txtInputLayout.setError("OCCUPYING LIMIT EXCEEDED");
+                    txtInputLayout.setError("" + getResources().getString(R.string.OCCUPYING_LIMIT_EXCEEDED));
                 }
             }
         });

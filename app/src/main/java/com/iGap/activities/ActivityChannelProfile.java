@@ -1703,16 +1703,16 @@ public class ActivityChannelProfile extends ActivityEnhanced
                         } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.INVALID) {
                             positive.setEnabled(false);
                             inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("INVALID");
+                            inputUserName.setError("" + getResources().getString(R.string.INVALID));
 
                         } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
                             positive.setEnabled(false);
                             inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("TAKEN");
+                            inputUserName.setError("" + getResources().getString(R.string.TAKEN));
                         } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.OCCUPYING_LIMIT_EXCEEDED) {
                             positive.setEnabled(false);
                             inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("OCCUPYING LIMIT EXCEEDED");
+                            inputUserName.setError("" + getResources().getString(R.string.OCCUPYING_LIMIT_EXCEEDED));
                         }
                     }
                 });
@@ -1756,7 +1756,7 @@ public class ActivityChannelProfile extends ActivityEnhanced
                 } else {
                     positive.setEnabled(false);
                     inputUserName.setErrorEnabled(true);
-                    inputUserName.setError("INVALID");
+                    inputUserName.setError("" + getResources().getString(R.string.INVALID));
                 }
             }
         });

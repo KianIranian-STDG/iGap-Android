@@ -745,7 +745,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             new RequestUserProfileCheckUsername().userProfileCheckUsername(editable.toString());
                         } else {
                             inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("INVALID");
+                            inputUserName.setError("" + getResources().getString(R.string.INVALID));
                             positive.setEnabled(false);
                         }
                     }
@@ -767,11 +767,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.INVALID) {
 
                                     inputUserName.setErrorEnabled(true);
-                                    inputUserName.setError("INVALID");
+                                    inputUserName.setError("" + getResources().getString(R.string.INVALID));
                                     positive.setEnabled(false);
                                 } else if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.TAKEN) {
                                     inputUserName.setErrorEnabled(true);
-                                    inputUserName.setError("TAKEN");
+                                    inputUserName.setError("" + getResources().getString(R.string.TAKEN));
                                     positive.setEnabled(false);
                                 }
                             }

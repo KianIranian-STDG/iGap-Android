@@ -1061,16 +1061,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.INVALID) {
                             positive.setEnabled(false);
                             inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("INVALID");
+                            inputUserName.setError("" + getResources().getString(R.string.INVALID));
 
                         } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.TAKEN) {
                             positive.setEnabled(false);
                             inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("TAKEN");
+                            inputUserName.setError("" + getResources().getString(R.string.TAKEN));
                         } else if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.OCCUPYING_LIMIT_EXCEEDED) {
                             positive.setEnabled(false);
                             inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("OCCUPYING LIMIT EXCEEDED");
+                            inputUserName.setError("" + getResources().getString(R.string.OCCUPYING_LIMIT_EXCEEDED));
                         }
                     }
                 });
@@ -1108,7 +1108,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 } else {
                     positive.setEnabled(false);
                     inputUserName.setErrorEnabled(true);
-                    inputUserName.setError("INVALID");
+                    inputUserName.setError("" + getResources().getString(R.string.INVALID));
                 }
             }
         });

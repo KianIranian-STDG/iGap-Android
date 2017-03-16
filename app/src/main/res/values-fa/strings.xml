@@ -764,8 +764,8 @@
   <string name="group_title_convert_to_public">تبدیل به گروه عمومی</string>
   <string name="group_text_convert_to_public">آیا می خواهید این گروه را به عمومی تبدیل کنید?</string>
   <string name="group_title_set_username">تخصیص نام کاربری</string>
-  <string name="permission_storage">Storage</string>
-  <string name="you_have_to_get_storage_permision_for_continue">you have to get storage permision for continue</string>
+  <string name="permission_storage">ذخیره سازی</string>
+  <string name="you_have_to_get_storage_permision_for_continue">برای ادامه کار نیاز به مجوز ذخیره سازی می باشد</string>
   <string name="clean_up_chat_rooms">پاک سازی چت روم ها</string>
   <string name="clean_up">پاک سازی چت روم</string>
   <string name="do_you_want_to_clean_all_data_in_chat_rooms">آیا مطمئن هستید که میخواهید کلیه اطلاعات چت ها را از دیتابیس داخلی حذف کنید ؟</string>
@@ -807,6 +807,8 @@
   <string name="show_member">نمایش اعضا</string>
   <string name="show_vote_layout_in_channel">نمایش لایه ثبت رای در کانال</string>
   <string name="close">بستن</string>
-
+  <string name="INVALID">نامعتبر</string>
+  <string name="TAKEN">ثبت شده</string>
+  <string name="OCCUPYING_LIMIT_EXCEEDED">محدودیت دریافت</string>
 
 </resources>
