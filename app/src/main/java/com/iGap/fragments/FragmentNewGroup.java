@@ -153,13 +153,12 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                                         @Override
                                         public void Allow() {
 
-                                            //if (isAdded()){ // boolean isAdded () Return true if the fragment is currently added to its activity.
-
+                                            if (isAdded()) { // boolean isAdded () Return true if the fragment is currently added to its activity.
                                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                                             intent.setType("image/*");
                                             startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
                                             isInAttach = true;
-                                            //}
+                                            }
                                         }
 
                                         @Override
@@ -184,8 +183,11 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                                                     @Override
                                                     public void Allow() {
                                                         // this dialog show 2 way for choose image : gallery and camera
+
+                                                        if (isAdded()) {
+                                                            useCamera();
+                                                        }
                                                         dialog.dismiss();
-                                                        useCamera();
                                                     }
 
                                                     @Override
