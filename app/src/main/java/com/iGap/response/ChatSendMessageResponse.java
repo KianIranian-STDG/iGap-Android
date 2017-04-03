@@ -101,18 +101,19 @@ public class ChatSendMessageResponse extends MessageHandler {
             }
         });
 
-        if (chatSendMessageResponse.getRoomMessage().getMessageId() > latestMessageId) {
-            if (chatSendMessageResponse.getResponse().getId().isEmpty()) {
-                // invoke following callback when i'm not the sender, because I already done
-                // everything after sending message
-                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
-                    G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHAT);
-                }
-            } else {
-                // invoke following callback when I'm the sender and the message has updated
-                G.chatSendMessageUtil.onMessageUpdate(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
-            }
+        // not used from latestMessageId because at getRoomList client get latest message and with this condition not send deliver status because other messageId is lower than latestMessageId
+        //if (chatSendMessageResponse.getRoomMessage().getMessageId() > latestMessageId) {
+        if (chatSendMessageResponse.getResponse().getId().isEmpty()) {
+            // invoke following callback when i'm not the sender, because I already done
+            // everything after sending message
+            //if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatSendMessageResponse.getRoomId()).findFirst() != null) {
+            G.chatSendMessageUtil.onMessageReceive(chatSendMessageResponse.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHAT);
+            //}
+        } else {
+            // invoke following callback when I'm the sender and the message has updated
+            G.chatSendMessageUtil.onMessageUpdate(chatSendMessageResponse.getRoomId(), roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
         }
+        //}
 
         realm.close();
     }
