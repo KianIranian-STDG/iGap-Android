@@ -11,7 +11,7 @@ public class Config {
     public static final int TIME_OUT_MS = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     public static final int LOOKUP_MAP_RESPONSE_OFFSET = 30000;
     public static final int ALLOW_RECONNECT_AGAIN_MINIMUM = (int) (DateUtils.SECOND_IN_MILLIS);
-    public static final int ALLOW_RECONNECT_AGAIN_NORMAL = (int) (5 * DateUtils.SECOND_IN_MILLIS);
+    public static final int ALLOW_RECONNECT_AGAIN_NORMAL = (int) (3 * DateUtils.SECOND_IN_MILLIS);
     public static final int ALLOW_RECONNECT_AGAIN_MAXIMUM = (int) (20 * DateUtils.SECOND_IN_MILLIS);
     public static final int REPEAT_CONNECTION_CHECKING = 1000;
     public static final int DEFAULT_TIME_OUT = 10000;
@@ -30,7 +30,7 @@ public class Config {
     public static final long TRY_CONNECTION_COUNT = 5;
     public static final long GET_CONTACT_LIST_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final long HEART_BEAT_CHECKING_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);
-    public static final long UPDATING_TIME_SHOWING = (int) (5 * DateUtils.SECOND_IN_MILLIS);
+    public static final long UPDATING_TIME_SHOWING = (int) (2 * DateUtils.SECOND_IN_MILLIS);
     public static final long CONNECTION_OPEN_TIME_OUT = (int) (20 * DateUtils.SECOND_IN_MILLIS);
     public static final long FAST_START_PAGE_TIME = (int) 20;
     public static final long LOW_START_PAGE_TIME = (int) 25;

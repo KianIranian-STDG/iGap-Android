@@ -4,7 +4,7 @@ import com.iGap.proto.ProtoUserAvatarGetList;
 
 public class RequestUserAvatarGetList {
 
-    public void userAddGetList(long userId) {
+    public void userAvatarGetList(long userId) {
 
         ProtoUserAvatarGetList.UserAvatarGetList.Builder builder = ProtoUserAvatarGetList.UserAvatarGetList.newBuilder();
         builder.setUserId(userId);

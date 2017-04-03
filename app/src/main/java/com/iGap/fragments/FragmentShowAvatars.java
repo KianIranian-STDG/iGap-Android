@@ -226,7 +226,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             case setting:
                 RealmRegisteredInfo user = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mPeerId).findFirst();
                 if (user != null) {
-                    new RequestUserAvatarGetList().userAddGetList(mPeerId);
+                    new RequestUserAvatarGetList().userAvatarGetList(mPeerId);
                     isRoomExist = true;
                 }
                 break;
@@ -250,7 +250,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
         if (isRoomExist) {
 
-            avatarList = mRealm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING);
+            avatarList = mRealm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAllSorted(RealmAvatarFields.UID, Sort.DESCENDING);
             avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
                 @Override public void onChange(RealmResults<RealmAvatar> element) {
 
