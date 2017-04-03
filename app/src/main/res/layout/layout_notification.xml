@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-    android:background="@color/notification_background"
               android:layoutDirection="ltr"
               android:orientation="horizontal"
     >
@@ -19,7 +18,8 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp4"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_marginStart="@dimen/dp12"
         android:layout_marginTop="@dimen/dp24"
         android:layout_weight="1"
         android:orientation="vertical">
@@ -37,8 +37,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:singleLine="true"
+                android:textAppearance="@style/NotificationText"
                 android:text="hasan : "
-                android:textColor="@color/notification_text"
                 android:textDirection="ltr"
                 android:textSize="@dimen/sp16"/>
 
@@ -50,8 +50,7 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="how are you"
-                android:textColor="@color/notification_text"
-
+                android:textAppearance="@style/NotificationText"
                 android:textDirection="ltr"
                 android:textSize="@dimen/sp14"/>
 
@@ -63,8 +62,9 @@
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true"
                 android:text="10:52"
-                android:textColor="@color/notification_text"
-                android:textSize="@dimen/sp12"/>
+                android:textAppearance="@style/NotificationText"
+                android:textSize="@dimen/sp12"
+                />
 
         </LinearLayout>
 
@@ -81,7 +81,7 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="hasan : "
-                android:textColor="@color/notification_text"
+                android:textAppearance="@style/NotificationText"
                 android:textDirection="ltr"
                 android:textSize="@dimen/sp16"/>
 
@@ -93,8 +93,7 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="how are you"
-                android:textColor="@color/notification_text"
-
+                android:textAppearance="@style/NotificationText"
                 android:textDirection="ltr"
                 android:textSize="@dimen/sp14"/>
 
@@ -106,8 +105,9 @@
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true"
                 android:text="10:52"
-                android:textColor="@color/notification_text"
-                android:textSize="@dimen/sp12"/>
+                android:textAppearance="@style/NotificationText"
+                android:textSize="@dimen/sp12"
+                />
 
         </LinearLayout>
 
@@ -124,7 +124,7 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="hasan : "
-                android:textColor="@color/notification_text"
+                android:textAppearance="@style/NotificationText"
                 android:textDirection="ltr"
                 android:textSize="@dimen/sp16"/>
 
@@ -136,8 +136,7 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="how are you"
-                android:textColor="@color/notification_text"
-
+                android:textAppearance="@style/NotificationText"
                 android:textDirection="ltr"
                 android:textSize="@dimen/sp14"/>
 
@@ -149,8 +148,9 @@
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true"
                 android:text="10:52"
-                android:textColor="@color/notification_text"
-                android:textSize="@dimen/sp12"/>
+                android:textAppearance="@style/NotificationText"
+                android:textSize="@dimen/sp12"
+                />
 
         </LinearLayout>
 
@@ -167,7 +167,7 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="hasan : "
-                android:textColor="@color/notification_text"
+                android:textAppearance="@style/NotificationText"
                 android:textDirection="ltr"
                 android:textSize="@dimen/sp16"/>
 
@@ -179,8 +179,7 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="how are you"
-                android:textColor="@color/notification_text"
-
+                android:textAppearance="@style/NotificationText"
                 android:textDirection="ltr"
                 android:textSize="@dimen/sp14"/>
 
@@ -192,8 +191,9 @@
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true"
                 android:text="10:52"
-                android:textColor="@color/notification_text"
-                android:textSize="@dimen/sp12"/>
+                android:textAppearance="@style/NotificationText"
+                android:textSize="@dimen/sp12"
+                />
 
         </LinearLayout>
 
@@ -203,7 +203,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
             android:text="..."
-            android:textColor="@color/notification_text"
+            android:textAppearance="@style/NotificationText"
             android:textSize="@dimen/sp12"
             android:visibility="visible"/>
 
@@ -211,7 +211,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginBottom="@dimen/dp8"
-            android:background="@color/notification_text"
+            android:textAppearance="@style/NotificationText"
             ></LinearLayout>
 
         <LinearLayout
@@ -233,8 +233,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/replay"
-                android:textColor="@color/notification_text"
-                android:textSize="@dimen/sp14"/>
+                android:textAppearance="@style/NotificationText"
+                android:textSize="@dimen/sp14"
+                />
 
             <TextView
                 android:id="@+id/ln_txt_unread_message"
@@ -245,8 +246,9 @@
                 android:paddingLeft="@dimen/dp8"
                 android:singleLine="true"
                 android:text="you have 10 new message"
-                android:textColor="@color/notification_text"
-                android:textSize="@dimen/sp12"/>
+                android:textAppearance="@style/NotificationText"
+                android:textSize="@dimen/sp12"
+                />
 
         </LinearLayout>
 

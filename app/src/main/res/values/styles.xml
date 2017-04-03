@@ -206,4 +206,9 @@
         <item name="android:textSize">@dimen/sp32</item>
     </style>
 
+  <style name="NotificationText" parent="android:TextAppearance.StatusBar.EventContent" />
+
+  <style name="NotificationTitle" parent="android:TextAppearance.StatusBar.Title" />
+
+
 </resources>
