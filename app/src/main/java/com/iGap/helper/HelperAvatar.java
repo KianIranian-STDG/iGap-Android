@@ -27,6 +27,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -34,7 +35,7 @@ import java.util.HashMap;
  */
 public class HelperAvatar {
 
-    private static HashMap<Long, OnAvatarGet> onAvatarGetHashMap = new HashMap<>();
+    private static HashMap<Long, ArrayList<OnAvatarGet>> onAvatarGetHashMap = new HashMap<>();
 
     public enum AvatarType {
         USER, ROOM
@@ -115,7 +116,17 @@ public class HelperAvatar {
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
                 onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalThumbnailPath(), ownerId);
             } else {
-                onAvatarGetHashMap.put(ownerId, onAvatarGet);
+
+                if (onAvatarGetHashMap.containsKey(ownerId)) {
+                    ArrayList<OnAvatarGet> listeners = onAvatarGetHashMap.get(ownerId);
+                    listeners.add(onAvatarGet);
+                } else {
+                    ArrayList<OnAvatarGet> listeners = new ArrayList<>();
+                    listeners.add(onAvatarGet);
+                    onAvatarGetHashMap.put(ownerId, listeners);
+                }
+
+
                 new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
                     @Override
                     public void onDownload(final String filepath, final String token) {
@@ -141,13 +152,19 @@ public class HelperAvatar {
                                         for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).findAll()) {
                                             if (realmAvatar1.getFile().getToken().equals(token)) {
                                                 //onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
-                                                OnAvatarGet onAvatarGetCallback = (onAvatarGetHashMap.get(realmAvatar1.getOwnerId()));
-                                                if (onAvatarGetCallback != null) {
-                                                    onAvatarGetCallback.onAvatarGet(filepath, realmAvatar1.getOwnerId());
-                                                    onAvatarGetHashMap.remove(realmAvatar1.getOwnerId());
-                                                } else {
-                                                    onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
+                                                ArrayList<OnAvatarGet> listeners = (onAvatarGetHashMap.get(realmAvatar1.getOwnerId()));
+
+                                                if (listeners != null) {
+                                                    for (OnAvatarGet listener : listeners) {
+                                                        if (listener != null) {
+                                                            listener.onAvatarGet(filepath, realmAvatar1.getOwnerId());
+                                                            onAvatarGetHashMap.remove(realmAvatar1.getOwnerId());
+                                                        } else {
+                                                            onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
+                                                        }
+                                                    }
                                                 }
+
                                                 break;
                                             }
                                         }
