@@ -158,11 +158,12 @@ public class HelperAvatar {
                                                     for (OnAvatarGet listener : listeners) {
                                                         if (listener != null) {
                                                             listener.onAvatarGet(filepath, realmAvatar1.getOwnerId());
-                                                            onAvatarGetHashMap.remove(realmAvatar1.getOwnerId());
                                                         } else {
                                                             onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
                                                         }
                                                     }
+
+                                                    onAvatarGetHashMap.remove(realmAvatar1.getOwnerId());
                                                 }
 
                                                 break;
