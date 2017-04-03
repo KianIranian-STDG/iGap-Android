@@ -66,7 +66,6 @@ import io.realm.Realm;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.iGap.G.context;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
     public IMessageItem messageClickListener;
@@ -449,9 +448,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
-            imgTick.setColorFilter(ContextCompat.getColor(context, R.color.white));
+            setTextcolor(imgTick, R.color.white);
         } else {
-            imgTick.setColorFilter(ContextCompat.getColor(context, R.color.colorOldBlack));
+            setTextcolor(imgTick, R.color.colorOldBlack);
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
 
@@ -468,6 +467,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp8);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
 
+    }
+
+    private void setTextcolor(ImageView imageView, int color) {
+
+        try {
+            imageView.setColorFilter(ContextCompat.getColor(G.context, color));
+        } catch (NullPointerException e) {
+            // imageView.setColorFilter(color,android.graphics.PorterDuff.Mode.MULTIPLY);
+            try {
+                imageView.setColorFilter(G.context.getResources().getColor(color));
+            } catch (Exception e1) {
+            }
+        }
     }
 
     @CallSuper
@@ -491,12 +503,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO ||
                 messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
-            imgTick.setColorFilter(ContextCompat.getColor(context, R.color.white));
+            setTextcolor(imgTick, R.color.white);
+
         } else {
             if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
-                imgTick.setColorFilter(ContextCompat.getColor(context, R.color.iGapColor));
+                setTextcolor(imgTick, R.color.iGapColor);
             } else {
-                imgTick.setColorFilter(ContextCompat.getColor(context, R.color.colorOldBlack));
+                setTextcolor(imgTick, R.color.colorOldBlack);
             }
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
