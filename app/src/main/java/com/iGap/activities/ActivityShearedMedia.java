@@ -320,12 +320,21 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 if (isThereAnyMoreItemToLoad) {
                     if (!isSendRequestForLoading) {
 
-                        //int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                        //
-                        //if (adapter.getItemCount() <= lastVisiblePosition + 25) {
-                        //
-                        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, mFilter);
-                        //}
+                        new Thread(new Runnable() {
+                            @Override public void run() {
+                                //int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                                //
+                                //if (adapter.getItemCount() <= lastVisiblePosition + 25) {
+                                //
+                                new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, mFilter);
+                                isSendRequestForLoading = true;
+
+                                //}
+                            }
+                        }).start();
+
+
+
                     }
                 }
             }

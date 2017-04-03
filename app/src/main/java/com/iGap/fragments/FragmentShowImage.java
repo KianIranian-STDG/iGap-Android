@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.libs.rippleeffect.RippleView;
@@ -116,7 +117,7 @@ public class FragmentShowImage extends Fragment {
 
             mRealm = Realm.getDefaultInstance();
 
-            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomid).findAll();
+            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomid).findAllSorted(RealmRoomMessageFields.UPDATE_TIME);
 
 
             if (mRealmList.size() < 1) {
@@ -208,7 +209,14 @@ public class FragmentShowImage extends Fragment {
 
         viewPager.setCurrentItem(selectedFile);
 
-        txtImageNumber.setText(selectedFile + 1 + " " + getString(R.string.of) + " " + mFList.size());
+        String _text = "";
+        if (HelperCalander.isLanguagePersian) {
+            _text = HelperCalander.convertToUnicodeFarsiNumber(selectedFile + 1 + " " + getString(R.string.of) + " " + mFList.size());
+        } else {
+            _text = selectedFile + 1 + " " + getString(R.string.of) + " " + mFList.size();
+        }
+
+        txtImageNumber.setText(_text);
 
         showImageInfo(mFList.get(selectedFile));
 
@@ -228,7 +236,14 @@ public class FragmentShowImage extends Fragment {
             @Override
             public void onPageSelected(int position) {
 
-                txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + mFList.size());
+                String _text = "";
+                if (HelperCalander.isLanguagePersian) {
+                    _text = HelperCalander.convertToUnicodeFarsiNumber(position + 1 + " " + getString(R.string.of) + " " + mFList.size());
+                } else {
+                    _text = position + 1 + " " + getString(R.string.of) + " " + mFList.size();
+                }
+
+                txtImageNumber.setText(_text);
 
                 showImageInfo(mFList.get(position));
 
@@ -272,7 +287,18 @@ public class FragmentShowImage extends Fragment {
             txtImageName.setText(realmRoomMessageFinal.getAttachment().getName());
         }
         if (realmRoomMessageFinal.getUpdateTime() != 0) {
-            txtImageDate.setText(TimeUtils.toLocal(realmRoomMessageFinal.getUpdateTime(), G.CHAT_MESSAGE_TIME));
+
+            String _date = HelperCalander.checkHijriAndReturnTime(realmRoomMessageFinal.getUpdateTime() / 1000);
+            String _time = TimeUtils.toLocal(realmRoomMessageFinal.getUpdateTime(), G.CHAT_MESSAGE_TIME);
+            String _text = "";
+            if (HelperCalander.isLanguagePersian) {
+
+                _text = HelperCalander.convertToUnicodeFarsiNumber(_date + " _ " + _time);
+            } else {
+                _text = _time + " _ " + _date;
+            }
+
+            txtImageDate.setText(_text);
         }
     }
 

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.interfaces.OnChannelAvatarDelete;
@@ -263,6 +264,10 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                         if (avatarListSize > 0) {
                             viewPager.getAdapter().notifyDataSetChanged();
                             txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + getString(R.string.of) + " " + avatarListSize);
+                            if (HelperCalander.isLanguagePersian) {
+                                txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
+                            }
+
                         } else {
                             getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
                         }
@@ -283,6 +288,10 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
 
         txtImageNumber.setText(1 + " " + getString(R.string.of) + " " + avatarList.size());
+        if (HelperCalander.isLanguagePersian) {
+            txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
+        }
+
         if (avatarList.get(0).getFile() != null) {
             txtImageName.setText(avatarList.get(0).getFile().getName());
         }

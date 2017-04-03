@@ -528,17 +528,23 @@ public class HelperNotificationAndBadge {
 
                                     unreadMessageCount++;
                                     messageOne = roomMessage.getMessage();
-                                    senderId = roomMessage.getUserId();
+
+                                if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                    senderId = realmRoom1.getId();
+                                } else {
+                                    senderId = realmRoom1.getChatRoom().getPeerId();
+                                }
+
+
 
                                 addItemToPopUPList(roomMessage);
 
                                     if (unreadMessageCount == 1 || unreadMessageCount == 2 || unreadMessageCount == 3) {
                                         Item item = new Item();
-                                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-                                        if (room != null) {
-                                            item.name = room.getTitle() + " : ";
-                                            item.roomId = room.getId();
-                                        }
+
+                                        item.name = realmRoom1.getTitle() + " : ";
+                                        item.roomId = realmRoom1.getId();
+
 
                                         String text = "";
                                         try {
