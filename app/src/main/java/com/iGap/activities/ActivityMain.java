@@ -1665,26 +1665,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                     if (mInfo.getLastMessage().isSenderMe()) {
                                         lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                                     } else {
+
                                         Realm realm1 = Realm.getDefaultInstance();
-                                        RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.getId()).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-                                        if (!results.isEmpty()) {
-                                            RealmRoomMessage realmRoomMessage = results.first();
-                                            if (realmRoomMessage != null) {
-                                                RealmRegisteredInfo realmRegisteredInfo = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessage.getUserId()).findFirst();
-                                                if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
-                                                    if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                                                        if (HelperCalander.isLanguagePersian) {
-                                                            lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
-                                                        } else {
-                                                            lastMessageSender = " :" + realmRegisteredInfo.getDisplayName();
-                                                        }
-                                                    } else {
-                                                        if (HelperCalander.isLanguagePersian) {
-                                                            lastMessageSender = " :" + realmRegisteredInfo.getDisplayName();
-                                                        } else {
-                                                            lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
-                                                        }
-                                                    }
+                                        RealmRegisteredInfo realmRegisteredInfo = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
+                                        if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
+                                            if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                                                if (HelperCalander.isLanguagePersian) {
+                                                    lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
+                                                } else {
+                                                    lastMessageSender = " :" + realmRegisteredInfo.getDisplayName();
+                                                }
+                                            } else {
+                                                if (HelperCalander.isLanguagePersian) {
+                                                    lastMessageSender = " :" + realmRegisteredInfo.getDisplayName();
+                                                } else {
+                                                    lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
                                                 }
                                             }
                                         }
