@@ -23,6 +23,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
@@ -93,6 +94,7 @@ import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperSetAction;
+import com.iGap.helper.HelperString;
 import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.HelperUrl;
 import com.iGap.helper.ImageHelper;
@@ -198,10 +200,12 @@ import com.iGap.request.RequestGroupUpdateDraft;
 import com.iGap.request.RequestUserContactsBlock;
 import com.iGap.request.RequestUserContactsUnblock;
 import com.iGap.request.RequestUserInfo;
+import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
+import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.github.meness.emoji.EmojiEditText;
 import io.github.meness.emoji.EmojiTextView;
 import io.github.meness.emoji.emoji.Emoji;
@@ -218,12 +222,15 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import org.parceler.Parcels;
@@ -3318,6 +3325,73 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
             latestRequestCode = requestCode;
 
+            /**
+             * compress video
+             */
+
+            if (requestCode == AttachFile.request_code_VIDEO_CAPTURED) {
+                //
+                //            Uri uri =  data.getData();
+                //            if (uri != null) {
+                //                Cursor cursor = null;
+                //                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                //                    cursor = getContentResolver().query(uri, null, null, null, null, null);
+                //                }
+                //
+                //                try {
+                //                    if (cursor != null && cursor.moveToFirst()) {
+                //
+                //                        String displayName = cursor.getString(
+                //                                cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                //                        Log.i("CCCCC", "Display Name: " + displayName);
+                //
+                //                        int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+                //                        String size = null;
+                //                        if (!cursor.isNull(sizeIndex)) {
+                //                            size = cursor.getString(sizeIndex);
+                //                        } else {
+                //                            size = "Unknown";
+                //                        }
+                //                        Log.i("CCCCC", "Size: " + size);
+                //
+                //                        tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(displayName, this, uri);
+                //                        new VideoCompressor().execute( tempFile.getPath());
+                //                    }
+                //                } finally {
+                //                    if (cursor != null) {
+                //                        cursor.close();
+                //                    }
+                //                }
+                //            }
+
+                File mediaStorageDir = new File(G.DIR_VIDEOS);
+                File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "video_" + HelperString.getRandomFileName(3) + ".mp4");
+                listPathString = new ArrayList<>();
+                //                    MediaController.newPath = mediaFile.toString();
+
+                Uri uri = data.getData();
+                File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile("displayName", this, uri);
+
+                String savePathVideoCompress = Environment.getExternalStorageDirectory()
+                    + File.separator
+                    + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME
+                    + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR
+                    +
+                    "VIDEO_"
+                    + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date())
+                    + ".mp4";
+
+                listPathString.add(savePathVideoCompress);
+
+                new VideoCompressor().execute(tempFile.getPath(), savePathVideoCompress);
+                showDraftLayout();
+                setDraftMessage(requestCode);
+                latestRequestCode = requestCode;
+                return;
+            }
+
+
+
             if (listPathString.size() == 1) {
                 showDraftLayout();
                 setDraftMessage(requestCode);
@@ -6082,7 +6156,25 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         itemGalleryList.clear();
+    }
 
+    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
+
+        @Override protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override protected Boolean doInBackground(String... params) {
+
+            return MediaController.getInstance().convertVideo(params[0], params[1]);
+        }
+
+        @Override protected void onPostExecute(Boolean compressed) {
+            super.onPostExecute(compressed);
+            if (compressed) {
+                Log.i("CCCCC", "compressed");
+            }
+        }
     }
 }
 
