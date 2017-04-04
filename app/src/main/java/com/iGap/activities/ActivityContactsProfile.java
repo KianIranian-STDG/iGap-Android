@@ -353,12 +353,12 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
 
                     if (realmRoom != null) {
-                        ActivityChat.activityChatForFinish.finish();
+                        // ActivityChat.activityChatForFinish.finish();
 
                         Intent intent = new Intent(context, ActivityChat.class);
                         intent.putExtra("RoomId", realmRoom.getId());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
+                        //  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
                         finish();
                     } else {
                         G.onChatGetRoom = new OnChatGetRoom() {
@@ -367,15 +367,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                 G.currentActivity.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ActivityChat.activityChatForFinish.finish();
+                                        //  ActivityChat.activityChatForFinish.finish();
 
                                         Realm realm = Realm.getDefaultInstance();
                                         Intent intent = new Intent(context, ActivityChat.class);
                                         intent.putExtra("peerId", userId);
                                         intent.putExtra("RoomId", roomId);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        //   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         realm.close();
-                                        context.startActivity(intent);
+                                        startActivity(intent);
                                         finish();
                                     }
                                 });

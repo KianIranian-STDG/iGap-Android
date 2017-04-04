@@ -725,7 +725,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     public void onClick(View v) {
 
                         if (mMessage.username.length() > 0) {
-                            HelperUrl.checkUsernameAndGoToRoom(mMessage.username);
+                            HelperUrl.checkUsernameAndGoToRoom(mMessage.username, HelperUrl.ChatEntery.profile);
                         }
                     }
                 });

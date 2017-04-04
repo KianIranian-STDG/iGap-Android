@@ -393,7 +393,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
 
 
-
     @Override
     protected void onStart() {
         super.onStart();

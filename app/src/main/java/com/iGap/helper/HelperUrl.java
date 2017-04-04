@@ -23,8 +23,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
+import com.iGap.activities.ActivityContactsProfile;
 import com.iGap.interfaces.OnAvatarGet;
-import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.interfaces.OnClientCheckInviteLink;
 import com.iGap.interfaces.OnClientJoinByInviteLink;
 import com.iGap.interfaces.OnClientResolveUsername;
@@ -38,7 +38,6 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-import com.iGap.request.RequestChatGetRoom;
 import com.iGap.request.RequestClientCheckInviteLink;
 import com.iGap.request.RequestClientJoinByInviteLink;
 import com.iGap.request.RequestClientResolveUsername;
@@ -49,6 +48,8 @@ import java.util.Arrays;
 import java.util.List;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
+
+import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 /**
  * Created by android3 on 11/26/2016.
@@ -63,6 +64,11 @@ public class HelperUrl {
         igapResolve,
         webLink
 
+    }
+
+    public enum ChatEntery {
+        chat,
+        profile
     }
 
 
@@ -275,7 +281,7 @@ public class HelperUrl {
                     if (url.toLowerCase().contains("join")) {
                         checkAndJoinToRoom(token);
                     } else {
-                        checkUsernameAndGoToRoom(token);
+                        checkUsernameAndGoToRoom(token, ChatEntery.profile);
                     }
 
                 }
@@ -302,7 +308,7 @@ public class HelperUrl {
                 String domain = path.getQueryParameter("domain");
 
                 if (domain.length() > 0) {
-                    checkUsernameAndGoToRoom(domain);
+                    checkUsernameAndGoToRoom(domain, ChatEntery.profile);
                 }
             }
 
@@ -433,7 +439,7 @@ public class HelperUrl {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override public void onClick(View widget) {
 
-                checkUsernameAndGoToRoom(text);
+                checkUsernameAndGoToRoom(text, ChatEntery.profile);
             }
 
             @Override public void updateDrawState(TextPaint ds) {
@@ -834,7 +840,7 @@ public class HelperUrl {
 
     //************************************  go to room by userName   *********************************************************************
 
-    public static void checkUsernameAndGoToRoom(final String userName) {
+    public static void checkUsernameAndGoToRoom(final String userName, final ChatEntery chatEntery) {
 
         if (userName == null || userName.length() < 1) return;
 
@@ -842,7 +848,7 @@ public class HelperUrl {
         // this methode check user name and if it is ok go to room
         G.onClientResolveUsername = new OnClientResolveUsername() {
             @Override public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
-                openChat(userName, type, user, room);
+                openChat(userName, type, user, room, chatEntery);
             }
 
             @Override public void onError(int majorCode, int minorCode) {
@@ -865,11 +871,11 @@ public class HelperUrl {
         if (dialogWaiting != null) if (dialogWaiting.isShowing()) dialogWaiting.dismiss();
     }
 
-    private static void openChat(String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
+    private static void openChat(String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntery chatEntery) {
 
         switch (type) {
             case USER:
-                goToChat(user);
+                goToChat(user, chatEntery);
                 break;
             case ROOM:
                 goToRoom(username, room);
@@ -877,7 +883,35 @@ public class HelperUrl {
         }
     }
 
-    private static void goToChat(final ProtoGlobal.RegisteredUser user) {
+    private static void goToActivity(long Roomid, long peerId, ChatEntery chatEntery) {
+
+        Intent intent;
+
+        switch (chatEntery) {
+            case chat:
+
+                intent = new Intent(G.currentActivity, ActivityChat.class);
+                intent.putExtra("RoomId", Roomid);
+                intent.putExtra("peerId", peerId);
+                //  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                G.currentActivity.startActivity(intent);
+
+                break;
+
+            case profile:
+
+                intent = new Intent(G.context, ActivityContactsProfile.class);
+                intent.putExtra("peerId", peerId);
+                intent.putExtra("RoomId", Roomid);
+                intent.putExtra("enterFrom", GROUP.toString());
+                //  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                G.currentActivity.startActivity(intent);
+
+                break;
+        }
+    }
+
+    private static void goToChat(final ProtoGlobal.RegisteredUser user, final ChatEntery chatEntery) {
 
         Long id = user.getId();
 
@@ -887,35 +921,34 @@ public class HelperUrl {
         if (realmRoom != null) {
             closeDialogWaiting();
 
-            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-            intent.putExtra("RoomId", realmRoom.getId());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            G.currentActivity.startActivity(intent);
+            goToActivity(realmRoom.getId(), id, chatEntery);
 
             realm.close();
         } else {
             if (G.userLogin) {
 
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override public void onChatGetRoom(long roomId) {
-                    closeDialogWaiting();
-                }
+                addchatToDatabaseAndGoToChat(user, 0, chatEntery);
 
-                @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
-                    addchatToDatabaseAndGoToChat(user, room.getId());
-
-                }
-
-                @Override public void onChatGetRoomTimeOut() {
-                    closeDialogWaiting();
-                }
-
-                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
-                    closeDialogWaiting();
-                }
-            };
-
-            new RequestChatGetRoom().chatGetRoomWithIdentity(user.getId());
+                //G.onChatGetRoom = new OnChatGetRoom() {
+                //    @Override public void onChatGetRoom(long roomId) {
+                //        closeDialogWaiting();
+                //    }
+                //
+                //    @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+                //        addchatToDatabaseAndGoToChat(user, room.getId() , chatEntery);
+                //
+                //    }
+                //
+                //    @Override public void onChatGetRoomTimeOut() {
+                //        closeDialogWaiting();
+                //    }
+                //
+                //    @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+                //        closeDialogWaiting();
+                //    }
+                //};
+                //
+                //new RequestChatGetRoom().chatGetRoomWithIdentity(user.getId());
             } else {
                 closeDialogWaiting();
                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
@@ -953,7 +986,7 @@ public class HelperUrl {
 
     }
 
-    private static void addchatToDatabaseAndGoToChat(final ProtoGlobal.RegisteredUser user, final long roomid) {
+    private static void addchatToDatabaseAndGoToChat(final ProtoGlobal.RegisteredUser user, final long roomid, final ChatEntery chatEntery) {
 
         closeDialogWaiting();
 
@@ -985,11 +1018,7 @@ public class HelperUrl {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override public void onSuccess() {
 
-                        Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-                        intent.putExtra("peerId", user.getId());
-                        intent.putExtra("RoomId", roomid);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        G.currentActivity.startActivity(intent);
+                        goToActivity(roomid, user.getId(), chatEntery);
 
                         realm.close();
                     }
@@ -1113,7 +1142,7 @@ public class HelperUrl {
                     if (url.toLowerCase().contains("join")) {
                         checkAndJoinToRoom(token);
                     } else {
-                        checkUsernameAndGoToRoom(token);
+                        checkUsernameAndGoToRoom(token, ChatEntery.profile);
                     }
 
                     Log.e("ddd", "token = " + token);
@@ -1123,7 +1152,7 @@ public class HelperUrl {
                 String domain = path.getQueryParameter("domain");
 
                 if (domain.length() > 0) {
-                    checkUsernameAndGoToRoom(domain);
+                    checkUsernameAndGoToRoom(domain, ChatEntery.profile);
                 }
 
                 Log.e("ddd", "domain  =  " + domain);
