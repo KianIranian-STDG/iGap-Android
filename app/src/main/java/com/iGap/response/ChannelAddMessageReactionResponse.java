@@ -6,7 +6,6 @@ import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-
 import io.realm.Realm;
 
 public class ChannelAddMessageReactionResponse extends MessageHandler {
@@ -58,10 +57,14 @@ public class ChannelAddMessageReactionResponse extends MessageHandler {
                      * vote in chat or group to forwarded message from channel
                      */
                     if (identityParams.length > 3) {
-                        long messageId = Long.parseLong(identityParams[3]);
-                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                        if (realmRoomMessage != null && realmRoomMessage.getForwardMessage() != null) {
-                            realmRoomMessage.getForwardMessage().setVote(reaction1, builder.getReactionCounterLabel());
+                        long forwardMessageId = Long.parseLong(identityParams[3]);
+                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, forwardMessageId).findFirst();
+                        if (realmRoomMessage != null && realmRoomMessage.getChannelExtra() != null) {
+                            if (messageReaction.equals(ProtoGlobal.RoomMessageReaction.THUMBS_UP.toString())) {
+                                realmRoomMessage.getChannelExtra().setThumbsUp(builder.getReactionCounterLabel());
+                            } else {
+                                realmRoomMessage.getChannelExtra().setThumbsDown(builder.getReactionCounterLabel());
+                            }
                         }
                     } else {
                         RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findFirst();

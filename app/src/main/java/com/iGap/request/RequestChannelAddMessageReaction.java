@@ -26,7 +26,7 @@ public class RequestChannelAddMessageReaction {
     public void channelAddMessageReactionForward(long roomId, long messageId, ProtoGlobal.RoomMessageReaction roomMessageReaction, long forwardedMessageId) {
         ProtoChannelAddMessageReaction.ChannelAddMessageReaction.Builder builder = ProtoChannelAddMessageReaction.ChannelAddMessageReaction.newBuilder();
         builder.setRoomId(roomId);
-        builder.setMessageId(messageId);
+        builder.setMessageId(forwardedMessageId);
         builder.setReaction(roomMessageReaction);
 
         String identity = Long.toString(roomId) + '*' + Long.toString(messageId) + '*' + roomMessageReaction.toString() + '*' + Long.toString(forwardedMessageId);

@@ -300,7 +300,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 showVote(holder);
             } else {
                 if (mMessage.forwardedFrom != null) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
                     if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                         showVote(holder);
                     }
@@ -314,8 +314,35 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      */
     private void showVote(VH holder) {
         voteAction(holder);
-        if (mMessage.forwardedFrom != null) {
-            HelperGetMessageState.getMessageState(mMessage.forwardedFrom.getRoomId(), mMessage.forwardedFrom.getMessageId());
+        /**
+         * userId != 0 means that this message is from channel
+         * because for chat and group userId will be set
+         */
+
+        if ((mMessage.forwardedFrom != null)) {
+
+            Realm realm = Realm.getDefaultInstance();
+            ProtoGlobal.Room.Type roomType = null;
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+            if (realmRoom != null) {
+                roomType = realmRoom.getType();
+            }
+            if ((mMessage.forwardedFrom != null) && (roomType == ProtoGlobal.Room.Type.CHANNEL)) {
+                /**
+                 * if roomType is Channel don't consider forward
+                 *
+                 * (( hint : set mMessage.forwardedFrom.getMessageId() divided by two
+                 * because when i add this message to RealmRoomMessage i multiplied by two ))
+                 */
+                long messageId = mMessage.forwardedFrom.getMessageId();
+                if (mMessage.forwardedFrom.getMessageId() > 20000000000000000L) {
+                    messageId = messageId / 2;
+                }
+                HelperGetMessageState.getMessageState(mMessage.forwardedFrom.getAuthorRoomId(), messageId);
+            } else {
+                HelperGetMessageState.getMessageState(mMessage.roomId, Long.parseLong(mMessage.messageID));
+            }
+            realm.close();
         } else {
             HelperGetMessageState.getMessageState(mMessage.roomId, Long.parseLong(mMessage.messageID));
         }
@@ -363,15 +390,41 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             TextView txtSignature = (TextView) holder.itemView.findViewById(R.id.txt_signature);
 
             lytVote.setVisibility(View.VISIBLE);
-            if (mMessage.forwardedFrom != null) {
+
+            /**
+             * userId != 0 means that this message is from channel
+             * because for chat and group userId will be set
+             */
+
+            if ((mMessage.forwardedFrom != null)) {
                 Realm realm = Realm.getDefaultInstance();
-                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst();
-                if (realmChannelExtra != null) {
-                    txtVoteUp.setText(realmChannelExtra.getThumbsUp());
-                    txtVoteDown.setText(realmChannelExtra.getThumbsDown());
-                    txtViewsLabel.setText(realmChannelExtra.getViewsLabel());
-                    txtSignature.setText(realmChannelExtra.getSignature());
+
+
+                ProtoGlobal.Room.Type roomType = null;
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+                if (realmRoom != null) {
+                    roomType = realmRoom.getType();
                 }
+
+                if (roomType != null && roomType == ProtoGlobal.Room.Type.CHANNEL) {
+                    long messageId = mMessage.forwardedFrom.getMessageId();
+                    if (mMessage.forwardedFrom.getMessageId() > 20000000000000000L) {
+                        messageId = messageId / 2;
+                    }
+                    RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+                    if (realmChannelExtra != null) {
+                        txtVoteUp.setText(realmChannelExtra.getThumbsUp());
+                        txtVoteDown.setText(realmChannelExtra.getThumbsDown());
+                        txtViewsLabel.setText(realmChannelExtra.getViewsLabel());
+                        txtSignature.setText(realmChannelExtra.getSignature());
+                    }
+                } else {
+                    txtVoteUp.setText(mMessage.channelExtra.thumbsUp);
+                    txtVoteDown.setText(mMessage.channelExtra.thumbsDown);
+                    txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
+                    txtSignature.setText(mMessage.channelExtra.signature);
+                }
+
                 realm.close();
             } else {
                 txtVoteUp.setText(mMessage.channelExtra.thumbsUp);
@@ -418,8 +471,30 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
                 if (realmRoomMessage != null) {
-                    if (mMessage.forwardedFrom != null) {
-                        new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.forwardedFrom.getRoomId(), mMessage.forwardedFrom.getMessageId(), reaction, Long.parseLong(mMessage.messageID));
+                    /**
+                     * userId != 0 means that this message is from channel
+                     * because for chat and group userId will be set
+                     */
+
+                    if ((mMessage.forwardedFrom != null)) {
+                        ProtoGlobal.Room.Type roomType = null;
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+                        if (realmRoom != null) {
+                            roomType = realmRoom.getType();
+                        }
+                        if ((roomType == ProtoGlobal.Room.Type.CHANNEL)) {
+                            long forwardMessageId = mMessage.forwardedFrom.getMessageId();
+                            /**
+                             * check with this number for detect is multiply now or no
+                             * hint : use another solution
+                             */
+                            if (mMessage.forwardedFrom.getMessageId() > 20000000000000000L) {
+                                forwardMessageId = forwardMessageId / 2;
+                            }
+                            new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.forwardedFrom.getAuthorRoomId(), Long.parseLong(mMessage.messageID), reaction, forwardMessageId);
+                        } else {
+                            new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction);
+                        }
                     } else {
                         new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction);
                     }
@@ -643,7 +718,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (holder.itemView.findViewById(R.id.cslr_txt_forward_from) == null) {
                 forwardView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_forward, null);
                 forwardView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         if (mMessage.username.length() > 0) {
                             HelperUrl.checkUsernameAndGoToRoom(mMessage.username);
@@ -1268,10 +1344,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 hideThumbnailIf(holder);
 
                 HelperUploadFile.AddListener(mMessage.messageID, new HelperUploadFile.UpdateListener() {
-                    @Override public void OnProgress(final int progress, FileUploadStructure struct) {
+                    @Override
+                    public void OnProgress(final int progress, FileUploadStructure struct) {
 
                         G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
                                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(progress);
 
@@ -1283,7 +1361,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         });
                     }
 
-                    @Override public void OnError() {
+                    @Override
+                    public void OnError() {
 
                         ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(0);
                         ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.upload, true);

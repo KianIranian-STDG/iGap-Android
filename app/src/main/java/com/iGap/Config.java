@@ -11,7 +11,7 @@ public class Config {
     public static final int TIME_OUT_MS = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     public static final int LOOKUP_MAP_RESPONSE_OFFSET = 30000;
     public static final int ALLOW_RECONNECT_AGAIN_MINIMUM = (int) (DateUtils.SECOND_IN_MILLIS);
-    public static final int ALLOW_RECONNECT_AGAIN_NORMAL = (int) (3 * DateUtils.SECOND_IN_MILLIS);
+    public static final int ALLOW_RECONNECT_AGAIN_NORMAL = (int) (5 * DateUtils.SECOND_IN_MILLIS);
     public static final int ALLOW_RECONNECT_AGAIN_MAXIMUM = (int) (20 * DateUtils.SECOND_IN_MILLIS);
     public static final int REPEAT_CONNECTION_CHECKING = 1000;
     public static final int DEFAULT_TIME_OUT = 10000;

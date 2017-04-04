@@ -751,23 +751,11 @@ import org.parceler.Parcel;
 
     public static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
 
-        RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId())
-            .equalTo(RealmRoomMessageFields.SHOW_TIME, true)
-            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-            .equalTo(RealmRoomMessageFields.DELETED, false)
-            .greaterThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId())
-            .findFirst();
+        RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId()).equalTo(RealmRoomMessageFields.SHOW_TIME, true).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
 
         RealmRoomMessage lastMessage = null;
 
-        RealmResults<RealmRoomMessage> list = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId())
-            .equalTo(RealmRoomMessageFields.SHOW_TIME, true)
-            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-            .equalTo(RealmRoomMessageFields.DELETED, false)
-            .lessThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId())
-            .findAll();
+        RealmResults<RealmRoomMessage> list = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId()).equalTo(RealmRoomMessageFields.SHOW_TIME, true).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).lessThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findAll();
 
         if (list.size() > 0) {
             lastMessage = list.last();
