@@ -119,6 +119,7 @@ import com.iGap.interfaces.OnLastSeenUpdateTiming;
 import com.iGap.interfaces.OnMessageReceive;
 import com.iGap.interfaces.OnPathAdapterBottomSheet;
 import com.iGap.interfaces.OnSetAction;
+import com.iGap.interfaces.OnUpdateUserOrRoomInfo;
 import com.iGap.interfaces.OnUpdateUserStatusInChangePage;
 import com.iGap.interfaces.OnUserContactsBlock;
 import com.iGap.interfaces.OnUserContactsUnBlock;
@@ -389,6 +390,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private boolean initAttach = false;
     private boolean initEmoji = false;
     public static boolean showVoteChannelLayout = true;
+    public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
 
 
 
@@ -519,6 +521,27 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         initCallbacks();
         HelperNotificationAndBadge.isChatRoomNow = true;
+
+        onUpdateUserOrRoomInfo = new OnUpdateUserOrRoomInfo() {
+            @Override public void onUpdateUserOrRoomInfo(String messageId) {
+
+                if (messageId != null && messageId.length() > 0) {
+                    for (int i = mAdapter.getAdapterItemCount(); i >= 0; i--) {
+                        if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+
+                            final int finalI = i;
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    mAdapter.notifyItemChanged(finalI);
+                                }
+                            });
+
+                            break;
+                        }
+                    }
+                }
+            }
+        };
     }
 
     private void insertItemAndUpdateAfterStartUpload(int progress, final FileUploadStructure struct) {

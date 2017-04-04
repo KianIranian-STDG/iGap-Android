@@ -1,6 +1,8 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.activities.ActivityChat;
+import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.helper.HelperGetUserInfo;
 import com.iGap.interfaces.OnGetUserInfo;
 import com.iGap.proto.ProtoClientGetRoom;
@@ -86,6 +88,21 @@ public class ClientGetRoomResponse extends MessageHandler {
             }
         });
         realm.close();
+
+        // updata chat message header forward after get user or room info
+        if (AbstractMessage.updateForwardInfo != null) {
+            if (AbstractMessage.updateForwardInfo.containsKey(clientGetRoom.getRoom().getId())) {
+                String messageid = AbstractMessage.updateForwardInfo.get(clientGetRoom.getRoom().getId());
+                AbstractMessage.updateForwardInfo.remove(clientGetRoom.getRoom().getId());
+                if (ActivityChat.onUpdateUserOrRoomInfo != null) {
+                    ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageid);
+                }
+            }
+        }
+
+
+
+
     }
 
     @Override

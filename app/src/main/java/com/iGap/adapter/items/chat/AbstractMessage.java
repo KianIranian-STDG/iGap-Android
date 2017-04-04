@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -71,6 +72,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
+
+    public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
 
 
 
@@ -743,7 +746,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                  */
                 RealmRegisteredInfo info = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom.getUserId()).findFirst();
                 if (info != null) {
-                    HelperInfo.needUpdateUser(info.getId(), info.getCacheId());
+
+                    if (HelperInfo.needUpdateUser(info.getId(), info.getCacheId())) {
+                        if (!updateForwardInfo.containsKey(info.getId())) {
+                            updateForwardInfo.put(info.getId(), mMessage.messageID);
+                        }
+                    }
+
                     txtForwardFrom.setText(info.getDisplayName());
                     mMessage.username = info.getUsername();
                     if (mMessage.isSenderMe()) {
@@ -752,7 +761,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                     }
                 } else if (mMessage.forwardedFrom.getUserId() != 0) {
-                    HelperInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null);
+
+                    if (HelperInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null)) {
+                        if (!updateForwardInfo.containsKey(mMessage.forwardedFrom.getUserId())) {
+                            updateForwardInfo.put(mMessage.forwardedFrom.getUserId(), mMessage.messageID);
+                        }
+                    }
+
 
                 } else {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
@@ -788,7 +803,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     break;
                             }
 
-                            HelperInfo.needUpdateRoomInfo(realmRoom1.getId());
+                            if (HelperInfo.needUpdateRoomInfo(realmRoom1.getId())) {
+                                if (!updateForwardInfo.containsKey(realmRoom1.getId())) {
+                                    updateForwardInfo.put(realmRoom1.getId(), mMessage.messageID);
+                                }
+                            }
+
+
+
                             txtForwardFrom.setText(realmRoom1.getTitle());
                             if (mMessage.isSenderMe()) {
                                 txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
@@ -796,7 +818,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                             }
                         } else {
-                            HelperInfo.needUpdateRoomInfo(mMessage.forwardedFrom.getAuthorRoomId());
+                            if (HelperInfo.needUpdateRoomInfo(mMessage.forwardedFrom.getAuthorRoomId())) {
+                                if (!updateForwardInfo.containsKey(mMessage.forwardedFrom.getAuthorRoomId())) {
+                                    updateForwardInfo.put(mMessage.forwardedFrom.getAuthorRoomId(), mMessage.messageID);
+                                }
+                            }
+
                         }
                     }
                 }

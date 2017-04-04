@@ -2,6 +2,8 @@ package com.iGap.response;
 
 import android.os.Handler;
 import com.iGap.G;
+import com.iGap.activities.ActivityChat;
+import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.fragments.FragmentShowMember;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserInfo;
@@ -81,6 +83,18 @@ public class UserInfoResponse extends MessageHandler {
                 if (FragmentShowMember.infoUpdateListenerCount != null) {
                     FragmentShowMember.infoUpdateListenerCount.complete(true, "", "");
                 }
+
+                // updata chat message header forward after get user or room info
+                if (AbstractMessage.updateForwardInfo != null) {
+                    if (AbstractMessage.updateForwardInfo.containsKey(builder.getUser())) {
+                        String messageid = AbstractMessage.updateForwardInfo.get(builder.getUser());
+                        AbstractMessage.updateForwardInfo.remove(builder.getUser());
+                        if (ActivityChat.onUpdateUserOrRoomInfo != null) {
+                            ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageid);
+                        }
+                    }
+                }
+
             }
         });
     }

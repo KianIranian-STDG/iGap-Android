@@ -25,6 +25,7 @@ public class HelperInfo {
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
         if (realmRegisteredInfo != null && cacheId != null && realmRegisteredInfo.getCacheId().equals(cacheId)) {
+            realm.close();
             return false;
         }
         new RequestUserInfo().userInfo(userId);
