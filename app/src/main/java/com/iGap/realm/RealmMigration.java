@@ -56,5 +56,12 @@ public class RealmMigration implements io.realm.RealmMigration {
                 realmRoomMessageSchema.addField(RealmRoomMessageFields.LINK_INFO, String.class);
             }
         }
+
+        if (oldVersion == 6) {
+            RealmObjectSchema realmRoomSchema = schema.get(RealmRoom.class.getSimpleName());
+            if (realmRoomSchema != null) {
+                realmRoomSchema.addField(RealmRoomFields.LAST_SCROLL_POSITION_MESSAGE_ID, long.class, FieldAttribute.REQUIRED);
+            }
+        }
     }
 }

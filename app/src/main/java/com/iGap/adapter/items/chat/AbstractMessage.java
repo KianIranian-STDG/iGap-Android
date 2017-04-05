@@ -67,6 +67,7 @@ import io.realm.Realm;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.iGap.activities.ActivityChat.compressingFiles;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
     public IMessageItem messageClickListener;
@@ -1365,9 +1366,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             contentLoading.setVisibility(View.GONE);
 
             /**
-             * update progress when user trying to upload or download
+             * update progress when user trying to upload or download also if
+             * file is compressing do this action for add listener and use later
              */
-            if (HelperUploadFile.isUploading(mMessage.messageID)) {
+            if (HelperUploadFile.isUploading(mMessage.messageID) || compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
                 hideThumbnailIf(holder);
 
                 HelperUploadFile.AddListener(mMessage.messageID, new HelperUploadFile.UpdateListener() {

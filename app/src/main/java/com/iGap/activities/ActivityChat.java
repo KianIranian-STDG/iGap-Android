@@ -242,7 +242,6 @@ import static com.iGap.R.id.replyFrom;
 import static com.iGap.R.string.member;
 import static com.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
-import static com.iGap.module.AttachFile.requestOpenGalleryForVideoMultipleSelect;
 import static com.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static com.iGap.module.MessageLoader.getLocalMessage;
 import static com.iGap.module.enums.ProgressState.HIDE;
@@ -551,11 +550,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         };
 
-        G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
-                ScrollTOLastPositionMeesgeId();
-            }
-        }, 600);
+        //G.handler.postDelayed(new Runnable() {
+        //    @Override public void run() {
+        //        ScrollTOLastPositionMeesgeId();
+        //    }
+        //}, 600);
 
     }
 
@@ -563,15 +562,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         if (progress == 0) {
 
-            G.handler.postDelayed(new Runnable() {
+            //G.handler.postDelayed(new Runnable() {
+            //    @Override public void run() {
+            //
+            //    }
+            //}, 300);
+
+            runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            addItemAfterStartUpload(struct);
-                        }
-                    });
+                    addItemAfterStartUpload(struct);
                 }
-            }, 300);
+            });
 
         } else if (progress == 100) {
 
@@ -3458,7 +3459,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 showDraftLayout();
                 setDraftMessage(requestCode);
             } else if (listPathString.size() > 1) {
-
+                compressedVideo = true;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -3900,7 +3901,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                  * make channel extra if room is channel
                  */
                 if (chatType == CHANNEL) {
-                    roomMessage.setChannelExtra(RealmChannelExtra.convert(realm, StructChannelExtra.makeDefaultStructure(finalMessageId, mRoomId)));
+                    StructChannelExtra structChannelExtra = StructChannelExtra.makeDefaultStructure(finalMessageId, mRoomId);
+                    finalMessageInfo.channelExtra = structChannelExtra;
+                    roomMessage.setChannelExtra(RealmChannelExtra.convert(realm, structChannelExtra));
                 }
 
                 if (finalMessageType == CONTACT) {
@@ -3962,7 +3965,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         uploadVideo.messageType = finalMessageType;
                         uploadVideo.message = getWrittenMessage();
                         structUploadVideo = uploadVideo;
-                        switchAddItem(new ArrayList<>(Collections.singletonList(finalMessageInfo)), false);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                switchAddItem(new ArrayList<>(Collections.singletonList(finalMessageInfo)), false);
+                            }
+                        });
                     }
                 }
 
