@@ -60,6 +60,7 @@ public class AttachFile {
     public static final int requestOpenGalleryForImageMultipleSelect = 19;
     public static final int requestOpenGalleryForVideoMultipleSelect = 20;
     public static final int request_code_open_document = 21;
+    public static final int request_code_trim_video = 22;
 
     private PopupWindow popupWindow;
 
