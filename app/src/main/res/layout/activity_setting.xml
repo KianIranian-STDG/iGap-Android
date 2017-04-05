@@ -704,6 +704,7 @@
               fontPath="fonts/IRANSansMobile.ttf"
               />
 
+
           <TextView
               android:id="@+id/st_txt_messageTextSize_number"
               android:layout_width="wrap_content"
@@ -719,6 +720,48 @@
               fontPath="fonts/IRANSansMobile.ttf"
               />
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/stsp_layout_trim"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp52"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            >
+
+          <LinearLayout
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_centerInParent="true"
+              >
+
+            <ToggleButton
+                android:id="@+id/stsp_toggle_trim"
+                android:layout_width="@dimen/dp44"
+                android:layout_height="@dimen/dp40"
+                android:background="@drawable/st_switch_button"
+                android:textOff=""
+                android:textOn=""
+                />
+          </LinearLayout>
+
+          <TextView
+              android:id="@+id/stsp_txt_trim"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical"
+              android:text="@string/st_trim"
+              android:textColor="@color/black_register"
+              android:textSize="@dimen/sp15"
+              android:textStyle="normal"
+              />
+
+
+        </RelativeLayout>
 
 
         <View

@@ -69,6 +69,7 @@
         <activity
             android:name=".activities.ActivityComment"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"/>
+        <activity android:name=".activities.ActivityTrimVideo" />
 
         <activity
             android:name=".activities.Activity_QrPayment"

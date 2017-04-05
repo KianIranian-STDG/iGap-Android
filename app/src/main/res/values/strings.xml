@@ -809,4 +809,5 @@
   <string name="INVALID">INVALID</string>
   <string name="TAKEN">TAKEN</string>
   <string name="OCCUPYING_LIMIT_EXCEEDED">OCCUPYING LIMIT EXCEEDED</string>
+  <string name="st_trim">Trim Video</string>
 </resources>

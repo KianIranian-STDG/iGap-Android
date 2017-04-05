@@ -1349,6 +1349,36 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        //toggle trim
+
+        final TextView txtTrim = (TextView) findViewById(R.id.stsp_txt_trim);
+        final ToggleButton stsp_toggle_Trim = (ToggleButton) findViewById(R.id.stsp_toggle_trim);
+
+        int checkedEnableTrim = sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1);
+        if (checkedEnableTrim == 1) {
+            stsp_toggle_Trim.setChecked(true);
+        } else {
+            stsp_toggle_Trim.setChecked(false);
+        }
+
+        txtTrim.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                //                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (stsp_toggle_Trim.isChecked()) {
+                    stsp_toggle_Trim.setChecked(false);
+                    editor.putInt(SHP_SETTING.KEY_TRIM, 0);
+                    editor.apply();
+                } else {
+                    stsp_toggle_Trim.setChecked(true);
+                    editor.putInt(SHP_SETTING.KEY_TRIM, 1);
+                    editor.apply();
+                }
+            }
+        });
+
+
 
         TextView txtPrivacySecurity = (TextView) findViewById(R.id.st_txt_privacySecurity);
         txtPrivacySecurity.setOnClickListener(new View.OnClickListener() {
