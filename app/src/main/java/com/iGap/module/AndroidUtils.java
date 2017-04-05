@@ -59,7 +59,7 @@ public final class AndroidUtils {
         }
     }
 
-    public static String getAudioArtistName(String filePath) {
+    public static String getAudioArtistName(String filePath) throws IllegalArgumentException {
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
         Uri uri;
         if (!HelperString.isExternal(filePath)) {
@@ -72,7 +72,7 @@ public final class AndroidUtils {
         return metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
     }
 
-    public static long getAudioDuration(Context context, String filePath) {
+    public static long getAudioDuration(Context context, String filePath) throws IllegalArgumentException {
 
         Uri uri;
         if (!HelperString.isExternal(filePath)) {

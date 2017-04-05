@@ -530,7 +530,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         HelperNotificationAndBadge.isChatRoomNow = true;
 
         onUpdateUserOrRoomInfo = new OnUpdateUserOrRoomInfo() {
-            @Override public void onUpdateUserOrRoomInfo(String messageId) {
+            @Override
+            public void onUpdateUserOrRoomInfo(String messageId) {
 
                 if (messageId != null && messageId.length() > 0) {
                     for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
@@ -538,7 +539,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                             final int finalI = i;
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     mAdapter.notifyItemChanged(finalI);
                                 }
                             });
@@ -569,7 +571,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             //}, 300);
 
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     addItemAfterStartUpload(struct);
                 }
             });
@@ -610,7 +613,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
                     if (!G.userLogin) {
                         G.handler.postDelayed(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 makeFailed(struct.messageId);
                             }
                         }, 200);
@@ -3048,7 +3052,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             final RealmRoom _RealmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             if (_RealmRoom != null) {
                 mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         _RealmRoom.setLastScrollPositionMessageId(_lastScroledMessageID);
                     }
                 });
@@ -3777,8 +3782,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             case AttachFile.requestOpenGalleryForVideoMultipleSelect:
             case request_code_VIDEO_CAPTURED:
                 fileName = new File(filePath).getName();
-                fileSize = new File(filePath).length();
-                duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath) / 1000;
+                /**
+                 * if video not compressed use from mainPath
+                 */
+                if (compressedVideo) {
+                    fileSize = new File(filePath).length();
+                    duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath) / 1000;
+                } else {
+                    fileSize = new File(mainVideoPath).length();
+                    duration = AndroidUtils.getAudioDuration(getApplicationContext(), mainVideoPath) / 1000;
+                }
+
                 if (isMessageWrote()) {
                     messageType = VIDEO_TEXT;
                 } else {
@@ -5521,17 +5535,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 hasDraft = true;
                 edtChat.setText(draft.getMessage());
 
-                if (draft.getReplyToMessageId() != 0) {
-
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, draft.getReplyToMessageId()).findFirst();
-                    if (realmRoomMessage != null) {
-                        StructMessageInfo struct = new StructMessageInfo();
-                        struct.messageText = realmRoomMessage.getMessage();
-                        struct.senderID = realmRoomMessage.getUserId() + "";
-                        struct.messageID = draft.getReplyToMessageId() + "";
-                        inflateReplayLayoutIntoStub(struct);
-                    }
-                }
+                // we don't have draft for file
+                //if (draft.getReplyToMessageId() != 0) {
+                //
+                //    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, draft.getReplyToMessageId()).findFirst();
+                //    if (realmRoomMessage != null) {
+                //        StructMessageInfo struct = new StructMessageInfo();
+                //        struct.messageText = realmRoomMessage.getMessage();
+                //        struct.senderID = realmRoomMessage.getUserId() + "";
+                //        struct.messageID = draft.getReplyToMessageId() + "";
+                //        inflateReplayLayoutIntoStub(struct);
+                //    }
+                //}
             }
             //            }
         }
@@ -5563,6 +5578,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, "", 0);
             } else if (chatType == GROUP) {
                 new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, "", 0);
+            } else if (chatType == CHANNEL) {
+                new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, "", 0);
             }
 
             clearLocalDraft();
