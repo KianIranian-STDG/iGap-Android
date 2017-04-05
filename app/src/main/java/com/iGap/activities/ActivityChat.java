@@ -405,33 +405,35 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     protected void onStart() {
         super.onStart();
 
-        RealmRoomMessage.fetchMessages(mRoomId, new OnActivityChatStart() {
-            @Override
-            public void resendMessage(RealmRoomMessage message) {
-                G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
-            }
-
-            @Override
-            public void resendMessageNeedsUpload(RealmRoomMessage message) {
-                HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(), new HelperUploadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(int progress, FileUploadStructure struct) {
-                        insertItemAndUpdateAfterStartUpload(progress, struct);
+        G.handler.postDelayed(new Runnable() {
+            @Override public void run() {
+                RealmRoomMessage.fetchMessages(mRoomId, new OnActivityChatStart() {
+                    @Override public void resendMessage(RealmRoomMessage message) {
+                        G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
                     }
 
-                    @Override
-                    public void OnError() {
+                    @Override public void resendMessageNeedsUpload(RealmRoomMessage message) {
+                        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(),
+                            new HelperUploadFile.UpdateListener() {
+                                @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                                    insertItemAndUpdateAfterStartUpload(progress, struct);
+                                }
 
+                                @Override public void OnError() {
+
+                                }
+                            });
+
+                    }
+
+                    @Override public void sendSeenStatus(RealmRoomMessage message) {
+                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                     }
                 });
-
             }
+        }, 300);
 
-            @Override
-            public void sendSeenStatus(RealmRoomMessage message) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-            }
-        });
+
 
         try {
             ShortcutBadger.applyCount(context, 0);
@@ -551,12 +553,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
             }
         };
-
-        //G.handler.postDelayed(new Runnable() {
-        //    @Override public void run() {
-        //        ScrollTOLastPositionMeesgeId();
-        //    }
-        //}, 600);
 
     }
 
@@ -906,6 +902,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         getUserInfo();
         checkAction();
         insertShearedData();
+
+        G.handler.postDelayed(new Runnable() {
+            @Override public void run() {
+                ScrollTOLastPositionMeesgeId();
+            }
+        }, 300);
+
     }
 
     /**
@@ -1988,29 +1991,29 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 switchAddItem(getLocalMessages(), true);
                 manageForwardedMessage();
 
-                if (messageId > 0) {
-                    // TODO: 10/15/2016  if list biger then 50 mList list should load some data we need
-                    scrollPosition = 0;
-                    for (AbstractMessage chatItem : mAdapter.getAdapterItems()) {
-                        if (chatItem.mMessage.messageID.equals(messageId + "")) {
-                            break;
-                        }
-                        scrollPosition++;
-                    }
-                    recyclerView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            recyclerView.scrollToPosition(scrollPosition);
-                        }
-                    }, 1500);
-                } else {
+                //if (messageId > 0) {
+                //    // TODO: 10/15/2016  if list biger then 50 mList list should load some data we need
+                //    scrollPosition = 0;
+                //    for (AbstractMessage chatItem : mAdapter.getAdapterItems()) {
+                //        if (chatItem.mMessage.messageID.equals(messageId + "")) {
+                //            break;
+                //        }
+                //        scrollPosition++;
+                //    }
+                //    recyclerView.postDelayed(new Runnable() {
+                //        @Override
+                //        public void run() {
+                //            recyclerView.scrollToPosition(scrollPosition);
+                //        }
+                //    }, 1500);
+                //} else {
                     /**
                      * show unread message
                      */
                     if (chatType != CHANNEL) {
                         addLayoutUnreadMessage();
                     }
-                }
+                // }
             }
         });
 
@@ -2047,7 +2050,20 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     countNewMessage = 0;
                 } else {
 
-                    if (recyclerView.getAdapter().getItemCount() > 0) {
+                    if (scrollPosition > 0) {
+
+                        int _unreadPosition = recyclerView.getAdapter().getItemCount() - scrollPosition;
+                        LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        int _lastPosition = llm.findLastVisibleItemPosition();
+
+                        if (_lastPosition < _unreadPosition) {
+                            recyclerView.scrollToPosition(_unreadPosition);
+                        } else {
+                            recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                        }
+
+                        scrollPosition = 0;
+                    } else if (recyclerView.getAdapter().getItemCount() > 0) {
 
                         LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
 
@@ -2553,6 +2569,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         int unreadMessageCount = mAdapter.getAdapterItemCount() - 1 - unreadPosition - timeLayoutCount;
 
+        scrollPosition = unreadMessageCount;
+
         if (unreadMessageCount > 0) {
             RealmRoomMessage unreadMessage = new RealmRoomMessage();
             unreadMessage.setMessageId(TimeUtils.currentLocalTime());
@@ -3042,22 +3060,23 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void setLastScrollPositionMeesgeIdToDB() {
 
         int _firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-        if (mAdapter.getItem(_firstVisiblePosition) instanceof TimeItem) {
+        if (mAdapter.getItem(_firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(_firstVisiblePosition) instanceof UnreadMessage) {
             _firstVisiblePosition++;
         }
-        final long _lastScroledMessageID = Long.parseLong(mAdapter.getItem(_firstVisiblePosition).mMessage.messageID);
+        long _lastScroledMessageID = 0;
 
-        if (_lastScroledMessageID > 0) {
+        if (_firstVisiblePosition + 15 < mAdapter.getAdapterItemCount()) {
+            _lastScroledMessageID = Long.parseLong(mAdapter.getItem(_firstVisiblePosition).mMessage.messageID);
+        }
 
-            final RealmRoom _RealmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-            if (_RealmRoom != null) {
-                mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        _RealmRoom.setLastScrollPositionMessageId(_lastScroledMessageID);
-                    }
-                });
-            }
+        final RealmRoom _RealmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (_RealmRoom != null) {
+            final long final_lastScroledMessageID = _lastScroledMessageID;
+            mRealm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+                    _RealmRoom.setLastScrollPositionMessageId(final_lastScroledMessageID);
+                }
+            });
         }
     }
 

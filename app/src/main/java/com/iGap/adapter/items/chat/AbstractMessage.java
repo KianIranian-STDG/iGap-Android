@@ -376,7 +376,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        voteContainer.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp260));
+        if (type == ProtoGlobal.Room.Type.CHANNEL) {
+            voteContainer.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp260));
+        }
 
         if (holder.itemView.findViewById(R.id.lyt_vote) == null) {
             View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
