@@ -97,8 +97,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
-import com.iGap.realm.RealmClientCondition;
-import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
@@ -1069,37 +1067,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //  roomAdapter.updateUiById(id);
     }
 
-    private void clearHistory(final Long id) {
+    private void clearHistory(Long id) {
 
-        final RealmClientCondition realmClientCondition = mRealm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, id).findFirst();
+        ActivityChat.clearHistoryMessage(id);
 
-        final RealmRoom room = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
-
-        if (room != null && room.getLastMessage() != null) {
-
-            if (realmClientCondition != null) {
-                mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmClientCondition.setClearId(room.getLastMessage().getMessageId());
-                    }
-                });
-
-                G.clearMessagesUtil.clearMessages(room.getType(), id, room.getLastMessage().getMessageId());
-            }
-        }
-
-        final RealmRoom _rm = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
-        if (_rm != null) {
-            mRealm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    _rm.setUnreadCount(0);
-                    _rm.setLastMessage(null);
-                    _rm.setUpdatedTime(0);
-                }
-            });
-        }
     }
 
     private void onSelectRoomMenu(String message, RealmRoom item) {

@@ -5402,10 +5402,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
     //    delete & clear History & mutNotification
 
-    public void clearHistory(long item) {
-        final long chatId = item;
+    public void clearHistory(long chatid) {
 
         llScrollNavigate.setVisibility(View.GONE);
+
+        clearHistoryMessage(chatid);
+    }
+
+    public static void clearHistoryMessage(final long chatId) {
 
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();
@@ -5436,6 +5440,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     if (room != null) {
                         room.setUnreadCount(0);
                         room.setLastMessage(null);
+                        room.setUpdatedTime(0);
                     }
                     // finally delete whole chat history
                     realmRoomMessages.deleteAllFromRealm();
@@ -5445,7 +5450,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             G.onClearChatHistory.onClearChatHistory();
         }
         realm.close();
-
     }
 
     private void deleteChat(final int itemff) {
