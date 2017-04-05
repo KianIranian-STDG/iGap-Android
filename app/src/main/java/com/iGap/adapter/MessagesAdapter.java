@@ -331,6 +331,31 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
+    /**
+     * update video message time and name after that compressed file
+     *
+     * @param messageId for find message in adapter
+     * @param fileDuration new duration for set in item
+     * @param fileSize new size for set in item
+     */
+    public void updateVideoInfo(long messageId, long fileDuration, long fileSize) {
+        List<Item> items = getAdapterItems();
+        for (int i = items.size() - 1; i >= 0; i--) {
+            Item messageInfo = items.get(i);
+            if (messageInfo.mMessage != null) {
+                if (messageInfo.mMessage.messageID != null) {
+                    if (Long.parseLong(messageInfo.mMessage.messageID) == messageId) {
+                        messageInfo.mMessage.attachment.duration = fileDuration;
+                        messageInfo.mMessage.attachment.size = fileSize;
+                        set(i, messageInfo);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+
     @Override
     public void notifyAdapterItemRemoved(int position) {
         super.notifyAdapterItemRemoved(position);
