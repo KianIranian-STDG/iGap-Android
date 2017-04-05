@@ -35,6 +35,7 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -157,8 +158,6 @@ import com.iGap.proto.ProtoChannelGetMessagesStats;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
-import com.iGap.realm.RealmAttachment;
-import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmClientCondition;
@@ -242,6 +241,7 @@ import static com.iGap.R.id.replyFrom;
 import static com.iGap.R.string.member;
 import static com.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static com.iGap.module.AttachFile.getFilePathFromUri;
+import static com.iGap.module.AttachFile.requestOpenGalleryForVideoMultipleSelect;
 import static com.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static com.iGap.module.MessageLoader.getLocalMessage;
 import static com.iGap.module.enums.ProgressState.HIDE;
@@ -253,6 +253,7 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.CONTACT;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.GIF_TEXT;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.LOG;
+import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
@@ -3271,7 +3272,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        compressedVideo = false;
         if (resultCode == RESULT_CANCELED) {
             HelperSetAction.sendCancel(messageId);
 
@@ -3330,56 +3331,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
              */
 
             if (requestCode == AttachFile.request_code_VIDEO_CAPTURED) {
-                //
-                //            Uri uri =  data.getData();
-                //            if (uri != null) {
-                //                Cursor cursor = null;
-                //                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                //                    cursor = getContentResolver().query(uri, null, null, null, null, null);
-                //                }
-                //
-                //                try {
-                //                    if (cursor != null && cursor.moveToFirst()) {
-                //
-                //                        String displayName = cursor.getString(
-                //                                cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                //                        Log.i("CCCCC", "Display Name: " + displayName);
-                //
-                //                        int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
-                //                        String size = null;
-                //                        if (!cursor.isNull(sizeIndex)) {
-                //                            size = cursor.getString(sizeIndex);
-                //                        } else {
-                //                            size = "Unknown";
-                //                        }
-                //                        Log.i("CCCCC", "Size: " + size);
-                //
-                //                        tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(displayName, this, uri);
-                //                        new VideoCompressor().execute( tempFile.getPath());
-                //                    }
-                //                } finally {
-                //                    if (cursor != null) {
-                //                        cursor.close();
-                //                    }
-                //                }
-                //            }
 
                 File mediaStorageDir = new File(G.DIR_VIDEOS);
                 File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "video_" + HelperString.getRandomFileName(3) + ".mp4");
                 listPathString = new ArrayList<>();
-                //                    MediaController.newPath = mediaFile.toString();
 
                 Uri uri = data.getData();
-                File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile("displayName", this, uri);
-
-                String savePathVideoCompress = Environment.getExternalStorageDirectory()
-                    + File.separator
-                    + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME
-                    + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR
-                    +
-                    "VIDEO_"
-                    + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date())
-                    + ".mp4";
+                File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(HelperString.getRandomFileName(5), this, uri);
+                mainVideoPath = tempFile.getPath();
+                Log.i("XXX", "mainVideoPath : " + mainVideoPath);
+                String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
+                        "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                 listPathString.add(savePathVideoCompress);
 
@@ -3393,6 +3355,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
 
             if (listPathString.size() == 1) {
+                if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect) {
+                    mainVideoPath = listPathString.get(0);
+
+                    String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
+                            "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+
+                    listPathString.set(0, savePathVideoCompress);
+
+                    new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
+                }
                 showDraftLayout();
                 setDraftMessage(requestCode);
             } else if (listPathString.size() > 1) {
@@ -3563,7 +3535,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 break;
 
-            case AttachFile.requestOpenGalleryForVideoMultipleSelect:
+            case requestOpenGalleryForVideoMultipleSelect:
                 txtFileNameForSend.setText(getString(R.string.multi_video_selected_for_send));
                 break;
             case request_code_VIDEO_CAPTURED:
@@ -3607,7 +3579,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void sendMessage(int requestCode, String filePath) {
 
-        if (filePath == null || filePath.length() == 0) {
+        if (filePath == null) {
 
             if (mReplayLayout != null && userTriesReplay()) {
                 mReplayLayout.setTag(null);
@@ -3711,7 +3683,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
                 break;
 
-            case AttachFile.requestOpenGalleryForVideoMultipleSelect:
+            case requestOpenGalleryForVideoMultipleSelect:
             case request_code_VIDEO_CAPTURED:
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
@@ -3853,8 +3825,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     finalMessageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
                 }
 
+                String makeThumbnailFilePath = "";
                 if (finalMessageType == ProtoGlobal.RoomMessageType.VIDEO || finalMessageType == VIDEO_TEXT) {
-                    Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(finalFilePath, MediaStore.Video.Thumbnails.MINI_KIND);
+                    if (compressedVideo) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
+                        makeThumbnailFilePath = finalFilePath;
+                    } else {
+                        makeThumbnailFilePath = mainVideoPath;
+                    }
+                }
+
+                if (finalMessageType == ProtoGlobal.RoomMessageType.VIDEO || finalMessageType == VIDEO_TEXT) {
+                    Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(makeThumbnailFilePath, MediaStore.Video.Thumbnails.MINI_KIND);
                     if (bitmap != null) {
                         String path = AndroidUtils.saveBitmap(bitmap);
                         roomMessage.getAttachment().setLocalThumbnailPath(path);
@@ -3864,6 +3845,34 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         finalMessageInfo.attachment.setLocalFilePath(roomMessage.getMessageId(), finalFilePath);
                         finalMessageInfo.attachment.width = bitmap.getWidth();
                         finalMessageInfo.attachment.height = bitmap.getHeight();
+                    } else {
+                        Log.i("XXX", "2 Thumbnail Not Exist");
+                    }
+
+                    if (compressedVideo) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
+                        Log.i("XXX", "UPLOAD");
+                        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), new HelperUploadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(int progress, FileUploadStructure struct) {
+                                insertItemAndUpdateAfterStartUpload(progress, struct);
+                            }
+
+                            @Override
+                            public void OnError() {
+
+                            }
+                        });
+                    } else {
+                        Log.i("XXX", "structUploadVideo");
+                        compressingFiles.put(finalMessageId, null);
+                        StructUploadVideo uploadVideo = new StructUploadVideo();
+                        uploadVideo.filePath = finalFilePath;
+                        uploadVideo.roomId = mRoomId;
+                        uploadVideo.messageId = finalMessageId;
+                        uploadVideo.messageType = finalMessageType;
+                        uploadVideo.message = getWrittenMessage();
+                        structUploadVideo = uploadVideo;
+                        switchAddItem(new ArrayList<>(Collections.singletonList(finalMessageInfo)), false);
                     }
                 }
 
@@ -3879,30 +3888,32 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         realm.close();
 
-        if (finalFilePath != null && finalMessageType != CONTACT) {
+        if (finalMessageType != VIDEO && finalMessageType != VIDEO_TEXT) {
+            if (finalFilePath != null && finalMessageType != CONTACT) {
 
-            HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    insertItemAndUpdateAfterStartUpload(progress, struct);
+                HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), new HelperUploadFile.UpdateListener() {
+                    @Override
+                    public void OnProgress(int progress, FileUploadStructure struct) {
+                        insertItemAndUpdateAfterStartUpload(progress, struct);
+                    }
+
+                    @Override
+                    public void OnError() {
+
+                    }
+                });
+            } else {
+                ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
+                if (finalMessageType == CONTACT) {
+                    messageUtil.contact(finalMessageInfo.userInfo.firstName, finalMessageInfo.userInfo.lastName, finalMessageInfo.userInfo.phone);
                 }
-
-                @Override
-                public void OnError() {
-
-                }
-            });
-        } else {
-            ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
-            if (finalMessageType == CONTACT) {
-                messageUtil.contact(finalMessageInfo.userInfo.firstName, finalMessageInfo.userInfo.lastName, finalMessageInfo.userInfo.phone);
+                messageUtil.sendMessage(Long.toString(finalMessageId));
             }
-            messageUtil.sendMessage(Long.toString(finalMessageId));
-        }
 
 
-        if (finalMessageType == CONTACT) {
-            mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo));
+            if (finalMessageType == CONTACT) {
+                mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo));
+            }
         }
 
         if (mReplayLayout != null && userTriesReplay()) {
@@ -5567,7 +5578,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
             showImage(message);
         } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == VIDEO_TEXT) {
-            Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token).findFirst().getLocalFilePath());
+            //Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token).findFirst().getLocalFilePath());
+            Intent intent = HelperMimeType.appropriateProgram(message.attachment.getLocalFilePath());
             if (intent != null) {
                 try {
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -6158,21 +6170,58 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         itemGalleryList.clear();
     }
 
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
+    //===========Video Compress
 
-        @Override protected void onPreExecute() {
+    private boolean compressedVideo = false;
+    private String mainVideoPath = "";
+    public static StructUploadVideo structUploadVideo;
+    public static ArrayMap<Long, HelperUploadFile.StructUpload> compressingFiles = new ArrayMap<>();
+
+    private class StructUploadVideo {
+        public long roomId;
+        public long messageId;
+        public String message;
+        public String filePath;
+        public ProtoGlobal.RoomMessageType messageType;
+    }
+
+    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
             super.onPreExecute();
         }
 
-        @Override protected Boolean doInBackground(String... params) {
-
+        @Override
+        protected Boolean doInBackground(String... params) {
             return MediaController.getInstance().convertVideo(params[0], params[1]);
         }
 
-        @Override protected void onPostExecute(Boolean compressed) {
+        @Override
+        protected void onPostExecute(Boolean compressed) {
             super.onPostExecute(compressed);
             if (compressed) {
-                Log.i("CCCCC", "compressed");
+                Log.i("XXX", "compressed");
+                compressedVideo = true;
+                if (structUploadVideo != null) {
+                    /**
+                     * update new info after compress file with notify item
+                     */
+                    long fileSize = new File(structUploadVideo.filePath).length();
+                    long duration = AndroidUtils.getAudioDuration(getApplicationContext(), structUploadVideo.filePath) / 1000;
+                    mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
+
+                    HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, new HelperUploadFile.UpdateListener() {
+                        @Override
+                        public void OnProgress(int progress, FileUploadStructure struct) {
+                            insertItemAndUpdateAfterStartUpload(progress, struct);
+                        }
+
+                        @Override
+                        public void OnError() {
+
+                        }
+                    });
+                }
             }
         }
     }

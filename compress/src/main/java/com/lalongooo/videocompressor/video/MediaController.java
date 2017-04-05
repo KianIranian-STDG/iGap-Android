@@ -591,7 +591,6 @@ import java.nio.ByteBuffer;
                                             }
                                             if ((info.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
                                                 decoderOutputAvailable = false;
-                                                Log.e("tmessages", "decoder stream end");
                                                 if (Build.VERSION.SDK_INT >= 18) {
                                                     encoder.signalEndOfInputStream();
                                                 } else {
@@ -609,7 +608,6 @@ import java.nio.ByteBuffer;
                                 videoStartTime = videoTime;
                             }
                         } catch (Exception e) {
-                            Log.e("tmessages", e.getMessage());
                             error = true;
                         }
 
@@ -641,7 +639,6 @@ import java.nio.ByteBuffer;
                 }
             } catch (Exception e) {
                 error = true;
-                Log.e("tmessages", e.getMessage());
             } finally {
                 if (extractor != null) {
                     extractor.release();
@@ -650,10 +647,9 @@ import java.nio.ByteBuffer;
                     try {
                         mediaMuxer.finishMovie(false);
                     } catch (Exception e) {
-                        Log.e("tmessages", e.getMessage());
+                        e.printStackTrace();
                     }
                 }
-                Log.e("tmessages", "time = " + (System.currentTimeMillis() - time));
             }
         } else {
             didWriteData(true, true);
@@ -661,7 +657,7 @@ import java.nio.ByteBuffer;
         }
         didWriteData(true, error);
 
-        inputFile.delete();
+        //inputFile.delete();
         return true;
     }
 }

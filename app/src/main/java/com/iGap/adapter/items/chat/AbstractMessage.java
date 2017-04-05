@@ -67,6 +67,7 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.iGap.G.context;
+import static com.iGap.activities.ActivityChat.compressingFiles;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
     public IMessageItem messageClickListener;
@@ -630,7 +631,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (holder.itemView.findViewById(R.id.cslr_txt_forward_from) == null) {
                 forwardView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_forward, null);
                 forwardView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         if (mMessage.username.length() > 0) {
                             HelperUrl.checkUsernameAndGoToRoom(mMessage.username);
@@ -1251,14 +1253,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             /**
              * update progress when user trying to upload or download
              */
-            if (HelperUploadFile.isUploading(mMessage.messageID)) {
+            if (HelperUploadFile.isUploading(mMessage.messageID) || compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
                 hideThumbnailIf(holder);
 
                 HelperUploadFile.AddListener(mMessage.messageID, new HelperUploadFile.UpdateListener() {
-                    @Override public void OnProgress(final int progress, FileUploadStructure struct) {
+                    @Override
+                    public void OnProgress(final int progress, FileUploadStructure struct) {
 
                         G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
                                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(progress);
 
@@ -1270,7 +1274,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         });
                     }
 
-                    @Override public void OnError() {
+                    @Override
+                    public void OnError() {
 
                         ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(0);
                         ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withDrawable(R.drawable.upload, true);
