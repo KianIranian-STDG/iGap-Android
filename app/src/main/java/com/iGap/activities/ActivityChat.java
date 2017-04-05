@@ -525,7 +525,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override public void onUpdateUserOrRoomInfo(String messageId) {
 
                 if (messageId != null && messageId.length() > 0) {
-                    for (int i = mAdapter.getAdapterItemCount(); i >= 0; i--) {
+                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
                         if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
 
                             final int finalI = i;
@@ -541,18 +541,29 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
             }
         };
+
+        G.handler.postDelayed(new Runnable() {
+            @Override public void run() {
+                ScrollTOLastPositionMeesgeId();
+            }
+        }, 600);
+
     }
 
     private void insertItemAndUpdateAfterStartUpload(int progress, final FileUploadStructure struct) {
 
         if (progress == 0) {
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    addItemAfterStartUpload(struct);
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            addItemAfterStartUpload(struct);
+                        }
+                    });
                 }
-            });
+            }, 300);
+
         } else if (progress == 100) {
 
             String messageid = struct.messageId + "";
@@ -574,25 +585,32 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         Log.i("ZZZ", "onUploadStarted UploadTask 5");
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
-        if (roomMessage != null) {
-            AbstractMessage message = mAdapter.getItemByFileIdentity(struct.messageId);
-            // message doesn't exists
-            if (message == null) {
-                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
-                if (!G.userLogin) {
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            makeFailed(struct.messageId);
-                        }
-                    }, 200);
+        try {
+
+            Realm realm = Realm.getDefaultInstance();
+            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
+            if (roomMessage != null) {
+                AbstractMessage message = null;
+
+                if (mAdapter != null && struct != null) {
+                    message = mAdapter.getItemByFileIdentity(struct.messageId);
+                }
+                // message doesn't exists
+                if (message == null) {
+                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+                    if (!G.userLogin) {
+                        G.handler.postDelayed(new Runnable() {
+                            @Override public void run() {
+                                makeFailed(struct.messageId);
+                            }
+                        }, 200);
+                    }
                 }
             }
-        }
-        realm.close();
+            realm.close();
+        } catch (Exception e) {
 
+        }
     }
 
 
@@ -3002,8 +3020,57 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
         onMusicListener = null;
 
+        setLastScrollPositionMeesgeIdToDB();
+
         overridePendingTransition(0, 0);
     }
+
+    private void setLastScrollPositionMeesgeIdToDB() {
+
+        int _firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        if (mAdapter.getItem(_firstVisiblePosition) instanceof TimeItem) {
+            _firstVisiblePosition++;
+        }
+        final long _lastScroledMessageID = Long.parseLong(mAdapter.getItem(_firstVisiblePosition).mMessage.messageID);
+
+        if (_lastScroledMessageID > 0) {
+
+            final RealmRoom _RealmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            if (_RealmRoom != null) {
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        _RealmRoom.setLastScrollPositionMessageId(_lastScroledMessageID);
+                    }
+                });
+            }
+        }
+    }
+
+    private void ScrollTOLastPositionMeesgeId() {
+
+        try {
+
+            RealmRoom _RealmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+
+            if (_RealmRoom != null) {
+
+                String _lastScroledMessageID = _RealmRoom.getLastScrollPositionMessageId() + "";
+
+                if (_lastScroledMessageID.length() > 0) {
+
+                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                        if (mAdapter.getAdapterItem(i).mMessage.messageID.equals(_lastScroledMessageID)) {
+                            recyclerView.scrollToPosition(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
 
     @Override
     protected void onStop() {

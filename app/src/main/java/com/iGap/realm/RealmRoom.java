@@ -34,6 +34,7 @@ public class RealmRoom extends RealmObject {
      * from a room that user don't have that room
      */
     private boolean keepRoom = false;
+    private long lastScrollPositionMessageId;
 
     public RealmRoom() {
 
@@ -71,6 +72,15 @@ public class RealmRoom extends RealmObject {
     public void setUpdatedTime(long updatedTime) {
         this.updatedTime = updatedTime;
     }
+
+    public long getLastScrollPositionMessageId() {
+        return lastScrollPositionMessageId;
+    }
+
+    public void setLastScrollPositionMessageId(long lastScrollPositionMessageId) {
+        this.lastScrollPositionMessageId = lastScrollPositionMessageId;
+    }
+
 
     public RealmRoomMessage getLastMessage() {
         return lastMessage;
