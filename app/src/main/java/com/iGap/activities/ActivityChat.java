@@ -341,6 +341,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private int latestRequestCode;
     private String latestFilePath;
     private Calendar lastDateCalendar = Calendar.getInstance();
+
     private LinearLayout mReplayLayout;
 
     private MaterialDesignTextView iconMute;
@@ -3622,7 +3623,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void sendMessage(int requestCode, String filePath) {
 
-        if (filePath == null || filePath.length() == 0) {
+        if (filePath == null || (filePath.length() == 0 && requestCode != AttachFile.request_code_contact_phone)) {
 
             if (mReplayLayout != null && userTriesReplay()) {
                 mReplayLayout.setTag(null);
@@ -3917,6 +3918,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
 
         if (finalMessageType == CONTACT) {
+            messageInfo.channelExtra = new StructChannelExtra();
             mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo));
         }
 
