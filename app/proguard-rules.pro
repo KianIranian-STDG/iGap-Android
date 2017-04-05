@@ -35,6 +35,10 @@
 -keepattributes SourceFile,LineNumberTable
 ###
 
+###For Compress Module
+-dontwarn com.googlecode.mp4parser.**
+###
+
 
 -keepattributes Signature,InnerClasses
 -keepclasseswithmembers class io.netty.** {
