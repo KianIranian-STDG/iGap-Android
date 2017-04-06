@@ -20,8 +20,7 @@ import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
-public class VideoWithTextItem
-        extends AbstractMessage<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
+public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
     private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public VideoWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
@@ -44,19 +43,13 @@ public class VideoWithTextItem
 
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
-                holder.duration.setText(
-                        String.format(holder.itemView.getResources().getString(R.string.video_duration),
-                                AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)),
-                                AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
+                holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
             }
 
             setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
         } else {
             if (mMessage.attachment != null) {
-                holder.duration.setText(
-                        String.format(holder.itemView.getResources().getString(R.string.video_duration),
-                                AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)),
-                                AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true)));
+                holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + mMessage.attachment.compressing));
             }
 
             setTextIfNeeded(holder.messageText, mMessage.messageText);
@@ -64,14 +57,16 @@ public class VideoWithTextItem
 
         if (!mMessage.hasLinkInMessage) {
             holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View v) {
+                @Override
+                public boolean onLongClick(View v) {
                     holder.itemView.performLongClick();
                     return false;
                 }
             });
 
             holder.messageText.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     if (!isSelected()) {
                         if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return;
