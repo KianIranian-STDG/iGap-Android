@@ -86,9 +86,10 @@ public class UserInfoResponse extends MessageHandler {
 
                 // updata chat message header forward after get user or room info
                 if (AbstractMessage.updateForwardInfo != null) {
-                    if (AbstractMessage.updateForwardInfo.containsKey(builder.getUser())) {
-                        String messageid = AbstractMessage.updateForwardInfo.get(builder.getUser());
-                        AbstractMessage.updateForwardInfo.remove(builder.getUser());
+                    long _id = builder.getUser().getId();
+                    if (AbstractMessage.updateForwardInfo.containsKey(_id)) {
+                        String messageid = AbstractMessage.updateForwardInfo.get(_id);
+                        AbstractMessage.updateForwardInfo.remove(_id);
                         if (ActivityChat.onUpdateUserOrRoomInfo != null) {
                             ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageid);
                         }
