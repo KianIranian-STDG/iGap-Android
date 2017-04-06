@@ -866,6 +866,11 @@
             fontPath="fonts/IRANSansMobile.ttf"
             />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background_editText"
+            />
 
         <LinearLayout
 
@@ -1150,6 +1155,12 @@
                 />
 
           </LinearLayout>
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/background_editText"
+              />
 
           <LinearLayout
               android:layout_width="match_parent"
