@@ -1418,6 +1418,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     editor.putInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 0);
                     editor.apply();
                 }
+
+                if (G.onRefreshActivity != null) {
+                    G.onRefreshActivity.refresh(G.selectedLanguage);
+                }
             }
         });
 

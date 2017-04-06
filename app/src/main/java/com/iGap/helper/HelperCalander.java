@@ -240,10 +240,10 @@ public class HelperCalander {
                     output = TimeUtils.toLocal(date.getTimeInMillis(), "MM dd");
                     String[] _date = output.split(" ");
                     if (_date.length > 1) {
-                        output = convertEnglishMonthNameToPersian(Integer.parseInt(_date[0])) + " " + _date[1];
+                        output = _date[1] + " " + convertEnglishMonthNameToPersian(Integer.parseInt(_date[0]));
                     }
                 } else {
-                    output = TimeUtils.toLocal(date.getTimeInMillis(), "MMM dd");
+                    output = TimeUtils.toLocal(date.getTimeInMillis(), "dd MMM");
                 }
 
             }
