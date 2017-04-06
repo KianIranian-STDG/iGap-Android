@@ -19,7 +19,7 @@ package com.iGap.module;
 import android.content.Context;
 import com.iGap.R;
 import com.iGap.helper.HelperCalander;
-import com.iGap.libs.CalendarTools;
+import com.iGap.libs.CalandarShamsi;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -74,13 +74,12 @@ public final class TimeUtils {
 
             if (HelperCalander.isTimeHijri()) {
 
-                CalendarTools convertTime = new CalendarTools();
-                convertTime.GregorianToPersian(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+                CalandarShamsi shamsi = new CalandarShamsi(date.getTime());
 
                 if (HelperCalander.isLanguagePersian) {
-                    output = convertTime.getDay() + " " + HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getYear();
+                    output = shamsi.date + " " + HelperCalander.getPersianMonthName(shamsi.month) + " " + shamsi.year;
                 } else {
-                    output = convertTime.getYear() + " " + HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getDay();
+                    output = shamsi.year + " " + HelperCalander.getPersianMonthName(shamsi.month) + " " + shamsi.date;
                 }
 
             } else {

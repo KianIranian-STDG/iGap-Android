@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 import android.text.format.DateUtils;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.libs.CalendarTools;
+import com.iGap.libs.CalandarShamsi;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
 import java.util.Calendar;
@@ -20,21 +20,12 @@ public class HelperCalander {
 
     public static String getPersianCalander(int year, int mounth, int day) {
 
-        //Calendar c=Calendar.getInstance();
-        //c.set(year,mounth,day);
-        //
+        Calendar c = Calendar.getInstance();
+        c.set(year, mounth, day);
 
-        //CalandarShamsi shamsi=new CalandarShamsi(c.getTime());
-        //
-        //Log.e("rrrrrr",c.getTime()+"        "+shamsi.year+" "+shamsi.month+"  "+shamsi.date   );
+        CalandarShamsi shamsi = new CalandarShamsi(c.getTime());
 
-
-
-
-        CalendarTools convertTime = new CalendarTools();
-        convertTime.GregorianToPersian(year, mounth, day);
-
-        String time = convertTime.getYear() + "/" + (Integer.parseInt(convertTime.getMonth()) + 1) + "/" + convertTime.getDay();
+        String time = shamsi.year + "/" + shamsi.month + "/" + shamsi.date;
 
         return isLanguagePersian ? convertToUnicodeFarsiNumber(time) : time;
     }
@@ -233,13 +224,12 @@ public class HelperCalander {
 
             if (HelperCalander.isTimeHijri()) {
 
-                CalendarTools convertTime = new CalendarTools();
-                convertTime.GregorianToPersian(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+                CalandarShamsi shamsi = new CalandarShamsi(date.getTime());
 
                 if (HelperCalander.isLanguagePersian) {
-                    output = convertTime.getDay() + " " + HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1);
+                    output = shamsi.date + " " + HelperCalander.getPersianMonthName(shamsi.month);
                 } else {
-                    output = HelperCalander.getPersianMonthName(Integer.parseInt(convertTime.getMonth()) + 1) + " " + convertTime.getDay();
+                    output = HelperCalander.getPersianMonthName(shamsi.month) + " " + shamsi.date;
                 }
 
 
