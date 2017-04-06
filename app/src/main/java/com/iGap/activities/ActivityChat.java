@@ -3524,6 +3524,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             setDraftMessage(requestCode);
                         }
                     }
+                    showDraftLayout();
+                    setDraftMessage(requestCode);
                 } else {
                     compressedVideo = true;
                     showDraftLayout();
