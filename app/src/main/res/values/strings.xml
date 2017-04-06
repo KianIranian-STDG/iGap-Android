@@ -164,8 +164,8 @@
   <string name="st_chatBackground">Chat Background</string>
   <string name="st_Enable_Animation">Enable Animations</string>
   <string name="st_inApp_Browser">In-App browser</string>
-  <string name="st_crop">Crop and Resize</string>
-  <string name="st_send_by_enter">Send by pressing Enter Key</string>
+  <string name="st_crop">Crop and Resize Photo</string>
+  <string name="st_send_by_enter">Send by Enter Key</string>
   <string name="st_title_Media">Multi Media</string>
   <string name="st_auto_download_data">Auto download (Cellular data)</string>
   <string name="st_auto_download_wifi">Auto download (Wi-Fi)</string>
@@ -804,7 +804,7 @@
   <string name="there_is_no_connection_to_server">There Is No Connection To Server</string>
   <string name="empty_room">No Message yet</string>
   <string name="show_member">Show Members List</string>
-  <string name="show_vote_layout_in_channel">show vote layout in channel</string>
+  <string name="show_vote_layout_in_channel">Show vote layout channel</string>
   <string name="close">close</string>
   <string name="INVALID">INVALID</string>
   <string name="TAKEN">TAKEN</string>

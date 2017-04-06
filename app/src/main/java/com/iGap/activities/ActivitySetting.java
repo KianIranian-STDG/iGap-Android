@@ -1361,20 +1361,26 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             stsp_toggle_Trim.setChecked(false);
         }
 
-        txtTrim.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                //                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        stsp_toggle_Trim.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                if (stsp_toggle_Trim.isChecked()) {
-                    stsp_toggle_Trim.setChecked(false);
-                    editor.putInt(SHP_SETTING.KEY_TRIM, 0);
-                    editor.apply();
-                } else {
-                    stsp_toggle_Trim.setChecked(true);
+                if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_TRIM, 1);
                     editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_TRIM, 0);
+                    editor.apply();
                 }
+            }
+        });
+
+        txtTrim.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                stsp_toggle_Trim.setChecked(!stsp_toggle_Trim.isChecked());
+
             }
         });
 

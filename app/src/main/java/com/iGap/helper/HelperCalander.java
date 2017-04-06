@@ -20,6 +20,17 @@ public class HelperCalander {
 
     public static String getPersianCalander(int year, int mounth, int day) {
 
+        //Calendar c=Calendar.getInstance();
+        //c.set(year,mounth,day);
+        //
+
+        //CalandarShamsi shamsi=new CalandarShamsi(c.getTime());
+        //
+        //Log.e("rrrrrr",c.getTime()+"        "+shamsi.year+" "+shamsi.month+"  "+shamsi.date   );
+
+
+
+
         CalendarTools convertTime = new CalendarTools();
         convertTime.GregorianToPersian(year, mounth, day);
 
