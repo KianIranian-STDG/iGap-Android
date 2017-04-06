@@ -537,11 +537,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         HelperNotificationAndBadge.isChatRoomNow = true;
 
         onUpdateUserOrRoomInfo = new OnUpdateUserOrRoomInfo() {
-            @Override public void onUpdateUserOrRoomInfo(final String messageId) {
+            @Override
+            public void onUpdateUserOrRoomInfo(final String messageId) {
 
                 if (messageId != null && messageId.length() > 0) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
                                 if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
                                     mAdapter.notifyItemChanged(i);
@@ -560,12 +562,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         if (progress == 0) {
 
-            //G.handler.postDelayed(new Runnable() {
-            //    @Override public void run() {
-            //
-            //    }
-            //}, 300);
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -575,11 +571,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         } else if (progress == 100) {
 
-            String messageid = struct.messageId + "";
+            String messageId = struct.messageId + "";
             for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
                 AbstractMessage item = mAdapter.getAdapterItem(i);
 
-                if (item.mMessage.messageID.equals(messageid)) {
+                if (item.mMessage.messageID.equals(messageId)) {
                     if (item.mMessage.hasAttachment()) {
                         item.mMessage.attachment.token = struct.token;
                     }
@@ -592,10 +588,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void addItemAfterStartUpload(final FileUploadStructure struct) {
 
-        Log.i("ZZZ", "onUploadStarted UploadTask 5");
-
         try {
-
             Realm realm = Realm.getDefaultInstance();
             RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
             if (roomMessage != null) {
@@ -619,7 +612,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
             realm.close();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -922,9 +915,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             if (hasForward) {
                 imvCancelForward.performClick();
-                ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
-                for (Parcelable messageInfo : messageInfos) {
-                    sendForwardedMessage((StructMessageInfo) Parcels.unwrap(messageInfo));
+                final ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
+                for (int i = 0; i < messageInfos.size(); i++) {
+                    /**
+                     * send forwarded message with one second delay for each message
+                     */
+                    final int j = i;
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(messageInfos.get(j)));
+                        }
+                    }, 1000 * j);
                 }
             } else {
                 imvCancelForward = (ImageView) findViewById(R.id.cslhf_imv_cansel);
