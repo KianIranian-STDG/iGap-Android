@@ -4029,6 +4029,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         uploadVideo.messageType = finalMessageType;
                         uploadVideo.message = getWrittenMessage();
                         structUploadVideo = uploadVideo;
+
+                        finalMessageInfo.attachment.compressing = getResources().getString(R.string.compressing);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

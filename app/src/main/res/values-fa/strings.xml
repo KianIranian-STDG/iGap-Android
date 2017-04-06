@@ -811,4 +811,5 @@
   <string name="TAKEN">ثبت شده</string>
   <string name="OCCUPYING_LIMIT_EXCEEDED">محدودیت دریافت</string>
   <string name="st_trim">Trim Video</string>
+  <string name="compressing"> فشرده سازی...</string>
 </resources>

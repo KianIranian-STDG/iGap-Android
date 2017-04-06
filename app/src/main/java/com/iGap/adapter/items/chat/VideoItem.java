@@ -131,19 +131,23 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     //    }
     //}
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutVideo;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_video;
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
+    @Override
+    public ViewHolderFactory<? extends ViewHolder> getFactory() {
         return FACTORY;
     }
 
-    @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
+    @Override
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
         if (fileType == LocalFileType.THUMBNAIL) {
@@ -157,27 +161,27 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
         }
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
+    @Override
+    protected void voteAction(ViewHolder holder) {
         super.voteAction(holder);
     }
 
-    @Override public FastAdapter.OnClickListener<VideoItem> getOnItemClickListener() {
+    @Override
+    public FastAdapter.OnClickListener<VideoItem> getOnItemClickListener() {
         return super.getOnItemClickListener();
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
-                holder.duration.setText(
-                    String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)),
-                        AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
+                holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
             }
         } else {
             if (mMessage.attachment != null) {
-                holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)),
-                    AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true)));
+                holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + mMessage.attachment.compressing));
             }
         }
 

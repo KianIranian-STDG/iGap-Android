@@ -347,6 +347,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     if (Long.parseLong(messageInfo.mMessage.messageID) == messageId) {
                         messageInfo.mMessage.attachment.duration = fileDuration;
                         messageInfo.mMessage.attachment.size = fileSize;
+                        messageInfo.mMessage.attachment.compressing = "";
                         set(i, messageInfo);
                         break;
                     }

@@ -807,6 +807,6 @@
   <string name="show_member">show member</string>
   <string name="show_vote_layout_in_channel">show vote layout in channel</string>
   <string name="close">close</string>
-
+  <string name="compressing"> فشرده سازی...</string>
 
 </resources>
