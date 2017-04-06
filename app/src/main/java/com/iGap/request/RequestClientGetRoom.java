@@ -17,9 +17,11 @@ public class RequestClientGetRoom {
 
         String identity = "";
 
-        if (mode != null) identity = mode.toString();
+        if (mode != null) {
+            identity = mode.toString();
+        }
 
-        RequestWrapper requestWrapper = new RequestWrapper(602, clientGetRoom, identity);
+        RequestWrapper requestWrapper = new RequestWrapper(602, clientGetRoom, identity + "*" + roomId);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

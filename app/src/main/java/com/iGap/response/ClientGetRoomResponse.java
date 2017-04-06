@@ -38,6 +38,10 @@ public class ClientGetRoomResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(final Realm realm) {
+
+                String[] identityParams = identity.split("\\*");
+                final String identity = identityParams[0];
+
                 if (identity.equals(RequestClientGetRoom.CreateRoomMode.justInfo.toString())) {
                     RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom());
                     realmRoom.setDeleted(true);
@@ -89,26 +93,24 @@ public class ClientGetRoomResponse extends MessageHandler {
         });
         realm.close();
 
-        // updata chat message header forward after get user or room info
+        // update chat message header forward after get user or room info
         if (AbstractMessage.updateForwardInfo != null) {
             if (AbstractMessage.updateForwardInfo.containsKey(clientGetRoom.getRoom().getId())) {
-                String messageid = AbstractMessage.updateForwardInfo.get(clientGetRoom.getRoom().getId());
+                String messageId = AbstractMessage.updateForwardInfo.get(clientGetRoom.getRoom().getId());
                 AbstractMessage.updateForwardInfo.remove(clientGetRoom.getRoom().getId());
                 if (ActivityChat.onUpdateUserOrRoomInfo != null) {
-                    ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageid);
+                    ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageId);
                 }
             }
         }
-
-
-
-
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        G.onClientGetRoomResponse.onTimeOut();
+        if (G.onClientGetRoomResponse != null) {
+            G.onClientGetRoomResponse.onTimeOut();
+        }
     }
 
 
@@ -118,8 +120,14 @@ public class ClientGetRoomResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        G.onClientGetRoomResponse.onError(majorCode, minorCode);
+        if (majorCode == 614 && minorCode == 1) {
+            String[] identityParams = identity.split("\\*");
+            final long roomId = Long.parseLong(identityParams[1]);
+            RealmRoom.createEmptyRoom(roomId);
+        }
+        if (G.onClientGetRoomResponse != null) {
+            G.onClientGetRoomResponse.onError(majorCode, minorCode);
+        }
     }
 }
 

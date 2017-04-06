@@ -217,6 +217,31 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
+    /**
+     * create RealmRoom without info ,just have roomId and type
+     * use this for detect that a room is a private channel
+     * set deleted true and keep true for not showing in room list
+     * and keep info for use in another subjects
+     */
+    public static void createEmptyRoom(final long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom == null) {
+                    realmRoom = realm.createObject(RealmRoom.class, roomId);
+                }
+                realmRoom.setType(RoomType.CHANNEL);
+                realmRoom.setTitle("private channel");
+                realmRoom.setDeleted(true);
+                realmRoom.setKeepRoom(true);
+            }
+        });
+        realm.close();
+    }
+
+
     public static void needGetRoom(long roomId) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();

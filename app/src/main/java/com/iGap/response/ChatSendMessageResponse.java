@@ -15,8 +15,6 @@ import com.iGap.request.RequestClientGetRoom;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-import static com.iGap.helper.HelperMessageResponse.computeLastMessageId;
-
 public class ChatSendMessageResponse extends MessageHandler {
 
     public int actionId;
@@ -40,7 +38,7 @@ public class ChatSendMessageResponse extends MessageHandler {
         final ProtoGlobal.RoomMessage roomMessage = chatSendMessageResponse.getRoomMessage();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         final String authorHash = realm.where(RealmUserInfo.class).findFirst().getAuthorHash();
-        long latestMessageId = computeLastMessageId(realm, chatSendMessageResponse.getRoomId());
+        //long latestMessageId = computeLastMessageId(realm, chatSendMessageResponse.getRoomId());
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override

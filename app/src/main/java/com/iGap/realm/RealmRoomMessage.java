@@ -286,7 +286,7 @@ import org.parceler.Parcel;
              * need to get it again
              */
             if (forwardOrReply) {
-                //RealmRoom.needGetRoom(input.getAuthor().getRoom().getRoomId());
+                RealmRoom.needGetRoom(input.getAuthor().getRoom().getRoomId());
             }
         }
         message.setAuthorHash(input.getAuthor().getHash());

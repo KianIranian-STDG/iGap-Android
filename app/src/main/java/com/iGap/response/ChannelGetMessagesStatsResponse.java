@@ -6,8 +6,6 @@ import com.iGap.proto.ProtoChannelGetMessagesStats;
 import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmChannelExtraFields;
-import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
 
 public class ChannelGetMessagesStatsResponse extends MessageHandler {
@@ -36,15 +34,15 @@ public class ChannelGetMessagesStatsResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 for (final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : builder.getStatsList()) {
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, stats.getMessageId()).findFirst();
-                    if (realmRoomMessage != null) {
+                    //RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, stats.getMessageId()).findFirst();
+                    // if (realmRoomMessage != null) {
 
                         RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, stats.getMessageId()).findFirst();
                         if (realmChannelExtra != null) {
                             realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
                             realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
                             realmChannelExtra.setViewsLabel(stats.getViewsLabel());
-                            realmRoomMessage.setChannelExtra(realmChannelExtra);
+                            //realmRoomMessage.setChannelExtra(realmChannelExtra);
                         }
 
                        /* RealmChannelExtra realmChannelExtra = realmRoomMessage.getChannelExtra();
@@ -68,7 +66,7 @@ public class ChannelGetMessagesStatsResponse extends MessageHandler {
                             realmRoomMessage.setChannelExtra(realmChannelExtra);
                         }*/
                     }
-                }
+                //}
             }
         });
         realm.close();

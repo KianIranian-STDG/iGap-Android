@@ -4,6 +4,8 @@ import com.iGap.G;
 import com.iGap.proto.ProtoChannelAddMessageReaction;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmChannelExtra;
+import com.iGap.realm.RealmChannelExtraFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
@@ -58,12 +60,13 @@ public class ChannelAddMessageReactionResponse extends MessageHandler {
                      */
                     if (identityParams.length > 3) {
                         long forwardMessageId = Long.parseLong(identityParams[3]);
-                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, forwardMessageId).findFirst();
-                        if (realmRoomMessage != null && realmRoomMessage.getChannelExtra() != null) {
+                        //RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, forwardMessageId).findFirst();
+                        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, forwardMessageId).findFirst();
+                        if (realmChannelExtra != null) {
                             if (messageReaction.equals(ProtoGlobal.RoomMessageReaction.THUMBS_UP.toString())) {
-                                realmRoomMessage.getChannelExtra().setThumbsUp(builder.getReactionCounterLabel());
+                                realmChannelExtra.setThumbsUp(builder.getReactionCounterLabel());
                             } else {
-                                realmRoomMessage.getChannelExtra().setThumbsDown(builder.getReactionCounterLabel());
+                                realmChannelExtra.setThumbsDown(builder.getReactionCounterLabel());
                             }
                         }
                     } else {

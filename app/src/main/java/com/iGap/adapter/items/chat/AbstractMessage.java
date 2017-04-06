@@ -799,7 +799,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                             switch (realmRoom1.getType()) {
                                 case CHANNEL:
-                                    mMessage.username = realmRoom1.getChannelRoom().getUsername();
+                                    if (realmRoom1.getChannelRoom() != null && realmRoom1.getChannelRoom().getUsername() != null) {
+                                        mMessage.username = realmRoom1.getChannelRoom().getUsername();
+                                    } else {
+                                        mMessage.username = holder.itemView.getResources().getString(R.string.private_channel);
+                                    }
+
                                     break;
                                 case GROUP:
                                     mMessage.username = realmRoom1.getGroupRoom().getUsername();

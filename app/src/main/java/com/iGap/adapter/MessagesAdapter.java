@@ -213,7 +213,11 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
             if (messageInfo.mMessage != null) {
-                if (messageInfo.mMessage.forwardedFrom != null && messageInfo.mMessage.forwardedFrom.getMessageId() == messageId) {
+                /**
+                 * divide messageInfo.mMessage.forwardedFrom.getMessageId() with two
+                 * because multiplied with two in putOrUpdate in RealmRoomMessage
+                 */
+                if (messageInfo.mMessage.forwardedFrom != null && (messageInfo.mMessage.forwardedFrom.getMessageId() / 2) == messageId) {
                     int pos = items.indexOf(messageInfo);
                     set(pos, messageInfo);
                 } else if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {
