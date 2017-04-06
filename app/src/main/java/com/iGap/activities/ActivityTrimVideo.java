@@ -7,7 +7,6 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 import com.iGap.R;
@@ -18,7 +17,7 @@ import life.knowledge4.videotrimmer.K4LVideoTrimmer;
 import life.knowledge4.videotrimmer.interfaces.OnK4LVideoListener;
 import life.knowledge4.videotrimmer.interfaces.OnTrimVideoListener;
 
-public class ActivityTrimVideo extends AppCompatActivity implements OnTrimVideoListener, OnK4LVideoListener {
+public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoListener, OnK4LVideoListener {
 
     private String path;
     private long originalSize;
@@ -27,7 +26,8 @@ public class ActivityTrimVideo extends AppCompatActivity implements OnTrimVideoL
     private TextView txtTime;
     private TextView txtSize;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_video_trime);
 
@@ -69,11 +69,13 @@ public class ActivityTrimVideo extends AppCompatActivity implements OnTrimVideoL
         txtSize.setText("," + formatFileSize((long) originalSize));
     }
 
-    @Override public void onTrimStarted() {
+    @Override
+    public void onTrimStarted() {
         Log.i("VVVVVVV", "onTrimStarted: ");
     }
 
-    @Override public void getResult(final Uri uri) {
+    @Override
+    public void getResult(final Uri uri) {
         Log.i("VVVVVVV", "getResult: ");
         Intent data = new Intent();
         data.setData(uri);
@@ -81,7 +83,8 @@ public class ActivityTrimVideo extends AppCompatActivity implements OnTrimVideoL
         finish();
     }
 
-    @Override public void cancelAction() {
+    @Override
+    public void cancelAction() {
         Log.i("VVVVVVV", "cancelAction: ");
         Uri uriCancel = Uri.parse(path);
         Intent data = new Intent();
@@ -90,7 +93,8 @@ public class ActivityTrimVideo extends AppCompatActivity implements OnTrimVideoL
         finish();
     }
 
-    @Override public void onError(String message) {
+    @Override
+    public void onError(String message) {
         Log.i("VVVVVVV", "onError: " + message);
     }
 
@@ -134,7 +138,8 @@ public class ActivityTrimVideo extends AppCompatActivity implements OnTrimVideoL
         return result;
     }
 
-    @Override public void onVideoPrepared() {
+    @Override
+    public void onVideoPrepared() {
         Log.i("VVVVVVV", "onVideoPrepared: ");
     }
 }
