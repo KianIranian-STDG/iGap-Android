@@ -49,8 +49,8 @@ public class HelperMimeType {
                 || path.endsWith(".csv")
                 || path.endsWith(".xml")
                 || path.endsWith(".html")) {
-
             intent.setDataAndType(uri, "text/*");
+
         } else if (path.endsWith(".mp3")
                 || path.endsWith(".ogg")
                 || path.endsWith(".wma")
@@ -59,19 +59,16 @@ public class HelperMimeType {
                 || path.endsWith(".wav")
                 || path.endsWith(".mid")
                 || path.endsWith(".midi")) {
-
             intent.setDataAndType(uri, "audio/*");
+
         } else if (path.endsWith(".mp4")
                 || path.endsWith(".3gp")
                 || path.endsWith(".avi")
                 || path.endsWith(".mpg")
                 || path.endsWith(".mpeg")
-                || path.endsWith(".flv")
-                || path.endsWith(".wmv") || path.endsWith(".m4v") || path.endsWith(".mov")) {
-
+                || path.endsWith(".flv") || path.endsWith(".wmv") || path.endsWith(".m4v") || path.endsWith(".mov")) {
             intent.setDataAndType(uri, "video/*");
         } else if (path.endsWith(".pdf")) {
-
             intent.setDataAndType(uri, "application/pdf");
         } else if (path.endsWith(".jpg")
                 || path.endsWith(".bmp")
@@ -79,7 +76,6 @@ public class HelperMimeType {
                 || path.endsWith(".gif")
                 || path.endsWith(".jpeg")
                 || path.endsWith(".tiff")) {
-
             intent.setDataAndType(uri, "image/*");
         } else if (path.endsWith(".apk")) {
 

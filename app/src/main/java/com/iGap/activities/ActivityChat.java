@@ -537,24 +537,19 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         HelperNotificationAndBadge.isChatRoomNow = true;
 
         onUpdateUserOrRoomInfo = new OnUpdateUserOrRoomInfo() {
-            @Override
-            public void onUpdateUserOrRoomInfo(String messageId) {
+            @Override public void onUpdateUserOrRoomInfo(final String messageId) {
 
                 if (messageId != null && messageId.length() > 0) {
-                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                        if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
-
-                            final int finalI = i;
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mAdapter.notifyItemChanged(finalI);
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                                if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                                    mAdapter.notifyItemChanged(i);
+                                    break;
                                 }
-                            });
-
-                            break;
+                            }
                         }
-                    }
+                    });
                 }
             }
         };
@@ -5754,7 +5749,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             showImage(message);
         } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == VIDEO_TEXT) {
             //Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token).findFirst().getLocalFilePath());
-            Intent intent = HelperMimeType.appropriateProgram(message.attachment.getLocalFilePath());
+
+            String _filePath = message.attachment.getLocalFilePath();
+
+            if (_filePath == null || _filePath.length() == 0) {
+                return;
+            }
+
+            Intent intent = HelperMimeType.appropriateProgram(_filePath);
             if (intent != null) {
                 try {
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
