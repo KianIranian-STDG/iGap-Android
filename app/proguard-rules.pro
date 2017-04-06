@@ -38,6 +38,11 @@
 ###For Compress Module
 -dontwarn com.googlecode.mp4parser.**
 ###
+###Trim
+-keep class com.coremedia.** { *; }
+-keep class com.mp4parser.** { *; }
+-keep class com.googlecode.** { *; }
+###
 
 
 -keepattributes Signature,InnerClasses
