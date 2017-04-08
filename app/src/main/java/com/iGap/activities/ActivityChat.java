@@ -159,6 +159,8 @@ import com.iGap.proto.ProtoChannelGetMessagesStats;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
+import com.iGap.realm.RealmAttachment;
+import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmClientCondition;
@@ -5769,9 +5771,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
             showImage(message);
         } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == VIDEO_TEXT) {
-            //Intent intent = HelperMimeType.appropriateProgram(realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token).findFirst().getLocalFilePath());
 
-            String _filePath = message.attachment.getLocalFilePath();
+            String _filePath = null;
+            String _token = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token;
+            RealmAttachment _Attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, _token).findFirst();
+
+            if (_Attachment != null) {
+                _filePath = _Attachment.getLocalFilePath();
+            }
 
             if (_filePath == null || _filePath.length() == 0) {
                 return;
