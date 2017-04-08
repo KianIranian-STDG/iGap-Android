@@ -401,6 +401,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private boolean initEmoji = false;
     public static boolean showVoteChannelLayout = true;
     public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
+    private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>();
+    private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
 
 
     @Override
@@ -3393,7 +3395,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        compressedVideo = false;
         if (resultCode == RESULT_CANCELED) {
             HelperSetAction.sendCancel(messageId);
 
@@ -3495,10 +3496,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     latestRequestCode = AttachFile.request_code_VIDEO_CAPTURED;
                     return;
                 }
-            } else {
-                compressedVideo = true;
             }
-
 
             if (listPathString.size() == 1) {
                 /**
@@ -3529,7 +3527,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     showDraftLayout();
                     setDraftMessage(requestCode);
                 } else {
-                    compressedVideo = true;
+                    /**
+                     * set compressed true for use this path
+                     */
+                    compressedPath.put(listPathString.get(0), true);
+
                     showDraftLayout();
                     setDraftMessage(requestCode);
                 }
@@ -3539,11 +3541,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        compressedVideo = true;
+
                         for (final String path : listPathString) {
+                            /**
+                             * set compressed true for use this path
+                             */
+                            compressedPath.put(path, true);
+
                             if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect && !path.toLowerCase().endsWith(".gif")) {
-                                String localpathNew = attachFile.saveGalleryPicToLocal(path);
-                                sendMessage(requestCode, localpathNew);
+                                String localPathNew = attachFile.saveGalleryPicToLocal(path);
+                                sendMessage(requestCode, localPathNew);
                             } else {
                                 sendMessage(requestCode, path);
                             }
@@ -3854,7 +3861,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 /**
                  * if video not compressed use from mainPath
                  */
-                if (compressedVideo) {
+                boolean compress = false;
+                if (compressedPath.get(filePath) != null) {
+                    compress = compressedPath.get(filePath);
+                }
+                if (compress) {
                     fileSize = new File(filePath).length();
                     duration = AndroidUtils.getAudioDuration(getApplicationContext(), filePath) / 1000;
                 } else {
@@ -4003,7 +4014,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 String makeThumbnailFilePath = "";
                 if (finalMessageType == ProtoGlobal.RoomMessageType.VIDEO || finalMessageType == VIDEO_TEXT) {
-                    if (compressedVideo) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
+                    //if (compressedPath.get(finalFilePath)) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
+                    boolean compress = false;
+                    if (compressedPath.get(finalFilePath) != null) {
+                        compress = compressedPath.get(finalFilePath);
+                    }
+                    if (compress) {
                         makeThumbnailFilePath = finalFilePath;
                     } else {
                         makeThumbnailFilePath = mainVideoPath;
@@ -4025,8 +4041,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         Log.i("XXX", "2 Thumbnail Not Exist");
                     }
 
-                    if (compressedVideo) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
-                        Log.i("XXX", "UPLOAD");
+                    //if (compressedPath.get(finalFilePath)) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
+                    boolean compress = false;
+                    if (compressedPath.get(finalFilePath) != null) {
+                        compress = compressedPath.get(finalFilePath);
+                    }
+                    if (compress) {
                         HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), new HelperUploadFile.UpdateListener() {
                             @Override
                             public void OnProgress(int progress, FileUploadStructure struct) {
@@ -4039,7 +4059,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             }
                         });
                     } else {
-                        Log.i("XXX", "structUploadVideo");
                         compressingFiles.put(finalMessageId, null);
                         StructUploadVideo uploadVideo = new StructUploadVideo();
                         uploadVideo.filePath = finalFilePath;
@@ -4047,7 +4066,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         uploadVideo.messageId = finalMessageId;
                         uploadVideo.messageType = finalMessageType;
                         uploadVideo.message = getWrittenMessage();
-                        structUploadVideo = uploadVideo;
+                        structUploadVideos.add(uploadVideo);
 
                         finalMessageInfo.attachment.compressing = getResources().getString(R.string.compressing);
                         runOnUiThread(new Runnable() {
@@ -6379,9 +6398,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     //===========Video Compress
 
-    private boolean compressedVideo = false;
     private String mainVideoPath = "";
-    public static StructUploadVideo structUploadVideo;
     public static ArrayMap<Long, HelperUploadFile.StructUpload> compressingFiles = new ArrayMap<>();
 
     private class StructUploadVideo {
@@ -6392,42 +6409,51 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         public ProtoGlobal.RoomMessageType messageType;
     }
 
-    class VideoCompressor extends AsyncTask<String, Void, Boolean> {
+    private class StructCompress {
+        public boolean compress;
+        public String path;
+    }
+
+    class VideoCompressor extends AsyncTask<String, Void, StructCompress> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
         @Override
-        protected Boolean doInBackground(String... params) {
-            return MediaController.getInstance().convertVideo(params[0], params[1]);
+        protected StructCompress doInBackground(String... params) {
+            StructCompress structCompress = new StructCompress();
+            structCompress.path = params[1];
+            structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1]);
+            return structCompress;
         }
 
         @Override
-        protected void onPostExecute(Boolean compressed) {
-            super.onPostExecute(compressed);
-            if (compressed) {
-                Log.i("XXX", "compressed");
-                compressedVideo = true;
-                if (structUploadVideo != null) {
-                    /**
-                     * update new info after compress file with notify item
-                     */
-                    long fileSize = new File(structUploadVideo.filePath).length();
-                    long duration = AndroidUtils.getAudioDuration(getApplicationContext(), structUploadVideo.filePath) / 1000;
-                    mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
+        protected void onPostExecute(StructCompress structCompress) {
+            super.onPostExecute(structCompress);
+            if (structCompress.compress) {
+                compressedPath.put(structCompress.path, true);
+                for (StructUploadVideo structUploadVideo : structUploadVideos) {
+                    if (structUploadVideo != null && structUploadVideo.filePath.equals(structCompress.path)) {
+                        /**
+                         * update new info after compress file with notify item
+                         */
+                        long fileSize = new File(structUploadVideo.filePath).length();
+                        long duration = AndroidUtils.getAudioDuration(getApplicationContext(), structUploadVideo.filePath) / 1000;
+                        mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
 
-                    HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, new HelperUploadFile.UpdateListener() {
-                        @Override
-                        public void OnProgress(int progress, FileUploadStructure struct) {
-                            insertItemAndUpdateAfterStartUpload(progress, struct);
-                        }
+                        HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, new HelperUploadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(int progress, FileUploadStructure struct) {
+                                insertItemAndUpdateAfterStartUpload(progress, struct);
+                            }
 
-                        @Override
-                        public void OnError() {
+                            @Override
+                            public void OnError() {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
             }
         }

@@ -80,13 +80,15 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
 
     private static void startUpload(FileUploadStructure uploadStructure, String identity, UpdateListener listener, ProtoGlobal.Room.Type chatType, boolean FromChat) {
 
-        StructUpload structUpload;
+        StructUpload structUpload = null;
 
         if (!list.containsKey(identity)) {
 
             if (compressingFiles.containsKey(Long.parseLong(identity))) {
                 structUpload = compressingFiles.get(Long.parseLong(identity));
-            } else {
+            }
+
+            if (structUpload == null) {
                 structUpload = new StructUpload();
                 structUpload.listener1 = listener;
             }
