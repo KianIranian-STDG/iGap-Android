@@ -5778,6 +5778,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             if (_Attachment != null) {
                 _filePath = _Attachment.getLocalFilePath();
+            } else if (message.attachment != null) {
+                _filePath = message.attachment.getLocalFilePath();
             }
 
             if (_filePath == null || _filePath.length() == 0) {
