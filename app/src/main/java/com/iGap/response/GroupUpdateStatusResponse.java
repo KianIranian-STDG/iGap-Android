@@ -1,12 +1,12 @@
 package com.iGap.response;
 
 import com.iGap.G;
-import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGroupUpdateStatus;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineSeen;
+import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
@@ -38,8 +38,7 @@ public class GroupUpdateStatusResponse extends MessageHandler {
             public void execute(Realm realm) {
                 if (!response.getId().isEmpty()) { // I'm sender
 
-                    RealmClientCondition realmClientCondition =
-                            realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
                     RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
                     for (int i = offlineSeen.size() - 1; i >= 0; i--) {
                         RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
@@ -47,9 +46,15 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                     }
                 } else { // I'm recipient
 
-                    // find message from database and update its status
-                    RealmRoomMessage roomMessage =
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).findFirst();
+                    /**
+                     * clear unread count if another account was saw this message
+                     */
+                    RealmRoom.clearUnreadCount(builder.getRoomId(), builder.getUpdaterAuthorHash(), builder.getStatus());
+
+                    /**
+                     * find message from database and update its status
+                     */
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).findFirst();
                     if (roomMessage != null) {
                         roomMessage.setStatus(builder.getStatus().toString());
                         realm.copyToRealmOrUpdate(roomMessage);
@@ -67,10 +72,6 @@ public class GroupUpdateStatusResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-
     }
 
     @Override

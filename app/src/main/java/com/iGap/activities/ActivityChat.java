@@ -2190,7 +2190,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     ll_attach_text.setVisibility(View.GONE);
                     edtChat.setText("");
 
-                    if (mReplayLayout != null && userTriesReplay()) {
+                    if (userTriesReplay()) {
                         mReplayLayout.setTag(null);
                         mReplayLayout.setVisibility(View.GONE);
                     }

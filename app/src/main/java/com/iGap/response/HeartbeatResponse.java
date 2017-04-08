@@ -1,5 +1,6 @@
 package com.iGap.response;
 
+import android.util.Log;
 import com.iGap.request.RequestHeartbeat;
 
 import static com.iGap.G.latestHearBeatTime;
@@ -21,6 +22,7 @@ public class HeartbeatResponse extends MessageHandler {
     public void handler() {
         super.handler();
         latestHearBeatTime = System.currentTimeMillis();
+        Log.i("HHH", "latestHearBeatTime : " + latestHearBeatTime);
         new RequestHeartbeat().heartBeat();
     }
 

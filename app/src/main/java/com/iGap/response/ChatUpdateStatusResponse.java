@@ -7,6 +7,7 @@ import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmOfflineSeen;
+import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
@@ -44,7 +45,13 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                         }
                     }
                 } else { // I'm recipient
-                    // find message from database and update its status
+                    /**
+                     * clear unread count if another account was saw this message
+                     */
+                    RealmRoom.clearUnreadCount(chatUpdateStatus.getRoomId(), chatUpdateStatus.getUpdaterAuthorHash(), chatUpdateStatus.getStatus());
+                    /**
+                     * find message from database and update its status
+                     */
                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId()).findFirst();
                     if (roomMessage != null) {
                         roomMessage.setStatus(chatUpdateStatus.getStatus().toString());

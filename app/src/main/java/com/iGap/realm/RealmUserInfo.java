@@ -72,4 +72,13 @@ public class RealmUserInfo extends RealmObject {
     public void setAuthorHash(String authorHash) {
         this.authorHash = authorHash;
     }
+
+
+    public boolean isAuthorMe(String author) {
+        if (author.equals(authorHash)) {
+            return true;
+        }
+        return false;
+    }
+
 }
