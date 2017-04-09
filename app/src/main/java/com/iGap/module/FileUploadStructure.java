@@ -5,7 +5,6 @@ package com.iGap.module;
  */
 
 import com.iGap.proto.ProtoGlobal;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,6 +27,7 @@ public class FileUploadStructure {
     public ProtoGlobal.RoomMessageType messageType;
     public long roomId;
     public String text;
+    public long replyMessageId;
 
     public FileUploadStructure(String fileName, long fileSize, String filePath, long messageId) {
         this.fileName = fileName;
@@ -36,14 +36,14 @@ public class FileUploadStructure {
         this.messageId = messageId;
     }
 
-    public FileUploadStructure(String fileName, long fileSize, String filePath, long messageId,
-                               ProtoGlobal.RoomMessageType messageType, long roomId) {
+    public FileUploadStructure(String fileName, long fileSize, String filePath, long messageId, ProtoGlobal.RoomMessageType messageType, long roomId, long replyMessageId) {
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.filePath = filePath;
         this.messageId = messageId;
         this.messageType = messageType;
         this.roomId = roomId;
+        this.replyMessageId = replyMessageId;
     }
 
     public void setFileHash(byte[] fileHash) {

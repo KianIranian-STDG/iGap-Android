@@ -248,7 +248,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
 
             if (sp.chatType != null) {
 
-                UploadComplet(sp.fileUploadStructure, sp.identity, sp.chatType);
+                UploadComplete(sp.fileUploadStructure, sp.identity, sp.chatType);
             }
 
             // remove from selected files to prevent calling this method multiple times
@@ -289,7 +289,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
         }
     }
 
-    private void UploadComplet(final FileUploadStructure uploadStructure, final String identity, ProtoGlobal.Room.Type chatType) {
+    private void UploadComplete(final FileUploadStructure uploadStructure, final String identity, ProtoGlobal.Room.Type chatType) {
 
         HelperSetAction.sendCancel(uploadStructure.messageId);
 
@@ -305,7 +305,11 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
         /**
          * this code should exist in under of other codes in this block
          */
-        new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId).attachment(uploadStructure.token).message(uploadStructure.text).sendMessage(Long.toString(uploadStructure.messageId));
+        if (uploadStructure.replyMessageId == 0) {
+            new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId).attachment(uploadStructure.token).message(uploadStructure.text).sendMessage(Long.toString(uploadStructure.messageId));
+        } else {
+            new ChatSendMessageUtil().newBuilder(chatType, uploadStructure.messageType, uploadStructure.roomId).replyMessage(uploadStructure.replyMessageId).attachment(uploadStructure.token).message(uploadStructure.text).sendMessage(Long.toString(uploadStructure.messageId));
+        }
     }
 
     private static void updateListeners(StructUpload upload) {
@@ -397,8 +401,8 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
         }
     }
 
-    public static void startUploadTaskChat(Long roomID, ProtoGlobal.Room.Type chatType, String filePath, long messageId, ProtoGlobal.RoomMessageType messageType, String messageText, UpdateListener listener) {
-        new UploadTask(roomID, chatType, listener).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, filePath, messageId, messageType, roomID, messageText);
+    public static void startUploadTaskChat(Long roomID, ProtoGlobal.Room.Type chatType, String filePath, long messageId, ProtoGlobal.RoomMessageType messageType, String messageText, long replyMessageId, UpdateListener listener) {
+        new UploadTask(roomID, chatType, listener).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, filePath, messageId, messageType, roomID, messageText, replyMessageId);
     }
 
     private static class UploadTask extends AsyncTask<Object, FileUploadStructure, FileUploadStructure> {
@@ -421,10 +425,11 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
                 ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) params[2];
                 long roomId = (long) params[3];
                 String messageText = (String) params[4];
+                long replyMessageId = (long) params[5];
                 File file = new File(filePath);
                 String fileName = file.getName();
                 long fileSize = file.length();
-                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, roomId);
+                FileUploadStructure fileUploadStructure = new FileUploadStructure(fileName, fileSize, filePath, messageId, messageType, roomId, replyMessageId);
                 fileUploadStructure.openFile(filePath);
                 fileUploadStructure.text = messageText;
 

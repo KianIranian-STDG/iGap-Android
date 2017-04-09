@@ -361,6 +361,17 @@ public class StructMessageInfo implements Parcelable {
         return output;
     }
 
+    public static long getReplyMessageId(StructMessageInfo structMessageInfo) {
+        if (structMessageInfo != null && structMessageInfo.replayTo != null) {
+            if (structMessageInfo.replayTo.getMessageId() > 20000000000000000L) {
+                return (structMessageInfo.replayTo.getMessageId() / 2);
+            } else {
+                return structMessageInfo.replayTo.getMessageId();
+            }
+        }
+        return 0;
+    }
+
     public boolean isTimeOrLogMessage() {
         return senderID.equalsIgnoreCase("-1");
     }

@@ -350,7 +350,7 @@ import org.parceler.Parcel;
 
         addTimeIfNeed(message, realm);
 
-        isEmojeInText(message, input.getMessage());
+        isEmojiInText(message, input.getMessage());
 
         return message;
     }
@@ -789,7 +789,7 @@ import org.parceler.Parcel;
         }
     }
 
-    public static void isEmojeInText(RealmRoomMessage roomMessage, String message) {
+    public static void isEmojiInText(RealmRoomMessage roomMessage, String message) {
 
         final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(message);
 
@@ -802,4 +802,15 @@ import org.parceler.Parcel;
         }
     }
 
+
+    public static long getReplyMessageId(RealmRoomMessage realmRoomMessage) {
+        if (realmRoomMessage != null && realmRoomMessage.getReplyTo() != null) {
+            if (realmRoomMessage.getReplyTo().getMessageId() > 20000000000000000L) {
+                return (realmRoomMessage.getReplyTo().getMessageId() / 2);
+            } else {
+                return realmRoomMessage.getReplyTo().getMessageId();
+            }
+        }
+        return 0;
+    }
 }

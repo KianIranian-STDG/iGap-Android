@@ -70,7 +70,7 @@ public class UploadService extends Service {
             }
         });
 
-        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, "", null);
+        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, "", 0, null);
 
         realm.close();
     }
