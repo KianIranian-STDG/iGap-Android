@@ -1640,17 +1640,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         Realm realm1 = Realm.getDefaultInstance();
                                         RealmRegisteredInfo realmRegisteredInfo = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
                                         if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
-                                            if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                                                if (HelperCalander.isLanguagePersian) {
-                                                    lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
+
+                                            String _name = realmRegisteredInfo.getDisplayName();
+                                            if (_name.length() > 0) {
+
+                                                if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                                                    if (HelperCalander.isLanguagePersian) {
+                                                        lastMessageSender = _name + ": ";
+                                                    } else {
+                                                        lastMessageSender = " :" + _name;
+                                                    }
                                                 } else {
-                                                    lastMessageSender = " :" + realmRegisteredInfo.getDisplayName();
-                                                }
-                                            } else {
-                                                if (HelperCalander.isLanguagePersian) {
-                                                    lastMessageSender = " :" + realmRegisteredInfo.getDisplayName();
-                                                } else {
-                                                    lastMessageSender = realmRegisteredInfo.getDisplayName() + ": ";
+                                                    if (HelperCalander.isLanguagePersian) {
+                                                        lastMessageSender = " :" + _name;
+                                                    } else {
+                                                        lastMessageSender = _name + ": ";
+                                                    }
                                                 }
                                             }
                                         }
