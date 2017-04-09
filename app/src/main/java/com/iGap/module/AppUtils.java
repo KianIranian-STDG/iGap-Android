@@ -264,6 +264,7 @@ public final class AppUtils {
             return message.getReplyTo().getMessage();
         } else {
             switch (message.getForwardMessage() == null ? message.getMessageType() : message.getForwardMessage().getMessageType()) {
+                case AUDIO_TEXT:
                 case AUDIO:
                     if (attachment == null) {
                         return null;
@@ -273,18 +274,21 @@ public final class AppUtils {
                 case CONTACT:
                     messageText = "contact"; // need to fill messageText with a String because in return check null
                     break;
+                case FILE_TEXT:
                 case FILE:
                     if (attachment == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
+                case GIF_TEXT:
                 case GIF:
                     if (attachment == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
+                case IMAGE_TEXT:
                 case IMAGE:
                     if (attachment == null) {
                         return null;
@@ -298,6 +302,7 @@ public final class AppUtils {
                     messageText = resources.getString(R.string.last_msg_format_chat, message.getLogMessage());
                     // resources.getString(R.string.log_message));
                     break;
+                case VIDEO_TEXT:
                 case VIDEO:
                     if (attachment == null) {
                         return null;
@@ -318,6 +323,78 @@ public final class AppUtils {
 
         return messageText;
     }
+
+    /**
+     * fetch type of message for show in reply view
+     *
+     * @param realmRoomMessage for detect message type
+     * @return final message text
+     */
+    public static String replyTextMessage(RealmRoomMessage realmRoomMessage, Resources resources) {
+        RealmRoomMessage message = realmRoomMessage.getForwardMessage() == null ? realmRoomMessage : realmRoomMessage.getForwardMessage();
+        String messageText = "";
+        if (message != null) {
+            switch (message.getMessageType()) {
+                case TEXT:
+                    if (message.getMessage() != null) {
+                        messageText = message.getMessage();
+                    }
+                    break;
+                case AUDIO_TEXT:
+                case AUDIO:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
+                    messageText = resources.getString(R.string.audio_message);
+                    break;
+                case CONTACT:
+                    messageText = message.getRoomMessageContact().getFirstName() + "\n" + message.getRoomMessageContact().getLastPhoneNumber();
+                    break;
+                case FILE_TEXT:
+                case FILE:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
+                    messageText = resources.getString(R.string.file_message);
+                    break;
+                case GIF_TEXT:
+                case GIF:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
+                    messageText = resources.getString(R.string.gif_message);
+                    break;
+                case IMAGE_TEXT:
+                case IMAGE:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
+                    messageText = resources.getString(R.string.image_message);
+                    break;
+                case LOCATION:
+                    messageText = resources.getString(R.string.location_message);
+                    break;
+                case VIDEO_TEXT:
+                case VIDEO:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
+                    messageText = resources.getString(R.string.video_message);
+                    break;
+                case VOICE:
+                    if (message.getAttachment() == null) {
+                        return null;
+                    }
+                    messageText = resources.getString(R.string.voice_message);
+                    break;
+                default:
+                    messageText = "";
+                    break;
+            }
+        }
+        return messageText;
+    }
+
 
     private static String computeLastMessage(final long roomId, Resources resources, ProtoGlobal.Room.Type roomType, RealmAttachment attachment) {
         Realm realm = Realm.getDefaultInstance();

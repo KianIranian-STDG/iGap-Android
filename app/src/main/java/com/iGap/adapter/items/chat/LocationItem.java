@@ -40,7 +40,8 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         return R.layout.chat_sub_layout_location;
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         holder.imgMapPosition.reserveSpace(G.context.getResources().getDimension(R.dimen.dp240), G.context.getResources().getDimension(R.dimen.dp120), getRoomType());
@@ -58,20 +59,21 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         }
 
         if (item != null) {
-
             if (item.getImagePath() != null && new File(item.getImagePath()).exists()) {
                 ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(item.getImagePath()), holder.imgMapPosition);
 
             } else {
                 FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
-                    @Override public void getBitmap(Bitmap bitmap) {
+                    @Override
+                    public void getBitmap(Bitmap bitmap) {
                         holder.imgMapPosition.setImageBitmap(bitmap);
 
                         final String savedPath = FragmentMap.saveBitmapToFile(bitmap);
 
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
 
                                 if (mMessage.forwardedFrom != null) {
                                     if (mMessage.forwardedFrom.getLocation() != null) {
@@ -82,9 +84,6 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                                         mMessage.location.setImagePath(savedPath);
                                     }
                                 }
-
-
-
                             }
                         });
                         realm.close();
@@ -94,23 +93,15 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
             final RealmRoomMessageLocation finalItem = item;
             holder.imgMapPosition.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-
+                @Override
+                public void onClick(View v) {
                     try {
                         HelperPermision.getLocationPermission(G.currentActivity, new OnGetPermission() {
-                            @Override public void Allow() {
-
+                            @Override
+                            public void Allow() {
                                 FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition);
-                                //  if (G.currentActivity instanceof FragmentActivity) {
-                                // ((AppCompatActivity) mContext).getSupportFragmentManager()
                                 FragmentActivity activity = (FragmentActivity) G.currentActivity;
-                                activity.getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .addToBackStack(null)
-                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                    .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
-                                    .commit();
-                                //   }
+                                activity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap).commit();
                             }
 
                             @Override

@@ -673,20 +673,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
 
-                String forwardMessage;
-                ProtoGlobal.RoomMessageType forwardType = mMessage.replayTo.getForwardMessage() != null ? mMessage.replayTo.getForwardMessage().getMessageType() : mMessage.replayTo.getMessageType();
-
-                if (forwardType == ProtoGlobal.RoomMessageType.CONTACT) {
-                    forwardMessage = mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getRoomMessageContact().getLastPhoneNumber() : mMessage.replayTo.getForwardMessage().getRoomMessageContact().getFirstName() + "\n" + mMessage.replayTo.getForwardMessage().getRoomMessageContact().getLastPhoneNumber();
-                } else {
-                    //forwardMessage = mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessage() : mMessage.replayTo.getForwardMessage().getMessage();
-                    if (mMessage.replayTo.getForwardMessage() == null) {
-                        forwardMessage = mMessage.replayTo.getMessage();
-                    } else {
-                        forwardMessage = mMessage.replayTo.getForwardMessage().getMessage();
-                    }
-                }
-
+                String forwardMessage = AppUtils.replyTextMessage(mMessage.replayTo, holder.itemView.getResources());
                 ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
 
                 realm.close();
