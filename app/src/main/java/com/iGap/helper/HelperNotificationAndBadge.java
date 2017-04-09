@@ -88,6 +88,7 @@ public class HelperNotificationAndBadge {
 
     private String mHeader = "";
     private String mContent = "";
+    private Bitmap mBitmapIcon = null;
 
     public HelperNotificationAndBadge() {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -104,23 +105,14 @@ public class HelperNotificationAndBadge {
 
         String avatarPath = null;
         if (unreadMessageCount == 1) {
-            //remoteViews.setTextViewText(R.id.ln_txt_header, list.get(0).name);
-            //remoteViews.setTextViewText(R.id.ln_txt_time, list.get(0).time);
-            //remoteViews.setTextViewText(R.id.ln_txt_message_notification, list.get(0).message);
-
-            mHeader = list.get(0).name;
-            mContent = list.get(0).message;
-
+            remoteViews.setTextViewText(R.id.ln_txt_header, list.get(0).name);
+            remoteViews.setTextViewText(R.id.ln_txt_time, list.get(0).time);
+            remoteViews.setTextViewText(R.id.ln_txt_message_notification, list.get(0).message);
 
         } else {
-
-            mHeader = context.getString(R.string.igap);
-            mContent = list.get(0).message;
-
-            // remoteViews.setTextViewText(R.id.ln_txt_header, context.getString(R.string.igap));
+            remoteViews.setTextViewText(R.id.ln_txt_header, context.getString(R.string.igap));
             if ((list.size() - 1) > 0) {
-                //  remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
-
+                remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
             }
 
             String s = "";
@@ -134,7 +126,7 @@ public class HelperNotificationAndBadge {
 
             mContent = str;
 
-            // remoteViews.setTextViewText(R.id.ln_txt_message_notification, str);
+            remoteViews.setTextViewText(R.id.ln_txt_message_notification, str);
         }
 
         if (isFromOnRoom) {
@@ -352,6 +344,49 @@ public class HelperNotificationAndBadge {
         return _style;
     }
 
+    private void getNotificationSmallInfo() {
+
+        String avatarPath = null;
+        if (unreadMessageCount == 1) {
+
+            mHeader = list.get(0).name;
+            mContent = list.get(0).message;
+        } else {
+            mHeader = context.getString(R.string.igap);
+            mContent = list.get(0).message;
+
+            String s = "";
+            if (countUnicChat == 1) {
+                s = " " + context.getString(R.string.chat);
+            } else if (countUnicChat > 1) {
+                s = " " + context.getString(R.string.chats);
+            }
+
+            String str = String.format(" %d " + context.getString(R.string.new_messages_from) + " %d " + s, unreadMessageCount + countChannelMessage, countUnicChat);
+
+            mContent = str;
+        }
+
+        mBitmapIcon = BitmapFactory.decodeResource(null, R.mipmap.icon);
+
+        if (isFromOnRoom) {
+            Realm realm = Realm.getDefaultInstance();
+            RealmAvatar realmAvatarPath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, senderId).findFirst();
+            if (realmAvatarPath != null) {
+                if (realmAvatarPath.getFile().isFileExistsOnLocal()) {
+                    avatarPath = realmAvatarPath.getFile().getLocalFilePath();
+                } else if (realmAvatarPath.getFile().isThumbnailExistsOnLocal()) {
+                    avatarPath = realmAvatarPath.getFile().getLocalThumbnailPath();
+                }
+            }
+            if (avatarPath != null) {
+                Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+                if (bitmap != null) {
+                    mBitmapIcon = bitmap;
+                }
+            }
+        }
+    }
 
     //*****************************************************************************************
     // notification ***********************
@@ -375,15 +410,16 @@ public class HelperNotificationAndBadge {
             pi = PendingIntent.getActivity(context, notificationId, new Intent(context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
+        //  setRemoteViewsNormal();
 
-        setRemoteViewsNormal();
+        getNotificationSmallInfo();
 
         String messageToshow = list.get(0).message;
         if (list.get(0).message.length() > 40) {
             messageToshow = messageToshow.substring(0, 40);
         }
 
-        notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon())
+        notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon()).setLargeIcon(mBitmapIcon)
             .setContentTitle(mHeader)
             .setContentText(mContent)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)

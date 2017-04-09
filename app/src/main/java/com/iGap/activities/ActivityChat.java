@@ -441,7 +441,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 });
             }
-        }, 300);
+        }, 500);
 
 
 
@@ -601,19 +601,20 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 if (mAdapter != null && struct != null) {
                     message = mAdapter.getItemByFileIdentity(struct.messageId);
-                }
-                // message doesn't exists
-                if (message == null) {
-                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
-                    if (!G.userLogin) {
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                makeFailed(struct.messageId);
-                            }
-                        }, 200);
+
+                    // message doesn't exists
+                    if (message == null) {
+                        switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
+                        if (!G.userLogin) {
+                            G.handler.postDelayed(new Runnable() {
+                                @Override public void run() {
+                                    makeFailed(struct.messageId);
+                                }
+                            }, 200);
+                        }
                     }
                 }
+
             }
             realm.close();
         } catch (Exception e) {
@@ -5016,34 +5017,32 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
     }
 
-    @Override
-    public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
+    @Override public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
         if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
             // if was last message removed
             // update room last message
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            Realm realm = Realm.getDefaultInstance();
 
-                    if (mAdapter.getAdapterItemCount() > 0) {
-                        AbstractMessage lastMessageBeforeDeleted = mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1);
-                        if (lastMessageBeforeDeleted != null) {
-                            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(lastMessageBeforeDeleted.mMessage.messageID)).findFirst();
-                            if (realmRoom != null && realmRoomMessage != null) {
-                                realmRoom.setLastMessage(realmRoomMessage);
-                                realmRoom.setUpdatedTime(realmRoomMessage.getUpdateOrCreateTime() / 1000);
-                            }
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+                    try {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                        long _deletedMessageId = Long.parseLong(messageInfo.messageID);
+                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
+                            .equalTo(RealmRoomMessageFields.EDITED, false)
+                            .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
+                            .lessThan(RealmRoomMessageFields.MESSAGE_ID, _deletedMessageId)
+                            .findAll()
+                            .last();
+                        if (realmRoom != null && realmRoomMessage != null) {
+                            realmRoom.setLastMessage(realmRoomMessage);
                         }
+                    } catch (NullPointerException e) {
                     }
                 }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    realm.close();
-                }
             });
+
+            realm.close();
         }
     }
 
@@ -5537,31 +5536,44 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void showDraftLayout() {
-        if (ll_attach_text == null) { // have null error , so reInitialize for avoid that
-            ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);
-        }
-        ll_attach_text.setVisibility(View.VISIBLE);
-        layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                layoutAttachBottom.setVisibility(View.GONE);
-            }
-        }).start();
-        imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        imvSendButton.clearAnimation();
-                        imvSendButton.setVisibility(View.VISIBLE);
+
+        //onActivityResult happens before onResume, so Presenter does not have View attached. because use handler
+        G.handler.postDelayed(new Runnable() {
+            @Override public void run() {
+
+                if (ll_attach_text == null) { // have null error , so reInitialize for avoid that
+
+                    ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);
+                    layoutAttachBottom = (LinearLayout) findViewById(R.id.layoutAttachBottom);
+                    imvSendButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_send_button);
+                }
+
+                ll_attach_text.setVisibility(View.VISIBLE);
+                layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
+                    @Override public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        layoutAttachBottom.setVisibility(View.GONE);
                     }
-                });
+                }).start();
+                imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
+                    @Override public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                imvSendButton.clearAnimation();
+                                imvSendButton.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
+                }).start();
+
+
+
 
             }
-        }).start();
+        }, 100);
+
+
     }
 
     private void setDraft() {
