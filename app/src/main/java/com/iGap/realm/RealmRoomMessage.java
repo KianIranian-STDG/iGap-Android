@@ -264,14 +264,6 @@ import org.parceler.Parcel;
 
         message.setMessage(input.getMessage());
 
-        String linkInfo = HelperUrl.getLinkInfo(input.getMessage());
-        if (linkInfo.length() > 0) {
-            message.setHasMessageLink(true);
-            message.setLinkInfo(linkInfo);
-        } else {
-            message.setHasMessageLink(false);
-        }
-
         message.setStatus(input.getStatus().toString());
 
         if (input.getAuthor().hasUser()) {
@@ -409,6 +401,15 @@ import org.parceler.Parcel;
 
     public void setMessage(String message) {
         this.message = message;
+
+        String linkInfo = HelperUrl.getLinkInfo(message);
+        if (linkInfo.length() > 0) {
+            setHasMessageLink(true);
+            setLinkInfo(linkInfo);
+        } else {
+            setHasMessageLink(false);
+        }
+
     }
 
     public boolean getHasMessageLink() {

@@ -567,7 +567,6 @@ public class HelperUrl {
         String tmp = "";
         Boolean isAtSign = false;
         int start = 0;
-        String enter = System.getProperty("line.separator");
 
         for (int i = 0; i < text.length(); i++) {
 
