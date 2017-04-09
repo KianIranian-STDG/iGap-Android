@@ -86,6 +86,9 @@ public class HelperNotificationAndBadge {
     private long currentAlarm;
     public ArrayList<StructPopUp> popUpList = new ArrayList<>();
 
+    private String mHeader = "";
+    private String mContent = "";
+
     public HelperNotificationAndBadge() {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_notification_small);
@@ -101,14 +104,23 @@ public class HelperNotificationAndBadge {
 
         String avatarPath = null;
         if (unreadMessageCount == 1) {
-            remoteViews.setTextViewText(R.id.ln_txt_header, list.get(0).name);
-            remoteViews.setTextViewText(R.id.ln_txt_time, list.get(0).time);
-            remoteViews.setTextViewText(R.id.ln_txt_message_notification, list.get(0).message);
+            //remoteViews.setTextViewText(R.id.ln_txt_header, list.get(0).name);
+            //remoteViews.setTextViewText(R.id.ln_txt_time, list.get(0).time);
+            //remoteViews.setTextViewText(R.id.ln_txt_message_notification, list.get(0).message);
+
+            mHeader = list.get(0).name;
+            mContent = list.get(0).message;
+
+
         } else {
 
-            remoteViews.setTextViewText(R.id.ln_txt_header, context.getString(R.string.igap));
+            mHeader = context.getString(R.string.igap);
+            mContent = list.get(0).message;
+
+            // remoteViews.setTextViewText(R.id.ln_txt_header, context.getString(R.string.igap));
             if ((list.size() - 1) > 0) {
-                remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
+                //  remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
+
             }
 
             String s = "";
@@ -120,7 +132,9 @@ public class HelperNotificationAndBadge {
 
             String str = String.format(" %d " + context.getString(R.string.new_messages_from) + " %d " + s, unreadMessageCount + countChannelMessage, countUnicChat);
 
-            remoteViews.setTextViewText(R.id.ln_txt_message_notification, str);
+            mContent = str;
+
+            // remoteViews.setTextViewText(R.id.ln_txt_message_notification, str);
         }
 
         if (isFromOnRoom) {
@@ -296,6 +310,49 @@ public class HelperNotificationAndBadge {
         }
     }
 
+    private NotificationCompat.InboxStyle getBigStyle() {
+
+        NotificationCompat.InboxStyle _style = new NotificationCompat.InboxStyle();
+
+        if (isFromOnRoom) {
+            _style.setBigContentTitle(list.get(0).name);
+
+            for (int i = 0; i < unreadMessageCount && i < 3; i++) {
+                _style.addLine(list.get(i).message);
+            }
+        } else {
+            for (int i = 0; i < unreadMessageCount && i < 3; i++) {
+                _style.addLine(list.get(i).name + " " + list.get(i).message);
+            }
+        }
+
+        if (unreadMessageCount > 3) {
+            _style.addLine("....");
+        }
+
+        String chatCount = "";
+
+        if (countUnicChat == 1) {
+            chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chat);
+        } else if (countUnicChat > 1) {
+            chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chats);
+        }
+
+        String newmess = "";
+        if (unreadMessageCount + countChannelMessage == 1) {
+            newmess = context.getString(R.string.new_message);
+            chatCount = "";
+        } else {
+            newmess = context.getString(R.string.new_messages);
+        }
+
+        String _summary = unreadMessageCount + countChannelMessage + " " + newmess + " " + chatCount;
+        _style.setSummaryText(_summary);
+
+        return _style;
+    }
+
+
     //*****************************************************************************************
     // notification ***********************
 
@@ -326,17 +383,24 @@ public class HelperNotificationAndBadge {
             messageToshow = messageToshow.substring(0, 40);
         }
 
-        notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon()).setContentTitle(context.getString(R.string.new_message_recicve)).setContent(remoteViews).setContentIntent(pi).build();
+        notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon())
+            .setContentTitle(mHeader)
+            .setContentText(mContent)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setStyle(getBigStyle())
+            .setContentIntent(pi)
+            .build();
+
 
         if (currentAlarm + delayAlarm < System.currentTimeMillis()) {
 
             alarmNotification(messageToshow);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            setRemoteViewsLarge();
-            notification.bigContentView = remoteViewsLarge;
-        }
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        //    setRemoteViewsLarge();
+        //    notification.bigContentView = remoteViewsLarge;
+        //}
 
         notificationManager.notify(notificationId, notification);
     }
