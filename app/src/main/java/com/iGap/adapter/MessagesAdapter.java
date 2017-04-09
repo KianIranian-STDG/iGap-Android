@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import com.iGap.R;
 import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.adapter.items.chat.TimeItem;
+import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
@@ -161,6 +162,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     if (item.mMessage.messageID.equals(Long.toString(messageId))) {
                         item.mMessage.messageText = updatedText;
                         item.mMessage.isEdited = true;
+                        item.mMessage.linkInfo = HelperUrl.getLinkInfo(updatedText);
                         set(i, item);
 
                         notifyItemChanged(i);
