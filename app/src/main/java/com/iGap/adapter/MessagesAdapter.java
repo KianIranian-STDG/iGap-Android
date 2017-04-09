@@ -162,6 +162,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                         item.mMessage.messageText = updatedText;
                         item.mMessage.isEdited = true;
                         set(i, item);
+
+                        notifyItemChanged(i);
+
                         break;
                     }
                 }

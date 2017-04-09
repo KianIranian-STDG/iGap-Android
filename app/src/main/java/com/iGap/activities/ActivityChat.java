@@ -2235,17 +2235,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     // update message text in database
                                     roomMessage.setMessage(message);
                                     roomMessage.setEdited(true);
-
-                                    String linkInfo = HelperUrl.getLinkInfo(message);
-                                    if (linkInfo.length() > 0) {
-                                        roomMessage.setHasMessageLink(true);
-                                        roomMessage.setLinkInfo(linkInfo);
-                                    } else {
-                                        roomMessage.setHasMessageLink(false);
-                                    }
-
                                     RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
-
                                     RealmRoomMessage.isEmojiInText(roomMessage, message);
 
                                 }
@@ -2311,14 +2301,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                                 roomMessage.setMessage(message);
                                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-
-                                String linkInfo = HelperUrl.getLinkInfo(message);
-                                if (linkInfo.length() > 0) {
-                                    roomMessage.setHasMessageLink(true);
-                                    roomMessage.setLinkInfo(linkInfo);
-                                } else {
-                                    roomMessage.setHasMessageLink(false);
-                                }
 
                                 RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
                                 RealmRoomMessage.isEmojiInText(roomMessage, message);
@@ -3982,14 +3964,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 roomMessage.setMessageType(finalMessageType);
                 roomMessage.setMessage(getWrittenMessage());
-
-                String linkInfo = HelperUrl.getLinkInfo(getWrittenMessage());
-                if (linkInfo.length() > 0) {
-                    roomMessage.setHasMessageLink(true);
-                    roomMessage.setLinkInfo(linkInfo);
-                } else {
-                    roomMessage.setHasMessageLink(false);
-                }
 
                 RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
                 RealmRoomMessage.isEmojiInText(roomMessage, getWrittenMessage());
