@@ -4926,6 +4926,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void scrollToEnd() {
+
+        if (recyclerView.getAdapter().getItemCount() < 2) {
+            return;
+        }
+
         recyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -4933,7 +4938,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
 
                 int lastPosition = llm.findLastVisibleItemPosition();
-                if (lastPosition + 50 > mAdapter.getItemCount()) {
+                if (lastPosition + 30 > mAdapter.getItemCount()) {
                     recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
                 } else {
                     recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);

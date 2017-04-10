@@ -79,27 +79,27 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             holder.thumbnail.setVisibility(View.VISIBLE);
             if (roomMessage.getForwardMessage() != null) {
                 if (roomMessage.getForwardMessage().getAttachment().getName().toLowerCase().endsWith(".pdf")) {
-                    holder.thumbnail.setImageResource(R.drawable.pdf_icon);
+                    holder.thumbnail.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.pdf_icon));
                 } else if (roomMessage.getForwardMessage().getAttachment().getName().toLowerCase().endsWith(".txt")) {
-                    holder.thumbnail.setImageResource(R.drawable.txt_icon);
+                    holder.thumbnail.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
                 } else if (roomMessage.getForwardMessage().getAttachment().getName().toLowerCase().endsWith(".exe")) {
-                    holder.thumbnail.setImageResource(R.drawable.exe_icon);
+                    holder.thumbnail.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
                 } else if (roomMessage.getForwardMessage().getAttachment().getName().toLowerCase().endsWith(".docs")) {
-                    holder.thumbnail.setImageResource(R.drawable.docx_icon);
+                    holder.thumbnail.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
                 } else {
-                    holder.thumbnail.setImageResource(R.drawable.file_icon);
+                    holder.thumbnail.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
                 }
             } else {
                 if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".pdf")) {
-                    holder.thumbnail.setImageResource(R.drawable.pdf_icon);
+                    holder.thumbnail.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.pdf_icon));
                 } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".txt")) {
-                    holder.thumbnail.setImageResource(R.drawable.txt_icon);
+                    holder.thumbnail.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
                 } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".exe")) {
-                    holder.thumbnail.setImageResource(R.drawable.exe_icon);
+                    holder.thumbnail.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
                 } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".docs")) {
-                    holder.thumbnail.setImageResource(R.drawable.docx_icon);
+                    holder.thumbnail.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
                 } else {
-                    holder.thumbnail.setImageResource(R.drawable.file_icon);
+                    holder.thumbnail.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
                 }
             }
         }

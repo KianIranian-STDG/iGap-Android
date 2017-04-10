@@ -3,6 +3,7 @@ package com.iGap.module;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -11,7 +12,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.iGap.G;
 import com.iGap.R;
+import com.iGap.fragments.FragmentMap;
 import com.iGap.interfaces.IResendMessage;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserUpdateStatus;
@@ -81,11 +84,12 @@ public final class AppUtils {
         return userStatus;
     }
 
-    public static void rightFileThumbnailIcon(ImageView view, ProtoGlobal.RoomMessageType messageType, @Nullable RealmRoomMessage message) {
+    public static void rightFileThumbnailIcon(final ImageView view, ProtoGlobal.RoomMessageType messageType, @Nullable final RealmRoomMessage message) {
 
         RealmAttachment attachment = null;
 
         if (message != null) attachment = message.getAttachment();
+
 
         if (messageType != null) {
             switch (messageType) {
@@ -97,20 +101,27 @@ public final class AppUtils {
                     view.setImageResource(R.drawable.green_music_note);
                 case FILE:
                 case FILE_TEXT:
-                    if (attachment.getName().toLowerCase().endsWith(".pdf")) {
-                        view.setImageResource(R.drawable.pdf_icon);
-                    } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
-                        view.setImageResource(R.drawable.txt_icon);
-                    } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
-                        view.setImageResource(R.drawable.exe_icon);
-                    } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
-                        view.setImageResource(R.drawable.docx_icon);
+
+                    if (attachment != null) {
+                        if (attachment.getName().toLowerCase().endsWith(".pdf")) {
+                            view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.pdf_icon));
+                        } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
+                            view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
+                        } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
+                            view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
+                        } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
+                            view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
+                        } else {
+                            view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
+                        }
                     } else {
-                        view.setImageResource(R.drawable.file_icon);
+                        view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
                     }
+
                     break;
                 case LOCATION:
-                    if (message.getLocation().getImagePath() != null) ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(message.getLocation().getImagePath()), view);
+                    getAndSetPositionPicture(message, view);
+
                     break;
                 default:
                     if (attachment != null) {
@@ -129,6 +140,32 @@ public final class AppUtils {
             }
         }
 
+    }
+
+    private static void getAndSetPositionPicture(final RealmRoomMessage message, final ImageView view) {
+        if (message.getLocation().getImagePath() != null) {
+            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(message.getLocation().getImagePath()), view);
+        } else {
+
+            FragmentMap.loadImageFromPosition(message.getLocation().getLocationLat(), message.getLocation().getLocationLong(), new FragmentMap.OnGetPicture() {
+                @Override public void getBitmap(Bitmap bitmap) {
+
+                    view.setImageBitmap(bitmap);
+
+                    final String savedPath = FragmentMap.saveBitmapToFile(bitmap);
+
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override public void execute(Realm realm) {
+                            if (message.getLocation() != null) {
+                                message.getLocation().setImagePath(savedPath);
+                            }
+                        }
+                    });
+                    realm.close();
+                }
+            });
+        }
     }
 
     /**
