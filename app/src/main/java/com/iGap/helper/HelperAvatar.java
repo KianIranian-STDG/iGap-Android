@@ -36,6 +36,7 @@ import java.util.HashMap;
 public class HelperAvatar {
 
     private static HashMap<Long, ArrayList<OnAvatarGet>> onAvatarGetHashMap = new HashMap<>();
+    private static HashMap<Long, Boolean> mReapeatList = new HashMap<>();
 
     public enum AvatarType {
         USER, ROOM
@@ -138,19 +139,17 @@ public class HelperAvatar {
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
-                                        for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).findAll()) {
-                                            if (realmAvatar1.getFile().getToken().equals(token)) {
-                                                realmAvatar1.getFile().setLocalThumbnailPath(filepath);
-                                                break;
-                                            }
+                                        for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
+                                            realmAvatar1.getFile().setLocalThumbnailPath(filepath);
+
                                         }
                                     }
                                 }, new Realm.Transaction.OnSuccess() {
                                     @Override
                                     public void onSuccess() {
                                         Realm realm1 = Realm.getDefaultInstance();
-                                        for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).findAll()) {
-                                            if (realmAvatar1.getFile().getToken().equals(token)) {
+                                        for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
+
                                                 //onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
                                                 ArrayList<OnAvatarGet> listeners = (onAvatarGetHashMap.get(realmAvatar1.getOwnerId()));
 
@@ -166,8 +165,8 @@ public class HelperAvatar {
                                                     onAvatarGetHashMap.remove(realmAvatar1.getOwnerId());
                                                 }
 
-                                                break;
-                                            }
+                                            //  break;
+
                                         }
                                         realm1.close();
                                     }
@@ -192,9 +191,49 @@ public class HelperAvatar {
             String[] initials = showInitials(ownerId, avatarType);
             if (initials != null) {
                 onAvatarGet.onShowInitials(initials[0], initials[1]);
+            } else {
+                getAvatarAfterTime(ownerId, avatarType, onAvatarGet);
             }
         }
     }
+
+    private static void getAvatarAfterTime(final long ownerId, final AvatarType avatarType, final OnAvatarGet onAvatarGet) {
+
+        try {
+
+            if (mReapeatList.containsKey(ownerId)) {
+                return;
+            }
+
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+
+                    mReapeatList.put(ownerId, true);
+
+                    HelperAvatar.getAvatar(ownerId, avatarType, new OnAvatarGet() {
+                        @Override public void onAvatarGet(final String avatarPath, final long ownerId) {
+                            G.handler.post(new Runnable() {
+                                @Override public void run() {
+                                    onAvatarGet.onAvatarGet(avatarPath, ownerId);
+                                }
+                            });
+                        }
+
+                        @Override public void onShowInitials(final String initials, final String color) {
+                            G.handler.post(new Runnable() {
+                                @Override public void run() {
+                                    onAvatarGet.onShowInitials(initials, color);
+                                }
+                            });
+                        }
+                    });
+                }
+            }, 1500);
+        } catch (Exception e) {
+
+        }
+    }
+
 
     /**
      * return latest avatar with this ownerId

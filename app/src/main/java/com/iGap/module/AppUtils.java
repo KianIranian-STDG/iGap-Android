@@ -94,28 +94,28 @@ public final class AppUtils {
         if (messageType != null) {
             switch (messageType) {
                 case VOICE:
-                    view.setImageResource(R.drawable.microphone_icon);
+                    setImageDrawable(view, R.drawable.microphone_icon);
                     break;
                 case AUDIO:
                 case AUDIO_TEXT:
-                    view.setImageResource(R.drawable.green_music_note);
+                    setImageDrawable(view, R.drawable.green_music_note);
                 case FILE:
                 case FILE_TEXT:
 
                     if (attachment != null) {
                         if (attachment.getName().toLowerCase().endsWith(".pdf")) {
-                            view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.pdf_icon));
+                            setImageDrawable(view, R.drawable.pdf_icon);
                         } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
-                            view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
+                            setImageDrawable(view, R.drawable.txt_icon);
                         } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
-                            view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
+                            setImageDrawable(view, R.drawable.exe_icon);
                         } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
-                            view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
+                            setImageDrawable(view, R.drawable.docx_icon);
                         } else {
-                            view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
+                            setImageDrawable(view, R.drawable.file_icon);
                         }
                     } else {
-                        view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
+                        setImageDrawable(view, R.drawable.file_icon);
                     }
 
                     break;
@@ -186,29 +186,33 @@ public final class AppUtils {
         }
         switch (status) {
             case DELIVERED:
-                view.setImageResource(R.drawable.ic_double_check);
+
+                setImageDrawable(view, R.drawable.ic_double_check);
+
                 //DrawableCompat.setTint(view.getDrawable(), Color.BLACK);
                 view.setColorFilter(Color.BLACK);
                 break;
             case FAILED:
-                view.setImageResource(R.drawable.ic_error);
+                setImageDrawable(view, R.drawable.ic_error);
+
                 //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.red));
                 break;
             case SEEN:
-                view.setImageResource(R.drawable.ic_double_check);
+
+                setImageDrawable(view, R.drawable.ic_double_check);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.iGapColor));
                 //final Drawable originalDrawable = view.getDrawable();
                 //final Drawable wrappedDrawable = DrawableCompat.wrap(originalDrawable);
                 //DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.iGapColor)));
                 break;
             case SENDING:
-                view.setImageResource(R.drawable.ic_clock);
+                setImageDrawable(view, R.drawable.ic_clock);
                 //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
                 break;
             case SENT:
-                view.setImageResource(R.drawable.ic_check);
+                setImageDrawable(view, R.drawable.ic_check);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
                 //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 break;
@@ -235,11 +239,11 @@ public final class AppUtils {
         }
         switch (status) {
             case DELIVERED:
-                view.setImageResource(R.drawable.ic_double_check);
+                setImageDrawable(view, R.drawable.ic_double_check);
                 //DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 break;
             case FAILED:
-                view.setImageResource(R.drawable.ic_error);
+                setImageDrawable(view, R.drawable.ic_error);
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
                     DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 } else {
@@ -247,13 +251,13 @@ public final class AppUtils {
                 }
                 break;
             case SEEN:
-                view.setImageResource(R.drawable.ic_double_check);
+                setImageDrawable(view, R.drawable.ic_double_check);
                 final Drawable originalDrawable = view.getDrawable();
                 final Drawable wrappedDrawable = DrawableCompat.wrap(originalDrawable);
                 DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.iGapColor)));
                 break;
             case SENDING:
-                view.setImageResource(R.drawable.ic_clock);
+                setImageDrawable(view, R.drawable.ic_clock);
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
                     DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 } else {
@@ -261,7 +265,7 @@ public final class AppUtils {
                 }
                 break;
             case SENT:
-                view.setImageResource(R.drawable.ic_check);
+                setImageDrawable(view, R.drawable.ic_check);
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
                     DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 } else {
@@ -273,6 +277,13 @@ public final class AppUtils {
                 break;
         }
     }
+
+    private static void setImageDrawable(ImageView view, int res) {
+        view.setImageDrawable(io.meness.github.messageprogress.AndroidUtils.getDrawable(G.currentActivity, res));
+
+        // view.setImageResource(res);
+    }
+
 
     public static long findLastMessageId(long roomId) {
         Realm realm = Realm.getDefaultInstance();
