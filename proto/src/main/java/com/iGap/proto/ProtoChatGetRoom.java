@@ -6,6 +6,7 @@ package com.iGap.proto;
 public final class ProtoChatGetRoom {
   private ProtoChatGetRoom() {
   }
+
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
@@ -53,6 +54,7 @@ public final class ProtoChatGetRoom {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
+
     private ChatGetRoom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
@@ -98,6 +100,7 @@ public final class ProtoChatGetRoom {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoChatGetRoom.internal_static_proto_ChatGetRoom_descriptor;
     }
@@ -211,30 +214,39 @@ public final class ProtoChatGetRoom {
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoom parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
@@ -329,18 +341,23 @@ public final class ProtoChatGetRoom {
       public Builder clone() {
         return (Builder) super.clone();
       }
+
       public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
@@ -519,6 +536,7 @@ public final class ProtoChatGetRoom {
         onChanged();
         return this;
       }
+
       public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
@@ -610,6 +628,7 @@ public final class ProtoChatGetRoom {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
+
     private ChatGetRoomResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
@@ -663,6 +682,7 @@ public final class ProtoChatGetRoom {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoChatGetRoom.internal_static_proto_ChatGetRoomResponse_descriptor;
     }
@@ -793,30 +813,39 @@ public final class ProtoChatGetRoom {
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatGetRoom.ChatGetRoomResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
@@ -920,18 +949,23 @@ public final class ProtoChatGetRoom {
       public Builder clone() {
         return (Builder) super.clone();
       }
+
       public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
@@ -1194,6 +1228,7 @@ public final class ProtoChatGetRoom {
         }
         return roomBuilder_;
       }
+
       public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }

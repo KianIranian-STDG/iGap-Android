@@ -2517,8 +2517,7 @@ public final class ProtoChannelSendMessage {
     internal_static_proto_ChannelSendMessage_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_proto_ChannelSendMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_ChannelSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChannelSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
     internal_static_proto_ChannelSendMessageResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChannelSendMessageResponse_fieldAccessorTable = new

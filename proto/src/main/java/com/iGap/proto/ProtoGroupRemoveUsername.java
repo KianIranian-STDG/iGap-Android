@@ -13,7 +13,6 @@ public final class ProtoGroupRemoveUsername {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface GroupRemoveUsernameOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.GroupRemoveUsername)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoGroupRemoveUsername {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -38,7 +35,6 @@ public final class ProtoGroupRemoveUsername {
      */
     long getRoomId();
   }
-
   /**
    * Protobuf type {@code proto.GroupRemoveUsername}
    */
@@ -49,7 +45,6 @@ public final class ProtoGroupRemoveUsername {
     private GroupRemoveUsername(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private GroupRemoveUsername() {
       roomId_ = 0L;
     }
@@ -115,21 +110,18 @@ public final class ProtoGroupRemoveUsername {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -147,7 +139,6 @@ public final class ProtoGroupRemoveUsername {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -182,7 +173,6 @@ public final class ProtoGroupRemoveUsername {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -263,15 +253,12 @@ public final class ProtoGroupRemoveUsername {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoGroupRemoveUsername.GroupRemoveUsername prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -281,7 +268,6 @@ public final class ProtoGroupRemoveUsername {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.GroupRemoveUsername}
      */
@@ -305,12 +291,10 @@ public final class ProtoGroupRemoveUsername {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -375,7 +359,6 @@ public final class ProtoGroupRemoveUsername {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoGroupRemoveUsername.GroupRemoveUsername) {
           return mergeFrom((com.iGap.proto.ProtoGroupRemoveUsername.GroupRemoveUsername) other);
@@ -418,14 +401,12 @@ public final class ProtoGroupRemoveUsername {
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -436,7 +417,6 @@ public final class ProtoGroupRemoveUsername {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -453,7 +433,6 @@ public final class ProtoGroupRemoveUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -467,7 +446,6 @@ public final class ProtoGroupRemoveUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -485,7 +463,6 @@ public final class ProtoGroupRemoveUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -500,7 +477,6 @@ public final class ProtoGroupRemoveUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -509,7 +485,6 @@ public final class ProtoGroupRemoveUsername {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -520,7 +495,6 @@ public final class ProtoGroupRemoveUsername {
           return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -533,14 +507,12 @@ public final class ProtoGroupRemoveUsername {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -550,7 +522,6 @@ public final class ProtoGroupRemoveUsername {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -575,7 +546,6 @@ public final class ProtoGroupRemoveUsername {
 
     // @@protoc_insertion_point(class_scope:proto.GroupRemoveUsername)
     private static final com.iGap.proto.ProtoGroupRemoveUsername.GroupRemoveUsername DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoGroupRemoveUsername.GroupRemoveUsername();
     }
@@ -613,12 +583,10 @@ public final class ProtoGroupRemoveUsername {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -629,7 +597,6 @@ public final class ProtoGroupRemoveUsername {
      */
     long getRoomId();
   }
-
   /**
    * Protobuf type {@code proto.GroupRemoveUsernameResponse}
    */
@@ -640,7 +607,6 @@ public final class ProtoGroupRemoveUsername {
     private GroupRemoveUsernameResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private GroupRemoveUsernameResponse() {
       roomId_ = 0L;
     }
@@ -706,21 +672,18 @@ public final class ProtoGroupRemoveUsername {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -730,7 +693,6 @@ public final class ProtoGroupRemoveUsername {
 
     public static final int ROOM_ID_FIELD_NUMBER = 2;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 2;</code>
      */
@@ -739,7 +701,6 @@ public final class ProtoGroupRemoveUsername {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -774,7 +735,6 @@ public final class ProtoGroupRemoveUsername {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -855,15 +815,12 @@ public final class ProtoGroupRemoveUsername {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoGroupRemoveUsername.GroupRemoveUsernameResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -873,7 +830,6 @@ public final class ProtoGroupRemoveUsername {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.GroupRemoveUsernameResponse}
      */
@@ -897,12 +853,10 @@ public final class ProtoGroupRemoveUsername {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -967,7 +921,6 @@ public final class ProtoGroupRemoveUsername {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoGroupRemoveUsername.GroupRemoveUsernameResponse) {
           return mergeFrom((com.iGap.proto.ProtoGroupRemoveUsername.GroupRemoveUsernameResponse) other);
@@ -1010,14 +963,12 @@ public final class ProtoGroupRemoveUsername {
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1028,7 +979,6 @@ public final class ProtoGroupRemoveUsername {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1045,7 +995,6 @@ public final class ProtoGroupRemoveUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1059,7 +1008,6 @@ public final class ProtoGroupRemoveUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1077,7 +1025,6 @@ public final class ProtoGroupRemoveUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1092,7 +1039,6 @@ public final class ProtoGroupRemoveUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1101,7 +1047,6 @@ public final class ProtoGroupRemoveUsername {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1112,7 +1057,6 @@ public final class ProtoGroupRemoveUsername {
           return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1125,14 +1069,12 @@ public final class ProtoGroupRemoveUsername {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1142,7 +1084,6 @@ public final class ProtoGroupRemoveUsername {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1167,7 +1108,6 @@ public final class ProtoGroupRemoveUsername {
 
     // @@protoc_insertion_point(class_scope:proto.GroupRemoveUsernameResponse)
     private static final com.iGap.proto.ProtoGroupRemoveUsername.GroupRemoveUsernameResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoGroupRemoveUsername.GroupRemoveUsernameResponse();
     }
@@ -1208,7 +1148,6 @@ public final class ProtoGroupRemoveUsername {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\031GroupRemoveUsername.proto\022\005proto\032\rRequ" +

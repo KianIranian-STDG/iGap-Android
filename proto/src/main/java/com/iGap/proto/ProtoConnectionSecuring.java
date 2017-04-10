@@ -48,6 +48,16 @@ public final class ProtoConnectionSecuring {
      * <code>optional uint32 heartbeat_interval = 4;</code>
      */
     int getHeartbeatInterval();
+
+    /**
+     * <code>optional string primary_node_name = 5;</code>
+     */
+    java.lang.String getPrimaryNodeName();
+
+    /**
+     * <code>optional string primary_node_name = 5;</code>
+     */
+    com.google.protobuf.ByteString getPrimaryNodeNameBytes();
   }
   /**
    * Protobuf type {@code proto.ConnectionSecuringResponse}
@@ -63,6 +73,7 @@ public final class ProtoConnectionSecuring {
       publicKey_ = "";
       symmetricKeyLength_ = 0;
       heartbeatInterval_ = 0;
+      primaryNodeName_ = "";
     }
 
     @java.lang.Override
@@ -115,6 +126,12 @@ public final class ProtoConnectionSecuring {
             case 32: {
 
               heartbeatInterval_ = input.readUInt32();
+              break;
+            }
+            case 42: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              primaryNodeName_ = s;
               break;
             }
           }
@@ -205,6 +222,38 @@ public final class ProtoConnectionSecuring {
       return heartbeatInterval_;
     }
 
+    public static final int PRIMARY_NODE_NAME_FIELD_NUMBER = 5;
+    private volatile java.lang.Object primaryNodeName_;
+
+    /**
+     * <code>optional string primary_node_name = 5;</code>
+     */
+    public java.lang.String getPrimaryNodeName() {
+      java.lang.Object ref = primaryNodeName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        primaryNodeName_ = s;
+        return s;
+      }
+    }
+
+    /**
+     * <code>optional string primary_node_name = 5;</code>
+     */
+    public com.google.protobuf.ByteString getPrimaryNodeNameBytes() {
+      java.lang.Object ref = primaryNodeName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        primaryNodeName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -228,6 +277,9 @@ public final class ProtoConnectionSecuring {
       if (heartbeatInterval_ != 0) {
         output.writeUInt32(4, heartbeatInterval_);
       }
+      if (!getPrimaryNodeNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, primaryNodeName_);
+      }
     }
 
     public int getSerializedSize() {
@@ -247,16 +299,18 @@ public final class ProtoConnectionSecuring {
       if (heartbeatInterval_ != 0) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4, heartbeatInterval_);
       }
+      if (!getPrimaryNodeNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, primaryNodeName_);
+      }
       memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof com.iGap.proto.ProtoConnectionSecuring.ConnectionSecuringResponse)) {
         return super.equals(obj);
@@ -271,6 +325,7 @@ public final class ProtoConnectionSecuring {
       result = result && getPublicKey().equals(other.getPublicKey());
       result = result && (getSymmetricKeyLength() == other.getSymmetricKeyLength());
       result = result && (getHeartbeatInterval() == other.getHeartbeatInterval());
+      result = result && getPrimaryNodeName().equals(other.getPrimaryNodeName());
       return result;
     }
 
@@ -291,6 +346,8 @@ public final class ProtoConnectionSecuring {
       hash = (53 * hash) + getSymmetricKeyLength();
       hash = (37 * hash) + HEARTBEAT_INTERVAL_FIELD_NUMBER;
       hash = (53 * hash) + getHeartbeatInterval();
+      hash = (37 * hash) + PRIMARY_NODE_NAME_FIELD_NUMBER;
+      hash = (53 * hash) + getPrimaryNodeName().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -336,16 +393,14 @@ public final class ProtoConnectionSecuring {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoConnectionSecuring.ConnectionSecuringResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -361,7 +416,8 @@ public final class ProtoConnectionSecuring {
     public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.ConnectionSecuringResponse)
             com.iGap.proto.ProtoConnectionSecuring.ConnectionSecuringResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
         return com.iGap.proto.ProtoConnectionSecuring.internal_static_proto_ConnectionSecuringResponse_descriptor;
       }
 
@@ -397,6 +453,8 @@ public final class ProtoConnectionSecuring {
 
         heartbeatInterval_ = 0;
 
+        primaryNodeName_ = "";
+
         return this;
       }
 
@@ -426,6 +484,7 @@ public final class ProtoConnectionSecuring {
         result.publicKey_ = publicKey_;
         result.symmetricKeyLength_ = symmetricKeyLength_;
         result.heartbeatInterval_ = heartbeatInterval_;
+        result.primaryNodeName_ = primaryNodeName_;
         onBuilt();
         return result;
       }
@@ -434,7 +493,8 @@ public final class ProtoConnectionSecuring {
         return (Builder) super.clone();
       }
 
-      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.setField(field, value);
       }
 
@@ -450,12 +510,13 @@ public final class ProtoConnectionSecuring {
         return (Builder) super.setRepeatedField(field, index, value);
       }
 
-      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoConnectionSecuring.ConnectionSecuringResponse) {
-          return mergeFrom((com.iGap.proto.ProtoConnectionSecuring.ConnectionSecuringResponse) other);
+          return mergeFrom((com.iGap.proto.ProtoConnectionSecuring.ConnectionSecuringResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -476,6 +537,10 @@ public final class ProtoConnectionSecuring {
         }
         if (other.getHeartbeatInterval() != 0) {
           setHeartbeatInterval(other.getHeartbeatInterval());
+        }
+        if (!other.getPrimaryNodeName().isEmpty()) {
+          primaryNodeName_ = other.primaryNodeName_;
+          onChanged();
         }
         onChanged();
         return this;
@@ -628,7 +693,8 @@ public final class ProtoConnectionSecuring {
       /**
        * <code>optional string public_key = 2;</code>
        */
-      public com.google.protobuf.ByteString getPublicKeyBytes() {
+      public com.google.protobuf.ByteString
+          getPublicKeyBytes() {
         java.lang.Object ref = publicKey_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
@@ -666,7 +732,7 @@ public final class ProtoConnectionSecuring {
         if (value == null) {
           throw new NullPointerException();
         }
-        checkByteStringIsUtf8(value);
+  checkByteStringIsUtf8(value);
         
         publicKey_ = value;
         onChanged();
@@ -699,7 +765,7 @@ public final class ProtoConnectionSecuring {
         return this;
       }
 
-      private int heartbeatInterval_;
+      private int heartbeatInterval_ ;
       /**
        * <code>optional uint32 heartbeat_interval = 4;</code>
        */
@@ -710,7 +776,7 @@ public final class ProtoConnectionSecuring {
        * <code>optional uint32 heartbeat_interval = 4;</code>
        */
       public Builder setHeartbeatInterval(int value) {
-
+        
         heartbeatInterval_ = value;
         onChanged();
         return this;
@@ -719,8 +785,76 @@ public final class ProtoConnectionSecuring {
        * <code>optional uint32 heartbeat_interval = 4;</code>
        */
       public Builder clearHeartbeatInterval() {
-
+        
         heartbeatInterval_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object primaryNodeName_ = "";
+
+      /**
+       * <code>optional string primary_node_name = 5;</code>
+       */
+      public java.lang.String getPrimaryNodeName() {
+        java.lang.Object ref = primaryNodeName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          primaryNodeName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+
+      /**
+       * <code>optional string primary_node_name = 5;</code>
+       */
+      public com.google.protobuf.ByteString getPrimaryNodeNameBytes() {
+        java.lang.Object ref = primaryNodeName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+          primaryNodeName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      /**
+       * <code>optional string primary_node_name = 5;</code>
+       */
+      public Builder setPrimaryNodeName(java.lang.String value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        primaryNodeName_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional string primary_node_name = 5;</code>
+       */
+      public Builder clearPrimaryNodeName() {
+
+        primaryNodeName_ = getDefaultInstance().getPrimaryNodeName();
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional string primary_node_name = 5;</code>
+       */
+      public Builder setPrimaryNodeNameBytes(com.google.protobuf.ByteString value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
+        primaryNodeName_ = value;
         onChanged();
         return this;
       }
@@ -729,7 +863,8 @@ public final class ProtoConnectionSecuring {
         return this;
       }
 
-      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -749,7 +884,7 @@ public final class ProtoConnectionSecuring {
 
     private static final com.google.protobuf.Parser<ConnectionSecuringResponse> PARSER = new com.google.protobuf.AbstractParser<ConnectionSecuringResponse>() {
       public ConnectionSecuringResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ConnectionSecuringResponse(input, extensionRegistry);
+          return new ConnectionSecuringResponse(input, extensionRegistry);
       }
     };
 
@@ -769,7 +904,7 @@ public final class ProtoConnectionSecuring {
   }
 
   public interface ConnectionSymmetricKeyOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:proto.ConnectionSymmetricKey)
+      // @@protoc_insertion_point(interface_extends:proto.ConnectionSymmetricKey)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -790,11 +925,12 @@ public final class ProtoConnectionSecuring {
      */
     com.google.protobuf.ByteString getSymmetricKey();
   }
+
   /**
    * Protobuf type {@code proto.ConnectionSymmetricKey}
    */
   public static final class ConnectionSymmetricKey extends com.google.protobuf.GeneratedMessageV3 implements
-          // @@protoc_insertion_point(message_implements:proto.ConnectionSymmetricKey)
+      // @@protoc_insertion_point(message_implements:proto.ConnectionSymmetricKey)
       ConnectionSymmetricKeyOrBuilder {
     // Use ConnectionSymmetricKey.newBuilder() to construct.
     private ConnectionSymmetricKey(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -810,7 +946,8 @@ public final class ProtoConnectionSecuring {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
 
-    private ConnectionSymmetricKey(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+    private ConnectionSymmetricKey(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -856,8 +993,8 @@ public final class ProtoConnectionSecuring {
         makeExtensionsImmutable();
       }
     }
-
-    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
       return com.iGap.proto.ProtoConnectionSecuring.internal_static_proto_ConnectionSymmetricKey_descriptor;
     }
 
@@ -905,7 +1042,8 @@ public final class ProtoConnectionSecuring {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
       if (request_ != null) {
         output.writeMessage(1, getRequest());
       }
@@ -932,11 +1070,10 @@ public final class ProtoConnectionSecuring {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey)) {
         return super.equals(obj);
@@ -972,76 +1109,80 @@ public final class ProtoConnectionSecuring {
       return hash;
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseDelimitedFrom(java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parseFrom(com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
-    protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+
     /**
      * Protobuf type {@code proto.ConnectionSymmetricKey}
      */
     public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.ConnectionSymmetricKey)
             com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
         return com.iGap.proto.ProtoConnectionSecuring.internal_static_proto_ConnectionSymmetricKey_descriptor;
       }
 
@@ -1054,7 +1195,8 @@ public final class ProtoConnectionSecuring {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1076,7 +1218,8 @@ public final class ProtoConnectionSecuring {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
         return com.iGap.proto.ProtoConnectionSecuring.internal_static_proto_ConnectionSymmetricKey_descriptor;
       }
 
@@ -1107,32 +1250,31 @@ public final class ProtoConnectionSecuring {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
-      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
-
-      public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
-      public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
-      public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
-      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey) {
-          return mergeFrom((com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey) other);
+          return mergeFrom((com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1155,7 +1297,8 @@ public final class ProtoConnectionSecuring {
         return true;
       }
 
-      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
         com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKey parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -1204,10 +1347,12 @@ public final class ProtoConnectionSecuring {
 
         return this;
       }
+
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      public Builder setRequest(com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
+      public Builder setRequest(
+          com.iGap.proto.ProtoRequest.Request.Builder builderForValue) {
         if (requestBuilder_ == null) {
           request_ = builderForValue.build();
           onChanged();
@@ -1223,7 +1368,8 @@ public final class ProtoConnectionSecuring {
       public Builder mergeRequest(com.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-            request_ = com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+            request_ =
+              com.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -1263,14 +1409,15 @@ public final class ProtoConnectionSecuring {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-          return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ?
+              com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
+
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>
-          getRequestFieldBuilder() {
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
           requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
@@ -1304,17 +1451,17 @@ public final class ProtoConnectionSecuring {
        * <code>optional bytes symmetric_key = 2;</code>
        */
       public Builder clearSymmetricKey() {
-        
+
         symmetricKey_ = getDefaultInstance().getSymmetricKey();
         onChanged();
         return this;
       }
-
       public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
-      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -1334,7 +1481,7 @@ public final class ProtoConnectionSecuring {
 
     private static final com.google.protobuf.Parser<ConnectionSymmetricKey> PARSER = new com.google.protobuf.AbstractParser<ConnectionSymmetricKey>() {
       public ConnectionSymmetricKey parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ConnectionSymmetricKey(input, extensionRegistry);
+          return new ConnectionSymmetricKey(input, extensionRegistry);
       }
     };
 
@@ -1354,7 +1501,7 @@ public final class ProtoConnectionSecuring {
   }
 
   public interface ConnectionSymmetricKeyResponseOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:proto.ConnectionSymmetricKeyResponse)
+      // @@protoc_insertion_point(interface_extends:proto.ConnectionSymmetricKeyResponse)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1394,11 +1541,12 @@ public final class ProtoConnectionSecuring {
      */
     int getSymmetricIvSize();
   }
+
   /**
    * Protobuf type {@code proto.ConnectionSymmetricKeyResponse}
    */
   public static final class ConnectionSymmetricKeyResponse extends com.google.protobuf.GeneratedMessageV3 implements
-          // @@protoc_insertion_point(message_implements:proto.ConnectionSymmetricKeyResponse)
+      // @@protoc_insertion_point(message_implements:proto.ConnectionSymmetricKeyResponse)
       ConnectionSymmetricKeyResponseOrBuilder {
     // Use ConnectionSymmetricKeyResponse.newBuilder() to construct.
     private ConnectionSymmetricKeyResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -1411,12 +1559,12 @@ public final class ProtoConnectionSecuring {
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+    public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
 
-    private ConnectionSymmetricKeyResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+    private ConnectionSymmetricKeyResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       try {
@@ -1468,14 +1616,13 @@ public final class ProtoConnectionSecuring {
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+        throw new com.google.protobuf.InvalidProtocolBufferException(e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
       }
     }
-
-    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
       return com.iGap.proto.ProtoConnectionSecuring.internal_static_proto_ConnectionSymmetricKeyResponse_descriptor;
     }
 
@@ -1486,7 +1633,8 @@ public final class ProtoConnectionSecuring {
     /**
      * Protobuf enum {@code proto.ConnectionSymmetricKeyResponse.Status}
      */
-    public enum Status implements com.google.protobuf.ProtocolMessageEnum {
+    public enum Status
+        implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>REJECTED = 0;</code>
        */
@@ -1510,7 +1658,8 @@ public final class ProtoConnectionSecuring {
 
       public final int getNumber() {
         if (this == UNRECOGNIZED) {
-          throw new java.lang.IllegalArgumentException("Can't get the number of an unknown enum value.");
+          throw new java.lang.IllegalArgumentException(
+              "Can't get the number of an unknown enum value.");
         }
         return value;
       }
@@ -1525,21 +1674,19 @@ public final class ProtoConnectionSecuring {
 
       public static Status forNumber(int value) {
         switch (value) {
-          case 0:
-            return REJECTED;
+          case 0: return REJECTED;
           case 1: return ACCEPTED;
           default: return null;
         }
       }
 
-      public static com.google.protobuf.Internal.EnumLiteMap<Status>
-          internalGetValueMap() {
+      public static com.google.protobuf.Internal.EnumLiteMap<Status> internalGetValueMap() {
         return internalValueMap;
       }
 
       private static final com.google.protobuf.Internal.EnumLiteMap<Status> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<Status>() {
-        public Status findValueByNumber(int number) {
-          return Status.forNumber(number);
+              public Status findValueByNumber(int number) {
+                return Status.forNumber(number);
               }
             };
 
@@ -1547,12 +1694,11 @@ public final class ProtoConnectionSecuring {
           getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-
-      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
         return com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.getDescriptor().getEnumTypes().get(0);
       }
 
@@ -1560,7 +1706,8 @@ public final class ProtoConnectionSecuring {
 
       public static Status valueOf(com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException("EnumValueDescriptor is not for this type.");
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
         }
         if (desc.getIndex() == -1) {
           return UNRECOGNIZED;
@@ -1624,19 +1771,23 @@ public final class ProtoConnectionSecuring {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         symmetricMethod_ = s;
         return s;
       }
     }
+
     /**
      * <code>optional string symmetric_method = 3;</code>
      */
     public com.google.protobuf.ByteString getSymmetricMethodBytes() {
       java.lang.Object ref = symmetricMethod_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         symmetricMethod_ = b;
         return b;
       } else {
@@ -1663,7 +1814,8 @@ public final class ProtoConnectionSecuring {
       return true;
     }
 
-    public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
       if (response_ != null) {
         output.writeMessage(1, getResponse());
       }
@@ -1684,7 +1836,8 @@ public final class ProtoConnectionSecuring {
 
       size = 0;
       if (response_ != null) {
-        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1, getResponse());
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getResponse());
       }
       if (status_ != com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Status.REJECTED.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
@@ -1702,11 +1855,10 @@ public final class ProtoConnectionSecuring {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse)) {
         return super.equals(obj);
@@ -1749,7 +1901,8 @@ public final class ProtoConnectionSecuring {
       return hash;
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(
+        com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
@@ -1761,45 +1914,42 @@ public final class ProtoConnectionSecuring {
       return PARSER.parseFrom(data);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseDelimitedFrom(
+        java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
+    public static com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parseFrom(
+        com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -1808,17 +1958,20 @@ public final class ProtoConnectionSecuring {
     }
 
     @java.lang.Override
-    protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+
     /**
      * Protobuf type {@code proto.ConnectionSymmetricKeyResponse}
      */
     public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.ConnectionSymmetricKeyResponse)
             com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
         return com.iGap.proto.ProtoConnectionSecuring.internal_static_proto_ConnectionSymmetricKeyResponse_descriptor;
       }
 
@@ -1831,7 +1984,8 @@ public final class ProtoConnectionSecuring {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1857,7 +2011,8 @@ public final class ProtoConnectionSecuring {
         return this;
       }
 
-      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
         return com.iGap.proto.ProtoConnectionSecuring.internal_static_proto_ConnectionSymmetricKeyResponse_descriptor;
       }
 
@@ -1890,32 +2045,28 @@ public final class ProtoConnectionSecuring {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
-      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
-
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
-
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-
-      public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
-      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse) {
-          return mergeFrom((com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse) other);
+          return mergeFrom((com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1945,7 +2096,9 @@ public final class ProtoConnectionSecuring {
         return true;
       }
 
-      public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
         com.iGap.proto.ProtoConnectionSecuring.ConnectionSymmetricKeyResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -1994,10 +2147,12 @@ public final class ProtoConnectionSecuring {
 
         return this;
       }
+
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      public Builder setResponse(com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
+      public Builder setResponse(
+          com.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
         if (responseBuilder_ == null) {
           response_ = builderForValue.build();
           onChanged();
@@ -2013,7 +2168,8 @@ public final class ProtoConnectionSecuring {
       public Builder mergeResponse(com.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-            response_ = com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+            response_ =
+              com.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -2053,16 +2209,18 @@ public final class ProtoConnectionSecuring {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-          return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ?
+              com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
+
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
-      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>
-          getResponseFieldBuilder() {
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -2122,7 +2280,8 @@ public final class ProtoConnectionSecuring {
       public java.lang.String getSymmetricMethod() {
         java.lang.Object ref = symmetricMethod_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           symmetricMethod_ = s;
           return s;
@@ -2130,23 +2289,28 @@ public final class ProtoConnectionSecuring {
           return (java.lang.String) ref;
         }
       }
+
       /**
        * <code>optional string symmetric_method = 3;</code>
        */
       public com.google.protobuf.ByteString getSymmetricMethodBytes() {
         java.lang.Object ref = symmetricMethod_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
           symmetricMethod_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
+
       /**
        * <code>optional string symmetric_method = 3;</code>
        */
-      public Builder setSymmetricMethod(java.lang.String value) {
+      public Builder setSymmetricMethod(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2170,7 +2334,7 @@ public final class ProtoConnectionSecuring {
       public Builder setSymmetricMethodBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
+    throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
@@ -2199,7 +2363,7 @@ public final class ProtoConnectionSecuring {
        * <code>optional uint32 symmetric_iv_size = 4;</code>
        */
       public Builder clearSymmetricIvSize() {
-        
+
         symmetricIvSize_ = 0;
         onChanged();
         return this;
@@ -2209,7 +2373,8 @@ public final class ProtoConnectionSecuring {
         return this;
       }
 
-      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -2228,8 +2393,9 @@ public final class ProtoConnectionSecuring {
     }
 
     private static final com.google.protobuf.Parser<ConnectionSymmetricKeyResponse> PARSER = new com.google.protobuf.AbstractParser<ConnectionSymmetricKeyResponse>() {
-      public ConnectionSymmetricKeyResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ConnectionSymmetricKeyResponse(input, extensionRegistry);
+      public ConnectionSymmetricKeyResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ConnectionSymmetricKeyResponse(input, extensionRegistry);
       }
     };
 
@@ -2255,48 +2421,50 @@ public final class ProtoConnectionSecuring {
   private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_ConnectionSymmetricKeyResponse_descriptor;
   private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_ConnectionSymmetricKeyResponse_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
+  public static com.google.protobuf.Descriptors.FileDescriptor
+      getDescriptor() {
     return descriptor;
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
     java.lang.String[] descriptorData = {
             "\n\030ConnectionSecuring.proto\022\005proto\032\rReque" +
-                    "st.proto\032\016Response.proto\"\215\001\n\032ConnectionS" +
+                    "st.proto\032\016Response.proto\"\250\001\n\032ConnectionS" +
                     "ecuringResponse\022!\n\010response\030\001 \001(\0132\017.prot" +
                     "o.Response\022\022\n\npublic_key\030\002 \001(\t\022\034\n\024symmet" +
                     "ric_key_length\030\003 \001(\r\022\032\n\022heartbeat_interv" +
-                    "al\030\004 \001(\r\"P\n\026ConnectionSymmetricKey\022\037\n\007re" +
-                    "quest\030\001 \001(\0132\016.proto.Request\022\025\n\rsymmetric" +
-                    "_key\030\002 \001(\014\"\334\001\n\036ConnectionSymmetricKeyRes" +
-                    "ponse\022!\n\010response\030\001 \001(\0132\017.proto.Response" +
-                    "\022<\n\006status\030\002 \001(\0162,.proto.ConnectionSymme", "tricKeyResponse.Status\022\030\n\020symmetric_meth" +
-            "od\030\003 \001(\t\022\031\n\021symmetric_iv_size\030\004 \001(\r\"$\n\006S" +
-            "tatus\022\014\n\010REJECTED\020\000\022\014\n\010ACCEPTED\020\001B)\n\016com" +
-            ".iGap.protoB\027ProtoConnectionSecuringb\006pr" +
-      "oto3"
+                    "al\030\004 \001(\r\022\031\n\021primary_node_name\030\005 \001(\t\"P\n\026C" +
+                    "onnectionSymmetricKey\022\037\n\007request\030\001 \001(\0132\016" +
+                    ".proto.Request\022\025\n\rsymmetric_key\030\002 \001(\014\"\334\001" +
+                    "\n\036ConnectionSymmetricKeyResponse\022!\n\010resp" +
+                    "onse\030\001 \001(\0132\017.proto.Response\022<\n\006status\030\002 ", "\001(\0162,.proto.ConnectionSymmetricKeyRespon" +
+            "se.Status\022\030\n\020symmetric_method\030\003 \001(\t\022\031\n\021s" +
+            "ymmetric_iv_size\030\004 \001(\r\"$\n\006Status\022\014\n\010REJE" +
+            "CTED\020\000\022\014\n\010ACCEPTED\020\001B)\n\016com.iGap.protoB\027" +
+            "ProtoConnectionSecuringb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
         descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-            com.iGap.proto.ProtoRequest.getDescriptor(), com.iGap.proto.ProtoResponse.getDescriptor(),
-        }, assigner);
-    internal_static_proto_ConnectionSecuringResponse_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_ConnectionSecuringResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ConnectionSecuringResponse_descriptor, new java.lang.String[]{"Response", "PublicKey", "SymmetricKeyLength", "HeartbeatInterval",});
-    internal_static_proto_ConnectionSymmetricKey_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_proto_ConnectionSymmetricKey_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ConnectionSymmetricKey_descriptor, new java.lang.String[]{"Request", "SymmetricKey",});
-    internal_static_proto_ConnectionSymmetricKeyResponse_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_proto_ConnectionSymmetricKeyResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ConnectionSymmetricKeyResponse_descriptor, new java.lang.String[]{"Response", "Status", "SymmetricMethod", "SymmetricIvSize",});
+        return null;
+      }
+    };
+    com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[] {
+          com.iGap.proto.ProtoRequest.getDescriptor(),
+          com.iGap.proto.ProtoResponse.getDescriptor(),
+    }, assigner);
+    internal_static_proto_ConnectionSecuringResponse_descriptor = getDescriptor().getMessageTypes().get(0);
+    internal_static_proto_ConnectionSecuringResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ConnectionSecuringResponse_descriptor,
+        new java.lang.String[] { "Response", "PublicKey", "SymmetricKeyLength", "HeartbeatInterval", "PrimaryNodeName", });
+    internal_static_proto_ConnectionSymmetricKey_descriptor = getDescriptor().getMessageTypes().get(1);
+    internal_static_proto_ConnectionSymmetricKey_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_ConnectionSymmetricKey_descriptor,
+        new java.lang.String[] { "Request", "SymmetricKey", });
+    internal_static_proto_ConnectionSymmetricKeyResponse_descriptor = getDescriptor().getMessageTypes().get(2);
+    internal_static_proto_ConnectionSymmetricKeyResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ConnectionSymmetricKeyResponse_descriptor,
+        new java.lang.String[] { "Response", "Status", "SymmetricMethod", "SymmetricIvSize", });
     com.iGap.proto.ProtoRequest.getDescriptor();
     com.iGap.proto.ProtoResponse.getDescriptor();
   }

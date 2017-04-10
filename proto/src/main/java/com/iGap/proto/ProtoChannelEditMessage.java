@@ -13,7 +13,6 @@ public final class ProtoChannelEditMessage {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface ChannelEditMessageOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.ChannelEditMessage)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoChannelEditMessage {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -47,13 +44,11 @@ public final class ProtoChannelEditMessage {
      * <code>optional string message = 4;</code>
      */
     java.lang.String getMessage();
-
     /**
      * <code>optional string message = 4;</code>
      */
     com.google.protobuf.ByteString getMessageBytes();
   }
-
   /**
    * Protobuf type {@code proto.ChannelEditMessage}
    */
@@ -64,7 +59,6 @@ public final class ProtoChannelEditMessage {
     private ChannelEditMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ChannelEditMessage() {
       roomId_ = 0L;
       messageId_ = 0L;
@@ -143,21 +137,18 @@ public final class ProtoChannelEditMessage {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -167,7 +158,6 @@ public final class ProtoChannelEditMessage {
 
     public static final int ROOM_ID_FIELD_NUMBER = 2;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 2;</code>
      */
@@ -177,7 +167,6 @@ public final class ProtoChannelEditMessage {
 
     public static final int MESSAGE_ID_FIELD_NUMBER = 3;
     private long messageId_;
-
     /**
      * <code>optional uint64 message_id = 3;</code>
      */
@@ -187,7 +176,6 @@ public final class ProtoChannelEditMessage {
 
     public static final int MESSAGE_FIELD_NUMBER = 4;
     private volatile java.lang.Object message_;
-
     /**
      * <code>optional string message = 4;</code>
      */
@@ -202,7 +190,6 @@ public final class ProtoChannelEditMessage {
         return s;
       }
     }
-
     /**
      * <code>optional string message = 4;</code>
      */
@@ -218,7 +205,6 @@ public final class ProtoChannelEditMessage {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -265,7 +251,6 @@ public final class ProtoChannelEditMessage {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -352,15 +337,12 @@ public final class ProtoChannelEditMessage {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -370,7 +352,6 @@ public final class ProtoChannelEditMessage {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChannelEditMessage}
      */
@@ -394,12 +375,10 @@ public final class ProtoChannelEditMessage {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -470,7 +449,6 @@ public final class ProtoChannelEditMessage {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage) {
           return mergeFrom((com.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage) other);
@@ -520,14 +498,12 @@ public final class ProtoChannelEditMessage {
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -538,7 +514,6 @@ public final class ProtoChannelEditMessage {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -555,7 +530,6 @@ public final class ProtoChannelEditMessage {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -569,7 +543,6 @@ public final class ProtoChannelEditMessage {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -587,7 +560,6 @@ public final class ProtoChannelEditMessage {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -602,7 +574,6 @@ public final class ProtoChannelEditMessage {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -611,7 +582,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -622,7 +592,6 @@ public final class ProtoChannelEditMessage {
           return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -635,14 +604,12 @@ public final class ProtoChannelEditMessage {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -652,7 +619,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -664,14 +630,12 @@ public final class ProtoChannelEditMessage {
       }
 
       private long messageId_;
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
       public long getMessageId() {
         return messageId_;
       }
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -681,7 +645,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -693,7 +656,6 @@ public final class ProtoChannelEditMessage {
       }
 
       private java.lang.Object message_ = "";
-
       /**
        * <code>optional string message = 4;</code>
        */
@@ -708,7 +670,6 @@ public final class ProtoChannelEditMessage {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string message = 4;</code>
        */
@@ -722,7 +683,6 @@ public final class ProtoChannelEditMessage {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string message = 4;</code>
        */
@@ -730,12 +690,11 @@ public final class ProtoChannelEditMessage {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         message_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string message = 4;</code>
        */
@@ -745,7 +704,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string message = 4;</code>
        */
@@ -754,7 +712,7 @@ public final class ProtoChannelEditMessage {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         message_ = value;
         onChanged();
         return this;
@@ -774,7 +732,6 @@ public final class ProtoChannelEditMessage {
 
     // @@protoc_insertion_point(class_scope:proto.ChannelEditMessage)
     private static final com.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage();
     }
@@ -812,12 +769,10 @@ public final class ProtoChannelEditMessage {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -842,7 +797,6 @@ public final class ProtoChannelEditMessage {
      * <code>optional string message = 5;</code>
      */
     java.lang.String getMessage();
-
     /**
      * <code>optional string message = 5;</code>
      */
@@ -852,13 +806,11 @@ public final class ProtoChannelEditMessage {
      * <code>optional .proto.RoomMessageType message_type = 6;</code>
      */
     int getMessageTypeValue();
-
     /**
      * <code>optional .proto.RoomMessageType message_type = 6;</code>
      */
     com.iGap.proto.ProtoGlobal.RoomMessageType getMessageType();
   }
-
   /**
    * Protobuf type {@code proto.ChannelEditMessageResponse}
    */
@@ -869,7 +821,6 @@ public final class ProtoChannelEditMessage {
     private ChannelEditMessageResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ChannelEditMessageResponse() {
       roomId_ = 0L;
       messageId_ = 0L;
@@ -961,21 +912,18 @@ public final class ProtoChannelEditMessage {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -985,7 +933,6 @@ public final class ProtoChannelEditMessage {
 
     public static final int ROOM_ID_FIELD_NUMBER = 2;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 2;</code>
      */
@@ -995,7 +942,6 @@ public final class ProtoChannelEditMessage {
 
     public static final int MESSAGE_ID_FIELD_NUMBER = 3;
     private long messageId_;
-
     /**
      * <code>optional uint64 message_id = 3;</code>
      */
@@ -1005,7 +951,6 @@ public final class ProtoChannelEditMessage {
 
     public static final int MESSAGE_VERSION_FIELD_NUMBER = 4;
     private long messageVersion_;
-
     /**
      * <code>optional uint64 message_version = 4;</code>
      */
@@ -1015,7 +960,6 @@ public final class ProtoChannelEditMessage {
 
     public static final int MESSAGE_FIELD_NUMBER = 5;
     private volatile java.lang.Object message_;
-
     /**
      * <code>optional string message = 5;</code>
      */
@@ -1030,7 +974,6 @@ public final class ProtoChannelEditMessage {
         return s;
       }
     }
-
     /**
      * <code>optional string message = 5;</code>
      */
@@ -1047,14 +990,12 @@ public final class ProtoChannelEditMessage {
 
     public static final int MESSAGE_TYPE_FIELD_NUMBER = 6;
     private int messageType_;
-
     /**
      * <code>optional .proto.RoomMessageType message_type = 6;</code>
      */
     public int getMessageTypeValue() {
       return messageType_;
     }
-
     /**
      * <code>optional .proto.RoomMessageType message_type = 6;</code>
      */
@@ -1064,7 +1005,6 @@ public final class ProtoChannelEditMessage {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1123,7 +1063,6 @@ public final class ProtoChannelEditMessage {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1216,15 +1155,12 @@ public final class ProtoChannelEditMessage {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -1234,7 +1170,6 @@ public final class ProtoChannelEditMessage {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChannelEditMessageResponse}
      */
@@ -1258,12 +1193,10 @@ public final class ProtoChannelEditMessage {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1340,7 +1273,6 @@ public final class ProtoChannelEditMessage {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse) {
           return mergeFrom((com.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse) other);
@@ -1396,14 +1328,12 @@ public final class ProtoChannelEditMessage {
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1414,7 +1344,6 @@ public final class ProtoChannelEditMessage {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1431,7 +1360,6 @@ public final class ProtoChannelEditMessage {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1445,7 +1373,6 @@ public final class ProtoChannelEditMessage {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1463,7 +1390,6 @@ public final class ProtoChannelEditMessage {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1478,7 +1404,6 @@ public final class ProtoChannelEditMessage {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1487,7 +1412,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1498,7 +1422,6 @@ public final class ProtoChannelEditMessage {
           return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1511,14 +1434,12 @@ public final class ProtoChannelEditMessage {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1528,7 +1449,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1540,14 +1460,12 @@ public final class ProtoChannelEditMessage {
       }
 
       private long messageId_;
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
       public long getMessageId() {
         return messageId_;
       }
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -1557,7 +1475,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -1569,14 +1486,12 @@ public final class ProtoChannelEditMessage {
       }
 
       private long messageVersion_;
-
       /**
        * <code>optional uint64 message_version = 4;</code>
        */
       public long getMessageVersion() {
         return messageVersion_;
       }
-
       /**
        * <code>optional uint64 message_version = 4;</code>
        */
@@ -1586,7 +1501,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 message_version = 4;</code>
        */
@@ -1598,7 +1512,6 @@ public final class ProtoChannelEditMessage {
       }
 
       private java.lang.Object message_ = "";
-
       /**
        * <code>optional string message = 5;</code>
        */
@@ -1613,7 +1526,6 @@ public final class ProtoChannelEditMessage {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string message = 5;</code>
        */
@@ -1627,7 +1539,6 @@ public final class ProtoChannelEditMessage {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string message = 5;</code>
        */
@@ -1635,12 +1546,11 @@ public final class ProtoChannelEditMessage {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         message_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string message = 5;</code>
        */
@@ -1650,7 +1560,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string message = 5;</code>
        */
@@ -1659,21 +1568,19 @@ public final class ProtoChannelEditMessage {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         message_ = value;
         onChanged();
         return this;
       }
 
       private int messageType_ = 0;
-
       /**
        * <code>optional .proto.RoomMessageType message_type = 6;</code>
        */
       public int getMessageTypeValue() {
         return messageType_;
       }
-
       /**
        * <code>optional .proto.RoomMessageType message_type = 6;</code>
        */
@@ -1682,7 +1589,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageType message_type = 6;</code>
        */
@@ -1690,7 +1596,6 @@ public final class ProtoChannelEditMessage {
         com.iGap.proto.ProtoGlobal.RoomMessageType result = com.iGap.proto.ProtoGlobal.RoomMessageType.valueOf(messageType_);
         return result == null ? com.iGap.proto.ProtoGlobal.RoomMessageType.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.RoomMessageType message_type = 6;</code>
        */
@@ -1703,7 +1608,6 @@ public final class ProtoChannelEditMessage {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageType message_type = 6;</code>
        */
@@ -1728,7 +1632,6 @@ public final class ProtoChannelEditMessage {
 
     // @@protoc_insertion_point(class_scope:proto.ChannelEditMessageResponse)
     private static final com.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse();
     }
@@ -1738,8 +1641,7 @@ public final class ProtoChannelEditMessage {
     }
 
     private static final com.google.protobuf.Parser<ChannelEditMessageResponse> PARSER = new com.google.protobuf.AbstractParser<ChannelEditMessageResponse>() {
-      public ChannelEditMessageResponse parsePartialFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public ChannelEditMessageResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
         return new ChannelEditMessageResponse(input, extensionRegistry);
       }
     };
@@ -1769,7 +1671,6 @@ public final class ProtoChannelEditMessage {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\030ChannelEditMessage.proto\022\005proto\032\rReque" +

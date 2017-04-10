@@ -13,7 +13,6 @@ public final class ProtoClientSubscribeToRoom {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface ClientSubscribeToRoomOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.ClientSubscribeToRoom)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoClientSubscribeToRoom {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -38,7 +35,6 @@ public final class ProtoClientSubscribeToRoom {
      */
     long getRoomId();
   }
-
   /**
    * Protobuf type {@code proto.ClientSubscribeToRoom}
    */
@@ -49,7 +45,6 @@ public final class ProtoClientSubscribeToRoom {
     private ClientSubscribeToRoom(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ClientSubscribeToRoom() {
       roomId_ = 0L;
     }
@@ -115,21 +110,18 @@ public final class ProtoClientSubscribeToRoom {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -147,7 +139,6 @@ public final class ProtoClientSubscribeToRoom {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -182,7 +173,6 @@ public final class ProtoClientSubscribeToRoom {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -263,15 +253,12 @@ public final class ProtoClientSubscribeToRoom {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoClientSubscribeToRoom.ClientSubscribeToRoom prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -281,7 +268,6 @@ public final class ProtoClientSubscribeToRoom {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ClientSubscribeToRoom}
      */
@@ -305,12 +291,10 @@ public final class ProtoClientSubscribeToRoom {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -375,7 +359,6 @@ public final class ProtoClientSubscribeToRoom {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoClientSubscribeToRoom.ClientSubscribeToRoom) {
           return mergeFrom((com.iGap.proto.ProtoClientSubscribeToRoom.ClientSubscribeToRoom) other);
@@ -418,14 +401,12 @@ public final class ProtoClientSubscribeToRoom {
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -436,7 +417,6 @@ public final class ProtoClientSubscribeToRoom {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -453,7 +433,6 @@ public final class ProtoClientSubscribeToRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -467,7 +446,6 @@ public final class ProtoClientSubscribeToRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -485,7 +463,6 @@ public final class ProtoClientSubscribeToRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -500,7 +477,6 @@ public final class ProtoClientSubscribeToRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -509,7 +485,6 @@ public final class ProtoClientSubscribeToRoom {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -520,7 +495,6 @@ public final class ProtoClientSubscribeToRoom {
           return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -533,14 +507,12 @@ public final class ProtoClientSubscribeToRoom {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -550,7 +522,6 @@ public final class ProtoClientSubscribeToRoom {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -575,7 +546,6 @@ public final class ProtoClientSubscribeToRoom {
 
     // @@protoc_insertion_point(class_scope:proto.ClientSubscribeToRoom)
     private static final com.iGap.proto.ProtoClientSubscribeToRoom.ClientSubscribeToRoom DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoClientSubscribeToRoom.ClientSubscribeToRoom();
     }
@@ -613,18 +583,15 @@ public final class ProtoClientSubscribeToRoom {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.ClientSubscribeToRoomResponse}
    */
@@ -635,7 +602,6 @@ public final class ProtoClientSubscribeToRoom {
     private ClientSubscribeToRoomResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ClientSubscribeToRoomResponse() {
     }
 
@@ -695,21 +661,18 @@ public final class ProtoClientSubscribeToRoom {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -718,7 +681,6 @@ public final class ProtoClientSubscribeToRoom {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -747,7 +709,6 @@ public final class ProtoClientSubscribeToRoom {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -825,15 +786,12 @@ public final class ProtoClientSubscribeToRoom {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoClientSubscribeToRoom.ClientSubscribeToRoomResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -843,7 +801,6 @@ public final class ProtoClientSubscribeToRoom {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ClientSubscribeToRoomResponse}
      */
@@ -867,12 +824,10 @@ public final class ProtoClientSubscribeToRoom {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -934,7 +889,6 @@ public final class ProtoClientSubscribeToRoom {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoClientSubscribeToRoom.ClientSubscribeToRoomResponse) {
           return mergeFrom((com.iGap.proto.ProtoClientSubscribeToRoom.ClientSubscribeToRoomResponse) other);
@@ -974,14 +928,12 @@ public final class ProtoClientSubscribeToRoom {
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -992,7 +944,6 @@ public final class ProtoClientSubscribeToRoom {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1009,7 +960,6 @@ public final class ProtoClientSubscribeToRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1023,7 +973,6 @@ public final class ProtoClientSubscribeToRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1041,7 +990,6 @@ public final class ProtoClientSubscribeToRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1056,7 +1004,6 @@ public final class ProtoClientSubscribeToRoom {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1065,7 +1012,6 @@ public final class ProtoClientSubscribeToRoom {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1076,7 +1022,6 @@ public final class ProtoClientSubscribeToRoom {
           return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1102,7 +1047,6 @@ public final class ProtoClientSubscribeToRoom {
 
     // @@protoc_insertion_point(class_scope:proto.ClientSubscribeToRoomResponse)
     private static final com.iGap.proto.ProtoClientSubscribeToRoom.ClientSubscribeToRoomResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoClientSubscribeToRoom.ClientSubscribeToRoomResponse();
     }
@@ -1142,7 +1086,6 @@ public final class ProtoClientSubscribeToRoom {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\033ClientSubscribeToRoom.proto\022\005proto\032\rRe" +

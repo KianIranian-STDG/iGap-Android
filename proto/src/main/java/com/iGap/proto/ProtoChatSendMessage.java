@@ -6,6 +6,7 @@ package com.iGap.proto;
 public final class ProtoChatSendMessage {
   private ProtoChatSendMessage() {
   }
+
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
@@ -128,6 +129,7 @@ public final class ProtoChatSendMessage {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
+
     private ChatSendMessage(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -236,13 +238,13 @@ public final class ProtoChatSendMessage {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoChatSendMessage.internal_static_proto_ChatSendMessage_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoChatSendMessage.internal_static_proto_ChatSendMessage_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoChatSendMessage.ChatSendMessage.class, com.iGap.proto.ProtoChatSendMessage.ChatSendMessage.Builder.class);
+      return com.iGap.proto.ProtoChatSendMessage.internal_static_proto_ChatSendMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoChatSendMessage.ChatSendMessage.class, com.iGap.proto.ProtoChatSendMessage.ChatSendMessage.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -588,27 +590,34 @@ public final class ProtoChatSendMessage {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessage parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessage parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessage parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessage parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessage parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessage parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessage parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
@@ -643,8 +652,7 @@ public final class ProtoChatSendMessage {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoChatSendMessage.internal_static_proto_ChatSendMessage_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoChatSendMessage.ChatSendMessage.class, com.iGap.proto.ProtoChatSendMessage.ChatSendMessage.Builder.class);
+        return com.iGap.proto.ProtoChatSendMessage.internal_static_proto_ChatSendMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoChatSendMessage.ChatSendMessage.class, com.iGap.proto.ProtoChatSendMessage.ChatSendMessage.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoChatSendMessage.ChatSendMessage.newBuilder()
@@ -750,18 +758,23 @@ public final class ProtoChatSendMessage {
       public Builder clone() {
         return (Builder) super.clone();
       }
+
       public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
@@ -1591,6 +1604,7 @@ public final class ProtoChatSendMessage {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
+
     private ChatSendMessageResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -1650,13 +1664,13 @@ public final class ProtoChatSendMessage {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoChatSendMessage.internal_static_proto_ChatSendMessageResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoChatSendMessage.internal_static_proto_ChatSendMessageResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse.class, com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse.Builder.class);
+      return com.iGap.proto.ProtoChatSendMessage.internal_static_proto_ChatSendMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse.class, com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -1811,27 +1825,34 @@ public final class ProtoChatSendMessage {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
@@ -1866,8 +1887,7 @@ public final class ProtoChatSendMessage {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoChatSendMessage.internal_static_proto_ChatSendMessageResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse.class, com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse.Builder.class);
+        return com.iGap.proto.ProtoChatSendMessage.internal_static_proto_ChatSendMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse.class, com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoChatSendMessage.ChatSendMessageResponse.newBuilder()
@@ -1939,18 +1959,23 @@ public final class ProtoChatSendMessage {
       public Builder clone() {
         return (Builder) super.clone();
       }
+
       public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
@@ -2330,8 +2355,7 @@ public final class ProtoChatSendMessage {
     internal_static_proto_ChatSendMessage_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_proto_ChatSendMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_ChatSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChatSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
     internal_static_proto_ChatSendMessageResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChatSendMessageResponse_fieldAccessorTable = new

@@ -2101,8 +2101,7 @@ public final class ProtoChannelAddMember {
     internal_static_proto_ChannelAddMember_Member_descriptor =
       internal_static_proto_ChannelAddMember_descriptor.getNestedTypes().get(0);
     internal_static_proto_ChannelAddMember_Member_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_ChannelAddMember_Member_descriptor, new java.lang.String[]{"UserId",});
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChannelAddMember_Member_descriptor, new java.lang.String[]{"UserId",});
     internal_static_proto_ChannelAddMemberResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChannelAddMemberResponse_fieldAccessorTable = new

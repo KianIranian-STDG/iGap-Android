@@ -6,6 +6,7 @@ package com.iGap.proto;
 public final class ProtoUserRegister {
   private ProtoUserRegister() {
   }
+
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
@@ -63,6 +64,7 @@ public final class ProtoUserRegister {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
+
     private UserRegister(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -115,6 +117,7 @@ public final class ProtoUserRegister {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_descriptor;
     }
@@ -279,6 +282,7 @@ public final class ProtoUserRegister {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
@@ -287,19 +291,24 @@ public final class ProtoUserRegister {
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegister parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegister parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegister parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
@@ -397,18 +406,23 @@ public final class ProtoUserRegister {
       public Builder clone() {
         return (Builder) super.clone();
       }
+
       public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
@@ -806,6 +820,7 @@ public final class ProtoUserRegister {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
+
     private UserRegisterResponse(com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -911,13 +926,13 @@ public final class ProtoUserRegister {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, com.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
+      return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, com.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
     }
 
     /**
@@ -984,6 +999,7 @@ public final class ProtoUserRegister {
       public static com.google.protobuf.Internal.EnumLiteMap<Method> internalGetValueMap() {
         return internalValueMap;
       }
+
       private static final com.google.protobuf.Internal.EnumLiteMap<Method> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<Method>() {
         public Method findValueByNumber(int number) {
           return Method.forNumber(number);
@@ -993,9 +1009,11 @@ public final class ProtoUserRegister {
       public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
+
       public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
+
       public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
         return com.iGap.proto.ProtoUserRegister.UserRegisterResponse.getDescriptor().getEnumTypes().get(0);
       }
@@ -1371,23 +1389,29 @@ public final class ProtoUserRegister {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
@@ -1421,8 +1445,7 @@ public final class ProtoUserRegister {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, com.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
+        return com.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, com.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoUserRegister.UserRegisterResponse.newBuilder()
@@ -1511,20 +1534,25 @@ public final class ProtoUserRegister {
       public Builder clone() {
         return (Builder) super.clone();
       }
+
       public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
@@ -2148,7 +2176,8 @@ public final class ProtoUserRegister {
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
+  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
             "\n\022UserRegister.proto\022\005proto\032\rRequest.pro" +
@@ -2172,11 +2201,10 @@ public final class ProtoUserRegister {
             return null;
           }
     };
-    com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-              com.iGap.proto.ProtoRequest.getDescriptor(),
+    com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
+            com.iGap.proto.ProtoRequest.getDescriptor(),
           com.iGap.proto.ProtoResponse.getDescriptor(),
-      }, assigner);
+    }, assigner);
     internal_static_proto_UserRegister_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_proto_UserRegister_fieldAccessorTable = new
@@ -2185,8 +2213,7 @@ public final class ProtoUserRegister {
         new java.lang.String[] { "Request", "PhoneNumber", "CountryCode", });
     internal_static_proto_UserRegisterResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_proto_UserRegisterResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserRegisterResponse_descriptor, new java.lang.String[]{"Response", "Username", "UserId", "AuthorHash", "Method", "ResendDelay", "SmsNumber", "VerifyCodeRegex", "VerifyCodeDigitCount",});
+    internal_static_proto_UserRegisterResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserRegisterResponse_descriptor, new java.lang.String[]{"Response", "Username", "UserId", "AuthorHash", "Method", "ResendDelay", "SmsNumber", "VerifyCodeRegex", "VerifyCodeDigitCount",});
     com.iGap.proto.ProtoRequest.getDescriptor();
     com.iGap.proto.ProtoResponse.getDescriptor();
   }

@@ -13,7 +13,6 @@ public final class ProtoChannelRevokeLink {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface ChannelRevokeLinkOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.ChannelRevokeLink)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoChannelRevokeLink {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -38,7 +35,6 @@ public final class ProtoChannelRevokeLink {
      */
     long getRoomId();
   }
-
   /**
    * Protobuf type {@code proto.ChannelRevokeLink}
    */
@@ -49,7 +45,6 @@ public final class ProtoChannelRevokeLink {
     private ChannelRevokeLink(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ChannelRevokeLink() {
       roomId_ = 0L;
     }
@@ -115,21 +110,18 @@ public final class ProtoChannelRevokeLink {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -147,7 +139,6 @@ public final class ProtoChannelRevokeLink {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -182,7 +173,6 @@ public final class ProtoChannelRevokeLink {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -263,15 +253,12 @@ public final class ProtoChannelRevokeLink {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoChannelRevokeLink.ChannelRevokeLink prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -281,7 +268,6 @@ public final class ProtoChannelRevokeLink {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChannelRevokeLink}
      */
@@ -305,12 +291,10 @@ public final class ProtoChannelRevokeLink {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -375,7 +359,6 @@ public final class ProtoChannelRevokeLink {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChannelRevokeLink.ChannelRevokeLink) {
           return mergeFrom((com.iGap.proto.ProtoChannelRevokeLink.ChannelRevokeLink) other);
@@ -418,14 +401,12 @@ public final class ProtoChannelRevokeLink {
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -436,7 +417,6 @@ public final class ProtoChannelRevokeLink {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -453,7 +433,6 @@ public final class ProtoChannelRevokeLink {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -467,7 +446,6 @@ public final class ProtoChannelRevokeLink {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -485,7 +463,6 @@ public final class ProtoChannelRevokeLink {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -500,7 +477,6 @@ public final class ProtoChannelRevokeLink {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -509,7 +485,6 @@ public final class ProtoChannelRevokeLink {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -520,7 +495,6 @@ public final class ProtoChannelRevokeLink {
           return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -533,14 +507,12 @@ public final class ProtoChannelRevokeLink {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -550,7 +522,6 @@ public final class ProtoChannelRevokeLink {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -575,7 +546,6 @@ public final class ProtoChannelRevokeLink {
 
     // @@protoc_insertion_point(class_scope:proto.ChannelRevokeLink)
     private static final com.iGap.proto.ProtoChannelRevokeLink.ChannelRevokeLink DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoChannelRevokeLink.ChannelRevokeLink();
     }
@@ -613,12 +583,10 @@ public final class ProtoChannelRevokeLink {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -633,7 +601,6 @@ public final class ProtoChannelRevokeLink {
      * <code>optional string invite_link = 3;</code>
      */
     java.lang.String getInviteLink();
-
     /**
      * <code>optional string invite_link = 3;</code>
      */
@@ -643,13 +610,11 @@ public final class ProtoChannelRevokeLink {
      * <code>optional string invite_token = 4;</code>
      */
     java.lang.String getInviteToken();
-
     /**
      * <code>optional string invite_token = 4;</code>
      */
     com.google.protobuf.ByteString getInviteTokenBytes();
   }
-
   /**
    * Protobuf type {@code proto.ChannelRevokeLinkResponse}
    */
@@ -660,7 +625,6 @@ public final class ProtoChannelRevokeLink {
     private ChannelRevokeLinkResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ChannelRevokeLinkResponse() {
       roomId_ = 0L;
       inviteLink_ = "";
@@ -740,21 +704,18 @@ public final class ProtoChannelRevokeLink {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -764,7 +725,6 @@ public final class ProtoChannelRevokeLink {
 
     public static final int ROOM_ID_FIELD_NUMBER = 2;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 2;</code>
      */
@@ -774,7 +734,6 @@ public final class ProtoChannelRevokeLink {
 
     public static final int INVITE_LINK_FIELD_NUMBER = 3;
     private volatile java.lang.Object inviteLink_;
-
     /**
      * <code>optional string invite_link = 3;</code>
      */
@@ -789,7 +748,6 @@ public final class ProtoChannelRevokeLink {
         return s;
       }
     }
-
     /**
      * <code>optional string invite_link = 3;</code>
      */
@@ -806,7 +764,6 @@ public final class ProtoChannelRevokeLink {
 
     public static final int INVITE_TOKEN_FIELD_NUMBER = 4;
     private volatile java.lang.Object inviteToken_;
-
     /**
      * <code>optional string invite_token = 4;</code>
      */
@@ -821,7 +778,6 @@ public final class ProtoChannelRevokeLink {
         return s;
       }
     }
-
     /**
      * <code>optional string invite_token = 4;</code>
      */
@@ -837,7 +793,6 @@ public final class ProtoChannelRevokeLink {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -884,7 +839,6 @@ public final class ProtoChannelRevokeLink {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -971,15 +925,12 @@ public final class ProtoChannelRevokeLink {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoChannelRevokeLink.ChannelRevokeLinkResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -990,7 +941,6 @@ public final class ProtoChannelRevokeLink {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChannelRevokeLinkResponse}
      */
@@ -1014,12 +964,10 @@ public final class ProtoChannelRevokeLink {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1090,7 +1038,6 @@ public final class ProtoChannelRevokeLink {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChannelRevokeLink.ChannelRevokeLinkResponse) {
           return mergeFrom((com.iGap.proto.ProtoChannelRevokeLink.ChannelRevokeLinkResponse) other);
@@ -1141,14 +1088,12 @@ public final class ProtoChannelRevokeLink {
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1159,7 +1104,6 @@ public final class ProtoChannelRevokeLink {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1176,7 +1120,6 @@ public final class ProtoChannelRevokeLink {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1190,7 +1133,6 @@ public final class ProtoChannelRevokeLink {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1208,7 +1150,6 @@ public final class ProtoChannelRevokeLink {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1223,7 +1164,6 @@ public final class ProtoChannelRevokeLink {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1232,7 +1172,6 @@ public final class ProtoChannelRevokeLink {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1243,7 +1182,6 @@ public final class ProtoChannelRevokeLink {
           return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1256,14 +1194,12 @@ public final class ProtoChannelRevokeLink {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1273,7 +1209,6 @@ public final class ProtoChannelRevokeLink {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -1285,7 +1220,6 @@ public final class ProtoChannelRevokeLink {
       }
 
       private java.lang.Object inviteLink_ = "";
-
       /**
        * <code>optional string invite_link = 3;</code>
        */
@@ -1300,7 +1234,6 @@ public final class ProtoChannelRevokeLink {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string invite_link = 3;</code>
        */
@@ -1314,7 +1247,6 @@ public final class ProtoChannelRevokeLink {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string invite_link = 3;</code>
        */
@@ -1322,12 +1254,11 @@ public final class ProtoChannelRevokeLink {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         inviteLink_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string invite_link = 3;</code>
        */
@@ -1337,7 +1268,6 @@ public final class ProtoChannelRevokeLink {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string invite_link = 3;</code>
        */
@@ -1346,14 +1276,13 @@ public final class ProtoChannelRevokeLink {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         inviteLink_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object inviteToken_ = "";
-
       /**
        * <code>optional string invite_token = 4;</code>
        */
@@ -1368,7 +1297,6 @@ public final class ProtoChannelRevokeLink {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string invite_token = 4;</code>
        */
@@ -1382,7 +1310,6 @@ public final class ProtoChannelRevokeLink {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string invite_token = 4;</code>
        */
@@ -1390,12 +1317,11 @@ public final class ProtoChannelRevokeLink {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         inviteToken_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string invite_token = 4;</code>
        */
@@ -1405,7 +1331,6 @@ public final class ProtoChannelRevokeLink {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string invite_token = 4;</code>
        */
@@ -1414,7 +1339,7 @@ public final class ProtoChannelRevokeLink {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         inviteToken_ = value;
         onChanged();
         return this;
@@ -1434,7 +1359,6 @@ public final class ProtoChannelRevokeLink {
 
     // @@protoc_insertion_point(class_scope:proto.ChannelRevokeLinkResponse)
     private static final com.iGap.proto.ProtoChannelRevokeLink.ChannelRevokeLinkResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoChannelRevokeLink.ChannelRevokeLinkResponse();
     }
@@ -1474,7 +1398,6 @@ public final class ProtoChannelRevokeLink {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\027ChannelRevokeLink.proto\022\005proto\032\rReques" +

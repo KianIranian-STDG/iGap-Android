@@ -21,13 +21,12 @@ public class UserGetDeleteTokenResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoUserGetDeleteToken.UserGetDeleteTokenResponse.Builder builder =
-                (ProtoUserGetDeleteToken.UserGetDeleteTokenResponse.Builder) message;
+        final ProtoUserGetDeleteToken.UserGetDeleteTokenResponse.Builder builder = (ProtoUserGetDeleteToken.UserGetDeleteTokenResponse.Builder) message;
 
         G.smsNumbers = builder.getSmsNumberList();
-        if (G.onUserGetDeleteToken != null)
-        G.onUserGetDeleteToken.onUserGetDeleteToken(builder.getResendDelay(),
-                builder.getTokenRegex(), builder.getTokenLenght());
+        if (G.onUserGetDeleteToken != null) {
+            G.onUserGetDeleteToken.onUserGetDeleteToken(builder.getResendDelay(), builder.getTokenRegex(), builder.getTokenLength());
+        }
     }
 
     @Override
@@ -43,8 +42,8 @@ public class UserGetDeleteTokenResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
         int getWait = errorResponse.getWait();
 
-        if (G.onUserGetDeleteToken != null) ;
-        G.onUserGetDeleteToken.onUserGetDeleteError(majorCode, minorCode, getWait);
-
+        if (G.onUserGetDeleteToken != null) {
+            G.onUserGetDeleteToken.onUserGetDeleteError(majorCode, minorCode, getWait);
+        }
     }
 }

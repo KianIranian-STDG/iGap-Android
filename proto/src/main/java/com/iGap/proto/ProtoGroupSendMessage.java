@@ -6,6 +6,7 @@ package com.iGap.proto;
 public final class ProtoGroupSendMessage {
   private ProtoGroupSendMessage() {
   }
+
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
@@ -128,6 +129,7 @@ public final class ProtoGroupSendMessage {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
+
     private GroupSendMessage(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -236,13 +238,13 @@ public final class ProtoGroupSendMessage {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessage_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessage_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage.class, com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage.Builder.class);
+      return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage.class, com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -588,27 +590,34 @@ public final class ProtoGroupSendMessage {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
@@ -643,8 +652,7 @@ public final class ProtoGroupSendMessage {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessage_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage.class, com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage.Builder.class);
+        return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage.class, com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoGroupSendMessage.GroupSendMessage.newBuilder()
@@ -750,18 +758,23 @@ public final class ProtoGroupSendMessage {
       public Builder clone() {
         return (Builder) super.clone();
       }
+
       public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
@@ -1591,6 +1604,7 @@ public final class ProtoGroupSendMessage {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
+
     private GroupSendMessageResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
@@ -1650,13 +1664,13 @@ public final class ProtoGroupSendMessage {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessageResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessageResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse.class, com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse.Builder.class);
+      return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse.class, com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -1807,30 +1821,38 @@ public final class ProtoGroupSendMessage {
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
@@ -1865,8 +1887,7 @@ public final class ProtoGroupSendMessage {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessageResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse.class, com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse.Builder.class);
+        return com.iGap.proto.ProtoGroupSendMessage.internal_static_proto_GroupSendMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse.class, com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse.Builder.class);
       }
 
       // Construct using com.iGap.proto.ProtoGroupSendMessage.GroupSendMessageResponse.newBuilder()
@@ -1938,18 +1959,23 @@ public final class ProtoGroupSendMessage {
       public Builder clone() {
         return (Builder) super.clone();
       }
+
       public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
@@ -2330,8 +2356,7 @@ public final class ProtoGroupSendMessage {
     internal_static_proto_GroupSendMessage_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_proto_GroupSendMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_GroupSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_GroupSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
     internal_static_proto_GroupSendMessageResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_GroupSendMessageResponse_fieldAccessorTable = new

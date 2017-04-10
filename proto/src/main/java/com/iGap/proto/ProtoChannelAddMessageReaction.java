@@ -13,7 +13,6 @@ public final class ProtoChannelAddMessageReaction {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface ChannelAddMessageReactionOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.ChannelAddMessageReaction)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoChannelAddMessageReaction {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -47,13 +44,11 @@ public final class ProtoChannelAddMessageReaction {
      * <code>optional .proto.RoomMessageReaction reaction = 4;</code>
      */
     int getReactionValue();
-
     /**
      * <code>optional .proto.RoomMessageReaction reaction = 4;</code>
      */
     com.iGap.proto.ProtoGlobal.RoomMessageReaction getReaction();
   }
-
   /**
    * Protobuf type {@code proto.ChannelAddMessageReaction}
    */
@@ -64,7 +59,6 @@ public final class ProtoChannelAddMessageReaction {
     private ChannelAddMessageReaction(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ChannelAddMessageReaction() {
       roomId_ = 0L;
       messageId_ = 0L;
@@ -143,21 +137,18 @@ public final class ProtoChannelAddMessageReaction {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -167,7 +158,6 @@ public final class ProtoChannelAddMessageReaction {
 
     public static final int ROOM_ID_FIELD_NUMBER = 2;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 2;</code>
      */
@@ -177,7 +167,6 @@ public final class ProtoChannelAddMessageReaction {
 
     public static final int MESSAGE_ID_FIELD_NUMBER = 3;
     private long messageId_;
-
     /**
      * <code>optional uint64 message_id = 3;</code>
      */
@@ -187,14 +176,12 @@ public final class ProtoChannelAddMessageReaction {
 
     public static final int REACTION_FIELD_NUMBER = 4;
     private int reaction_;
-
     /**
      * <code>optional .proto.RoomMessageReaction reaction = 4;</code>
      */
     public int getReactionValue() {
       return reaction_;
     }
-
     /**
      * <code>optional .proto.RoomMessageReaction reaction = 4;</code>
      */
@@ -204,7 +191,6 @@ public final class ProtoChannelAddMessageReaction {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -251,7 +237,6 @@ public final class ProtoChannelAddMessageReaction {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -338,15 +323,12 @@ public final class ProtoChannelAddMessageReaction {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoChannelAddMessageReaction.ChannelAddMessageReaction prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -356,7 +338,6 @@ public final class ProtoChannelAddMessageReaction {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChannelAddMessageReaction}
      */
@@ -380,12 +361,10 @@ public final class ProtoChannelAddMessageReaction {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -456,7 +435,6 @@ public final class ProtoChannelAddMessageReaction {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChannelAddMessageReaction.ChannelAddMessageReaction) {
           return mergeFrom((com.iGap.proto.ProtoChannelAddMessageReaction.ChannelAddMessageReaction) other);
@@ -505,14 +483,12 @@ public final class ProtoChannelAddMessageReaction {
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -523,7 +499,6 @@ public final class ProtoChannelAddMessageReaction {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -540,7 +515,6 @@ public final class ProtoChannelAddMessageReaction {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -554,7 +528,6 @@ public final class ProtoChannelAddMessageReaction {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -572,7 +545,6 @@ public final class ProtoChannelAddMessageReaction {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -587,7 +559,6 @@ public final class ProtoChannelAddMessageReaction {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -596,7 +567,6 @@ public final class ProtoChannelAddMessageReaction {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -607,7 +577,6 @@ public final class ProtoChannelAddMessageReaction {
           return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -620,14 +589,12 @@ public final class ProtoChannelAddMessageReaction {
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -637,7 +604,6 @@ public final class ProtoChannelAddMessageReaction {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 2;</code>
        */
@@ -649,14 +615,12 @@ public final class ProtoChannelAddMessageReaction {
       }
 
       private long messageId_;
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
       public long getMessageId() {
         return messageId_;
       }
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -666,7 +630,6 @@ public final class ProtoChannelAddMessageReaction {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 message_id = 3;</code>
        */
@@ -678,14 +641,12 @@ public final class ProtoChannelAddMessageReaction {
       }
 
       private int reaction_ = 0;
-
       /**
        * <code>optional .proto.RoomMessageReaction reaction = 4;</code>
        */
       public int getReactionValue() {
         return reaction_;
       }
-
       /**
        * <code>optional .proto.RoomMessageReaction reaction = 4;</code>
        */
@@ -694,7 +655,6 @@ public final class ProtoChannelAddMessageReaction {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageReaction reaction = 4;</code>
        */
@@ -702,7 +662,6 @@ public final class ProtoChannelAddMessageReaction {
         com.iGap.proto.ProtoGlobal.RoomMessageReaction result = com.iGap.proto.ProtoGlobal.RoomMessageReaction.valueOf(reaction_);
         return result == null ? com.iGap.proto.ProtoGlobal.RoomMessageReaction.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.RoomMessageReaction reaction = 4;</code>
        */
@@ -715,7 +674,6 @@ public final class ProtoChannelAddMessageReaction {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.RoomMessageReaction reaction = 4;</code>
        */
@@ -740,7 +698,6 @@ public final class ProtoChannelAddMessageReaction {
 
     // @@protoc_insertion_point(class_scope:proto.ChannelAddMessageReaction)
     private static final com.iGap.proto.ProtoChannelAddMessageReaction.ChannelAddMessageReaction DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoChannelAddMessageReaction.ChannelAddMessageReaction();
     }
@@ -778,12 +735,10 @@ public final class ProtoChannelAddMessageReaction {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -793,13 +748,11 @@ public final class ProtoChannelAddMessageReaction {
      * <code>optional string reaction_counter_label = 2;</code>
      */
     java.lang.String getReactionCounterLabel();
-
     /**
      * <code>optional string reaction_counter_label = 2;</code>
      */
     com.google.protobuf.ByteString getReactionCounterLabelBytes();
   }
-
   /**
    * Protobuf type {@code proto.ChannelAddMessageReactionResponse}
    */
@@ -810,7 +763,6 @@ public final class ProtoChannelAddMessageReaction {
     private ChannelAddMessageReactionResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ChannelAddMessageReactionResponse() {
       reactionCounterLabel_ = "";
     }
@@ -877,21 +829,18 @@ public final class ProtoChannelAddMessageReaction {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -901,7 +850,6 @@ public final class ProtoChannelAddMessageReaction {
 
     public static final int REACTION_COUNTER_LABEL_FIELD_NUMBER = 2;
     private volatile java.lang.Object reactionCounterLabel_;
-
     /**
      * <code>optional string reaction_counter_label = 2;</code>
      */
@@ -916,7 +864,6 @@ public final class ProtoChannelAddMessageReaction {
         return s;
       }
     }
-
     /**
      * <code>optional string reaction_counter_label = 2;</code>
      */
@@ -932,7 +879,6 @@ public final class ProtoChannelAddMessageReaction {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -967,7 +913,6 @@ public final class ProtoChannelAddMessageReaction {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1048,11 +993,9 @@ public final class ProtoChannelAddMessageReaction {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -1065,7 +1008,6 @@ public final class ProtoChannelAddMessageReaction {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ChannelAddMessageReactionResponse}
      */
@@ -1089,12 +1031,10 @@ public final class ProtoChannelAddMessageReaction {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1159,7 +1099,6 @@ public final class ProtoChannelAddMessageReaction {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse) {
           return mergeFrom((com.iGap.proto.ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse) other);
@@ -1203,14 +1142,12 @@ public final class ProtoChannelAddMessageReaction {
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1221,7 +1158,6 @@ public final class ProtoChannelAddMessageReaction {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1238,7 +1174,6 @@ public final class ProtoChannelAddMessageReaction {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1252,7 +1187,6 @@ public final class ProtoChannelAddMessageReaction {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1270,7 +1204,6 @@ public final class ProtoChannelAddMessageReaction {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1285,7 +1218,6 @@ public final class ProtoChannelAddMessageReaction {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1294,7 +1226,6 @@ public final class ProtoChannelAddMessageReaction {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1305,7 +1236,6 @@ public final class ProtoChannelAddMessageReaction {
           return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1318,7 +1248,6 @@ public final class ProtoChannelAddMessageReaction {
       }
 
       private java.lang.Object reactionCounterLabel_ = "";
-
       /**
        * <code>optional string reaction_counter_label = 2;</code>
        */
@@ -1333,7 +1262,6 @@ public final class ProtoChannelAddMessageReaction {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string reaction_counter_label = 2;</code>
        */
@@ -1347,7 +1275,6 @@ public final class ProtoChannelAddMessageReaction {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string reaction_counter_label = 2;</code>
        */
@@ -1355,12 +1282,11 @@ public final class ProtoChannelAddMessageReaction {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         reactionCounterLabel_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string reaction_counter_label = 2;</code>
        */
@@ -1370,7 +1296,6 @@ public final class ProtoChannelAddMessageReaction {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string reaction_counter_label = 2;</code>
        */
@@ -1379,7 +1304,7 @@ public final class ProtoChannelAddMessageReaction {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         reactionCounterLabel_ = value;
         onChanged();
         return this;
@@ -1399,7 +1324,6 @@ public final class ProtoChannelAddMessageReaction {
 
     // @@protoc_insertion_point(class_scope:proto.ChannelAddMessageReactionResponse)
     private static final com.iGap.proto.ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse();
     }
@@ -1439,7 +1363,6 @@ public final class ProtoChannelAddMessageReaction {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\037ChannelAddMessageReaction.proto\022\005proto" +

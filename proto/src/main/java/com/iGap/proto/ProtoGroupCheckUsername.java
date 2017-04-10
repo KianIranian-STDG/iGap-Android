@@ -13,7 +13,6 @@ public final class ProtoGroupCheckUsername {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface GroupCheckUsernameOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.GroupCheckUsername)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoGroupCheckUsername {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -37,7 +34,6 @@ public final class ProtoGroupCheckUsername {
      * <code>optional string username = 2;</code>
      */
     java.lang.String getUsername();
-
     /**
      * <code>optional string username = 2;</code>
      */
@@ -48,7 +44,6 @@ public final class ProtoGroupCheckUsername {
      */
     long getRoomId();
   }
-
   /**
    * Protobuf type {@code proto.GroupCheckUsername}
    */
@@ -59,7 +54,6 @@ public final class ProtoGroupCheckUsername {
     private GroupCheckUsername(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private GroupCheckUsername() {
       username_ = "";
       roomId_ = 0L;
@@ -132,21 +126,18 @@ public final class ProtoGroupCheckUsername {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -156,7 +147,6 @@ public final class ProtoGroupCheckUsername {
 
     public static final int USERNAME_FIELD_NUMBER = 2;
     private volatile java.lang.Object username_;
-
     /**
      * <code>optional string username = 2;</code>
      */
@@ -171,7 +161,6 @@ public final class ProtoGroupCheckUsername {
         return s;
       }
     }
-
     /**
      * <code>optional string username = 2;</code>
      */
@@ -188,7 +177,6 @@ public final class ProtoGroupCheckUsername {
 
     public static final int ROOM_ID_FIELD_NUMBER = 3;
     private long roomId_;
-
     /**
      * <code>optional uint64 room_id = 3;</code>
      */
@@ -197,7 +185,6 @@ public final class ProtoGroupCheckUsername {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -238,7 +225,6 @@ public final class ProtoGroupCheckUsername {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -322,15 +308,12 @@ public final class ProtoGroupCheckUsername {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -340,7 +323,6 @@ public final class ProtoGroupCheckUsername {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.GroupCheckUsername}
      */
@@ -364,12 +346,10 @@ public final class ProtoGroupCheckUsername {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -437,7 +417,6 @@ public final class ProtoGroupCheckUsername {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername) {
           return mergeFrom((com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername) other);
@@ -484,14 +463,12 @@ public final class ProtoGroupCheckUsername {
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -502,7 +479,6 @@ public final class ProtoGroupCheckUsername {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -519,7 +495,6 @@ public final class ProtoGroupCheckUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -533,7 +508,6 @@ public final class ProtoGroupCheckUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -551,7 +525,6 @@ public final class ProtoGroupCheckUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -566,7 +539,6 @@ public final class ProtoGroupCheckUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -575,7 +547,6 @@ public final class ProtoGroupCheckUsername {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -586,7 +557,6 @@ public final class ProtoGroupCheckUsername {
           return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -599,7 +569,6 @@ public final class ProtoGroupCheckUsername {
       }
 
       private java.lang.Object username_ = "";
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -614,7 +583,6 @@ public final class ProtoGroupCheckUsername {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -628,7 +596,6 @@ public final class ProtoGroupCheckUsername {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -636,12 +603,11 @@ public final class ProtoGroupCheckUsername {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         username_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -651,7 +617,6 @@ public final class ProtoGroupCheckUsername {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -660,21 +625,19 @@ public final class ProtoGroupCheckUsername {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         username_ = value;
         onChanged();
         return this;
       }
 
       private long roomId_;
-
       /**
        * <code>optional uint64 room_id = 3;</code>
        */
       public long getRoomId() {
         return roomId_;
       }
-
       /**
        * <code>optional uint64 room_id = 3;</code>
        */
@@ -684,7 +647,6 @@ public final class ProtoGroupCheckUsername {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 room_id = 3;</code>
        */
@@ -709,7 +671,6 @@ public final class ProtoGroupCheckUsername {
 
     // @@protoc_insertion_point(class_scope:proto.GroupCheckUsername)
     private static final com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername();
     }
@@ -747,12 +708,10 @@ public final class ProtoGroupCheckUsername {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -762,13 +721,11 @@ public final class ProtoGroupCheckUsername {
      * <code>optional .proto.GroupCheckUsernameResponse.Status status = 2;</code>
      */
     int getStatusValue();
-
     /**
      * <code>optional .proto.GroupCheckUsernameResponse.Status status = 2;</code>
      */
     com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status getStatus();
   }
-
   /**
    * Protobuf type {@code proto.GroupCheckUsernameResponse}
    */
@@ -779,7 +736,6 @@ public final class ProtoGroupCheckUsername {
     private GroupCheckUsernameResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private GroupCheckUsernameResponse() {
       status_ = 0;
     }
@@ -959,21 +915,18 @@ public final class ProtoGroupCheckUsername {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -983,14 +936,12 @@ public final class ProtoGroupCheckUsername {
 
     public static final int STATUS_FIELD_NUMBER = 2;
     private int status_;
-
     /**
      * <code>optional .proto.GroupCheckUsernameResponse.Status status = 2;</code>
      */
     public int getStatusValue() {
       return status_;
     }
-
     /**
      * <code>optional .proto.GroupCheckUsernameResponse.Status status = 2;</code>
      */
@@ -1000,7 +951,6 @@ public final class ProtoGroupCheckUsername {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1035,7 +985,6 @@ public final class ProtoGroupCheckUsername {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1116,15 +1065,12 @@ public final class ProtoGroupCheckUsername {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -1134,7 +1080,6 @@ public final class ProtoGroupCheckUsername {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.GroupCheckUsernameResponse}
      */
@@ -1158,12 +1103,10 @@ public final class ProtoGroupCheckUsername {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1228,7 +1171,6 @@ public final class ProtoGroupCheckUsername {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse) {
           return mergeFrom((com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse) other);
@@ -1271,14 +1213,12 @@ public final class ProtoGroupCheckUsername {
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1289,7 +1229,6 @@ public final class ProtoGroupCheckUsername {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1306,7 +1245,6 @@ public final class ProtoGroupCheckUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1320,7 +1258,6 @@ public final class ProtoGroupCheckUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1338,7 +1275,6 @@ public final class ProtoGroupCheckUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1353,7 +1289,6 @@ public final class ProtoGroupCheckUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1362,7 +1297,6 @@ public final class ProtoGroupCheckUsername {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1373,7 +1307,6 @@ public final class ProtoGroupCheckUsername {
           return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1386,14 +1319,12 @@ public final class ProtoGroupCheckUsername {
       }
 
       private int status_ = 0;
-
       /**
        * <code>optional .proto.GroupCheckUsernameResponse.Status status = 2;</code>
        */
       public int getStatusValue() {
         return status_;
       }
-
       /**
        * <code>optional .proto.GroupCheckUsernameResponse.Status status = 2;</code>
        */
@@ -1402,7 +1333,6 @@ public final class ProtoGroupCheckUsername {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.GroupCheckUsernameResponse.Status status = 2;</code>
        */
@@ -1410,7 +1340,6 @@ public final class ProtoGroupCheckUsername {
         com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status result = com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.valueOf(status_);
         return result == null ? com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.GroupCheckUsernameResponse.Status status = 2;</code>
        */
@@ -1423,7 +1352,6 @@ public final class ProtoGroupCheckUsername {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.GroupCheckUsernameResponse.Status status = 2;</code>
        */
@@ -1448,7 +1376,6 @@ public final class ProtoGroupCheckUsername {
 
     // @@protoc_insertion_point(class_scope:proto.GroupCheckUsernameResponse)
     private static final com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse();
     }
@@ -1488,7 +1415,6 @@ public final class ProtoGroupCheckUsername {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\030GroupCheckUsername.proto\022\005proto\032\rReque" +

@@ -206,6 +206,7 @@ public final class ProtoChannelGetMemberList {
       public static com.google.protobuf.Internal.EnumLiteMap<FilterRole> internalGetValueMap() {
         return internalValueMap;
       }
+
       private static final com.google.protobuf.Internal.EnumLiteMap<FilterRole> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<FilterRole>() {
         public FilterRole findValueByNumber(int number) {
           return FilterRole.forNumber(number);
@@ -215,9 +216,11 @@ public final class ProtoChannelGetMemberList {
       public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(ordinal());
       }
+
       public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
+
       public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
         return com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.getDescriptor().getEnumTypes().get(0);
       }
@@ -2345,8 +2348,7 @@ public final class ProtoChannelGetMemberList {
         }, assigner);
     internal_static_proto_ChannelGetMemberList_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_ChannelGetMemberList_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChannelGetMemberList_descriptor,
+    internal_static_proto_ChannelGetMemberList_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChannelGetMemberList_descriptor,
         new java.lang.String[] { "Request", "RoomId", "FilterRole", });
     internal_static_proto_ChannelGetMemberListResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);

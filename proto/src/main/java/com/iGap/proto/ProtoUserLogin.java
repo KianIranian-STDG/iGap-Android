@@ -6,6 +6,7 @@ package com.iGap.proto;
 public final class ProtoUserLogin {
   private ProtoUserLogin() {
   }
+
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
@@ -139,6 +140,7 @@ public final class ProtoUserLogin {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
+
     private UserLogin(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
@@ -237,6 +239,7 @@ public final class ProtoUserLogin {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoUserLogin.internal_static_proto_UserLogin_descriptor;
     }
@@ -638,30 +641,39 @@ public final class ProtoUserLogin {
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLogin parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
@@ -783,18 +795,23 @@ public final class ProtoUserLogin {
       public Builder clone() {
         return (Builder) super.clone();
       }
+
       public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
+
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
@@ -1478,6 +1495,7 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
+
       public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
@@ -1542,6 +1560,16 @@ public final class ProtoUserLogin {
      * <code>optional bool deprecated_client = 2;</code>
      */
     boolean getDeprecatedClient();
+
+    /**
+     * <code>optional string secondary_node_name = 3;</code>
+     */
+    java.lang.String getSecondaryNodeName();
+
+    /**
+     * <code>optional string secondary_node_name = 3;</code>
+     */
+    com.google.protobuf.ByteString getSecondaryNodeNameBytes();
   }
   /**
    * Protobuf type {@code proto.UserLoginResponse}
@@ -1555,6 +1583,7 @@ public final class ProtoUserLogin {
     }
     private UserLoginResponse() {
       deprecatedClient_ = false;
+      secondaryNodeName_ = "";
     }
 
     @java.lang.Override
@@ -1562,6 +1591,7 @@ public final class ProtoUserLogin {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
+
     private UserLoginResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
@@ -1597,6 +1627,12 @@ public final class ProtoUserLogin {
               deprecatedClient_ = input.readBool();
               break;
             }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              secondaryNodeName_ = s;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1607,6 +1643,7 @@ public final class ProtoUserLogin {
         makeExtensionsImmutable();
       }
     }
+
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.iGap.proto.ProtoUserLogin.internal_static_proto_UserLoginResponse_descriptor;
     }
@@ -1645,6 +1682,38 @@ public final class ProtoUserLogin {
       return deprecatedClient_;
     }
 
+    public static final int SECONDARY_NODE_NAME_FIELD_NUMBER = 3;
+    private volatile java.lang.Object secondaryNodeName_;
+
+    /**
+     * <code>optional string secondary_node_name = 3;</code>
+     */
+    public java.lang.String getSecondaryNodeName() {
+      java.lang.Object ref = secondaryNodeName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        secondaryNodeName_ = s;
+        return s;
+      }
+    }
+
+    /**
+     * <code>optional string secondary_node_name = 3;</code>
+     */
+    public com.google.protobuf.ByteString getSecondaryNodeNameBytes() {
+      java.lang.Object ref = secondaryNodeName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        secondaryNodeName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1662,6 +1731,9 @@ public final class ProtoUserLogin {
       if (deprecatedClient_ != false) {
         output.writeBool(2, deprecatedClient_);
       }
+      if (!getSecondaryNodeNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, secondaryNodeName_);
+      }
     }
 
     public int getSerializedSize() {
@@ -1675,6 +1747,9 @@ public final class ProtoUserLogin {
       if (deprecatedClient_ != false) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(2, deprecatedClient_);
       }
+      if (!getSecondaryNodeNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, secondaryNodeName_);
+      }
       memoizedSize = size;
       return size;
     }
@@ -1683,7 +1758,7 @@ public final class ProtoUserLogin {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof com.iGap.proto.ProtoUserLogin.UserLoginResponse)) {
         return super.equals(obj);
@@ -1696,6 +1771,7 @@ public final class ProtoUserLogin {
         result = result && getResponse().equals(other.getResponse());
       }
       result = result && (getDeprecatedClient() == other.getDeprecatedClient());
+      result = result && getSecondaryNodeName().equals(other.getSecondaryNodeName());
       return result;
     }
 
@@ -1712,6 +1788,8 @@ public final class ProtoUserLogin {
       }
       hash = (37 * hash) + DEPRECATED_CLIENT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getDeprecatedClient());
+      hash = (37 * hash) + SECONDARY_NODE_NAME_FIELD_NUMBER;
+      hash = (53 * hash) + getSecondaryNodeName().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1720,43 +1798,51 @@ public final class ProtoUserLogin {
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
+
     public static com.iGap.proto.ProtoUserLogin.UserLoginResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
     public static Builder newBuilder(com.iGap.proto.ProtoUserLogin.UserLoginResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -1772,7 +1858,8 @@ public final class ProtoUserLogin {
     public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.UserLoginResponse)
             com.iGap.proto.ProtoUserLogin.UserLoginResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
         return com.iGap.proto.ProtoUserLogin.internal_static_proto_UserLoginResponse_descriptor;
       }
 
@@ -1804,6 +1891,8 @@ public final class ProtoUserLogin {
         }
         deprecatedClient_ = false;
 
+        secondaryNodeName_ = "";
+
         return this;
       }
 
@@ -1831,6 +1920,7 @@ public final class ProtoUserLogin {
           result.response_ = responseBuilder_.build();
         }
         result.deprecatedClient_ = deprecatedClient_;
+        result.secondaryNodeName_ = secondaryNodeName_;
         onBuilt();
         return result;
       }
@@ -1838,24 +1928,31 @@ public final class ProtoUserLogin {
       public Builder clone() {
         return (Builder) super.clone();
       }
-      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
+
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.setField(field, value);
       }
+
       public Builder clearField(com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
+
       public Builder clearOneof(com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
+
       public Builder setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
+
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserLogin.UserLoginResponse) {
-          return mergeFrom((com.iGap.proto.ProtoUserLogin.UserLoginResponse) other);
+          return mergeFrom((com.iGap.proto.ProtoUserLogin.UserLoginResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1869,6 +1966,10 @@ public final class ProtoUserLogin {
         }
         if (other.getDeprecatedClient() != false) {
           setDeprecatedClient(other.getDeprecatedClient());
+        }
+        if (!other.getSecondaryNodeName().isEmpty()) {
+          secondaryNodeName_ = other.secondaryNodeName_;
+          onChanged();
         }
         onChanged();
         return this;
@@ -1975,7 +2076,7 @@ public final class ProtoUserLogin {
        * <code>optional .proto.Response response = 1;</code>
        */
       public com.iGap.proto.ProtoResponse.Response.Builder getResponseBuilder() {
-
+        
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
@@ -2003,7 +2104,7 @@ public final class ProtoUserLogin {
         return responseBuilder_;
       }
 
-      private boolean deprecatedClient_;
+      private boolean deprecatedClient_ ;
       /**
        * <code>optional bool deprecated_client = 2;</code>
        */
@@ -2014,7 +2115,7 @@ public final class ProtoUserLogin {
        * <code>optional bool deprecated_client = 2;</code>
        */
       public Builder setDeprecatedClient(boolean value) {
-
+        
         deprecatedClient_ = value;
         onChanged();
         return this;
@@ -2023,16 +2124,86 @@ public final class ProtoUserLogin {
        * <code>optional bool deprecated_client = 2;</code>
        */
       public Builder clearDeprecatedClient() {
-
+        
         deprecatedClient_ = false;
         onChanged();
         return this;
       }
+
+      private java.lang.Object secondaryNodeName_ = "";
+
+      /**
+       * <code>optional string secondary_node_name = 3;</code>
+       */
+      public java.lang.String getSecondaryNodeName() {
+        java.lang.Object ref = secondaryNodeName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          secondaryNodeName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+
+      /**
+       * <code>optional string secondary_node_name = 3;</code>
+       */
+      public com.google.protobuf.ByteString getSecondaryNodeNameBytes() {
+        java.lang.Object ref = secondaryNodeName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+          secondaryNodeName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      /**
+       * <code>optional string secondary_node_name = 3;</code>
+       */
+      public Builder setSecondaryNodeName(java.lang.String value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        secondaryNodeName_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional string secondary_node_name = 3;</code>
+       */
+      public Builder clearSecondaryNodeName() {
+
+        secondaryNodeName_ = getDefaultInstance().getSecondaryNodeName();
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional string secondary_node_name = 3;</code>
+       */
+      public Builder setSecondaryNodeNameBytes(com.google.protobuf.ByteString value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
+        secondaryNodeName_ = value;
+        onChanged();
+        return this;
+      }
+
       public final Builder setUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
-      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -2052,7 +2223,7 @@ public final class ProtoUserLogin {
 
     private static final com.google.protobuf.Parser<UserLoginResponse> PARSER = new com.google.protobuf.AbstractParser<UserLoginResponse>() {
       public UserLoginResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
-        return new UserLoginResponse(input, extensionRegistry);
+          return new UserLoginResponse(input, extensionRegistry);
       }
     };
 
@@ -2079,8 +2250,8 @@ public final class ProtoUserLogin {
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
+  private static  com.google.protobuf.Descriptors.FileDescriptor descriptor;
 
-  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
             "\n\017UserLogin.proto\022\005proto\032\rRequest.proto\032" +
@@ -2092,9 +2263,9 @@ public final class ProtoUserLogin {
                     "Platform\022\030\n\020platform_version\030\010 \001(\t\022\035\n\006de" +
                     "vice\030\t \001(\0162\r.proto.Device\022\023\n\013device_name" +
                     "\030\n \001(\t\022!\n\010language\030\013 \001(\0162\017.proto.Languag" +
-                    "e\"Q\n\021UserLoginResponse\022!\n\010response\030\001 \001(\013", "2\017.proto.Response\022\031\n\021deprecated_client\030\002" +
-            " \001(\010B \n\016com.iGap.protoB\016ProtoUserLoginb\006" +
-            "proto3"
+                    "e\"n\n\021UserLoginResponse\022!\n\010response\030\001 \001(\013", "2\017.proto.Response\022\031\n\021deprecated_client\030\002" +
+            " \001(\010\022\033\n\023secondary_node_name\030\003 \001(\tB \n\016com" +
+            ".iGap.protoB\016ProtoUserLoginb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -2103,8 +2274,9 @@ public final class ProtoUserLogin {
       }
     };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-            com.iGap.proto.ProtoRequest.getDescriptor(), com.iGap.proto.ProtoResponse.getDescriptor(), com.iGap.proto.ProtoGlobal.getDescriptor(),
-    }, assigner);
+            com.iGap.proto.ProtoRequest.getDescriptor(), com.iGap.proto.ProtoResponse.getDescriptor(),
+          com.iGap.proto.ProtoGlobal.getDescriptor(),
+        }, assigner);
     internal_static_proto_UserLogin_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_proto_UserLogin_fieldAccessorTable = new
@@ -2114,9 +2286,8 @@ public final class ProtoUserLogin {
     internal_static_proto_UserLoginResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_UserLoginResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_UserLoginResponse_descriptor,
-        new java.lang.String[] { "Response", "DeprecatedClient", });
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserLoginResponse_descriptor,
+        new java.lang.String[] { "Response", "DeprecatedClient", "SecondaryNodeName", });
     com.iGap.proto.ProtoRequest.getDescriptor();
     com.iGap.proto.ProtoResponse.getDescriptor();
     com.iGap.proto.ProtoGlobal.getDescriptor();

@@ -13,7 +13,6 @@ public final class ProtoClientJoinByUsername {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface ClientJoinByUsernameOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.ClientJoinByUsername)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoClientJoinByUsername {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -37,13 +34,11 @@ public final class ProtoClientJoinByUsername {
      * <code>optional string username = 2;</code>
      */
     java.lang.String getUsername();
-
     /**
      * <code>optional string username = 2;</code>
      */
     com.google.protobuf.ByteString getUsernameBytes();
   }
-
   /**
    * Protobuf type {@code proto.ClientJoinByUsername}
    */
@@ -54,7 +49,6 @@ public final class ProtoClientJoinByUsername {
     private ClientJoinByUsername(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ClientJoinByUsername() {
       username_ = "";
     }
@@ -121,21 +115,18 @@ public final class ProtoClientJoinByUsername {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -145,7 +136,6 @@ public final class ProtoClientJoinByUsername {
 
     public static final int USERNAME_FIELD_NUMBER = 2;
     private volatile java.lang.Object username_;
-
     /**
      * <code>optional string username = 2;</code>
      */
@@ -160,7 +150,6 @@ public final class ProtoClientJoinByUsername {
         return s;
       }
     }
-
     /**
      * <code>optional string username = 2;</code>
      */
@@ -176,7 +165,6 @@ public final class ProtoClientJoinByUsername {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -211,7 +199,6 @@ public final class ProtoClientJoinByUsername {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -292,15 +279,12 @@ public final class ProtoClientJoinByUsername {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoClientJoinByUsername.ClientJoinByUsername prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -310,7 +294,6 @@ public final class ProtoClientJoinByUsername {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ClientJoinByUsername}
      */
@@ -334,12 +317,10 @@ public final class ProtoClientJoinByUsername {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -404,7 +385,6 @@ public final class ProtoClientJoinByUsername {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoClientJoinByUsername.ClientJoinByUsername) {
           return mergeFrom((com.iGap.proto.ProtoClientJoinByUsername.ClientJoinByUsername) other);
@@ -448,14 +428,12 @@ public final class ProtoClientJoinByUsername {
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -466,7 +444,6 @@ public final class ProtoClientJoinByUsername {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -483,7 +460,6 @@ public final class ProtoClientJoinByUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -497,7 +473,6 @@ public final class ProtoClientJoinByUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -515,7 +490,6 @@ public final class ProtoClientJoinByUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -530,7 +504,6 @@ public final class ProtoClientJoinByUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -539,7 +512,6 @@ public final class ProtoClientJoinByUsername {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -550,7 +522,6 @@ public final class ProtoClientJoinByUsername {
           return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -563,7 +534,6 @@ public final class ProtoClientJoinByUsername {
       }
 
       private java.lang.Object username_ = "";
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -578,7 +548,6 @@ public final class ProtoClientJoinByUsername {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -592,7 +561,6 @@ public final class ProtoClientJoinByUsername {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -600,12 +568,11 @@ public final class ProtoClientJoinByUsername {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         username_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -615,7 +582,6 @@ public final class ProtoClientJoinByUsername {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -624,7 +590,7 @@ public final class ProtoClientJoinByUsername {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         username_ = value;
         onChanged();
         return this;
@@ -644,7 +610,6 @@ public final class ProtoClientJoinByUsername {
 
     // @@protoc_insertion_point(class_scope:proto.ClientJoinByUsername)
     private static final com.iGap.proto.ProtoClientJoinByUsername.ClientJoinByUsername DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoClientJoinByUsername.ClientJoinByUsername();
     }
@@ -682,18 +647,15 @@ public final class ProtoClientJoinByUsername {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.ClientJoinByUsernameResponse}
    */
@@ -704,7 +666,6 @@ public final class ProtoClientJoinByUsername {
     private ClientJoinByUsernameResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private ClientJoinByUsernameResponse() {
     }
 
@@ -764,21 +725,18 @@ public final class ProtoClientJoinByUsername {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -787,7 +745,6 @@ public final class ProtoClientJoinByUsername {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -816,7 +773,6 @@ public final class ProtoClientJoinByUsername {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -894,15 +850,12 @@ public final class ProtoClientJoinByUsername {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoClientJoinByUsername.ClientJoinByUsernameResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -913,7 +866,6 @@ public final class ProtoClientJoinByUsername {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.ClientJoinByUsernameResponse}
      */
@@ -937,12 +889,10 @@ public final class ProtoClientJoinByUsername {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1004,7 +954,6 @@ public final class ProtoClientJoinByUsername {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoClientJoinByUsername.ClientJoinByUsernameResponse) {
           return mergeFrom((com.iGap.proto.ProtoClientJoinByUsername.ClientJoinByUsernameResponse) other);
@@ -1044,14 +993,12 @@ public final class ProtoClientJoinByUsername {
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1062,7 +1009,6 @@ public final class ProtoClientJoinByUsername {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1079,7 +1025,6 @@ public final class ProtoClientJoinByUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1093,7 +1038,6 @@ public final class ProtoClientJoinByUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1111,7 +1055,6 @@ public final class ProtoClientJoinByUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1126,7 +1069,6 @@ public final class ProtoClientJoinByUsername {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1135,7 +1077,6 @@ public final class ProtoClientJoinByUsername {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1146,7 +1087,6 @@ public final class ProtoClientJoinByUsername {
           return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1172,7 +1112,6 @@ public final class ProtoClientJoinByUsername {
 
     // @@protoc_insertion_point(class_scope:proto.ClientJoinByUsernameResponse)
     private static final com.iGap.proto.ProtoClientJoinByUsername.ClientJoinByUsernameResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoClientJoinByUsername.ClientJoinByUsernameResponse();
     }
@@ -1213,7 +1152,6 @@ public final class ProtoClientJoinByUsername {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\032ClientJoinByUsername.proto\022\005proto\032\rReq" +

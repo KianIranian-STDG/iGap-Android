@@ -13,7 +13,6 @@ public final class ProtoUserContactsGetBlockedList {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface UserContactsGetBlockedListOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.UserContactsGetBlockedList)
           com.google.protobuf.MessageOrBuilder {
@@ -22,18 +21,15 @@ public final class ProtoUserContactsGetBlockedList {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     com.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.UserContactsGetBlockedList}
    */
@@ -44,7 +40,6 @@ public final class ProtoUserContactsGetBlockedList {
     private UserContactsGetBlockedList(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserContactsGetBlockedList() {
     }
 
@@ -104,21 +99,18 @@ public final class ProtoUserContactsGetBlockedList {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public com.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -127,7 +119,6 @@ public final class ProtoUserContactsGetBlockedList {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -156,7 +147,6 @@ public final class ProtoUserContactsGetBlockedList {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -234,15 +224,12 @@ public final class ProtoUserContactsGetBlockedList {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedList prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -252,7 +239,6 @@ public final class ProtoUserContactsGetBlockedList {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserContactsGetBlockedList}
      */
@@ -276,12 +262,10 @@ public final class ProtoUserContactsGetBlockedList {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -343,7 +327,6 @@ public final class ProtoUserContactsGetBlockedList {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedList) {
           return mergeFrom((com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedList) other);
@@ -383,14 +366,12 @@ public final class ProtoUserContactsGetBlockedList {
 
       private com.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoRequest.Request, com.iGap.proto.ProtoRequest.Request.Builder, com.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -401,7 +382,6 @@ public final class ProtoUserContactsGetBlockedList {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -418,7 +398,6 @@ public final class ProtoUserContactsGetBlockedList {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -432,7 +411,6 @@ public final class ProtoUserContactsGetBlockedList {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -450,7 +428,6 @@ public final class ProtoUserContactsGetBlockedList {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -465,7 +442,6 @@ public final class ProtoUserContactsGetBlockedList {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -474,7 +450,6 @@ public final class ProtoUserContactsGetBlockedList {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -485,7 +460,6 @@ public final class ProtoUserContactsGetBlockedList {
           return request_ == null ? com.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -511,7 +485,6 @@ public final class ProtoUserContactsGetBlockedList {
 
     // @@protoc_insertion_point(class_scope:proto.UserContactsGetBlockedList)
     private static final com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedList DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedList();
     }
@@ -549,12 +522,10 @@ public final class ProtoUserContactsGetBlockedList {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     com.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -564,28 +535,23 @@ public final class ProtoUserContactsGetBlockedList {
      * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
      */
     java.util.List<com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User> getUserList();
-
     /**
      * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
      */
     com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User getUser(int index);
-
     /**
      * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
      */
     int getUserCount();
-
     /**
      * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
      */
     java.util.List<? extends com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.UserOrBuilder> getUserOrBuilderList();
-
     /**
      * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
      */
     com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.UserOrBuilder getUserOrBuilder(int index);
   }
-
   /**
    * Protobuf type {@code proto.UserContactsGetBlockedListResponse}
    */
@@ -596,7 +562,6 @@ public final class ProtoUserContactsGetBlockedList {
     private UserContactsGetBlockedListResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserContactsGetBlockedListResponse() {
       user_ = java.util.Collections.emptyList();
     }
@@ -675,7 +640,6 @@ public final class ProtoUserContactsGetBlockedList {
        */
       long getUserId();
     }
-
     /**
      * Protobuf type {@code proto.UserContactsGetBlockedListResponse.User}
      */
@@ -686,7 +650,6 @@ public final class ProtoUserContactsGetBlockedList {
       private User(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
-
       private User() {
         userId_ = 0L;
       }
@@ -739,7 +702,6 @@ public final class ProtoUserContactsGetBlockedList {
 
       public static final int USER_ID_FIELD_NUMBER = 1;
       private long userId_;
-
       /**
        * <code>optional uint64 user_id = 1;</code>
        */
@@ -748,7 +710,6 @@ public final class ProtoUserContactsGetBlockedList {
       }
 
       private byte memoizedIsInitialized = -1;
-
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized == 1) return true;
@@ -777,7 +738,6 @@ public final class ProtoUserContactsGetBlockedList {
       }
 
       private static final long serialVersionUID = 0L;
-
       @java.lang.Override
       public boolean equals(final java.lang.Object obj) {
         if (obj == this) {
@@ -850,15 +810,12 @@ public final class ProtoUserContactsGetBlockedList {
       public Builder newBuilderForType() {
         return newBuilder();
       }
-
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-
       public static Builder newBuilder(com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
-
       public Builder toBuilder() {
         return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
       }
@@ -868,7 +825,6 @@ public final class ProtoUserContactsGetBlockedList {
         Builder builder = new Builder(parent);
         return builder;
       }
-
       /**
        * Protobuf type {@code proto.UserContactsGetBlockedListResponse.User}
        */
@@ -892,12 +848,10 @@ public final class ProtoUserContactsGetBlockedList {
           super(parent);
           maybeForceBuilderInitialization();
         }
-
         private void maybeForceBuilderInitialization() {
           if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
           }
         }
-
         public Builder clear() {
           super.clear();
           userId_ = 0L;
@@ -951,7 +905,6 @@ public final class ProtoUserContactsGetBlockedList {
         public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
           return (Builder) super.addRepeatedField(field, value);
         }
-
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User) {
             return mergeFrom((com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User) other);
@@ -990,14 +943,12 @@ public final class ProtoUserContactsGetBlockedList {
         }
 
         private long userId_;
-
         /**
          * <code>optional uint64 user_id = 1;</code>
          */
         public long getUserId() {
           return userId_;
         }
-
         /**
          * <code>optional uint64 user_id = 1;</code>
          */
@@ -1007,7 +958,6 @@ public final class ProtoUserContactsGetBlockedList {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional uint64 user_id = 1;</code>
          */
@@ -1032,7 +982,6 @@ public final class ProtoUserContactsGetBlockedList {
 
       // @@protoc_insertion_point(class_scope:proto.UserContactsGetBlockedListResponse.User)
       private static final com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User DEFAULT_INSTANCE;
-
       static {
         DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User();
       }
@@ -1065,21 +1014,18 @@ public final class ProtoUserContactsGetBlockedList {
     private int bitField0_;
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private com.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public com.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1089,35 +1035,30 @@ public final class ProtoUserContactsGetBlockedList {
 
     public static final int USER_FIELD_NUMBER = 2;
     private java.util.List<com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User> user_;
-
     /**
      * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
      */
     public java.util.List<com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User> getUserList() {
       return user_;
     }
-
     /**
      * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
      */
     public java.util.List<? extends com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.UserOrBuilder> getUserOrBuilderList() {
       return user_;
     }
-
     /**
      * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
      */
     public int getUserCount() {
       return user_.size();
     }
-
     /**
      * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
      */
     public com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User getUser(int index) {
       return user_.get(index);
     }
-
     /**
      * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
      */
@@ -1126,7 +1067,6 @@ public final class ProtoUserContactsGetBlockedList {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1161,7 +1101,6 @@ public final class ProtoUserContactsGetBlockedList {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1244,15 +1183,12 @@ public final class ProtoUserContactsGetBlockedList {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -1262,7 +1198,6 @@ public final class ProtoUserContactsGetBlockedList {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserContactsGetBlockedListResponse}
      */
@@ -1286,13 +1221,11 @@ public final class ProtoUserContactsGetBlockedList {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
           getUserFieldBuilder();
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1432,19 +1365,16 @@ public final class ProtoUserContactsGetBlockedList {
         }
         return this;
       }
-
       private int bitField0_;
 
       private com.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoResponse.Response, com.iGap.proto.ProtoResponse.Response.Builder, com.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1455,7 +1385,6 @@ public final class ProtoUserContactsGetBlockedList {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1472,7 +1401,6 @@ public final class ProtoUserContactsGetBlockedList {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1486,7 +1414,6 @@ public final class ProtoUserContactsGetBlockedList {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1504,7 +1431,6 @@ public final class ProtoUserContactsGetBlockedList {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1519,7 +1445,6 @@ public final class ProtoUserContactsGetBlockedList {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1528,7 +1453,6 @@ public final class ProtoUserContactsGetBlockedList {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1539,7 +1463,6 @@ public final class ProtoUserContactsGetBlockedList {
           return response_ == null ? com.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1552,7 +1475,6 @@ public final class ProtoUserContactsGetBlockedList {
       }
 
       private java.util.List<com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User> user_ = java.util.Collections.emptyList();
-
       private void ensureUserIsMutable() {
         if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           user_ = new java.util.ArrayList<com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User>(user_);
@@ -1572,7 +1494,6 @@ public final class ProtoUserContactsGetBlockedList {
           return userBuilder_.getMessageList();
         }
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1583,7 +1504,6 @@ public final class ProtoUserContactsGetBlockedList {
           return userBuilder_.getCount();
         }
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1594,7 +1514,6 @@ public final class ProtoUserContactsGetBlockedList {
           return userBuilder_.getMessage(index);
         }
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1611,7 +1530,6 @@ public final class ProtoUserContactsGetBlockedList {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1625,7 +1543,6 @@ public final class ProtoUserContactsGetBlockedList {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1642,7 +1559,6 @@ public final class ProtoUserContactsGetBlockedList {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1659,7 +1575,6 @@ public final class ProtoUserContactsGetBlockedList {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1673,7 +1588,6 @@ public final class ProtoUserContactsGetBlockedList {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1687,7 +1601,6 @@ public final class ProtoUserContactsGetBlockedList {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1701,7 +1614,6 @@ public final class ProtoUserContactsGetBlockedList {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1715,7 +1627,6 @@ public final class ProtoUserContactsGetBlockedList {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1729,14 +1640,12 @@ public final class ProtoUserContactsGetBlockedList {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
       public com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User.Builder getUserBuilder(int index) {
         return getUserFieldBuilder().getBuilder(index);
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1747,7 +1656,6 @@ public final class ProtoUserContactsGetBlockedList {
           return userBuilder_.getMessageOrBuilder(index);
         }
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1758,21 +1666,18 @@ public final class ProtoUserContactsGetBlockedList {
           return java.util.Collections.unmodifiableList(user_);
         }
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
       public com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User.Builder addUserBuilder() {
         return getUserFieldBuilder().addBuilder(com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User.getDefaultInstance());
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
       public com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User.Builder addUserBuilder(int index) {
         return getUserFieldBuilder().addBuilder(index, com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User.getDefaultInstance());
       }
-
       /**
        * <code>repeated .proto.UserContactsGetBlockedListResponse.User user = 2;</code>
        */
@@ -1804,7 +1709,6 @@ public final class ProtoUserContactsGetBlockedList {
 
     // @@protoc_insertion_point(class_scope:proto.UserContactsGetBlockedListResponse)
     private static final com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new com.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse();
     }
@@ -1835,8 +1739,7 @@ public final class ProtoUserContactsGetBlockedList {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_UserContactsGetBlockedList_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_UserContactsGetBlockedList_fieldAccessorTable;
+  private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_UserContactsGetBlockedList_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_UserContactsGetBlockedListResponse_descriptor;
   private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_UserContactsGetBlockedListResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_UserContactsGetBlockedListResponse_User_descriptor;
@@ -1847,7 +1750,6 @@ public final class ProtoUserContactsGetBlockedList {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n UserContactsGetBlockedList.proto\022\005prot" +
@@ -1872,7 +1774,7 @@ public final class ProtoUserContactsGetBlockedList {
     internal_static_proto_UserContactsGetBlockedList_descriptor = getDescriptor().getMessageTypes().get(0);
     internal_static_proto_UserContactsGetBlockedList_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserContactsGetBlockedList_descriptor, new java.lang.String[]{"Request",});
     internal_static_proto_UserContactsGetBlockedListResponse_descriptor = getDescriptor().getMessageTypes().get(1);
-    internal_static_proto_UserContactsGetBlockedListResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserContactsGetBlockedListResponse_descriptor, new java.lang.String[] { "Response", "User", });
+    internal_static_proto_UserContactsGetBlockedListResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserContactsGetBlockedListResponse_descriptor, new java.lang.String[]{"Response", "User",});
     internal_static_proto_UserContactsGetBlockedListResponse_User_descriptor =
       internal_static_proto_UserContactsGetBlockedListResponse_descriptor.getNestedTypes().get(0);
     internal_static_proto_UserContactsGetBlockedListResponse_User_fieldAccessorTable = new
