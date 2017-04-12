@@ -2344,15 +2344,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     realmChannelExtra.setMessageId(parseLong(identity));
                                     realmChannelExtra.setThumbsUp("0");
                                     realmChannelExtra.setThumbsDown("0");
-                                    if (realmRoom.getChannelRoom().isSignature()) {
+                                    if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
                                         realmChannelExtra.setSignature(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName());
                                     } else {
                                         realmChannelExtra.setSignature("");
                                     }
                                     realmChannelExtra.setViewsLabel("1");
-                                    if (roomMessage != null) {
-                                        roomMessage.setChannelExtra(realmChannelExtra);
-                                    }
                                 }
                             });
                         }
@@ -3988,7 +3985,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (chatType == CHANNEL) {
                     StructChannelExtra structChannelExtra = StructChannelExtra.makeDefaultStructure(finalMessageId, mRoomId);
                     finalMessageInfo.channelExtra = structChannelExtra;
-                    roomMessage.setChannelExtra(RealmChannelExtra.convert(realm, structChannelExtra));
+                    RealmChannelExtra.convert(realm, structChannelExtra);
+                    //roomMessage.setChannelExtra(RealmChannelExtra.convert(realm, structChannelExtra));
                 }
 
                 if (finalMessageType == CONTACT) {
@@ -6069,10 +6067,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         long replyMessageId = replyMessage.getMessageId();
         /**
-         * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * 2)
-         * so i need to (replyMessageId / 2) again for use this messageId
+         * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
+         * so i need to (replyMessageId * (-1)) again for use this messageId
          */
-        int position = mAdapter.findPositionByMessageId((replyMessageId / 2));
+        int position = mAdapter.findPositionByMessageId((replyMessageId * (-1)));
         if (position == -1) {
             position = mAdapter.findPositionByMessageId(replyMessageId);
         }

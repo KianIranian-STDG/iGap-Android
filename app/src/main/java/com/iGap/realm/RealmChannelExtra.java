@@ -1,6 +1,7 @@
 package com.iGap.realm;
 
 import com.iGap.module.StructChannelExtra;
+import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmChannelExtraRealmProxy;
 import io.realm.RealmObject;
@@ -8,8 +9,7 @@ import org.parceler.Parcel;
 
 @Parcel(implementations = {RealmChannelExtraRealmProxy.class},
         value = Parcel.Serialization.BEAN,
-        analyze = {RealmChannelExtra.class})
-public class RealmChannelExtra extends RealmObject {
+        analyze = {RealmChannelExtra.class}) public class RealmChannelExtra extends RealmObject {
 
     private long messageId;
     private String signature;
@@ -66,5 +66,18 @@ public class RealmChannelExtra extends RealmObject {
         realmChannelExtra.setThumbsDown(structChannelExtra.thumbsDown);
         realmChannelExtra.setViewsLabel(structChannelExtra.viewsLabel);
         return realmChannelExtra;
+    }
+
+    /**
+     * get latest count for vote and increase it
+     *
+     * @param reaction Up or Down
+     */
+    public void setVote(ProtoGlobal.RoomMessageReaction reaction, String voteCount) {
+        if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+            setThumbsUp(voteCount);
+        } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
+            setThumbsDown(voteCount);
+        }
     }
 }

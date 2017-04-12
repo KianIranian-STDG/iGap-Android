@@ -243,7 +243,7 @@ import org.parceler.Parcel;
              * for forward and reply set new messageId
              * for create new message if before not exist
              */
-            messageId = input.getMessageId() * 2;
+            messageId = input.getMessageId() * (-1);
         } else {
             messageId = input.getMessageId();
         }
@@ -337,7 +337,6 @@ import org.parceler.Parcel;
             realmChannelExtra.setThumbsDown(input.getChannelExtra().getThumbsDownLabel());
             realmChannelExtra.setThumbsUp(input.getChannelExtra().getThumbsUpLabel());
             realmChannelExtra.setViewsLabel(input.getChannelExtra().getViewsLabel());
-            message.setChannelExtra(realmChannelExtra);
         }
 
         addTimeIfNeed(message, realm);
@@ -698,20 +697,20 @@ import org.parceler.Parcel;
         realm.close();
     }
 
-    /**
-     * get latest count for vote and increase it
-     *
-     * @param reaction Up or Down
-     */
-    public void setVote(ProtoGlobal.RoomMessageReaction reaction, String voteCount) {
-        if (getChannelExtra() != null) {
-            if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-                getChannelExtra().setThumbsUp(voteCount);
-            } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
-                getChannelExtra().setThumbsDown(voteCount);
-            }
-        }
-    }
+    ///**
+    // * get latest count for vote and increase it
+    // *
+    // * @param reaction Up or Down
+    // */
+    //public void setVote(ProtoGlobal.RoomMessageReaction reaction, String voteCount) {
+    //    if (getChannelExtra() != null) {
+    //        if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+    //            getChannelExtra().setThumbsUp(voteCount);
+    //        } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
+    //            getChannelExtra().setThumbsDown(voteCount);
+    //        }
+    //    }
+    //}
 
     public static void ClearAllMessage(boolean deleteAllMessage, final long roomId) {
 
@@ -806,8 +805,8 @@ import org.parceler.Parcel;
 
     public static long getReplyMessageId(RealmRoomMessage realmRoomMessage) {
         if (realmRoomMessage != null && realmRoomMessage.getReplyTo() != null) {
-            if (realmRoomMessage.getReplyTo().getMessageId() > 20000000000000000L) {
-                return (realmRoomMessage.getReplyTo().getMessageId() / 2);
+            if (realmRoomMessage.getReplyTo().getMessageId() < 0) {
+                return (realmRoomMessage.getReplyTo().getMessageId() * (-1));
             } else {
                 return realmRoomMessage.getReplyTo().getMessageId();
             }

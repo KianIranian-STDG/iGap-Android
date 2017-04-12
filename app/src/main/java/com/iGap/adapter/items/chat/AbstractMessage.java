@@ -335,12 +335,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 /**
                  * if roomType is Channel don't consider forward
                  *
-                 * (( hint : set mMessage.forwardedFrom.getMessageId() divided by two
-                 * because when i add this message to RealmRoomMessage i multiplied by two ))
+                 * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
+                 * so i need to (replyMessageId * (-1)) again for use this messageId
                  */
                 long messageId = mMessage.forwardedFrom.getMessageId();
-                if (mMessage.forwardedFrom.getMessageId() > 20000000000000000L) {
-                    messageId = messageId / 2;
+                if (mMessage.forwardedFrom.getMessageId() < 0) {
+                    messageId = messageId * (-1);
                 }
                 HelperGetMessageState.getMessageState(mMessage.forwardedFrom.getAuthorRoomId(), messageId);
             } else {
@@ -414,8 +414,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 if (roomType != null && roomType == ProtoGlobal.Room.Type.CHANNEL) {
                     long messageId = mMessage.forwardedFrom.getMessageId();
-                    if (mMessage.forwardedFrom.getMessageId() > 20000000000000000L) {
-                        messageId = messageId / 2;
+                    if (mMessage.forwardedFrom.getMessageId() < 0) {
+                        messageId = messageId * (-1);
                     }
                     RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
                     if (realmChannelExtra != null) {
@@ -494,8 +494,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                              * check with this number for detect is multiply now or no
                              * hint : use another solution
                              */
-                            if (mMessage.forwardedFrom.getMessageId() > 20000000000000000L) {
-                                forwardMessageId = forwardMessageId / 2;
+                            if (mMessage.forwardedFrom.getMessageId() < 0) {
+                                forwardMessageId = forwardMessageId * (-1);
                             }
                             new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.forwardedFrom.getAuthorRoomId(), Long.parseLong(mMessage.messageID), reaction, forwardMessageId);
                         } else {
@@ -655,9 +655,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
 
                 try {
-                    AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)),
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(),
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
+                    AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
 
                 } catch (IllegalStateException e) {
                     e.printStackTrace();

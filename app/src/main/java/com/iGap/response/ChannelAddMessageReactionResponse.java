@@ -6,8 +6,6 @@ import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmChannelExtraFields;
-import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageFields;
 import io.realm.Realm;
 
 public class ChannelAddMessageReactionResponse extends MessageHandler {
@@ -70,9 +68,9 @@ public class ChannelAddMessageReactionResponse extends MessageHandler {
                             }
                         }
                     } else {
-                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findFirst();
-                        if (realmRoomMessage != null) {
-                            realmRoomMessage.setVote(reaction1, builder.getReactionCounterLabel());
+                        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, Long.parseLong(messageId)).findFirst();
+                        if (realmChannelExtra != null) {
+                            realmChannelExtra.setVote(reaction1, builder.getReactionCounterLabel());
                         }
                     }
                 }

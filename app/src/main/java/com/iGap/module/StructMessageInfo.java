@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.RealmChannelExtra;
+import com.iGap.realm.RealmChannelExtraFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoomMessage;
@@ -330,8 +332,9 @@ public class StructMessageInfo implements Parcelable {
         }
 
         messageInfo.replayTo = roomMessage.getReplyTo();
-        if (roomMessage.getChannelExtra() != null) {
-            messageInfo.channelExtra = StructChannelExtra.convert(roomMessage.getChannelExtra());
+        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+        if (realmChannelExtra != null) {
+            messageInfo.channelExtra = StructChannelExtra.convert(realmChannelExtra);
         } else {
             messageInfo.channelExtra = new StructChannelExtra();
         }
@@ -363,8 +366,8 @@ public class StructMessageInfo implements Parcelable {
 
     public static long getReplyMessageId(StructMessageInfo structMessageInfo) {
         if (structMessageInfo != null && structMessageInfo.replayTo != null) {
-            if (structMessageInfo.replayTo.getMessageId() > 20000000000000000L) {
-                return (structMessageInfo.replayTo.getMessageId() / 2);
+            if (structMessageInfo.replayTo.getMessageId() < 0) {
+                return (structMessageInfo.replayTo.getMessageId() * (-1));
             } else {
                 return structMessageInfo.replayTo.getMessageId();
             }
