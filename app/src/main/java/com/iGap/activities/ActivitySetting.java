@@ -2090,26 +2090,34 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 dialog.dismiss();
 
-                switch (title) {
+                try {
 
-                    case R.string.app_theme:
-                        appBarColorClick(picker.getColor());
-                        break;
-                    case R.string.app_notif_color:
-                        notificationColorClick(picker.getColor(), true);
-                        break;
-                    case R.string.toggle_botton_color:
-                        toggleBottomClick(picker.getColor());
-                        break;
-                    case R.string.send_and_attach_botton_color:
-                        sendAndAttachColorClick(picker.getColor());
-                        break;
-                    case R.string.default_header_font_color:
-                        headerColorClick(picker.getColor(), true);
-                        break;
+                    String _strColor = "#" + Integer.toHexString(picker.getColor());
+                    int _color = Color.parseColor(_strColor); // if can not parae selected color do not set selected color
+
+                    switch (title) {
+
+                        case R.string.app_theme:
+                            appBarColorClick(picker.getColor());
+                            break;
+                        case R.string.app_notif_color:
+                            notificationColorClick(picker.getColor(), true);
+                            break;
+                        case R.string.toggle_botton_color:
+                            toggleBottomClick(picker.getColor());
+                            break;
+                        case R.string.send_and_attach_botton_color:
+                            sendAndAttachColorClick(picker.getColor());
+                            break;
+                        case R.string.default_header_font_color:
+                            headerColorClick(picker.getColor(), true);
+                            break;
+                    }
+                } catch (IllegalArgumentException e) {
+
+                    new MaterialDialog.Builder(ActivitySetting.this).title(R.string.selected_color_can_not_set_on_yout_device).cancelable(true).show();
+
                 }
-
-
             }
         });
 

@@ -55,6 +55,8 @@ public class RealmMigration implements io.realm.RealmMigration {
                 realmRoomMessageSchema.addField(RealmRoomMessageFields.HAS_EMOJI_IN_TEXT, boolean.class, FieldAttribute.REQUIRED);
                 realmRoomMessageSchema.addField(RealmRoomMessageFields.LINK_INFO, String.class);
             }
+
+            oldVersion++;
         }
 
         if (oldVersion == 6) {

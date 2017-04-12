@@ -808,5 +808,6 @@
   <string name="show_vote_layout_in_channel">show vote layout in channel</string>
   <string name="close">close</string>
   <string name="compressing"> فشرده سازی...</string>
+  <string name="selected_color_can_not_set_on_yout_device">رنگ انتخاب شده قابل نمایش در دستگاه شما نیست</string>
 
 </resources>

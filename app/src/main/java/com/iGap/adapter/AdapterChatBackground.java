@@ -96,6 +96,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 // ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(bigImagePath), holder2.img);
                 holder2.mPath = bigImagePath;
             } else {
+                holder2.mPath = "";
                 holder2.messageProgress.setVisibility(View.VISIBLE);
                 if (HelperDownloadFile.isDownLoading(mList.get(position).getProtoWallpaper().getFile().getToken())) {
                     startDownload(position, holder2.messageProgress, holder2.contentLoading);

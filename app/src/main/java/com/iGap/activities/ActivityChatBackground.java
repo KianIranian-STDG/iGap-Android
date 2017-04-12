@@ -168,9 +168,10 @@ public class ActivityChatBackground extends ActivityEnhanced {
 
                 if (data != null && data.getData() != null) {
 
-                    AttachFile attachFile = new AttachFile(G.currentActivity);
-
-                    filePath = attachFile.saveGalleryPicToLocal(AttachFile.getFilePathFromUri(data.getData()));
+                    if (ActivityChatBackground.this != null) {
+                        AttachFile attachFile = new AttachFile(ActivityChatBackground.this);
+                        filePath = attachFile.saveGalleryPicToLocal(AttachFile.getFilePathFromUri(data.getData()));
+                    }
                 }
 
                 break;

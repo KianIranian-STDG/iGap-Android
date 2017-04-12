@@ -539,7 +539,10 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
         protected void onPostExecute(FileUploadStructure result) {
             super.onPostExecute(result);
 
-            startUpload(result, result.messageId + "", listener, null, false);
+            if (result != null) {
+                startUpload(result, result.messageId + "", listener, null, false);
+            }
+
         }
     }
 

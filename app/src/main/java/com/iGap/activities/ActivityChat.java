@@ -3066,28 +3066,38 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void setLastScrollPositionMessageIdToDB() {
 
-        if (recyclerView != null) {
-            int _firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-            if (mAdapter.getItem(_firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(_firstVisiblePosition) instanceof UnreadMessage) {
-                _firstVisiblePosition++;
-            }
-            long _lastScrolledMessageID = 0;
+        try {
 
-            if (_firstVisiblePosition + 15 < mAdapter.getAdapterItemCount()) {
-                _lastScrolledMessageID = Long.parseLong(mAdapter.getItem(_firstVisiblePosition).mMessage.messageID);
-            }
+            if (recyclerView != null && mAdapter != null) {
+                int _firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                if (mAdapter.getItem(_firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(_firstVisiblePosition) instanceof UnreadMessage) {
+                    _firstVisiblePosition++;
+                }
 
-            final RealmRoom _RealmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-            if (_RealmRoom != null) {
-                final long final_lastScrolledMessageID = _lastScrolledMessageID;
-                mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        _RealmRoom.setLastScrollPositionMessageId(final_lastScrolledMessageID);
-                    }
-                });
+                if (mAdapter.getItem(_firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(_firstVisiblePosition) instanceof UnreadMessage) {
+                    _firstVisiblePosition++;
+                }
+
+                long _lastScrolledMessageID = 0;
+
+                if (_firstVisiblePosition + 15 < mAdapter.getAdapterItemCount()) {
+                    _lastScrolledMessageID = Long.parseLong(mAdapter.getItem(_firstVisiblePosition).mMessage.messageID);
+                }
+
+                final RealmRoom _RealmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                if (_RealmRoom != null) {
+                    final long final_lastScrolledMessageID = _lastScrolledMessageID;
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override public void execute(Realm realm) {
+                            _RealmRoom.setLastScrollPositionMessageId(final_lastScrolledMessageID);
+                        }
+                    });
+                }
             }
+        } catch (Exception e) {
+
         }
+
     }
 
     private void ScrollTOLastPositionMeesgeId() {
@@ -3710,66 +3720,74 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
     }
 
-    private void setDraftMessage(int requestCode) {
-        if (listPathString == null) return;
-        if (listPathString.size() < 1) return;
+    private void setDraftMessage(final int requestCode) {
 
-        switch (requestCode) {
-            case AttachFile.request_code_TAKE_PICTURE:
-                txtFileNameForSend.setText(getString(R.string.image_selected_for_send));
-                break;
-            case AttachFile.requestOpenGalleryForImageMultipleSelect:
-                if (listPathString.size() == 1) {
-                    if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
+        G.handler.postDelayed(new Runnable() {
+            @Override public void run() {
+
+                if (listPathString == null) return;
+                if (listPathString.size() < 1) return;
+
+                switch (requestCode) {
+                    case AttachFile.request_code_TAKE_PICTURE:
                         txtFileNameForSend.setText(getString(R.string.image_selected_for_send));
-                    } else {
-                        txtFileNameForSend.setText(getString(R.string.gif_selected_for_send));
-                    }
-                } else {
-                    txtFileNameForSend.setText(listPathString.size() + getString(R.string.image_selected_for_send));
-                }
+                        break;
+                    case AttachFile.requestOpenGalleryForImageMultipleSelect:
+                        if (listPathString.size() == 1) {
+                            if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
+                                txtFileNameForSend.setText(getString(R.string.image_selected_for_send));
+                            } else {
+                                txtFileNameForSend.setText(getString(R.string.gif_selected_for_send));
+                            }
+                        } else {
+                            txtFileNameForSend.setText(listPathString.size() + getString(R.string.image_selected_for_send));
+                        }
 
-                break;
+                        break;
 
-            case AttachFile.requestOpenGalleryForVideoMultipleSelect:
-                txtFileNameForSend.setText(getString(R.string.multi_video_selected_for_send));
-                break;
-            case request_code_VIDEO_CAPTURED:
+                    case AttachFile.requestOpenGalleryForVideoMultipleSelect:
+                        txtFileNameForSend.setText(getString(R.string.multi_video_selected_for_send));
+                        break;
+                    case request_code_VIDEO_CAPTURED:
 
-                if (listPathString.size() == 1) {
-                    txtFileNameForSend.setText(getString(R.string.video_selected_for_send));
-                } else {
-                    txtFileNameForSend.setText(listPathString.size() + getString(R.string.video_selected_for_send));
-                }
-                break;
+                        if (listPathString.size() == 1) {
+                            txtFileNameForSend.setText(getString(R.string.video_selected_for_send));
+                        } else {
+                            txtFileNameForSend.setText(listPathString.size() + getString(R.string.video_selected_for_send));
+                        }
+                        break;
 
-            case AttachFile.request_code_pic_audi:
-                if (listPathString.size() == 1) {
-                    txtFileNameForSend.setText(getString(R.string.audio_selected_for_send));
-                } else {
-                    txtFileNameForSend.setText(listPathString.size() + getString(R.string.audio_selected_for_send));
+                    case AttachFile.request_code_pic_audi:
+                        if (listPathString.size() == 1) {
+                            txtFileNameForSend.setText(getString(R.string.audio_selected_for_send));
+                        } else {
+                            txtFileNameForSend.setText(listPathString.size() + getString(R.string.audio_selected_for_send));
+                        }
+                        break;
+                    case AttachFile.request_code_pic_file:
+                        txtFileNameForSend.setText(getString(R.string.file_selected_for_send));
+                        break;
+                    case AttachFile.request_code_open_document:
+                        if (listPathString.size() == 1) {
+                            txtFileNameForSend.setText(getString(R.string.file_selected_for_send));
+                        }
+                        break;
+                    case AttachFile.request_code_paint:
+                        if (listPathString.size() == 1) {
+                            txtFileNameForSend.setText(getString(R.string.pain_selected_for_send));
+                        }
+                        break;
+                    case AttachFile.request_code_contact_phone:
+                        txtFileNameForSend.setText(getString(R.string.phone_selected_for_send));
+                        break;
+                    case IntentRequests.REQ_CROP:
+                        txtFileNameForSend.setText(getString(R.string.crop_selected_for_send));
+                        break;
                 }
-                break;
-            case AttachFile.request_code_pic_file:
-                txtFileNameForSend.setText(getString(R.string.file_selected_for_send));
-                break;
-            case AttachFile.request_code_open_document:
-                if (listPathString.size() == 1) {
-                    txtFileNameForSend.setText(getString(R.string.file_selected_for_send));
-                }
-                break;
-            case AttachFile.request_code_paint:
-                if (listPathString.size() == 1) {
-                    txtFileNameForSend.setText(getString(R.string.pain_selected_for_send));
-                }
-                break;
-            case AttachFile.request_code_contact_phone:
-                txtFileNameForSend.setText(getString(R.string.phone_selected_for_send));
-                break;
-            case IntentRequests.REQ_CROP:
-                txtFileNameForSend.setText(getString(R.string.crop_selected_for_send));
-                break;
-        }
+            }
+        }, 100);
+
+
     }
 
 
@@ -4944,6 +4962,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void scrollToEnd() {
 
+        if (recyclerView == null || recyclerView.getAdapter() == null) return;
+
         if (recyclerView.getAdapter().getItemCount() < 2) {
             return;
         }
@@ -4952,15 +4972,19 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void run() {
 
-                LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                try {
 
-                int lastPosition = llm.findLastVisibleItemPosition();
-                if (lastPosition + 30 > mAdapter.getItemCount()) {
-                    recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-                } else {
-                    recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                    LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                    int lastPosition = llm.findLastVisibleItemPosition();
+                    if (lastPosition + 30 > mAdapter.getItemCount()) {
+                        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                    } else {
+                        recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                    }
+                } catch (IllegalArgumentException e) {
+
                 }
-
 
             }
         }, 300);
