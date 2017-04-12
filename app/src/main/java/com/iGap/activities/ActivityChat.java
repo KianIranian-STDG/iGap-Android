@@ -5952,6 +5952,21 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             }
 
                         } else if (text.toString().equalsIgnoreCase(getString(R.string.delete_item_dialog))) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // remove deleted message from adapter
+                                    mAdapter.removeMessage(parseLong(message.messageID));
+
+                                    // remove tag from edtChat if the
+                                    // message has deleted
+                                    if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                        if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                            edtChat.setTag(null);
+                                        }
+                                    }
+                                }
+                            });
                             final Realm realmCondition = Realm.getDefaultInstance();
                             final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, message.roomId).findFirstAsync();
                             realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
@@ -5965,8 +5980,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                                                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
                                                     if (roomMessage != null) {
-                                                        // delete message from database
-                                                        //roomMessage.deleteFromRealm();
                                                         roomMessage.setDeleted(true);
                                                     }
 
@@ -5974,21 +5987,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                     realmOfflineDelete.setOfflineDelete(parseLong(message.messageID));
                                                     element.getOfflineDeleted().add(realmOfflineDelete);
 
-                                                    runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            // remove deleted message from adapter
-                                                            mAdapter.removeMessage(parseLong(message.messageID));
-
-                                                            // remove tag from edtChat if the
-                                                            // message has deleted
-                                                            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                                                if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                                                    edtChat.setTag(null);
-                                                                }
-                                                            }
-                                                        }
-                                                    });
                                                     // delete message
                                                     if (chatType == GROUP) {
                                                         new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(message.messageID));
