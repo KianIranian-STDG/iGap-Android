@@ -607,7 +607,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
                         if (!G.userLogin) {
                             G.handler.postDelayed(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     makeFailed(struct.messageId);
                                 }
                             }, 200);
@@ -4996,27 +4997,30 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
     }
 
-    @Override public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
+    @Override
+    public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
         if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
             // if was last message removed
             // update room last message
             Realm realm = Realm.getDefaultInstance();
 
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     try {
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         long _deletedMessageId = Long.parseLong(messageInfo.messageID);
-                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
-                            .equalTo(RealmRoomMessageFields.EDITED, false)
-                            .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-                            .lessThan(RealmRoomMessageFields.MESSAGE_ID, _deletedMessageId)
-                            .findAll()
-                            .last();
+                        RealmRoomMessage realmRoomMessage = null;
+                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.EDITED, false).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, _deletedMessageId).findAll();
+                        if (realmRoomMessages.size() > 0) {
+                            realmRoomMessage = realmRoomMessages.last();
+                        }
+
                         if (realmRoom != null && realmRoomMessage != null) {
                             realmRoom.setLastMessage(realmRoomMessage);
                         }
                     } catch (NullPointerException e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -5518,7 +5522,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         //onActivityResult happens before onResume, so Presenter does not have View attached. because use handler
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 if (ll_attach_text == null) { // have null error , so reInitialize for avoid that
 
@@ -5529,16 +5534,19 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 ll_attach_text.setVisibility(View.VISIBLE);
                 layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                    @Override public void onAnimationEnd(Animator animation) {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         layoutAttachBottom.setVisibility(View.GONE);
                     }
                 }).start();
                 imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                    @Override public void onAnimationEnd(Animator animation) {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 imvSendButton.clearAnimation();
                                 imvSendButton.setVisibility(View.VISIBLE);
                             }
