@@ -401,7 +401,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private boolean initEmoji = false;
     public static boolean showVoteChannelLayout = true;
     public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
-    private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>();
+    private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
 
 
@@ -2810,9 +2810,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
 
                     } else if (messageType == HelperGetDataFromOtherApp.FileType.video) {
+                        if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1) {
+                            String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
+                                    "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                            mainVideoPath = AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
 
-                        for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                            sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                            new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
+                            sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
+                        } else {
+                            for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
+                                compressedPath.put(AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
+                                sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                            }
                         }
 
                     } else if (messageType == HelperGetDataFromOtherApp.FileType.audio) {
@@ -2825,19 +2834,28 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
 
-                            if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
-                                HelperGetDataFromOtherApp.FileType fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
-                                if (fileType == HelperGetDataFromOtherApp.FileType.image) {
-                                    sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                                } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
-                                    sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                                } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
-                                    sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                                } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
-                                    sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                            if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && HelperGetDataFromOtherApp.fileTypeArray.get(0) == HelperGetDataFromOtherApp.FileType.video) {
+                                String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
+                                        "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                                mainVideoPath = AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
+
+                                new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
+                                sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
+                            } else {
+                                if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
+                                    HelperGetDataFromOtherApp.FileType fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
+                                    if (fileType == HelperGetDataFromOtherApp.FileType.image) {
+                                        sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                    } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
+                                        compressedPath.put(AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
+                                        sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                    } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
+                                        sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                    } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
+                                        sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                    }
                                 }
                             }
-
                         }
                     }
                     HelperGetDataFromOtherApp.messageType = null;

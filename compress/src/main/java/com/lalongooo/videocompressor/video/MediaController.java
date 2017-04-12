@@ -2,7 +2,6 @@ package com.lalongooo.videocompressor.video;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.graphics.Bitmap;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
@@ -228,32 +227,11 @@ import java.nio.ByteBuffer;
         String height = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
         String rotation = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
 
-        int videoWidth = 641;
-        int videoHeight = 481;
-        try {
-            MediaMetadataRetriever re = new MediaMetadataRetriever();
-            Bitmap bmp = null;
-            re.setDataSource(path);
-            bmp = retriever.getFrameAtTime();
-            videoHeight = bmp.getHeight();
-            videoWidth = bmp.getWidth();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-
         long startTime = -1;
         long endTime = -1;
 
-        int resultWidth;
-        int resultHeight;
-
-        if (videoWidth < 640) {
-            resultWidth = videoWidth;
-            resultHeight = videoHeight;
-        } else {
-            resultWidth = 640;
-            resultHeight = 480;
-        }
+        int resultWidth = 640;
+        int resultHeight = 360;
 
         int rotationValue = Integer.valueOf(rotation);
         int originalWidth = Integer.valueOf(width);
