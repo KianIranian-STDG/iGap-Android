@@ -853,7 +853,7 @@ public class G extends MultiDexApplication {
                              */
                             if (HelperTimeOut.heartBeatTimeOut()) {
                                 Log.i("HHH", "connectionManager heartBeatTimeOut");
-                                reconnect(true);
+                                //reconnect(true);
                             } else {
                                 Log.i("HHH", "connectionManager Not Time Out HeartBeat");
                             }

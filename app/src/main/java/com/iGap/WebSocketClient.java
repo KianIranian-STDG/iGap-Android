@@ -72,8 +72,7 @@ public class WebSocketClient {
                         reconnectQueueLimitation = 0;
                         G.socketConnection = true;
                         HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-                        checkFirstResponse();
-
+                        //checkFirstResponse();
                         //HelperUploadFile.addItemFromQueue();
                     }
 
@@ -253,55 +252,32 @@ public class WebSocketClient {
 
     public static void reconnect(boolean force) {
 
-        if ((force || (webSocketClient == null || !webSocketClient.isOpen()))) { // topPermission
+        if ((force || (webSocketClient == null || !webSocketClient.isOpen()))) {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
 
-                    //new connection start
-                    //if (reconnectCount < 10) {
-                    //    Log.e("DDD", "MINIMUM");
-                    //    allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MINIMUM;
-                    //} else if (reconnectCount < 20) {
-                    //    Log.e("DDD", "NORMAL");
-                    //    allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_NORMAL;
-                    //} else {
-                    //    Log.e("DDD", "MAXIMUM");
-                    //    allowReconnectAgain = Config.ALLOW_RECONNECT_AGAIN_MAXIMUM;
-                    //}
-                    //new connection end
-
                     if (timeDifference(latestConnectionTryTiming) && connectionState != WebSocketState.CONNECTING && (connectionState != WebSocketState.OPEN || (HelperTimeOut.timeoutChecking(0, latestConnectionOpenTime, Config.CONNECTION_OPEN_TIME_OUT)))) {
-                        //new connection start
-                        //reconnectCount++;
                         if (reconnectQueueLimitation > 0) {
                             reconnectQueueLimitation--;
                         }
-                        //new connection end
 
                         HelperSetAction.clearAllActions();
-                        Log.e("DDD", "reconnect 1");
                         if (allowForReconnecting) {
                             allowForReconnecting = false;
                             HelperConnectionState.connectionState(Config.ConnectionState.CONNECTING);
-                            Log.e("DDD", "reconnect 2");
                             if (G.allowForConnect) {
-                                Log.e("DDD", "reconnect 3");
                                 latestConnectionTryTiming = System.currentTimeMillis();
                                 waitingForReconnecting = false;
                                 resetWebsocketInfo();
                                 WebSocketClient.getInstance();
-                                //if (reconnectQueueLimitation <= 1) {
                                 checkSocketConnection();
-                                //}
                             }
                         }
                     } else {
-                        //new connection start
                         if (reconnectQueueLimitation < Config.TRY_CONNECTION_COUNT) {
-                            reconnectQueueLimitation++;
-                            //new connection end
                             Log.i("DDD", "try for connect");
+                            reconnectQueueLimitation++;
                             allowForReconnecting = true;
                             waitingForReconnecting = false;
                             reconnect(false);
