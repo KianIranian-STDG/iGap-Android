@@ -155,6 +155,7 @@ import com.iGap.module.TimeUtils;
 import com.iGap.module.VoiceRecord;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.module.enums.ProgressState;
+import com.iGap.module.enums.SendingStep;
 import com.iGap.proto.ProtoChannelGetMessagesStats;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoGlobal;
@@ -4872,34 +4873,54 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     @Override
-    public void onUploadCancel(View view, final StructMessageInfo message, int pos) {
+    public void onUploadOrCompressCancel(View view, final StructMessageInfo message, int pos, SendingStep sendingStep) {
 
-        HelperSetAction.sendCancel(Long.parseLong(message.messageID));
+        if (sendingStep == SendingStep.UPLOADING) {
+            HelperSetAction.sendCancel(Long.parseLong(message.messageID));
 
-        if (HelperUploadFile.cancelUploading(message.messageID)) {
-            // empty tag if selected message has been set
-            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                    edtChat.setTag(null);
+            if (HelperUploadFile.cancelUploading(message.messageID)) {
+                clearItem(Long.parseLong(message.messageID), pos);
+            }
+        } else if (sendingStep == SendingStep.COMPRESSING) {
+
+            /**
+             * clear path for avoid from continue uploading after compressed file
+             */
+            for (StructUploadVideo structUploadVideo : structUploadVideos) {
+                if (structUploadVideo.filePath.equals(message.attachment.getLocalFilePath())) {
+                    structUploadVideo.filePath = "";
                 }
             }
-
-            mAdapter.removeMessage(pos);
-
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(message.messageID)).findFirst();
-                    if (roomMessage != null) {
-                        // delete message from database
-                        roomMessage.deleteFromRealm();
-                    }
-                }
-            });
-            realm.close();
+            clearItem(Long.parseLong(message.messageID), pos);
         }
     }
+
+    /**
+     * clear tag from edtChat and remove from view and delete from RealmRoomMessage
+     */
+    private void clearItem(final long messageId, int position) {
+        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+            if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                edtChat.setTag(null);
+            }
+        }
+
+        mAdapter.removeMessage(position);
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                if (roomMessage != null) {
+                    // delete message from database
+                    roomMessage.deleteFromRealm();
+                }
+            }
+        });
+        realm.close();
+    }
+
 
     private void showImage(final StructMessageInfo messageInfo) {
 

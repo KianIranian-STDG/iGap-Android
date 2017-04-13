@@ -45,6 +45,7 @@ import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.enums.ConnectionMode;
 import com.iGap.module.enums.LocalFileType;
+import com.iGap.module.enums.SendingStep;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
@@ -1144,12 +1145,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
                 }
             } else {
-                messageClickListener.onUploadCancel(progress, mMessage, holder.getAdapterPosition());
+                messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.UPLOADING);
             }
 
 
         } else if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
             HelperDownloadFile.stopDownLoad(attachment.getToken());
+        } else if (compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
+            messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.COMPRESSING);
         } else {
             if (thumbnail != null) {
                 thumbnail.setVisibility(View.VISIBLE);

@@ -2,6 +2,7 @@ package com.lalongooo.videocompressor.video;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.graphics.Bitmap;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
@@ -38,7 +39,8 @@ import java.nio.ByteBuffer;
         return localInstance;
     }
 
-    @SuppressLint("NewApi") public static int selectColorFormat(MediaCodecInfo codecInfo, String mimeType) {
+    @SuppressLint("NewApi")
+    public static int selectColorFormat(MediaCodecInfo codecInfo, String mimeType) {
         MediaCodecInfo.CodecCapabilities capabilities = codecInfo.getCapabilitiesForType(mimeType);
         int lastColorFormat = 0;
         for (int i = 0; i < capabilities.colorFormats.length; i++) {
@@ -85,7 +87,8 @@ import java.nio.ByteBuffer;
 
         public static void runConversion(final String videoPath) {
             new Thread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     try {
                         VideoConvertRunnable wrapper = new VideoConvertRunnable(videoPath);
                         Thread th = new Thread(wrapper, "VideoConvertRunnable");
@@ -98,7 +101,8 @@ import java.nio.ByteBuffer;
             }).start();
         }
 
-        @Override public void run() {
+        @Override
+        public void run() {
             //            MediaController.getInstance().convertVideo(videoPath , );
         }
     }
@@ -134,7 +138,8 @@ import java.nio.ByteBuffer;
         VideoConvertRunnable.runConversion(path);
     }
 
-    @TargetApi(16) private long readAndWriteTrack(MediaExtractor extractor, MP4Builder mediaMuxer, MediaCodec.BufferInfo info, long start, long end, File file, boolean isAudio) throws Exception {
+    @TargetApi(16)
+    private long readAndWriteTrack(MediaExtractor extractor, MP4Builder mediaMuxer, MediaCodec.BufferInfo info, long start, long end, File file, boolean isAudio) throws Exception {
         int trackIndex = selectTrack(extractor, isAudio);
         if (trackIndex >= 0) {
             extractor.selectTrack(trackIndex);
@@ -201,7 +206,8 @@ import java.nio.ByteBuffer;
         return -1;
     }
 
-    @TargetApi(16) private int selectTrack(MediaExtractor extractor, boolean audio) {
+    @TargetApi(16)
+    private int selectTrack(MediaExtractor extractor, boolean audio) {
         int numTracks = extractor.getTrackCount();
         for (int i = 0; i < numTracks; i++) {
             MediaFormat format = extractor.getTrackFormat(i);
@@ -219,7 +225,8 @@ import java.nio.ByteBuffer;
         return -5;
     }
 
-    @TargetApi(16) public boolean convertVideo(final String path, String savePath) {
+    @TargetApi(16)
+    public boolean convertVideo(final String path, String savePath) {
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(path);
@@ -227,11 +234,32 @@ import java.nio.ByteBuffer;
         String height = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
         String rotation = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
 
+        int videoWidth = 641;
+        int videoHeight = 481;
+        try {
+            MediaMetadataRetriever re = new MediaMetadataRetriever();
+            Bitmap bmp = null;
+            re.setDataSource(path);
+            bmp = retriever.getFrameAtTime();
+            videoHeight = bmp.getHeight();
+            videoWidth = bmp.getWidth();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
         long startTime = -1;
         long endTime = -1;
 
-        int resultWidth = 640;
-        int resultHeight = 360;
+        int resultWidth;
+        int resultHeight;
+
+        if (videoWidth * videoHeight < 307200) {
+            resultWidth = videoWidth;
+            resultHeight = videoHeight;
+        } else {
+            resultWidth = 640;
+            resultHeight = 480;
+        }
 
         int rotationValue = Integer.valueOf(rotation);
         int originalWidth = Integer.valueOf(width);

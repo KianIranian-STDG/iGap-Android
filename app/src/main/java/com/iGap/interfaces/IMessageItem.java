@@ -2,6 +2,7 @@ package com.iGap.interfaces;
 
 import android.view.View;
 import com.iGap.module.StructMessageInfo;
+import com.iGap.module.enums.SendingStep;
 import com.iGap.realm.RealmRoomMessage;
 
 public interface IMessageItem {
@@ -14,7 +15,7 @@ public interface IMessageItem {
 
     void onSenderAvatarClick(View view, StructMessageInfo message, int pos);
 
-    void onUploadCancel(View view, StructMessageInfo message, int pos);
+    void onUploadOrCompressCancel(View view, StructMessageInfo message, int pos, SendingStep sendingStep);
 
     void onFailedMessageClick(View view, StructMessageInfo message, int pos);
 
