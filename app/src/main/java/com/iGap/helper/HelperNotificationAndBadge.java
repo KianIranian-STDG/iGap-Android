@@ -18,7 +18,6 @@ import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Display;
-import android.view.View;
 import android.widget.RemoteViews;
 import com.iGap.G;
 import com.iGap.R;
@@ -101,58 +100,58 @@ public class HelperNotificationAndBadge {
         remoteViewsLarge.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
     }
 
-    private void setRemoteViewsNormal() {
-
-        String avatarPath = null;
-        if (unreadMessageCount == 1) {
-            remoteViews.setTextViewText(R.id.ln_txt_header, list.get(0).name);
-            remoteViews.setTextViewText(R.id.ln_txt_time, list.get(0).time);
-            remoteViews.setTextViewText(R.id.ln_txt_message_notification, list.get(0).message);
-
-        } else {
-            remoteViews.setTextViewText(R.id.ln_txt_header, context.getString(R.string.igap));
-            if ((list.size() - 1) > 0) {
-                remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
-            }
-
-            String s = "";
-            if (countUnicChat == 1) {
-                s = " " + context.getString(R.string.chat);
-            } else if (countUnicChat > 1) {
-                s = " " + context.getString(R.string.chats);
-            }
-
-            String str = String.format(" %d " + context.getString(R.string.new_messages_from) + " %d " + s, unreadMessageCount + countChannelMessage, countUnicChat);
-
-            mContent = str;
-
-            remoteViews.setTextViewText(R.id.ln_txt_message_notification, str);
-        }
-
-        if (isFromOnRoom) {
-            Realm realm = Realm.getDefaultInstance();
-            RealmAvatar realmAvatarPath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, senderId).findFirst();
-            if (realmAvatarPath != null) {
-                if (realmAvatarPath.getFile().isFileExistsOnLocal()) {
-                    avatarPath = realmAvatarPath.getFile().getLocalFilePath();
-                } else if (realmAvatarPath.getFile().isThumbnailExistsOnLocal()) {
-                    avatarPath = realmAvatarPath.getFile().getLocalThumbnailPath();
-                }
-            }
-            if (avatarPath != null) {
-                Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
-                if (bitmap != null) {
-                    remoteViews.setImageViewBitmap(R.id.ln_imv_avatar_notification, bitmap);
-                } else {
-                    remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
-                }
-            } else {
-                remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
-            }
-        } else {
-            remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
-        }
-    }
+    //private void setRemoteViewsNormal() {
+    //
+    //    String avatarPath = null;
+    //    if (unreadMessageCount == 1) {
+    //        remoteViews.setTextViewText(R.id.ln_txt_header, list.get(0).name);
+    //        remoteViews.setTextViewText(R.id.ln_txt_time, list.get(0).time);
+    //        remoteViews.setTextViewText(R.id.ln_txt_message_notification, list.get(0).message);
+    //
+    //    } else {
+    //        remoteViews.setTextViewText(R.id.ln_txt_header, context.getString(R.string.igap));
+    //        if ((list.size() - 1) > 0) {
+    //            remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
+    //        }
+    //
+    //        String s = "";
+    //        if (countUnicChat == 1) {
+    //            s = " " + context.getString(R.string.chat);
+    //        } else if (countUnicChat > 1) {
+    //            s = " " + context.getString(R.string.chats);
+    //        }
+    //
+    //        String str = String.format(" %d " + context.getString(R.string.new_messages_from) + " %d " + s, unreadMessageCount + countChannelMessage, countUnicChat);
+    //
+    //        mContent = str;
+    //
+    //        remoteViews.setTextViewText(R.id.ln_txt_message_notification, str);
+    //    }
+    //
+    //    if (isFromOnRoom) {
+    //        Realm realm = Realm.getDefaultInstance();
+    //        RealmAvatar realmAvatarPath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, senderId).findFirst();
+    //        if (realmAvatarPath != null) {
+    //            if (realmAvatarPath.getFile().isFileExistsOnLocal()) {
+    //                avatarPath = realmAvatarPath.getFile().getLocalFilePath();
+    //            } else if (realmAvatarPath.getFile().isThumbnailExistsOnLocal()) {
+    //                avatarPath = realmAvatarPath.getFile().getLocalThumbnailPath();
+    //            }
+    //        }
+    //        if (avatarPath != null) {
+    //            Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+    //            if (bitmap != null) {
+    //                remoteViews.setImageViewBitmap(R.id.ln_imv_avatar_notification, bitmap);
+    //            } else {
+    //                remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
+    //            }
+    //        } else {
+    //            remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
+    //        }
+    //    } else {
+    //        remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
+    //    }
+    //}
 
     private void setOnTextClick(int resLayot, int indexItem) {
 
@@ -163,144 +162,144 @@ public class HelperNotificationAndBadge {
         remoteViewsLarge.setOnClickPendingIntent(resLayot, pendingIntent);
     }
 
-    private void setRemoteViewsLarge() {
-
-        if (unreadMessageCount == 1) {
-
-            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
-            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.GONE);
-            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.GONE);
-            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
-
-            setOnTextClick(R.id.ln_ll_message_a, 0);
-
-            remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
-            remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
-            remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, list.get(0).time);
-        } else if (unreadMessageCount == 2) {
-
-            if (isFromOnRoom) {
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
-
-                setOnTextClick(R.id.ln_ll_message_a, 0);
-                setOnTextClick(R.id.ln_ll_message_b, 0);
-                setOnTextClick(R.id.ln_ll_message_c, 0);
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, "");
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, "");
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, "");
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(0).message);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(0).time);
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_c1, "");
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_c2, list.get(1).message);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_c3, list.get(1).time);
-            } else {
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.GONE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
-
-                setOnTextClick(R.id.ln_ll_message_a, 0);
-                setOnTextClick(R.id.ln_ll_message_b, 1);
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, list.get(0).time);
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, list.get(1).name);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(1).message);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(1).time);
-            }
-        } else if (unreadMessageCount >= 3) {
-
-            if (isFromOnRoom) {
-
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.VISIBLE);
-                setOnTextClick(R.id.ln_ll_message_a, 0);
-                setOnTextClick(R.id.ln_ll_message_b, 0);
-                setOnTextClick(R.id.ln_ll_message_c, 0);
-                setOnTextClick(R.id.ln_ll_message_d, 0);
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, "");
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, "");
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, "");
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(0).message);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(0).time);
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_c1, "");
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_c2, list.get(1).message);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_c3, list.get(1).time);
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_d1, "");
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_d2, list.get(2).message);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_d3, list.get(2).time);
-            } else {
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
-                remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
-
-                setOnTextClick(R.id.ln_ll_message_a, 0);
-                setOnTextClick(R.id.ln_ll_message_b, 1);
-                setOnTextClick(R.id.ln_ll_message_c, 2);
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, list.get(0).time);
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, list.get(1).name);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(1).message);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(1).time);
-
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_c1, list.get(2).name);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_c2, list.get(2).message);
-                remoteViewsLarge.setTextViewText(R.id.ln_txt_c3, list.get(2).time);
-            }
-        }
-
-        if (unreadMessageCount >= 4) {
-            remoteViewsLarge.setViewVisibility(R.id.ln_txt_more, View.VISIBLE);
-        } else {
-            remoteViewsLarge.setViewVisibility(R.id.ln_txt_more, View.GONE);
-        }
-
-        String chatCount = "";
-
-        if (countUnicChat == 1) {
-            chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chat);
-        } else if (countUnicChat > 1) {
-            chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chats);
-        }
-
-        String newmess = "";
-        if (unreadMessageCount + countChannelMessage == 1) {
-            newmess = context.getString(R.string.new_message);
-            chatCount = "";
-        } else {
-            newmess = context.getString(R.string.new_messages);
-        }
-
-        remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + countChannelMessage + " " + newmess + " " + chatCount);
-
-        if (unreadMessageCount + countChannelMessage == 1) {
-            remoteViewsLarge.setViewVisibility(R.id.mln_btn_replay, View.VISIBLE);
-            remoteViewsLarge.setViewVisibility(R.id.ln_txt_replay, View.VISIBLE);
-        } else {
-            remoteViewsLarge.setViewVisibility(R.id.mln_btn_replay, View.GONE);
-            remoteViewsLarge.setViewVisibility(R.id.ln_txt_replay, View.GONE);
-        }
-    }
+    //private void setRemoteViewsLarge() {
+    //
+    //    if (unreadMessageCount == 1) {
+    //
+    //        remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
+    //        remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.GONE);
+    //        remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.GONE);
+    //        remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
+    //
+    //        setOnTextClick(R.id.ln_ll_message_a, 0);
+    //
+    //        remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
+    //        remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
+    //        remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, list.get(0).time);
+    //    } else if (unreadMessageCount == 2) {
+    //
+    //        if (isFromOnRoom) {
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
+    //
+    //            setOnTextClick(R.id.ln_ll_message_a, 0);
+    //            setOnTextClick(R.id.ln_ll_message_b, 0);
+    //            setOnTextClick(R.id.ln_ll_message_c, 0);
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, "");
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, "");
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, "");
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(0).message);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(0).time);
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c1, "");
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c2, list.get(1).message);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c3, list.get(1).time);
+    //        } else {
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.GONE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
+    //
+    //            setOnTextClick(R.id.ln_ll_message_a, 0);
+    //            setOnTextClick(R.id.ln_ll_message_b, 1);
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, list.get(0).time);
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, list.get(1).name);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(1).message);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(1).time);
+    //        }
+    //    } else if (unreadMessageCount >= 3) {
+    //
+    //        if (isFromOnRoom) {
+    //
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.VISIBLE);
+    //            setOnTextClick(R.id.ln_ll_message_a, 0);
+    //            setOnTextClick(R.id.ln_ll_message_b, 0);
+    //            setOnTextClick(R.id.ln_ll_message_c, 0);
+    //            setOnTextClick(R.id.ln_ll_message_d, 0);
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, "");
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, "");
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, "");
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(0).message);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(0).time);
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c1, "");
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c2, list.get(1).message);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c3, list.get(1).time);
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_d1, "");
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_d2, list.get(2).message);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_d3, list.get(2).time);
+    //        } else {
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
+    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
+    //
+    //            setOnTextClick(R.id.ln_ll_message_a, 0);
+    //            setOnTextClick(R.id.ln_ll_message_b, 1);
+    //            setOnTextClick(R.id.ln_ll_message_c, 2);
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, list.get(0).time);
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, list.get(1).name);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(1).message);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(1).time);
+    //
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c1, list.get(2).name);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c2, list.get(2).message);
+    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c3, list.get(2).time);
+    //        }
+    //    }
+    //
+    //    if (unreadMessageCount >= 4) {
+    //        remoteViewsLarge.setViewVisibility(R.id.ln_txt_more, View.VISIBLE);
+    //    } else {
+    //        remoteViewsLarge.setViewVisibility(R.id.ln_txt_more, View.GONE);
+    //    }
+    //
+    //    String chatCount = "";
+    //
+    //    if (countUnicChat == 1) {
+    //        chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chat);
+    //    } else if (countUnicChat > 1) {
+    //        chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chats);
+    //    }
+    //
+    //    String newmess = "";
+    //    if (unreadMessageCount + countChannelMessage == 1) {
+    //        newmess = context.getString(R.string.new_message);
+    //        chatCount = "";
+    //    } else {
+    //        newmess = context.getString(R.string.new_messages);
+    //    }
+    //
+    //    remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + countChannelMessage + " " + newmess + " " + chatCount);
+    //
+    //    if (unreadMessageCount + countChannelMessage == 1) {
+    //        remoteViewsLarge.setViewVisibility(R.id.mln_btn_replay, View.VISIBLE);
+    //        remoteViewsLarge.setViewVisibility(R.id.ln_txt_replay, View.VISIBLE);
+    //    } else {
+    //        remoteViewsLarge.setViewVisibility(R.id.mln_btn_replay, View.GONE);
+    //        remoteViewsLarge.setViewVisibility(R.id.ln_txt_replay, View.GONE);
+    //    }
+    //}
 
     private NotificationCompat.InboxStyle getBigStyle() {
 
