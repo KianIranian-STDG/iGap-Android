@@ -1374,16 +1374,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             super.onBindViewHolder(holder, position);
 
-            if (holder instanceof ViewHolder) {
-                ViewHolder vh = (ViewHolder) holder;
-                File file = new File(vh.tempFilePath);
 
-                if (file.exists()) {
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(vh.tempFilePath), vh.imvPicFile);
-                } else {
-                    vh.imvPicFile.setImageResource(R.mipmap.j_video);
-                }
-            }
         }
 
         public class ViewHolder extends mHolder {
@@ -1394,7 +1385,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             public ViewHolder(View view, int position) {
                 super(view, position);
 
-                RealmAttachment at = mList.get(position).item.getAttachment();
+                RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
 
                 imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
 
@@ -1409,6 +1400,37 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 txtVideoSize.setText("(" + AndroidUtils.humanReadableByteCount(at.getSize(), true) + ")");
 
                 tempFilePath = getThumpnailPath(position);
+
+                File filethumpnail = new File(tempFilePath);
+
+                if (filethumpnail.exists()) {
+                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(tempFilePath), imvPicFile);
+                } else {
+                    imvPicFile.setImageResource(R.mipmap.j_video);
+
+                    if (at.getSmallThumbnail() != null) {
+                        if (at.getSmallThumbnail().getSize() > 0) {
+
+                            HelperDownloadFile.startDownload(at.getToken(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4,
+                                new HelperDownloadFile.UpdateListener() {
+                                    @Override public void OnProgress(String token, int progress) {
+
+                                        G.currentActivity.runOnUiThread(new Runnable() {
+                                            @Override public void run() {
+                                                ImageLoader.getInstance().displayImage(suitablePath(tempFilePath), imvPicFile);
+                                            }
+                                        });
+                                    }
+
+                                    @Override public void OnError(String token) {
+
+                                    }
+                                });
+                        }
+                    }
+                }
+
+
                 filePath = getFilePath(position);
 
                 File file = new File(filePath);
