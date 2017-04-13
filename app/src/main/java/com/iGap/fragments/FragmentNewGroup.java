@@ -90,7 +90,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
     private TextView txtNextStep, txtCancel, txtTitleToolbar;
     private static String prefix = "NewGroup";
     private long groomId = 0;
-    private String path;
+    //  private String path;
     private RelativeLayout parent;
 
     private EditText edtGroupName;
@@ -326,11 +326,11 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
             }
         });
 
-        if (prefix.equals("NewChanel")) {
-            path = G.DIR_NEW_CHANEL;
-        } else {
-            path = G.DIR_NEW_GROUP;
-        }
+        //if (prefix.equals("NewChanel")) {
+        //    path = G.DIR_NEW_CHANEL;
+        //} else {
+        //    path = G.DIR_NEW_GROUP;
+        //}
 
         //=======================name of group
         TextInputLayout txtInputNewGroup = (TextInputLayout) view.findViewById(R.id.ng_txtInput_newGroup);
@@ -411,7 +411,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                     String newName = edtGroupName.getText().toString().replace(" ", "_");
-                    File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
+                    //  File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                     if (prefix.equals("NewChanel")) {
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         isChannel = true;

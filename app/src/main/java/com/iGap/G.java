@@ -205,10 +205,10 @@ public class G extends MultiDexApplication {
     public static final String DIR_DOCUMENT = DIR_APP + "/iGap Document";
     public static final String DIR_TEMP = DIR_APP + "/.temp";
     public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/.chat_background";
-    public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
-    public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
+    // public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
+    // public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
     public static final String DIR_IMAGE_USER = DIR_APP + "/.image_user";
-    public static final String DIR_NOMEDIA = DIR_APP + "/.nomedia";
+    //  public static final String DIR_NOMEDIA = DIR_APP + "/.nomedia";
 
     public static final String CHAT_MESSAGE_TIME = "H:mm";
 
@@ -514,8 +514,8 @@ public class G extends MultiDexApplication {
         makeFolder();
 
         chatBackground = new File(DIR_CHAT_BACKGROUND, "addChatBackground.jpg");
-        IMAGE_NEW_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.jpg");
-        IMAGE_NEW_CHANEL = new File(G.DIR_NEW_CHANEL, "image_new_chanel.jpg");
+        //  IMAGE_NEW_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.jpg");
+        // IMAGE_NEW_CHANEL = new File(G.DIR_NEW_CHANEL, "image_new_chanel.jpg");
         imageFile = new File(DIR_IMAGE_USER, "image_user");
 
         context = getApplicationContext();
@@ -605,8 +605,8 @@ public class G extends MultiDexApplication {
                 new File(DIR_AUDIOS).mkdirs();
                 new File(DIR_DOCUMENT).mkdirs();
                 new File(DIR_CHAT_BACKGROUND).mkdirs();
-                new File(DIR_NEW_GROUP).mkdirs();
-                new File(DIR_NEW_CHANEL).mkdirs();
+                //  new File(DIR_NEW_GROUP).mkdirs();
+                //  new File(DIR_NEW_CHANEL).mkdirs();
                 new File(DIR_IMAGE_USER).mkdirs();
                 new File(DIR_TEMP).mkdirs();
 
@@ -617,8 +617,8 @@ public class G extends MultiDexApplication {
                 new File(DIR_AUDIOS + "/" + file).mkdirs();
                 new File(DIR_DOCUMENT + "/" + file).mkdirs();
                 new File(DIR_CHAT_BACKGROUND + "/" + file).mkdirs();
-                new File(DIR_NEW_GROUP + "/" + file).mkdirs();
-                new File(DIR_NEW_CHANEL + "/" + file).mkdirs();
+                //  new File(DIR_NEW_GROUP + "/" + file).mkdirs();
+                //   new File(DIR_NEW_CHANEL + "/" + file).mkdirs();
                 new File(DIR_IMAGE_USER + "/" + file).mkdirs();
                 new File(DIR_TEMP + "/" + file).mkdirs();
             }
