@@ -4927,12 +4927,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         // for gone app bar
         FragmentShowImage.appBarLayout = appBarLayout;
 
-        String selectedFileToken = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getToken() : messageInfo.attachment.token;
+        long selectedFileToken = Long.parseLong(messageInfo.messageID);
 
         android.app.Fragment fragment = FragmentShowImage.newInstance();
         Bundle bundle = new Bundle();
         bundle.putLong("RoomId", mRoomId);
-        bundle.putString("SelectedImage", selectedFileToken);
+        bundle.putLong("SelectedImage", selectedFileToken);
         fragment.setArguments(bundle);
 
         getFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, fragment, "ShowImageMessage").commit();

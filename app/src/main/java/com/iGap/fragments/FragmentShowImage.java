@@ -64,7 +64,7 @@ public class FragmentShowImage extends Fragment {
     private ArrayList<RealmRoomMessage> mFList = new ArrayList<>();
 
     private Long mRoomid;
-    private String selectedFileToken = "";
+    private Long selectedFileToken;
     private Realm mRealm;
 
     public static ArrayList<String> downloadedList = new ArrayList<>();
@@ -108,7 +108,7 @@ public class FragmentShowImage extends Fragment {
         if (bundle != null) { // get a list of image
 
             mRoomid = bundle.getLong("RoomId");
-            selectedFileToken = bundle.getString("SelectedImage");
+            selectedFileToken = bundle.getLong("SelectedImage");
 
             if (mRoomid == null) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
@@ -145,15 +145,11 @@ public class FragmentShowImage extends Fragment {
 
 
             if (selectedFileToken != null) {
-                for (int i = 0; i < mFList.size(); i++) {
+                for (int i = mFList.size() - 1; i >= 0; i--) {
 
-                    RealmAttachment attachment = mFList.get(i).getForwardMessage() != null ? mFList.get(i).getForwardMessage().getAttachment() : mFList.get(i).getAttachment();
-
-                    if (attachment != null) {
-                        if (selectedFileToken.equals(attachment.getToken())) {
-                            selectedFile = i;
-                            break;
-                        }
+                    if (selectedFileToken == mFList.get(i).getMessageId()) {
+                        selectedFile = i;
+                        break;
                     }
                 }
             }

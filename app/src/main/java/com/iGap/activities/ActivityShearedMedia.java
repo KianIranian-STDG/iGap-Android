@@ -1335,12 +1335,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         private void showImage(int position, RecyclerView.ViewHolder holder) {
 
-            String selectedFileToken = mList.get(position).item.getAttachment().getToken();
+            long selectedFileToken = mList.get(position).item.getMessageId();
 
             Fragment fragment = FragmentShowImage.newInstance();
             Bundle bundle = new Bundle();
             bundle.putLong("RoomId", roomId);
-            bundle.putString("SelectedImage", selectedFileToken);
+            bundle.putLong("SelectedImage", selectedFileToken);
             fragment.setArguments(bundle);
 
             ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
