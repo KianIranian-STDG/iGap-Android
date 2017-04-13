@@ -5851,9 +5851,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
         ProtoGlobal.RoomMessageType messageType = message.forwardedFrom != null ? message.forwardedFrom.getMessageType() : message.messageType;
         Realm realm = Realm.getDefaultInstance();
-        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == VIDEO_TEXT) {
             showImage(message);
-        } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == VIDEO_TEXT) {
+        } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
 
             String _filePath = null;
             String _token = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token;

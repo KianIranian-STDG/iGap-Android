@@ -124,5 +124,5 @@
     <color name="colorOldBlack">#2A2A2A</color>
     <color name="room_message_blue">#007eff</color>
     <color name="room_message_gray">#FF616161</color>
-
+    <color name="background_progress">#c7101010</color>
 </resources>
