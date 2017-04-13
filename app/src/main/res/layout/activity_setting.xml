@@ -1193,21 +1193,46 @@
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             />
 
-        <TextView
-            android:id="@+id/st_txt_keepMedia"
+
+        <LinearLayout
+            android:id="@+id/st_layout_keepMedia"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingTop="@dimen/dp4"
-            android:text="@string/st_keepMedia"
-            android:textColor="@color/black_register"
-            android:textSize="@dimen/sp15"
-            android:textStyle="normal"
-            android:visibility="visible"
-            fontPath="fonts/IRANSansMobile.ttf"
-            />
+            android:layout_height="@dimen/dp52"
+            android:orientation="horizontal"
+            >
+
+
+          <TextView
+              android:id="@+id/st_txt_keepMedia"
+              android:layout_width="0dp"
+              android:layout_height="@dimen/dp48"
+              android:gravity="center_vertical"
+              android:layout_weight="1"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
+              android:paddingTop="@dimen/dp4"
+              android:text="@string/st_keepMedia"
+              android:textColor="@color/black_register"
+              android:textSize="@dimen/sp15"
+              android:textStyle="normal"
+              android:visibility="visible"
+              fontPath="fonts/IRANSansMobile.ttf"
+              />
+
+          <TextView
+              android:id="@+id/st_txt_sub_keepMedia"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
+              android:text="1Week"
+              android:textColor="@color/toolbar_background"
+              android:textSize="@dimen/sp15"
+              android:textStyle="normal"
+              fontPath="fonts/IRANSansMobile.ttf"
+              />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

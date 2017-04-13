@@ -1669,26 +1669,41 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        final TextView txtSubKeepMedia = (TextView) findViewById(R.id.st_txt_sub_keepMedia);
+        ViewGroup ltKeepMedia = (ViewGroup) findViewById(R.id.st_layout_keepMedia);
         txtKeepMedia = (TextView) findViewById(R.id.st_txt_keepMedia);
-        txtKeepMedia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        boolean isForever = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
+        Log.i("KKKKKKK", "isForever: " + isForever);
+        if (isForever) {
+            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
+        } else {
+            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
+        }
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_keepMedia).content(R.string.st_dialog_content_keepMedia).positiveText("ForEver").onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
-                        editor.apply();
-                    }
-                }).negativeText("1WEEk").onNegative(new MaterialDialog.SingleButtonCallback() {
+        ltKeepMedia.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_keepMedia)
+                    .content(R.string.st_dialog_content_keepMedia)
+                    .positiveText(getResources().getString(R.string.keep_media_forever))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
                         editor.apply();
+                        txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
+                    }
+                    })
+                    .negativeText(getResources().getString(R.string.keep_media_1week))
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
+                        editor.apply();
+                        txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
                     }
                 }).show();
             }

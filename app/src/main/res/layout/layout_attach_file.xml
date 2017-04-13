@@ -65,7 +65,7 @@
                 style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="bottom"
+                android:layout_gravity="center"
                 android:gravity="bottom|end|right"
                 android:padding="@dimen/dp8"
                 android:text="@string/md_send_button"
