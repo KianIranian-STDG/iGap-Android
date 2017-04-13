@@ -226,27 +226,6 @@ public class FragmentShowImage extends Fragment {
                 view.setScaleY(normalizedPosition / 2 + 0.5f);
             }
         });
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) {
-
-                if (mFList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || mFList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                    isFirstPlay = false;
-                }
-            }
-
-            @Override public void onPageSelected(final int position) {
-                txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + mFList.size());
-                showImageInfo(mFList.get(position));
-
-                if (videoController != null) {
-                    videoController.hide();
-                }
-            }
-
-            @Override public void onPageScrollStateChanged(int state) {
-            }
-        });
     }
 
     /**
@@ -496,6 +475,8 @@ public class FragmentShowImage extends Fragment {
                             videoController.setVisibility(View.VISIBLE);
                         }
                     }
+                    touchImageView.performClick();
+
                 }
             });
 
