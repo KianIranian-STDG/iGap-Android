@@ -736,6 +736,10 @@ public class FragmentShowImage extends Fragment {
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
+        if (videoController != null) {
+            videoController.hide();
+            videoController = null;
+        }
     }
 
     @Override public void onDetach() {
@@ -744,6 +748,10 @@ public class FragmentShowImage extends Fragment {
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
+        }
+        if (videoController != null) {
+            videoController.hide();
+            videoController = null;
         }
     }
 }
