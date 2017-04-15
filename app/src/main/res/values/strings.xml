@@ -810,6 +810,7 @@
   <string name="TAKEN">TAKEN</string>
   <string name="OCCUPYING_LIMIT_EXCEEDED">OCCUPYING LIMIT EXCEEDED</string>
   <string name="st_trim">Trim Video</string>
+  <string name="st_compress">Compress Video</string>
   <string name="compressing"> compressing...</string>
   <string name="selected_color_can_not_set_on_yout_device">Selected color can not set on your device</string>
   <string name="keep_media_forever">Forever</string>

@@ -484,7 +484,7 @@
             android:paddingTop="@dimen/dp4"
             android:text="@string/Active_Sessions"
             android:textColor="@color/black_register"
-            android:textSize="@dimen/sp16"
+            android:textSize="@dimen/sp14"
             android:textStyle="normal"
             fontPath="fonts/IRANSansMobile.ttf"
             />
@@ -535,7 +535,7 @@
               android:paddingTop="@dimen/dp4"
               android:text="@string/if_you_are_away_for"
               android:textColor="@color/black_register"
-              android:textSize="@dimen/sp16"
+              android:textSize="@dimen/sp14"
               android:textStyle="normal"
               fontPath="fonts/IRANSansMobile.ttf"
               />
@@ -550,7 +550,7 @@
               android:paddingTop="@dimen/dp4"
               android:text="1 year"
               android:textColor="@color/toolbar_background"
-              android:textSize="@dimen/sp16"
+              android:textSize="@dimen/sp14"
               android:textStyle="normal"
               fontPath="fonts/IRANSansMobile.ttf"
               />

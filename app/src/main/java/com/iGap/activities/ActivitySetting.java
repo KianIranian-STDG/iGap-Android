@@ -1349,6 +1349,40 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        //toggle compress
+        final TextView txtCompress = (TextView) findViewById(R.id.stsp_txt_compress);
+        final ToggleButton stsp_toggle_Compress = (ToggleButton) findViewById(R.id.stsp_toggle_compress);
+
+        int checkedEnableCompress = sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1);
+        if (checkedEnableCompress == 1) {
+            stsp_toggle_Compress.setChecked(true);
+        } else {
+            stsp_toggle_Compress.setChecked(false);
+        }
+
+        stsp_toggle_Compress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (isChecked) {
+                    editor.putInt(SHP_SETTING.KEY_COMPRESS, 1);
+                    editor.apply();
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_COMPRESS, 0);
+                    editor.apply();
+                }
+            }
+        });
+
+        txtCompress.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                stsp_toggle_Compress.setChecked(!stsp_toggle_Compress.isChecked());
+            }
+        });
+
+
         //toggle trim
 
         final TextView txtTrim = (TextView) findViewById(R.id.stsp_txt_trim);

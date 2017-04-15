@@ -811,6 +811,7 @@
   <string name="TAKEN">ثبت شده</string>
   <string name="OCCUPYING_LIMIT_EXCEEDED">محدودیت دریافت</string>
   <string name="st_trim">ویرایش ویدیو</string>
+  <string name="st_compress">فشرده سازی ویدیو</string>
   <string name="compressing"> فشرده سازی...</string>
   <string name="selected_color_can_not_set_on_yout_device">رنگ انتخاب شده قابل نمایش در دستگاه شما نیست</string>
   <string name="keep_media_forever">برای همیشه</string>
