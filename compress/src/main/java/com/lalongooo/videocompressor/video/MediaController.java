@@ -261,6 +261,7 @@ import java.nio.ByteBuffer;
         if (videoWidth * videoHeight < 307200) {
             //resultWidth = videoWidth;
             //resultHeight = videoHeight;
+
             try {
                 copyFile(new File(path), new File(savePath));
             } catch (IOException e) {

@@ -6487,9 +6487,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private class StructCompress {
         public boolean compress;
         public String path;
+        public long orginalSize;
+        public String orginalPath;
     }
 
     class VideoCompressor extends AsyncTask<String, Void, StructCompress> {
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -6497,9 +6500,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         @Override
         protected StructCompress doInBackground(String... params) {
+            File file = new File(params[0]);
+            long originalSize = file.length();
+
             StructCompress structCompress = new StructCompress();
             structCompress.path = params[1];
+            structCompress.orginalPath = params[0];
             structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1]);
+            structCompress.orginalSize = originalSize;
             return structCompress;
         }
 
@@ -6513,8 +6521,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         /**
                          * update new info after compress file with notify item
                          */
+
                         long fileSize = new File(structUploadVideo.filePath).length();
                         long duration = AndroidUtils.getAudioDuration(getApplicationContext(), structUploadVideo.filePath) / 1000;
+                        if (fileSize >= structCompress.orginalSize) {
+
+                            structUploadVideo.filePath = structCompress.orginalPath;
+                        }
+
                         mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
 
                         HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, structUploadVideo.replyMessageId, new HelperUploadFile.UpdateListener() {

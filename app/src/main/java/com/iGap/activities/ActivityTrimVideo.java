@@ -76,12 +76,11 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
     @Override
     public void onTrimStarted() {
-        Log.i("VVVVVVV", "onTrimStarted: ");
     }
 
     @Override
     public void getResult(final Uri uri) {
-        Log.i("VVVVVVV", "getResult: ");
+
         Intent data = new Intent();
         data.setData(uri);
         setResult(Activity.RESULT_OK, data);
@@ -90,7 +89,7 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
     @Override
     public void cancelAction() {
-        Log.i("VVVVVVV", "cancelAction: ");
+
         Uri uriCancel = Uri.parse(path);
         Intent data = new Intent();
         data.setData(uriCancel);
@@ -100,7 +99,7 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
     @Override
     public void onError(String message) {
-        Log.i("VVVVVVV", "onError: " + message);
+
     }
 
     public static String formatFileSize(long size) {

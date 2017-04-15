@@ -720,7 +720,11 @@
               fontPath="fonts/IRANSansMobile.ttf"
               />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background_editText"
+            />
 
         <TextView
             android:id="@+id/st_txt_chatBackground"
@@ -1215,6 +1219,7 @@
               android:textSize="@dimen/sp15"
               android:textStyle="normal"
               android:visibility="visible"
+              android:singleLine="true"
               fontPath="fonts/IRANSansMobile.ttf"
               />
 
