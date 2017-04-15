@@ -35,6 +35,8 @@ import io.realm.Realm;
 
 import static com.iGap.R.id.ntg_txt_back;
 import static com.iGap.R.string.DISCARD;
+import static com.iGap.R.string.array_Default;
+import static com.iGap.R.string.array_Disable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -166,13 +168,13 @@ public class FragmentNotification extends Fragment {
         int popupNotification = realmNotification;
         switch (popupNotification) {
             case DEFAULT:
-                txtPopupNotification.setText("Default");
+                txtPopupNotification.setText(getResources().getString(R.string.array_Default));
                 break;
             case ENABLE:
-                txtPopupNotification.setText("Enable");
+                txtPopupNotification.setText(getResources().getString(R.string.array_enable));
                 break;
             case DISABLE:
-                txtPopupNotification.setText("Disable");
+                txtPopupNotification.setText(getResources().getString(R.string.array_Disable));
                 break;
         }
 
@@ -308,7 +310,11 @@ public class FragmentNotification extends Fragment {
         });
 
         //========================================================sound
-        txtSound.setText(realmSound);
+        if (realmIdSound == 0 || realmIdSound == -1) {
+            txtSound.setText(getResources().getString(R.string.array_Default_Notification_tone));
+        } else {
+            txtSound.setText(realmSound);
+        }
         ltSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -410,10 +416,10 @@ public class FragmentNotification extends Fragment {
 
         switch (realmVibrate) {
             case 0:
-                txtVibrate.setText(getResources().getString(R.string.array_Disable));
+                txtVibrate.setText(getResources().getString(array_Disable));
                 break;
             case 1:
-                txtVibrate.setText(getResources().getString(R.string.array_Default));
+                txtVibrate.setText(getResources().getString(array_Default));
                 break;
             case 2:
                 txtVibrate.setText(getResources().getString(R.string.array_Short));
@@ -675,9 +681,9 @@ public class FragmentNotification extends Fragment {
 
                 realmNotificationSetting.setNotification(0);
                 realmNotificationSetting.setVibrate(-1);
-                realmNotificationSetting.setSound("Default Notification Tone");
+                realmNotificationSetting.setSound(getResources().getString(R.string.array_Default_Notification_tone));
                 realmNotificationSetting.setIdRadioButtonSound(-1);
-                realmNotificationSetting.setSmartNotification("default");
+                realmNotificationSetting.setSmartNotification(getResources().getString(R.string.array_Default));
                 realmNotificationSetting.setTimes(-1);
                 realmNotificationSetting.setMinutes(-1);
                 realmNotificationSetting.setLedColor(-1);

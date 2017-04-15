@@ -6524,12 +6524,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         long fileSize = new File(structUploadVideo.filePath).length();
                         long duration = AndroidUtils.getAudioDuration(getApplicationContext(), structUploadVideo.filePath) / 1000;
+
                         if (fileSize >= structCompress.orginalSize) {
-
                             structUploadVideo.filePath = structCompress.orginalPath;
+                            mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, structCompress.orginalSize);
+                        } else {
+                            mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
                         }
-
-                        mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
 
                         HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, structUploadVideo.replyMessageId, new HelperUploadFile.UpdateListener() {
                             @Override
