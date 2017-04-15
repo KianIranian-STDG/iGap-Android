@@ -3,6 +3,7 @@ package com.iGap.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +26,8 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
     private TextView txtDetail;
     private TextView txtTime;
     private TextView txtSize;
-
+    int videoWidth = 641;
+    int videoHeight = 481;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,9 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
             path = bundle.getString("PATH");
         }
+
+        getResolutionVideo(path);
+
         path = getRealPathFromURI(Uri.parse(path));
         durationVideo(path);
 
@@ -141,5 +146,20 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
     @Override
     public void onVideoPrepared() {
         Log.i("VVVVVVV", "onVideoPrepared: ");
+    }
+
+    private void getResolutionVideo(String path) {
+        try {
+            MediaMetadataRetriever re = new MediaMetadataRetriever();
+            Bitmap bmp = null;
+            re.setDataSource(path);
+            bmp = re.getFrameAtTime();
+            videoHeight = bmp.getHeight();
+            videoWidth = bmp.getWidth();
+
+            txtDetail.setText(videoWidth + "X" + videoHeight);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 }
