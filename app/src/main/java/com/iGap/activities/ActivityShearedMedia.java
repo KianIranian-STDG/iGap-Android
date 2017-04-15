@@ -314,7 +314,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         recyclerView.setItemViewCacheSize(1000);
 
         onScrollListener = new RecyclerView.OnScrollListener() {
-            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            @Override public void onScrollStateChanged(final RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (isThereAnyMoreItemToLoad) {
@@ -322,14 +322,13 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                         new Thread(new Runnable() {
                             @Override public void run() {
-                                //int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                                //
-                                //if (adapter.getItemCount() <= lastVisiblePosition + 25) {
-                                //
+                                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+
+                                if (lastVisiblePosition + 10 >= offset) {
+
                                 new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, mFilter);
                                 isSendRequestForLoading = true;
-
-                                //}
+                                }
                             }
                         }).start();
 
@@ -1683,7 +1682,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 File file = new File(vh.filePath);
                 if (file.exists()) {
                     vh.gifView.setImageURI(Uri.fromFile(file));
-                    vh.gifDrawable = gifDrawable = (GifDrawable) vh.gifView.getDrawable();
+                    vh.gifDrawable = (GifDrawable) vh.gifView.getDrawable();
                     vh.messageProgress.withDrawable(R.drawable.ic_play, true);
 
                     vh.messageProgress.setOnClickListener(new View.OnClickListener() {
@@ -1695,7 +1694,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         }
                     });
 
-                    gifDrawable.start();
+                    vh.gifDrawable.start();
                     vh.messageProgress.setVisibility(View.GONE);
                 }
 
