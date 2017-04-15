@@ -207,7 +207,7 @@ public final class AppUtils {
                 //DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.iGapColor)));
                 break;
             case SENDING:
-                setImageDrawable(view, R.drawable.ic_clock);
+                //setImageDrawable(view, R.drawable.ic_clock);
                 //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
                 break;

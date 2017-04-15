@@ -99,7 +99,9 @@ public final class MessageLoader {
          * convert message from RealmRoomMessage to StructMessageInfo for send to view
          */
         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-            structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
+            if (realmRoomMessage.getMessageId() != 0) {
+                structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
+            }
         }
 
         realm.close();
