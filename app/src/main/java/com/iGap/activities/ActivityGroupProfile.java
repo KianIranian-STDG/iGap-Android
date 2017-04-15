@@ -82,7 +82,6 @@ import com.iGap.module.AttachFile;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
 import com.iGap.module.FileUploadStructure;
-import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.SUID;
 import com.iGap.module.StructContactInfo;
@@ -379,7 +378,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void initComponent() {
 
-        MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.agp_btn_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.agp_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
@@ -389,7 +387,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         });
 
-        MaterialDesignTextView btnMenu = (MaterialDesignTextView) findViewById(R.id.agp_btn_menu);
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         RippleView rippleMenu = (RippleView) findViewById(R.id.agp_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

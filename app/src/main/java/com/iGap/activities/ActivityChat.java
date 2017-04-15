@@ -2811,7 +2811,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
 
                     } else if (messageType == HelperGetDataFromOtherApp.FileType.video) {
-                        if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1) {
+                        if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
                             String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
                                     "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                             mainVideoPath = AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
@@ -2842,7 +2842,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             if (fileType == HelperGetDataFromOtherApp.FileType.image) {
                                 sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                             } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
-                                if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1) {
+                                if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
                                     String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
                                             "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                                     mainVideoPath = AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
@@ -3496,7 +3496,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         intent.putExtra("PATH", getFilePathFromUri(data.getData()));
                         startActivityForResult(intent, AttachFile.request_code_trim_video);
                         return;
-                    } else {
+                    } else if (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1) {
 
                         File mediaStorageDir = new File(G.DIR_VIDEOS);
                         File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "video_" + HelperString.getRandomFileName(3) + ".mp4");
@@ -3516,22 +3516,28 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         setDraftMessage(requestCode);
                         latestRequestCode = requestCode;
                         return;
+                    } else {
+                        compressedPath.put(listPathString.get(0), true);
                     }
                 }
 
                 if (requestCode == AttachFile.request_code_trim_video) {
-                    File mediaStorageDir = new File(G.DIR_VIDEOS);
-                    listPathString = new ArrayList<>();
-
-                    String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
-                            "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-
-                    listPathString.add(savePathVideoCompress);
-                    mainVideoPath = data.getData().getPath();
-                    new VideoCompressor().execute(data.getData().getPath(), savePathVideoCompress);
+                    latestRequestCode = AttachFile.request_code_VIDEO_CAPTURED;
                     showDraftLayout();
                     setDraftMessage(AttachFile.request_code_VIDEO_CAPTURED);
-                    latestRequestCode = AttachFile.request_code_VIDEO_CAPTURED;
+                    if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {
+                        File mediaStorageDir = new File(G.DIR_VIDEOS);
+                        listPathString = new ArrayList<>();
+
+                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
+                                "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+
+                        listPathString.add(savePathVideoCompress);
+                        mainVideoPath = data.getData().getPath();
+                        new VideoCompressor().execute(data.getData().getPath(), savePathVideoCompress);
+                    } else {
+                        compressedPath.put(data.getData().getPath(), true);
+                    }
                     return;
                 }
             }
@@ -3547,7 +3553,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             intent.putExtra("PATH", getFilePathFromUri(data.getData()));
                             startActivityForResult(intent, AttachFile.request_code_trim_video);
                             return;
-                        } else {
+                        } else if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {
 
                             mainVideoPath = listPathString.get(0);
 
@@ -3560,6 +3566,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                             showDraftLayout();
                             setDraftMessage(requestCode);
+                        } else {
+                            compressedPath.put(listPathString.get(0), true);
                         }
                     }
                     showDraftLayout();
