@@ -2834,29 +2834,31 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     } else if (messageType == HelperGetDataFromOtherApp.FileType.file) {
 
                         for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-
-                            if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && HelperGetDataFromOtherApp.fileTypeArray.get(0) == HelperGetDataFromOtherApp.FileType.video) {
-                                String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
-                                        "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                                mainVideoPath = AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
-
-                                new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
-                                sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
-                            } else {
-                                if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
-                                    HelperGetDataFromOtherApp.FileType fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
-                                    if (fileType == HelperGetDataFromOtherApp.FileType.image) {
-                                        sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                                    } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
-                                        compressedPath.put(AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
-                                        sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                                    } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
-                                        sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                                    } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
-                                        sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
-                                    }
-                                }
+                            HelperGetDataFromOtherApp.FileType fileType = messageType = HelperGetDataFromOtherApp.FileType.file;
+                            if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
+                                fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
                             }
+
+                            if (fileType == HelperGetDataFromOtherApp.FileType.image) {
+                                sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                            } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
+                                if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1) {
+                                    String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
+                                            "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                                    mainVideoPath = AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
+
+                                    new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
+                                    sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
+                                } else {
+                                    compressedPath.put(AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
+                                    sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                }
+                            } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
+                                sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                            } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
+                                sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                            }
+
                         }
                     }
                     HelperGetDataFromOtherApp.messageType = null;
@@ -3089,7 +3091,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (_RealmRoom != null) {
                     final long final_lastScrolledMessageID = _lastScrolledMessageID;
                     mRealm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
                             _RealmRoom.setLastScrollPositionMessageId(final_lastScrolledMessageID);
                         }
                     });
@@ -3724,7 +3727,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void setDraftMessage(final int requestCode) {
 
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 if (listPathString == null) return;
                 if (listPathString.size() < 1) return;
