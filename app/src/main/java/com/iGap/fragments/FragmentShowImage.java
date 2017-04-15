@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -365,6 +364,7 @@ public class FragmentShowImage extends Fragment {
                     if (rm.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE) {
                         touchImageView.setVisibility(View.VISIBLE);
                         imgPlay.setVisibility(View.GONE);
+                        isFirstPlay = false;
                     } else {
                         if (isFirstPlay) {
                             mTextureView.setVisibility(View.VISIBLE);
@@ -495,7 +495,6 @@ public class FragmentShowImage extends Fragment {
                         if (touchImageView.getVisibility() == View.GONE) {
                             touchImageView.setVisibility(View.VISIBLE);
                             imgPlay.setVisibility(View.VISIBLE);
-                            Log.i("CCCCCCCC", "touchImageView.getVisibility(): " + touchImageView.getVisibility());
                         }
                     }
 
