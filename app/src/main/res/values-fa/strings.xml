@@ -8,11 +8,10 @@
 
   <!-- Page 2 introduce app -->
   <string name="text_line_1_introduce_page2">"امنیت در آی گپ"</string>
-  <string name="text_line_2_introduce_page2">"آی گپ ارتباط امن و مطمئن را بین شما ، دوستان و خانواده را تضمین میکند ، آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد حریم خصوصی را برای کاربران خود فراهم کرده است. "</string>
-
+<string name="text_line_2_introduce_page2">"آی گپ ارتباط امن و مطمئن را بین شما ، دوستان و خانواده تضمین میکند ، آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد حریم خصوصی را برای کاربران خود فراهم کرده است. "</string>
   <!-- Page 3 introduce app -->
   <string name="text_line_1_introduce_page3">"گفتگو"</string>
-  <string name="text_line_2_introduce_page3">"شما میتوانید بصورت شخصی و یا گروهی به گفتگو بپردازید و یا کانال ساخته و در آن عضو بگیرید."</string>
+  <string name="text_line_2_introduce_page3">"شما میتوانید بصورت شخصی و گروهی به گفتگو بپردازید و یا کانال ساخته و در آن عضو بگیرید."</string>
 
   <!-- Page 4 introduce app -->
   <string name="text_line_1_introduce_page4">"انتقال فایل"</string>
