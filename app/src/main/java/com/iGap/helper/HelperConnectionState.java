@@ -31,7 +31,7 @@ public class HelperConnectionState {
             G.latestConnectionState = Config.ConnectionState.UPDATING;
         }
 
-        if (G.currentActivity instanceof ActivityMain) {
+        if (G.currentActivity instanceof ActivityMain || connectionState == Config.ConnectionState.IGAP || connectionState == Config.ConnectionState.UPDATING) {
 
             if (snack != null) {
                 if (snack.isShown()) {
@@ -67,16 +67,7 @@ public class HelperConnectionState {
                                 }
                             });
                             snack.setText(finalMessage2);
-                            if (G.connectionState == Config.ConnectionState.IGAP || G.connectionState == Config.ConnectionState.UPDATING) {
-                                G.currentActivity.runOnUiThread(new Runnable() {
-                                    @Override public void run() {
-                                        snack.dismiss();
-                                        snack = null;
-                                    }
-                                });
-                            } else {
-                                snack.show();
-                            }
+                            snack.show();
                         }
                     });
                 }
