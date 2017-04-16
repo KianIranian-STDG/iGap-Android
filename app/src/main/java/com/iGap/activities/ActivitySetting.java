@@ -2258,7 +2258,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void openBrowser(String s) {
 
-        int mColorPrimary = getResources().getColor(R.color.green);
+        int mColorPrimary = Color.parseColor(G.appBarColor);
         final Uri PROJECT_URI = Uri.parse(s);
 
         CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();
