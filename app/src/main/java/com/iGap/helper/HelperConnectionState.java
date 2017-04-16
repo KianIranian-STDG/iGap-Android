@@ -36,7 +36,7 @@ public class HelperConnectionState {
         /**
          * detect change connection state
          */
-        if (G.latestConnectionState != connectionState) {
+        if (G.latestConnectionState != connectionState || (snack != null && !snack.isShown())) {
 
             G.latestActivity = G.currentActivity;
             G.latestConnectionState = connectionState;
@@ -55,7 +55,7 @@ public class HelperConnectionState {
                     @Override
                     public void run() {
                         if (snack == null) {
-                            snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), finalMessage, 10 * 60 * 1000);
+                            snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), finalMessage, 600000);
                             snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
