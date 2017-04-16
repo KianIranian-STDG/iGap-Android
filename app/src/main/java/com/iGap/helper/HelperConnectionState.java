@@ -60,7 +60,7 @@ public class HelperConnectionState {
                         @Override public void run() {
 
                             snack = null;
-                            snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), finalMessage, 10 * 60 * 1000);
+                            snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), finalMessage, 600000);
                             snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override public void onClick(View view) {
                                     snack.dismiss();
