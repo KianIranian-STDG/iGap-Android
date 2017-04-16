@@ -41,15 +41,15 @@ public class HelperConnectionState {
             }
         } else {
 
-            if (G.latestConnectionState != connectionState) {
+            if (G.latestConnectionState != G.connectionState) {
 
                 G.latestActivity = G.currentActivity;
-                G.latestConnectionState = connectionState;
+                G.latestConnectionState = G.connectionState;
                 String message = G.context.getResources().getString(R.string.waiting_for_network);
 
-                if (connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
+                if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
                     message = G.context.getResources().getString(R.string.waiting_for_network);
-                } else if (connectionState == Config.ConnectionState.CONNECTING) {
+                } else if (G.connectionState == Config.ConnectionState.CONNECTING) {
                     message = G.context.getResources().getString(R.string.connecting);
                 }
 
@@ -67,7 +67,7 @@ public class HelperConnectionState {
                                 }
                             });
                             snack.setText(finalMessage2);
-                            if (connectionState == Config.ConnectionState.IGAP || connectionState == Config.ConnectionState.UPDATING) {
+                            if (G.connectionState == Config.ConnectionState.IGAP || G.connectionState == Config.ConnectionState.UPDATING) {
                                 G.currentActivity.runOnUiThread(new Runnable() {
                                     @Override public void run() {
                                         snack.dismiss();
