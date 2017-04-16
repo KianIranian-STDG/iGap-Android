@@ -114,6 +114,7 @@ import com.iGap.interfaces.OnChatMessageSelectionChanged;
 import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.interfaces.OnChatUpdateStatusResponse;
 import com.iGap.interfaces.OnClearChatHistory;
+import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnClientJoinByUsername;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnGroupAvatarResponse;
@@ -157,6 +158,7 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.module.enums.ProgressState;
 import com.iGap.module.enums.SendingStep;
 import com.iGap.proto.ProtoChannelGetMessagesStats;
+import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
@@ -194,6 +196,7 @@ import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatUpdateDraft;
+import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestClientJoinByUsername;
 import com.iGap.request.RequestClientSubscribeToRoom;
 import com.iGap.request.RequestClientUnsubscribeFromRoom;
@@ -261,7 +264,8 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
 
-public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
+public class ActivityChat extends ActivityEnhanced
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnClientGetRoomResponse {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -532,6 +536,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.onUserInfoResponse = this;
         G.onChannelAddMessageReaction = this;
         G.onChannelGetMessagesStats = this;
+        G.onClientGetRoomResponse = this;
         activityChatForFinish = this;
         activityChat = this;
         G.onSetAction = this;
@@ -875,10 +880,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         userStatus = getResources().getString(R.string.last_seen_recently);
                     }
                 } else if (chatType == GROUP) {
+                    new RequestClientGetRoom().clientGetRoom(realmRoom.getId(), RequestClientGetRoom.CreateRoomMode.requestFromOwner); // i just fill CreateRoomMode Unlike JustInfo
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     groupRole = realmGroupRoom.getRole();
                     groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
                 } else if (chatType == CHANNEL) {
+                    new RequestClientGetRoom().clientGetRoom(realmRoom.getId(), RequestClientGetRoom.CreateRoomMode.requestFromOwner); // i just fill CreateRoomMode Unlike JustInfo
                     RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                     channelRole = realmChannelRoom.getRole();
                     channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
@@ -1530,7 +1537,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
-        if (prgWaiting != null) prgWaiting.setVisibility(View.GONE);
+        if (prgWaiting != null && messageInfos.size() > 0) {
+            prgWaiting.setVisibility(View.GONE);
+        }
 
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
@@ -3430,6 +3439,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
     }
 
+    private void hideProgress() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (prgWaiting != null) {
+                    prgWaiting.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -4713,10 +4733,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         recyclerView.addOnScrollListener(scrollListener);
         realm.close();
 
-        if (prgWaiting != null) {
-            prgWaiting.setVisibility(View.GONE);
-        }
-
         return messageInfos;
     }
 
@@ -4725,7 +4741,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      *
      * @param oldMessageId if set oldMessageId=0 messages will be get from latest message that exist in server
      */
-    private void getOnlineMessage(long oldMessageId) {
+    private void getOnlineMessage(final long oldMessageId) {
         if (!isWaitingForHistory) {
             isWaitingForHistory = true;
 
@@ -4737,6 +4753,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             MessageLoader.getOnlineMessage(mRoomId, oldMessageId, reachMessageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP, new OnMessageReceive() {
                 @Override
                 public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached) {
+                    hideProgress();
                     startFutureMessageId = startMessageId;
                     /**
                      * hide progress received history
@@ -4794,7 +4811,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 @Override
                 public void onError(int majorCode, int minorCode) {
-
+                    hideProgress();
                     /**
                      * hide progress if have any error
                      */
@@ -6423,6 +6440,34 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 });
             }
         }
+    }
+
+    //****** Get Room Info
+
+    @Override
+    public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
+
+        if (room.getId() == mRoomId && (room.getType() == GROUP || room.getType() == CHANNEL)) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (room.getType() == GROUP) {
+                        groupParticipantsCountLabel = room.getGroupRoomExtra().getParticipantsCountLabel();
+                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member));
+                    } else {
+                        channelParticipantsCountLabel = room.getChannelRoomExtra().getParticipantsCountLabel();
+                        txtLastSeen.setText(channelParticipantsCountLabel + " " + getResources().getString(R.string.member));
+                    }
+                    avi.setVisibility(View.GONE);
+                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onTimeOut() {
+
     }
 
     public static ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {

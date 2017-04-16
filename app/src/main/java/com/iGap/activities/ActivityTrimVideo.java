@@ -8,7 +8,6 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.helper.HelperCalander;
@@ -28,6 +27,7 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
     private TextView txtSize;
     int videoWidth = 641;
     int videoHeight = 481;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,7 +144,7 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
     @Override
     public void onVideoPrepared() {
-        Log.i("VVVVVVV", "onVideoPrepared: ");
+
     }
 
     private void getResolutionVideo(String path) {
