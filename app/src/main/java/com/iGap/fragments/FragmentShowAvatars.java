@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -416,6 +417,8 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
 
             final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
+            final ImageView imgPlay = (ImageView) layout.findViewById(R.id.imgPlay);
+            imgPlay.setVisibility(View.GONE);
             final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
 
             final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) layout.findViewById(R.id.ch_progress_loadingContent);
