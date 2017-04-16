@@ -1449,20 +1449,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         private void playVideo(int position, RecyclerView.ViewHolder holder) {
 
-            //ViewHolder vh = (ViewHolder) holder;
-            //
-            //Intent intent = HelperMimeType.appropriateProgram(vh.filePath);
-            //if (intent != null) context.startActivity(intent);
+            ViewHolder vh = (ViewHolder) holder;
 
-            long selectedFileToken = mList.get(position).item.getMessageId();
-
-            Fragment fragment = FragmentShowImage.newInstance();
-            Bundle bundle = new Bundle();
-            bundle.putLong("RoomId", roomId);
-            bundle.putLong("SelectedImage", selectedFileToken);
-            fragment.setArguments(bundle);
-
-            ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
+            Intent intent = HelperMimeType.appropriateProgram(vh.filePath);
+            if (intent != null) context.startActivity(intent);
         }
     }
 
