@@ -260,6 +260,8 @@ public class G extends MultiDexApplication {
     public static String attachmentColor;
     public static String headerTextColor;
 
+    public static boolean isSaveToGalary = false;
+
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -496,18 +498,25 @@ public class G extends MultiDexApplication {
         super.onCreate();
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
-        SharedPreferences shKeepAlive = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        int isStart = shKeepAlive.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
+        SharedPreferences preferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        int isStart = preferences.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
         if (isStart == 1) {
             Intent intent = new Intent(this, MyService.class);
             startService(intent);
         }
 
-        appBarColor = shKeepAlive.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
-        notificationColor = shKeepAlive.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-        toggleBottonColor = shKeepAlive.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleBottonColor);
-        attachmentColor = shKeepAlive.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
-        headerTextColor = shKeepAlive.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
+        int checkedSaveToGallery = preferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
+        if (checkedSaveToGallery == 1) {
+            isSaveToGalary = true;
+        } else {
+            isSaveToGalary = false;
+        }
+
+        appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
+        notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
+        toggleBottonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleBottonColor);
+        attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
+        headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
 
 
 

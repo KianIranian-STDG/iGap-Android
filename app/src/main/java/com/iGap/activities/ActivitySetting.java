@@ -1972,7 +1972,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ltSaveToGallery = (TextView) findViewById(R.id.st_txt_saveGallery);
         toggleSaveToGallery = (ToggleButton) findViewById(R.id.st_toggle_saveGallery);
-        int checkedSaveToGallery = sharedPreferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 1);
+        int checkedSaveToGallery = sharedPreferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
         if (checkedSaveToGallery == 1) {
             toggleSaveToGallery.setChecked(true);
         } else {
@@ -1989,8 +1989,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 1);
                     editor.apply();
+                    G.isSaveToGalary = true;
                 } else {
                     editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
+                    G.isSaveToGalary = false;
                     editor.apply();
                 }
             }

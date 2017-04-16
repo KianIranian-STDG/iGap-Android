@@ -5,10 +5,9 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
-
 import com.iGap.G;
 import com.iGap.R;
-
+import com.iGap.module.AndroidUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,12 +47,41 @@ public class HelperSaveFile {
         }
     }
 
+    public static Boolean saveFileToDownLoadFolder(String filePath, String fileName) {
+
+        try {
+            if (filePath == null || fileName == null) {
+                return false;
+            }
+
+            File src = new File(filePath);
+
+            if (!src.exists()) {
+                return false;
+            }
+
+            String destinationPath = " ";
+
+            if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).exists()) {
+                destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
+            } else {
+                destinationPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Downloads/" + fileName;
+            }
+
+            AndroidUtils.copyFile(src, new File(destinationPath));
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static void savePicToGallary(Bitmap bitmap, String name) {
 
         MediaStore.Images.Media.insertImage(G.context.getContentResolver(), bitmap, name, "yourDescription");
     }
 
-    public static void savePicToGallary(String filePath) {
+    public static void savePicToGallary(String filePath, boolean showToast) {
 
         ContentValues values = new ContentValues();
 
@@ -63,7 +91,10 @@ public class HelperSaveFile {
 
         G.context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-        Toast.makeText(G.context, R.string.picture_save_to_galary, Toast.LENGTH_SHORT).show();
+        if (showToast) {
+            Toast.makeText(G.context, R.string.picture_save_to_galary, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public static void saveToMusicFolder(String path, String name) {

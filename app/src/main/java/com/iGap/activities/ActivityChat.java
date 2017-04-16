@@ -94,6 +94,7 @@ import com.iGap.helper.HelperGetMessageState;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperPermision;
+import com.iGap.helper.HelperSaveFile;
 import com.iGap.helper.HelperSetAction;
 import com.iGap.helper.HelperString;
 import com.iGap.helper.HelperUploadFile;
@@ -6122,6 +6123,13 @@ public class ActivityChat extends ActivityEnhanced
                             }
                         } else if (text.toString().equalsIgnoreCase(getString(R.string.share_item_dialog))) {
                             shearedDataToOtherProgram(message);
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
+
+                            if (HelperSaveFile.saveFileToDownLoadFolder(message.getAttachment().localFilePath, message.getAttachment().name)) {
+                                Toast.makeText(G.context, R.string.picture_save_to_galary, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(G.context, R.string.first_download_file, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 }).show();

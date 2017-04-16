@@ -273,6 +273,15 @@ public class HelperDownloadFile {
 
             if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) addDownloadFromQueue();
 
+            // save downloaded file to galary
+            if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE && G.isSaveToGalary && item.moveToDirectoryPAth != null) {
+                File file = new File(item.moveToDirectoryPAth);
+                if (file.exists()) {
+                    HelperSaveFile.savePicToGallary(item.moveToDirectoryPAth, false);
+                }
+            }
+
+
             return;
         }
 

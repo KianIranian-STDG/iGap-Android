@@ -815,4 +815,6 @@
   <string name="selected_color_can_not_set_on_yout_device">رنگ انتخاب شده قابل نمایش در دستگاه شما نیست</string>
   <string name="keep_media_forever">برای همیشه</string>
   <string name="keep_media_1week">یک هفته</string>
+  <string name="file_save_to_download_folder">"فایل در پوشه دانلود ذخیره شد"</string>
+  <string name="first_download_file">ابتدا فایل را دانلود کنید</string>
 </resources>

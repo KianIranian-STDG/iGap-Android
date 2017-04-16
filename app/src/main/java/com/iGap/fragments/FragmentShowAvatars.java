@@ -395,7 +395,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             if (media != null) {
                 File file = new File(media);
                 if (file.exists()) {
-                    HelperSaveFile.savePicToGallary(media);
+                    HelperSaveFile.savePicToGallary(media, true);
                 }
             }
         }

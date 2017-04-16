@@ -310,7 +310,7 @@ public class FragmentShowImage extends Fragment {
             String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
             File file = new File(path);
             if (file.exists()) {
-                HelperSaveFile.savePicToGallary(path);
+                HelperSaveFile.savePicToGallary(path, true);
             }
         }
     }

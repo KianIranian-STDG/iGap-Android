@@ -616,6 +616,7 @@
   <string name="array_delete_photo_group">Delete Photo</string>
   <string name="to_delete_chat">Delete Chat</string>
   <string name="picture_save_to_galary">"picture saved to gallery"</string>
+  <string name="file_save_to_download_folder">"File save to download folder"</string>
   <string name="my_location_title">My Location</string>
   <string name="shared_image">Shared images</string>
   <string name="shared_video">Shared video</string>
@@ -815,4 +816,5 @@
   <string name="selected_color_can_not_set_on_yout_device">Selected color can not set on your device</string>
   <string name="keep_media_forever">Forever</string>
   <string name="keep_media_1week">1Week</string>
+  <string name="first_download_file">First download file</string>
 </resources>
