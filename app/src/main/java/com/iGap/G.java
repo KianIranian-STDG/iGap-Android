@@ -516,8 +516,8 @@ public class G extends MultiDexApplication {
         makeFolder();
 
         chatBackground = new File(DIR_CHAT_BACKGROUND, "addChatBackground.jpg");
-        //  IMAGE_NEW_GROUP = new File(G.DIR_NEW_GROUP, "image_new_group.jpg");
-        // IMAGE_NEW_CHANEL = new File(G.DIR_NEW_CHANEL, "image_new_chanel.jpg");
+        IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");
+        IMAGE_NEW_CHANEL = new File(G.DIR_IMAGE_USER, "image_new_chanel.jpg");
         imageFile = new File(DIR_IMAGE_USER, "image_user");
 
         context = getApplicationContext();
