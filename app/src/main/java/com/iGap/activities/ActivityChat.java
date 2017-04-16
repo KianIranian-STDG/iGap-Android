@@ -2370,11 +2370,11 @@ public class ActivityChat extends ActivityEnhanced
 
                         scrollToEnd();
 
-                        if (G.userLogin) {
-                            new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
-                        } else {
-                            makeFailed(Long.parseLong(identity));
-                        }
+                        //if (G.userLogin) {
+                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                        //} else {
+                        //    makeFailed(Long.parseLong(identity));
+                        //}
 
                         edtChat.setText("");
 

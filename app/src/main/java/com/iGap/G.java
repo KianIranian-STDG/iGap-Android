@@ -226,6 +226,7 @@ public class G extends MultiDexApplication {
     public static ArrayList<String> unSecure = new ArrayList<>();
     // list of actionId that can be doing without secure
     public static ArrayList<String> unLogin = new ArrayList<>();
+    public static ArrayList<String> waitingActionIds = new ArrayList<>();
     public static HashMap<Integer, String> lookupMap = new HashMap<>();
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
     public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
@@ -552,6 +553,7 @@ public class G extends MultiDexApplication {
         HelperFillLookUpClass.fillLookUpClassArray();
         fillUnSecureList();
         fillUnLoginList();
+        fillWaitingRequestActionIdAllowed();
         fillSecuringInterface();
         WebSocketClient.getInstance();
 
@@ -714,6 +716,21 @@ public class G extends MultiDexApplication {
         unLogin.add("503");
     }
 
+    /**
+     * list of actionId that will be storing in waitingActionIds list
+     * and after that user login send this request again
+     */
+    private void fillWaitingRequestActionIdAllowed() {
+        waitingActionIds.add("201");
+        waitingActionIds.add("310");
+        waitingActionIds.add("410");
+        //waitingActionIds.add("700");
+        //waitingActionIds.add("701");
+        //waitingActionIds.add("702");
+        //waitingActionIds.add("703");
+        //waitingActionIds.add("705");
+    }
+
     private void fillSecuringInterface() {
         G.onSecuring = new OnSecuring() {
             @Override
@@ -746,12 +763,26 @@ public class G extends MultiDexApplication {
 
     public static void sendWaitingRequestWrappers() {
         for (RequestWrapper requestWrapper : RequestQueue.WAITING_REQUEST_WRAPPERS) {
-            try {
-                Log.i("EEE!", "WAITING_REQUEST_WRAPPERS sendRequest");
-                RequestQueue.sendRequest(requestWrapper);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            RequestQueue.RUNNING_REQUEST_WRAPPERS.add(requestWrapper);
+
+        }
+        RequestQueue.WAITING_REQUEST_WRAPPERS.clear();
+
+        for (int i = 0; i < RequestQueue.RUNNING_REQUEST_WRAPPERS.size(); i++) {
+            final int j = i;
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        RequestQueue.sendRequest(RequestQueue.RUNNING_REQUEST_WRAPPERS.get(j));
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    if (j == (RequestQueue.RUNNING_REQUEST_WRAPPERS.size() - 1)) {
+                        RequestQueue.RUNNING_REQUEST_WRAPPERS.clear();
+                    }
+                }
+            }, 500 * j);
         }
     }
 
@@ -780,6 +811,7 @@ public class G extends MultiDexApplication {
 
                         getUserInfo();
                         new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
+                        sendWaitingRequestWrappers();
                     }
                 });
             }

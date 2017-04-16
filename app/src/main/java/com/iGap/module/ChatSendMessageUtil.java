@@ -1,11 +1,16 @@
 package com.iGap.module;
 
+import android.os.Handler;
+import android.os.Looper;
+import com.iGap.G;
 import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestChannelSendMessage;
 import com.iGap.request.RequestChatSendMessage;
 import com.iGap.request.RequestGroupSendMessage;
+import io.realm.Realm;
 
 /**
  * util for chat send messages
@@ -203,6 +208,42 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
             requestChannelSendMessage.sendMessage(fakeMessageIdAsIdentity);
         }
+
+        if (!G.userLogin) {
+            makeFailed(Long.parseLong(fakeMessageIdAsIdentity));
+        }
+    }
+
+    /**
+     * change message status from sending to failed
+     *
+     * @param fakeMessageId messageId that create when created this message
+     */
+    private void makeFailed(final long fakeMessageId) {
+        // message failed
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, fakeMessageId).findFirst();
+                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+                        }
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, fakeMessageId).findFirst();
+                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
