@@ -242,6 +242,7 @@ public class G extends MultiDexApplication {
     public static int ivSize;
     public static int userTextSize = 0;
     public static Activity currentActivity;
+    public static Activity latestActivity;
     public static LayoutInflater inflater;
     public static Typeface FONT_IGAP;
 
@@ -274,6 +275,7 @@ public class G extends MultiDexApplication {
     public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
 
     public static Config.ConnectionState connectionState;
+    public static Config.ConnectionState latestConnectionState;
     public static OnConnectionChangeState onConnectionChangeState;
     public static OnUpdating onUpdating;
     public static OnReceiveInfoLocation onReceiveInfoLocation;
