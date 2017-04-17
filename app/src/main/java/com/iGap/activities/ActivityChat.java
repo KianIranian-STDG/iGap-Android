@@ -195,7 +195,6 @@ import com.iGap.request.RequestChatDelete;
 import com.iGap.request.RequestChatDeleteMessage;
 import com.iGap.request.RequestChatEditMessage;
 import com.iGap.request.RequestChatUpdateDraft;
-import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestClientJoinByUsername;
 import com.iGap.request.RequestClientSubscribeToRoom;
 import com.iGap.request.RequestClientUnsubscribeFromRoom;
@@ -877,12 +876,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         userStatus = getResources().getString(R.string.last_seen_recently);
                     }
                 } else if (chatType == GROUP) {
-                    new RequestClientGetRoom().clientGetRoom(realmRoom.getId(), RequestClientGetRoom.CreateRoomMode.requestFromOwner); // i just fill CreateRoomMode Unlike JustInfo
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                     groupRole = realmGroupRoom.getRole();
                     groupParticipantsCountLabel = realmGroupRoom.getParticipantsCountLabel();
                 } else if (chatType == CHANNEL) {
-                    new RequestClientGetRoom().clientGetRoom(realmRoom.getId(), RequestClientGetRoom.CreateRoomMode.requestFromOwner); // i just fill CreateRoomMode Unlike JustInfo
                     RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                     channelRole = realmChannelRoom.getRole();
                     channelParticipantsCountLabel = realmChannelRoom.getParticipantsCountLabel();
@@ -6146,13 +6143,20 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             @Override
             public void resendMessage() {
+                Log.i("XXX", "resendMessage1");
                 mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
             }
 
             @Override
             public void resendAllMessages() {
-                for (StructMessageInfo message : failedMessages) {
-                    mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                for (int i = 0; i < failedMessages.size(); i++) {
+                    final int j = i;
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.updateMessageStatus(parseLong(failedMessages.get(j).messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                        }
+                    }, 1000 * i);
                 }
             }
         }, parseLong(message.messageID), failedMessages);

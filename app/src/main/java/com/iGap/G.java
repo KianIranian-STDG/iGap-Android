@@ -782,7 +782,7 @@ public class G extends MultiDexApplication {
                         RequestQueue.RUNNING_REQUEST_WRAPPERS.clear();
                     }
                 }
-            }, 500 * j);
+            }, 1000 * j);
         }
     }
 
