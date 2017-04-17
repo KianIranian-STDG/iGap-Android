@@ -115,7 +115,6 @@ import com.iGap.interfaces.OnChatMessageSelectionChanged;
 import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.interfaces.OnChatUpdateStatusResponse;
 import com.iGap.interfaces.OnClearChatHistory;
-import com.iGap.interfaces.OnClientGetRoomResponse;
 import com.iGap.interfaces.OnClientJoinByUsername;
 import com.iGap.interfaces.OnDeleteChatFinishActivity;
 import com.iGap.interfaces.OnGroupAvatarResponse;
@@ -159,7 +158,6 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.module.enums.ProgressState;
 import com.iGap.module.enums.SendingStep;
 import com.iGap.proto.ProtoChannelGetMessagesStats;
-import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
@@ -265,8 +263,7 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
 
 
-public class ActivityChat extends ActivityEnhanced
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnClientGetRoomResponse {
+public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 
     public static ActivityChat activityChat;
     public static OnComplete hashListener;
@@ -537,7 +534,6 @@ public class ActivityChat extends ActivityEnhanced
         G.onUserInfoResponse = this;
         G.onChannelAddMessageReaction = this;
         G.onChannelGetMessagesStats = this;
-        G.onClientGetRoomResponse = this;
         activityChatForFinish = this;
         activityChat = this;
         G.onSetAction = this;
@@ -6448,34 +6444,6 @@ public class ActivityChat extends ActivityEnhanced
                 });
             }
         }
-    }
-
-    //****** Get Room Info
-
-    @Override
-    public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
-
-        if (room.getId() == mRoomId && (room.getType() == GROUP || room.getType() == CHANNEL)) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (room.getType() == GROUP) {
-                        groupParticipantsCountLabel = room.getGroupRoomExtra().getParticipantsCountLabel();
-                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member));
-                    } else {
-                        channelParticipantsCountLabel = room.getChannelRoomExtra().getParticipantsCountLabel();
-                        txtLastSeen.setText(channelParticipantsCountLabel + " " + getResources().getString(R.string.member));
-                    }
-                    avi.setVisibility(View.GONE);
-                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onTimeOut() {
-
     }
 
     public static ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {
