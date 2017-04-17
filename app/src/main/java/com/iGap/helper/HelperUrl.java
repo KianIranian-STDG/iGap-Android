@@ -237,12 +237,12 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static void openBrowser(String s) {
+    public static void openBrowser(String url) {
 
         final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo((FragmentActivity) G.currentActivity);
 
-        int mColorPrimary = G.context.getResources().getColor(R.color.green);
-        final Uri PROJECT_URI = Uri.parse(s);
+        int mColorPrimary = Color.parseColor(G.appBarColor);
+        final Uri PROJECT_URI = Uri.parse(url);
 
         CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();
 
