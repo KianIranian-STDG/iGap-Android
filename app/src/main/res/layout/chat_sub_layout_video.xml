@@ -71,6 +71,7 @@
                             android:paddingLeft="@dimen/dp4"
                             android:paddingRight="@dimen/dp4"
                             android:paddingTop="1dp"
+                            android:singleLine="true"
                             android:text="3:48 (4.5 MB)"
                             android:textAllCaps="true"
                             android:textColor="@color/gray10"

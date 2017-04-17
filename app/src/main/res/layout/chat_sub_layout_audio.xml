@@ -90,6 +90,7 @@
                   android:gravity="bottom"
                   android:maxLines="1"
                   android:text="3.2 mb"
+                  android:singleLine="true"
                   android:textAllCaps="true"
                   android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
                   android:textColor="@color/black90"
@@ -117,6 +118,7 @@
                     android:ellipsize="middle"
                     android:gravity="left"
                     android:maxLines="1"
+                    android:singleLine="true"
                     android:maxWidth="@dimen/dp160"
                     android:text="file_name.ext"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
@@ -131,6 +133,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="Artist"
+                    android:singleLine="true"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
                     android:textColor="@color/black90"
                     />

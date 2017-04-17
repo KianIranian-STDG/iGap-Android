@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
+            android:singleLine="true"
             android:text="SAMPLE TEXT"
             android:textColor="@color/green"
             android:textStyle="bold"/>
@@ -48,6 +49,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
+            android:singleLine="true"
             android:text="SAMPLE TEXT"/>
     </LinearLayout>
 

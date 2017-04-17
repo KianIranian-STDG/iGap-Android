@@ -96,6 +96,7 @@
                         android:text="LAST MESSAGE"
                         android:textColor="#FF616161"
                         android:maxLines="1"
+                        android:singleLine="true"
                         android:layout_gravity="start"
                         android:gravity="start"
                         android:textSize="@dimen/sp13"/>
@@ -156,6 +157,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
+                        android:singleLine="true"
                         android:text="time"
                         android:textColor="@color/gray"
                         android:textSize="@dimen/sp12"/>

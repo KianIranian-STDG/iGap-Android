@@ -16,6 +16,7 @@
         android:paddingLeft="@dimen/dp24"
         android:paddingRight="@dimen/dp24"
         android:paddingTop="@dimen/dp4"
+        android:singleLine="true"
         android:text="Today"
         android:textAllCaps="false"
         android:textColor="@color/white"
