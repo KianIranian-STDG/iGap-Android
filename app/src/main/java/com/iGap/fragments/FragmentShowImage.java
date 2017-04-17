@@ -46,6 +46,7 @@ import io.github.meness.emoji.EmojiTextView;
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class FragmentShowImage extends Fragment {
 
             mRealm = Realm.getDefaultInstance();
 
-            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomid).findAll();
+            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomid).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
 
             if (mRealmList.size() < 1) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
