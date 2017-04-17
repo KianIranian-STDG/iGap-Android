@@ -1340,6 +1340,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             Bundle bundle = new Bundle();
             bundle.putLong("RoomId", roomId);
             bundle.putLong("SelectedImage", selectedFileToken);
+            bundle.putString("TYPE", ProtoGlobal.RoomMessageType.IMAGE.toString());
             fragment.setArguments(bundle);
 
             ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
@@ -1448,11 +1449,21 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
 
         private void playVideo(int position, RecyclerView.ViewHolder holder) {
+            //
+            //ViewHolder vh = (ViewHolder) holder;
+            //
+            //Intent intent = HelperMimeType.appropriateProgram(vh.filePath);
+            //if (intent != null) context.startActivity(intent);
+            long selectedFileToken = mNewList.get(position).item.getMessageId();
 
-            ViewHolder vh = (ViewHolder) holder;
+            Fragment fragment = FragmentShowImage.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putLong("RoomId", roomId);
+            bundle.putLong("SelectedImage", selectedFileToken);
+            bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
+            fragment.setArguments(bundle);
 
-            Intent intent = HelperMimeType.appropriateProgram(vh.filePath);
-            if (intent != null) context.startActivity(intent);
+            ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
         }
     }
 
