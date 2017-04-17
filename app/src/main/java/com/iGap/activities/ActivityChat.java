@@ -6034,6 +6034,22 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 realm.close();
 
+                String _savedFolderName = "";
+                if (message.messageType.toString().contains("IMAGE") || message.messageType.toString().contains("VIDEO") || message.messageType.toString().contains("GIF")) {
+                    _savedFolderName = getString(R.string.save_to_gallery);
+                } else if (message.messageType.toString().contains("AUDIO") || message.messageType.toString().contains("VOICE")) {
+                    _savedFolderName = getString(R.string.save_to_Music);
+                }
+
+                if (_savedFolderName.length() > 0) {
+                    int index = items.indexOf(getString(R.string.saveToDownload_item_dialog));
+                    if (index >= 0) {
+                        items.set(index, _savedFolderName);
+                    }
+                }
+
+
+
                 new MaterialDialog.Builder(this).title(getString(R.string.messages)).negativeText(getString(R.string.cancel)).items(items).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -6124,11 +6140,30 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             shearedDataToOtherProgram(message);
                         } else if (text.toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
 
-                            if (HelperSaveFile.saveFileToDownLoadFolder(message.getAttachment().localFilePath, message.getAttachment().name)) {
-                                Toast.makeText(G.context, R.string.picture_save_to_galary, Toast.LENGTH_SHORT).show();
+                            String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath
+                                : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+
+                            HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
+
+                            String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath
+                                : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+
+                            HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
+                        } else if (text.toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
+
+                            String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath
+                                : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+
+                            if (message.messageType.toString().contains("VIDEO")) {
+                                HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
+                                //  HelperSaveFile.saveVideoToGallary(_dPath, true);
+                            } else if (message.messageType.toString().contains("GIF")) {
+                                HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
                             } else {
-                                Toast.makeText(G.context, R.string.first_download_file, Toast.LENGTH_SHORT).show();
+                                HelperSaveFile.savePicToGallary(_dPath, true);
                             }
+
                         }
                     }
                 }).show();

@@ -817,4 +817,8 @@
   <string name="keep_media_forever">Forever</string>
   <string name="keep_media_1week">1Week</string>
   <string name="first_download_file">First download file</string>
+  <string name="file_save_to_galary_folder">File save to galary folder</string>
+  <string name="file_can_not_save_to_selected_folder">File can not save to selected folder</string>
+  <string name="file_save_to_video_folder">File save to video folder</string>
+  <string name="file_save_to_picture_folder">File save to picture folder</string>
 </resources>

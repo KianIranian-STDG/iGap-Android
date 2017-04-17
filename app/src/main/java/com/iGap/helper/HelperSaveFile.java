@@ -47,7 +47,11 @@ public class HelperSaveFile {
         }
     }
 
-    public static Boolean saveFileToDownLoadFolder(String filePath, String fileName) {
+    public enum FolderType {
+        download, music, gif, video, image
+    }
+
+    public static Boolean saveFileToDownLoadFolder(String filePath, String fileName, FolderType folderType, int sucsesMessageSRC) {
 
         try {
             if (filePath == null || fileName == null) {
@@ -62,16 +66,48 @@ public class HelperSaveFile {
 
             String destinationPath = " ";
 
-            if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).exists()) {
-                destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
-            } else {
-                destinationPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Downloads/" + fileName;
+            switch (folderType) {
+                case download:
+
+                    if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).exists()) {
+                        destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
+                    } else {
+                        destinationPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Downloads/" + fileName;
+                    }
+
+                    break;
+                case music:
+                    if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).exists()) {
+                        destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath() + "/" + fileName;
+                    }
+
+                    break;
+
+                case gif:
+
+                    if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).exists()) {
+                        destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + fileName;
+                    }
+
+                    break;
+                case video:
+
+                    if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).exists()) {
+                        destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath() + "/" + fileName;
+                    }
+
+                    break;
             }
 
             AndroidUtils.copyFile(src, new File(destinationPath));
 
+            Toast.makeText(G.currentActivity, sucsesMessageSRC, Toast.LENGTH_SHORT).show();
+
             return true;
         } catch (Exception e) {
+
+            Toast.makeText(G.currentActivity, R.string.file_can_not_save_to_selected_folder, Toast.LENGTH_SHORT).show();
+
             return false;
         }
     }
@@ -94,7 +130,18 @@ public class HelperSaveFile {
         if (showToast) {
             Toast.makeText(G.context, R.string.picture_save_to_galary, Toast.LENGTH_SHORT).show();
         }
+    }
 
+    public static void saveVideoToGallary(String videoFilePath, boolean showToast) {
+        ContentValues values = new ContentValues(3);
+        values.put(MediaStore.Video.Media.TITLE, "My video title");
+        values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
+        values.put(MediaStore.Video.Media.DATA, videoFilePath);
+        G.context.getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+
+        if (showToast) {
+            Toast.makeText(G.context, R.string.file_save_to_galary_folder, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static void saveToMusicFolder(String path, String name) {

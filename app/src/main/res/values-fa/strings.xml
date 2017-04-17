@@ -817,4 +817,8 @@
   <string name="keep_media_1week">یک هفته</string>
   <string name="file_save_to_download_folder">"فایل در پوشه دانلود ذخیره شد"</string>
   <string name="first_download_file">ابتدا فایل را دانلود کنید</string>
+  <string name="file_save_to_galary_folder">فایل در پوشه گالری ذخیره شد</string>
+  <string name="file_can_not_save_to_selected_folder">فایل در پوشه انتخاب شده ذخیره نشد.</string>
+  <string name="file_save_to_video_folder">فایل در پوشه ویدیو ذخیره شد.</string>
+  <string name="file_save_to_picture_folder">فایل در پوشه تصاویر ذخیره شد.</string>
 </resources>
