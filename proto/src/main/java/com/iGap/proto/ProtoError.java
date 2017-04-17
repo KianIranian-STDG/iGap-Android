@@ -44,6 +44,16 @@ public final class ProtoError {
      * <code>optional uint32 wait = 4;</code>
      */
     int getWait();
+
+    /**
+     * <code>optional string message = 5;</code>
+     */
+    java.lang.String getMessage();
+
+    /**
+     * <code>optional string message = 5;</code>
+     */
+    com.google.protobuf.ByteString getMessageBytes();
   }
   /**
    * Protobuf type {@code proto.ErrorResponse}
@@ -59,6 +69,7 @@ public final class ProtoError {
       majorCode_ = 0;
       minorCode_ = 0;
       wait_ = 0;
+      message_ = "";
     }
 
     @java.lang.Override
@@ -110,6 +121,12 @@ public final class ProtoError {
             case 32: {
 
               wait_ = input.readUInt32();
+              break;
+            }
+            case 42: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              message_ = s;
               break;
             }
           }
@@ -179,6 +196,38 @@ public final class ProtoError {
       return wait_;
     }
 
+    public static final int MESSAGE_FIELD_NUMBER = 5;
+    private volatile java.lang.Object message_;
+
+    /**
+     * <code>optional string message = 5;</code>
+     */
+    public java.lang.String getMessage() {
+      java.lang.Object ref = message_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        message_ = s;
+        return s;
+      }
+    }
+
+    /**
+     * <code>optional string message = 5;</code>
+     */
+    public com.google.protobuf.ByteString getMessageBytes() {
+      java.lang.Object ref = message_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        message_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -202,6 +251,9 @@ public final class ProtoError {
       if (wait_ != 0) {
         output.writeUInt32(4, wait_);
       }
+      if (!getMessageBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, message_);
+      }
     }
 
     public int getSerializedSize() {
@@ -221,6 +273,9 @@ public final class ProtoError {
       if (wait_ != 0) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4, wait_);
       }
+      if (!getMessageBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, message_);
+      }
       memoizedSize = size;
       return size;
     }
@@ -229,7 +284,7 @@ public final class ProtoError {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof com.iGap.proto.ProtoError.ErrorResponse)) {
         return super.equals(obj);
@@ -244,6 +299,7 @@ public final class ProtoError {
       result = result && (getMajorCode() == other.getMajorCode());
       result = result && (getMinorCode() == other.getMinorCode());
       result = result && (getWait() == other.getWait());
+      result = result && getMessage().equals(other.getMessage());
       return result;
     }
 
@@ -264,6 +320,8 @@ public final class ProtoError {
       hash = (53 * hash) + getMinorCode();
       hash = (37 * hash) + WAIT_FIELD_NUMBER;
       hash = (53 * hash) + getWait();
+      hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
+      hash = (53 * hash) + getMessage().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -309,15 +367,14 @@ public final class ProtoError {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
     public static Builder newBuilder(com.iGap.proto.ProtoError.ErrorResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -333,7 +390,8 @@ public final class ProtoError {
     public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.ErrorResponse)
             com.iGap.proto.ProtoError.ErrorResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
         return com.iGap.proto.ProtoError.internal_static_proto_ErrorResponse_descriptor;
       }
 
@@ -369,6 +427,8 @@ public final class ProtoError {
 
         wait_ = 0;
 
+        message_ = "";
+
         return this;
       }
 
@@ -398,6 +458,7 @@ public final class ProtoError {
         result.majorCode_ = majorCode_;
         result.minorCode_ = minorCode_;
         result.wait_ = wait_;
+        result.message_ = message_;
         onBuilt();
         return result;
       }
@@ -406,7 +467,8 @@ public final class ProtoError {
         return (Builder) super.clone();
       }
 
-      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
+      public Builder setField(com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.setField(field, value);
       }
 
@@ -422,7 +484,8 @@ public final class ProtoError {
         return (Builder) super.setRepeatedField(field, index, value);
       }
 
-      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
+      public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -447,6 +510,10 @@ public final class ProtoError {
         }
         if (other.getWait() != 0) {
           setWait(other.getWait());
+        }
+        if (!other.getMessage().isEmpty()) {
+          message_ = other.message_;
+          onChanged();
         }
         onChanged();
         return this;
@@ -553,7 +620,7 @@ public final class ProtoError {
        * <code>optional .proto.Response response = 1;</code>
        */
       public com.iGap.proto.ProtoResponse.Response.Builder getResponseBuilder() {
-
+        
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
@@ -581,7 +648,7 @@ public final class ProtoError {
         return responseBuilder_;
       }
 
-      private int majorCode_;
+      private int majorCode_ ;
       /**
        * <code>optional uint32 major_code = 2;</code>
        */
@@ -592,7 +659,7 @@ public final class ProtoError {
        * <code>optional uint32 major_code = 2;</code>
        */
       public Builder setMajorCode(int value) {
-
+        
         majorCode_ = value;
         onChanged();
         return this;
@@ -601,13 +668,13 @@ public final class ProtoError {
        * <code>optional uint32 major_code = 2;</code>
        */
       public Builder clearMajorCode() {
-
+        
         majorCode_ = 0;
         onChanged();
         return this;
       }
 
-      private int minorCode_;
+      private int minorCode_ ;
       /**
        * <code>optional uint32 minor_code = 3;</code>
        */
@@ -618,7 +685,7 @@ public final class ProtoError {
        * <code>optional uint32 minor_code = 3;</code>
        */
       public Builder setMinorCode(int value) {
-
+        
         minorCode_ = value;
         onChanged();
         return this;
@@ -627,13 +694,13 @@ public final class ProtoError {
        * <code>optional uint32 minor_code = 3;</code>
        */
       public Builder clearMinorCode() {
-
+        
         minorCode_ = 0;
         onChanged();
         return this;
       }
 
-      private int wait_;
+      private int wait_ ;
       /**
        * <code>optional uint32 wait = 4;</code>
        */
@@ -644,7 +711,7 @@ public final class ProtoError {
        * <code>optional uint32 wait = 4;</code>
        */
       public Builder setWait(int value) {
-
+        
         wait_ = value;
         onChanged();
         return this;
@@ -653,8 +720,76 @@ public final class ProtoError {
        * <code>optional uint32 wait = 4;</code>
        */
       public Builder clearWait() {
-
+        
         wait_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object message_ = "";
+
+      /**
+       * <code>optional string message = 5;</code>
+       */
+      public java.lang.String getMessage() {
+        java.lang.Object ref = message_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          message_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+
+      /**
+       * <code>optional string message = 5;</code>
+       */
+      public com.google.protobuf.ByteString getMessageBytes() {
+        java.lang.Object ref = message_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+          message_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      /**
+       * <code>optional string message = 5;</code>
+       */
+      public Builder setMessage(java.lang.String value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+
+        message_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional string message = 5;</code>
+       */
+      public Builder clearMessage() {
+
+        message_ = getDefaultInstance().getMessage();
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional string message = 5;</code>
+       */
+      public Builder setMessageBytes(com.google.protobuf.ByteString value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        checkByteStringIsUtf8(value);
+
+        message_ = value;
         onChanged();
         return this;
       }
@@ -663,7 +798,8 @@ public final class ProtoError {
         return this;
       }
 
-      public final Builder mergeUnknownFields(final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
@@ -683,7 +819,7 @@ public final class ProtoError {
 
     private static final com.google.protobuf.Parser<ErrorResponse> PARSER = new com.google.protobuf.AbstractParser<ErrorResponse>() {
       public ErrorResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ErrorResponse(input, extensionRegistry);
+          return new ErrorResponse(input, extensionRegistry);
       }
     };
 
@@ -708,15 +844,15 @@ public final class ProtoError {
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
+  private static  com.google.protobuf.Descriptors.FileDescriptor descriptor;
 
-  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
-            "\n\013Error.proto\022\005proto\032\016Response.proto\"h\n\r" +
+            "\n\013Error.proto\022\005proto\032\016Response.proto\"y\n\r" +
                     "ErrorResponse\022!\n\010response\030\001 \001(\0132\017.proto." +
                     "Response\022\022\n\nmajor_code\030\002 \001(\r\022\022\n\nminor_co" +
-                    "de\030\003 \001(\r\022\014\n\004wait\030\004 \001(\rB\034\n\016com.iGap.proto" +
-                    "B\nProtoErrorb\006proto3"
+                    "de\030\003 \001(\r\022\014\n\004wait\030\004 \001(\r\022\017\n\007message\030\005 \001(\tB" +
+                    "\034\n\016com.iGap.protoB\nProtoErrorb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -728,9 +864,8 @@ public final class ProtoError {
             com.iGap.proto.ProtoResponse.getDescriptor(),
     }, assigner);
     internal_static_proto_ErrorResponse_descriptor = getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_ErrorResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_ErrorResponse_descriptor,
-        new java.lang.String[] { "Response", "MajorCode", "MinorCode", "Wait", });
+    internal_static_proto_ErrorResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ErrorResponse_descriptor, new java.lang.String[] { "Response", "MajorCode", "MinorCode", "Wait", "Message", });
     com.iGap.proto.ProtoResponse.getDescriptor();
   }
 

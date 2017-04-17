@@ -1565,11 +1565,15 @@ public final class ProtoUserLogin {
      * <code>optional string secondary_node_name = 3;</code>
      */
     java.lang.String getSecondaryNodeName();
-
     /**
      * <code>optional string secondary_node_name = 3;</code>
      */
     com.google.protobuf.ByteString getSecondaryNodeNameBytes();
+
+    /**
+     * <code>optional bool update_available = 4;</code>
+     */
+    boolean getUpdateAvailable();
   }
   /**
    * Protobuf type {@code proto.UserLoginResponse}
@@ -1584,6 +1588,7 @@ public final class ProtoUserLogin {
     private UserLoginResponse() {
       deprecatedClient_ = false;
       secondaryNodeName_ = "";
+      updateAvailable_ = false;
     }
 
     @java.lang.Override
@@ -1631,6 +1636,11 @@ public final class ProtoUserLogin {
               java.lang.String s = input.readStringRequireUtf8();
 
               secondaryNodeName_ = s;
+              break;
+            }
+            case 32: {
+
+              updateAvailable_ = input.readBool();
               break;
             }
           }
@@ -1684,7 +1694,6 @@ public final class ProtoUserLogin {
 
     public static final int SECONDARY_NODE_NAME_FIELD_NUMBER = 3;
     private volatile java.lang.Object secondaryNodeName_;
-
     /**
      * <code>optional string secondary_node_name = 3;</code>
      */
@@ -1699,7 +1708,6 @@ public final class ProtoUserLogin {
         return s;
       }
     }
-
     /**
      * <code>optional string secondary_node_name = 3;</code>
      */
@@ -1712,6 +1720,16 @@ public final class ProtoUserLogin {
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
+    }
+
+    public static final int UPDATE_AVAILABLE_FIELD_NUMBER = 4;
+    private boolean updateAvailable_;
+
+    /**
+     * <code>optional bool update_available = 4;</code>
+     */
+    public boolean getUpdateAvailable() {
+      return updateAvailable_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1734,6 +1752,9 @@ public final class ProtoUserLogin {
       if (!getSecondaryNodeNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, secondaryNodeName_);
       }
+      if (updateAvailable_ != false) {
+        output.writeBool(4, updateAvailable_);
+      }
     }
 
     public int getSerializedSize() {
@@ -1749,6 +1770,9 @@ public final class ProtoUserLogin {
       }
       if (!getSecondaryNodeNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, secondaryNodeName_);
+      }
+      if (updateAvailable_ != false) {
+        size += com.google.protobuf.CodedOutputStream.computeBoolSize(4, updateAvailable_);
       }
       memoizedSize = size;
       return size;
@@ -1772,6 +1796,7 @@ public final class ProtoUserLogin {
       }
       result = result && (getDeprecatedClient() == other.getDeprecatedClient());
       result = result && getSecondaryNodeName().equals(other.getSecondaryNodeName());
+      result = result && (getUpdateAvailable() == other.getUpdateAvailable());
       return result;
     }
 
@@ -1790,6 +1815,8 @@ public final class ProtoUserLogin {
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getDeprecatedClient());
       hash = (37 * hash) + SECONDARY_NODE_NAME_FIELD_NUMBER;
       hash = (53 * hash) + getSecondaryNodeName().hashCode();
+      hash = (37 * hash) + UPDATE_AVAILABLE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(getUpdateAvailable());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1842,7 +1869,6 @@ public final class ProtoUserLogin {
     public static Builder newBuilder(com.iGap.proto.ProtoUserLogin.UserLoginResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -1893,6 +1919,8 @@ public final class ProtoUserLogin {
 
         secondaryNodeName_ = "";
 
+        updateAvailable_ = false;
+
         return this;
       }
 
@@ -1921,6 +1949,7 @@ public final class ProtoUserLogin {
         }
         result.deprecatedClient_ = deprecatedClient_;
         result.secondaryNodeName_ = secondaryNodeName_;
+        result.updateAvailable_ = updateAvailable_;
         onBuilt();
         return result;
       }
@@ -1970,6 +1999,9 @@ public final class ProtoUserLogin {
         if (!other.getSecondaryNodeName().isEmpty()) {
           secondaryNodeName_ = other.secondaryNodeName_;
           onChanged();
+        }
+        if (other.getUpdateAvailable() != false) {
+          setUpdateAvailable(other.getUpdateAvailable());
         }
         onChanged();
         return this;
@@ -2131,7 +2163,6 @@ public final class ProtoUserLogin {
       }
 
       private java.lang.Object secondaryNodeName_ = "";
-
       /**
        * <code>optional string secondary_node_name = 3;</code>
        */
@@ -2146,7 +2177,6 @@ public final class ProtoUserLogin {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string secondary_node_name = 3;</code>
        */
@@ -2160,30 +2190,27 @@ public final class ProtoUserLogin {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string secondary_node_name = 3;</code>
        */
       public Builder setSecondaryNodeName(java.lang.String value) {
         if (value == null) {
           throw new NullPointerException();
-        }
-
+  }
+  
         secondaryNodeName_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string secondary_node_name = 3;</code>
        */
       public Builder clearSecondaryNodeName() {
-
+        
         secondaryNodeName_ = getDefaultInstance().getSecondaryNodeName();
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string secondary_node_name = 3;</code>
        */
@@ -2192,8 +2219,37 @@ public final class ProtoUserLogin {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         secondaryNodeName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private boolean updateAvailable_;
+
+      /**
+       * <code>optional bool update_available = 4;</code>
+       */
+      public boolean getUpdateAvailable() {
+        return updateAvailable_;
+      }
+
+      /**
+       * <code>optional bool update_available = 4;</code>
+       */
+      public Builder setUpdateAvailable(boolean value) {
+
+        updateAvailable_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <code>optional bool update_available = 4;</code>
+       */
+      public Builder clearUpdateAvailable() {
+
+        updateAvailable_ = false;
         onChanged();
         return this;
       }
@@ -2250,7 +2306,9 @@ public final class ProtoUserLogin {
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
+  private static com.google.protobuf.Descriptors.FileDescriptor
+      descriptor;
 
   static {
     java.lang.String[] descriptorData = {
@@ -2263,9 +2321,10 @@ public final class ProtoUserLogin {
                     "Platform\022\030\n\020platform_version\030\010 \001(\t\022\035\n\006de" +
                     "vice\030\t \001(\0162\r.proto.Device\022\023\n\013device_name" +
                     "\030\n \001(\t\022!\n\010language\030\013 \001(\0162\017.proto.Languag" +
-                    "e\"n\n\021UserLoginResponse\022!\n\010response\030\001 \001(\013", "2\017.proto.Response\022\031\n\021deprecated_client\030\002" +
-            " \001(\010\022\033\n\023secondary_node_name\030\003 \001(\tB \n\016com" +
-            ".iGap.protoB\016ProtoUserLoginb\006proto3"
+                    "e\"\210\001\n\021UserLoginResponse\022!\n\010response\030\001 \001(", "\0132\017.proto.Response\022\031\n\021deprecated_client\030" +
+            "\002 \001(\010\022\033\n\023secondary_node_name\030\003 \001(\t\022\030\n\020up" +
+            "date_available\030\004 \001(\010B \n\016com.iGap.protoB\016" +
+            "ProtoUserLoginb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -2285,9 +2344,7 @@ public final class ProtoUserLogin {
         new java.lang.String[] { "Request", "Token", "AppName", "AppId", "AppBuildVersion", "AppVersion", "Platform", "PlatformVersion", "Device", "DeviceName", "Language", });
     internal_static_proto_UserLoginResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_proto_UserLoginResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserLoginResponse_descriptor,
-        new java.lang.String[] { "Response", "DeprecatedClient", "SecondaryNodeName", });
+    internal_static_proto_UserLoginResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserLoginResponse_descriptor, new java.lang.String[]{"Response", "DeprecatedClient", "SecondaryNodeName", "UpdateAvailable", });
     com.iGap.proto.ProtoRequest.getDescriptor();
     com.iGap.proto.ProtoResponse.getDescriptor();
     com.iGap.proto.ProtoGlobal.getDescriptor();

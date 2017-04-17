@@ -23,6 +23,8 @@ public class ErrorResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         double majorCode = errorResponse.getMajorCode();
         double minorCode = errorResponse.getMinorCode();
+        int wait = errorResponse.getWait();
+        String errorMessage = errorResponse.getMessage();
 
     }
 

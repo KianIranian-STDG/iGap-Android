@@ -21,6 +21,12 @@ public class UserLoginResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+
+        /*ProtoUserLogin.UserLoginResponse.Builder builder = (ProtoUserLogin.UserLoginResponse.Builder) message;
+        builder.getDeprecatedClient();
+        builder.getSecondaryNodeName();
+        builder.getUpdateAvailable();*/
+
         G.userLogin = true;
         WebSocketClient.waitingForReconnecting = false;
         WebSocketClient.allowForReconnecting = true;
