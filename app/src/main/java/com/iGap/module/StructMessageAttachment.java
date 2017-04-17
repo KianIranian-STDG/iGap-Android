@@ -26,6 +26,7 @@ public class StructMessageAttachment implements Parcelable {
         }
     };
     public String token;
+    public String cashID;
     public String name;
     public long size;
     public int width;

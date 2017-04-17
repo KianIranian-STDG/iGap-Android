@@ -9,11 +9,9 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.interfaces.OnFileDownloadResponse;
 import com.iGap.module.AndroidUtils;
-import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAttachmentFields;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestFileDownload;
 import com.iGap.request.RequestWrapper;
 import io.realm.Realm;
@@ -29,17 +27,16 @@ public class HelperDownloadFile {
     private static ArrayMap<String, StructDownLoad> list = new ArrayMap<>();
     private OnFileDownloadResponse onFileDownloadResponse;
 
-    private static int maxDownloadSize = 10;
+    private static int maxDownloadSize = 4;
 
     private static ArrayList<StructQueue> mQueue = new ArrayList<>();
 
     public HelperDownloadFile() {
 
         onFileDownloadResponse = new OnFileDownloadResponse() {
-            @Override
-            public void onFileDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+            @Override public void onFileDownload(String cashId, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
 
-                String PrimaryKey = token + selector;
+                String PrimaryKey = cashId + selector;
 
                 if (list.size() > 0 && list.containsKey(PrimaryKey)) {
                     StructDownLoad item = list.get(PrimaryKey);
@@ -51,7 +48,11 @@ public class HelperDownloadFile {
                         if (mQueue.size() > 0) {
                             if (mQueue.get(0).priority > item.priority) {
 
-                                addItemToQueue(item.Token + item.selector, ++item.priority);
+                                if (item.priority < 3) {
+                                    ++item.priority;
+                                }
+
+                                addItemToQueue(item.cashId + item.selector, item.priority);
                                 addDownloadFromQueue();
                                 return;
                             }
@@ -64,15 +65,10 @@ public class HelperDownloadFile {
                 }
             }
 
-            @Override
-            public void onAvatarDownload(String token, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress, long userId, RoomType roomType) {
 
-            }
+            @Override public void onError(int majorCode, int minorCode, String cashId, ProtoFileDownload.FileDownload.Selector selector) {
 
-            @Override
-            public void onError(int majorCode, int minorCode, String token, ProtoFileDownload.FileDownload.Selector selector) {
-
-                String primaryKey = token + selector;
+                String primaryKey = cashId + selector;
 
                 if (list.size() > 0 && list.containsKey(primaryKey)) {
                     StructDownLoad item = list.get(primaryKey);
@@ -90,7 +86,9 @@ public class HelperDownloadFile {
 
                         list.remove(primaryKey);
 
-                        if (selector == ProtoFileDownload.FileDownload.Selector.FILE) addDownloadFromQueue();
+                        // if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+                        addDownloadFromQueue();
+                        //  }
                     }
                 }
             }
@@ -101,6 +99,7 @@ public class HelperDownloadFile {
 
     private static class StructDownLoad {
         public String Token = "";
+        public String cashId = "";
         public ArrayList<UpdateListener> listeners = new ArrayList<>();
         public int progress = 0;
         public long offset = 0;
@@ -134,7 +133,9 @@ public class HelperDownloadFile {
         for (int i = 0; i < list.size(); i++) {
 
             StructDownLoad _sd = list.valueAt(i);
-            if (_sd.selector == ProtoFileDownload.FileDownload.Selector.FILE) count++;
+            // if (_sd.selector == ProtoFileDownload.FileDownload.Selector.FILE){
+            count++;
+            //  }
         }
 
         if ((count) > maxDownloadSize) return true;
@@ -165,16 +166,18 @@ public class HelperDownloadFile {
         }
     }
 
-    public static void startDownload(String token, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority, UpdateListener update) {
+    public static void startDownload(String token, String cashId, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority,
+        UpdateListener update) {
 
         StructDownLoad item;
 
-        String primaryKey = token + selector;
+        String primaryKey = cashId + selector;
 
         if (!list.containsKey(primaryKey)) {
 
             item = new StructDownLoad();
             item.Token = token;
+            item.cashId = cashId;
             item.listeners.add(update);
             item.name = name;
             item.moveToDirectoryPAth = moveToDirectoryPAth;
@@ -194,16 +197,15 @@ public class HelperDownloadFile {
 
         switch (item.selector) {
             case FILE:
-                item.path = token + "_" + item.name;
+                item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, false);
                 break;
             case SMALL_THUMBNAIL:
             case LARGE_THUMBNAIL:
-                item.path = "thumb_" + item.Token + "_" + AppUtils.suitableThumbFileName(item.name);
+                item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, true);
                 break;
         }
 
-        String tmpPath = G.DIR_TEMP + "/" + item.path;
-        File tmpFile = new File(tmpPath);
+        File tmpFile = new File(item.path);
 
         if (tmpFile.exists()) {
             item.offset = tmpFile.length();
@@ -213,19 +215,29 @@ public class HelperDownloadFile {
             }
         }
 
-        if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+        if (moveToDirectoryPAth != null && moveToDirectoryPAth.length() > 0) {
+            File _lockalFile = new File(moveToDirectoryPAth);
+            if (_lockalFile.exists()) {
+                item.progress = 100;
+            }
+        }
+
+        if (item.progress < 100) {
+            // if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
             if (isNeedItemGoToQueue()) {
                 addItemToQueue(primaryKey, periority);
                 return;
             }
+            // }
         }
+
 
         requestDownloadFile(item);
     }
 
-    public static void stopDownLoad(String token) {
+    public static void stopDownLoad(String cashID) {
 
-        String primaryKey = token + ProtoFileDownload.FileDownload.Selector.FILE;
+        String primaryKey = cashID + ProtoFileDownload.FileDownload.Selector.FILE;
 
         if (list.size() > 0 && list.containsKey(primaryKey)) {
 
@@ -266,18 +278,25 @@ public class HelperDownloadFile {
 
     private static void requestDownloadFile(StructDownLoad item) {
 
-        if (item.progress == 100) {
-            moveTmpFileToOrginFolder(item.Token, item.selector);
+        if (item.progress == 100 || item.offset >= item.size) {
+            moveTmpFileToOrginFolder(item.Token, item.selector, item.cashId);
             updateView(item);
-            list.remove(item.Token + item.selector);
+            list.remove(item.cashId + item.selector);
 
-            if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) addDownloadFromQueue();
+            // if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE){
+            addDownloadFromQueue();
+            // }
 
             // save downloaded file to galary
-            if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE && G.isSaveToGalary && item.moveToDirectoryPAth != null) {
+
+            if (G.isSaveToGalary && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
                 File file = new File(item.moveToDirectoryPAth);
                 if (file.exists()) {
-                    HelperSaveFile.savePicToGallary(item.moveToDirectoryPAth, false);
+
+                    if (HelperMimeType.isFileImage(item.moveToDirectoryPAth) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth)) {
+                        HelperSaveFile.savePicToGallary(item.moveToDirectoryPAth, false);
+                    }
+
                 }
             }
 
@@ -288,89 +307,68 @@ public class HelperDownloadFile {
         updateView(item);
 
         ProtoFileDownload.FileDownload.Selector selector = item.selector;
-        item.identity = item.Token + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset + '*' + true;
+        item.identity = item.cashId + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset + '*' + true;
         new RequestFileDownload().download(item.Token, item.offset, (int) item.size, selector, item.identity);
+
     }
 
-    private static void moveTmpFileToOrginFolder(String token, ProtoFileDownload.FileDownload.Selector selector) {
+    private static void moveTmpFileToOrginFolder(String token, ProtoFileDownload.FileDownload.Selector selector, String cashId) {
 
-        StructDownLoad item = list.get(token + selector);
+        StructDownLoad item = list.get(cashId + selector);
 
         if (item.moveToDirectoryPAth.length() > 0) {
-            String dirTmp = G.DIR_TEMP + "/" + item.path;
             try {
-                AndroidUtils.cutFromTemp(dirTmp, item.moveToDirectoryPAth);
+                AndroidUtils.cutFromTemp(item.path, item.moveToDirectoryPAth);
             } catch (IOException e) {
             }
         }
 
+
         switch (item.selector) {
             case FILE:
-                setFilePAthToDataBaseAttachment(token, item.moveToDirectoryPAth);
+                setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
                 break;
-
             case SMALL_THUMBNAIL:
             case LARGE_THUMBNAIL:
-                String dirPathThumpnail = G.DIR_TEMP + "/" + item.path;
-                setThumbnailPathDataBaseAttachment(token, dirPathThumpnail);
+                setThumbnailPathDataBaseAttachment(cashId, item.path);
                 break;
         }
     }
 
-    private static void setThumbnailPathDataBaseAttachment(final String token, final String name) {
+    private static void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findAll();
-                        for (RealmAttachment attachment : attachments) {
-                            attachment.setLocalThumbnailPath(name);
-                        }
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        realm.close();
-                    }
-                });
+        final Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
+                for (RealmAttachment attachment : attachments) {
+                    attachment.setLocalThumbnailPath(path);
+                }
             }
         });
+
+        realm.close();
     }
 
-    public static boolean isDownLoading(String token) {
+    public static boolean isDownLoading(String cashID) {
 
-        String primaryKey = token + ProtoFileDownload.FileDownload.Selector.FILE;
+        String primaryKey = cashID + ProtoFileDownload.FileDownload.Selector.FILE;
 
         if (list.containsKey(primaryKey)) return true;
 
         return false;
     }
 
-    public static int getProgress(String token) {
-
-        String primaryKey = token + ProtoFileDownload.FileDownload.Selector.FILE;
-
-        if (list.containsKey(primaryKey)) {
-            return list.get(primaryKey).progress;
-        } else {
-            return 0;
-        }
-    }
-
-    private static void setFilePAthToDataBaseAttachment(final String token, final String name) {
+    private static void setFilePAthToDataBaseAttachment(final String cashID, final String path) {
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findAll();
+                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
 
                 for (RealmAttachment attachment : attachments) {
-                    attachment.setLocalFilePath(name);
+                    attachment.setLocalFilePath(path);
                 }
             }
         });

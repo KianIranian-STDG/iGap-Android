@@ -59,9 +59,13 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
             if (mList.get(position).getWallpaperType() == ActivityChatBackground.WallpaperType.proto) {
                 ProtoGlobal.File pf = mList.get(position).getProtoWallpaper().getFile();
-                final String path = G.DIR_TEMP + "/" + "thumb_" + pf.getCacheId() + "_" + pf.getName();
+
+                final String path = G.DIR_CHAT_BACKGROUND + "/" + "thumb_" + pf.getCacheId() + "_" + pf.getName();
+
+
+
                 if (!new File(path).exists()) {
-                    HelperDownloadFile.startDownload(pf.getToken(), pf.getName(), pf.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4,
+                    HelperDownloadFile.startDownload(pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4,
                         new HelperDownloadFile.UpdateListener() {
                             @Override public void OnProgress(String token, int progress) {
                                 if (progress == 100) {
@@ -98,7 +102,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             } else {
                 holder2.mPath = "";
                 holder2.messageProgress.setVisibility(View.VISIBLE);
-                if (HelperDownloadFile.isDownLoading(mList.get(position).getProtoWallpaper().getFile().getToken())) {
+                if (HelperDownloadFile.isDownLoading(mList.get(position).getProtoWallpaper().getFile().getCacheId())) {
                     startDownload(position, holder2.messageProgress, holder2.contentLoading);
                 }
 
@@ -235,7 +239,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
         String path = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
 
-        HelperDownloadFile.startDownload(pf.getToken(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2, new HelperDownloadFile.UpdateListener() {
+        HelperDownloadFile.startDownload(pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2, new HelperDownloadFile.UpdateListener() {
             @Override public void OnProgress(String token, final int progress) {
 
                 if (messageProgress != null) {
@@ -270,14 +274,16 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
     private void stopDownload(int position) {
 
-        HelperDownloadFile.stopDownLoad(mList.get(position).getProtoWallpaper().getFile().getToken());
+        HelperDownloadFile.stopDownLoad(mList.get(position).getProtoWallpaper().getFile().getCacheId());
     }
 
     private void downloadFile(int position, MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
 
-        if (mList.get(position) == null || mList.get(position).getProtoWallpaper() == null) return;
+        if (mList.get(position) == null || mList.get(position).getProtoWallpaper() == null) {
+            return;
+        }
 
-        if (HelperDownloadFile.isDownLoading(mList.get(position).getProtoWallpaper().getFile().getToken())) {
+        if (HelperDownloadFile.isDownLoading(mList.get(position).getProtoWallpaper().getFile().getCacheId())) {
             stopDownload(position);
         } else {
             startDownload(position, messageProgress, contentLoading);

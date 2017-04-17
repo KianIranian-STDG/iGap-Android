@@ -25,11 +25,11 @@ public class FileDownloadResponse extends MessageHandler {
         super.handler();
         ProtoFileDownload.FileDownloadResponse.Builder builder = (ProtoFileDownload.FileDownloadResponse.Builder) message;
         String[] identityParams = identity.split("\\*");
-        String token = identityParams[0];
+        String cashid = identityParams[0];
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
         long fileSize = Long.parseLong(identityParams[2]);
-        String filename = identityParams[3];
-        String filePath = G.DIR_TEMP + "/" + filename;
+        String filePath = identityParams[3];
+
         int previousOffset = Integer.parseInt(identityParams[4]);
         if (identityParams[5].equals("true")) isFromHelperDownload = true;
 
@@ -48,22 +48,16 @@ public class FileDownloadResponse extends MessageHandler {
 
         AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
 
-        //if (!avatarRequested) {
-        //
-
         if (isFromHelperDownload) {
             if (G.onFileDownloadResponse != null) {
-                G.onFileDownloadResponse.onFileDownload(token, nextOffset, selector, (int) progress);
+                G.onFileDownloadResponse.onFileDownload(cashid, nextOffset, selector, (int) progress);
             }
         } else {
             if (G.onFileDownloaded != null) {
-                G.onFileDownloaded.onFileDownload(filename, token, fileSize, nextOffset, selector, (int) progress);
+                G.onFileDownloaded.onFileDownload(filePath, cashid, fileSize, nextOffset, selector, (int) progress);
             }
         }
 
-        //} else {
-        //    G.onFileDownloadResponse.onAvatarDownload(token, nextOffset, selector, (int) progress, userId, roomType);
-        //}
     }
 
     @Override public void timeOut() {
@@ -78,13 +72,13 @@ public class FileDownloadResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
 
         String[] identityParams = identity.split("\\*");
-        String token = identityParams[0];
+        String cashid = identityParams[0];
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
         if (identityParams[5].equals("true")) isFromHelperDownload = true;
 
         if (isFromHelperDownload) {
             if (G.onFileDownloadResponse != null) {
-                G.onFileDownloadResponse.onError(majorCode, minorCode, token, selector);
+                G.onFileDownloadResponse.onError(majorCode, minorCode, cashid, selector);
             }
         } else {
             if (G.onFileDownloaded != null) {

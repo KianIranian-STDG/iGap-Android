@@ -302,6 +302,7 @@ public class StructMessageInfo implements Parcelable {
         if (roomMessage.getAttachment() != null) {
             messageInfo.attachment = StructMessageAttachment.convert(roomMessage.getAttachment());
             messageInfo.uploadProgress = messageInfo.attachment.token != null && !messageInfo.attachment.token.isEmpty() ? 100 : 0;
+            messageInfo.attachment.cashID = roomMessage.getAttachment().getCacheId();
         }
         messageInfo.messageText = roomMessage.getMessage();
         messageInfo.senderID = Long.toString(roomMessage.getUserId());

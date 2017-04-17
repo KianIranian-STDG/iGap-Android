@@ -30,7 +30,6 @@ import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperSaveFile;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
-import com.iGap.module.AppUtils;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
@@ -38,7 +37,6 @@ import com.iGap.module.TouchImageView;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
-import com.iGap.realm.RealmAttachmentFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -287,7 +285,7 @@ public class FragmentShowImage extends Fragment {
 
         if (rm != null) {
             if (rm.getForwardMessage() != null) rm = rm.getForwardMessage();
-            String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
+            String path = getFilePath(viewPager.getCurrentItem());
             File file = new File(path);
             if (file.exists()) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
@@ -314,9 +312,7 @@ public class FragmentShowImage extends Fragment {
         RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
         if (rm != null) {
 
-            if (rm.getForwardMessage() != null) rm = rm.getForwardMessage();
-
-            String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
+            String path = getFilePath(viewPager.getCurrentItem());
             File file = new File(path);
             if (file.exists()) {
                 HelperSaveFile.savePicToGallary(path, true);
@@ -349,7 +345,7 @@ public class FragmentShowImage extends Fragment {
             contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
             final RealmRoomMessage rm = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage() : mFList.get(position);
 
-            if (HelperDownloadFile.isDownLoading(rm.getAttachment().getToken())) {
+            if (HelperDownloadFile.isDownLoading(rm.getAttachment().getCacheId())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
                 startDownload(position, progress, touchImageView, contentLoading, imgPlay, mTextureView);
             } else {
@@ -360,7 +356,7 @@ public class FragmentShowImage extends Fragment {
             //
             if (rm != null) {
 
-                path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
+                path = getFilePath(position);
                 File file = new File(path);
                 if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                     mMediaPlayer.pause();
@@ -391,7 +387,7 @@ public class FragmentShowImage extends Fragment {
                     }
                 } else {
                     imgPlay.setVisibility(View.GONE);
-                    path = getThumpnailPath(rm.getAttachment().getToken(), rm.getAttachment().getName());
+                    path = getThumpnailPath(rm);
                     touchImageView.setVisibility(View.VISIBLE);
                     file = new File(path);
                     if (file.exists()) {
@@ -401,6 +397,7 @@ public class FragmentShowImage extends Fragment {
                         ProtoFileDownload.FileDownload.Selector selector = null;
                         long fileSize = 0;
 
+
                         if (rm.getAttachment().getSmallThumbnail() != null) {
                             selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
                             fileSize = rm.getAttachment().getSmallThumbnail().getSize();
@@ -409,10 +406,11 @@ public class FragmentShowImage extends Fragment {
                             fileSize = rm.getAttachment().getLargeThumbnail().getSize();
                         }
 
-                        final String filePathTumpnail = G.DIR_TEMP + "/" + "thumb_" + rm.getAttachment().getToken() + "_" + rm.getAttachment().getName();
+                        final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(rm.getAttachment().getCacheId(), rm.getAttachment().getName(), G.DIR_TEMP, true);
 
                         if (selector != null && fileSize > 0) {
-                            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), fileSize, selector, "", 4,
+                                new HelperDownloadFile.UpdateListener() {
                                 @Override public void OnProgress(String token, int progress) {
 
                                     if (progress == 100) {
@@ -437,11 +435,11 @@ public class FragmentShowImage extends Fragment {
             progress.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
 
-                    String _tpken =
-                        mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getAttachment().getToken() : mFList.get(position).getAttachment().getToken();
+                    String _cashID =
+                        mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getAttachment().getCacheId() : mFList.get(position).getAttachment().getCacheId();
 
-                    if (HelperDownloadFile.isDownLoading(_tpken)) {
-                        HelperDownloadFile.stopDownLoad(_tpken);
+                    if (HelperDownloadFile.isDownLoading(_cashID)) {
+                        HelperDownloadFile.stopDownLoad(_cashID);
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
                         startDownload(position, progress, touchImageView, contentLoading, imgPlay, mTextureView);
@@ -527,11 +525,14 @@ public class FragmentShowImage extends Fragment {
 
             final RealmRoomMessage rm = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage() : mFList.get(position);
 
-            String dirPath = AndroidUtils.suitableAppFilePath(rm.getMessageType()) + "/" + rm.getAttachment().getToken() + "_" + rm.getAttachment().getName();
+            String dirPath = AndroidUtils.getFilePathWithCashId(rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getMessageType());
 
-            if (downloadedList.indexOf(rm.getAttachment().getToken()) == -1) downloadedList.add(rm.getAttachment().getToken());
+            if (downloadedList.indexOf(rm.getAttachment().getToken()) == -1) {
+                downloadedList.add(rm.getAttachment().getCacheId());
+            }
 
-            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4,
+            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getAttachment().getSize(),
+                ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4,
                 new HelperDownloadFile.UpdateListener() {
                     @Override public void OnProgress(String token, final int progres) {
 
@@ -549,7 +550,7 @@ public class FragmentShowImage extends Fragment {
                                             imgPlay.setVisibility(View.VISIBLE);
                                             //if (position == viewPager.getCurrentItem()) playVideo(position, mTextureView, imgPlay, touchImageView);
                                         }
-                                        String path = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
+                                        String path = getFilePath(position);
                                         ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
                                     }
                                 }
@@ -579,8 +580,7 @@ public class FragmentShowImage extends Fragment {
             if (mMediaPlayer == null) mMediaPlayer = new MediaPlayer();
             if (videoController == null) videoController = new MediaController(getActivity());
             mTextureView.setVisibility(View.VISIBLE);
-            final RealmRoomMessage rm = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage() : mFList.get(position);
-            videoPath = getFilePath(rm.getAttachment().getToken(), rm.getAttachment().getName(), rm.getMessageType());
+            videoPath = getFilePath(position);
             videoController.setAnchorView(touchImageView);
             videoController.setMediaPlayer(this);
             imgPlay.setVisibility(View.GONE);
@@ -710,38 +710,44 @@ public class FragmentShowImage extends Fragment {
         }
     }
 
-    public String getFilePath(String token, String fileName, ProtoGlobal.RoomMessageType messageType) {
+    public String getFilePath(int position) {
 
         String result = "";
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
+        RealmAttachment at = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getAttachment() : mFList.get(position).getAttachment();
 
-        if (attachment != null) {
-            if (attachment.getLocalFilePath() != null) result = attachment.getLocalFilePath();
+        if (at != null) {
+            if (at.getLocalFilePath() != null) result = at.getLocalFilePath();
         }
 
-        if (result.length() < 1) result = AndroidUtils.suitableAppFilePath(messageType) + "/" + token + "_" + fileName;
+        ProtoGlobal.RoomMessageType messageType = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getMessageType() : mFList.get(position).getMessageType();
 
-        realm.close();
+        if (result.length() < 1) {
+            result = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
+        }
 
         return result;
     }
 
-    public String getThumpnailPath(String token, String fileName) {
+    public String getThumpnailPath(RealmRoomMessage roomMessage) {
 
         String result = "";
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, token).findFirst();
-
-        if (attachment != null) {
-            if (attachment.getLocalThumbnailPath() != null) result = attachment.getLocalThumbnailPath();
+        if (roomMessage == null) {
+            return "";
         }
 
-        if (result.length() < 1) result = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(fileName);
+        if (roomMessage.getAttachment() != null) {
+            if (roomMessage.getAttachment().getLocalThumbnailPath() != null) {
+                result = roomMessage.getAttachment().getLocalThumbnailPath();
+            }
 
-        realm.close();
+            if (result.length() < 1) {
+                result = AndroidUtils.getFilePathWithCashId(roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getName(), G.DIR_TEMP, true);
+            }
+        }
+
+
 
         return result;
     }

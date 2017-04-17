@@ -954,6 +954,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (attachment != null) {
+
             if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
 
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
@@ -1147,10 +1148,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else {
                 messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.UPLOADING);
             }
-
-
-        } else if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
-            HelperDownloadFile.stopDownLoad(attachment.getToken());
+        } else if (HelperDownloadFile.isDownLoading(attachment.getCacheId())) {
+            HelperDownloadFile.stopDownLoad(attachment.getCacheId());
         } else if (compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
             messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.COMPRESSING);
         } else {
@@ -1202,17 +1201,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         String token = attachment.getToken();
         String name = attachment.getName();
+
         long size = 0;
 
         if (attachment.getSmallThumbnail() != null) size = attachment.getSmallThumbnail().getSize();
 
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
-        final String _path = G.DIR_TEMP + "/" + "thumb_" + token + "_" + AppUtils.suitableThumbFileName(name);
+        if (attachment.getCacheId() == null || attachment.getCacheId().length() == 0) {
+            return;
+        }
+
+        final String _path = AndroidUtils.getFilePathWithCashId(attachment.getCacheId(), name, G.DIR_TEMP, true);
+
 
         if (token != null && token.length() > 0 && size > 0) {
 
-            HelperDownloadFile.startDownload(token, name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(token, attachment.getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(String token, int progress) {
 
@@ -1259,18 +1264,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Long size = attachment.getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-        if (!HelperDownloadFile.isDownLoading(token)) messageClickListener.onDownloadAllEqualCashId(token, mMessage.messageID);
+        if (!HelperDownloadFile.isDownLoading(attachment.getCacheId())) {
+            messageClickListener.onDownloadAllEqualCashId(attachment.getCacheId(), mMessage.messageID);
+        }
 
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
 
-        final String _path = AndroidUtils.suitableAppFilePath(messageType) + "/" + token + "_" + name;
+        final String _path = AndroidUtils.getFilePathWithCashId(attachment.getCacheId(), name, messageType);
 
         if (token != null && token.length() > 0 && size > 0) {
 
             progressBar.setVisibility(View.VISIBLE);
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
-            HelperDownloadFile.startDownload(token, name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(token, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String token, final int progress) {
 
@@ -1416,7 +1423,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private void checkForDownloading(VH holder, RealmAttachment attachment) {
 
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
-        if (HelperDownloadFile.isDownLoading(attachment.getToken())) {
+        if (HelperDownloadFile.isDownLoading(attachment.getCacheId())) {
             hideThumbnailIf(holder);
 
             downLoadFile(holder, attachment, 0);

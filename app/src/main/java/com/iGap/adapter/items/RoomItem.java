@@ -275,6 +275,9 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
             final RealmAvatar realmAvatar = getLastAvatar(idForGetAvatar);
             if (realmAvatar != null) {
+
+                HelperAvatar.updatePath(realmAvatar);
+
                 if (realmAvatar.getFile().isFileExistsOnLocal()) {
                     ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
                 } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {

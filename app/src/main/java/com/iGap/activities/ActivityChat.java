@@ -3020,14 +3020,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             int count = FragmentShowImage.downloadedList.size();
 
             for (int i = 0; i < count; i++) {
-                String token = FragmentShowImage.downloadedList.get(i) + "";
+                String _cashId = FragmentShowImage.downloadedList.get(i) + "";
 
                 for (int j = mAdapter.getAdapterItemCount() - 1; j >= 0; j--) {
                     try {
 
-                        String mToken = mAdapter.getItem(j).mMessage.forwardedFrom != null ? mAdapter.getItem(j).mMessage.forwardedFrom.getAttachment().getToken() : mAdapter.getItem(j).mMessage.attachment.token;
+                        String mCashID = mAdapter.getItem(j).mMessage.forwardedFrom != null ? mAdapter.getItem(j).mMessage.forwardedFrom.getAttachment().getCacheId()
+                            : mAdapter.getItem(j).mMessage.attachment.cashID;
 
-                        if (mToken.equals(token)) {
+                        if (mCashID.equals(_cashId)) {
                             mAdapter.notifyItemChanged(j);
                         }
                     } catch (NullPointerException e) {
@@ -4641,13 +4642,19 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                          */
                         Object[] object = getLocalMessage(mRoomId, startFutureMessageId, gapMessageId, 10, false, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP);
                         topMore = (boolean) object[1];
-                        ArrayList<StructMessageInfo> structMessageInfos = (ArrayList<StructMessageInfo>) object[0];
+                        final ArrayList<StructMessageInfo> structMessageInfos = (ArrayList<StructMessageInfo>) object[0];
                         if (structMessageInfos.size() > 0) {
                             startFutureMessageId = Long.parseLong(structMessageInfos.get(structMessageInfos.size() - 1).messageID);
                         } else {
                             startFutureMessageId = 0;
                         }
-                        switchAddItem(structMessageInfos, true);
+
+                        recyclerView.post(new Runnable() {
+                            @Override public void run() {
+                                switchAddItem(structMessageInfos, true);
+                            }
+                        });
+
 
                         /**
                          * if gap is exist ,check that reached to gap or not and if
@@ -5906,8 +5913,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         realm.close();
     }
 
-    @Override
-    public void onDownloadAllEqualCashId(String token, String messageID) {
+    @Override public void onDownloadAllEqualCashId(String cashId, String messageID) {
 
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
 
@@ -5915,7 +5921,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 AbstractMessage item = mAdapter.getAdapterItem(i);
 
                 if (item.mMessage.hasAttachment()) {
-                    if (item.mMessage.getAttachment().token.equals(token) && (!item.mMessage.messageID.equals(messageID))) {
+                    if (item.mMessage.getAttachment().cashID.equals(cashId) && (!item.mMessage.messageID.equals(messageID))) {
                         mAdapter.notifyItemChanged(i);
                     }
                 }

@@ -19,6 +19,63 @@ import static com.iGap.G.context;
 
 public class HelperMimeType {
 
+    public static boolean isFileImage(String path) {
+
+        if (path.endsWith(".jpg") || path.endsWith(".bmp") || path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".tiff")) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isFileVideo(String path) {
+
+        if (path.endsWith(".mp4")
+            || path.endsWith(".3gp")
+            || path.endsWith(".avi")
+            || path.endsWith(".mpg")
+            || path.endsWith(".mpeg")
+            || path.endsWith(".flv")
+            || path.endsWith(".wmv")
+            || path.endsWith(".m4v")
+            || path.endsWith(".mov")) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isFileAudio(String path) {
+
+        if (path.endsWith(".mp3")
+            || path.endsWith(".ogg")
+            || path.endsWith(".wma")
+            || path.endsWith(".m4a")
+            || path.endsWith(".amr")
+            || path.endsWith(".wav")
+            || path.endsWith(".mid")
+            || path.endsWith(".midi")) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isFileText(String path) {
+
+        if (path.endsWith(".txt") || path.endsWith(".csv") || path.endsWith(".xml") || path.endsWith(".html")) {
+
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isFilePakage(String path) {
+
+        if (path.endsWith(".gz") || path.endsWith(".gz") || path.endsWith(".zip")) {
+
+            return true;
+        }
+        return false;
+    }
+
     /**
      * open a file by appropriate Program
      *
@@ -45,42 +102,20 @@ public class HelperMimeType {
             uri = Uri.fromFile(file);
         }
 
-        if (path.endsWith(".txt")
-                || path.endsWith(".csv")
-                || path.endsWith(".xml")
-                || path.endsWith(".html")) {
+        if (isFileText(path)) {
             intent.setDataAndType(uri, "text/*");
-
-        } else if (path.endsWith(".mp3")
-                || path.endsWith(".ogg")
-                || path.endsWith(".wma")
-                || path.endsWith(".m4a")
-                || path.endsWith(".amr")
-                || path.endsWith(".wav")
-                || path.endsWith(".mid")
-                || path.endsWith(".midi")) {
+        } else if (isFileAudio(path)) {
             intent.setDataAndType(uri, "audio/*");
-
-        } else if (path.endsWith(".mp4")
-                || path.endsWith(".3gp")
-                || path.endsWith(".avi")
-                || path.endsWith(".mpg")
-                || path.endsWith(".mpeg")
-                || path.endsWith(".flv") || path.endsWith(".wmv") || path.endsWith(".m4v") || path.endsWith(".mov")) {
+        } else if (isFileVideo(path)) {
             intent.setDataAndType(uri, "video/*");
         } else if (path.endsWith(".pdf")) {
             intent.setDataAndType(uri, "application/pdf");
-        } else if (path.endsWith(".jpg")
-                || path.endsWith(".bmp")
-                || path.endsWith(".png")
-                || path.endsWith(".gif")
-                || path.endsWith(".jpeg")
-                || path.endsWith(".tiff")) {
+        } else if (isFileImage(path)) {
             intent.setDataAndType(uri, "image/*");
         } else if (path.endsWith(".apk")) {
 
             intent.setDataAndType(uri, "application/vnd.android.package-archive");
-        } else if (path.endsWith(".gz") || path.endsWith(".gz") || path.endsWith(".zip")) {
+        } else if (isFilePakage(path)) {
             intent.setDataAndType(uri, "package/*");
         } else if (path.endsWith(".ppt") || path.endsWith(".pptx")) {
 
@@ -105,21 +140,15 @@ public class HelperMimeType {
 
         extention = extention.toLowerCase();
 
-        if (extention.endsWith("jpg")
-                || extention.endsWith("jpeg")
-                || extention.endsWith("png")
-                || extention.endsWith("bmp")) {
+        if (isFileImage(extention)) {
             x = R.mipmap.j_pic;
         } else if (extention.endsWith("apk")) {
             x = R.mipmap.j_apk;
-        } else if (extention.endsWith("mp3") || extention.endsWith("ogg") || extention.endsWith(
-                "wma")) {
+        } else if (extention.endsWith("mp3") || extention.endsWith("ogg") || extention.endsWith("wma")) {
             x = R.mipmap.j_mp3;
-        } else if (extention.endsWith("mp4") || extention.endsWith("3gp") || extention.endsWith(
-                "avi") || extention.endsWith("mpg") || extention.endsWith("flv") || extention.endsWith("wmv") || extention.endsWith("m4v") || extention.endsWith("mov")) {
+        } else if (isFileVideo(extention)) {
             x = R.mipmap.j_video;
-        } else if (extention.endsWith("m4a") || extention.endsWith("amr") || extention.endsWith(
-                "wav")) {
+        } else if (extention.endsWith("m4a") || extention.endsWith("amr") || extention.endsWith("wav")) {
             x = R.mipmap.j_audio;
         } else if (extention.endsWith("html") || extention.endsWith("htm")) {
             x = R.mipmap.j_html;

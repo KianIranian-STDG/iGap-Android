@@ -25,6 +25,7 @@ import com.iGap.interfaces.OnChannelAvatarDelete;
 import com.iGap.interfaces.OnGroupAvatarDelete;
 import com.iGap.interfaces.OnUserAvatarDelete;
 import com.iGap.libs.rippleeffect.RippleView;
+import com.iGap.module.AndroidUtils;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.OnComplete;
 import com.iGap.module.TouchImageView;
@@ -426,7 +427,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
             final RealmAttachment ra = avatarList.get(position).getFile();
 
-            if (HelperDownloadFile.isDownLoading(ra.getToken())) {
+            if (HelperDownloadFile.isDownLoading(ra.getCacheId())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
                 startDownload(position, progress, touchImageView, contentLoading);
             } else {
@@ -459,10 +460,11 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                             fileSize = ra.getLargeThumbnail().getSize();
                         }
 
-                        final String filePathTumpnail = G.DIR_TEMP + "/" + "thumb_" + ra.getToken() + "_" + ra.getName();
+                        final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_TEMP, true);
+
 
                         if (selector != null && fileSize > 0) {
-                            HelperDownloadFile.startDownload(ra.getToken(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.startDownload(ra.getToken(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                                 @Override public void OnProgress(String token, int progress) {
 
                                     if (progress == 100) {
@@ -487,10 +489,10 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             progress.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
 
-                    String _tpken = avatarList.get(position).getFile().getToken();
+                    String _cashId = avatarList.get(position).getFile().getCacheId();
 
-                    if (HelperDownloadFile.isDownLoading(_tpken)) {
-                        HelperDownloadFile.stopDownLoad(_tpken);
+                    if (HelperDownloadFile.isDownLoading(_cashId)) {
+                        HelperDownloadFile.stopDownLoad(_cashId);
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
                         startDownload(position, progress, touchImageView, contentLoading);
@@ -526,9 +528,10 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
             final RealmAttachment ra = avatarList.get(position).getFile();
 
-            final String dirPath = G.DIR_IMAGE_USER + "/" + ra.getToken() + "_" + ra.getName();
+            final String dirPath = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_IMAGE_USER, false);
 
-            HelperDownloadFile.startDownload(ra.getToken(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(ra.getToken(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4,
+                new HelperDownloadFile.UpdateListener() {
                 @Override public void OnProgress(String token, final int progres) {
 
                     if (progress != null) {

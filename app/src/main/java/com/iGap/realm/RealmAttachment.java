@@ -66,18 +66,16 @@ public class RealmAttachment extends RealmObject {
             RealmThumbnail smallThumbnail = realm.where(RealmThumbnail.class).equalTo("id", smallId).findFirst();
             realmAttachment.setSmallThumbnail(smallThumbnail);
 
-
-            String tempFilePath = G.DIR_TEMP + "/" + "thumb_" + file.getToken() + "_" + AppUtils.suitableThumbFileName(file.getName());
+            String tempFilePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_TEMP, true);
             String filePath = "";
             switch (attachmentFor) {
                 case MESSAGE_ATTACHMENT:
-                    filePath = AndroidUtils.suitableAppFilePath(messageType);
+                    filePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), messageType);
                     break;
                 case AVATAR:
-                    filePath = G.DIR_IMAGE_USER;
+                    filePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
                     break;
             }
-            filePath += "/" + file.getToken() + "_" + file.getName();
 
             realmAttachment.setLocalFilePath(new File(filePath).exists() ? filePath : null);
             realmAttachment.setLocalThumbnailPath(new File(tempFilePath).exists() ? tempFilePath : null);

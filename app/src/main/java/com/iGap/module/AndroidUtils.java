@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -312,22 +313,6 @@ public final class AndroidUtils {
 
 
 
-    public static void cutFromTemp(ProtoGlobal.RoomMessageType messageType, String fileName) throws IOException {
-        File cutTo = new File(suitableAppFilePath(messageType) + "/" + fileName);
-        File cutFrom = new File(G.DIR_TEMP + "/" + fileName);
-
-        copyFile(cutFrom, cutTo);
-        deleteFile(cutFrom);
-    }
-
-    public static void cutFromTemp(String fileName) throws IOException {
-        File cutTo = new File(G.DIR_IMAGE_USER + "/" + fileName);
-        File cutFrom = new File(G.DIR_TEMP + "/" + fileName);
-
-        copyFile(cutFrom, cutTo);
-        //deleteFile(cutFrom);
-    }
-
     public static void cutFromTemp(String pathTmp, String newPath) throws IOException {
         File cutTo = new File(newPath);
         File cutFrom = new File(pathTmp);
@@ -476,5 +461,89 @@ public final class AndroidUtils {
             colorDrawable.setColor(color);
         }
     }
+
+    //*****************************************************************************************************************
+    private static String makeSHA1Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        MessageDigest md = MessageDigest.getInstance("SHA1");
+        md.reset();
+        byte[] buffer = input.getBytes("UTF-8");
+        md.update(buffer);
+        byte[] digest = md.digest();
+
+        String hexStr = "";
+        for (int i = 0; i < digest.length; i++) {
+            hexStr += Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1);
+        }
+        return hexStr;
+    }
+
+    public static String getFilePathWithCashId(String cashId, String name, ProtoGlobal.RoomMessageType messageType) {
+
+        String _Dir = suitableAppFilePath(messageType);
+        String _hash = cashId;
+        String _mimeType = "";
+
+        int index = name.lastIndexOf(".");
+        if (index >= 0) {
+            _mimeType = name.substring(index);
+        }
+
+        String _result = "";
+
+        try {
+            _hash = makeSHA1Hash(cashId);
+        } catch (NoSuchAlgorithmException e) {
+        } catch (UnsupportedEncodingException e) {
+        }
+
+        _result = _Dir + "/" + _hash + _mimeType;
+
+        return _result;
+    }
+
+    public static String getFilePathWithCashId(String cashId, String name, String selectDir, boolean isThumbNail) {
+
+        String _hash = cashId;
+        String _mimeType = "";
+
+        if (isThumbNail) {
+
+            _mimeType = ".jpg";
+        } else {
+            int index = name.lastIndexOf(".");
+            if (index >= 0) {
+                _mimeType = name.substring(index);
+            }
+        }
+
+        String _result = "";
+
+        try {
+            _hash = makeSHA1Hash(cashId);
+        } catch (NoSuchAlgorithmException e) {
+        } catch (UnsupportedEncodingException e) {
+        }
+
+        if (selectDir.equals(G.DIR_TEMP)) {
+
+            if (isThumbNail) {
+                _result = G.DIR_TEMP + "/" + "thumb_" + _hash + _mimeType;
+            } else {
+                _result = G.DIR_TEMP + "/" + _hash + _mimeType;
+            }
+        } else if (selectDir.equals(G.DIR_IMAGE_USER)) {
+
+            if (isThumbNail) {
+                _result = G.DIR_IMAGE_USER + "/" + "thumb_" + _hash + _mimeType;
+            } else {
+                _result = G.DIR_IMAGE_USER + "/" + _hash + _mimeType;
+            }
+        }
+        // AppUtils.suitableThumbFileName(name);
+
+        return _result;
+    }
+
+    //*****************************************************************************************************************
 
 }
