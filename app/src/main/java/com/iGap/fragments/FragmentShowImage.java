@@ -46,7 +46,6 @@ import io.github.meness.emoji.EmojiTextView;
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,7 +80,6 @@ public class FragmentShowImage extends Fragment {
     public MediaController videoController;
     public int po;
     private String path;
-    private String type = null;
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
@@ -116,7 +114,7 @@ public class FragmentShowImage extends Fragment {
 
             mRoomid = bundle.getLong("RoomId");
             selectedFileToken = bundle.getLong("SelectedImage");
-            if (bundle.getString("TYPE") != null) type = bundle.getString("TYPE");
+
             if (mRoomid == null) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 return false;
@@ -124,7 +122,7 @@ public class FragmentShowImage extends Fragment {
 
             mRealm = Realm.getDefaultInstance();
 
-            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomid).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomid).findAll();
 
             if (mRealmList.size() < 1) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
@@ -135,25 +133,12 @@ public class FragmentShowImage extends Fragment {
 
                 boolean isImage = false;
 
-                if (type == null) {
-                    if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getMessageType()
+                if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                    isImage = true;
+                } else if (item.getForwardMessage() != null) {
+                    if (item.getForwardMessage().getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getForwardMessage().getMessageType()
                         .toString()
                         .contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                        isImage = true;
-                    } else if (item.getForwardMessage() != null) {
-                        if (item.getForwardMessage().getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getForwardMessage()
-                            .getMessageType()
-                            .toString()
-                            .contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                            isImage = true;
-                        }
-                    }
-                } else if (type.contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                    if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                        isImage = true;
-                    }
-                } else if (type.contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-                    if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
                         isImage = true;
                     }
                 }
