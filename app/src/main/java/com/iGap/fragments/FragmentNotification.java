@@ -187,7 +187,7 @@ public class FragmentNotification extends Fragment {
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
                             case 0: {
-                                txtPopupNotification.setText("Default");
+                                txtPopupNotification.setText(getResources().getString(R.string.array_Default));
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
@@ -225,7 +225,7 @@ public class FragmentNotification extends Fragment {
                                 break;
                             }
                             case 1: {
-                                txtPopupNotification.setText("Enable");
+                                txtPopupNotification.setText(getResources().getString(R.string.array_enable));
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
@@ -264,7 +264,7 @@ public class FragmentNotification extends Fragment {
                                 break;
                             }
                             case 2: {
-                                txtPopupNotification.setText("Disable");
+                                txtPopupNotification.setText(getResources().getString(R.string.array_Disable));
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override

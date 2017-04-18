@@ -349,6 +349,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             @Override
                             public void run() {
                                 txtMemberNumber.setText(memberCount + "");
+                                if (HelperCalander.isLanguagePersian) {
+                                    txtMemberNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMemberNumber.getText().toString()));
+                                }
                             }
                         });
                     }
@@ -758,7 +761,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
 
         txtMemberNumber.setText(participantsCountLabel);
-
+        if (HelperCalander.isLanguagePersian) {
+            txtMemberNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMemberNumber.getText().toString()));
+        }
         txtLinkTitle = (TextView) findViewById(R.id.agp_txt_link_title);
         txtGroupLink = (TextView) findViewById(R.id.agp_txt_link);
 
