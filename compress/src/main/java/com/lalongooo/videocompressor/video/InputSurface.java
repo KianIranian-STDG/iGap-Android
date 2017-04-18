@@ -23,7 +23,6 @@ import android.opengl.EGLContext;
 import android.opengl.EGLDisplay;
 import android.opengl.EGLExt;
 import android.opengl.EGLSurface;
-import android.os.Build;
 import android.view.Surface;
 
 @TargetApi(17) public class InputSurface {
@@ -111,9 +110,7 @@ import android.view.Surface;
     }
 
     public void setPresentationTime(long nsecs) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            EGLExt.eglPresentationTimeANDROID(mEGLDisplay, mEGLSurface, nsecs);
-        }
+        EGLExt.eglPresentationTimeANDROID(mEGLDisplay, mEGLSurface, nsecs);
     }
 
     private void checkEglError(String msg) {

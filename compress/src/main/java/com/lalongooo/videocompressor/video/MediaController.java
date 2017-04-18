@@ -112,6 +112,7 @@ import java.nio.ByteBuffer;
         }
     }
 
+    @SuppressLint("NewApi")
     public static MediaCodecInfo selectCodec(String mimeType) {
         int numCodecs = MediaCodecList.getCodecCount();
         MediaCodecInfo lastCodecInfo = null;
@@ -143,8 +144,8 @@ import java.nio.ByteBuffer;
         VideoConvertRunnable.runConversion(path);
     }
 
-    @TargetApi(16)
-    private long readAndWriteTrack(MediaExtractor extractor, MP4Builder mediaMuxer, MediaCodec.BufferInfo info, long start, long end, File file, boolean isAudio) throws Exception {
+
+    @TargetApi(16) private long readAndWriteTrack(MediaExtractor extractor, MP4Builder mediaMuxer, MediaCodec.BufferInfo info, long start, long end, File file, boolean isAudio) throws Exception {
         int trackIndex = selectTrack(extractor, isAudio);
         if (trackIndex >= 0) {
             extractor.selectTrack(trackIndex);
@@ -160,7 +161,6 @@ import java.nio.ByteBuffer;
             ByteBuffer buffer = ByteBuffer.allocateDirect(maxBufferSize);
             long startTime = -1;
 
-            long lastTimestamp = -100;
 
             while (!inputDone) {
 
@@ -168,6 +168,32 @@ import java.nio.ByteBuffer;
                 int index = extractor.getSampleTrackIndex();
                 if (index == trackIndex) {
                     info.size = extractor.readSampleData(buffer, 0);
+                    if (Build.VERSION.SDK_INT < 21) {
+                        buffer.position(0);
+                        buffer.limit(info.size);
+                    }
+                    if (!isAudio) {
+                        byte[] array = buffer.array();
+                        if (array != null) {
+                            int offset = buffer.arrayOffset();
+                            int len = offset + buffer.limit();
+                            int writeStart = -1;
+                            for (int a = offset; a <= len - 4; a++) {
+                                if (array[a] == 0 && array[a + 1] == 0 && array[a + 2] == 0 && array[a + 3] == 1 || a == len - 4) {
+                                    if (writeStart != -1) {
+                                        int l = a - writeStart - (a != len - 4 ? 4 : 0);
+                                        array[writeStart] = (byte) (l >> 24);
+                                        array[writeStart + 1] = (byte) (l >> 16);
+                                        array[writeStart + 2] = (byte) (l >> 8);
+                                        array[writeStart + 3] = (byte) l;
+                                        writeStart = a;
+                                    } else {
+                                        writeStart = a;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     if (info.size >= 0) {
                         info.presentationTimeUs = extractor.getSampleTime();
                     } else {
@@ -180,14 +206,11 @@ import java.nio.ByteBuffer;
                             startTime = info.presentationTimeUs;
                         }
                         if (end < 0 || info.presentationTimeUs < end) {
-                            if (info.presentationTimeUs > lastTimestamp) {
-                                info.offset = 0;
-                                info.flags = extractor.getSampleFlags();
-                                if (mediaMuxer.writeSampleData(muxerTrackIndex, buffer, info, isAudio)) {
-                                    //                                    didWriteData(messageObject, file, false, false);
-                                }
+                            info.offset = 0;
+                            info.flags = extractor.getSampleFlags();
+                            if (mediaMuxer.writeSampleData(muxerTrackIndex, buffer, info, false)) {
+                                didWriteData(false, false);
                             }
-                            lastTimestamp = info.presentationTimeUs;
                         } else {
                             eof = true;
                         }
@@ -339,10 +362,9 @@ import java.nio.ByteBuffer;
                 extractor = new MediaExtractor();
                 extractor.setDataSource(inputFile.toString());
 
-                if (resultWidth != originalWidth || resultHeight != originalHeight) {
+                if (resultWidth != originalWidth || resultHeight != originalHeight || rotateRender != 0) {
                     int videoIndex;
                     videoIndex = selectTrack(extractor, false);
-
                     if (videoIndex >= 0) {
                         MediaCodec decoder = null;
                         MediaCodec encoder = null;
@@ -529,7 +551,7 @@ import java.nio.ByteBuffer;
                                         }
                                         if (info.size > 1) {
                                             if ((info.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) == 0) {
-                                                if (mediaMuxer.writeSampleData(videoTrackIndex, encodedData, info, false)) {
+                                                if (mediaMuxer.writeSampleData(videoTrackIndex, encodedData, info, true)) {
                                                     didWriteData(false, false);
                                                 }
                                             } else if (videoTrackIndex == -5) {
@@ -674,7 +696,7 @@ import java.nio.ByteBuffer;
                         videoStartTime = videoTime;
                     }
                 }
-                if (!error) {
+                if (!error && bitrate != -1) {
                     readAndWriteTrack(extractor, mediaMuxer, info, videoStartTime, endTime, cacheFile, true);
                 }
             } catch (Exception e) {

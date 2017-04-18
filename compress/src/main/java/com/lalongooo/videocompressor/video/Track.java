@@ -3,13 +3,14 @@
  * It is licensed under GNU GPL v. 2 or later.
  * You should have received a copy of the license in this archive (see LICENSE).
  *
- * Copyright Nikolai Kudashov, 2013-2016.
+ * Copyright Nikolai Kudashov, 2013-2017.
  */
 
 package com.lalongooo.videocompressor.video;
 
 import android.annotation.TargetApi;
 import android.media.MediaCodec;
+import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
 import com.coremedia.iso.boxes.AbstractMediaHeaderBox;
 import com.coremedia.iso.boxes.SampleDescriptionBox;
@@ -25,15 +26,31 @@ import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.SLConfigDescriptor;
 import com.mp4parser.iso14496.part15.AvcConfigurationBox;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 @TargetApi(16) public class Track {
+
+    private class SamplePresentationTime {
+
+        private int index;
+        private long presentationTime;
+        private long dt;
+
+        public SamplePresentationTime(int idx, long time) {
+            index = idx;
+            presentationTime = time;
+        }
+    }
+
     private long trackId = 0;
     private ArrayList<Sample> samples = new ArrayList<>();
     private long duration = 0;
+    private int[] sampleCompositions;
     private String handler;
     private AbstractMediaHeaderBox headerBox = null;
     private SampleDescriptionBox sampleDescriptionBox = null;
@@ -43,10 +60,10 @@ import java.util.Map;
     private int height;
     private int width;
     private float volume = 0;
-    private ArrayList<Long> sampleDurations = new ArrayList<>();
+    private long[] sampleDurations;
+    private ArrayList<SamplePresentationTime> samplePresentationTimes = new ArrayList<>();
     private boolean isAudio = false;
     private static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap<>();
-    private long lastPresentationTimeUs = 0;
     private boolean first = true;
 
     static {
@@ -68,8 +85,8 @@ import java.util.Map;
         trackId = id;
         isAudio = audio;
         if (!isAudio) {
-            sampleDurations.add((long) 3015);
-            duration = 3015;
+            //sampleDurations.add((long) 3015);
+            //duration = 3015;
             width = format.getInteger(MediaFormat.KEY_WIDTH);
             height = format.getInteger(MediaFormat.KEY_HEIGHT);
             timeScale = 90000;
@@ -108,8 +125,66 @@ import java.util.Map;
                     avcConfigurationBox.setPictureParameterSets(ppsArray);
                 }
 
-                avcConfigurationBox.setAvcLevelIndication(13);
-                avcConfigurationBox.setAvcProfileIndication(100);
+                if (format.containsKey("level")) {
+                    int level = format.getInteger("level");
+                    if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel1) {
+                        avcConfigurationBox.setAvcLevelIndication(1);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel2) {
+                        avcConfigurationBox.setAvcLevelIndication(2);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel11) {
+                        avcConfigurationBox.setAvcLevelIndication(11);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel12) {
+                        avcConfigurationBox.setAvcLevelIndication(12);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel13) {
+                        avcConfigurationBox.setAvcLevelIndication(13);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel21) {
+                        avcConfigurationBox.setAvcLevelIndication(21);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel22) {
+                        avcConfigurationBox.setAvcLevelIndication(22);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel3) {
+                        avcConfigurationBox.setAvcLevelIndication(3);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel31) {
+                        avcConfigurationBox.setAvcLevelIndication(31);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel32) {
+                        avcConfigurationBox.setAvcLevelIndication(32);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel4) {
+                        avcConfigurationBox.setAvcLevelIndication(4);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel41) {
+                        avcConfigurationBox.setAvcLevelIndication(41);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel42) {
+                        avcConfigurationBox.setAvcLevelIndication(42);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel5) {
+                        avcConfigurationBox.setAvcLevelIndication(5);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel51) {
+                        avcConfigurationBox.setAvcLevelIndication(51);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel52) {
+                        avcConfigurationBox.setAvcLevelIndication(52);
+                    } else if (level == MediaCodecInfo.CodecProfileLevel.AVCLevel1b) {
+                        avcConfigurationBox.setAvcLevelIndication(0x1b);
+                    }
+                } else {
+                    avcConfigurationBox.setAvcLevelIndication(13);
+                }
+                if (format.containsKey("profile")) {
+                    int profile = format.getInteger("profile");
+                    if (profile == MediaCodecInfo.CodecProfileLevel.AVCProfileBaseline) {
+                        avcConfigurationBox.setAvcProfileIndication(66);
+                    } else if (profile == MediaCodecInfo.CodecProfileLevel.AVCProfileMain) {
+                        avcConfigurationBox.setAvcProfileIndication(77);
+                    } else if (profile == MediaCodecInfo.CodecProfileLevel.AVCProfileExtended) {
+                        avcConfigurationBox.setAvcProfileIndication(88);
+                    } else if (profile == MediaCodecInfo.CodecProfileLevel.AVCProfileHigh) {
+                        avcConfigurationBox.setAvcProfileIndication(100);
+                    } else if (profile == MediaCodecInfo.CodecProfileLevel.AVCProfileHigh10) {
+                        avcConfigurationBox.setAvcProfileIndication(110);
+                    } else if (profile == MediaCodecInfo.CodecProfileLevel.AVCProfileHigh422) {
+                        avcConfigurationBox.setAvcProfileIndication(122);
+                    } else if (profile == MediaCodecInfo.CodecProfileLevel.AVCProfileHigh444) {
+                        avcConfigurationBox.setAvcProfileIndication(244);
+                    }
+                } else {
+                    avcConfigurationBox.setAvcProfileIndication(100);
+                }
                 avcConfigurationBox.setBitDepthLumaMinus8(-1);
                 avcConfigurationBox.setBitDepthChromaMinus8(-1);
                 avcConfigurationBox.setChromaFormat(-1);
@@ -132,8 +207,8 @@ import java.util.Map;
                 sampleDescriptionBox.addBox(visualSampleEntry);
             }
         } else {
-            sampleDurations.add((long) 1024);
-            duration = 1024;
+            //sampleDurations.add((long) 1024);
+            //duration = 1024;
             volume = 1;
             timeScale = format.getInteger(MediaFormat.KEY_SAMPLE_RATE);
             handler = "soun";
@@ -181,23 +256,63 @@ import java.util.Map;
     }
 
     public void addSample(long offset, MediaCodec.BufferInfo bufferInfo) {
-        long delta = bufferInfo.presentationTimeUs - lastPresentationTimeUs;
-        if (delta < 0) {
-            return;
-        }
         boolean isSyncFrame = !isAudio && (bufferInfo.flags & MediaCodec.BUFFER_FLAG_SYNC_FRAME) != 0;
         samples.add(new Sample(offset, bufferInfo.size));
         if (syncSamples != null && isSyncFrame) {
             syncSamples.add(samples.size());
         }
+        samplePresentationTimes.add(new SamplePresentationTime(samplePresentationTimes.size(), (bufferInfo.presentationTimeUs * timeScale + 500000L) / 1000000L));
+    }
 
-        delta = (delta * timeScale + 500000L) / 1000000L;
-        lastPresentationTimeUs = bufferInfo.presentationTimeUs;
-        if (!first) {
-            sampleDurations.add(sampleDurations.size() - 1, delta);
-            duration += delta;
+    public void prepare() {
+        ArrayList<SamplePresentationTime> original = new ArrayList<>(samplePresentationTimes);
+        Collections.sort(samplePresentationTimes, new Comparator<SamplePresentationTime>() {
+            @Override public int compare(SamplePresentationTime o1, SamplePresentationTime o2) {
+                if (o1.presentationTime > o2.presentationTime) {
+                    return 1;
+                } else if (o1.presentationTime < o2.presentationTime) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+        long lastPresentationTimeUs = 0;
+        sampleDurations = new long[samplePresentationTimes.size()];
+        long minDelta = Long.MAX_VALUE;
+        boolean outOfOrder = false;
+        for (int a = 0; a < samplePresentationTimes.size(); a++) {
+            SamplePresentationTime presentationTime = samplePresentationTimes.get(a);
+            long delta = presentationTime.presentationTime - lastPresentationTimeUs;
+            lastPresentationTimeUs = presentationTime.presentationTime;
+            sampleDurations[presentationTime.index] = delta;
+            if (presentationTime.index != 0) {
+                duration += delta;
+            }
+            if (delta != 0) {
+                minDelta = Math.min(minDelta, delta);
+            }
+            if (presentationTime.index != a) {
+                outOfOrder = true;
+            }
         }
-        first = false;
+        if (sampleDurations.length > 0) {
+            sampleDurations[0] = minDelta;
+            duration += minDelta;
+        }
+        for (int a = 1; a < original.size(); a++) {
+            original.get(a).dt = sampleDurations[a] + original.get(a - 1).dt;
+        }
+        if (outOfOrder) {
+            sampleCompositions = new int[samplePresentationTimes.size()];
+            for (int a = 0; a < samplePresentationTimes.size(); a++) {
+                SamplePresentationTime presentationTime = samplePresentationTimes.get(a);
+                sampleCompositions[presentationTime.index] = (int) (presentationTime.presentationTime - presentationTime.dt);
+            }
+        }
+        //if (!first) {
+        //    sampleDurations.add(sampleDurations.size() - 1, delta);
+        //    duration += delta;
+        //}
     }
 
     public ArrayList<Sample> getSamples() {
@@ -214,6 +329,10 @@ import java.util.Map;
 
     public AbstractMediaHeaderBox getMediaHeaderBox() {
         return headerBox;
+    }
+
+    public int[] getSampleCompositions() {
+        return sampleCompositions;
     }
 
     public SampleDescriptionBox getSampleDescriptionBox() {
@@ -251,7 +370,7 @@ import java.util.Map;
         return volume;
     }
 
-    public ArrayList<Long> getSampleDurations() {
+    public long[] getSampleDurations() {
         return sampleDurations;
     }
 
