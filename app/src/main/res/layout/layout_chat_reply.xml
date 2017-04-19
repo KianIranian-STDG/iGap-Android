@@ -53,12 +53,15 @@
             android:text="SAMPLE TEXT"/>
     </LinearLayout>
 
-    <ImageView
+    <com.iGap.module.MaterialDesignTextView
         android:id="@+id/cancelIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:contentDescription="@null"
-        app:srcCompat="@drawable/ic_gray_cancel"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:text="@string/md_close_button"
+        android:textAppearance="@style/TextIconAppearance.all"
+        android:textColor="@color/gray_3c"
         />
 
 </LinearLayout>

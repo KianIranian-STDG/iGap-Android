@@ -2186,7 +2186,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onClick(View view) {
 
-                String[] s = splitStringEvery(edtChat.getText().toString(), 200);
+                //String[] s = splitStringEvery(edtChat.getText().toString(), 200);
                 //for (int i = 0; i < s.length; i++) {
                 //    Log.i("CCCCCCCCCC", "onClick: "+ Arrays.toString(s));
                 //}
@@ -4222,7 +4222,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
             TextView replayFrom = (TextView) mReplayLayout.findViewById(replyFrom);
             ImageView thumbnail = (ImageView) mReplayLayout.findViewById(R.id.thumbnail);
-            ImageView closeReplay = (ImageView) mReplayLayout.findViewById(R.id.cancelIcon);
+            TextView closeReplay = (TextView) mReplayLayout.findViewById(R.id.cancelIcon);
             closeReplay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
