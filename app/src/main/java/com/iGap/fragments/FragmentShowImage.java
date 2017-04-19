@@ -603,13 +603,20 @@ public class FragmentShowImage extends Fragment {
                 e.printStackTrace();
             }
 
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override public void onCompletion(MediaPlayer mp) {
+                    mp.seekTo(0);
+                    imgPlay.setVisibility(View.VISIBLE);
+                }
+            });
+
             //mMediaPlayer.seekTo(100);
         }
 
         private void setMediaPlayer(MediaPlayer mMediaPlayer, final TextureView mTextureView, final ImageView imgPlay, final TouchImageView touchImageView) {
             Surface surfaceTexture = new Surface(mTextureView.getSurfaceTexture());
             mMediaPlayer.setSurface(surfaceTexture);
-            mMediaPlayer.setLooping(true);
+            mMediaPlayer.setLooping(false);
             mMediaPlayer.prepareAsync();
 
             mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -618,7 +625,6 @@ public class FragmentShowImage extends Fragment {
                     getRealSize(mp, mTextureView);
                     imgPlay.setVisibility(View.GONE);
                     mp.start();
-                    mp.seekTo(10);
                     mTextureView.setVisibility(View.VISIBLE);
                     touchImageView.setVisibility(View.GONE);
                     videoController.setEnabled(true);
