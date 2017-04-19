@@ -64,7 +64,6 @@
       android:text="@string/md_close_button"
       android:textAppearance="@style/TextIconAppearance.all"
       android:textColor="@color/gray_3c"
-
       />
 
 
