@@ -1559,7 +1559,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         imgToggleBottomColor = (ImageView) findViewById(R.id.asn_img_toggle_botton_color);
         GradientDrawable bgShapeToggleBottomColor = (GradientDrawable) imgToggleBottomColor.getBackground();
-        bgShapeToggleBottomColor.setColor(Color.parseColor(G.toggleBottonColor));
+        bgShapeToggleBottomColor.setColor(Color.parseColor(G.toggleButtonColor));
 
         imgToggleBottomColor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1987,10 +1987,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 1);
                     editor.apply();
-                    G.isSaveToGalary = true;
+                    G.isSaveToGallery = true;
                 } else {
                     editor.putInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
-                    G.isSaveToGalary = false;
+                    G.isSaveToGallery = false;
                     editor.apply();
                 }
             }
@@ -2224,9 +2224,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         GradientDrawable bgShape = (GradientDrawable) imgToggleBottomColor.getBackground();
-        G.toggleBottonColor = "#" + Integer.toHexString(color);
+        G.toggleButtonColor = "#" + Integer.toHexString(color);
         bgShape.setColor(color);
-        editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleBottonColor);
+        editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
         editor.apply();
     }
 

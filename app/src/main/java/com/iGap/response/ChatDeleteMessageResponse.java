@@ -55,8 +55,9 @@ public class ChatDeleteMessageResponse extends MessageHandler {
                         }
                     }
                 }
-                G.onChatDeleteMessageResponse.onChatDeleteMessage(chatDeleteMessage.getDeleteVersion(), chatDeleteMessage.getMessageId(), chatDeleteMessage.getRoomId(),
-                    chatDeleteMessage.getResponse());
+                if (G.onChatDeleteMessageResponse != null) {
+                    G.onChatDeleteMessageResponse.onChatDeleteMessage(chatDeleteMessage.getDeleteVersion(), chatDeleteMessage.getMessageId(), chatDeleteMessage.getRoomId(), chatDeleteMessage.getResponse());
+                }
 
             }
         });

@@ -21,6 +21,7 @@ import com.iGap.module.StructSessionsGetActiveList;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmPrivacy;
 import com.iGap.realm.RealmUserInfo;
+import com.iGap.request.RequestUserContactsGetBlockedList;
 import com.iGap.request.RequestUserProfileGetSelfRemove;
 import com.iGap.request.RequestUserProfileSetSelfRemove;
 import io.realm.Realm;
@@ -109,6 +110,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
         view.findViewById(R.id.fpac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 

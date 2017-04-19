@@ -250,18 +250,19 @@ public class G extends MultiDexApplication {
     public static long currentTime;
     public static long userId;
     public static long latestHearBeatTime = System.currentTimeMillis();
-    public static boolean firstTimeEnterToApp = true;
+    public static boolean firstTimeEnterToApp = true; // use this field for get room list
     public static String selectedLanguage = "en";
     public static long serverHeartBeatTiming = 60 * 1000;
 
     // default color
     public static String appBarColor;
     public static String notificationColor;
-    public static String toggleBottonColor;
+    public static String toggleButtonColor;
     public static String attachmentColor;
     public static String headerTextColor;
 
-    public static boolean isSaveToGalary = false;
+    public static boolean firstEnter = true;
+    public static boolean isSaveToGallery = false;
 
 
     @Override
@@ -508,14 +509,14 @@ public class G extends MultiDexApplication {
 
         int checkedSaveToGallery = preferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
         if (checkedSaveToGallery == 1) {
-            isSaveToGalary = true;
+            isSaveToGallery = true;
         } else {
-            isSaveToGalary = false;
+            isSaveToGallery = false;
         }
 
         appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
         notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-        toggleBottonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleBottonColor);
+        toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleBottonColor);
         attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
         headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
 
@@ -809,8 +810,13 @@ public class G extends MultiDexApplication {
                             new RequestClientGetRoomList().clientGetRoomList();
                         }
 
+                        if (firstEnter) {
+                            firstEnter = false;
+                            new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
+                            //contact checking
+                            //get contact list
+                        }
                         getUserInfo();
-                        new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
                         sendWaitingRequestWrappers();
                     }
                 });

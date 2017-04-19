@@ -287,9 +287,9 @@ public class HelperDownloadFile {
             addDownloadFromQueue();
             // }
 
-            // save downloaded file to galary
+            // save downloaded file to gallery
 
-            if (G.isSaveToGalary && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
+            if (G.isSaveToGallery && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
                 File file = new File(item.moveToDirectoryPAth);
                 if (file.exists()) {
 
