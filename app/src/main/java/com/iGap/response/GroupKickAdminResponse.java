@@ -7,7 +7,6 @@ import com.iGap.proto.ProtoGroupKickAdmin;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -38,6 +37,7 @@ public class GroupKickAdminResponse extends MessageHandler {
                 .equalTo(RealmRoomFields.ID, builder.getRoomId())
                 .findFirst();
 
+        RealmRoom.updateRole(ProtoGlobal.Room.Type.GROUP, builder.getRoomId(), builder.getMemberId(), ProtoGlobal.GroupRoom.Role.MEMBER.toString());
         if (realmRoom != null) {
             RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
             for (final RealmMember member : realmMembers) {

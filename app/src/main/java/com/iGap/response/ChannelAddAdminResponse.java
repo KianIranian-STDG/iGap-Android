@@ -8,7 +8,7 @@ import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
+import com.iGap.realm.enums.ChannelChatRole;
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -32,6 +32,7 @@ public class ChannelAddAdminResponse extends MessageHandler {
 
         final ProtoChannelAddAdmin.ChannelAddAdminResponse.Builder builder = (ProtoChannelAddAdmin.ChannelAddAdminResponse.Builder) message;
 
+        RealmRoom.updateRole(ProtoGlobal.Room.Type.CHANNEL, builder.getRoomId(), builder.getMemberId(), ChannelChatRole.ADMIN.toString());
         Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
         if (realmRoom != null) {

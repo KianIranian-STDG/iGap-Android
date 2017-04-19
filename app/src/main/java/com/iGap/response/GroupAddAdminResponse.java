@@ -8,7 +8,7 @@ import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
+import com.iGap.realm.enums.GroupChatRole;
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -31,9 +31,10 @@ public class GroupAddAdminResponse extends MessageHandler {
         super.handler();
 
         final ProtoGroupAddAdmin.GroupAddAdminResponse.Builder builder = (ProtoGroupAddAdmin.GroupAddAdminResponse.Builder) message;
-
         Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+
+        RealmRoom.updateRole(ProtoGlobal.Room.Type.GROUP, builder.getRoomId(), builder.getMemberId(), GroupChatRole.ADMIN.toString());
 
         if (realmRoom != null) {
             realm.executeTransaction(new Realm.Transaction() {

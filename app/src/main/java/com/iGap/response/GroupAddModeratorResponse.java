@@ -8,7 +8,7 @@ import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
+import com.iGap.realm.enums.GroupChatRole;
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -33,6 +33,7 @@ public class GroupAddModeratorResponse extends MessageHandler {
 
         Realm realm = Realm.getDefaultInstance();
 
+        RealmRoom.updateRole(ProtoGlobal.Room.Type.GROUP, builder.getRoomId(), builder.getMemberId(), GroupChatRole.MODERATOR.toString());
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
 
         if (realmRoom != null) {

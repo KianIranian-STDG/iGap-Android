@@ -6,7 +6,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -34,7 +33,7 @@ public class ChannelKickModeratorResponse extends MessageHandler {
 
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-
+        RealmRoom.updateRole(ProtoGlobal.Room.Type.CHANNEL, builder.getRoomId(), builder.getMemberId(), ProtoGlobal.GroupRoom.Role.MEMBER.toString());
         if (realmRoom != null) {
             RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
 

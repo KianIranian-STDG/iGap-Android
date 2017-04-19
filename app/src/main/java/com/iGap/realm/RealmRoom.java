@@ -3,6 +3,8 @@ package com.iGap.realm;
 import com.iGap.G;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
+import com.iGap.realm.enums.ChannelChatRole;
+import com.iGap.realm.enums.GroupChatRole;
 import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestClientGetRoom;
 import io.realm.Realm;
@@ -281,6 +283,43 @@ public class RealmRoom extends RealmObject {
             }
         }
         realm.close();
+    }
+
+    public static void updateRole(final ProtoGlobal.Room.Type type, long roomId, long memberId, final String role) {
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+
+        if (memberId == realmUserInfo.getUserId()) {
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+
+                    if (type == ProtoGlobal.Room.Type.GROUP) {
+                        GroupChatRole mRole;
+                        if (role.contains(GroupChatRole.ADMIN.toString())) {
+                            mRole = GroupChatRole.ADMIN;
+                        } else if (role.contains(GroupChatRole.MODERATOR.toString())) {
+                            mRole = GroupChatRole.MODERATOR;
+                        } else {
+                            mRole = GroupChatRole.MEMBER;
+                        }
+                        realmRoom.getGroupRoom().setRole(mRole);
+                    } else {
+                        ChannelChatRole mRole;
+                        if (role.contains(ChannelChatRole.ADMIN.toString())) {
+                            mRole = ChannelChatRole.ADMIN;
+                        } else if (role.contains(ChannelChatRole.MODERATOR.toString())) {
+                            mRole = ChannelChatRole.MODERATOR;
+                        } else {
+                            mRole = ChannelChatRole.MEMBER;
+                        }
+                        realmRoom.getChannelRoom().setRole(mRole);
+                    }
+                }
+            });
+        }
     }
 
 
