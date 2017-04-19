@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp48"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:attr/windowBackground"
     android:clickable="true"
     android:gravity="center_vertical"
@@ -56,12 +55,17 @@
         />
   </LinearLayout>
 
-  <ImageView
+  <com.iGap.module.MaterialDesignTextView
       android:id="@+id/cslhf_imv_cansel"
-      android:layout_width="30dp"
-      android:layout_height="30dp"
-      android:contentDescription="@null"
-      app:srcCompat="@drawable/ic_gray_cancel"
+      android:layout_width="@dimen/dp40"
+      android:layout_height="match_parent"
+      android:background="@null"
+      android:gravity="center_vertical"
+      android:text="@string/md_close_button"
+      android:textAppearance="@style/TextIconAppearance.all"
+      android:textColor="@color/gray_3c"
+
       />
+
 
 </LinearLayout>

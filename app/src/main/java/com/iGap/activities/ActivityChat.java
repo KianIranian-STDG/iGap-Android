@@ -42,6 +42,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -378,7 +379,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private RecyclerView.OnScrollListener scrollListener;
 
     private boolean hasForward = false;
-    private ImageView imvCancelForward;
+    private TextView imvCancelForward;
 
     private int countLoadItemToChat = 0;
     private FrameLayout llScrollNavigate;
@@ -405,7 +406,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
-
+    private int maxLength = 10;
 
     @Override
     protected void onStart() {
@@ -938,7 +939,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }, 1000 * j);
                 }
             } else {
-                imvCancelForward = (ImageView) findViewById(R.id.cslhf_imv_cansel);
+                imvCancelForward = (TextView) findViewById(R.id.cslhf_imv_cansel);
                 imvCancelForward.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1713,6 +1714,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onClick(View view) {
                 ll_attach_text.setVisibility(View.GONE);
+                edtChat.setFilters(new InputFilter[] {});
+                edtChat.setText(edtChat.getText());
+                edtChat.setSelection(edtChat.getText().length());
 
                 if (edtChat.getText().length() == 0) {
 
@@ -2182,6 +2186,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onClick(View view) {
 
+                String[] s = splitStringEvery(edtChat.getText().toString(), 200);
+                //for (int i = 0; i < s.length; i++) {
+                //    Log.i("CCCCCCCCCC", "onClick: "+ Arrays.toString(s));
+                //}
                 HelperSetAction.setCancel(mRoomId);
 
                 clearDraftRequest();
@@ -2204,6 +2212,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     sendMessage(latestRequestCode, listPathString.get(0));
                     listPathString.clear();
                     ll_attach_text.setVisibility(View.GONE);
+                    edtChat.setFilters(new InputFilter[] {});
                     edtChat.setText("");
 
                     clearReplyView();
@@ -5624,6 +5633,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
 
                 ll_attach_text.setVisibility(View.VISIBLE);
+                // set maxLength  when layout attachment is visible
+                edtChat.setFilters(new InputFilter[] { new InputFilter.LengthFilter(maxLength) });
+
                 layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
@@ -6613,6 +6625,21 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
             }
         }
+    }
+
+    public String[] splitStringEvery(String s, int interval) {
+        int arrayLength = (int) Math.ceil(((s.length() / (double) interval)));
+        String[] result = new String[arrayLength];
+
+        int j = 0;
+        int lastIndex = result.length - 1;
+        for (int i = 0; i < lastIndex; i++) {
+            result[i] = s.substring(j, j + interval);
+            j += interval;
+        } //Add the last bit
+        result[lastIndex] = s.substring(j);
+
+        return result;
     }
 }
 
