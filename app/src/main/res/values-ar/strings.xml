@@ -817,5 +817,7 @@
   <string name="file_can_not_save_to_selected_folder">File can not save to selected folder</string>
   <string name="file_save_to_video_folder">File save to video folder</string>
   <string name="file_save_to_picture_folder">File save to picture folder</string>
+  <string name="calls">Calls</string>
+  <string name="igap_call">iGap Call</string>
 
 </resources>

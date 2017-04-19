@@ -821,4 +821,6 @@
   <string name="file_can_not_save_to_selected_folder">فایل در پوشه انتخاب شده ذخیره نشد.</string>
   <string name="file_save_to_video_folder">فایل در پوشه ویدیو ذخیره شد.</string>
   <string name="file_save_to_picture_folder">فایل در پوشه تصاویر ذخیره شد.</string>
+  <string name="calls">تماس</string>
+  <string name="igap_call">iGap Call</string>
 </resources>

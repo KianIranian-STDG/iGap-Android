@@ -44,6 +44,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.WebSocketClient;
 import com.iGap.fragments.ContactGroupFragment;
+import com.iGap.fragments.FragmentCall;
 import com.iGap.fragments.FragmentCreateChannel;
 import com.iGap.fragments.FragmentIgapSearch;
 import com.iGap.fragments.FragmentNewGroup;
@@ -609,6 +610,36 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }, 256);
             }
         });
+
+        ViewGroup itemNavCall = (ViewGroup) findViewById(R.id.lm_ll_call);
+        itemNavCall.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
+                        Fragment fragment = FragmentCall.newInstance();
+                        try {
+                            getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .addToBackStack(null)
+                                .replace(R.id.fragmentContainer, fragment)
+                                .commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+                    }
+                }, 256);
+            }
+        });
+
+
+
 
         ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
         itemNavSend.setOnClickListener(new View.OnClickListener() {

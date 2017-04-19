@@ -37,6 +37,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.fragments.FragmentCall;
 import com.iGap.fragments.FragmentNotification;
 import com.iGap.fragments.FragmentShowAvatars;
 import com.iGap.helper.HelperAvatar;
@@ -668,13 +669,21 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         imgMenu = (MaterialDesignTextView) findViewById(R.id.chi_img_menuPopup);
 
         RippleView rippleMenu = (RippleView) findViewById(R.id.chi_ripple_menuPopup);
-
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
                 showPopUp();
             }
         });
+
+        RippleView rippleCall = (RippleView) findViewById(R.id.chi_ripple_call);
+        rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override public void onComplete(RippleView rippleView) {
+
+                FragmentCall.call(userId, ActivityContactsProfile.this, R.id.chi_layoutParent);
+            }
+        });
+
         vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

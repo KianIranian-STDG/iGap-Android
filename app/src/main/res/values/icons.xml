@@ -64,9 +64,20 @@
     <string name="md_videocam">\ue04b</string>
     <string name="md_library_music">\ue030</string>
     <string name="md_folder">\ue2c7</string>
+  <string name="md_phone">\ue0cd</string>
+
+  <string name="md_call_made">\ue0b2</string>
+  <string name="md_call_received">\ue0b5</string>
+  <string name="md_call_missed">\ue0b4</string>
+  <string name="md_call_missed_outgoing">\ue0e4</string>
+  <string name="md_call_end">\ue0b1</string>
+
+  <string name="md_mic">\ue029</string>
+  <string name="md_mic_off">\ue02b</string>
+  <string name="md_chat">\ue0b7</string>
 
 
-    <string name="icon_location">\ue901</string>
+  <string name="icon_location">\ue901</string>
     <string name="icon_music">\ue911</string>
     <string name="icon_file_empty">\ue924</string>
     <string name="icon_brush">\ue902</string>
