@@ -68,7 +68,8 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 7) {
-            schema.create(RealmPhoneContacts.class.getSimpleName()).addField(RealmPhoneContactsFields.PHONE, String.class).addField(RealmPhoneContactsFields.FIRST_NAME, String.class).addField(RealmPhoneContactsFields.LAST_NAME, String.class);
+            RealmObjectSchema realmPhoneContacts = schema.create(RealmPhoneContacts.class.getSimpleName()).addField(RealmPhoneContactsFields.PHONE, String.class).addField(RealmPhoneContactsFields.FIRST_NAME, String.class).addField(RealmPhoneContactsFields.LAST_NAME, String.class);
+            realmPhoneContacts.addPrimaryKey(RealmPhoneContactsFields.PHONE);
         }
     }
 }
