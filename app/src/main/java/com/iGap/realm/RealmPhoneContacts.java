@@ -2,6 +2,7 @@ package com.iGap.realm;
 
 import com.iGap.module.StructListOfContact;
 import com.iGap.request.RequestUserContactImport;
+import com.iGap.request.RequestUserContactsGetList;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -44,14 +45,15 @@ public class RealmPhoneContacts extends RealmObject {
     public static void sendContactList(final ArrayList<StructListOfContact> list, final boolean force) {
 
         new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 ArrayList<StructListOfContact> _list = fillContactsToDB(list);
-
                 if (_list.size() > 0) {
-
                     RequestUserContactImport listContact = new RequestUserContactImport();
                     listContact.contactImport(_list, force);
+                } else {
+                    new RequestUserContactsGetList().userContactGetList();
                 }
             }
         }).start();
@@ -60,7 +62,8 @@ public class RealmPhoneContacts extends RealmObject {
     private static void addContactToDB(final StructListOfContact item, Realm realm) {
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 RealmPhoneContacts _realmPhoneContacts = realm.createObject(RealmPhoneContacts.class, item.getPhone());
                 _realmPhoneContacts.setFirstName(item.firstName);
@@ -109,7 +112,8 @@ public class RealmPhoneContacts extends RealmObject {
                         if (_realmPhoneContacts != null) {
 
                             realm.executeTransaction(new Realm.Transaction() {
-                                @Override public void execute(Realm realm) {
+                                @Override
+                                public void execute(Realm realm) {
                                     _realmPhoneContacts.setFirstName(_item.getFirstName());
                                     _realmPhoneContacts.setLastName(_item.getLastName());
                                 }

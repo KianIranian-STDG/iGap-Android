@@ -64,6 +64,11 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmRoomSchema != null) {
                 realmRoomSchema.addField(RealmRoomFields.LAST_SCROLL_POSITION_MESSAGE_ID, long.class, FieldAttribute.REQUIRED);
             }
+            oldVersion++;
+        }
+
+        if (oldVersion == 7) {
+            schema.create(RealmPhoneContacts.class.getSimpleName()).addField(RealmPhoneContactsFields.PHONE, String.class).addField(RealmPhoneContactsFields.FIRST_NAME, String.class).addField(RealmPhoneContactsFields.LAST_NAME, String.class);
         }
     }
 }

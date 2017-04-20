@@ -35,6 +35,8 @@ public class Config {
     public static final long FAST_START_PAGE_TIME = (int) 20;
     public static final long LOW_START_PAGE_TIME = (int) 25;
     public static final long FETCH_CONTACT_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);
+    public static final int MAX_TEXT_ATTACHMENT_LENGTH = 200;
+    public static final int MAX_TEXT_LENGTH = 4096;
     public static String urlWebsocket = "wss://secure.igap.net/hybrid/";
 
     public static String default_appBarColor = "#3dbcb3";
