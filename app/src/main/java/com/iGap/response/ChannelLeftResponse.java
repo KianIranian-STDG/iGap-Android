@@ -6,12 +6,14 @@ import com.iGap.proto.ProtoError;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmMember;
+import com.iGap.realm.RealmMemberFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ChannelLeftResponse extends MessageHandler {
 
@@ -44,29 +46,28 @@ public class ChannelLeftResponse extends MessageHandler {
                         realmRoom.deleteFromRealm();
                     }
 
-                    if (!builder.getResponse().getId().isEmpty()) { // if own send request for left
-                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findFirst();
-                        if (realmRoomMessage != null) {
-                            realmRoomMessage.deleteFromRealm();
-                        }
+                    RealmResults<RealmRoomMessage> realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
+                    realmRoomMessage.deleteAllFromRealm();
 
-                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
-                        if (realmClientCondition != null) {
-                            realmClientCondition.deleteFromRealm();
-                        }
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
+                    if (realmClientCondition != null) {
+                        realmClientCondition.deleteFromRealm();
+                    }
 
-                        if (G.onChannelLeft != null) {
-                            G.onChannelLeft.onChannelLeft(builder.getRoomId(), builder.getMemberId());
-                        }
+                    if (G.onChannelLeft != null) {
+                        G.onChannelLeft.onChannelLeft(builder.getRoomId(), builder.getMemberId());
                     }
                 } else {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
                     if (realmRoom != null && realmRoom.getChannelRoom() != null) {
-                        for (RealmMember member : realmRoom.getChannelRoom().getMembers()) {
-                            if (member.getPeerId() == builder.getMemberId()) {
+
+                        try {
+                            RealmMember member = realmRoom.getChannelRoom().getMembers().where().equalTo(RealmMemberFields.PEER_ID, builder.getMemberId()).findFirst();
+                            if (member != null) {
                                 member.deleteFromRealm();
-                                break;
                             }
+                        } catch (NullPointerException e) {
+
                         }
                     }
                 }

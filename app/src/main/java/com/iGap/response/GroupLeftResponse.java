@@ -6,12 +6,14 @@ import com.iGap.proto.ProtoGroupLeft;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
 import com.iGap.realm.RealmMember;
+import com.iGap.realm.RealmMemberFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class GroupLeftResponse extends MessageHandler {
 
@@ -47,11 +49,9 @@ public class GroupLeftResponse extends MessageHandler {
                         realmRoom.deleteFromRealm();
                     }
 
-                    if (!builder.getResponse().getId().isEmpty()) { // if own send request for left
-                        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findFirst();
-                        if (realmRoomMessage != null) {
-                            realmRoomMessage.deleteFromRealm();
-                        }
+                    RealmResults<RealmRoomMessage> realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
+                    realmRoomMessage.deleteAllFromRealm();
+
 
                         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
                         if (realmClientCondition != null) {
@@ -61,15 +61,18 @@ public class GroupLeftResponse extends MessageHandler {
                         if (G.onGroupLeft != null) {
                             G.onGroupLeft.onGroupLeft(roomId, memberId);
                         }
-                    }
+
                 } else {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                     if (realmRoom != null && realmRoom.getGroupRoom() != null) {
-                        for (RealmMember member : realmRoom.getGroupRoom().getMembers()) {
-                            if (member.getPeerId() == memberId) {
+
+                        try {
+                            RealmMember member = realmRoom.getGroupRoom().getMembers().where().equalTo(RealmMemberFields.PEER_ID, builder.getMemberId()).findFirst();
+                            if (member != null) {
                                 member.deleteFromRealm();
-                                break;
                             }
+                        } catch (NullPointerException e) {
+
                         }
                     }
                 }
