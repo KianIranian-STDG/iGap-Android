@@ -2,8 +2,7 @@ package com.iGap.response;
 
 import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.proto.ProtoUserAvatarGetList;
+import com.iGap.proto.ProtoGroupAvatarGetList;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmAvatar;
 import com.iGap.realm.RealmAvatarFields;
@@ -33,19 +32,19 @@ public class GroupAvatarGetListResponse extends MessageHandler {
         final long roomId = Long.parseLong(identity);
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
-                // delete all avatar in roomid
+                // delete all avatar in roomId
                 realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findAll().deleteAllFromRealm();
 
-                ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder userAvatarGetListResponse = (ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder) message;
-
+                ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder groupAvatarGetListResponse = (ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder) message;
                 // add all list to realm avatar
-                for (ProtoGlobal.Avatar avatar : userAvatarGetListResponse.getAvatarList()) {
-                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
+                for (int i = (groupAvatarGetListResponse.getAvatarList().size() - 1); i >= 0; i--) {
+                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, groupAvatarGetListResponse.getAvatarList().get(i).getId());
                     realmAvatar.setOwnerId(roomId);
                     realmAvatar.setUid(SUID.id().get());
-                    realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
+                    realmAvatar.setFile(RealmAttachment.build(groupAvatarGetListResponse.getAvatarList().get(i).getFile(), AttachmentFor.AVATAR, null));
                 }
             }
         });

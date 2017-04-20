@@ -24,8 +24,8 @@ android {
     applicationId "net.iGap"
     minSdkVersion 15
     targetSdkVersion 25
-    versionCode 20
-    versionName "0.0.20"
+    versionCode 21
+    versionName "0.0.21"
     multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
   }
@@ -109,6 +109,4 @@ dependencies {
   compile(project(':k4l-video-trimmer')) {
     exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
   }
-
-  compile 'com.github.markushi:circlebutton:1.1'
 }
