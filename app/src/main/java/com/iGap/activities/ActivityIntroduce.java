@@ -199,7 +199,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
         if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before
-            G.importContact();
             Intent intent = new Intent(G.context, ActivityMain.class);
             startActivity(intent);
             finish();

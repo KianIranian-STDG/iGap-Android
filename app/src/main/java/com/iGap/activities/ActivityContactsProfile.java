@@ -918,7 +918,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         contacts.add(contact);
 
-        new RequestUserContactImport().contactImport(contacts, true);
+        new RequestUserContactImport().contactImportAndGetResponse(contacts, true);
+
     }
 
     private void showPopUp() {

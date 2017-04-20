@@ -1126,7 +1126,6 @@ public class ActivityRegister extends ActivityEnhanced {
                             finish();
                         } else {
                             // get user info for set nick name and after from that go to ActivityMain
-                            G.importContact();
                             getUserInfo();
                             requestUserInfo();
                         }

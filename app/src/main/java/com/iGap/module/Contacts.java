@@ -11,7 +11,6 @@ import com.iGap.realm.RealmInviteFriend;
 import com.iGap.realm.RealmInviteFriendFields;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
-import com.iGap.request.RequestUserContactImport;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ public class Contacts {
         return items;
     }
 
-    public static ArrayList<StructListOfContact> getListOfContact(boolean sendToServer) { //get List Of Contact
+    public static ArrayList<StructListOfContact> getListOfContact() { //get List Of Contact
 
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
@@ -146,16 +145,13 @@ public class Contacts {
                 resultContactList.add(itemContact);
             }
         }
-        if (sendToServer) {
-            RequestUserContactImport listContact = new RequestUserContactImport();
-            listContact.contactImport(resultContactList, false);
-        }
+
         return resultContactList;
     }
 
     public static void FillRealmInviteFriend() {
 
-        final ArrayList<StructListOfContact> contactList = getListOfContact(false);
+        final ArrayList<StructListOfContact> contactList = getListOfContact();
         final int size = contactList.size();
 
         if (size > 0) {

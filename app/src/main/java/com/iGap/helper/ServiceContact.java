@@ -15,7 +15,7 @@ import android.support.v4.content.ContextCompat;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.module.StructListOfContact;
-import com.iGap.request.RequestUserContactImport;
+import com.iGap.realm.RealmPhoneContacts;
 import java.util.ArrayList;
 
 import static com.iGap.G.context;
@@ -129,8 +129,10 @@ public class ServiceContact extends Service {
                                 }
                             }
                         }
-                        RequestUserContactImport listContact = new RequestUserContactImport();
-                        listContact.contactImport(resultContactList, false);
+
+                        RealmPhoneContacts.sendContactList(resultContactList, false);
+
+
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }

@@ -87,7 +87,6 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
-import com.iGap.module.Contacts;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.OnComplete;
@@ -209,6 +208,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                          */
                         G.isSendContact = false;
                         G.importContact();
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT, true);
+                        editor.apply();
                     }
 
                     @Override
@@ -223,9 +226,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT, true);
-            editor.apply();
         }
 
         G.helperNotificationAndBadge.cancelNotification();
@@ -349,13 +349,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    /**
-     * import contact phone for first one
-     */
-    private void importContactList() {
 
-        Contacts.getListOfContact(true);
-    }
 
     @Override
     protected void onStart() {

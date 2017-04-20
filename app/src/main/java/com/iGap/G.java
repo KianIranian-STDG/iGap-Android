@@ -150,6 +150,7 @@ import com.iGap.module.enums.ConnectionMode;
 import com.iGap.proto.ProtoClientCondition;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmMigration;
+import com.iGap.realm.RealmPhoneContacts;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestClientGetRoomList;
@@ -443,7 +444,8 @@ public class G extends MultiDexApplication {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Contacts.getListOfContact(true);
+
+                        RealmPhoneContacts.sendContactList(Contacts.getListOfContact(), false);
                     }
                 });
             }
@@ -813,8 +815,7 @@ public class G extends MultiDexApplication {
                         if (firstEnter) {
                             firstEnter = false;
                             new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
-                            //contact checking
-                            //get contact list
+                            importContact();
                         }
                         getUserInfo();
                         sendWaitingRequestWrappers();
