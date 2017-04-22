@@ -21,7 +21,6 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
 import com.iGap.module.HelperCopyFile;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
@@ -79,9 +78,9 @@ public class ActivityCrop extends ActivityEnhanced {
         }
         if (uri != null || path != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), imgPic);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), imgPic);
             } else {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(uri.getPath()), imgPic);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(uri.getPath()), imgPic);
             }
             prgWaiting.setVisibility(View.GONE);
         }

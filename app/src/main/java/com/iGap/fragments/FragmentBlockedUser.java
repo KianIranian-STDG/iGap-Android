@@ -28,7 +28,6 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestUserContactsBlock;
 import com.iGap.request.RequestUserContactsUnblock;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -167,7 +166,7 @@ public class FragmentBlockedUser extends Fragment {
                 @Override public void onAvatarGet(final String avatarPath, long ownerId) {
                     G.handler.post(new Runnable() {
                         @Override public void run() {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
                         }
                     });
                 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperRadius;
 import com.iGap.interfaces.IMessageItem;
@@ -15,7 +16,6 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.meness.github.messageprogress.MessageProgress;
 import java.util.List;
 
@@ -152,7 +152,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
 
         if (fileType == LocalFileType.THUMBNAIL) {
 
-            ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
+            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
 
             holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
         } else {

@@ -47,7 +47,6 @@ import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestUserAvatarAdd;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserProfileSetNickname;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.io.File;
@@ -468,7 +467,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
     private void setImage(String path) {
         if (path != null) {
 
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), btnSetImage);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), btnSetImage);
             btnSetImage.setPadding(0, 0, 0, 0);
             //Bitmap bitmap = BitmapFactory.decodeFile(path);
             //btnSetImage.setImageBitmap(bitmap);

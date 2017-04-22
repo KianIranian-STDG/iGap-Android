@@ -59,7 +59,6 @@ import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestChannelAddMessageReaction;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.github.meness.emoji.EmojiTextView;
 import io.meness.github.messageprogress.MessageProgress;
 import io.meness.github.messageprogress.OnMessageProgressClick;
@@ -234,7 +233,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
+                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), (ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar));
                                 }
                             });
                         }

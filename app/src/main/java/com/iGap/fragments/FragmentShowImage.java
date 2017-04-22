@@ -40,7 +40,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.github.meness.emoji.EmojiTextView;
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
@@ -368,7 +367,7 @@ public class FragmentShowImage extends Fragment {
                 }
                 if (file.exists()) {
                     progress.setVisibility(View.GONE);
-                    ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
+                    G.imageLoader.displayImage(suitablePath(path), touchImageView);
                     if (rm.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE) {
                         touchImageView.setVisibility(View.VISIBLE);
                         imgPlay.setVisibility(View.GONE);
@@ -394,7 +393,7 @@ public class FragmentShowImage extends Fragment {
                     touchImageView.setVisibility(View.VISIBLE);
                     file = new File(path);
                     if (file.exists()) {
-                        ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
+                        G.imageLoader.displayImage(suitablePath(path), touchImageView);
                     } else if (rm.getAttachment() != null) {
                         // if thumpnail not exist download it
                         ProtoFileDownload.FileDownload.Selector selector = null;
@@ -420,7 +419,7 @@ public class FragmentShowImage extends Fragment {
 
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override public void run() {
-                                                ImageLoader.getInstance().displayImage(suitablePath(filePathTumpnail), touchImageView);
+                                                G.imageLoader.displayImage(suitablePath(filePathTumpnail), touchImageView);
                                             }
                                         });
                                     }
@@ -554,7 +553,7 @@ public class FragmentShowImage extends Fragment {
                                             //if (position == viewPager.getCurrentItem()) playVideo(position, mTextureView, imgPlay, touchImageView);
                                         }
                                         String path = getFilePath(position);
-                                        ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
+                                        G.imageLoader.displayImage(suitablePath(path), touchImageView);
                                     }
                                 }
                             });

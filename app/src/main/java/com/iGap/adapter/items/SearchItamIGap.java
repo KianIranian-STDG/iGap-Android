@@ -16,7 +16,6 @@ import com.iGap.proto.ProtoClientSearchUsername;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.github.meness.emoji.EmojiTextView;
 import java.util.List;
 
@@ -55,7 +54,7 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
 
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
                         }
                     });
                 }
@@ -80,7 +79,7 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
 
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override public void run() {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
                         }
                     });
                 }

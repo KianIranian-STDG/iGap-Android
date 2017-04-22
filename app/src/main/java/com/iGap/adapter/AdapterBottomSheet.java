@@ -11,7 +11,6 @@ import com.iGap.activities.ActivityChat;
 import com.iGap.module.StructBottomSheet;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.List;
 
 public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, AdapterBottomSheet.ViewHolder> {
@@ -64,9 +63,8 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
         //        holder.imgSrc.setImageBitmap(loadedImage);
         //    }
         //});
-        ImageLoader imageLoader = ImageLoader.getInstance(); // Get singleton instance
-        imageLoader.displayImage("file://" + mList.getPath(), holder.imgSrc);
 
+        G.imageLoader.displayImage("file://" + mList.getPath(), holder.imgSrc);
 
         if (mList.isSelected) {
             holder.checkBoxSelect.setChecked(false);
@@ -112,14 +110,13 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
     //The viewHolder used for this mList. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public static ImageLoader imageLoader;
         private CardView cr;
         private ImageView imgSrc;
         protected AnimateCheckBox checkBoxSelect;
 
         public ViewHolder(View view) {
             super(view);
-            imageLoader = ImageLoader.getInstance();
+
             cr = (CardView) view.findViewById(R.id.card_view);
             imgSrc = (ImageView) view.findViewById(R.id.img_gallery);
             checkBoxSelect = (AnimateCheckBox) view.findViewById(R.id.cig_checkBox_select_user);

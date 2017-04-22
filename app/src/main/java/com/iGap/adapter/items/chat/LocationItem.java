@@ -15,7 +15,6 @@ import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessageLocation;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +59,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
         if (item != null) {
             if (item.getImagePath() != null && new File(item.getImagePath()).exists()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(item.getImagePath()), holder.imgMapPosition);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(item.getImagePath()), holder.imgMapPosition);
 
             } else {
                 FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {

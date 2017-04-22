@@ -208,7 +208,6 @@ import com.iGap.request.RequestUserInfo;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.github.meness.emoji.EmojiEditText;
@@ -2993,7 +2992,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
                     }
                 });
             }
@@ -6445,7 +6444,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
                     }
                 });
             }

@@ -46,7 +46,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
-        //ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.thumbnail);
+        //G.imageLoader.displayImage(suitablePath(localPath), holder.thumbnail);
         //holder.thumbnail.setImageResource(R.drawable.file_icon);
     }
 

@@ -19,7 +19,6 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.meness.github.messageprogress.MessageProgress;
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +70,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                                 if (progress == 100) {
                                     G.currentActivity.runOnUiThread(new Runnable() {
                                         @Override public void run() {
-                                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), holder2.img);
+                                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
                                         }
                                     });
                                 }
@@ -81,10 +80,10 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                             }
                         });
                 } else {
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), holder2.img);
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
                 }
             } else {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(mList.get(position).getPath()), holder2.img);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(mList.get(position).getPath()), holder2.img);
             }
 
             String bigImagePath;
@@ -97,7 +96,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
             if (new File(bigImagePath).exists()) {
                 holder2.messageProgress.setVisibility(View.GONE);
-                // ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(bigImagePath), holder2.img);
+                // G.imageLoader.displayImage(AndroidUtils.suitablePath(bigImagePath), holder2.img);
                 holder2.mPath = bigImagePath;
             } else {
                 holder2.mPath = "";

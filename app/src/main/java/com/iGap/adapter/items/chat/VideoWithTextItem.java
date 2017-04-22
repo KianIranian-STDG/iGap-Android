@@ -13,7 +13,6 @@ import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.github.meness.emoji.EmojiTextView;
 import io.meness.github.messageprogress.MessageProgress;
 import java.util.List;
@@ -90,7 +89,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
         if (fileType == LocalFileType.THUMBNAIL) {
 
-            ImageLoader.getInstance().displayImage(suitablePath(localPath), holder.image);
+            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
 
             holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
         } else {

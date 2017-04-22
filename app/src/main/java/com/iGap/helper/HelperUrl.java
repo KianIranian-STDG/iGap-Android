@@ -41,7 +41,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.request.RequestClientCheckInviteLink;
 import com.iGap.request.RequestClientJoinByInviteLink;
 import com.iGap.request.RequestClientResolveUsername;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -768,7 +767,7 @@ public class HelperUrl {
 
                                 HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
                                     @Override public void onAvatarGet(final String avatarPath, long roomId) {
-                                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
+                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
                                     }
 
                                     @Override public void onShowInitials(String initials, String color) {

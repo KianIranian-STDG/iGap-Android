@@ -82,7 +82,6 @@ import com.iGap.request.RequestUserContactsDelete;
 import com.iGap.request.RequestUserContactsEdit;
 import com.iGap.request.RequestUserContactsUnblock;
 import com.iGap.request.RequestUserInfo;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -308,7 +307,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 //                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 //                imgUser.setImageBitmap(myBitmap);
 
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imgFile.getAbsolutePath()), imgUser);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(imgFile.getAbsolutePath()), imgUser);
 
             } else {
                 imgUser.setImageBitmap(
@@ -757,7 +756,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgUser);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgUser);
                     }
                 });
             }

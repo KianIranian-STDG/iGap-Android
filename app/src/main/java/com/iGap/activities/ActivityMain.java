@@ -118,7 +118,6 @@ import com.iGap.request.RequestGroupDelete;
 import com.iGap.request.RequestGroupLeft;
 import com.iGap.request.RequestUserInfo;
 import com.iGap.request.RequestUserSessionLogout;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
@@ -1461,7 +1460,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgNavImage);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgNavImage);
                     }
                 });
             }
@@ -1489,7 +1488,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);
                         }
                     }
                 });
@@ -1763,9 +1762,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
                             if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
                             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
                             } else {
                                 HelperAvatar.getAvatar1(idForGetAvatar, avatarType, new OnAvatarGet() {
                                     @Override
@@ -1773,7 +1772,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         /*G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                             }
                         });*/
                                     }

@@ -3,6 +3,7 @@ package com.iGap.adapter.items;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
@@ -17,7 +18,6 @@ import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import java.util.List;
 
@@ -87,7 +87,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
             }
 
             @Override

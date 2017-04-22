@@ -57,7 +57,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.request.RequestClientSearchRoomHistory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -87,7 +86,7 @@ import static com.iGap.module.AndroidUtils.suitablePath;
  */
 public class ActivityShearedMedia extends ActivityEnhanced {
 
-    private Realm mRealm;
+
     private RealmResults<RealmRoomMessage> mRealmList;
     private ArrayList<StructShearedMedia> mNewList;
     RealmChangeListener<RealmResults<RealmRoomMessage>> changeListener;
@@ -162,11 +161,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mRealm != null) mRealm.close();
-    }
+
 
     private void setListener() {
 
@@ -210,7 +205,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         };
 
-        if (changeListener != null) mRealmList.addChangeListener(changeListener);
+        if (changeListener != null) {
+            mRealmList.addChangeListener(changeListener);
+        }
     }
 
     @Override
@@ -223,7 +220,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sheared_media);
 
-        mRealm = Realm.getDefaultInstance();
 
         mediaLayout = (LinearLayout) findViewById(R.id.asm_ll_music_layout);
         musicPlayer = new MusicPlayer(mediaLayout);
@@ -421,7 +417,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                final RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                Realm realm = Realm.getDefaultInstance();
+
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                 if (realmRoom != null) {
                     ActivityChat.deleteSelectedMessages(roomId, adapter.SelectedList, realmRoom.getType());
@@ -451,9 +449,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         break;
                 }
 
-                final RealmRoom room = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (room != null) {
-                    mRealm.executeTransaction(new Realm.Transaction() {
+                    realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
                             room.setSharedMediaCount(getStringSharedMediaCount());
@@ -462,6 +460,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 }
 
                 adapter.resetSelected();
+
+                realm.close();
             }
         });
 
@@ -632,7 +632,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         txtSharedMedia.setText(R.string.shared_links);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL;
 
-        mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+        Realm realm = Realm.getDefaultInstance();
+
+        mRealmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                 equalTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.TEXT.toString()).
                 equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
                 findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
@@ -647,6 +649,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityShearedMedia.this));
         recyclerView.setAdapter(adapter);
+
+        realm.close();
     }
 
     //********************************************************************************************
@@ -655,7 +659,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         if (mRealmList != null) mRealmList.removeChangeListeners();
 
-        mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+        Realm realm = Realm.getDefaultInstance();
+
+        mRealmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                 contains(RealmRoomMessageFields.MESSAGE_TYPE, type).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         setListener();
@@ -664,6 +670,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         getDataFromServer(filter);
         mListcount = mRealmList.size();
+
+        realm.close();
 
         return addTimeToList(mRealmList);
     }
@@ -766,7 +774,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             @Override
             public void run() {
 
-                mRealm.executeTransaction(new Realm.Transaction() {
+                Realm realm = Realm.getDefaultInstance();
+
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
@@ -774,6 +784,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         }
                     }
                 });
+
+                realm.close();
 
             }
         });
@@ -1323,7 +1335,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 // if thumpnail not exist download it
                 File filet = new File(vh.tempFilePath);
                 if (filet.exists()) {
-                    vh.imvPicFile.setImageURI(Uri.fromFile(new File(vh.tempFilePath)));
+                    G.imageLoader.displayImage(suitablePath(vh.tempFilePath), vh.imvPicFile);
                 } else {
 
                     RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
@@ -1339,7 +1351,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                                     if (progress == 100) {
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override public void run() {
-                                                ImageLoader.getInstance().displayImage(suitablePath(vh.tempFilePath), vh.imvPicFile);
+                                                G.imageLoader.displayImage(suitablePath(vh.tempFilePath), vh.imvPicFile);
                                             }
                                         });
                                     }
@@ -1463,7 +1475,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 File filethumpnail = new File(tempFilePath);
 
                 if (filethumpnail.exists()) {
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(tempFilePath), imvPicFile);
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(tempFilePath), imvPicFile);
                 } else {
                     imvPicFile.setImageResource(R.mipmap.j_video);
 
@@ -1478,7 +1490,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                                         if (progress == 100) {
                                             G.currentActivity.runOnUiThread(new Runnable() {
                                                 @Override public void run() {
-                                                    ImageLoader.getInstance().displayImage(suitablePath(tempFilePath), imvPicFile);
+                                                    G.imageLoader.displayImage(suitablePath(tempFilePath), imvPicFile);
                                                 }
                                             });
                                         }
@@ -1605,7 +1617,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         } else {
                             file = new File(tempFilePath);
                             if (file.exists()) {
-                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(tempFilePath), imvPicFile);
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(tempFilePath), imvPicFile);
                             }
                         }
                     } catch (Exception e) {
@@ -1615,7 +1627,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     messageProgress.setVisibility(View.VISIBLE);
                     file = new File(tempFilePath);
                     if (file.exists()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(tempFilePath), imvPicFile);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(tempFilePath), imvPicFile);
                     }
                 }
             }
@@ -1705,7 +1717,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     File filethumpnail = new File(tempFilePath);
 
                     if (filethumpnail.exists()) {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(tempFilePath), gifView);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(tempFilePath), gifView);
                     } else {
                         if (at.getSmallThumbnail() != null) {
                             if (at.getSmallThumbnail().getSize() > 0) {
@@ -1717,7 +1729,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                                             if (progress == 100) {
                                                 G.currentActivity.runOnUiThread(new Runnable() {
                                                     @Override public void run() {
-                                                        ImageLoader.getInstance().displayImage(suitablePath(tempFilePath), gifView);
+                                                        G.imageLoader.displayImage(suitablePath(tempFilePath), gifView);
                                                     }
                                                 });
                                             }
@@ -1814,7 +1826,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 File file = new File(vh.tempFilePath);
 
                 if (file.exists()) {
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(vh.tempFilePath), vh.imvPicFile);
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(vh.tempFilePath), vh.imvPicFile);
                 } else {
                     Bitmap bitmap = HelperMimeType.getMimePic(context, HelperMimeType.getMimeResource(mList.get(position).item.getAttachment().getName()));
                     if (bitmap != null) vh.imvPicFile.setImageBitmap(bitmap);

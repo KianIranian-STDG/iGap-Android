@@ -21,7 +21,6 @@ import com.iGap.proto.ProtoUserUpdateStatus;
 import com.iGap.realm.RealmAttachment;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -126,9 +125,9 @@ public final class AppUtils {
                 default:
                     if (attachment != null) {
                         if (attachment.isFileExistsOnLocal()) {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(attachment.getLocalFilePath()), view);
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(attachment.getLocalFilePath()), view);
                         } else if (attachment.isThumbnailExistsOnLocal()) {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(attachment.getLocalThumbnailPath()), view);
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(attachment.getLocalThumbnailPath()), view);
                         } else {
                             view.setVisibility(View.GONE);
                             // TODO: 11/15/2016 [Alireza] request download bede
@@ -144,7 +143,7 @@ public final class AppUtils {
 
     private static void getAndSetPositionPicture(final RealmRoomMessage message, final ImageView view) {
         if (message.getLocation().getImagePath() != null) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(message.getLocation().getImagePath()), view);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(message.getLocation().getImagePath()), view);
         } else {
 
             FragmentMap.loadImageFromPosition(message.getLocation().getLocationLat(), message.getLocation().getLocationLong(), new FragmentMap.OnGetPicture() {

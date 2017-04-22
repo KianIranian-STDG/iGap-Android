@@ -45,7 +45,6 @@ import com.iGap.request.RequestGroupAvatarDelete;
 import com.iGap.request.RequestGroupAvatarGetList;
 import com.iGap.request.RequestUserAvatarDelete;
 import com.iGap.request.RequestUserAvatarGetList;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -440,13 +439,13 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
                 File file = new File(path);
                 if (file.exists()) {
-                    ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
+                    G.imageLoader.displayImage(suitablePath(path), touchImageView);
                     progress.setVisibility(View.GONE);
                 } else {
                     path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
                     file = new File(path);
                     if (file.exists()) {
-                        ImageLoader.getInstance().displayImage(suitablePath(path), touchImageView);
+                        G.imageLoader.displayImage(suitablePath(path), touchImageView);
                     } else {
                         // if thumpnail not exist download it
                         ProtoFileDownload.FileDownload.Selector selector = null;
@@ -471,7 +470,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override public void run() {
-                                                ImageLoader.getInstance().displayImage(suitablePath(filePathTumpnail), touchImageView);
+                                                G.imageLoader.displayImage(suitablePath(filePathTumpnail), touchImageView);
                                             }
                                         });
                                     }
@@ -545,7 +544,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                                     progress.setVisibility(View.GONE);
                                     contentLoading.setVisibility(View.GONE);
 
-                                    ImageLoader.getInstance().displayImage(suitablePath(dirPath), touchImageView);
+                                    G.imageLoader.displayImage(suitablePath(dirPath), touchImageView);
                                 }
                             }
                         });

@@ -16,7 +16,6 @@ import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.List;
 
 /**
@@ -82,7 +81,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                     }
                 });
             }

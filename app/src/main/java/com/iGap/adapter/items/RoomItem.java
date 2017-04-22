@@ -29,7 +29,6 @@ import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
@@ -279,9 +278,9 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
                 HelperAvatar.updatePath(realmAvatar);
 
                 if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
                 } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
                 } else {
                     HelperAvatar.getAvatar1(idForGetAvatar, avatarType, new OnAvatarGet() {
                         @Override
@@ -289,7 +288,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
                         /*G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                             }
                         });*/
                         }

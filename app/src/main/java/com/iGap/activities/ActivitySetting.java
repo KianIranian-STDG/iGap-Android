@@ -98,7 +98,6 @@ import com.iGap.request.RequestUserSessionLogout;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
@@ -233,12 +232,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (realmUserInfo != null && realmUserInfo.getLastAvatar() != null) {
             RealmAvatar realmAvatar = realmUserInfo.getLastAvatar();
             if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), circleImageView);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), circleImageView);
                 if (G.onChangeUserPhotoListener != null) {
                     G.onChangeUserPhotoListener.onChangePhoto(realmAvatar.getFile().getLocalFilePath());
                 }
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), circleImageView);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), circleImageView);
                 if (G.onChangeUserPhotoListener != null) {
                     G.onChangeUserPhotoListener.onChangePhoto(realmAvatar.getFile().getLocalThumbnailPath());
                 }
@@ -253,7 +252,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void setImage(String path) {
         if (path != null) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(path), circleImageView);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), circleImageView);
             if (G.onChangeUserPhotoListener != null) {
                 G.onChangeUserPhotoListener.onChangePhoto(path);
             }
@@ -2263,7 +2262,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), circleImageView);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), circleImageView);
                     }
                 });
             }

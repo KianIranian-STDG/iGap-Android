@@ -49,7 +49,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.request.RequestChannelGetMemberList;
 import com.iGap.request.RequestGroupGetMemberList;
 import com.iGap.request.RequestUserInfo;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmList;
@@ -457,7 +456,7 @@ public class FragmentShowMember extends Fragment {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                         }
                     });
                 }

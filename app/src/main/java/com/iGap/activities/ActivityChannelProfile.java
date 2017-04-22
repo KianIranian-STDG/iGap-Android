@@ -113,7 +113,6 @@ import com.iGap.request.RequestChannelRevokeLink;
 import com.iGap.request.RequestChannelUpdateSignature;
 import com.iGap.request.RequestChannelUpdateUsername;
 import com.iGap.request.RequestUserInfo;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -771,7 +770,7 @@ public class ActivityChannelProfile extends ActivityEnhanced
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imgCircleImageView);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgCircleImageView);
                     }
                 });
             }
@@ -812,9 +811,9 @@ public class ActivityChannelProfile extends ActivityEnhanced
         }
 
         if (realmAvatar.getFile().isFileExistsOnLocal()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imgCircleImageView);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imgCircleImageView);
         } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imgCircleImageView);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imgCircleImageView);
         } else {
             imgCircleImageView.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
         }
@@ -1880,7 +1879,7 @@ public class ActivityChannelProfile extends ActivityEnhanced
             public void run() {
                 if (new File(imagePath).exists()) {
                     imgCircleImageView.setPadding(0, 0, 0, 0);
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
                 }
             }
         });

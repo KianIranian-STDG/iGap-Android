@@ -3,6 +3,7 @@ package com.iGap.module.enums;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.util.Log;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.R;
@@ -292,5 +293,12 @@ public final class StartupActions {
             Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(8).migration(new RealmMigration()).build());
         }
         dynamicRealm.close();
+
+        try {
+            Realm.compactRealm(configuration);
+        } catch (UnsupportedOperationException e) {
+            Log.e("ErrorLog", " G.realmConfiguration        " + e.toString());
+            e.printStackTrace();
+        }
     }
 }

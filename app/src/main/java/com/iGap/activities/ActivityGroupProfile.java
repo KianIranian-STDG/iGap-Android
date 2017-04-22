@@ -114,7 +114,6 @@ import com.iGap.request.RequestGroupRemoveUsername;
 import com.iGap.request.RequestGroupRevokeLink;
 import com.iGap.request.RequestGroupUpdateUsername;
 import com.iGap.request.RequestUserInfo;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -805,7 +804,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
                             }
                         });
                     }
@@ -1216,9 +1215,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
 
         if (realmAvatar.getFile().isFileExistsOnLocal()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imvGroupAvatar);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imvGroupAvatar);
         } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvGroupAvatar);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvGroupAvatar);
         } else {
             imvGroupAvatar.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
         }
@@ -2056,7 +2055,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
                     }
                 });
             }
@@ -2091,7 +2090,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
                         }
                     });
                 }
@@ -2116,7 +2115,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
                     }
                 });
             }

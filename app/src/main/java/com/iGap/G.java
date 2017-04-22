@@ -152,6 +152,7 @@ public class G extends MultiDexApplication {
     public static SecretKeySpec symmetricKey;
     public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
     public static HelperCheckInternetConnection.ConnectivityType latestConnectivityType;
+    public static ImageLoader imageLoader;
 
     public static ArrayList<String> unSecure = new ArrayList<>();
     public static ArrayList<String> unLogin = new ArrayList<>();// list of actionId that can be doing without secure
@@ -334,8 +335,10 @@ public class G extends MultiDexApplication {
 
         new StartupActions();
 
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
         ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(defaultOptions).build());
+
+        imageLoader = ImageLoader.getInstance();
     }
 
     @Override

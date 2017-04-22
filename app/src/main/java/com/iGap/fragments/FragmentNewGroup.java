@@ -68,7 +68,6 @@ import com.iGap.request.RequestChatConvertToGroup;
 import com.iGap.request.RequestClientGetRoom;
 import com.iGap.request.RequestGroupAvatarAdd;
 import com.iGap.request.RequestGroupCreate;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
@@ -712,9 +711,9 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         if (realmAvatar != null) {
             imgCircleImageView.setPadding(0, 0, 0, 0);
             if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imgCircleImageView);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imgCircleImageView);
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imgCircleImageView);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imgCircleImageView);
             } else {
                 showInitials();
             }
@@ -733,7 +732,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
             public void run() {
                 if (imagePath != null && new File(imagePath).exists()) {
                     imgCircleImageView.setPadding(0, 0, 0, 0);
-                    ImageLoader.getInstance().displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
                 } else {
                     showInitials();
                     imgCircleImageView.setPadding(0, 0, 0, 0);
