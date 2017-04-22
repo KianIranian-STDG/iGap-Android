@@ -169,7 +169,6 @@ public class LoginActions extends Application {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
                         RealmPhoneContacts.sendContactList(Contacts.getListOfContact(), false);
                     }
                 });

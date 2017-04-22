@@ -49,7 +49,7 @@ import com.iGap.interfaces.OnReceiveInfoLocation;
 import com.iGap.interfaces.OnReceivePageInfoTOS;
 import com.iGap.module.CustomCircleImage;
 import com.iGap.module.SHP_SETTING;
-import com.iGap.module.enums.StartupActions;
+import com.iGap.module.StartupActions;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
 import com.iGap.request.RequestInfoPage;

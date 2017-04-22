@@ -1,4 +1,4 @@
-package com.iGap.module.enums;
+package com.iGap.module;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,10 +14,10 @@ import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.MyService;
-import com.iGap.module.ConnectionManager;
-import com.iGap.module.LoginActions;
-import com.iGap.module.SHP_SETTING;
 import com.iGap.realm.RealmMigration;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -45,6 +45,7 @@ import static com.iGap.G.context;
 import static com.iGap.G.headerTextColor;
 import static com.iGap.G.helperNotificationAndBadge;
 import static com.iGap.G.imageFile;
+import static com.iGap.G.imageLoader;
 import static com.iGap.G.isSaveToGallery;
 import static com.iGap.G.notificationColor;
 import static com.iGap.G.selectedLanguage;
@@ -230,6 +231,9 @@ public final class StartupActions {
     }
 
     private void initializeGlobalVariables() {
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
+        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
+        imageLoader = ImageLoader.getInstance();
         helperNotificationAndBadge = new HelperNotificationAndBadge();
 
         HelperFillLookUpClass.fillLookUpClassArray();

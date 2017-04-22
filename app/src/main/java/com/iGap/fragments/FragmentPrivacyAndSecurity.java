@@ -27,7 +27,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.SHP_SETTING;
-import com.iGap.module.StructSessionsgetActivelist;
+import com.iGap.module.StructSessionsGetActiveList;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmPrivacy;
 import com.iGap.realm.RealmUserInfo;
@@ -51,7 +51,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     private SharedPreferences sharedPreferences;
     private int poRbDialogSelfDestruction = 0;
     private int selfRemove;
-    private ArrayList<StructSessionsgetActivelist> itemSessionsgetActivelist = new ArrayList<StructSessionsgetActivelist>();
+    private ArrayList<StructSessionsGetActiveList> itemSessionsgetActivelist = new ArrayList<StructSessionsGetActiveList>();
     private TextView txtDestruction;
 
     private TextView txtWhoCanSeeMyAvatar;

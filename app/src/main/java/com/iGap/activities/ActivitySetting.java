@@ -87,7 +87,7 @@ import com.iGap.module.FileUploadStructure;
 import com.iGap.module.IntentRequests;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
-import com.iGap.module.enums.StartupActions;
+import com.iGap.module.StartupActions;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
