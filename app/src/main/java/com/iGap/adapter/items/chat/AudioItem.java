@@ -31,7 +31,6 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.github.meness.emoji.EmojiTextView;
 import java.io.File;
 import java.util.List;
@@ -40,7 +39,6 @@ import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static android.view.View.GONE;
 
 public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public AudioItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
@@ -54,11 +52,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     @Override
     public int getLayoutRes() {
         return R.layout.chat_sub_layout_audio;
-    }
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
     }
 
     @Override
@@ -125,11 +118,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         }
 
         View audioBoxView = holder.itemView.findViewById(R.id.audioBox);
-        if ((mMessage.forwardedFrom != null
-                && mMessage.forwardedFrom.getForwardMessage() != null
-                && mMessage.forwardedFrom.getForwardMessage().getMessage() != null
-                && !TextUtils.isEmpty(mMessage.forwardedFrom.getForwardMessage().getMessage()))
-                || !TextUtils.isEmpty(mMessage.messageText)) {
+        if ((mMessage.forwardedFrom != null && mMessage.forwardedFrom.getForwardMessage() != null && mMessage.forwardedFrom.getForwardMessage().getMessage() != null && !TextUtils.isEmpty(mMessage.forwardedFrom.getForwardMessage().getMessage())) || !TextUtils.isEmpty(mMessage.messageText)) {
             audioBoxView.setBackgroundResource(R.drawable.green_bg_rounded_corner);
         } else {
             audioBoxView.setBackgroundColor(Color.TRANSPARENT);
@@ -138,8 +127,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000);
 
 
-                holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
-                Log.e("ddd", _st + "");
+        holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
+        Log.e("ddd", _st + "");
 
 
         if (mMessage.messageID.equals(MusicPlayer.messageId)) {
@@ -206,14 +195,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         super.voteAction(holder);
     }
 
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-
         protected ImageView thumbnail;
         protected TextView fileSize;
         protected TextView fileName;
@@ -304,5 +286,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 }
             });
         }
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }

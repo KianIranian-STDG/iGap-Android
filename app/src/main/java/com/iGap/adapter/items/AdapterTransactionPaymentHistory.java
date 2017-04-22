@@ -17,15 +17,13 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.fragments.FragmentTransactionPaymentHistory;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
 
 
 public class AdapterTransactionPaymentHistory extends AbstractItem<AdapterTransactionPaymentHistory, AdapterTransactionPaymentHistory.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
-    public FragmentTransactionPaymentHistory.StructHistotyPayment item;
+    public FragmentTransactionPaymentHistory.StructHistoryPayment item;
 
-    public AdapterTransactionPaymentHistory setContact(FragmentTransactionPaymentHistory.StructHistotyPayment item) {
+    public AdapterTransactionPaymentHistory setContact(FragmentTransactionPaymentHistory.StructHistoryPayment item) {
         this.item = item;
         return this;
     }
@@ -63,20 +61,7 @@ public class AdapterTransactionPaymentHistory extends AbstractItem<AdapterTransa
 
     }
 
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-
 
         protected TextView txtTime1;
         protected TextView txtTime2;
@@ -98,6 +83,11 @@ public class AdapterTransactionPaymentHistory extends AbstractItem<AdapterTransa
             txtCondition = (TextView) view.findViewById(R.id.ftphs_txt_condition);
             txtRightArrowIcon = (com.iGap.module.MaterialDesignTextView) view.findViewById(R.id.ftphs_txt_icon_right_arrow);
         }
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }
 

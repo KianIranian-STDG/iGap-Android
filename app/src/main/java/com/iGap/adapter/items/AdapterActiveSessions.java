@@ -19,7 +19,6 @@ import com.iGap.R;
 import com.iGap.helper.HelperCalander;
 import com.iGap.module.StructSessionsGetActiveList;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
 
 import static com.iGap.R.id.adp_currentSession;
@@ -83,18 +82,6 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
 
         holder.txtCreateTime.setText("" + changeTime);
 
-
-//        holder.vgRootLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                if (item.isCurrent()){
-//
-//                }else {
-//                    Toast.makeText(G.context, "active", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
     }
 
     //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
@@ -124,25 +111,8 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
         }
     }
 
-    //the static ViewHolderFactory which will be used to generate the ViewHolder for this Item
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
-
-    /**
-     * our ItemFactory implementation which creates the ViewHolder for our adapter.
-     * It is highly recommended to implement a ViewHolderFactory as it is 0-1ms faster for ViewHolder creation,
-     * and it is also many many times more efficient if you define custom listeners on views within your item.
-     */
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
-    /**
-     * return our ViewHolderFactory implementation here
-     */
     @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }

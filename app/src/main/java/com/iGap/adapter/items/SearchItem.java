@@ -26,13 +26,11 @@ import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.TimeUtils;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.github.meness.emoji.EmojiTextView;
 import java.io.File;
 import java.util.List;
 
 public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public SearchFragment.StructSearch item;
     private Typeface typeFaceIcon;
 
@@ -99,29 +97,16 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
                     Bitmap bitmap = BitmapFactory.decodeFile(filepathThumbnail);
                     holder.avatar.setImageBitmap(bitmap);
                 } else {
-                    holder.avatar.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(
-                            holder.avatar.getLayoutParams().width, item.initials, item.color));
+                    holder.avatar.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(holder.avatar.getLayoutParams().width, item.initials, item.color));
                 }
             }
         } else {
-            holder.avatar.setImageBitmap(
-                    HelperImageBackColor.drawAlphabetOnPicture(holder.avatar.getLayoutParams().width,
-                            item.initials, item.color));
-        }
-    }
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
+            holder.avatar.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(holder.avatar.getLayoutParams().width, item.initials, item.color));
         }
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
+
         protected CircleImageView avatar;
         protected CustomTextViewMedium name;
         protected TextView txtIcon;
@@ -137,6 +122,11 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             txtIcon = (TextView) view.findViewById(R.id.sfsl_txt_icon);
             txtTime = (TextView) view.findViewById(R.id.sfsl_txt_time);
         }
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }
 

@@ -20,15 +20,12 @@ import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.github.meness.emoji.EmojiTextView;
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
-public class ImageWithTextItem
-        extends AbstractMessage<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
+public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
 
     public ImageWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
@@ -58,14 +55,11 @@ public class ImageWithTextItem
             @Override
             public void onClick(View v) {
                 if (!isSelected()) {
-                    if (mMessage.status.equalsIgnoreCase(
-                            ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
                     }
-                    if (mMessage.status.equalsIgnoreCase(
-                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage,
-                                holder.getAdapterPosition());
+                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
                     } else {
                         messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
                     }
@@ -83,23 +77,22 @@ public class ImageWithTextItem
 
         if (!mMessage.hasLinkInMessage) {
             holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View v) {
+                @Override
+                public boolean onLongClick(View v) {
                     holder.itemView.performLongClick();
                     return false;
                 }
             });
 
             holder.messageText.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     if (!isSelected()) {
-                        if (mMessage.status.equalsIgnoreCase(
-                            ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return;
                         }
-                        if (mMessage.status.equalsIgnoreCase(
-                            ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            messageClickListener.onFailedMessageClick(v, mMessage,
-                                holder.getAdapterPosition());
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
                         } else {
                             messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
                         }
@@ -110,11 +103,12 @@ public class ImageWithTextItem
 
     }
 
-    @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
+    @Override
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
         G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-                holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+        holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
     }
 
     @Override
@@ -123,14 +117,8 @@ public class ImageWithTextItem
     }
 
     @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {

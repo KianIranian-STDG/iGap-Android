@@ -35,7 +35,7 @@ public class FragmentTransactionPaymentHistory extends Fragment {
 
     private FastAdapter fastAdapter;
     private ItemAdapter itemAdapter;
-    private ArrayList<StructHistotyPayment> list = new ArrayList<>();
+    private ArrayList<StructHistoryPayment> list = new ArrayList<>();
     private RecyclerView recyclerView;
 
     private PaymentTaype paymentTaype = PaymentTaype.weekly;
@@ -52,7 +52,7 @@ public class FragmentTransactionPaymentHistory extends Fragment {
         completed;
     }
 
-    public class StructHistotyPayment {
+    public class StructHistoryPayment {
 
         public String time1 = "";
         public String time2 = "";
@@ -106,7 +106,7 @@ public class FragmentTransactionPaymentHistory extends Fragment {
     private void fillList() {
 
 
-        StructHistotyPayment item = new StructHistotyPayment();
+        StructHistoryPayment item = new StructHistoryPayment();
 
         item.comment = "resturant mahele";
         item.pyamentAction = PyamentAction.completed;

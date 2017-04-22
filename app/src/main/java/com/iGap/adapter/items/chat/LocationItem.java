@@ -24,7 +24,6 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessageLocation;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +32,6 @@ import java.util.List;
 import static com.iGap.R.id.ac_ll_parent;
 
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public LocationItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
@@ -145,15 +143,10 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     }
 
     @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 

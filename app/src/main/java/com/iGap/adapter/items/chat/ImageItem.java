@@ -19,13 +19,11 @@ import com.iGap.interfaces.IMessageItem;
 import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
 
 import static com.iGap.module.AndroidUtils.suitablePath;
 
 public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public ImageItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
@@ -42,16 +40,11 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     }
 
     @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
         G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-                holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
-
+        holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
     }
 
 
@@ -89,18 +82,17 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         });
     }
 
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected ReserveSpaceRoundedImageView image;
 
+        protected ReserveSpaceRoundedImageView image;
         public ViewHolder(View view) {
             super(view);
             image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
         }
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }

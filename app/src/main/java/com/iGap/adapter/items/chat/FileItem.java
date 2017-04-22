@@ -22,13 +22,11 @@ import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
 import java.util.List;
 
 public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public FileItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
@@ -44,10 +42,6 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         return R.layout.chat_sub_layout_file;
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
 
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
@@ -133,18 +127,13 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         super.voteAction(holder);
     }
 
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-    }
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
+
+
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
         protected EmojiTextView messageText;
         protected ImageView thumbnail;
-
         public ViewHolder(View view) {
             super(view);
 
@@ -153,6 +142,12 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
             cslf_txt_file_size = (TextView) view.findViewById(R.id.fileSize);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+        }
+
     }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }
