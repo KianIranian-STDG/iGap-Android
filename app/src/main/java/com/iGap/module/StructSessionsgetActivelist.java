@@ -2,7 +2,8 @@ package com.iGap.module;
 
 import com.iGap.proto.ProtoGlobal;
 
-public class StructSessionsgetActivelist {
+
+public class StructSessionsGetActiveList {
 
     private long sessionId;
     private String name;
@@ -16,7 +17,7 @@ public class StructSessionsgetActivelist {
     private ProtoGlobal.Language language;
     private String country;
     private boolean current;
-    private int createTime;
+    private int createTime;  //ddd
     private int activeTime;
     private String ip;
 
