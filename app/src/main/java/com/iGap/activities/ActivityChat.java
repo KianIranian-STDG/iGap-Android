@@ -1,3 +1,13 @@
+/*
+* This is the source code of iGap for Android
+* It is licensed under GNU AGPL v3.0
+* You should have received a copy of the license in this archive (see LICENSE).
+* Copyright © 2017 , iGap - www.iGap.net
+* iGap Messenger | Free, Fast and Secure instant messaging application
+* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* All rights reserved.
+*/
+
 package com.iGap.activities;
 
 import android.Manifest;
@@ -260,7 +270,6 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageType.LOG;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static com.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static java.lang.Long.parseLong;
-
 
 public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 

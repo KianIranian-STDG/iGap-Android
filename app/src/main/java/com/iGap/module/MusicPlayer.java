@@ -1,3 +1,14 @@
+/*
+* This is the source code of iGap for Android
+* It is licensed under GNU AGPL v3.0
+* You should have received a copy of the license in this archive (see LICENSE).
+* Copyright © 2017 , iGap - www.iGap.net
+* iGap Messenger | Free, Fast and Secure instant messaging application
+* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* All rights reserved.
+*/
+
+
 package com.iGap.module;
 
 import android.app.Notification;
@@ -35,9 +46,6 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created by android3 on 10/2/2016.
- */
 public class MusicPlayer {
 
     public static final int notificationId = 19;

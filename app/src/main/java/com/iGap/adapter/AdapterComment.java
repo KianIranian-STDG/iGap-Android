@@ -1,3 +1,13 @@
+/*
+* This is the source code of iGap for Android
+* It is licensed under GNU AGPL v3.0
+* You should have received a copy of the license in this archive (see LICENSE).
+* Copyright © 2017 , iGap - www.iGap.net
+* iGap Messenger | Free, Fast and Secure instant messaging application
+* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* All rights reserved.
+*/
+
 package com.iGap.adapter;
 
 import android.content.Context;
@@ -13,17 +23,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.iGap.R;
 import com.iGap.activities.ActivityComment;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.StructCommentInfo;
-
 import java.util.ArrayList;
 
-/**
- * Created by android3 on 8/31/2016.
- */
 public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public int replayCommentNumber = -1;

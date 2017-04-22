@@ -1,9 +1,5 @@
 package com.iGap.module;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 11/8/2016.
- */
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;

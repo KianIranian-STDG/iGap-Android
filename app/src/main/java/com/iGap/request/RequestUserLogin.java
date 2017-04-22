@@ -1,3 +1,13 @@
+/*
+* This is the source code of iGap for Android
+* It is licensed under GNU AGPL v3.0
+* You should have received a copy of the license in this archive (see LICENSE).
+* Copyright © 2017 , iGap - www.iGap.net
+* iGap Messenger | Free, Fast and Secure instant messaging application
+* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* All rights reserved.
+*/
+
 package com.iGap.request;
 
 import android.content.Context;
@@ -6,12 +16,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
-
 import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoRequest;
 import com.iGap.proto.ProtoUserLogin;
-
 import java.util.Locale;
 
 import static com.iGap.G.context;

@@ -1,8 +1,12 @@
-// Copyright (c) 2016, iGap - www.iGap.im
-// iGap is a Hybrid instant messaging service .
-// RooyeKhat Media Co . - www.RooyeKhat.co
-// All rights reserved.
-
+/*
+* This is the source code of iGap for Android
+* It is licensed under GNU AGPL v3.0
+* You should have received a copy of the license in this archive (see LICENSE).
+* Copyright © 2017 , iGap - www.iGap.net
+* iGap Messenger | Free, Fast and Secure instant messaging application
+* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* All rights reserved.
+*/
 package com.iGap.fragments;
 
 import android.os.Bundle;
@@ -13,10 +17,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.iGap.R;
 import com.iGap.module.SlidingTabLayout;
-
 import java.util.ArrayList;
 
 

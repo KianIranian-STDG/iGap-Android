@@ -1,10 +1,19 @@
+/*
+* This is the source code of iGap for Android
+* It is licensed under GNU AGPL v3.0
+* You should have received a copy of the license in this archive (see LICENSE).
+* Copyright © 2017 , iGap - www.iGap.net
+* iGap Messenger | Free, Fast and Secure instant messaging application
+* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* All rights reserved.
+*/
+
 package com.iGap.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.iGap.R;
 import com.iGap.adapter.items.ContactItem;
 import com.iGap.adapter.items.ContactItemGroup;
@@ -13,7 +22,6 @@ import com.iGap.module.CustomTextViewMedium;
 import com.mikepenz.fastadapter.AbstractAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
-
 import java.util.List;
 
 public class StickyHeaderAdapter extends AbstractAdapter implements StickyRecyclerHeadersAdapter {

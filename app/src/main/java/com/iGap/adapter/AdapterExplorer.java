@@ -1,3 +1,13 @@
+/*
+* This is the source code of iGap for Android
+* It is licensed under GNU AGPL v3.0
+* You should have received a copy of the license in this archive (see LICENSE).
+* Copyright © 2017 , iGap - www.iGap.net
+* iGap Messenger | Free, Fast and Secure instant messaging application
+* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* All rights reserved.
+*/
+
 package com.iGap.adapter;
 
 import android.support.v7.widget.RecyclerView;
@@ -6,16 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.iGap.R;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.module.StructExplorerItem;
-
 import java.util.ArrayList;
 
-/**
- * Created by android3 on 9/7/2016.
- */
 public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHolder> {
 
     private HelperMimeType helperMimeType;
