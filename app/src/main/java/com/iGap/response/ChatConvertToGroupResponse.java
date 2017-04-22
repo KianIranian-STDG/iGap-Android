@@ -1,14 +1,14 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.module.enums.GroupChatRole;
+import com.iGap.module.enums.RoomType;
 import com.iGap.proto.ProtoChatConvertToGroup;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmGroupRoom;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-import com.iGap.realm.enums.GroupChatRole;
-import com.iGap.realm.enums.RoomType;
 import io.realm.Realm;
 
 public class ChatConvertToGroupResponse extends MessageHandler {

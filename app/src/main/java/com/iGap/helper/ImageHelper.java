@@ -26,12 +26,11 @@ public class ImageHelper {
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         final RectF rectF = new RectF(rect);
-        final float roundPx = pixels;
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        canvas.drawRoundRect(rectF, (float) pixels, (float) pixels, paint);
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
@@ -63,9 +62,8 @@ public class ImageHelper {
                         bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                     }
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
-
 
             } else {
                 return null;
@@ -73,7 +71,6 @@ public class ImageHelper {
 
             ExifInterface ei = new ExifInterface(filepath);
             int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-
 
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
@@ -88,9 +85,9 @@ public class ImageHelper {
                     bitmap = rotateImage(bitmap, 270);
                     saveChange = true;
                     break;
-
             }
         } catch (IOException e) {
+            e.printStackTrace();
         }
 
         if (filepath.length() > 0 && saveChange) SaveBitmapToFile(filepath, bitmap);
@@ -155,27 +152,22 @@ public class ImageHelper {
             //decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inSampleSize = scale;
-            //  o2.inSampleSize = 15;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    public static boolean isNeedtoCompress(File file) {
+    public static boolean isNeedToCompress(File file) {
 
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
         try {
             BitmapFactory.decodeStream(new FileInputStream(file), null, o);
-
-            if (o.outWidth > 500 || o.outHeight > 500) {
-                return true;
-            } else {
-                return false;
-            }
+            return o.outWidth > 500 || o.outHeight > 500;
         } catch (FileNotFoundException e) {
-
+            e.printStackTrace();
         }
 
         return true;
@@ -184,7 +176,6 @@ public class ImageHelper {
     public static Bitmap correctRotate(String filepath, Bitmap bitmap) {
 
         try {
-
             ExifInterface ei = new ExifInterface(filepath);
             int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 

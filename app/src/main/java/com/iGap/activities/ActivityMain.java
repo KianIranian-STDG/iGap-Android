@@ -69,6 +69,7 @@ import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.interfaces.OnChatUpdateStatusResponse;
 import com.iGap.interfaces.OnClientCondition;
 import com.iGap.interfaces.OnClientGetRoomListResponse;
+import com.iGap.interfaces.OnComplete;
 import com.iGap.interfaces.OnConnectionChangeState;
 import com.iGap.interfaces.OnDraftMessage;
 import com.iGap.interfaces.OnGetPermission;
@@ -89,9 +90,12 @@ import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
-import com.iGap.module.OnComplete;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.ShouldScrolledBehavior;
+import com.iGap.module.enums.ChannelChatRole;
+import com.iGap.module.enums.ConnectionState;
+import com.iGap.module.enums.GroupChatRole;
+import com.iGap.module.enums.RoomType;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmAvatar;
@@ -103,9 +107,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.iGap.realm.RealmUserInfo;
-import com.iGap.realm.enums.ChannelChatRole;
-import com.iGap.realm.enums.GroupChatRole;
-import com.iGap.realm.enums.RoomType;
 import com.iGap.request.RequestChannelDelete;
 import com.iGap.request.RequestChannelLeft;
 import com.iGap.request.RequestChatDelete;
@@ -787,13 +788,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void connectionState() {
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
-        if (G.connectionState == Config.ConnectionState.WAITING_FOR_NETWORK) {
+        if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
             txtIgap.setText(R.string.waiting_for_network);
             txtIgap.setTypeface(null, Typeface.BOLD);
-        } else if (G.connectionState == Config.ConnectionState.CONNECTING) {
+        } else if (G.connectionState == ConnectionState.CONNECTING) {
             txtIgap.setText(R.string.connecting);
             txtIgap.setTypeface(null, Typeface.BOLD);
-        } else if (G.connectionState == Config.ConnectionState.UPDATING) {
+        } else if (G.connectionState == ConnectionState.UPDATING) {
             txtIgap.setText(updating);
             txtIgap.setTypeface(null, Typeface.BOLD);
         } else {
@@ -803,18 +804,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.onConnectionChangeState = new OnConnectionChangeState() {
             @Override
-            public void onChangeState(final Config.ConnectionState connectionStateR) {
+            public void onChangeState(final ConnectionState connectionStateR) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         G.connectionState = connectionStateR;
-                        if (connectionStateR == Config.ConnectionState.WAITING_FOR_NETWORK) {
+                        if (connectionStateR == ConnectionState.WAITING_FOR_NETWORK) {
                             txtIgap.setText(R.string.waiting_for_network);
                             txtIgap.setTypeface(null, Typeface.BOLD);
-                        } else if (connectionStateR == Config.ConnectionState.CONNECTING) {
+                        } else if (connectionStateR == ConnectionState.CONNECTING) {
                             txtIgap.setText(R.string.connecting);
                             txtIgap.setTypeface(null, Typeface.BOLD);
-                        } else if (connectionStateR == Config.ConnectionState.UPDATING) {
+                        } else if (connectionStateR == ConnectionState.UPDATING) {
                             txtIgap.setText(R.string.updating);
                             txtIgap.setTypeface(null, Typeface.BOLD);
                         } else {
@@ -832,7 +833,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        G.connectionState = Config.ConnectionState.UPDATING;
+                        G.connectionState = ConnectionState.UPDATING;
                         txtIgap.setText(R.string.updating);
                         txtIgap.setTypeface(null, Typeface.BOLD);
                     }
@@ -845,8 +846,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                  * if yet still G.connectionState is in update state
                  * show latestState that was in previous state
                  */
-                if (G.connectionState == Config.ConnectionState.UPDATING) {
-                    G.onConnectionChangeState.onChangeState(Config.ConnectionState.IGAP);
+                if (G.connectionState == ConnectionState.UPDATING) {
+                    G.onConnectionChangeState.onChangeState(ConnectionState.IGAP);
                 }
             }
         };

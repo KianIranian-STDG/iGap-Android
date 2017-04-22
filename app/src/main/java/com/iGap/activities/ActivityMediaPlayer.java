@@ -19,10 +19,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.R;
 import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperSaveFile;
+import com.iGap.interfaces.OnComplete;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
-import com.iGap.module.OnComplete;
 import java.io.File;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 

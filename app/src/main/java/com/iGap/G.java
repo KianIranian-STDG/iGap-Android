@@ -147,6 +147,7 @@ import com.iGap.module.Connectivity;
 import com.iGap.module.Contacts;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.enums.ConnectionMode;
+import com.iGap.module.enums.ConnectionState;
 import com.iGap.proto.ProtoClientCondition;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmMigration;
@@ -279,8 +280,8 @@ public class G extends MultiDexApplication {
     public static ChatSendMessageUtil chatSendMessageUtil = new ChatSendMessageUtil();
     public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
 
-    public static Config.ConnectionState connectionState;
-    public static Config.ConnectionState latestConnectionState;
+    public static ConnectionState connectionState;
+    public static ConnectionState latestConnectionState;
     public static OnConnectionChangeState onConnectionChangeState;
     public static OnUpdating onUpdating;
     public static OnReceiveInfoLocation onReceiveInfoLocation;
@@ -518,7 +519,7 @@ public class G extends MultiDexApplication {
 
         appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
         notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-        toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleBottonColor);
+        toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
         attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
         headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
 
@@ -914,7 +915,7 @@ public class G extends MultiDexApplication {
                      * No Network
                      */
                     hasNetworkBefore = false;
-                    HelperConnectionState.connectionState(Config.ConnectionState.WAITING_FOR_NETWORK);
+                    HelperConnectionState.connectionState(ConnectionState.WAITING_FOR_NETWORK);
                     G.socketConnection = false;
                 }
             }

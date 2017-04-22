@@ -34,6 +34,7 @@ import com.iGap.activities.ActivityPaint;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperString;
 import com.iGap.helper.ImageHelper;
+import com.iGap.interfaces.OnComplete;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.proto.ProtoGlobal;
 import java.io.File;
@@ -663,7 +664,7 @@ public class AttachFile {
             String result = "";
             if (galleryPath == null) return "";
 
-        if (ImageHelper.isNeedtoCompress(new File(galleryPath))) {
+        if (ImageHelper.isNeedToCompress(new File(galleryPath))) {
 
             Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
             bitmap = ImageHelper.correctRotate(galleryPath, bitmap);

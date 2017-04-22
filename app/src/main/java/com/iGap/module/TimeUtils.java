@@ -19,7 +19,6 @@ package com.iGap.module;
 import android.content.Context;
 import com.iGap.R;
 import com.iGap.helper.HelperCalander;
-import com.iGap.libs.CalandarShamsi;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -74,7 +73,7 @@ public final class TimeUtils {
 
             if (HelperCalander.isTimeHijri()) {
 
-                CalandarShamsi shamsi = new CalandarShamsi(date.getTime());
+                CalendarShamsi shamsi = new CalendarShamsi(date.getTime());
 
                 if (HelperCalander.isLanguagePersian) {
                     output = shamsi.date + " " + HelperCalander.getPersianMonthName(shamsi.month) + " " + shamsi.year;

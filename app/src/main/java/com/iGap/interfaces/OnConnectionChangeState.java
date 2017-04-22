@@ -1,7 +1,7 @@
 package com.iGap.interfaces;
 
-import com.iGap.Config;
+import com.iGap.module.enums.ConnectionState;
 
 public interface OnConnectionChangeState {
-    void onChangeState(Config.ConnectionState connectionState);
+    void onChangeState(ConnectionState connectionState);
 }

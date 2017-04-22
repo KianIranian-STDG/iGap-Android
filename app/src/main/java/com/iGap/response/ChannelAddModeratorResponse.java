@@ -1,6 +1,7 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.module.enums.ChannelChatRole;
 import com.iGap.proto.ProtoChannelAddModerator;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoGlobal;
@@ -8,7 +9,6 @@ import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmMember;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
-import com.iGap.realm.enums.ChannelChatRole;
 import io.realm.Realm;
 import io.realm.RealmList;
 

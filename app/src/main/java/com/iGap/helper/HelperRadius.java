@@ -28,7 +28,7 @@ public class HelperRadius {
             return (int) (options.outHeight / Config.IMAGE_CORNER);
         }*/
 
-        return (int) Config.IMAGE_CORNER;
+        return Config.IMAGE_CORNER;
     }
 
 }

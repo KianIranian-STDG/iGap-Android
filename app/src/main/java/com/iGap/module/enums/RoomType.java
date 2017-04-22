@@ -1,10 +1,7 @@
-package com.iGap.realm.enums;
+package com.iGap.module.enums;
 
 import com.iGap.proto.ProtoGlobal;
 
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 8/31/2016.
- */
 public enum RoomType {
     CHAT, GROUP, CHANNEL;
 

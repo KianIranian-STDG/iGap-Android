@@ -12,8 +12,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.interfaces.OnComplete;
 import com.iGap.module.MaterialDesignTextView;
-import com.iGap.module.OnComplete;
 import com.iGap.proto.ProtoGlobal;
 
 public class MyDialog {

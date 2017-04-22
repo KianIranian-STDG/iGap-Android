@@ -46,7 +46,6 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.iGap.Config;
 import com.iGap.G;
-import com.iGap.IntentRequests;
 import com.iGap.R;
 import com.iGap.fragments.FragmentDeleteAccount;
 import com.iGap.fragments.FragmentPrivacyAndSecurity;
@@ -63,6 +62,7 @@ import com.iGap.helper.ImageHelper;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
 import com.iGap.interfaces.OnAvatarGet;
+import com.iGap.interfaces.OnComplete;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnUserAvatarResponse;
 import com.iGap.interfaces.OnUserProfileCheckUsername;
@@ -75,7 +75,7 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
 import com.iGap.module.FileUploadStructure;
 import com.iGap.module.IncomingSms;
-import com.iGap.module.OnComplete;
+import com.iGap.module.IntentRequests;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoGlobal;
@@ -2177,7 +2177,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
                 headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
-                //  toggleBottomClick(Color.parseColor(Config.default_toggleBottonColor));
+                //  toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));
                 sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
                 appBarColorClick(Color.parseColor(Config.default_appBarColor));
             }

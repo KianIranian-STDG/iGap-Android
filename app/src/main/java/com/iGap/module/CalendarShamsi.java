@@ -1,12 +1,9 @@
-package com.iGap.libs;
+package com.iGap.module;
 
 import java.util.Date;
 
-/**
- * Created by android3 on 4/6/2017.
- */
 
-public class CalandarShamsi {
+public class CalendarShamsi {
 
     public String strWeekDay = "";
     public String strMonth = "";
@@ -15,23 +12,23 @@ public class CalandarShamsi {
     public int month;
     public int year;
 
-    public CalandarShamsi() {
-        Date MiladiDate = new Date();
-        calcSolarCalendar(MiladiDate);
+    public CalendarShamsi() {
+        Date MiladyDate = new Date();
+        calcSolarCalendar(MiladyDate);
     }
 
-    public CalandarShamsi(Date MiladiDate) {
-        calcSolarCalendar(MiladiDate);
+    public CalendarShamsi(Date MiladyDate) {
+        calcSolarCalendar(MiladyDate);
     }
 
-    private void calcSolarCalendar(Date MiladiDate) {
+    private void calcSolarCalendar(Date MiladyDate) {
 
         int ld;
 
-        int miladiYear = MiladiDate.getYear() + 1900;
-        int miladiMonth = MiladiDate.getMonth() + 1;
-        int miladiDate = MiladiDate.getDate();
-        int WeekDay = MiladiDate.getDay();
+        int miladyYear = MiladyDate.getYear() + 1900;
+        int miladyMonth = MiladyDate.getMonth() + 1;
+        int miladyDate = MiladyDate.getDate();
+        int WeekDay = MiladyDate.getDay();
 
         int[] buf1 = new int[12];
         int[] buf2 = new int[12];
@@ -62,8 +59,8 @@ public class CalandarShamsi {
         buf2[10] = 305;
         buf2[11] = 335;
 
-        if ((miladiYear % 4) != 0) {
-            date = buf1[miladiMonth - 1] + miladiDate;
+        if ((miladyYear % 4) != 0) {
+            date = buf1[miladyMonth - 1] + miladyDate;
 
             if (date > 79) {
                 date = date - 79;
@@ -78,7 +75,7 @@ public class CalandarShamsi {
                             date = (date % 31);
                             break;
                     }
-                    year = miladiYear - 621;
+                    year = miladyYear - 621;
                 } else {
                     date = date - 186;
 
@@ -92,10 +89,10 @@ public class CalandarShamsi {
                             date = (date % 30);
                             break;
                     }
-                    year = miladiYear - 621;
+                    year = miladyYear - 621;
                 }
             } else {
-                if ((miladiYear > 1996) && (miladiYear % 4) == 1) {
+                if ((miladyYear > 1996) && (miladyYear % 4) == 1) {
                     ld = 11;
                 } else {
                     ld = 10;
@@ -112,12 +109,12 @@ public class CalandarShamsi {
                         date = (date % 30);
                         break;
                 }
-                year = miladiYear - 622;
+                year = miladyYear - 622;
             }
         } else {
-            date = buf2[miladiMonth - 1] + miladiDate;
+            date = buf2[miladyMonth - 1] + miladyDate;
 
-            if (miladiYear >= 1996) {
+            if (miladyYear >= 1996) {
                 ld = 79;
             } else {
                 ld = 80;
@@ -136,7 +133,7 @@ public class CalandarShamsi {
                             date = (date % 31);
                             break;
                     }
-                    year = miladiYear - 621;
+                    year = miladyYear - 621;
                 } else {
                     date = date - 186;
 
@@ -150,7 +147,7 @@ public class CalandarShamsi {
                             date = (date % 30);
                             break;
                     }
-                    year = miladiYear - 621;
+                    year = miladyYear - 621;
                 }
             } else {
                 date = date + 10;
@@ -165,7 +162,7 @@ public class CalandarShamsi {
                         date = (date % 30);
                         break;
                 }
-                year = miladiYear - 622;
+                year = miladyYear - 622;
             }
         }
 

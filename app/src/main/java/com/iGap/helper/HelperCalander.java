@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 import android.text.format.DateUtils;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.libs.CalandarShamsi;
+import com.iGap.module.CalendarShamsi;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.TimeUtils;
 import java.util.Calendar;
@@ -23,7 +23,7 @@ public class HelperCalander {
         Calendar c = Calendar.getInstance();
         c.set(year, mounth, day);
 
-        CalandarShamsi shamsi = new CalandarShamsi(c.getTime());
+        CalendarShamsi shamsi = new CalendarShamsi(c.getTime());
 
         String time = shamsi.year + "/" + shamsi.month + "/" + shamsi.date;
 
@@ -224,7 +224,7 @@ public class HelperCalander {
 
             if (HelperCalander.isTimeHijri()) {
 
-                CalandarShamsi shamsi = new CalandarShamsi(date.getTime());
+                CalendarShamsi shamsi = new CalendarShamsi(date.getTime());
 
                 if (HelperCalander.isLanguagePersian) {
                     output = shamsi.date + " " + HelperCalander.getPersianMonthName(shamsi.month);

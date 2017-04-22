@@ -1,4 +1,4 @@
-package com.iGap.realm.enums;
+package com.iGap.module.enums;
 
 import com.iGap.proto.ProtoGlobal;
 

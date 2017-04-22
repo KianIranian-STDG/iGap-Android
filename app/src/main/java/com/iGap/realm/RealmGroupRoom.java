@@ -1,7 +1,7 @@
 package com.iGap.realm;
 
+import com.iGap.module.enums.GroupChatRole;
 import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.enums.GroupChatRole;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
