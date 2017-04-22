@@ -13,8 +13,7 @@ package com.iGap.module;
 
 import com.iGap.proto.ProtoGlobal;
 
-
-public class StructSessionsGetActiveList {
+public class StructSessionsgetActivelist {
 
     private long sessionId;
     private String name;

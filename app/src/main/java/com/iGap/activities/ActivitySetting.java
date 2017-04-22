@@ -84,7 +84,6 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
 import com.iGap.module.FileUploadStructure;
-import com.iGap.module.IncomingSms;
 import com.iGap.module.IntentRequests;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
@@ -144,45 +143,33 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     public static int KEY_AD_ROAMING_MUSIC = -1;
     public static int KEY_AD_ROAMINGN_GIF = -1;
     private SharedPreferences sharedPreferences;
-    private TextView txtMenu, txtMessageTextSize, txtAutoDownloadData, txtAutoDownloadWifi, txtChatBackground, txtAutoDownloadRoaming, txtKeepMedia, txtLanguage, txtSizeClearCach;
-    private LinearLayout ltClearCache;
-    private RelativeLayout lyCleanUp;
+    private TextView txtMessageTextSize;
+    private TextView txtLanguage;
+    private TextView txtSizeClearCach;
     private PopupWindow popupWindow;
     private int poRbDialogLangouage = -1;
-    private String textLanguage = "English";
     private int poRbDialogTextSize = -1;
-    private ViewGroup ltMessageTextSize, ltLanguage;
-    private TextView txtNickName, txtUserName, txtPhoneNumber, txtNotifyAndSound, txtWebViewBlog, txtWebViewHome, txtSticker, ltInAppBrowser, ltSentByEnter, ltEnableAnimation, ltAutoGifs, ltSaveToGallery;
+    private TextView txtNickName;
+    private TextView txtUserName;
+    private TextView txtPhoneNumber;
     private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
-    private AppBarLayout appBarLayout;
-    private CollapsingToolbarLayout collapsingToolbarLayout;
     private Uri uriIntent;
     private ImageView imgAppBarSelected;
     private ImageView imgNotificationColor;
     private ImageView imgToggleBottomColor;
     private ImageView imgSendAndAttachColor;
     private ImageView imgHeaderTextColor;
-
-
     private long idAvatar;
-    private File nameImageFile;
     private FloatingActionButton fab;
     private com.iGap.module.CircleImageView circleImageView;
-    private String nickName;
     private String userName;
     private String phoneName;
-    private ProtoGlobal.Gender userGender;
     private String userEmail;
     private long userId;
-    private long lastUploadedAvatarId;
-    private IncomingSms smsReceiver;
-    private String regex;
     public ProgressBar prgWait;
-    private static String identityCurrent;
     private TextView txtGander;
     private TextView txtEmail;
     TextView txtNickNameTitle;
-    private AttachFile attachFile;
 
     private Realm mRealm;
     RealmChangeListener<RealmModel> userInfoListener;
@@ -850,10 +837,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        appBarLayout = (AppBarLayout) findViewById(R.id.st_appbar);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.st_appbar);
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.st_collapsing_layout);
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.st_collapsing_layout);
         collapsingToolbarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
 
@@ -1137,8 +1124,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
-        textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
+        String textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
         if (textLanguage.equals("English")) {
             poRbDialogLangouage = 0;
         } else if (textLanguage.equals("فارسی")) {
@@ -1151,7 +1137,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         txtLanguage = (TextView) findViewById(R.id.st_txt_language);
         txtLanguage.setText(textLanguage);
-        ltLanguage = (ViewGroup) findViewById(R.id.st_layout_language);
+        ViewGroup ltLanguage = (ViewGroup) findViewById(R.id.st_layout_language);
         ltLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1209,7 +1195,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtSizeClearCach = (TextView) findViewById(R.id.st_txt_clearCache);
         txtSizeClearCach.setText(formatFileSize(total));
 
-        lyCleanUp = (RelativeLayout) findViewById(R.id.st_layout_cleanup);
+        RelativeLayout lyCleanUp = (RelativeLayout) findViewById(R.id.st_layout_cleanup);
         lyCleanUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1226,7 +1212,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        ltClearCache = (LinearLayout) findViewById(R.id.st_layout_clearCache);
+        LinearLayout ltClearCache = (LinearLayout) findViewById(R.id.st_layout_clearCache);
         ltClearCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1483,7 +1469,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
         }
 
-        ltMessageTextSize = (ViewGroup) findViewById(R.id.st_layout_messageTextSize);
+        ViewGroup ltMessageTextSize = (ViewGroup) findViewById(R.id.st_layout_messageTextSize);
         ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1514,8 +1500,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
-        txtChatBackground = (TextView) findViewById(R.id.st_txt_chatBackground);
+        TextView txtChatBackground = (TextView) findViewById(R.id.st_txt_chatBackground);
         txtChatBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1640,10 +1625,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         //***********************
 
-
-
-
-        ltInAppBrowser = (TextView) findViewById(R.id.st_txt_inAppBrowser);
+        TextView ltInAppBrowser = (TextView) findViewById(R.id.st_txt_inAppBrowser);
         toggleInAppBrowser = (ToggleButton) findViewById(R.id.st_toggle_inAppBrowser);
         int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
         if (checkedInappBrowser == 1) {
@@ -1670,7 +1652,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        txtNotifyAndSound = (TextView) findViewById(R.id.st_txt_notifyAndSound);
+        TextView txtNotifyAndSound = (TextView) findViewById(R.id.st_txt_notifyAndSound);
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1678,7 +1660,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        ltSentByEnter = (TextView) findViewById(R.id.st_txt_sendEnter);
+        TextView ltSentByEnter = (TextView) findViewById(R.id.st_txt_sendEnter);
         toggleSentByEnter = (ToggleButton) findViewById(R.id.st_toggle_sendEnter);
         int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
         if (checkedSendByEnter == 1) {
@@ -1713,7 +1695,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         final TextView txtSubKeepMedia = (TextView) findViewById(R.id.st_txt_sub_keepMedia);
         ViewGroup ltKeepMedia = (ViewGroup) findViewById(R.id.st_layout_keepMedia);
-        txtKeepMedia = (TextView) findViewById(R.id.st_txt_keepMedia);
+        TextView txtKeepMedia = (TextView) findViewById(R.id.st_txt_keepMedia);
         boolean isForever = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
         Log.i("KKKKKKK", "isForever: " + isForever);
         if (isForever) {
@@ -1751,8 +1733,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
-        txtAutoDownloadData = (TextView) findViewById(R.id.st_txt_autoDownloadData);
+        TextView txtAutoDownloadData = (TextView) findViewById(R.id.st_txt_autoDownloadData);
         txtAutoDownloadData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1805,8 +1786,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
-        txtAutoDownloadWifi = (TextView) findViewById(R.id.st_txt_autoDownloadWifi);
+        TextView txtAutoDownloadWifi = (TextView) findViewById(R.id.st_txt_autoDownloadWifi);
         txtAutoDownloadWifi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1862,8 +1842,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
-        txtAutoDownloadRoaming = (TextView) findViewById(R.id.st_txt_autoDownloadRoaming);
+        TextView txtAutoDownloadRoaming = (TextView) findViewById(R.id.st_txt_autoDownloadRoaming);
         txtAutoDownloadRoaming.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1918,7 +1897,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        ltEnableAnimation = (TextView) findViewById(R.id.st_txt_enableAnimation);
+        TextView ltEnableAnimation = (TextView) findViewById(R.id.st_txt_enableAnimation);
         toggleEnableAnimation = (ToggleButton) findViewById(R.id.st_toggle_enableAnimation);
         int checkedEnableAnimation = sharedPreferences.getInt(SHP_SETTING.KEY_ENABLE_ANIMATION, 0);
         if (checkedEnableAnimation == 1) {
@@ -1945,7 +1924,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        ltAutoGifs = (TextView) findViewById(R.id.st_txt_autoGif);
+        TextView ltAutoGifs = (TextView) findViewById(R.id.st_txt_autoGif);
         toggleAutoGifs = (ToggleButton) findViewById(R.id.st_toggle_autoGif);
         int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS);
         if (checkedAutoGif == 1) {
@@ -1978,7 +1957,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        ltSaveToGallery = (TextView) findViewById(R.id.st_txt_saveGallery);
+        TextView ltSaveToGallery = (TextView) findViewById(R.id.st_txt_saveGallery);
         toggleSaveToGallery = (ToggleButton) findViewById(R.id.st_toggle_saveGallery);
         int checkedSaveToGallery = sharedPreferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
         if (checkedSaveToGallery == 1) {
@@ -2015,9 +1994,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
-
-        txtWebViewHome = (TextView) findViewById(R.id.st_txt_iGap_home);
+        TextView txtWebViewHome = (TextView) findViewById(R.id.st_txt_iGap_home);
         txtWebViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -2030,7 +2007,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        txtWebViewBlog = (TextView) findViewById(R.id.st_txt_privacy_blog);
+        TextView txtWebViewBlog = (TextView) findViewById(R.id.st_txt_privacy_blog);
         txtWebViewBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -2069,10 +2046,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (checkValidationForRealm(userInfo)) {
             //if (userInfo != null) {
             userId = userInfo.getUserId();
-            nickName = userInfo.getUserInfo().getDisplayName();
+            String nickName = userInfo.getUserInfo().getDisplayName();
             userName = userInfo.getUserInfo().getUsername();
             phoneName = userInfo.getUserInfo().getPhoneNumber();
-            userGender = userInfo.getGender();
+            ProtoGlobal.Gender userGender = userInfo.getGender();
             userEmail = userInfo.getEmail();
             //}
 
@@ -2348,7 +2325,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                 idAvatar = SUID.id().get();
                 pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
-                nameImageFile = new File(pathSaveImage);
+                File nameImageFile = new File(pathSaveImage);
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 uriIntent = Uri.fromFile(nameImageFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
@@ -2407,7 +2384,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 pathSaveImage = data.getData().toString();
             }
 
-            lastUploadedAvatarId = idAvatar + 1L;
+            long lastUploadedAvatarId = idAvatar + 1L;
 
             showProgressBar();
             HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {

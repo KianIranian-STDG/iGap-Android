@@ -14,7 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import com.iGap.R;
-import com.iGap.module.StructSessionsGetActiveList;
+import com.iGap.module.StructSessionsgetActivelist;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
@@ -22,19 +22,19 @@ import java.util.List;
 
 public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessionsHeader, AdapterActiveSessionsHeader.ViewHolder> {
 
-    public StructSessionsGetActiveList item;
+    public StructSessionsgetActivelist item;
 
-    private List<StructSessionsGetActiveList> itemList;
+    private List<StructSessionsgetActivelist> itemList;
 
-    public List<StructSessionsGetActiveList> getItem() {
+    public List<StructSessionsgetActivelist> getItem() {
         return itemList;
     }
 
-    public AdapterActiveSessionsHeader(List<StructSessionsGetActiveList> item) {
+    public AdapterActiveSessionsHeader(List<StructSessionsgetActivelist> item) {
         itemList = item;
     }
 
-    public void setItem(List<StructSessionsGetActiveList> item) {
+    public void setItem(List<StructSessionsgetActivelist> item) {
         this.itemList = item;
     }
 
