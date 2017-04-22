@@ -7,10 +7,6 @@ import com.iGap.request.RequestChatClearMessage;
 import com.iGap.request.RequestGroupClearMessage;
 
 /**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/5/2016.
- */
-
-/**
  * util for chat clear messages
  * useful for having callback from different activities
  */

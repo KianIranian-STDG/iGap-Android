@@ -78,6 +78,7 @@ import com.iGap.module.IncomingSms;
 import com.iGap.module.IntentRequests;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
+import com.iGap.module.enums.StartupActions;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.proto.ProtoUserProfileCheckUsername;
@@ -1496,7 +1497,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
                                 editor.apply();
 
-                                G.setUserTextSize();
+                                StartupActions.textSizeDetection(sharedPreferences);
 
                                 return false;
                             }

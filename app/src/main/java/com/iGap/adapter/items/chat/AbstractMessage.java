@@ -23,6 +23,7 @@ import com.iGap.R;
 import com.iGap.activities.ActivityChat;
 import com.iGap.helper.HelperAvatar;
 import com.iGap.helper.HelperCalander;
+import com.iGap.helper.HelperCheckInternetConnection;
 import com.iGap.helper.HelperDownloadFile;
 import com.iGap.helper.HelperError;
 import com.iGap.helper.HelperGetMessageState;
@@ -43,7 +44,6 @@ import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
-import com.iGap.module.enums.ConnectionMode;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.module.enums.SendingStep;
 import com.iGap.proto.ProtoFileDownload;
@@ -77,14 +77,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
 
-
-
     public ProtoGlobal.Room.Type type;
 
-    enum DownLoadType {
-        thumpnail,
-        file;
-    }
 
     protected ProtoGlobal.Room.Type getRoomType() {
         return type;
@@ -857,7 +851,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void checkAutoDownload(final VH holder, final RealmAttachment attachment, Context context, ConnectionMode connectionMode) {
+    private void checkAutoDownload(final VH holder, final RealmAttachment attachment, Context context, HelperCheckInternetConnection.ConnectivityType connectionMode) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         ProtoGlobal.RoomMessageType messageType;
         if (mMessage.forwardedFrom != null) {
@@ -1051,8 +1045,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
 
                 if (!attachment.isFileExistsOnLocal()) {
-                    checkAutoDownload(holder, attachment, holder.itemView.getContext(), ConnectionMode.WIFI);
-                    checkAutoDownload(holder, attachment, holder.itemView.getContext(), ConnectionMode.MOBILE);
+                    checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.currentConnectivityType);
                 }
 
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {

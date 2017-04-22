@@ -88,6 +88,7 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
+import com.iGap.module.LoginActions;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
 import com.iGap.module.SHP_SETTING;
@@ -208,7 +209,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                          * for import contacts
                          */
                         G.isSendContact = false;
-                        G.importContact();
+                        LoginActions.importContact();
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT, true);

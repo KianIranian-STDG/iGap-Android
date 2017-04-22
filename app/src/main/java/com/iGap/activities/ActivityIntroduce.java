@@ -39,6 +39,7 @@ import com.iGap.interfaces.OnReceiveInfoLocation;
 import com.iGap.interfaces.OnReceivePageInfoTOS;
 import com.iGap.module.CustomCircleImage;
 import com.iGap.module.SHP_SETTING;
+import com.iGap.module.enums.StartupActions;
 import com.iGap.realm.RealmUserInfo;
 import com.iGap.request.RequestInfoLocation;
 import com.iGap.request.RequestInfoPage;
@@ -82,7 +83,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
         overridePendingTransition(0, 0);
     }
@@ -94,50 +96,23 @@ public class ActivityIntroduce extends ActivityEnhanced {
          * set true mFirstRun for get room history after logout and login again
          */
         G.firstTimeEnterToApp = true;
-        licenceChecker();
+        //licenceChecker();
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-        //isRealmDelete = sharedPreferences.getBoolean(SHP_SETTING.KEY_REALM_DELETE_ALL, true);
-        //if (isRealmDelete) {
-        //    //HelperRealm.realmTruncate();
-        //    SharedPreferences.Editor editor = sharedPreferences.edit();
-        //    editor.putBoolean(SHP_SETTING.KEY_REALM_DELETE_ALL, false);
-        //    editor.apply();
-        //}
-
-        //boolean version10 = sharedPreferences.getBoolean(SHP_SETTING.CHECK_10, true);
-        //if (version10) {
-        //    SharedPreferences.Editor editor = sharedPreferences.edit();
-        //    editor.putBoolean(SHP_SETTING.CHECK_10, false);
-        //    editor.apply();
-        //}
-        boolean version11 = sharedPreferences.getBoolean(SHP_SETTING.CHECK_11, true);
-        if (version11) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(SHP_SETTING.CHECK_11, false);
-            editor.apply();
-        }
 
         boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
 
         if (deleteFolderBackground) {
-
             deleteContentFolderChatBackground();
-
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
             editor.apply();
         }
 
-        G.makeFolder();
-
         try {
             HelperPermision.getStoragePermision(this, new OnGetPermission() {
                 @Override
                 public void Allow() {
-
-                    G.makeFolder();
                     goToProgram(savedInstanceState);
                 }
 
@@ -152,8 +127,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                                 HelperPermision.getStoragePermision(ActivityIntroduce.this, new OnGetPermission() {
                                     @Override
                                     public void Allow() {
-
-                                        G.makeFolder();
+                                        StartupActions.makeFolder();
                                         goToProgram(savedInstanceState);
                                     }
 
@@ -1085,7 +1059,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mChecker.onDestroy();
+        //mChecker.onDestroy();
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.module.LoginActions;
 
 
 public class HelperError {
@@ -16,7 +17,7 @@ public class HelperError {
                 if (minorCode == 1) {
                     G.userLogin = false;
                     error = G.context.getResources().getString(R.string.E_2);
-                    G.login();
+                    LoginActions.login();
                 }
                 break;
             case 5:

@@ -1,39 +1,18 @@
 package com.iGap;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.graphics.Typeface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.support.v4.content.ContextCompat;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperCheckInternetConnection;
-import com.iGap.helper.HelperClientCondition;
-import com.iGap.helper.HelperConnectionState;
-import com.iGap.helper.HelperDownloadFile;
-import com.iGap.helper.HelperFillLookUpClass;
 import com.iGap.helper.HelperNotificationAndBadge;
-import com.iGap.helper.HelperTimeOut;
-import com.iGap.helper.HelperUploadFile;
-import com.iGap.helper.MyService;
 import com.iGap.interfaces.IClientSearchUserName;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnChannelAddAdmin;
@@ -143,62 +122,51 @@ import com.iGap.interfaces.UpdateListAfterKick;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ChatUpdateStatusUtil;
 import com.iGap.module.ClearMessagesUtil;
-import com.iGap.module.Connectivity;
-import com.iGap.module.Contacts;
-import com.iGap.module.SHP_SETTING;
-import com.iGap.module.enums.ConnectionMode;
 import com.iGap.module.enums.ConnectionState;
+import com.iGap.module.enums.StartupActions;
 import com.iGap.proto.ProtoClientCondition;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmMigration;
-import com.iGap.realm.RealmPhoneContacts;
-import com.iGap.realm.RealmRegisteredInfo;
-import com.iGap.realm.RealmUserInfo;
-import com.iGap.request.RequestClientGetRoomList;
-import com.iGap.request.RequestQueue;
-import com.iGap.request.RequestUserContactsGetBlockedList;
-import com.iGap.request.RequestUserInfo;
-import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
-import com.neovisionaries.ws.client.WebSocket;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import io.fabric.sdk.android.Fabric;
-import io.realm.DynamicRealm;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.spec.SecretKeySpec;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-
-import static com.iGap.WebSocketClient.allowForReconnecting;
-import static com.iGap.WebSocketClient.reconnect;
 
 public class G extends MultiDexApplication {
 
+    public static Context context;
+    public static Handler handler;
+    public static LayoutInflater inflater;
     private Tracker mTracker;
 
-    synchronized public Tracker getDefaultTracker() {
-        if (mTracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_tracker);
-        }
-        return mTracker;
-    }
+    public static HelperNotificationAndBadge helperNotificationAndBadge;
+    public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
+    public static List<Long> smsNumbers = new ArrayList<>();
+    public static AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
+    public static SecretKeySpec symmetricKey;
+    public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
+    public static HelperCheckInternetConnection.ConnectivityType latestConnectivityType;
 
-    public static final String FAQ = "";
-    public static final String POLICY = "";
+    public static ArrayList<String> unSecure = new ArrayList<>();
+    public static ArrayList<String> unLogin = new ArrayList<>();// list of actionId that can be doing without secure
+    public static ArrayList<String> waitingActionIds = new ArrayList<>();
+
+    public static HashMap<Integer, String> lookupMap = new HashMap<>();
+    public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
+
+    public static Activity currentActivity;
+    public static Activity latestActivity;
+
+    public static File IMAGE_NEW_GROUP;
+    public static File IMAGE_NEW_CHANEL;
+    public static File imageFile;
+
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DIR_APP = DIR_SDCARD + "/iGap";
     public static final String DIR_IMAGES = DIR_APP + "/iGap Images";
@@ -207,79 +175,45 @@ public class G extends MultiDexApplication {
     public static final String DIR_DOCUMENT = DIR_APP + "/iGap Document";
     public static final String DIR_TEMP = DIR_APP + "/.temp";
     public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/.chat_background";
-    // public static final String DIR_NEW_GROUP = DIR_APP + "/.new_group";
-    // public static final String DIR_NEW_CHANEL = DIR_APP + "/.new_chanel";
     public static final String DIR_IMAGE_USER = DIR_APP + "/.image_user";
-    //  public static final String DIR_NOMEDIA = DIR_APP + "/.nomedia";
-
     public static final String CHAT_MESSAGE_TIME = "H:mm";
 
-    // list of actionId that can be doing without login
-
-    public static Typeface iranSans;
-    public static Typeface flaticon;
-    public static Context context;
-    public static Handler handler;
-    public static HelperNotificationAndBadge helperNotificationAndBadge;
-    public static boolean isAppInFg = false;
-    public static boolean isScrInFg = false;
-    public static boolean isChangeScrFg = false;
-    public static boolean isUserStatusOnline = false;
-    public static ArrayList<String> unSecure = new ArrayList<>();
-    // list of actionId that can be doing without secure
-    public static ArrayList<String> unLogin = new ArrayList<>();
-    public static ArrayList<String> waitingActionIds = new ArrayList<>();
-    public static HashMap<Integer, String> lookupMap = new HashMap<>();
-    public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
-    public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
-    public static List<Long> smsNumbers = new ArrayList<>();
-    public static AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
-    public static boolean isSecure = false;
-    public static boolean allowForConnect = true;
-    //TODO [Saeed Mozaffari] [2016-08-18 12:09 PM] - set allowForConnect to realm
-    public static boolean userLogin = false;
-    public static boolean socketConnection = false;
-    public static boolean canRunReceiver = false;
-    public static SecretKeySpec symmetricKey;
-    public static String symmetricMethod;
-    public static int ivSize;
-    public static int userTextSize = 0;
-    public static Activity currentActivity;
-    public static Activity latestActivity;
-    public static LayoutInflater inflater;
-    public static Typeface FONT_IGAP;
-
-    public static long currentTime;
-    public static long userId;
-    public static long latestHearBeatTime = System.currentTimeMillis();
-    public static boolean firstTimeEnterToApp = true; // use this field for get room list
     public static String selectedLanguage = "en";
-    public static long serverHeartBeatTiming = 60 * 1000;
-
-    // default color
-    public static String appBarColor;
+    public static String symmetricMethod;
+    public static String appBarColor; // default color
     public static String notificationColor;
     public static String toggleButtonColor;
     public static String attachmentColor;
     public static String headerTextColor;
 
+    public static boolean isAppInFg = false;
+    public static boolean isScrInFg = false;
+    public static boolean isChangeScrFg = false;
+    public static boolean isUserStatusOnline = false;
+    public static boolean isSecure = false;
+    public static boolean allowForConnect = true; //TODO [Saeed Mozaffari] [2016-08-18 12:09 PM] - set allowForConnect to realm
+    public static boolean userLogin = false;
+    public static boolean socketConnection = false;
+    public static boolean canRunReceiver = false;
+    public static boolean firstTimeEnterToApp = true; // use this field for get room list
     public static boolean firstEnter = true;
     public static boolean isSaveToGallery = false;
+    public static boolean hasNetworkBefore;
+    public static boolean isSendContact = false;
+    public static boolean latestMobileDataState;
 
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
-
-    public static File imageFile;
+    public static int ivSize;
+    public static int userTextSize = 0;
     public static int COPY_BUFFER_SIZE = 1024;
+
+    public static long currentTime;
+    public static long userId;
+    public static long latestHearBeatTime = System.currentTimeMillis();
+    public static long serverHeartBeatTiming = 60 * 1000;
 
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
     public static ChatSendMessageUtil chatSendMessageUtil = new ChatSendMessageUtil();
     public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
-
     public static ConnectionState connectionState;
     public static ConnectionState latestConnectionState;
     public static OnConnectionChangeState onConnectionChangeState;
@@ -295,9 +229,7 @@ public class G extends MultiDexApplication {
     public static OnUserProfileSetNickNameResponse onUserProfileSetNickNameResponse;
     public static OnInfoCountryResponse onInfoCountryResponse;
     public static OnInfoTime onInfoTime;
-    //   public static OnUserContactImport onContactImport;
     public static OnUserContactEdit onUserContactEdit;
-
     public static OnUserContactDelete onUserContactdelete;
     public static OnClientGetRoomListResponse onClientGetRoomListResponse;
     public static OnClientGetRoomResponse onClientGetRoomResponse;
@@ -307,7 +239,6 @@ public class G extends MultiDexApplication {
     public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
     public static OnChatDelete onChatDelete;
     public static OnUserUsernameToId onUserUsernameToId;
-
     public static OnUserProfileGetNickname onUserProfileGetNickname;
     public static OnGroupCreate onGroupCreate;
     public static OnGroupAddMember onGroupAddMember;
@@ -332,7 +263,6 @@ public class G extends MultiDexApplication {
     public static OnUserAvatarGetList onUserAvatarGetList;
     public static OnDraftMessage onDraftMessage;
     public static OnUserDelete onUserDelete;
-
     public static OnUserProfileCheckUsername onUserProfileCheckUsername;
     public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;
     public static OnGroupGetMemberList onGroupGetMemberList;
@@ -393,534 +323,32 @@ public class G extends MultiDexApplication {
     public static OnGetWallpaper onGetWallpaper;
     public static IClientSearchUserName onClientSearchUserName;
 
-
-    public static File chatBackground;
-    public static File IMAGE_NEW_GROUP;
-    public static File IMAGE_NEW_CHANEL;
-    public static ConnectionMode connectionMode;
-    public static boolean isNetworkRoaming;
-    public static boolean hasNetworkBefore;
-    public static double timeVideoPlayer = 30000.0;
-    public static boolean isSendContact = false;
-
-    public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
-
-    public static void setUserTextSize() {
-
-        SharedPreferences sharedPreferencesSetting = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        userTextSize = sharedPreferencesSetting.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14);
-
-        int screenLayout = context.getResources().getConfiguration().screenLayout;
-        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
-
-        switch (screenLayout) {
-            case Configuration.SCREENLAYOUT_SIZE_SMALL:
-                userTextSize = (userTextSize * 3) / 4;
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_LARGE:
-                userTextSize = (userTextSize * 3) / 2;
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_XLARGE:// or 4
-                userTextSize *= 2;
-        }
-    }
-
-    public static void importContact() {
-        /**
-         * just import contact in each enter to app
-         * when user login was done
-         */
-        if (isSendContact) {
-            return;
-        }
-
-        if (G.userLogin) {
-            /**
-             * this can be go in the activity for check permission in api 6+
-             */
-            isSendContact = true;
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        RealmPhoneContacts.sendContactList(Contacts.getListOfContact(), false);
-                    }
-                });
-            }
-        } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    importContact();
-                }
-            }, 2000);
-        }
-    }
-
-    public static void getUserInfo() {
-        Realm realm = Realm.getDefaultInstance();
-        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        realm.close();
-
-        G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                // fill own user info
-                if (userId == user.getId()) {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmRegisteredInfo.putOrUpdate(user);
-                        }
-                    });
-
-                    realm.close();
-                }
-            }
-
-            @Override
-            public void onUserInfoTimeOut() {
-
-            }
-
-            @Override
-            public void onUserInfoError(int majorCode, int minorCode) {
-
-            }
-        };
-        new RequestUserInfo().userInfo(userId);
-    }
-
-    public static HelperCheckInternetConnection.ConnectivityType latestConnectivityType;
-    public static boolean latestMobileDataState;
-
     @Override
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
-        SharedPreferences preferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        int isStart = preferences.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
-        if (isStart == 1) {
-            Intent intent = new Intent(this, MyService.class);
-            startService(intent);
-        }
-
-        int checkedSaveToGallery = preferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
-        if (checkedSaveToGallery == 1) {
-            isSaveToGallery = true;
-        } else {
-            isSaveToGallery = false;
-        }
-
-        appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
-        notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-        toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
-        attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
-        headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
-
-
-
-
-        setFont();
-        makeFolder();
-
-        chatBackground = new File(DIR_CHAT_BACKGROUND, "addChatBackground.jpg");
-        IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");
-        IMAGE_NEW_CHANEL = new File(G.DIR_IMAGE_USER, "image_new_chanel.jpg");
-        imageFile = new File(DIR_IMAGE_USER, "image_user");
-
         context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        if (Connectivity.isConnectedMobile(context)) {
-            HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.MOBILE;
-            latestConnectivityType = HelperCheckInternetConnection.ConnectivityType.MOBILE;
-            latestMobileDataState = true;
-            hasNetworkBefore = true;
-        } else if (Connectivity.isConnectedWifi(context)) {
-            HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.WIFI;
-            latestConnectivityType = HelperCheckInternetConnection.ConnectivityType.WIFI;
-            latestMobileDataState = false;
-            hasNetworkBefore = true;
-        }
-
-        connectionManager();
-
-        helperNotificationAndBadge = new HelperNotificationAndBadge();
-
-        HelperFillLookUpClass.fillLookUpClassArray();
-        fillUnSecureList();
-        fillUnLoginList();
-        fillWaitingRequestActionIdAllowed();
-        fillSecuringInterface();
-        WebSocketClient.getInstance();
-
-        iranSans = Typeface.createFromAsset(this.getAssets(), "fonts/IRANSansMobile.ttf");
-        flaticon = Typeface.createFromAsset(this.getAssets(), "fonts/Flaticon.ttf");
-        FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
-
-        realmConfiguration();
+        new StartupActions();
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(true).build();
         ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(defaultOptions).build());
+    }
 
-        FONT_IGAP = Typeface.createFromAsset(context.getAssets(), "fonts/neuropolitical.ttf");
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
-        SharedPreferences sharedPreferences = getSharedPreferences("CopyDataBase", MODE_PRIVATE);
-        boolean isCopyFromAsset = sharedPreferences.getBoolean("isCopyRealm", true);
-
-        if (isCopyFromAsset) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("isCopyRealm", false);
-            editor.apply();
-            try {
-                copyFromAsset();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            mTracker = analytics.newTracker(R.xml.global_tracker);
         }
-        setUserTextSize();
-
-        new HelperDownloadFile();
-        new HelperUploadFile();
-    }
-
-    private void realmConfiguration() {
-        /**
-         * before call RealmConfiguration client need to Realm.init(context);
-         */
-        Realm.init(getApplicationContext());
-
-        RealmConfiguration configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(8).migration(new RealmMigration()).build();
-        DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);
-        /**
-         * Returns version of Realm file on disk
-         */
-        if (dynamicRealm.getVersion() == -1) {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(8).deleteRealmIfMigrationNeeded().build());
-        } else {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(8).migration(new RealmMigration()).build());
-        }
-        dynamicRealm.close();
-    }
-
-    public static void makeFolder() {
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                new File(DIR_APP).mkdirs();
-                new File(DIR_IMAGES).mkdirs();
-                new File(DIR_VIDEOS).mkdirs();
-                new File(DIR_AUDIOS).mkdirs();
-                new File(DIR_DOCUMENT).mkdirs();
-                new File(DIR_CHAT_BACKGROUND).mkdirs();
-                //  new File(DIR_NEW_GROUP).mkdirs();
-                //  new File(DIR_NEW_CHANEL).mkdirs();
-                new File(DIR_IMAGE_USER).mkdirs();
-                new File(DIR_TEMP).mkdirs();
-
-                String file = ".nomedia";
-                new File(DIR_APP + "/" + file).mkdirs();
-                new File(DIR_IMAGES + "/" + file).mkdirs();
-                new File(DIR_VIDEOS + "/" + file).mkdirs();
-                new File(DIR_AUDIOS + "/" + file).mkdirs();
-                new File(DIR_DOCUMENT + "/" + file).mkdirs();
-                new File(DIR_CHAT_BACKGROUND + "/" + file).mkdirs();
-                //  new File(DIR_NEW_GROUP + "/" + file).mkdirs();
-                //   new File(DIR_NEW_CHANEL + "/" + file).mkdirs();
-                new File(DIR_IMAGE_USER + "/" + file).mkdirs();
-                new File(DIR_TEMP + "/" + file).mkdirs();
-            }
-        }).start();
-
-
-    }
-
-    public void setFont() {
-
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "en");
-
-        switch (language) {
-            case "فارسی":
-                selectedLanguage = "fa";
-                HelperCalander.isLanguagePersian = true;
-                break;
-            case "English":
-                selectedLanguage = "en";
-                HelperCalander.isLanguagePersian = false;
-                break;
-            case "العربی":
-                selectedLanguage = "ar";
-                HelperCalander.isLanguagePersian = false;
-                break;
-            case "Deutsch":
-                selectedLanguage = "nl";
-                HelperCalander.isLanguagePersian = false;
-                break;
-
-        }
-
-        setLocale("selectedLanguage");
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
-
-
-    }
-
-    public void setLocale(String lang) {
-
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-    }
-
-    private void copyFromAsset() throws IOException {
-        InputStream inputStream = getAssets().open("CountryListA.realm");
-        Realm realm = Realm.getDefaultInstance();
-        String outFileName = realm.getPath();
-        OutputStream outputStream = new FileOutputStream(outFileName);
-        byte[] buffer = new byte[1024];
-        int len;
-        while ((len = inputStream.read(buffer)) > 0) {
-            outputStream.write(buffer, 0, len);
-        }
-        outputStream.flush();
-        outputStream.close();
-        inputStream.close();
-        realm.close();
-    }
-
-    /**
-     * list of actionId that can be doing without secure
-     */
-    private void fillUnSecureList() {
-        unSecure.add("2");
-    }
-
-    /**
-     * list of actionId that can be doing without login
-     */
-    private void fillUnLoginList() {
-        unLogin.add("100");
-        unLogin.add("101");
-        unLogin.add("102");
-        unLogin.add("500");
-        unLogin.add("501");
-        unLogin.add("502");
-        unLogin.add("503");
-    }
-
-    /**
-     * list of actionId that will be storing in waitingActionIds list
-     * and after that user login send this request again
-     */
-    private void fillWaitingRequestActionIdAllowed() {
-        waitingActionIds.add("201");
-        waitingActionIds.add("310");
-        waitingActionIds.add("410");
-        //waitingActionIds.add("700");
-        //waitingActionIds.add("701");
-        //waitingActionIds.add("702");
-        //waitingActionIds.add("703");
-        //waitingActionIds.add("705");
-    }
-
-    private void fillSecuringInterface() {
-        G.onSecuring = new OnSecuring() {
-            @Override
-            public void onSecure() {
-                login();
-
-                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-                switch (activeNetwork.getType()) {
-                    case ConnectivityManager.TYPE_WIFI:
-
-                        connectionMode = ConnectionMode.WIFI;
-                        break;
-                    case ConnectivityManager.TYPE_MOBILE:
-                        connectionMode = ConnectionMode.MOBILE;
-                        break;
-                    case ConnectivityManager.TYPE_WIMAX:
-                        connectionMode = ConnectionMode.WIMAX;
-                        break;
-                }
-
-                TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-                if (tm.isNetworkRoaming()) {
-                    isNetworkRoaming = tm.isNetworkRoaming();
-                }
-            }
-        };
-    }
-
-    public static void sendWaitingRequestWrappers() {
-        for (RequestWrapper requestWrapper : RequestQueue.WAITING_REQUEST_WRAPPERS) {
-            RequestQueue.RUNNING_REQUEST_WRAPPERS.add(requestWrapper);
-
-        }
-        RequestQueue.WAITING_REQUEST_WRAPPERS.clear();
-
-        for (int i = 0; i < RequestQueue.RUNNING_REQUEST_WRAPPERS.size(); i++) {
-            final int j = i;
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        RequestQueue.sendRequest(RequestQueue.RUNNING_REQUEST_WRAPPERS.get(j));
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                    if (j == (RequestQueue.RUNNING_REQUEST_WRAPPERS.size() - 1)) {
-                        RequestQueue.RUNNING_REQUEST_WRAPPERS.clear();
-                    }
-                }
-            }, 1000 * j);
-        }
-    }
-
-    public static void login() { //TODO [Saeed Mozaffari] [2016-09-07 10:24 AM] - mitonim karhaie ke hamishe bad az login bayad anjam beshe ro dar classe login response gharar bedim
-
-        G.onUserLogin = new OnUserLogin() {
-            @Override
-            public void onLogin() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        clientConditionGlobal = HelperClientCondition.computeClientCondition();
-                        /**
-                         * in first enter to app client send clientCondition after get room list
-                         * but, in another login when user not closed app after login client send
-                         * latest state to server  after login without get room list , also if
-                         * app in background is running now if firstTimeEnterToApp is false we send
-                         * client condition because this field(firstTimeEnterToApp) will be lost value
-                         * in close app and after app start running in background we don't send
-                         * client condition!!! for avoid from this problem we checked isAppInFg state
-                         * app is background send clientCondition (: .
-                         */
-                        if (!firstTimeEnterToApp || !isAppInFg) {
-                            new RequestClientGetRoomList().clientGetRoomList();
-                        }
-
-                        if (firstEnter) {
-                            firstEnter = false;
-                            new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
-                            importContact();
-                        }
-                        getUserInfo();
-                        sendWaitingRequestWrappers();
-                    }
-                });
-            }
-
-            @Override
-            public void onLoginError(int majorCode, int minorCode) {
-
-            }
-        };
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.isSecure) {
-                    Realm realm = Realm.getDefaultInstance();
-                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-
-                    if (userInfo != null) userId = userInfo.getUserId();
-
-                    if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
-                        new RequestUserLogin().userLogin(userInfo.getToken());
-                    }
-                    realm.close();
-                } else {
-                    login();
-                }
-            }
-        }, 1000);
-    }
-
-    private void connectionManager() {
-        BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (Connectivity.isConnectedMobile(context)) {
-                    /**
-                     * isConnectedMobile
-                     */
-                    HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.MOBILE;
-                } else if (Connectivity.isConnectedWifi(context)) {
-                    /**
-                     * isConnectedWifi
-                     */
-                    HelperCheckInternetConnection.currentConnectivityType = HelperCheckInternetConnection.ConnectivityType.WIFI;
-                } else {
-                    /**
-                     * no connection
-                     */
-                }
-
-                if (HelperCheckInternetConnection.hasNetwork()) {
-                    /**
-                     * Has Network
-                     */
-                    if (!hasNetworkBefore) {
-                        /**
-                         * before no network
-                         */
-                        latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
-                        hasNetworkBefore = true;
-                        allowForReconnecting = true;
-                        reconnect(true);
-                    } else {
-                        /**
-                         * before has network
-                         */
-                        if (latestConnectivityType == null || latestConnectivityType != HelperCheckInternetConnection.currentConnectivityType) {
-                            /**
-                             * change connectivity type
-                             */
-                            latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
-                            allowForReconnecting = true;
-                            WebSocket webSocket = WebSocketClient.getInstance();
-                            if (webSocket != null) {
-                                webSocket.disconnect();
-                            }
-                        } else {
-                            /**
-                             * not change connectivity type
-                             * hint : if call twice or more this receiver , in second time will be called this section .
-                             */
-                            if (HelperTimeOut.heartBeatTimeOut()) {
-                                Log.i("HHH", "connectionManager heartBeatTimeOut");
-                                //reconnect(true);
-                            } else {
-                                Log.i("HHH", "connectionManager Not Time Out HeartBeat");
-                            }
-                        }
-                    }
-                } else {
-                    /**
-                     * No Network
-                     */
-                    hasNetworkBefore = false;
-                    HelperConnectionState.connectionState(ConnectionState.WAITING_FOR_NETWORK);
-                    G.socketConnection = false;
-                }
-            }
-        };
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        getApplicationContext().registerReceiver(networkStateReceiver, filter);
+        return mTracker;
     }
 }

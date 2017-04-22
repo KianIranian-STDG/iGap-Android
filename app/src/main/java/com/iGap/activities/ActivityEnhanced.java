@@ -103,13 +103,10 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         try {
             String selectedLanguage = G.selectedLanguage;
-
             if (selectedLanguage == null) return;
 
-            String currentLalnguage = Locale.getDefault().getLanguage();
-
-            if (!selectedLanguage.equals(currentLalnguage)) {
-
+            String currentLanguage = Locale.getDefault().getLanguage();
+            if (!selectedLanguage.equals(currentLanguage)) {
                 Locale locale = new Locale(selectedLanguage);
                 Locale.setDefault(locale);
                 Configuration config = new Configuration();
@@ -117,6 +114,7 @@ public class ActivityEnhanced extends AppCompatActivity {
                 context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
