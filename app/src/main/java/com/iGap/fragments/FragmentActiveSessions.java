@@ -36,7 +36,7 @@ import com.iGap.interfaces.OnUserSessionTerminate;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
-import com.iGap.module.StructSessionsgetActivelist;
+import com.iGap.module.StructSessionsGetActiveList;
 import com.iGap.proto.ProtoUserSessionGetActiveList;
 import com.iGap.request.RequestUserSessionGetActiveList;
 import com.iGap.request.RequestUserSessionLogout;
@@ -55,12 +55,12 @@ public class FragmentActiveSessions extends Fragment {
 
     private FastAdapter fastAdapter;
     private RecyclerView rcvContent;
-    private List<StructSessionsgetActivelist> structItems = new ArrayList<>();
+    private List<StructSessionsGetActiveList> structItems = new ArrayList<>();
     private List<IItem> items = new ArrayList<>();
     private ProgressBar prgWaiting;
     private FastItemAdapter fastItemAdapter;
     private boolean isClearAdapter = true;
-    private List<StructSessionsgetActivelist> list = new ArrayList<>();
+    private List<StructSessionsGetActiveList> list = new ArrayList<>();
 
 
     public FragmentActiveSessions() {
@@ -119,7 +119,7 @@ public class FragmentActiveSessions extends Fragment {
 
                         for (int i = 0; i < session.size(); i++) {
 
-                            StructSessionsgetActivelist item = new StructSessionsgetActivelist();
+                            StructSessionsGetActiveList item = new StructSessionsGetActiveList();
                             item.setSessionId(session.get(i).getSessionId());
                             item.setName(session.get(i).getAppName());
                             item.setAppId(session.get(i).getAppId());
@@ -356,7 +356,7 @@ public class FragmentActiveSessions extends Fragment {
     public void itemAdapter() {
         boolean b = false;
 
-        for (StructSessionsgetActivelist s : structItems) {
+        for (StructSessionsGetActiveList s : structItems) {
 
 
             if (s.isCurrent()) {

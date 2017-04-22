@@ -11,7 +11,6 @@
 package com.iGap.adapter.items;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
@@ -27,19 +26,13 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.realm.Realm;
 import java.util.List;
-
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
- */
 
 /**
  * Contact item used with FastAdapter for Navigation drawer contacts fragment.
  */
 public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructContactInfo mContact;
 
     public ContactItem setContact(StructContactInfo contact) {
@@ -60,7 +53,6 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-        Log.i("WWW", "1");
         if (mContact.isHeader) {
             holder.topLine.setVisibility(View.VISIBLE);
         } else {
@@ -89,7 +81,6 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         realm.close();
 
         setAvatar(holder);
-        Log.i("WWW", "2****");
     }
 
     private void setAvatar(final ViewHolder holder) {
@@ -108,19 +99,6 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
 
     }
 
-
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected CircleImageView image;
         protected CustomTextViewMedium title;
@@ -135,5 +113,10 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
             topLine = (View) view.findViewById(R.id.topLine);
         }
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }

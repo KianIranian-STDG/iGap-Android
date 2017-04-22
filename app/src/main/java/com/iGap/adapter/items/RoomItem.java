@@ -38,7 +38,6 @@ import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.github.meness.emoji.EmojiTextView;
 import io.realm.Realm;
@@ -56,7 +55,6 @@ import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
  * chat item for main displaying chats
  */
 public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public RealmRoom mInfo;
     public OnComplete mComplete;
     public String action;
@@ -397,53 +395,6 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
             holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
             holder.unreadMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.unreadMessage.getText().toString()));
         }
-
-
-    }
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected CircleImageView image;
-        protected View distanceColor;
-        protected TextView chatIcon;
-        protected EmojiTextView name;
-        protected EmojiTextView lastMessageSender;
-        protected TextView mute;
-        protected EmojiTextView lastMessage;
-        protected TextView lastSeen;
-        protected TextView unreadMessage;
-        protected ImageView messageStatus;
-        private AVLoadingIndicatorView avi;
-
-        public ViewHolder(View view) {
-            super(view);
-
-            avi = (AVLoadingIndicatorView) view.findViewById(R.id.cs_avi);
-            image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
-            distanceColor = view.findViewById(R.id.cs_view_distance_color);
-            chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);
-            name = (EmojiTextView) view.findViewById(R.id.cs_txt_contact_name);
-            lastMessage = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message);
-            lastMessageSender = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message_sender);
-            lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
-            unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
-
-            mute = (TextView) view.findViewById(R.id.cs_txt_mute);
-            messageStatus = (ImageView) view.findViewById(R.id.cslr_txt_tic);
-
-            AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
-
-        }
     }
 
     private RealmAvatar getLastAvatar(long ownerId) {
@@ -503,5 +454,46 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
         }
         realm.close();
         return ownerId;
+    }
+
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
+
+        protected CircleImageView image;
+        protected View distanceColor;
+        protected TextView chatIcon;
+        protected EmojiTextView name;
+        protected EmojiTextView lastMessageSender;
+        protected TextView mute;
+        protected EmojiTextView lastMessage;
+        protected TextView lastSeen;
+        protected TextView unreadMessage;
+        protected ImageView messageStatus;
+        private AVLoadingIndicatorView avi;
+
+        public ViewHolder(View view) {
+            super(view);
+
+            avi = (AVLoadingIndicatorView) view.findViewById(R.id.cs_avi);
+            image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
+            distanceColor = view.findViewById(R.id.cs_view_distance_color);
+            chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);
+            name = (EmojiTextView) view.findViewById(R.id.cs_txt_contact_name);
+            lastMessage = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message);
+            lastMessageSender = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message_sender);
+            lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
+            unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
+
+            mute = (TextView) view.findViewById(R.id.cs_txt_mute);
+            messageStatus = (ImageView) view.findViewById(R.id.cslr_txt_tic);
+
+            AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
+
+        }
+
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }

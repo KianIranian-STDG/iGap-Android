@@ -22,7 +22,6 @@ import com.iGap.module.ReserveSpaceGifImageView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.github.meness.emoji.EmojiTextView;
 import io.meness.github.messageprogress.MessageProgress;
 import java.io.File;
@@ -32,7 +31,6 @@ import pl.droidsonroids.gif.GifDrawable;
 import static android.content.Context.MODE_PRIVATE;
 
 public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTextItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public GifWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
@@ -64,11 +62,6 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     @Override
     public int getLayoutRes() {
         return R.layout.chat_sub_layout_gif_with_text;
-    }
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
     }
 
     @Override
@@ -171,16 +164,10 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         super.voteAction(holder);
     }
 
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
+
         protected ReserveSpaceGifImageView image;
         protected EmojiTextView messageText;
-
         public ViewHolder(View view) {
             super(view);
 
@@ -189,5 +176,11 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             messageText.setTextSize(G.userTextSize);
             messageText.setMovementMethod(LinkMovementMethod.getInstance());
         }
+
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }

@@ -22,7 +22,6 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.github.meness.emoji.EmojiTextView;
 import io.meness.github.messageprogress.MessageProgress;
 import java.util.List;
@@ -30,7 +29,6 @@ import java.util.List;
 import static com.iGap.module.AndroidUtils.suitablePath;
 
 public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public VideoWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
@@ -114,17 +112,6 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         super.voteAction(holder);
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
@@ -139,5 +126,10 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             duration = (TextView) view.findViewById(R.id.duration);
             messageText.setMovementMethod(LinkMovementMethod.getInstance());
         }
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }

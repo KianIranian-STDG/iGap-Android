@@ -25,14 +25,12 @@ import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
 
 /**
  * Contact item used with FastAdapter for Navigation drawer contacts fragment.
  */
 public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItemGroup.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
     public StructContactInfo mContact;
 
     public ContactItemGroup setContact(StructContactInfo contact) {
@@ -108,19 +106,8 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         });
     }
 
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
+
         protected CircleImageView image;
         protected CustomTextViewMedium title;
         protected CustomTextViewMedium subtitle;
@@ -136,5 +123,10 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
             topLine = (View) view.findViewById(R.id.topLine);
             checkBoxSelect = (AnimateCheckBox) view.findViewById(R.id.cig_checkBox_select_user);
         }
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }

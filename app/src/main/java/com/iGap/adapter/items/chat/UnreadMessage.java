@@ -16,42 +16,40 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
 
 public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public UnreadMessage(IMessageItem messageClickListener) {
         super(false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.cslum_txt_unread_message;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layot_unread_message;
     }
 
-    @Override public void bindView(ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.txtUnreadMessage, mMessage.messageText);
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
+    @Override
+    protected void voteAction(ViewHolder holder) {
         super.voteAction(holder);
     }
 
-    @Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
 
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
@@ -62,13 +60,15 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
 
             txtUnreadMessage = (TextView) view.findViewById(R.id.cslum_txt_unread_message);
             txtUnreadMessage.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                 }
             });
 
             txtUnreadMessage.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View v) {
+                @Override
+                public boolean onLongClick(View v) {
                     return false;
                 }
             });

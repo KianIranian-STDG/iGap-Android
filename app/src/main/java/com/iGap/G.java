@@ -133,13 +133,11 @@ import com.iGap.interfaces.UpdateListAfterKick;
 import com.iGap.module.ChatSendMessageUtil;
 import com.iGap.module.ChatUpdateStatusUtil;
 import com.iGap.module.ClearMessagesUtil;
+import com.iGap.module.StartupActions;
 import com.iGap.module.enums.ConnectionState;
-import com.iGap.module.enums.StartupActions;
 import com.iGap.proto.ProtoClientCondition;
 import com.iGap.request.RequestWrapper;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import io.fabric.sdk.android.Fabric;
 import java.io.File;
 import java.util.ArrayList;
@@ -345,11 +343,6 @@ public class G extends MultiDexApplication {
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         new StartupActions();
-
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
-        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(this).defaultDisplayImageOptions(defaultOptions).build());
-
-        imageLoader = ImageLoader.getInstance();
     }
 
     @Override

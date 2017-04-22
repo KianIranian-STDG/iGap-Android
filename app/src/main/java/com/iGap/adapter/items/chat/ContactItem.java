@@ -17,11 +17,9 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
 
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public ContactItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
@@ -76,27 +74,22 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         }
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
+
         protected TextView name;
         protected TextView number;
         protected ImageView image;
-
         public ViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
             number = (TextView) view.findViewById(R.id.number);
             image = (ImageView) view.findViewById(R.id.image);
         }
+
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }

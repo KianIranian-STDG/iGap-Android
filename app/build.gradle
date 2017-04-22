@@ -51,11 +51,11 @@ android {
 
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
-  compile('com.mikepenz:fastadapter:2.1.6@aar') {
+  compile('com.mikepenz:fastadapter:2.5.2@aar') {
     transitive = true
   }
-  compile 'com.mikepenz:fastadapter-commons:2.1.0@aar'
-  compile 'com.mikepenz:fastadapter-extensions:2.1.0@aar'
+  compile 'com.mikepenz:fastadapter-commons:2.5.2@aar'
+  compile 'com.mikepenz:fastadapter-extensions:2.5.2@aar'
   compile 'com.mikepenz:materialize:1.0.1@aar'
   compile project(':messageprogress')
   compile project(':proto')

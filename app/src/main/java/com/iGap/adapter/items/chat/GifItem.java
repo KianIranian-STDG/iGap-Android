@@ -20,7 +20,6 @@ import com.iGap.module.ReserveSpaceGifImageView;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.proto.ProtoGlobal;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import io.meness.github.messageprogress.MessageProgress;
 import java.io.File;
 import java.util.List;
@@ -29,7 +28,6 @@ import pl.droidsonroids.gif.GifDrawable;
 import static android.content.Context.MODE_PRIVATE;
 
 public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public GifItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
@@ -61,11 +59,6 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     @Override
     public int getLayoutRes() {
         return R.layout.chat_sub_layout_gif;
-    }
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
     }
 
     @Override
@@ -139,10 +132,9 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         super.voteAction(holder);
     }
 
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {

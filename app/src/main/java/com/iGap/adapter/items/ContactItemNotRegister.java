@@ -19,19 +19,12 @@ import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.StructContactInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
-
-/**
- * Created by Alireza Eskandarpour Shoferi (meNESS) on 9/3/2016.
- */
 
 /**
  * Contact item used with FastAdapter for Navigation drawer contacts fragment.
  */
-public class ContactItemNotRegister
-        extends AbstractItem<ContactItemNotRegister, ContactItemNotRegister.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
+public class ContactItemNotRegister extends AbstractItem<ContactItemNotRegister, ContactItemNotRegister.ViewHolder> {
     public StructContactInfo mContact;
 
     public ContactItemNotRegister setContact(StructContactInfo contact) {
@@ -67,28 +60,15 @@ public class ContactItemNotRegister
         }
 
         String name = HelperImageBackColor.getFirstAlphabetName(mContact.displayName);
-        holder.image.setImageBitmap(
-                HelperImageBackColor.drawAlphabetOnPicture(holder.image.getLayoutParams().width, name,
-                        HelperImageBackColor.getColor(name)));
-    }
-
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
+        holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(holder.image.getLayoutParams().width, name, HelperImageBackColor.getColor(name)));
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
+
         protected CircleImageView image;
         protected CustomTextViewMedium title;
         protected CustomTextViewMedium subtitle;
         protected View topLine;
-
         public ViewHolder(View view) {
             super(view);
 
@@ -97,5 +77,10 @@ public class ContactItemNotRegister
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
             topLine = (View) view.findViewById(R.id.topLine);
         }
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }

@@ -16,11 +16,9 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
-import com.mikepenz.fastadapter.utils.ViewHolderFactory;
 import java.util.List;
 
 public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
-    private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
 
     public TimeItem(IMessageItem messageClickListener) {
         super(false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
@@ -48,18 +46,8 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
         super.voteAction(holder);
     }
 
-    @Override
-    public ViewHolderFactory<? extends ViewHolder> getFactory() {
-        return FACTORY;
-    }
-
-    protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-        public ViewHolder create(View v) {
-            return new ViewHolder(v);
-        }
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
+
         protected TextView text;
 
         public ViewHolder(View view) {
@@ -67,5 +55,10 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
 
             text = (TextView) view.findViewById(R.id.text);
         }
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 }
