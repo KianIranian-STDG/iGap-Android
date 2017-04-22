@@ -286,11 +286,18 @@ public class HelperDownloadFile {
         }
     }
 
-    private static void requestDownloadFile(StructDownLoad item) {
+    private static void requestDownloadFile(final StructDownLoad item) {
 
         if (item.progress == 100 || item.offset >= item.size) {
             moveTmpFileToOrginFolder(item.Token, item.selector, item.cashId);
-            updateView(item);
+
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    updateView(item);
+                }
+            }, 250);
+
+
             list.remove(item.cashId + item.selector);
 
             // if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE){

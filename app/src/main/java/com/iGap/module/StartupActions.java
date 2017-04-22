@@ -232,7 +232,7 @@ public final class StartupActions {
 
     private void initializeGlobalVariables() {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
-        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
+        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).threadPoolSize(1).defaultDisplayImageOptions(defaultOptions).build());
         imageLoader = ImageLoader.getInstance();
         helperNotificationAndBadge = new HelperNotificationAndBadge();
 
