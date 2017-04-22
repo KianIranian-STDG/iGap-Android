@@ -1,10 +1,17 @@
 package com.iGap.module;
+/*
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+*/
 
 import com.iGap.proto.ProtoGlobal;
 
-
-public class StructSessionsGetActiveList {
-
+public class StructSessions {
     private long sessionId;
     private String name;
     private int appId;
@@ -17,7 +24,7 @@ public class StructSessionsGetActiveList {
     private ProtoGlobal.Language language;
     private String country;
     private boolean current;
-    private int createTime;
+    private int createTime;  //ddd
     private int activeTime;
     private String ip;
 

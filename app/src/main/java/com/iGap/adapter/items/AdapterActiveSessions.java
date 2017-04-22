@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperCalander;
-import com.iGap.module.StructSessionsgetActivelist;
+import com.iGap.module.StructSessions;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import java.util.List;
 
@@ -27,17 +27,17 @@ import static com.iGap.R.id.adp_rootLayout;
 
 public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, AdapterActiveSessions.ViewHolder> {
 
-    public StructSessionsgetActivelist item;
+    public StructSessions item;
 
-    public StructSessionsgetActivelist getItem() {
+    public StructSessions getItem() {
         return item;
     }
 
-    public AdapterActiveSessions(StructSessionsgetActivelist item) {
+    public AdapterActiveSessions(StructSessions item) {
         this.item = item;
     }
 
-    public void setItem(StructSessionsgetActivelist item) {
+    public void setItem(StructSessions item) {
         this.item = item;
     }
 
