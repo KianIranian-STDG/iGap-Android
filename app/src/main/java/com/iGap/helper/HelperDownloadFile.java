@@ -129,7 +129,7 @@ public class HelperDownloadFile {
     }
 
     public interface UpdateListener {
-        void OnProgress(String token, int progress);
+        void OnProgress(String path, int progress);
 
         void OnError(String token);
     }
@@ -291,12 +291,7 @@ public class HelperDownloadFile {
         if (item.progress == 100 || item.offset >= item.size) {
             moveTmpFileToOrginFolder(item.Token, item.selector, item.cashId);
 
-            G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
-                    updateView(item);
-                }
-            }, 250);
-
+            updateView(item);
 
             list.remove(item.cashId + item.selector);
 
@@ -395,7 +390,10 @@ public class HelperDownloadFile {
     private static void updateView(final StructDownLoad item) {
         for (UpdateListener listener : item.listeners) {
             if (listener != null) {
-                listener.OnProgress(item.Token, item.progress);
+
+                String _path = item.moveToDirectoryPAth.length() > 0 ? item.moveToDirectoryPAth : item.path;
+
+                listener.OnProgress(_path, item.progress);
             }
         }
     }

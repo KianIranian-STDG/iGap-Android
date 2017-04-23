@@ -1160,8 +1160,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             HelperDownloadFile.startDownload(at.getToken(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2,
                 new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(String token, final int progress) {
+                @Override public void OnProgress(String path, final int progress) {
 
                     if (messageProgress != null) {
 
@@ -1352,13 +1351,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                             HelperDownloadFile.startDownload(at.getToken(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL,
                                 "", 4, new HelperDownloadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(String token, int progress) {
+                                @Override public void OnProgress(final String path, int progress) {
 
                                     if (progress == 100) {
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override public void run() {
-                                                G.imageLoader.displayImage(suitablePath(vh.tempFilePath), vh.imvPicFile);
+                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), vh.imvPicFile);
                                             }
                                         });
                                     }
@@ -1492,12 +1490,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                             HelperDownloadFile.startDownload(at.getToken(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL,
                                 "", 4,
                                 new HelperDownloadFile.UpdateListener() {
-                                    @Override public void OnProgress(String token, int progress) {
+                                    @Override public void OnProgress(final String path, int progress) {
 
                                         if (progress == 100) {
                                             G.currentActivity.runOnUiThread(new Runnable() {
                                                 @Override public void run() {
-                                                    G.imageLoader.displayImage(suitablePath(tempFilePath), imvPicFile);
+                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), imvPicFile);
                                                 }
                                             });
                                         }
@@ -1731,12 +1729,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                                 HelperDownloadFile.startDownload(at.getToken(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(),
                                     ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
-                                        @Override public void OnProgress(String token, int progress) {
+                                        @Override public void OnProgress(final String path, int progress) {
 
                                             if (progress == 100) {
                                                 G.currentActivity.runOnUiThread(new Runnable() {
                                                     @Override public void run() {
-                                                        G.imageLoader.displayImage(suitablePath(tempFilePath), gifView);
+                                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), gifView);
                                                     }
                                                 });
                                             }

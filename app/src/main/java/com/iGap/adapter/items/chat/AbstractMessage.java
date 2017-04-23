@@ -1220,8 +1220,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (token != null && token.length() > 0 && size > 0) {
 
             HelperDownloadFile.startDownload(token, attachment.getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(String token, int progress) {
+                @Override public void OnProgress(final String path, int progress) {
 
                     if (progress == 100) {
                         G.currentActivity.runOnUiThread(new Runnable() {
@@ -1235,7 +1234,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     type = mMessage.messageType.toString().toLowerCase();
                                 }
                                 if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-                                    onLoadThumbnailFromLocal(holder, _path, LocalFileType.THUMBNAIL);
+                                    onLoadThumbnailFromLocal(holder, AndroidUtils.suitablePath(path), LocalFileType.THUMBNAIL);
                                 }
                             }
                         });
@@ -1280,8 +1279,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
             HelperDownloadFile.startDownload(token, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(final String token, final int progress) {
+                @Override public void OnProgress(final String path, final int progress) {
 
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override
@@ -1292,8 +1290,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                                 progressBar.performProgress();
 
-
-                                onLoadThumbnailFromLocal(holder, _path, LocalFileType.FILE);
+                                onLoadThumbnailFromLocal(holder, AndroidUtils.suitablePath(path), LocalFileType.FILE);
 
                             } else {
                                 progressBar.withProgress(progress);

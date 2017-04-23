@@ -423,13 +423,13 @@ public class FragmentShowImage extends Fragment {
                         if (selector != null && fileSize > 0) {
                             HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), fileSize, selector, "", 4,
                                 new HelperDownloadFile.UpdateListener() {
-                                @Override public void OnProgress(String token, int progress) {
+                                    @Override public void OnProgress(final String path, int progress) {
 
                                     if (progress == 100) {
 
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override public void run() {
-                                                G.imageLoader.displayImage(suitablePath(filePathTumpnail), touchImageView);
+                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
                                             }
                                         });
                                     }
@@ -546,7 +546,7 @@ public class FragmentShowImage extends Fragment {
             HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getAttachment().getSize(),
                 ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4,
                 new HelperDownloadFile.UpdateListener() {
-                    @Override public void OnProgress(String token, final int progres) {
+                    @Override public void OnProgress(final String path, final int progres) {
 
                         if (progress != null) {
 
@@ -562,8 +562,8 @@ public class FragmentShowImage extends Fragment {
                                             imgPlay.setVisibility(View.VISIBLE);
                                             //if (position == viewPager.getCurrentItem()) playVideo(position, mTextureView, imgPlay, touchImageView);
                                         }
-                                        String path = getFilePath(position);
-                                        G.imageLoader.displayImage(suitablePath(path), touchImageView);
+
+                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
                                     }
                                 }
                             });

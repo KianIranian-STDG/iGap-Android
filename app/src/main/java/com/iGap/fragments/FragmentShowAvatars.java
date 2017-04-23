@@ -474,13 +474,13 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
                         if (selector != null && fileSize > 0) {
                             HelperDownloadFile.startDownload(ra.getToken(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                                @Override public void OnProgress(String token, int progress) {
+                                @Override public void OnProgress(final String path, int progress) {
 
                                     if (progress == 100) {
 
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override public void run() {
-                                                G.imageLoader.displayImage(suitablePath(filePathTumpnail), touchImageView);
+                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
                                             }
                                         });
                                     }
@@ -541,7 +541,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
             HelperDownloadFile.startDownload(ra.getToken(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4,
                 new HelperDownloadFile.UpdateListener() {
-                @Override public void OnProgress(String token, final int progres) {
+                    @Override public void OnProgress(final String path, final int progres) {
 
                     if (progress != null) {
 
@@ -554,7 +554,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                                     progress.setVisibility(View.GONE);
                                     contentLoading.setVisibility(View.GONE);
 
-                                    G.imageLoader.displayImage(suitablePath(dirPath), touchImageView);
+                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
                                 }
                             }
                         });

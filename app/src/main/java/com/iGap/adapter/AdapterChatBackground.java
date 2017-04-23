@@ -76,7 +76,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 if (!new File(path).exists()) {
                     HelperDownloadFile.startDownload(pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4,
                         new HelperDownloadFile.UpdateListener() {
-                            @Override public void OnProgress(String token, int progress) {
+                            @Override public void OnProgress(String mPath, int progress) {
                                 if (progress == 100) {
                                     G.currentActivity.runOnUiThread(new Runnable() {
                                         @Override public void run() {
@@ -249,7 +249,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         String path = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
 
         HelperDownloadFile.startDownload(pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2, new HelperDownloadFile.UpdateListener() {
-            @Override public void OnProgress(String token, final int progress) {
+            @Override public void OnProgress(String mPath, final int progress) {
 
                 if (messageProgress != null) {
 
