@@ -711,13 +711,23 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     if (data.getClipData() != null) { // multi select file
                         listPathString = attachFile.getClipData(data.getClipData());
+
+                        if (listPathString != null) {
+                            for (int i = 0; i < listPathString.size(); i++) {
+                                listPathString.set(i, getFilePathFromUri(Uri.fromFile(new File(listPathString.get(i)))));
+                            }
+                        }
+
+
                     }
                 }
 
                 if (listPathString == null || listPathString.size() < 1) {
                     listPathString = new ArrayList<>();
 
-                    if (data.getData() != null) listPathString.add(getFilePathFromUri(data.getData()));
+                    if (data.getData() != null) {
+                        listPathString.add(getFilePathFromUri(data.getData()));
+                    }
                 }
             }
             latestRequestCode = requestCode;
@@ -729,7 +739,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (requestCode == AttachFile.request_code_VIDEO_CAPTURED) {
                     if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
                         Intent intent = new Intent(ActivityChat.this, ActivityTrimVideo.class);
-                        intent.putExtra("PATH", getFilePathFromUri(data.getData()));
+                        intent.putExtra("PATH", listPathString.get(0));
                         startActivityForResult(intent, AttachFile.request_code_trim_video);
                         return;
                     } else if (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1) {
@@ -785,7 +795,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect) {
                         if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
                             Intent intent = new Intent(ActivityChat.this, ActivityTrimVideo.class);
-                            intent.putExtra("PATH", getFilePathFromUri(data.getData()));
+                            intent.putExtra("PATH", listPathString.get(0));
                             startActivityForResult(intent, AttachFile.request_code_trim_video);
                             return;
                         } else if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {

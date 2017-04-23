@@ -146,7 +146,9 @@ public class AttachFile {
 
     public static String getFilePathFromUri(Uri uri) {
 
-        if (uri == null) return null;
+        if (uri == null) {
+            return null;
+        }
 
         String path;
 

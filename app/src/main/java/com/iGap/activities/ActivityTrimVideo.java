@@ -51,8 +51,6 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
         }
 
         getResolutionVideo(path);
-
-        path = getRealPathFromURI(Uri.parse(path));
         durationVideo(path);
 
         K4LVideoTrimmer videoTrimmer = (K4LVideoTrimmer) findViewById(R.id.timeLine);
