@@ -81,7 +81,6 @@ import com.iGap.interfaces.OnClientCondition;
 import com.iGap.interfaces.OnClientGetRoomListResponse;
 import com.iGap.interfaces.OnComplete;
 import com.iGap.interfaces.OnConnectionChangeState;
-import com.iGap.interfaces.OnDraftMessage;
 import com.iGap.interfaces.OnGetPermission;
 import com.iGap.interfaces.OnGroupAvatarResponse;
 import com.iGap.interfaces.OnRefreshActivity;
@@ -89,7 +88,6 @@ import com.iGap.interfaces.OnSetActionInRoom;
 import com.iGap.interfaces.OnUpdateAvatar;
 import com.iGap.interfaces.OnUpdating;
 import com.iGap.interfaces.OnUserInfoMyClient;
-import com.iGap.interfaces.OnUserInfoResponse;
 import com.iGap.interfaces.OnUserSessionLogout;
 import com.iGap.interfaces.OpenFragment;
 import com.iGap.libs.floatingAddButton.ArcMenu;
@@ -150,7 +148,7 @@ import static com.iGap.R.string.updating;
 import static com.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static com.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnUserInfoResponse, OnDraftMessage, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition {
 
     public static boolean isMenuButtonAddShown = false;
     FloatingActionButton btnStartNewChat;
@@ -323,20 +321,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        //G.onFileDownloadResponse = this;
-        G.onUserInfoResponse = this;
-        G.onDraftMessage = this;
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         initComponent();
-
         connectionState();
         initRecycleView();
         initFloatingButtonCreateNew();
         initDrawerMenu();
-        //onDraftMessage();
 
         keepMedia = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
         if (keepMedia) {// if Was selected keep media at 1week
@@ -361,11 +354,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
 
-
     @Override
     protected void onStart() {
         super.onStart();
-
         RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
             @Override
             public void sendDeliveredStatus(RealmRoom room, RealmRoomMessage message) {
@@ -582,9 +573,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
 
-
-
-
         ViewGroup itemNavContacts = (ViewGroup) findViewById(R.id.lm_ll_contacts);
         itemNavContacts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -701,7 +689,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        //                                showProgressBar();
                                         G.onUserSessionLogout = new OnUserSessionLogout() {
                                             @Override
                                             public void onUserSessionLogout() {
@@ -710,7 +697,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                                     @Override
                                                     public void run() {
                                                         HelperLogout.logout();
-                                                        //                                                hideProgressBar();
                                                     }
                                                 });
                                             }
@@ -720,7 +706,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        //                                                hideProgressBar();
                                                         final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
                                                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                             @Override
@@ -738,7 +723,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        //                                                hideProgressBar();
                                                         final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
                                                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                             @Override
@@ -751,7 +735,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                                 });
                                             }
                                         };
-
                                         new RequestUserSessionLogout().userSessionLogout();
                                     }
                                 }).show();
@@ -1256,12 +1239,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onResume() {
         super.onResume();
-
-        //       =======> after change language in ActivitySetting this part refresh Activity main
+        /**
+         * after change language in ActivitySetting this part refresh Activity main
+         */
         G.onRefreshActivity = new OnRefreshActivity() {
             @Override
             public void refresh(String changeLanguage) {
-
                 ActivityMain.this.recreate();
             }
         };
@@ -1282,9 +1265,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.onClientCondition = this;
         G.onSetActionInRoom = this;
 
-
         getChatsList();
-
         startService(new Intent(this, ServiceContact.class));
 
         HelperUrl.getLinkinfo(getIntent(), ActivityMain.this);
@@ -1300,13 +1281,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onChatClearMessage(final long roomId, long clearId, final ProtoResponse.Response response) {
-
+        //empty
     }
 
     @Override
     public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
-        // TODO
-
+        //empty
     }
 
     @Override
@@ -1334,61 +1314,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onMessageFailed(final long roomId, RealmRoomMessage roomMessage) {
-
+        //empty
     }
 
     @Override
     public void onChatUpdateStatus(final long roomId, long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
-
-    }
-
-    @Override
-    public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-        /*Realm realm1 = Realm.getDefaultInstance();
-        final long userId = realm1.where(RealmUserInfo.class).findFirst().getUserId();
-        realm1.close();
-        if (userId == user.getId()) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAvatar avatar = RealmAvatar.put(user.getId(), user.getAvatar());
-
-                    RealmRegisteredInfo.putOrUpdate(user);
-
-                    G.onChangeUserPhotoListener.onChangeInitials(user.getInitials(), user.getColor());
-
-                    if (avatar != null && avatar.isValid()) {
-                        if (!avatar.getFile().isFileExistsOnLocal() && !avatar.getFile().isThumbnailExistsOnLocal()) {
-                            requestDownloadAvatar(false, avatar.getFile().getToken(), avatar.getFile().getName(), (int) avatar.getFile().getSmallThumbnail().getSize());
-                        } else {
-                            if (avatar.getFile().isFileExistsOnLocal()) {
-                                G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalFilePath());
-                            } else if (avatar.getFile().isThumbnailExistsOnLocal()) {
-                                G.onChangeUserPhotoListener.onChangePhoto(avatar.getFile().getLocalThumbnailPath());
-                            }
-                        }
-                    }
-                }
-            });
-
-            realm.close();
-        }*/
+        //empty
     }
 
     @Override
     public void onUserInfoTimeOut() {
-
+        //empty
     }
 
     @Override
     public void onUserInfoError(int majorCode, int minorCode) {
-
-    }
-
-    @Override
-    public void onDraftMessage(final long roomId, String draftMessage) {
-
+        //empty
     }
 
     @Override
@@ -1770,7 +1711,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                             HelperAvatar.updatePath(realmAvatar);
 
-
                             if (realmAvatar.getFile().isFileExistsOnLocal()) {
                                 G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
                             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
@@ -1779,22 +1719,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                 HelperAvatar.getAvatar1(idForGetAvatar, avatarType, new OnAvatarGet() {
                                     @Override
                                     public void onAvatarGet(final String avatarPath, final long ownerId) {
-                        /*G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
-                            }
-                        });*/
+                                        //empty
                                     }
 
                                     @Override
                                     public void onShowInitials(final String initials, final String color) {
-                        /*G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                            }
-                        });*/
+                                        //empty
                                     }
                                 });
 
@@ -1826,25 +1756,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
 
                         holder.name.setText(mInfo.getTitle());
-
-           /* if (mInfo.isDeleted()) {
-                long lastMessageTime = AppUtils.computeLastMessageTime(mInfo.getId());
-                if (lastMessageTime != 0) {
-                    holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(lastMessageTime));
-
-                    holder.lastSeen.setVisibility(View.VISIBLE);
-                } else {
-                    holder.lastSeen.setVisibility(GONE);
-                }
-            } else {
-                if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
-                    holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
-
-                    holder.lastSeen.setVisibility(View.VISIBLE);
-                } else {
-                    holder.lastSeen.setVisibility(GONE);
-                }
-            }*/
 
                         if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
                             holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
@@ -2018,17 +1929,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return null;
         }
 
-        //private void updateUiById(Long id) {
-        //
-        //    for (int i = 0; i < realmResults.size(); i++) {
-        //
-        //        if (realmResults.get(i).getId() == id) {
-        //            notifyItemChanged(i);
-        //            break;
-        //        }
-        //    }
-        //}
-
         /**
          * get string chat icon
          *
@@ -2046,40 +1946,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 default:
                     return null;
             }
-        }
-    }
-
-    public class PreCachingLayoutManager extends LinearLayoutManager {
-        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 1600;
-        private int extraLayoutSpace = -1;
-        private Context context;
-
-        public PreCachingLayoutManager(Context context) {
-            super(context);
-            this.context = context;
-        }
-
-        public PreCachingLayoutManager(Context context, int extraLayoutSpace) {
-            super(context);
-            this.context = context;
-            this.extraLayoutSpace = extraLayoutSpace;
-        }
-
-        public PreCachingLayoutManager(Context context, int orientation, boolean reverseLayout) {
-            super(context, orientation, reverseLayout);
-            this.context = context;
-        }
-
-        public void setExtraLayoutSpace(int extraLayoutSpace) {
-            this.extraLayoutSpace = extraLayoutSpace;
-        }
-
-        @Override
-        protected int getExtraLayoutSpace(RecyclerView.State state) {
-            if (extraLayoutSpace > 0) {
-                return extraLayoutSpace;
-            }
-            return DEFAULT_EXTRA_LAYOUT_SPACE;
         }
     }
 
