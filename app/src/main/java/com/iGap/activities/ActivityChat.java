@@ -2046,102 +2046,107 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
 
                     String[] messages = HelperString.splitStringEvery(getWrittenMessage(), Config.MAX_TEXT_LENGTH);
-                    for (int i = 0; i < messages.length; i++) {
-                        final String message = messages[i];
-                        if (!message.isEmpty()) {
-                            final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                            final String identity = Long.toString(SUID.id().get());
-                            final long currentTime = TimeUtils.currentLocalTime();
+                    if (messages.length == 0) {
+                        edtChat.setText("");
+                        Toast.makeText(G.context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
+                    } else {
+                        for (int i = 0; i < messages.length; i++) {
+                            final String message = messages[i];
+                            if (!message.isEmpty()) {
+                                final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                final String identity = Long.toString(SUID.id().get());
+                                final long currentTime = TimeUtils.currentLocalTime();
 
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, parseLong(identity));
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, parseLong(identity));
 
-                                    roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                                    roomMessage.setMessage(message);
-                                    roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+                                        roomMessage.setMessage(message);
+                                        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
 
-                                    RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
-                                    RealmRoomMessage.isEmojiInText(roomMessage, message);
+                                        RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
+                                        RealmRoomMessage.isEmojiInText(roomMessage, message);
 
-                                    roomMessage.setRoomId(mRoomId);
-                                    roomMessage.setShowMessage(true);
+                                        roomMessage.setRoomId(mRoomId);
+                                        roomMessage.setShowMessage(true);
 
-                                    roomMessage.setUserId(senderId);
-                                    roomMessage.setCreateTime(currentTime);
+                                        roomMessage.setUserId(senderId);
+                                        roomMessage.setCreateTime(currentTime);
 
-                                    /**
-                                     *  user wants to replay to a message
-                                     */
-                                    if (userTriesReplay()) {
-                                        RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
-                                        if (messageToReplay != null) {
-                                            roomMessage.setReplyTo(messageToReplay);
+                                        /**
+                                         *  user wants to replay to a message
+                                         */
+                                        if (userTriesReplay()) {
+                                            RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
+                                            if (messageToReplay != null) {
+                                                roomMessage.setReplyTo(messageToReplay);
+                                            }
                                         }
                                     }
+                                });
+
+                                final RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(identity)).findFirst();
+
+                                if (roomMessage != null) {
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            if (room != null) {
+                                                room.setLastMessage(roomMessage);
+                                            }
+                                        }
+                                    });
                                 }
-                            });
 
-                            final RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(identity)).findFirst();
-
-                            if (roomMessage != null) {
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        if (room != null) {
-                                            room.setLastMessage(roomMessage);
+                                if (chatType == CHANNEL) {
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+                                            realmChannelExtra.setMessageId(parseLong(identity));
+                                            realmChannelExtra.setThumbsUp("0");
+                                            realmChannelExtra.setThumbsDown("0");
+                                            if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
+                                                realmChannelExtra.setSignature(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName());
+                                            } else {
+                                                realmChannelExtra.setSignature("");
+                                            }
+                                            realmChannelExtra.setViewsLabel("1");
                                         }
-                                    }
-                                });
-                            }
+                                    });
+                                }
+                                mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(SUID.id().get()));
 
-                            if (chatType == CHANNEL) {
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
-                                        realmChannelExtra.setMessageId(parseLong(identity));
-                                        realmChannelExtra.setThumbsUp("0");
-                                        realmChannelExtra.setThumbsDown("0");
-                                        if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
-                                            realmChannelExtra.setSignature(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName());
-                                        } else {
-                                            realmChannelExtra.setSignature("");
+                                realm.close();
+
+                                scrollToEnd();
+
+                                /**
+                                 * send splitted message in every one second
+                                 */
+                                if (messages.length > 1) {
+                                    G.handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
                                         }
-                                        realmChannelExtra.setViewsLabel("1");
-                                    }
-                                });
-                            }
-                            mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(SUID.id().get()));
+                                    }, 1000 * i);
+                                } else {
+                                    new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                                }
 
-                            realm.close();
 
-                            scrollToEnd();
+                                edtChat.setText("");
 
-                            /**
-                             * send splitted message in every one second
-                             */
-                            if (messages.length > 1) {
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
-                                    }
-                                }, 1000 * i);
+                                /**
+                                 * if replay layout is visible, gone it
+                                 */
+                                clearReplyView();
                             } else {
-                                new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                                Toast.makeText(G.context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
                             }
-
-
-                            edtChat.setText("");
-
-                            /**
-                             * if replay layout is visible, gone it
-                             */
-                            clearReplyView();
-                        } else {
-                            Toast.makeText(G.context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -2538,16 +2543,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                 // make update status to message sender that i've read his message
                                                 if (chatType == CHAT) {
                                                     G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                                                } else if (chatType == GROUP && (roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT || roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.DELIVERED)) {
+                                                } else if (chatType == GROUP && (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN)) {
                                                     G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                                                 }
                                             }
                                         });
 
-                                        //// if need to add time befor insert new message
-                                        //if (isNeedAddTime) {
-                                        //    addTimeToList(SUID.id().get());
-                                        //}
                                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
                                         setBtnDownVisible();
                                     } else {
@@ -6253,7 +6254,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                          * don't send update status for own user
                          */
                         if (realmRoomMessages.get(i).getUserId() != G.userId) {
-                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, realmRoomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                            if ((chatType != CHANNEL && !realmRoomMessages.get(i).getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()))) {
+                                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, realmRoomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                            }
                         }
                     }
 

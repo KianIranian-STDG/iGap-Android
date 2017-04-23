@@ -13,6 +13,7 @@ package com.iGap.response;
 import com.iGap.G;
 import com.iGap.proto.ProtoChatUpdateStatus;
 import com.iGap.proto.ProtoError;
+import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
 import com.iGap.realm.RealmClientCondition;
 import com.iGap.realm.RealmClientConditionFields;
@@ -47,11 +48,13 @@ public class ChatUpdateStatusResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 if (!response.getId().isEmpty()) { // I'm sender
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatUpdateStatus.getRoomId()).findFirst();
-                    for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) {
-                        if (realmOfflineSeen.getOfflineSeen() == chatUpdateStatus.getMessageId()) {
-                            realmOfflineSeen.deleteFromRealm();
-                            break;
+                    if (chatUpdateStatus.getStatus() == ProtoGlobal.RoomMessageStatus.SEEN) {
+                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatUpdateStatus.getRoomId()).findFirst();
+                        for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) {
+                            if (realmOfflineSeen.getOfflineSeen() == chatUpdateStatus.getMessageId()) {
+                                realmOfflineSeen.deleteFromRealm();
+                                break;
+                            }
                         }
                     }
                 } else { // I'm recipient

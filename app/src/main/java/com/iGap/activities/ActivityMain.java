@@ -70,7 +70,6 @@ import com.iGap.helper.HelperLogout;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperUrl;
 import com.iGap.helper.ServiceContact;
-import com.iGap.interfaces.OnActivityMainStart;
 import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
 import com.iGap.interfaces.OnChatClearMessageResponse;
@@ -357,12 +356,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
-        RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
-            @Override
-            public void sendDeliveredStatus(RealmRoom room, RealmRoomMessage message) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-            }
-        });
+        //RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
+        //    @Override
+        //    public void sendDeliveredStatus(RealmRoom room, RealmRoomMessage message) {
+        //        G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+        //    }
+        //});
     }
 
     /**

@@ -112,7 +112,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                 }
             }
         });
-        if (builder.getRoomMessage().getMessageId() > latestMessageId) {
+        // if (builder.getRoomMessage().getMessageId() > latestMessageId) {
             if (builder.getResponse().getId().isEmpty()) {
                 // invoke following callback when i'm not the sender, because I already done
                 // everything after sending message
@@ -123,7 +123,7 @@ public class GroupSendMessageResponse extends MessageHandler {
                 // invoke following callback when I'm the sender and the message has updated
                 G.chatSendMessageUtil.onMessageUpdate(builder.getRoomId(), roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
             }
-        }
+        //}
 
         realm.close();
     }
