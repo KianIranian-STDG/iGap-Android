@@ -25,6 +25,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import com.iGap.helper.HelperCalander;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -497,5 +498,55 @@ public class FileUtils {
             }
         }
         fileOrDirectory.delete();
+    }
+
+    /**
+     * convert Decimal Format
+     */
+    public static String formatFileSize(long size) {
+        String hrSize = null;
+
+        double b = size;
+        double k = size / 1024.0;
+        double m = ((size / 1024.0) / 1024.0);
+        double g = (((size / 1024.0) / 1024.0) / 1024.0);
+        double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);
+
+        DecimalFormat dec = new DecimalFormat("0.0");
+
+        if (t > 1) {
+            hrSize = dec.format(t).concat(" TB");
+        } else if (g > 1) {
+            hrSize = dec.format(g).concat(" GB");
+        } else if (m > 1) {
+            hrSize = dec.format(m).concat(" MB");
+        } else if (k > 1) {
+            hrSize = dec.format(k).concat(" KB");
+        } else {
+            hrSize = dec.format(b).concat(" Bytes");
+        }
+
+        return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(hrSize) : hrSize;
+    }
+
+    public static long getFolderSize(File dir) throws RuntimeException {
+        long size = 0;
+        if (dir == null) return size;
+
+        if (dir.listFiles() != null) {
+
+            for (File file : dir.listFiles()) {
+                if (file != null) {
+                    if (file.isFile()) {
+                        size += file.length();
+                    } else {
+                        size += getFolderSize(file);
+                    }
+                } else {
+                    return size;
+                }
+            }
+        }
+        return size;
     }
 }

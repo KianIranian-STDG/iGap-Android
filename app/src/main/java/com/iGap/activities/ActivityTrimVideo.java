@@ -20,9 +20,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.TextView;
 import com.iGap.R;
-import com.iGap.helper.HelperCalander;
 import java.io.File;
-import java.text.DecimalFormat;
 import life.knowledge4.videotrimmer.K4LVideoTrimmer;
 import life.knowledge4.videotrimmer.interfaces.OnK4LVideoListener;
 import life.knowledge4.videotrimmer.interfaces.OnTrimVideoListener;
@@ -81,7 +79,7 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
         seconds = seconds % 60;
         txtTime.setText("," + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
 
-        txtSize.setText("," + formatFileSize((long) originalSize));
+        txtSize.setText("," + com.iGap.module.FileUtils.formatFileSize((long) originalSize));
     }
 
     @Override
@@ -110,32 +108,6 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
     @Override
     public void onError(String message) {
 
-    }
-
-    public static String formatFileSize(long size) {
-        String hrSize = null;
-
-        double b = size;
-        double k = size / 1024.0;
-        double m = ((size / 1024.0) / 1024.0);
-        double g = (((size / 1024.0) / 1024.0) / 1024.0);
-        double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);
-
-        DecimalFormat dec = new DecimalFormat("0.0");
-
-        if (t > 1) {
-            hrSize = dec.format(t).concat(" TB");
-        } else if (g > 1) {
-            hrSize = dec.format(g).concat(" GB");
-        } else if (m > 1) {
-            hrSize = dec.format(m).concat(" MB");
-        } else if (k > 1) {
-            hrSize = dec.format(k).concat(" KB");
-        } else {
-            hrSize = dec.format(b).concat(" Bytes");
-        }
-
-        return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(hrSize) : hrSize;
     }
 
     private String getRealPathFromURI(Uri contentURI) {
