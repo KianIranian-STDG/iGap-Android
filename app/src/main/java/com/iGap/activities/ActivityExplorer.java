@@ -34,9 +34,6 @@ import java.io.File;
 import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-/**
- * Created by android3 on 9/7/2016.
- */
 public class ActivityExplorer extends ActivityEnhanced {
 
     String nextnode;

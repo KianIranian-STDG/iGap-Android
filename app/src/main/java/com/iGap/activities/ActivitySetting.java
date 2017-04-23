@@ -84,6 +84,7 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AttachFile;
 import com.iGap.module.FileUploadStructure;
+import com.iGap.module.FileUtils;
 import com.iGap.module.IntentRequests;
 import com.iGap.module.SHP_SETTING;
 import com.iGap.module.SUID;
@@ -112,7 +113,6 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Locale;
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -175,77 +175,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     RealmChangeListener<RealmModel> userInfoListener;
     RealmUserInfo realmUserInfo;
 
-    public static long getFolderSize(File dir) throws RuntimeException {
-        long size = 0;
-        if (dir == null) return size;
 
-        if (dir.listFiles() != null) {
 
-            for (File file : dir.listFiles()) {
-                if (file != null) {
-                    if (file.isFile()) {
-                        size += file.length();
-                    } else {
-                        size += getFolderSize(file);
-                    }
-                } else {
-                    return size;
-                }
-            }
-        }
-        return size;
-    }
-
-    public static String formatFileSize(long size) {
-        String hrSize = null;
-
-        double b = size;
-        double k = size / 1024.0;
-        double m = ((size / 1024.0) / 1024.0);
-        double g = (((size / 1024.0) / 1024.0) / 1024.0);
-        double t = ((((size / 1024.0) / 1024.0) / 1024.0) / 1024.0);
-
-        DecimalFormat dec = new DecimalFormat("0.0");
-
-        if (t > 1) {
-            hrSize = dec.format(t).concat(" TB");
-        } else if (g > 1) {
-            hrSize = dec.format(g).concat(" GB");
-        } else if (m > 1) {
-            hrSize = dec.format(m).concat(" MB");
-        } else if (k > 1) {
-            hrSize = dec.format(k).concat(" KB");
-        } else {
-            hrSize = dec.format(b).concat(" Bytes");
-        }
-
-        return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(hrSize) : hrSize;
-    }
-
-    /*private void setImage() {
-        final Realm realm = Realm.getDefaultInstance();
-
-        RealmRegisteredInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst().getUserInfo();
-        if (realmUserInfo != null && realmUserInfo.getLastAvatar() != null) {
-            RealmAvatar realmAvatar = realmUserInfo.getLastAvatar();
-            if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), circleImageView);
-                if (G.onChangeUserPhotoListener != null) {
-                    G.onChangeUserPhotoListener.onChangePhoto(realmAvatar.getFile().getLocalFilePath());
-                }
-            } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), circleImageView);
-                if (G.onChangeUserPhotoListener != null) {
-                    G.onChangeUserPhotoListener.onChangePhoto(realmAvatar.getFile().getLocalThumbnailPath());
-                }
-            } else {
-                showInitials();
-                requestDownloadAvatar(false, realmAvatar.getFile().getToken(), realmAvatar.getFile().getName(), (int) realmAvatar.getFile().getSmallThumbnail().getSize());
-            }
-        } else {
-            showInitials();
-        }
-    }*/
 
     private void setImage(String path) {
         if (path != null) {
@@ -334,6 +265,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         new RequestUserProfileGetEmail().userProfileGetEmail();
 
 
+         /*
+          set layout and open dialog for set or change Name & Family
+         */
         ViewGroup layoutNickname = (ViewGroup) findViewById(R.id.st_layout_nickname);
         layoutNickname.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -498,7 +432,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
+         /*
+          open dialog for set or change gander
+         */
         ViewGroup layoutGander = (ViewGroup) findViewById(R.id.st_layout_gander);
         layoutGander.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -562,6 +498,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+        /*
+          set layout and open dialog for set or change email address
+         */
         ViewGroup ltEmail = (ViewGroup) findViewById(R.id.st_layout_email);
         ltEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -686,7 +625,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 dialog.show();
             }
         });
-
+         /*
+          set layout and open dialog for change userName
+         */
         ViewGroup layoutUserName = (ViewGroup) findViewById(R.id.st_layout_username);
         layoutUserName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -844,7 +785,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         collapsingToolbarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
 
-
         final TextView titleToolbar = (TextView) findViewById(R.id.st_txt_titleToolbar);
         final ViewGroup viewGroup = (ViewGroup) findViewById(R.id.st_parentLayoutCircleImage);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -883,6 +823,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 finish();
             }
         });
+
+        /*
+          set layout for popup menu
+         */
 
         final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
         // button popupMenu in toolbar
@@ -1072,6 +1016,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+         /*
+          page for show all image user
+         */
         FragmentShowAvatars.onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
@@ -1135,6 +1082,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             poRbDialogLangouage = 3;
         }
 
+         /*
+         choose language farsi or english ,arabic , .....
+         */
         txtLanguage = (TextView) findViewById(R.id.st_txt_language);
         txtLanguage.setText(textLanguage);
         ViewGroup ltLanguage = (ViewGroup) findViewById(R.id.st_layout_language);
@@ -1148,7 +1098,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         txtLanguage.setText(text.toString());
                         poRbDialogLangouage = which;
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
                         editor.apply();
@@ -1186,14 +1135,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        final long sizeFolderPhoto = getFolderSize(new File(G.DIR_IMAGES));
-        final long sizeFolderVideo = getFolderSize(new File(G.DIR_VIDEOS));
-        final long sizeFolderDocument = getFolderSize(new File(G.DIR_DOCUMENT));
+        final long sizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
+        final long sizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
+        final long sizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
 
         final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument;
 
         txtSizeClearCach = (TextView) findViewById(R.id.st_txt_clearCache);
-        txtSizeClearCach.setText(formatFileSize(total));
+        txtSizeClearCach.setText(FileUtils.formatFileSize(total));
 
         RelativeLayout lyCleanUp = (RelativeLayout) findViewById(R.id.st_layout_cleanup);
         lyCleanUp.setOnClickListener(new View.OnClickListener() {
@@ -1212,14 +1161,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+         /*
+          clear all video , image , document cache
+         */
         LinearLayout ltClearCache = (LinearLayout) findViewById(R.id.st_layout_clearCache);
         ltClearCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                final long sizeFolderPhotoDialog = getFolderSize(new File(G.DIR_IMAGES));
-                final long sizeFolderVideoDialog = getFolderSize(new File(G.DIR_VIDEOS));
-                final long sizeFolderDocumentDialog = getFolderSize(new File(G.DIR_DOCUMENT));
+                final long sizeFolderPhotoDialog = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
+                final long sizeFolderVideoDialog = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
+                final long sizeFolderDocumentDialog = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
 
                 boolean wrapInScrollView = true;
                 final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_Clear_Cache)).customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText(getResources().getString(R.string.st_title_Clear_Cache)).show();
@@ -1229,18 +1181,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final File filePhoto = new File(G.DIR_IMAGES);
                 assert view != null;
                 TextView photo = (TextView) view.findViewById(R.id.st_txt_sizeFolder_photo);
-                photo.setText(formatFileSize(sizeFolderPhotoDialog));
+                photo.setText(FileUtils.formatFileSize(sizeFolderPhotoDialog));
 
                 final CheckBox checkBoxPhoto = (CheckBox) view.findViewById(R.id.st_checkBox_photo);
                 final File fileVideo = new File(G.DIR_VIDEOS);
                 TextView video = (TextView) view.findViewById(R.id.st_txt_sizeFolder_video);
-                video.setText(formatFileSize(sizeFolderVideoDialog));
+                video.setText(FileUtils.formatFileSize(sizeFolderVideoDialog));
 
                 final CheckBox checkBoxVideo = (CheckBox) view.findViewById(R.id.st_checkBox_video_dialogClearCash);
 
                 final File fileDocument = new File(G.DIR_DOCUMENT);
                 TextView document = (TextView) view.findViewById(R.id.st_txt_sizeFolder_document_dialogClearCash);
-                document.setText(formatFileSize(sizeFolderDocumentDialog));
+                document.setText(FileUtils.formatFileSize(sizeFolderDocumentDialog));
 
                 final CheckBox checkBoxDocument = (CheckBox) view.findViewById(R.id.st_checkBox_document_dialogClearCash);
 
@@ -1264,18 +1216,20 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 if (!file.isDirectory()) file.delete();
                             }
                         }
-                        long afterClearSizeFolderPhoto = getFolderSize(new File(G.DIR_IMAGES));
-                        long afterClearSizeFolderVideo = getFolderSize(new File(G.DIR_VIDEOS));
-                        long afterClearSizeFolderDocument = getFolderSize(new File(G.DIR_DOCUMENT));
+                        long afterClearSizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
+                        long afterClearSizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
+                        long afterClearSizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
                         long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument;
-                        txtSizeClearCach.setText(formatFileSize(afterClearTotal));
+                        txtSizeClearCach.setText(FileUtils.formatFileSize(afterClearTotal));
                         dialog.dismiss();
                     }
                 });
             }
         });
 
-        //toggle crop
+         /*
+          setting toggle  crop page
+         */
 
         final TextView txtCrop = (TextView) findViewById(R.id.stsp_txt_crop);
         final ToggleButton stsp_toggle_crop = (ToggleButton) findViewById(R.id.stsp_toggle_crop);
@@ -1310,8 +1264,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        //toggle vote channel
-
+         /*
+          setting toggle vote channel
+         */
         final TextView txtVote = (TextView) findViewById(R.id.as_txt_show_vote);
         final ToggleButton toggleVote = (ToggleButton) findViewById(R.id.as_toggle_show_vote);
 
@@ -1343,7 +1298,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        //toggle compress
+         /*
+          setting toggle toggle compress
+         */
+
         final TextView txtCompress = (TextView) findViewById(R.id.stsp_txt_compress);
         final ToggleButton stsp_toggle_Compress = (ToggleButton) findViewById(R.id.stsp_toggle_compress);
 
@@ -1376,8 +1334,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-
-        //toggle trim
+         /*
+          setting toggle toggle trim
+         */
 
         final TextView txtTrim = (TextView) findViewById(R.id.stsp_txt_trim);
         final ToggleButton stsp_toggle_Trim = (ToggleButton) findViewById(R.id.stsp_toggle_trim);
@@ -1413,7 +1372,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
 
-
+          /*
+         open privacy abd security page
+         */
         TextView txtPrivacySecurity = (TextView) findViewById(R.id.st_txt_privacySecurity);
         txtPrivacySecurity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1423,6 +1384,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+         /*
+          setting toggle DataShams
+         */
         final TextView txtDataShams = (TextView) findViewById(R.id.st_txt_st_toggle_dataShams);
         final ToggleButton toggleEnableDataShams = (ToggleButton) findViewById(R.id.st_toggle_dataShams);
 
@@ -1461,6 +1425,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
 
+         /*
+          setting text size for chat room
+         */
         poRbDialogTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14) - 11;
         txtMessageTextSize = (TextView) findViewById(R.id.st_txt_messageTextSize_number);
         txtMessageTextSize.setText("" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
@@ -1487,7 +1454,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 }
                                 poRbDialogTextSize = which;
                                 int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
                                 editor.apply();
@@ -1500,6 +1466,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+         /*
+          open page chat background
+         */
         TextView txtChatBackground = (TextView) findViewById(R.id.st_txt_chatBackground);
         txtChatBackground.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1624,7 +1593,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
 
         //***********************
-
+         /*
+          open browser
+         */
         TextView ltInAppBrowser = (TextView) findViewById(R.id.st_txt_inAppBrowser);
         toggleInAppBrowser = (ToggleButton) findViewById(R.id.st_toggle_inAppBrowser);
         int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
@@ -1637,7 +1608,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         ltInAppBrowser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (toggleInAppBrowser.isChecked()) {
@@ -1672,7 +1642,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         toggleSentByEnter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -1712,7 +1681,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
                         editor.apply();
@@ -1723,7 +1691,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
                         editor.apply();
@@ -1751,7 +1718,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
                         editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1);
@@ -1805,7 +1771,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
 
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
                         editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
@@ -1862,7 +1827,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         //
 
-                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
                         editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
@@ -1909,7 +1873,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         ltEnableAnimation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (toggleEnableAnimation.isChecked()) {
@@ -1937,7 +1900,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -1970,7 +1932,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -1998,10 +1959,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtWebViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-                //                intent.putExtra("PATH", "https://www.igap.net/en/");
-                //                startActivity(intent);
-
                 HelperUrl.openBrowser("https://www.igap.net/");
 
             }
@@ -2011,9 +1968,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtWebViewBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-                //                intent.putExtra("PATH", "https://blog.igap.net");
-                //                startActivity(intent);
                 HelperUrl.openBrowser("https://blog.igap.net");
             }
         });
@@ -2022,10 +1976,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtCreateTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //                Intent intent = new Intent(ActivitySetting.this, ActivityWebView.class);
-                //                intent.putExtra("PATH", "https://support.igap.net");
-                //                startActivity(intent);
-
                 HelperUrl.openBrowser("https://support.igap.net");
             }
         });
@@ -2044,14 +1994,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void updateUserInfoUI(RealmUserInfo userInfo) {
         if (checkValidationForRealm(userInfo)) {
-            //if (userInfo != null) {
             userId = userInfo.getUserId();
             String nickName = userInfo.getUserInfo().getDisplayName();
             userName = userInfo.getUserInfo().getUsername();
             phoneName = userInfo.getUserInfo().getPhoneNumber();
             ProtoGlobal.Gender userGender = userInfo.getGender();
             userEmail = userInfo.getEmail();
-            //}
 
             if (nickName != null) {
                 txtNickName.setText(nickName);
@@ -2091,6 +2039,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         return false;
     }
 
+    // call this method for show choose color dialog
     private void showSelectAppColorDialog(final int title) {
 
         boolean wrapInScrollView = true;
@@ -2178,7 +2127,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void appBarColorClick(int color) {
 
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         GradientDrawable bgShape = (GradientDrawable) imgAppBarSelected.getBackground();
@@ -2194,7 +2142,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     private void notificationColorClick(int color, boolean updateUi) {
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         GradientDrawable bgShape = (GradientDrawable) imgNotificationColor.getBackground();
         G.notificationColor = "#" + Integer.toHexString(color);
@@ -2208,7 +2155,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     private void toggleBottomClick(int color) {
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         GradientDrawable bgShape = (GradientDrawable) imgToggleBottomColor.getBackground();
         G.toggleButtonColor = "#" + Integer.toHexString(color);
@@ -2218,7 +2164,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     private void headerColorClick(int color, boolean updateUi) {
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         GradientDrawable bgShape = (GradientDrawable) imgHeaderTextColor.getBackground();
         G.headerTextColor = "#" + Integer.toHexString(color);
@@ -2230,7 +2175,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     private void sendAndAttachColorClick(int color) {
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         GradientDrawable bgShape = (GradientDrawable) imgSendAndAttachColor.getBackground();
         G.attachmentColor = "#" + Integer.toHexString(color);
@@ -2530,14 +2474,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private final CustomTabsActivityHelper.CustomTabsFallback mCustomTabsFallback = new CustomTabsActivityHelper.CustomTabsFallback() {
         @Override
         public void openUri(Activity activity, Uri uri) {
-            //                    Toast.makeText(activity, R.string.custom_tabs_failed, Toast.LENGTH_SHORT)
-            //                            .show();
+
             try {
                 activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
-                //                        Toast.makeText(activity, R.string.activity_not_found, Toast.LENGTH_SHORT)
-                //                                .show();
             }
         }
     };

@@ -42,12 +42,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityCrop extends ActivityEnhanced {
 
-    public final String IMAGE_DIRECTORY_NAME = "Upload";
     private ImageView imgPic;
     private Uri uri;
-    private TextView txtCancel, txtSet, txtCrop, txtAgreeImage;
-    private long idAvatar;
-    private String pathSaveImage;
     private String page;
     private String type;
     private int id;
@@ -55,7 +51,6 @@ public class ActivityCrop extends ActivityEnhanced {
     private File mediaStorageDir;
     private File fileChat;
     private String result;
-    private ProgressBar prgWaiting;
     AttachFile attachFile;
     private String path;
 
@@ -69,12 +64,12 @@ public class ActivityCrop extends ActivityEnhanced {
 
         attachFile = new AttachFile(this);
 
-        prgWaiting = (ProgressBar) findViewById(R.id.crop_prgWaiting);
+        ProgressBar prgWaiting = (ProgressBar) findViewById(R.id.crop_prgWaiting);
         imgPic = (ImageView) findViewById(R.id.pu_img_imageBefore);
-        txtAgreeImage = (TextView) findViewById(R.id.pu_txt_agreeImage);
+        TextView txtAgreeImage = (TextView) findViewById(R.id.pu_txt_agreeImage);
 
-        txtCancel = (TextView) findViewById(R.id.pu_txt_cancel_crop);
-        txtSet = (TextView) findViewById(R.id.pu_txt_set_crop);
+        TextView txtCancel = (TextView) findViewById(R.id.pu_txt_cancel_crop);
+        TextView txtSet = (TextView) findViewById(R.id.pu_txt_set_crop);
         final Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
 
@@ -95,8 +90,11 @@ public class ActivityCrop extends ActivityEnhanced {
             prgWaiting.setVisibility(View.GONE);
         }
         RippleView rippleCrop = (RippleView) findViewById(R.id.pu_ripple_crop);
-        txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
+        TextView txtCrop = (TextView) findViewById(R.id.pu_txt_crop);
 
+        /*
+        open crop page
+         */
         if (uri != null && !uri.toString().equals("")) {
             rippleCrop.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
@@ -145,52 +143,6 @@ public class ActivityCrop extends ActivityEnhanced {
 
         txtSet.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-
-                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                //
-                //    if (path != null && type.equals("crop_camera")) {
-                //        pathImageUser = path;
-                //        switch (page) {
-                //            case "NewGroup":
-                //                String timeStampGroup = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                //                result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
-                //                HelperCopyFile.copyFile(pathImageUser, result);
-                //
-                //                break;
-                //            case "NewChanel":
-                //                String timeStampChannel = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                //                result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
-                //                HelperCopyFile.copyFile(pathImageUser, result);
-                //
-                //                break;
-                //            case "chat":
-                //                mediaStorageDir = new File(G.DIR_IMAGES);
-                //                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                //                fileChat = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
-                //                result = fileChat.toString();
-                //                HelperCopyFile.copyFile(pathImageUser, result);
-                //                break;
-                //            default:
-                //
-                //                result = G.imageFile.toString() + "_" + id + ".jpg";
-                //                HelperCopyFile.copyFile(pathImageUser, result);
-                //                break;
-                //        }
-                //        Log.i("CCCCC", "befor else onClick: " +result );
-                //    } else {
-                //        result = path;
-                //        Log.i("CCCCC", "else onClick: " +result );
-                //    }
-                //    if (page != null) {
-                //
-                //        Intent data = new Intent();
-                //        data.setData(Uri.parse(result));
-                //        setResult(Activity.RESULT_OK, data);
-                //        finish();
-                //    }
-                //
-                //} else {
-
                 if (uri != null && type.equals("crop_camera")) {
                     pathImageUser = getRealPathFromURI(uri);
                     switch (page) {
@@ -233,7 +185,7 @@ public class ActivityCrop extends ActivityEnhanced {
         });
     }
 
-    //======================================================================================================// result from crop
+    // result from crop
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -243,7 +195,6 @@ public class ActivityCrop extends ActivityEnhanced {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 uri = Uri.parse(AttachFile.mCurrentPhotoPath);
                 imgPic.setImageURI(uri);
-                //File file = new File(imageUri.getPath());
             } else {
                 String filePath = null;
                 ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
@@ -254,7 +205,6 @@ public class ActivityCrop extends ActivityEnhanced {
         } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_image_from_gallery_single_select) {
             String filePath = null;
 
-            //            filePath = AttachFile.getFilePathFromUri(data.getData());
             if (data.getData() == null) {
                 return;
             }

@@ -44,17 +44,17 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySettingNotification extends ActivityEnhanced {
 
-    private TextView txtBack, txtVibrateMessage, txtPopupNotification, txtVibrateGroup,
-            txtPopupNotificationGroup, txtSoundGroup, txtSoundMessage, txtRepeat_Notifications, ltAlert,
-            ltMessagePreview, ltAlert_group, ltMessagePreview_group;
+    private TextView txtVibrateMessage;
+    private TextView txtPopupNotification;
+    private TextView txtVibrateGroup;
+    private TextView txtPopupNotificationGroup;
+    private TextView txtSoundGroup;
+    private TextView txtSoundMessage;
+    private TextView txtRepeat_Notifications;
     private ImageView imgLedMessage, imgLedColor_group;
 
     private int poRbDialogSoundGroup = -1;
     private int poRbDialogSoundMessage = -1;
-
-    private ViewGroup ltLedColorMessage, ltPopupNotification, ltSoundMessage, ltVibrate_message,
-            ltLedColor_group, ltVibrateGroup, ltPopupNotificationGroup, ltSoundGroup,
-            ltRepeat_Notifications, ltReset_all_notification;
 
     private ToggleButton tgAlert, tgMessagePreview, tgAlert_group, tgMessagePreview_group,
             tgApp_sound, tgApp_Vibrate, tgApp_preview, tgChat_sound, tgContact_joined, tgPinned_message,
@@ -74,7 +74,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        txtBack = (TextView) findViewById(R.id.stns_txt_back);
+        TextView txtBack = (TextView) findViewById(R.id.stns_txt_back);
 
         findViewById(R.id.asn_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -97,12 +97,12 @@ public class ActivitySettingNotification extends ActivityEnhanced {
             tgAlert.setChecked(false);
         }
 
-        ltAlert = (TextView) findViewById(R.id.stns_txt_alert);
+        TextView ltAlert = (TextView) findViewById(R.id.stns_txt_alert);
 
         tgAlert.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -130,12 +130,12 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         } else {
             tgMessagePreview.setChecked(false);
         }
-        ltMessagePreview = (TextView) findViewById(R.id.stns_txt_messagePreview);
+        TextView ltMessagePreview = (TextView) findViewById(R.id.stns_txt_messagePreview);
 
         tgMessagePreview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -158,12 +158,12 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         imgLedMessage = (ImageView) findViewById(R.id.stns_img_ledColorMessage);
         GradientDrawable bgShape = (GradientDrawable) imgLedMessage.getBackground();
         bgShape.setColor(ledColorMessage);
-        ltLedColorMessage = (ViewGroup) findViewById(R.id.stns_layout_ledColorMessage);
+        ViewGroup ltLedColorMessage = (ViewGroup) findViewById(R.id.stns_layout_ledColorMessage);
         ltLedColorMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
                 boolean wrapInScrollView = true;
                 final MaterialDialog dialog =
@@ -234,7 +234,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                 break;
         }
 
-        ltVibrate_message = (ViewGroup) findViewById(R.id.stns_layout_vibrate_message);
+        ViewGroup ltVibrate_message = (ViewGroup) findViewById(R.id.stns_layout_vibrate_message);
         ltVibrate_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -317,8 +317,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
 
         txtPopupNotification.setText(popupNotification);
 
-
-        ltPopupNotification = (ViewGroup) findViewById(R.id.stns_layout_popupNotification_message);
+        ViewGroup ltPopupNotification = (ViewGroup) findViewById(R.id.stns_layout_popupNotification_message);
         ltPopupNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -330,7 +329,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                             public void onSelection(MaterialDialog dialog, View view, int which,
                                                     CharSequence text) {
 
-                                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 switch (which) {
                                     case 0:
@@ -365,7 +364,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         txtSoundMessage = (TextView) findViewById(R.id.stns_txt_sound_text);
         String soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, getResources().getString(R.string.array_Default_Notification_tone));
         txtSoundMessage.setText(soundMessage);
-        ltSoundMessage = (ViewGroup) findViewById(R.id.stns_layout_sound_message);
+        ViewGroup ltSoundMessage = (ViewGroup) findViewById(R.id.stns_layout_sound_message);
 
         ltSoundMessage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -444,7 +443,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
 
                                         txtSoundMessage.setText(text.toString());
                                         poRbDialogSoundMessage = which;
-                                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
                                         editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE,
                                                 text.toString());
@@ -468,11 +467,11 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         } else {
             tgAlert_group.setChecked(false);
         }
-        ltAlert_group = (TextView) findViewById(R.id.stns_txt_alert_group);
+        TextView ltAlert_group = (TextView) findViewById(R.id.stns_txt_alert_group);
         ltAlert_group.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (tgAlert_group.isChecked()) {
@@ -495,11 +494,11 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         } else {
             tgMessagePreview_group.setChecked(false);
         }
-        ltMessagePreview_group = (TextView) findViewById(R.id.stns_txt_messagePreview_group);
+        TextView ltMessagePreview_group = (TextView) findViewById(R.id.stns_txt_messagePreview_group);
         ltMessagePreview_group.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (tgMessagePreview_group.isChecked()) {
@@ -521,12 +520,11 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         GradientDrawable bgShapeGroup = (GradientDrawable) imgLedColor_group.getBackground();
         bgShapeGroup.setColor(ledColorGroup);
 
-        ltLedColor_group = (ViewGroup) findViewById(R.id.stns_layout_ledColor_group);
+        ViewGroup ltLedColor_group = (ViewGroup) findViewById(R.id.stns_layout_ledColor_group);
         ltLedColor_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 boolean wrapInScrollView = true;
@@ -596,7 +594,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                 txtVibrateGroup.setText(getResources().getString(R.string.array_Only_if_silent));
                 break;
         }
-        ltVibrateGroup = (ViewGroup) findViewById(R.id.stns_layout_vibrate_group);
+        ViewGroup ltVibrateGroup = (ViewGroup) findViewById(R.id.stns_layout_vibrate_group);
         ltVibrateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -662,8 +660,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                 (TextView) findViewById(R.id.stns_txt_popupNotification_group_text);
         String popupNotificationGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Default));
         txtPopupNotificationGroup.setText(popupNotificationGroup);
-        ltPopupNotificationGroup =
-                (ViewGroup) findViewById(R.id.stns_layout_popupNotification_group);
+        ViewGroup ltPopupNotificationGroup = (ViewGroup) findViewById(R.id.stns_layout_popupNotification_group);
         ltPopupNotificationGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -732,7 +729,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         txtSoundGroup = (TextView) findViewById(R.id.stns_txt_sound_group_text);
         String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, getResources().getString(R.string.array_Default_Notification_tone));
         txtSoundGroup.setText(soundGroup);
-        ltSoundGroup = (ViewGroup) findViewById(R.id.stns_layout_sound_group);
+        ViewGroup ltSoundGroup = (ViewGroup) findViewById(R.id.stns_layout_sound_group);
         ltSoundGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -809,7 +806,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
 
                                         txtSoundGroup.setText(text.toString());
                                         poRbDialogSoundGroup = which;
-                                        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
                                         editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, text.toString());
                                         editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, which);
@@ -836,7 +833,6 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         tgApp_sound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -867,7 +863,6 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         tgApp_Vibrate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -897,7 +892,6 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         tgApp_preview.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -929,7 +923,6 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         tgChat_sound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -962,7 +955,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         ltContact_joined.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (tgContact_joined.isChecked()) {
@@ -988,7 +981,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         ltPinned_message.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (tgPinned_message.isChecked()) {
@@ -1018,7 +1011,6 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         tgKeep_alive_service.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -1058,7 +1050,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         ltBackground_connection.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (tgBackground_connection.isChecked()) {
@@ -1083,7 +1075,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         ltBadge_content.setOnClickListener(new View.OnClickListener() { // 2
             @Override
             public void onClick(View view) {
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (tgBadge_content.isChecked()) {
@@ -1101,7 +1093,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         txtRepeat_Notifications = (TextView) findViewById(R.id.st_txt_Repeat_Notifications);
         String repeat_Notifications = sharedPreferences.getString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_Off));
         txtRepeat_Notifications.setText(repeat_Notifications);
-        ltRepeat_Notifications = (ViewGroup) findViewById(R.id.st_layout_Repeat_Notifications);
+        ViewGroup ltRepeat_Notifications = (ViewGroup) findViewById(R.id.st_layout_Repeat_Notifications);
         ltRepeat_Notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1161,7 +1153,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
 
         //============================================================================= reset
 
-        ltReset_all_notification = (ViewGroup) findViewById(R.id.st_layout_reset_all_notification);
+        ViewGroup ltReset_all_notification = (ViewGroup) findViewById(R.id.st_layout_reset_all_notification);
         ltReset_all_notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
