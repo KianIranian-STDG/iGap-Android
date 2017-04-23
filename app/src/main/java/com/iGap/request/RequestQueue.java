@@ -40,7 +40,6 @@ public class RequestQueue {
         int length = requestWrappers.length;
         String randomId = HelperString.generateKey();
         if (length == 1) {
-            Log.i("PPP", "ActionId : " + requestWrappers[0].getActionId());
             prepareRequest(randomId, requestWrappers[0]);
         } else if (length > 1) {
             ArrayList<Object> relationValue = new ArrayList<>();
@@ -95,6 +94,7 @@ public class RequestQueue {
 
             if (G.isSecure) {
                 if (G.userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
+                    Log.i("PPP", "ActionId : " + requestWrapper.actionId + " Request => " + G.lookupMap.get(requestWrapper.actionId + 30000));
                     message = AESCrypt.encrypt(G.symmetricKey, message);
                     WebSocket webSocket = WebSocketClient.getInstance();
                     if (webSocket != null) {

@@ -39,11 +39,8 @@ public class HelperUnpackMessage {
 
     public static synchronized boolean unpack(byte[] message) {
 
-        Log.i("SOC", "HelperUnpackMessage 1 unpack");
-
         Object[] objects = fetchMessage(message);
         if (objects == null) {
-            Log.i("SOC", "HelperUnpackMessage 1A fetchMessage objects == null");
             return false;
         }
 
@@ -52,11 +49,8 @@ public class HelperUnpackMessage {
         String className = (String) objects[2];
 
         String protoClassName = HelperClassNamePreparation.preparationProtoClassName(className);
-        Log.i("SOC", "HelperUnpackMessage protoClassName : " + protoClassName);
         Object protoObject = fillProtoClassData(protoClassName, payload);
         String responseId = getResponseId(protoObject);
-        Log.i("SOC",
-                "HelperUnpackMessage responseId : " + responseId + "  ||  actionId : " + actionId);
 
         if (responseId == null) {
             if (actionId == 0) {
@@ -81,18 +75,15 @@ public class HelperUnpackMessage {
                         for (int i = 0; i < values.size(); i++) {
                             Object currentProto;
                             String currentResponseId = randomId + "." + i;
-                            RequestWrapper currentRequestWrapper =
-                                    G.requestQueueMap.get(currentResponseId);
+                            RequestWrapper currentRequestWrapper = G.requestQueueMap.get(currentResponseId);
                             if (i == index) {
                                 currentProto = protoObject;
                             } else {
-                                ProtoResponse.Response.Builder responseBuilder =
-                                        ProtoResponse.Response.newBuilder();
+                                ProtoResponse.Response.Builder responseBuilder = ProtoResponse.Response.newBuilder();
                                 responseBuilder.setId(getRequestId(currentRequestWrapper));
                                 responseBuilder.build();
 
-                                ProtoError.ErrorResponse.Builder errorResponse =
-                                        ProtoError.ErrorResponse.newBuilder();
+                                ProtoError.ErrorResponse.Builder errorResponse = ProtoError.ErrorResponse.newBuilder();
                                 errorResponse.setMinorCode(6);
                                 errorResponse.setMinorCode(1);
                                 errorResponse.setResponse(responseBuilder);
@@ -101,17 +92,13 @@ public class HelperUnpackMessage {
                                 currentProto = errorResponse;
                             }
                             G.requestQueueMap.remove(currentResponseId);
-                            instanceResponseClass(currentRequestWrapper.getActionId()
-                                            + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto,
-                                    currentRequestWrapper.identity, "error");
+                            instanceResponseClass(currentRequestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto, currentRequestWrapper.identity, "error");
                         }
                     } else {
                         RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
 
-                        instanceResponseClass(
-                                requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET,
-                                protoObject, requestWrapper.identity, "error");
+                        instanceResponseClass(requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, protoObject, requestWrapper.identity, "error");
                     }
                 } else {
                     if (responseId.contains(".")) {
@@ -120,8 +107,7 @@ public class HelperUnpackMessage {
                         String indexString = responseId.split("\\.")[1];
                         int index = Integer.parseInt(indexString);
 
-                        Object responseClass = instanceResponseClass(actionId, protoObject,
-                                G.requestQueueMap.get(responseId).identity, null);
+                        Object responseClass = instanceResponseClass(actionId, protoObject, G.requestQueueMap.get(responseId).identity, null);
 
                         ArrayList<Object> objectValues = G.requestQueueRelationMap.get(randomId);
                         objectValues.set(index, responseClass);
@@ -143,30 +129,26 @@ public class HelperUnpackMessage {
 
                                 Object object = objectValues.get(j);
 
-                                Field fieldActionId =
-                                        object.getClass().getDeclaredField("actionId");
+                                Field fieldActionId = object.getClass().getDeclaredField("actionId");
                                 Field fieldMessage = object.getClass().getDeclaredField("message");
-                                Field fieldIdentity =
-                                        object.getClass().getDeclaredField("identity");
+                                Field fieldIdentity = object.getClass().getDeclaredField("identity");
                                 int currentActionId = fieldActionId.getInt(object);
                                 Object currentMessage = fieldMessage.get(object);
                                 String currentIdentity = null;
                                 if (fieldIdentity.get(object) != null) {
                                     currentIdentity = fieldIdentity.get(object).toString();
                                 }
-                                instanceResponseClass(currentActionId, currentMessage,
-                                        currentIdentity, "handler");
+                                instanceResponseClass(currentActionId, currentMessage, currentIdentity, "handler");
                             }
                         }
                     } else {
                         RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
-                        instanceResponseClass(actionId, protoObject, requestWrapper.identity,
-                                "handler");
+                        instanceResponseClass(actionId, protoObject, requestWrapper.identity, "handler");
                     }
                 }
             } catch (Exception e) {
-                Log.i("SOC", "Exception : " + e);
+                e.printStackTrace();
             }
         }
 
@@ -174,8 +156,6 @@ public class HelperUnpackMessage {
     }
 
     public static synchronized String getResponseId(Object protoObject) {
-        Log.i("SOC", "HelperUnpackMessage 3 getResponseId");
-
         String responseId = null;
         try {
             Method method = protoObject.getClass().getMethod("getResponse");
@@ -185,10 +165,8 @@ public class HelperUnpackMessage {
             }
             responseId = response.getId();
         } catch (SecurityException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            Log.i("SOC", "Exception getResponseId 6 : " + e);
             e.printStackTrace();
         }
-        Log.i("SOC", "HelperUnpackMessage 4 responseId : " + responseId);
         return responseId;
     }
 
@@ -251,9 +229,7 @@ public class HelperUnpackMessage {
         return byteArray;
     }
 
-    public static synchronized Object fillProtoClassData(String protoClassName,
-                                                         byte[] protoMessage) {
-        Log.i("SOC", "HelperUnpackMessage 2 fillProtoClassData");
+    public static synchronized Object fillProtoClassData(String protoClassName, byte[] protoMessage) {
         Object object3 = null;
         try {
 
@@ -269,56 +245,40 @@ public class HelperUnpackMessage {
             method3.invoke(object3);
         } catch (InstantiationException e) {
             e.printStackTrace();
-            Log.i("SOC_ERROR", "Exception 1 : " + e);
         } catch (IllegalAccessException e) {
-            Log.i("SOC_ERROR", "Exception 2 : " + e);
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            Log.i("SOC_ERROR", "Exception 3 : " + e);
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            Log.i("SOC_ERROR", "Exception 4 : " + e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            Log.i("SOC_ERROR", "Exception 5 : " + e);
             e.printStackTrace();
         }
 
         return object3;
     }
 
-    public static synchronized Object instanceResponseClass(int actionId, Object protoObject,
-                                                            String identity, String optionalMethod) {
-        Log.i("SOC", "HelperUnpackMessage 5 instanceResponseClass");
+    public static synchronized Object instanceResponseClass(int actionId, Object protoObject, String identity, String optionalMethod) {
         Object object = null;
         try {
             String className = getClassName(actionId);
-            String responseClassName =
-                    HelperClassNamePreparation.preparationResponseClassName(className);
-            Log.i("SOC", "HelperUnpackMessage 5 responseClassName : " + responseClassName);
+            String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
             Class<?> responseClass = Class.forName(responseClassName);
-            Constructor<?> constructor =
-                    responseClass.getDeclaredConstructor(int.class, Object.class, String.class);
+            Constructor<?> constructor = responseClass.getDeclaredConstructor(int.class, Object.class, String.class);
             constructor.setAccessible(true);
             object = constructor.newInstance(actionId, protoObject, identity);
             if (optionalMethod != null) {
                 responseClass.getMethod(optionalMethod).invoke(object);
             }
-            Log.i("SOC", "HelperUnpackMessage 6 unpack message successful");
         } catch (InstantiationException e) {
-            Log.i("SOC_ERROR", "Exception instanceResponseClass 7 : " + e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            Log.i("SOC_ERROR", "Exception instanceResponseClass 8 : " + e);
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            Log.i("SOC_ERROR", "Exception instanceResponseClass 9 : " + e);
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            Log.i("SOC_ERROR", "Exception instanceResponseClass 10 : " + e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            Log.i("SOC_ERROR", "Exception instanceResponseClass 11 : " + e);
             e.printStackTrace();
         }
         return object;

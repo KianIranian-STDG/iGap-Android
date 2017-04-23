@@ -12,6 +12,8 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.WebSocketClient;
+import com.iGap.helper.HelperConnectionState;
+import com.iGap.module.enums.ConnectionState;
 import com.iGap.proto.ProtoError;
 
 public class UserLoginResponse extends MessageHandler {
@@ -31,7 +33,7 @@ public class UserLoginResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-
+        HelperConnectionState.connectionState(ConnectionState.IGAP);
         /*ProtoUserLogin.UserLoginResponse.Builder builder = (ProtoUserLogin.UserLoginResponse.Builder) message;
         builder.getDeprecatedClient();
         builder.getSecondaryNodeName();

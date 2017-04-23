@@ -55,7 +55,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -451,7 +450,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     @Override
                     public void sendSeenStatus(RealmRoomMessage message) {
-                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                        if (!isNotJoin) {
+                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                        }
                     }
                 });
             }
@@ -576,7 +577,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     protected void onPause() {
         super.onPause();
-        if (isGoingFromUserLink) {
+        if (isGoingFromUserLink && isNotJoin) {
             new RequestClientUnsubscribeFromRoom().clientUnsubscribeFromRoom(mRoomId);
         }
         onMusicListener = null;
@@ -599,6 +600,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 @Override
                 public void execute(Realm realm) {
                     realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll().deleteAllFromRealm();
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().deleteAllFromRealm();
                 }
             });
             realm.close();
@@ -2540,11 +2542,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                     }
                                                 }
 
-                                                // make update status to message sender that i've read his message
-                                                if (chatType == CHAT) {
-                                                    G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                                                } else if (chatType == GROUP && (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN)) {
-                                                    G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                                if (!isNotJoin) {
+                                                    // make update status to message sender that i've read his message
+                                                    if (chatType == CHAT) {
+                                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                                    } else if (chatType == GROUP && (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN)) {
+                                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                                    }
                                                 }
                                             }
                                         });
@@ -2552,11 +2556,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
                                         setBtnDownVisible();
                                     } else {
-                                        // user has received the message, so I make a new delivered update status request
-                                        if (roomType == CHAT) {
-                                            G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                                        } else if (roomType == GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                                            G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                                        if (!isNotJoin) {
+                                            // user has received the message, so I make a new delivered update status request
+                                            if (roomType == CHAT) {
+                                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                                            } else if (roomType == GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                                            }
                                         }
                                     }
                                 } else {
@@ -2984,7 +2990,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             @Override
             public void resendMessage() {
-                Log.i("XXX", "resendMessage1");
                 mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
             }
 
@@ -4092,53 +4097,54 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void setDraft() {
+        if (!isNotJoin) {
+            if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
+                StructMessageInfo info = ((StructMessageInfo) mReplayLayout.getTag());
+                replyToMessageId = parseLong(info.messageID);
+            } else {
+                replyToMessageId = 0;
+            }
+            if (edtChat == null) {
+                return;
+            }
 
-        if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
-            StructMessageInfo info = ((StructMessageInfo) mReplayLayout.getTag());
-            replyToMessageId = parseLong(info.messageID);
-        } else {
-            replyToMessageId = 0;
-        }
-        if (edtChat == null) {
-            return;
-        }
+            String message = edtChat.getText().toString();
 
-        String message = edtChat.getText().toString();
+            if (!message.trim().isEmpty() || ((mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE))) {
 
-        if (!message.trim().isEmpty() || ((mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE))) {
+                hasDraft = true;
 
-            hasDraft = true;
+                Realm realm = Realm.getDefaultInstance();
+                final String finalMessage = message;
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                        if (realmRoom != null) {
 
-            Realm realm = Realm.getDefaultInstance();
-            final String finalMessage = message;
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                    if (realmRoom != null) {
+                            RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
+                            draft.setMessage(finalMessage);
+                            draft.setReplyToMessageId(replyToMessageId);
 
-                        RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
-                        draft.setMessage(finalMessage);
-                        draft.setReplyToMessageId(replyToMessageId);
+                            realmRoom.setDraft(draft);
 
-                        realmRoom.setDraft(draft);
-
-                        if (chatType == CHAT) {
-                            new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, finalMessage, replyToMessageId);
-                        } else if (chatType == GROUP) {
-                            new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, finalMessage, replyToMessageId);
-                        } else if (chatType == CHANNEL) {
-                            new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, finalMessage, replyToMessageId);
-                        }
-                        if (G.onDraftMessage != null) { // zamani ke mostaghim varede chat beshim bedune vorud be list room ha onDraftMessage null mishe
-                            G.onDraftMessage.onDraftMessage(mRoomId, finalMessage);
+                            if (chatType == CHAT) {
+                                new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, finalMessage, replyToMessageId);
+                            } else if (chatType == GROUP) {
+                                new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, finalMessage, replyToMessageId);
+                            } else if (chatType == CHANNEL) {
+                                new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, finalMessage, replyToMessageId);
+                            }
+                            if (G.onDraftMessage != null) {
+                                G.onDraftMessage.onDraftMessage(mRoomId, finalMessage);
+                            }
                         }
                     }
-                }
-            });
-            realm.close();
-        } else {
-            clearDraftRequest();
+                });
+                realm.close();
+            } else {
+                clearDraftRequest();
+            }
         }
     }
 
@@ -6249,13 +6255,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     /**
                      * send seen status to server when get message from server
                      */
-                    for (int i = 0; i < realmRoomMessages.size(); i++) {
-                        /**
-                         * don't send update status for own user
-                         */
-                        if (realmRoomMessages.get(i).getUserId() != G.userId) {
-                            if ((chatType != CHANNEL && !realmRoomMessages.get(i).getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()))) {
-                                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, realmRoomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                    if (!isNotJoin) {
+                        for (int i = 0; i < realmRoomMessages.size(); i++) {
+                            /**
+                             * don't send update status for own user
+                             */
+                            if (realmRoomMessages.get(i).getUserId() != G.userId) {
+                                if ((chatType != CHANNEL && !realmRoomMessages.get(i).getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()))) {
+                                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, realmRoomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                }
                             }
                         }
                     }

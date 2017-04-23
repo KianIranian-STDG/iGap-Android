@@ -12,6 +12,7 @@ package com.iGap.response;
 
 import android.support.annotation.CallSuper;
 import android.util.Log;
+import com.iGap.G;
 import com.iGap.WebSocketClient;
 import com.iGap.helper.HelperError;
 import com.iGap.proto.ProtoError;
@@ -33,6 +34,7 @@ public abstract class MessageHandler {
     @CallSuper
     public void handler() throws NullPointerException {
         Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + message);
+        Log.i("LLL", "MessageHandler handler : " + actionId + " || Response => " + G.lookupMap.get(actionId));
     }
 
     @CallSuper
@@ -57,5 +59,6 @@ public abstract class MessageHandler {
         HelperError.showSnackMessage(HelperError.getErrorFromCode(majorCode, minorCode));
 
         Log.i("MSGE", "MessageHandler error : " + actionId + " || " + message);
+        Log.i("LLL", "MessageHandler timeOut/error : " + actionId + " || Response => " + G.lookupMap.get(actionId) + " || code : " + majorCode + "," + minorCode);
     }
 }

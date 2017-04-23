@@ -61,11 +61,11 @@ import static com.iGap.G.waitingActionIds;
 public final class StartupActions {
 
     public StartupActions() {
+        initializeGlobalVariables();
         realmConfiguration();
         connectToServer();
         manageSettingPreferences();
         makeFolder();
-        initializeGlobalVariables();
         ConnectionManager.manageConnection();
 
         /**

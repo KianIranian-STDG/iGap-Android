@@ -13,8 +13,6 @@ package com.iGap.response;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.WebSocketClient;
-import com.iGap.helper.HelperConnectionState;
-import com.iGap.module.enums.ConnectionState;
 import com.iGap.proto.ProtoConnectionSecuring;
 import com.neovisionaries.ws.client.WebSocket;
 
@@ -49,7 +47,6 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
             //TODO [Saeed Mozaffari] [2016-09-06 12:30 PM] - go to upgrade page
 
         } else if (statusNumber == Config.ACCEPT) {
-            HelperConnectionState.connectionState(ConnectionState.IGAP);
 
             /**
              * when secure is false set useMask true otherwise set false

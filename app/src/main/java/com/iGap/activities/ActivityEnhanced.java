@@ -76,7 +76,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         AttachFile.isInAttach = false;
 
-        if (!G.isUserStatusOnline) {
+        if (!G.isUserStatusOnline && G.userLogin) {
             new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE);
         }
 
@@ -96,7 +96,7 @@ public class ActivityEnhanced extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!G.isAppInFg && !AttachFile.isInAttach) {
+                if (!G.isAppInFg && !AttachFile.isInAttach && G.userLogin) {
                     new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
                 }
             }
