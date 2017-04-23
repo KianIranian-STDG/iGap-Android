@@ -14,7 +14,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -291,6 +290,9 @@ public class FragmentShowImage extends Fragment {
         dialog.getWindow().setAttributes(layoutParams);
     }
 
+    /**
+     * share Image and video
+     */
     private void shareImage() {
 
         RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
@@ -319,6 +321,9 @@ public class FragmentShowImage extends Fragment {
         }
     }
 
+    /**
+     * share Image and video
+     */
     private void saveToGalary() {
 
         RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
@@ -332,9 +337,13 @@ public class FragmentShowImage extends Fragment {
         }
     }
 
-    private class AdapterViewPager extends PagerAdapter implements MediaController.MediaPlayerControl, TextureView.SurfaceTextureListener {
+    /**
+     * adapter for view pager
+     */
+    private class AdapterViewPager extends PagerAdapter implements MediaController.MediaPlayerControl {
 
         private String videoPath;
+        private int lastPosition;
 
         @Override public int getCount() {
             return mFList.size();
@@ -344,7 +353,7 @@ public class FragmentShowImage extends Fragment {
             return view.equals(object);
         }
 
-        @Override public Object instantiateItem(View container, final int position) {
+        @Override public Object instantiateItem(ViewGroup container, final int position) {
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
@@ -394,7 +403,7 @@ public class FragmentShowImage extends Fragment {
                             isFirstPlay = false;
                         }
                         imgPlay.setVisibility(View.VISIBLE);
-                        mTextureView.setVisibility(View.VISIBLE);
+                        mTextureView.setVisibility(View.INVISIBLE);
                         videoPath = path;
                     }
                 } else {
@@ -408,7 +417,6 @@ public class FragmentShowImage extends Fragment {
                         // if thumpnail not exist download it
                         ProtoFileDownload.FileDownload.Selector selector = null;
                         long fileSize = 0;
-
 
                         if (rm.getAttachment().getSmallThumbnail() != null) {
                             selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
@@ -435,10 +443,10 @@ public class FragmentShowImage extends Fragment {
                                     }
                                 }
 
-                                @Override public void OnError(String token) {
+                                    @Override public void OnError(String token) {
 
-                                }
-                            });
+                                    }
+                                });
                         }
                     }
                 }
@@ -501,27 +509,41 @@ public class FragmentShowImage extends Fragment {
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) {
 
-                    if (mFList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || mFList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                        isFirstPlay = false;
+                    if (isFirstPlay) {
+                        if (mFList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || mFList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+                            isFirstPlay = false;
+                        }
                     }
                 }
 
                 @Override public void onPageSelected(final int position) {
+
                     txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + mFList.size());
                     showImageInfo(mFList.get(position));
 
-                    if (mFList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || mFList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-                        if (touchImageView.getVisibility() == View.GONE) {
+                    ProtoGlobal.RoomMessageType type;
+
+                    if (mFList.get(position).getForwardMessage() != null) {
+                        type = mFList.get(position).getForwardMessage().getMessageType();
+                    } else {
+                        type = mFList.get(position).getMessageType();
+                        }
+                    if (type == ProtoGlobal.RoomMessageType.VIDEO && mMediaPlayer != null) {
+                        File f = new File(getFilePath(position));
+                        if (f.exists()) {
                             touchImageView.setVisibility(View.VISIBLE);
                             imgPlay.setVisibility(View.VISIBLE);
+                        } else {
+                            imgPlay.setVisibility(View.GONE);
                         }
+                    } else if (type == ProtoGlobal.RoomMessageType.IMAGE) {
+                        imgPlay.setVisibility(View.GONE);
                     }
 
                     if (videoController != null) {
                         videoController.hide();
                     }
-                }
-
+                    }
                 @Override public void onPageScrollStateChanged(int state) {
                 }
             });
@@ -530,6 +552,9 @@ public class FragmentShowImage extends Fragment {
             return layout;
         }
 
+        /**
+         * start download
+         */
         private void startDownload(final int position, final MessageProgress progress, final TouchImageView touchImageView, final ContentLoadingProgressBar contentLoading, final ImageView imgPlay,
             final TextureView mTextureView) {
 
@@ -587,7 +612,10 @@ public class FragmentShowImage extends Fragment {
             container.removeView((View) object);
         }
 
-        public void playVideo(final int position, final TextureView mTextureView, final ImageView imgPlay, final TouchImageView touchImageView) {
+        /**
+         * video player
+         */
+        private void playVideo(final int position, final TextureView mTextureView, final ImageView imgPlay, final TouchImageView touchImageView) {
 
             if (mMediaPlayer == null) mMediaPlayer = new MediaPlayer();
             if (videoController == null) videoController = new MediaController(getActivity());
@@ -635,13 +663,24 @@ public class FragmentShowImage extends Fragment {
                     imgPlay.setVisibility(View.GONE);
                     mp.start();
                     mTextureView.setVisibility(View.VISIBLE);
-                    touchImageView.setVisibility(View.GONE);
+                    touchImageView.animate().setDuration(700).alpha(0F).start();
+
+                    G.handler.postDelayed(new Runnable() {
+                        @Override public void run() {
+                            touchImageView.setVisibility(View.GONE);
+                            touchImageView.clearAnimation();
+                        }
+                    }, 700);
+
                     videoController.setEnabled(true);
                     videoController.show();
                 }
             });
         }
 
+        /**
+         * get real width and height video
+         */
         private void getRealSize(MediaPlayer mp, TextureView mTextureView) {
             //Get the dimensions of the video
             int videoWidth = mp.getVideoWidth();
@@ -714,18 +753,6 @@ public class FragmentShowImage extends Fragment {
             return 0;
         }
 
-        @Override public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        }
-
-        @Override public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        }
-
-        @Override public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            return false;
-        }
-
-        @Override public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        }
     }
 
     public String getFilePath(int position) {
