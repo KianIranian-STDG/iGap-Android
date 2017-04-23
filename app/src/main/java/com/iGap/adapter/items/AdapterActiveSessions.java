@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.helper.HelperCalander;
-import com.iGap.module.StructSessions;
+import com.iGap.module.structs.StructSessions;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import java.util.List;
 

@@ -57,7 +57,7 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
-import com.iGap.module.StructMessageInfo;
+import com.iGap.module.structs.StructMessageInfo;
 import com.iGap.proto.ProtoClientSearchRoomHistory;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;

@@ -9,11 +9,12 @@
 */
 
 
-package com.iGap.module;
+package com.iGap.module.structs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
+import com.iGap.module.MyType;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmChannelExtraFields;

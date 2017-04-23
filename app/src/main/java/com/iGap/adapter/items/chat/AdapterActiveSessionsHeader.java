@@ -14,7 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import com.iGap.R;
-import com.iGap.module.StructSessions;
+import com.iGap.module.structs.StructSessions;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import java.util.List;
 

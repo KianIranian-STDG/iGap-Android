@@ -9,11 +9,17 @@
 */
 
 
-package com.iGap.module;
+package com.iGap.module.structs;
 
-public class StructExplorerItem {
 
-    public String name = "";
-    public Integer image = null;
-    public String path = "";
+import com.iGap.proto.ProtoGlobal;
+
+public class StructUploadVideo {
+
+    public long roomId;
+    public long messageId;
+    public String message;
+    public String filePath;
+    public ProtoGlobal.RoomMessageType messageType;
+    public long replyMessageId;
 }

@@ -9,7 +9,7 @@
 */
 
 
-package com.iGap.module;
+package com.iGap.module.structs;
 
 import com.iGap.realm.RealmChannelExtra;
 import com.iGap.realm.RealmRoom;

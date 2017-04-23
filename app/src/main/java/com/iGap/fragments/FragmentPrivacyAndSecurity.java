@@ -27,7 +27,7 @@ import com.iGap.G;
 import com.iGap.R;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.SHP_SETTING;
-import com.iGap.module.StructSessions;
+import com.iGap.module.structs.StructSessions;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmPrivacy;
 import com.iGap.realm.RealmUserInfo;

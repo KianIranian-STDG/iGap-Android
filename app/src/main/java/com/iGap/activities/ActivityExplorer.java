@@ -29,7 +29,7 @@ import com.iGap.adapter.AdapterExplorer;
 import com.iGap.helper.HelperMimeType;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
-import com.iGap.module.StructExplorerItem;
+import com.iGap.module.structs.StructExplorerItem;
 import java.io.File;
 import java.util.ArrayList;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;

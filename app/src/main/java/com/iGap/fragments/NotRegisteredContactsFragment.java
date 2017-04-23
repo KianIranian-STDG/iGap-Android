@@ -30,7 +30,7 @@ import com.iGap.adapter.StickyHeaderAdapter;
 import com.iGap.adapter.items.ContactItemNotRegister;
 import com.iGap.module.Contacts;
 import com.iGap.module.SoftKeyboard;
-import com.iGap.module.StructContactInfo;
+import com.iGap.module.structs.StructContactInfo;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;

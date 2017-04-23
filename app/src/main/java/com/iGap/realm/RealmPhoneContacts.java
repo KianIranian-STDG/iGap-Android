@@ -11,7 +11,7 @@
 
 package com.iGap.realm;
 
-import com.iGap.module.StructListOfContact;
+import com.iGap.module.structs.StructListOfContact;
 import com.iGap.request.RequestUserContactImport;
 import com.iGap.request.RequestUserContactsGetList;
 import io.realm.Realm;

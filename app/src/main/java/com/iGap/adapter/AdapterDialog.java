@@ -21,7 +21,7 @@ import android.widget.Filterable;
 import android.widget.RadioButton;
 import com.iGap.R;
 import com.iGap.activities.ActivityRegister;
-import com.iGap.module.StructCountry;
+import com.iGap.module.structs.StructCountry;
 import java.util.ArrayList;
 
 public class AdapterDialog extends BaseAdapter implements Filterable {

@@ -18,7 +18,7 @@ import com.hanks.library.AnimateCheckBox;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
-import com.iGap.module.StructBottomSheet;
+import com.iGap.module.structs.StructBottomSheet;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import java.util.List;
 

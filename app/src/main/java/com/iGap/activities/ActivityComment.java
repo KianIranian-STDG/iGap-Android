@@ -30,7 +30,7 @@ import com.iGap.adapter.AdapterComment;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.MaterialDesignTextView;
-import com.iGap.module.StructCommentInfo;
+import com.iGap.module.structs.StructCommentInfo;
 import io.github.meness.emoji.EmojiEditText;
 import io.github.meness.emoji.emoji.Emoji;
 import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;

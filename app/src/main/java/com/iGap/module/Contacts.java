@@ -16,6 +16,8 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.util.Log;
 import com.iGap.G;
+import com.iGap.module.structs.StructContactInfo;
+import com.iGap.module.structs.StructListOfContact;
 import com.iGap.realm.RealmContacts;
 import com.iGap.realm.RealmContactsFields;
 import com.iGap.realm.RealmInviteFriend;

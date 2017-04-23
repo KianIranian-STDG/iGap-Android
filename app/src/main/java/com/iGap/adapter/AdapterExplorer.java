@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.helper.HelperMimeType;
-import com.iGap.module.StructExplorerItem;
+import com.iGap.module.structs.StructExplorerItem;
 import java.util.ArrayList;
 
 public class AdapterExplorer extends RecyclerView.Adapter<AdapterExplorer.ViewHolder> {

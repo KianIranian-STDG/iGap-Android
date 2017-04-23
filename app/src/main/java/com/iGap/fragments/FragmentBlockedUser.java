@@ -33,7 +33,7 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.Contacts;
 import com.iGap.module.CustomTextViewMedium;
-import com.iGap.module.StructContactInfo;
+import com.iGap.module.structs.StructContactInfo;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.request.RequestUserContactsBlock;

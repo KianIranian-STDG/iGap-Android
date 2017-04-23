@@ -12,6 +12,7 @@ package com.iGap.response;
 
 import android.support.annotation.CallSuper;
 import android.util.Log;
+import com.iGap.WebSocketClient;
 import com.iGap.helper.HelperError;
 import com.iGap.proto.ProtoError;
 
@@ -38,7 +39,7 @@ public abstract class MessageHandler {
     public void timeOut() {
         if (heartBeatTimeOut()) {
             Log.i("HHH", "heartBeatTimeOut");
-            //WebSocketClient.reconnect(true);
+            WebSocketClient.reconnect(true);
         } else {
             Log.i("HHH", "Not Time Out HeartBeat");
         }
@@ -55,8 +56,6 @@ public abstract class MessageHandler {
 
         HelperError.showSnackMessage(HelperError.getErrorFromCode(majorCode, minorCode));
 
-
         Log.i("MSGE", "MessageHandler error : " + actionId + " || " + message);
     }
-
 }

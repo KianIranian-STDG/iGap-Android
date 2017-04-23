@@ -9,27 +9,13 @@
 */
 
 
-package com.iGap.module;
+package com.iGap.module.structs;
 
 
-public class StructBottomSheet {
+public class StructCompress {
 
-    public boolean isSelected;
+    public boolean compress;
     public String path;
-
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
+    public long originalSize;
+    public String originalPath;
 }

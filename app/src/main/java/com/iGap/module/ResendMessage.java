@@ -14,6 +14,7 @@ import android.content.Context;
 import com.iGap.G;
 import com.iGap.helper.HelperUploadFile;
 import com.iGap.interfaces.IResendMessage;
+import com.iGap.module.structs.StructMessageInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;

@@ -52,10 +52,10 @@ import com.iGap.module.MyType;
 import com.iGap.module.ReserveSpaceGifImageView;
 import com.iGap.module.ReserveSpaceRoundedImageView;
 import com.iGap.module.SHP_SETTING;
-import com.iGap.module.StructMessageInfo;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.enums.LocalFileType;
 import com.iGap.module.enums.SendingStep;
+import com.iGap.module.structs.StructMessageInfo;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAttachment;
@@ -1054,7 +1054,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
 
                 if (!attachment.isFileExistsOnLocal()) {
-                    checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.currentConnectivityType);
+                    if (HelperCheckInternetConnection.currentConnectivityType == null) {
+                        checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.WIFI);
+                        checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.MOBILE);
+                    } else {
+                        checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.currentConnectivityType);
+                    }
                 }
 
                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withOnProgress(new OnProgress() {
@@ -1220,7 +1225,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (token != null && token.length() > 0 && size > 0) {
 
             HelperDownloadFile.startDownload(token, attachment.getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                @Override public void OnProgress(final String path, int progress) {
+                @Override
+                public void OnProgress(final String path, int progress) {
 
                     if (progress == 100) {
                         G.currentActivity.runOnUiThread(new Runnable() {
@@ -1279,7 +1285,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
             HelperDownloadFile.startDownload(token, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
-                @Override public void OnProgress(final String path, final int progress) {
+                @Override
+                public void OnProgress(final String path, final int progress) {
 
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override

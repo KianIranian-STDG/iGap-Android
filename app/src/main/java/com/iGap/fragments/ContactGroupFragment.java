@@ -37,7 +37,7 @@ import com.iGap.interfaces.OnGroupAddMember;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.Contacts;
 import com.iGap.module.SUID;
-import com.iGap.module.StructContactInfo;
+import com.iGap.module.structs.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmChannelRoom;
 import com.iGap.realm.RealmGroupRoom;

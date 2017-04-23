@@ -65,7 +65,7 @@ import com.iGap.module.CountryListComparator;
 import com.iGap.module.CountryReader;
 import com.iGap.module.IncomingSms;
 import com.iGap.module.SoftKeyboard;
-import com.iGap.module.StructCountry;
+import com.iGap.module.structs.StructCountry;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoRequest;
 import com.iGap.proto.ProtoUserRegister;

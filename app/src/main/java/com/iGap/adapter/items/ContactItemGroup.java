@@ -22,7 +22,7 @@ import com.iGap.interfaces.OnAvatarGet;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
-import com.iGap.module.StructContactInfo;
+import com.iGap.module.structs.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import java.util.List;

@@ -14,6 +14,7 @@ package com.iGap.module;
 import com.iGap.G;
 import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import com.iGap.interfaces.OnMessageReceive;
+import com.iGap.module.structs.StructMessageInfo;
 import com.iGap.proto.ProtoClientGetRoomHistory;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;

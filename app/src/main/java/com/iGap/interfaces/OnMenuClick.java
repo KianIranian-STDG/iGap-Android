@@ -12,7 +12,7 @@
 package com.iGap.interfaces;
 
 import android.view.View;
-import com.iGap.module.StructContactInfo;
+import com.iGap.module.structs.StructContactInfo;
 
 public interface OnMenuClick {
 

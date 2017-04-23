@@ -21,7 +21,7 @@ import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
 import com.iGap.module.LastSeenTimeUtil;
-import com.iGap.module.StructContactInfo;
+import com.iGap.module.structs.StructContactInfo;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;

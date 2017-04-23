@@ -24,7 +24,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import com.iGap.Config;
 import com.iGap.G;
-import com.iGap.module.StructListOfContact;
+import com.iGap.module.structs.StructListOfContact;
 import com.iGap.realm.RealmPhoneContacts;
 import java.util.ArrayList;
 

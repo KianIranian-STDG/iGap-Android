@@ -9,7 +9,7 @@
 */
 
 
-package com.iGap.module;
+package com.iGap.module.structs;
 
 public class StructListOfContact {
 

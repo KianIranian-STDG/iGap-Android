@@ -11,7 +11,7 @@
 
 package com.iGap.request;
 
-import com.iGap.module.StructListOfContact;
+import com.iGap.module.structs.StructListOfContact;
 import com.iGap.proto.ProtoUserContactsImport;
 import java.util.ArrayList;
 

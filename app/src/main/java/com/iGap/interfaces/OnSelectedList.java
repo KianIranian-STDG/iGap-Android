@@ -11,7 +11,7 @@
 
 package com.iGap.interfaces;
 
-import com.iGap.module.StructContactInfo;
+import com.iGap.module.structs.StructContactInfo;
 import java.util.ArrayList;
 
 public interface OnSelectedList {

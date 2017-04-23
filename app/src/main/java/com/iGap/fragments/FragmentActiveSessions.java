@@ -36,7 +36,7 @@ import com.iGap.interfaces.OnUserSessionTerminate;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.SUID;
-import com.iGap.module.StructSessions;
+import com.iGap.module.structs.StructSessions;
 import com.iGap.proto.ProtoUserSessionGetActiveList;
 import com.iGap.request.RequestUserSessionGetActiveList;
 import com.iGap.request.RequestUserSessionLogout;

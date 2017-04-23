@@ -1,4 +1,4 @@
-package com.iGap.module;
+package com.iGap.module.structs;
 /*
  * This is the source code of iGap for Android
  * It is licensed under GNU AGPL v3.0

@@ -11,8 +11,8 @@
 package com.iGap.interfaces;
 
 import android.view.View;
-import com.iGap.module.StructMessageInfo;
 import com.iGap.module.enums.SendingStep;
+import com.iGap.module.structs.StructMessageInfo;
 import com.iGap.realm.RealmRoomMessage;
 
 public interface IMessageItem {

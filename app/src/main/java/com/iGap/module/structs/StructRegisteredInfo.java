@@ -9,7 +9,7 @@
 */
 
 
-package com.iGap.module;
+package com.iGap.module.structs;
 
 import android.os.Parcel;
 import android.os.Parcelable;

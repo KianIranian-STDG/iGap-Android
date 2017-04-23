@@ -9,13 +9,11 @@
 */
 
 
-package com.iGap.module;
+package com.iGap.module.structs;
 
+public class StructExplorerItem {
 
-public class StructCompress {
-
-    public boolean compress;
-    public String path;
-    public long originalSize;
-    public String originalPath;
+    public String name = "";
+    public Integer image = null;
+    public String path = "";
 }

@@ -9,7 +9,7 @@
 */
 
 
-package com.iGap.module;
+package com.iGap.module.structs;
 
 import java.util.ArrayList;
 

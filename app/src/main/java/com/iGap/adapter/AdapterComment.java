@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.iGap.R;
 import com.iGap.activities.ActivityComment;
 import com.iGap.module.CircleImageView;
-import com.iGap.module.StructCommentInfo;
+import com.iGap.module.structs.StructCommentInfo;
 import java.util.ArrayList;
 
 public class AdapterComment extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

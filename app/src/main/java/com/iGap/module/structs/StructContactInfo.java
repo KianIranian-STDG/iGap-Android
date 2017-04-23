@@ -9,7 +9,7 @@
 */
 
 
-package com.iGap.module;
+package com.iGap.module.structs;
 
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmAvatar;

@@ -11,7 +11,7 @@
 
 package com.iGap.realm;
 
-import com.iGap.module.StructChannelExtra;
+import com.iGap.module.structs.StructChannelExtra;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
 import io.realm.RealmChannelExtraRealmProxy;

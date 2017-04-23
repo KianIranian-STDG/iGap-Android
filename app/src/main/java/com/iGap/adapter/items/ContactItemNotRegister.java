@@ -17,7 +17,7 @@ import com.iGap.helper.HelperCalander;
 import com.iGap.helper.HelperImageBackColor;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
-import com.iGap.module.StructContactInfo;
+import com.iGap.module.structs.StructContactInfo;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import java.util.List;
 

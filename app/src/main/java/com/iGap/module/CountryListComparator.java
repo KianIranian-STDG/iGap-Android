@@ -11,6 +11,7 @@
 
 package com.iGap.module;
 
+import com.iGap.module.structs.StructCountry;
 import java.util.Comparator;
 
 public class CountryListComparator implements Comparator<StructCountry> {

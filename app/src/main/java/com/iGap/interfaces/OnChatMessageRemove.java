@@ -11,7 +11,7 @@
 
 package com.iGap.interfaces;
 
-import com.iGap.module.StructMessageInfo;
+import com.iGap.module.structs.StructMessageInfo;
 
 public interface OnChatMessageRemove {
     void onPreChatMessageRemove(StructMessageInfo messageInfo, int position);

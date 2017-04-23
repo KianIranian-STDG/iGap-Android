@@ -35,7 +35,7 @@ import com.iGap.helper.HelperAddContact;
 import com.iGap.helper.HelperPermision;
 import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.MaterialDesignTextView;
-import com.iGap.module.StructListOfContact;
+import com.iGap.module.structs.StructListOfContact;
 import com.iGap.request.RequestUserContactImport;
 import java.io.IOException;
 import java.util.ArrayList;
