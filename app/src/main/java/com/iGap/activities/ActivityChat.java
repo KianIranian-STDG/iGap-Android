@@ -6249,7 +6249,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                      * send seen status to server when get message from server
                      */
                     for (int i = 0; i < realmRoomMessages.size(); i++) {
-                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, realmRoomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                        /**
+                         * don't send update status for own user
+                         */
+                        if (realmRoomMessages.get(i).getUserId() != G.userId) {
+                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, realmRoomMessages.get(i).getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                        }
                     }
 
                     isWaitingForHistory = false;

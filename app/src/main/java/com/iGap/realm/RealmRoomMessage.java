@@ -90,7 +90,7 @@ import org.parceler.Parcel;
 
     public static void fetchNotDeliveredMessages(final OnActivityMainStart callback) {
         final Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> sentMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString()).findAllSortedAsync(new String[]{RealmRoomMessageFields.ROOM_ID, RealmRoomMessageFields.MESSAGE_ID}, new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
+        RealmResults<RealmRoomMessage> sentMessages = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.USER_ID, G.userId).equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString()).findAllSortedAsync(new String[]{RealmRoomMessageFields.ROOM_ID, RealmRoomMessageFields.MESSAGE_ID}, new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
         sentMessages.addChangeListener(new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
             @Override
             public void onChange(RealmResults<RealmRoomMessage> element) {
@@ -184,6 +184,9 @@ import org.parceler.Parcel;
                     if (realmClientCondition != null) {
                         for (RealmRoomMessage roomMessage : realmRoomMessages) {
                             if (roomMessage != null) {
+                                /**
+                                 * don't send seen for own message
+                                 */
                                 if (roomMessage.getUserId() != userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                     roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                                     RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());

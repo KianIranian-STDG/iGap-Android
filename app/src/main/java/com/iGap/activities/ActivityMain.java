@@ -1295,8 +1295,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-
                 int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager()).findFirstVisibleItemPosition();
                 if (firstVisibleItem < 5) {
                     mRecyclerView.getRecycleView().scrollToPosition(0);
@@ -1304,11 +1302,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        // user has received the message, so I make a new delivered update status request
-        if (roomType == ProtoGlobal.Room.Type.CHAT) {
-            G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-        } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-            G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+        /**
+         * don't send update status for own message
+         */
+        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != G.userId) {
+            // user has received the message, so I make a new delivered update status request
+            if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            }
         }
     }
 

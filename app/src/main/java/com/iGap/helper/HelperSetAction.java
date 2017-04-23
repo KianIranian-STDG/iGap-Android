@@ -32,7 +32,7 @@ public class HelperSetAction {
 
     public static void setActionTyping(final long roomId, ProtoGlobal.Room.Type chatType) {
 
-        if (!checkExistAction(roomId, ProtoGlobal.ClientAction.TYPING) && chatType != null) {
+        if (!checkExistAction(roomId, ProtoGlobal.ClientAction.TYPING) && chatType != null && chatType != ProtoGlobal.Room.Type.CHANNEL) {
             int randomNumber = HelperNumerical.generateRandomNumber(8);
 
             final StructAction structAction = new StructAction();
@@ -103,6 +103,13 @@ public class HelperSetAction {
                 realm.close();
                 return;
             }
+        }
+
+        /**
+         * channel don't have set action
+         */
+        if (chatType == ProtoGlobal.Room.Type.CHANNEL) {
+            return;
         }
 
         if (!checkExistAction(roomId, action)) {

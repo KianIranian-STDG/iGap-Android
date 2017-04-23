@@ -40,6 +40,7 @@ public class RequestQueue {
         int length = requestWrappers.length;
         String randomId = HelperString.generateKey();
         if (length == 1) {
+            Log.i("PPP", "ActionId : " + requestWrappers[0].getActionId());
             prepareRequest(randomId, requestWrappers[0]);
         } else if (length > 1) {
             ArrayList<Object> relationValue = new ArrayList<>();
