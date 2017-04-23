@@ -195,4 +195,27 @@ public class HelperString {
         return true;
     }
 
+    /**
+     * split string
+     *
+     * @param interval limitation for split
+     */
+    public static String[] splitStringEvery(String string, int interval) {
+        if (string == null || string.length() == 0) {
+            return new String[0];
+        }
+
+        int arrayLength = (int) Math.ceil(((string.length() / (double) interval)));
+        String[] result = new String[arrayLength];
+
+        int j = 0;
+        int lastIndex = result.length - 1;
+        for (int i = 0; i < lastIndex; i++) {
+            result[i] = string.substring(j, j + interval);
+            j += interval;
+        }
+        result[lastIndex] = string.substring(j);
+
+        return result;
+    }
 }
