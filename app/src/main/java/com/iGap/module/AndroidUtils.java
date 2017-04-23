@@ -47,6 +47,7 @@ import java.security.NoSuchAlgorithmException;
 
 public final class AndroidUtils {
     private AndroidUtils() throws InstantiationException {
+
         throw new InstantiationException("This class is not for instantiation.");
     }
 
