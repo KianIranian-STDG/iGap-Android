@@ -86,6 +86,7 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
 
     //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
     protected static class ViewHolder extends RecyclerView.ViewHolder {
+
         private ViewGroup vgRootLayout;
         private TextView txtCurrentSession;
         private TextView txtDevice;
