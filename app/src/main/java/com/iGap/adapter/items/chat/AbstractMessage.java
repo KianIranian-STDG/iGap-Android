@@ -1240,7 +1240,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     type = mMessage.messageType.toString().toLowerCase();
                                 }
                                 if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-                                    onLoadThumbnailFromLocal(holder, AndroidUtils.suitablePath(path), LocalFileType.THUMBNAIL);
+                                    onLoadThumbnailFromLocal(holder, path, LocalFileType.THUMBNAIL);
                                 }
                             }
                         });
@@ -1297,7 +1297,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                                 progressBar.performProgress();
 
-                                onLoadThumbnailFromLocal(holder, AndroidUtils.suitablePath(path), LocalFileType.FILE);
+                                onLoadThumbnailFromLocal(holder, path, LocalFileType.FILE);
 
                             } else {
                                 progressBar.withProgress(progress);
