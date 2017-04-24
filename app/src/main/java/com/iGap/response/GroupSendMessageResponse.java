@@ -25,8 +25,6 @@ import com.iGap.request.RequestClientGetRoom;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-import static com.iGap.helper.HelperMessageResponse.computeLastMessageId;
-
 public class GroupSendMessageResponse extends MessageHandler {
 
     public int actionId;
@@ -51,7 +49,6 @@ public class GroupSendMessageResponse extends MessageHandler {
         final ProtoGlobal.RoomMessage roomMessage = builder.getRoomMessage();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         final String authorHash = realm.where(RealmUserInfo.class).findFirst().getAuthorHash();
-        long latestMessageId = computeLastMessageId(realm, builder.getRoomId());
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -61,7 +58,6 @@ public class GroupSendMessageResponse extends MessageHandler {
                 // but sender. so I check current userId with room message user id, and if not equals
                 // and response is null, so we sure recipient is another user
 
-                //TODO [Saeed Mozaffari] [2016-11-13 7:40 PM] - AUTHOR_CHECK . niaz hast inja check beshe ke author user bud ya room? chon inja vase group hast va faghat user darim.
                 if (userId != roomMessage.getAuthor().getUser().getUserId() && builder.getResponse().getId().isEmpty()) {
                     // i'm the recipient
 
