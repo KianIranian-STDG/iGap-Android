@@ -14,6 +14,7 @@ import com.iGap.G;
 import com.iGap.activities.ActivityChat;
 import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.helper.HelperGetUserInfo;
+import com.iGap.helper.HelperLogMessage;
 import com.iGap.interfaces.OnGetUserInfo;
 import com.iGap.proto.ProtoClientGetRoom;
 import com.iGap.proto.ProtoError;
@@ -56,6 +57,17 @@ public class ClientGetRoomResponse extends MessageHandler {
                     RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom());
                     realmRoom.setDeleted(true);
                     realmRoom.setKeepRoom(true);
+
+                    // update log message in realm room message after get room info
+                    if (G.logMessageUpdatList.containsKey(clientGetRoom.getRoom().getId())) {
+
+                        G.handler.postDelayed(new Runnable() {
+                            @Override public void run() {
+                                HelperLogMessage.updateLogMessageAfterGetUserInfo(G.logMessageUpdatList.get(clientGetRoom.getRoom().getId()));
+                            }
+                        }, 500);
+                    }
+
                     return;
                 }
 

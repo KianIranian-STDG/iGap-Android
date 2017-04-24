@@ -341,7 +341,7 @@ public class StructMessageInfo implements Parcelable {
         if (roomMessage.getLog() != null) {
             messageInfo.senderID = "-1";
             //messageInfo.messageText = roomMessage.getLog().getType().toString();
-            messageInfo.messageText = roomMessage.getLogMessage();
+            messageInfo.messageText = roomMessage.getLogMessageWithLinkInfo();
         }
 
         messageInfo.replayTo = roomMessage.getReplyTo();

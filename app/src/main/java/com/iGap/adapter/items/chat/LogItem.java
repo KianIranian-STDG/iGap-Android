@@ -11,9 +11,11 @@
 package com.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 import com.iGap.R;
+import com.iGap.helper.HelperLogMessage;
 import com.iGap.interfaces.IMessageItem;
 import com.iGap.proto.ProtoGlobal;
 import java.util.List;
@@ -38,7 +40,18 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        setTextIfNeeded(holder.text, mMessage.messageText);
+        //Realm realm=Realm.getDefaultInstance();
+        //
+        //RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID ,Long.parseLong(mMessage.messageID)).findFirst();
+        //if(roomMessage!=null){
+        //
+        //}
+        //
+        //realm.close();
+
+        holder.text.setText(HelperLogMessage.getLogMessageWithLink(mMessage.messageText));
+
+        // setTextIfNeeded(holder.text, mMessage.messageText);
     }
 
     @Override
@@ -52,6 +65,8 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
         public ViewHolder(View view) {
             super(view);
             text = (TextView) view.findViewById(R.id.text);
+            text.setMovementMethod(LinkMovementMethod.getInstance());
+
         }
     }
 

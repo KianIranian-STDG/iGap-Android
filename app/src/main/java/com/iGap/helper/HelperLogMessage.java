@@ -10,13 +10,26 @@
 
 package com.iGap.helper;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
+import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
+import com.iGap.activities.ActivityChat;
+import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
 import com.iGap.realm.RealmRegisteredInfoFields;
 import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
+import com.iGap.realm.RealmRoomMessage;
+import com.iGap.realm.RealmRoomMessageFields;
+import com.iGap.request.RequestChatGetRoom;
+import com.iGap.request.RequestUserInfo;
 import io.realm.Realm;
 
 import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.MEMBER_ADDED;
@@ -35,7 +48,37 @@ import static com.iGap.proto.ProtoGlobal.RoomMessageLog.Type.USER_JOINED;
  */
 public class HelperLogMessage {
 
-    public static String logMessage(long roomId, ProtoGlobal.RoomMessage.Author author, ProtoGlobal.RoomMessageLog messageLog) {
+    public static class StructLog {
+
+        long roomId;
+        ProtoGlobal.RoomMessage.Author author;
+        ProtoGlobal.RoomMessageLog messageLog;
+        long messageID;
+
+        long updateID;
+    }
+
+    public static void updateLogMessageAfterGetUserInfo(final StructLog item) {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        final RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, item.messageID).findFirst();
+
+        if (roomMessage != null) {
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+                    roomMessage.setLogMessage(HelperLogMessage.logMessage(item.roomId, item.author, item.messageLog, item.messageID));
+
+                    G.logMessageUpdatList.remove(item.updateID);
+                }
+            });
+        }
+
+        realm.close();
+    }
+
+    public static String logMessage(long roomId, ProtoGlobal.RoomMessage.Author author, ProtoGlobal.RoomMessageLog messageLog, long messageID) {
 
         String authorName = "";
         String targetName = "";
@@ -44,19 +87,53 @@ public class HelperLogMessage {
         Realm realm = Realm.getDefaultInstance();
         ProtoGlobal.Room.Type typeRoom = null;
 
+        String linkInfoEnglish = "";
+        String linlInfoPersian = "";
+
+        long updateID = 0;
+
         /**
          * detect authorName
          */
         if (author.hasUser()) {
-            HelperInfo.needUpdateUser(author.getUser().getUserId(), author.getUser().getCacheId());
+
+            updateID = author.getUser().getUserId();
+
+
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, author.getUser().getUserId()).findFirst();
             if (realmRegisteredInfo != null) {
                 authorName = realmRegisteredInfo.getDisplayName();
+            } else {
+
+                StructLog item = new StructLog();
+                item.roomId = roomId;
+                item.messageID = messageID;
+                item.author = author;
+                item.messageLog = messageLog;
+                item.updateID = updateID;
+
+                G.logMessageUpdatList.put(updateID, item);
+
+                HelperInfo.needUpdateUser(author.getUser().getUserId(), author.getUser().getCacheId());
             }
         } else if (author.hasRoom()) {
+
+            updateID = author.getRoom().getRoomId();
+
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, author.getRoom().getRoomId()).findFirst();
             if (realmRoom != null) {
                 authorName = realmRoom.getTitle();
+            } else {
+                StructLog item = new StructLog();
+                item.roomId = roomId;
+                item.messageID = messageID;
+                item.author = author;
+                item.messageLog = messageLog;
+                item.updateID = updateID;
+
+                G.logMessageUpdatList.put(updateID, item);
+
+                HelperInfo.needUpdateRoomInfo(author.getRoom().getRoomId());
             }
         }
 
@@ -64,9 +141,21 @@ public class HelperLogMessage {
          * detect targetName
          */
         if (messageLog.hasTargetUser()) {
+
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, messageLog.getTargetUser().getId()).findFirst();
             if (realmRegisteredInfo != null) {
                 targetName = realmRegisteredInfo.getDisplayName();
+            } else {
+
+                StructLog item = new StructLog();
+                item.roomId = roomId;
+                item.messageID = messageID;
+                item.author = author;
+                item.messageLog = messageLog;
+                item.updateID = messageLog.getTargetUser().getId();
+                G.logMessageUpdatList.put(messageLog.getTargetUser().getId(), item);
+                new RequestUserInfo().userInfo(messageLog.getTargetUser().getId());
+
             }
         }
 
@@ -85,60 +174,117 @@ public class HelperLogMessage {
             typeRoom = realmRoom.getType();
 
             if (typeRoom.toString().equals("CHANNEL")) {
-                finalTypeRoom = G.context.getResources().getString(R.string.channel);
+                //   finalTypeRoom = G.context.getResources().getString(R.string.channel);
+                finalTypeRoom = "کانال";
             } else if (typeRoom.toString().equals("GROUP")) {
-                finalTypeRoom = G.context.getResources().getString(R.string.group);
+                // finalTypeRoom = G.context.getResources().getString(R.string.group);
+                finalTypeRoom = "گروه";
             } else {
-                finalTypeRoom = G.context.getResources().getString(R.string.conversation);
+                //  finalTypeRoom = G.context.getResources().getString(R.string.conversation);
+                finalTypeRoom = "صفحه";
+
             }
         } else {
-            finalTypeRoom = G.context.getResources().getString(R.string.conversation);
+            // finalTypeRoom = G.context.getResources().getString(R.string.conversation);
+            finalTypeRoom = "صفحه";
         }
 
         englishResult = authorName + " " + logMessage + " " + targetName;
+        linkInfoEnglish = englishResult.indexOf(authorName)
+            + "@"
+            + authorName.length()
+            + "@"
+            + updateID
+            + "@"
+            + author.hasUser()
+            + "@"
+            + englishResult.lastIndexOf(targetName)
+            + "@"
+            + targetName.length()
+            + "@"
+            + messageLog.getTargetUser().getId();
 
         switch (messageLog.getType()) {
             case USER_JOINED:
                 persianResult = authorName + " " + logMessage;
+                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case USER_DELETED:
                 persianResult = authorName + " " + logMessage;
+                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case ROOM_CREATED:
 
                 if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
                     persianResult = logMessage + " " + finalTypeRoom + " " + authorName;
                 } else {
-                    persianResult = logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                    persianResult = logMessage + " " + finalTypeRoom + " توسط " + authorName;
                 }
+
+                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+
                 break;
             case MEMBER_ADDED:
-                persianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                persianResult = logMessage + " " + targetName + " توسط " + authorName;
+
+                linlInfoPersian = persianResult.lastIndexOf(authorName)
+                    + "@"
+                    + authorName.length()
+                    + "@"
+                    + updateID
+                    + "@"
+                    + author.hasUser()
+                    + "@"
+                    + persianResult.indexOf(targetName)
+                    + "@"
+                    + targetName.length()
+                    + "@"
+                    + messageLog.getTargetUser().getId();
+
                 break;
             case MEMBER_KICKED:
-                persianResult = logMessage + " " + targetName + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                persianResult = logMessage + " " + targetName + " توسط " + authorName;
+
+                linlInfoPersian = persianResult.lastIndexOf(authorName)
+                    + "@"
+                    + authorName.length()
+                    + "@"
+                    + updateID
+                    + "@"
+                    + author.hasUser()
+                    + "@"
+                    + persianResult.indexOf(targetName)
+                    + "@"
+                    + targetName.length()
+                    + "@"
+                    + messageLog.getTargetUser().getId();
+
                 break;
             case MEMBER_LEFT:
                 persianResult = authorName + " " + finalTypeRoom + " " + logMessage;
+                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case ROOM_CONVERTED_TO_PUBLIC:
                 persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
+                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case ROOM_CONVERTED_TO_PRIVATE:
                 persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
                 break;
             case MEMBER_JOINED_BY_INVITE_LINK:
-                persianResult = authorName + " " + logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.MEMBER_JOINED_BY_INVITE_LINK_2);
+                persianResult = authorName + " " + logMessage + " " + finalTypeRoom + " اضافه شد ";
+                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
 
                 break;
             case ROOM_DELETED:
-                persianResult = logMessage + " " + finalTypeRoom + " " + G.context.getResources().getString(R.string.prefix) + " " + authorName;
+                persianResult = logMessage + " " + finalTypeRoom + " توسط " + authorName;
+                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
         }
 
         realm.close();
 
-        return (englishResult + "\n" + persianResult);
+        return (englishResult + "\n" + persianResult + "\n" + linkInfoEnglish + "\n" + linlInfoPersian);
     }
 
     private static String logMessageString(ProtoGlobal.RoomMessageLog.Type type) {
@@ -197,4 +343,150 @@ public class HelperLogMessage {
 
         return result;
     }
+
+    public static SpannableStringBuilder getLogMessageWithLink(String text) {
+
+        if (text == null || text.length() == 0) {
+            return null;
+        }
+
+        String str[] = text.split("\n");
+        String tmp = null;
+
+        try {
+            if (HelperCalander.isLanguagePersian) {
+                tmp = str[1];
+            } else {
+                tmp = str[0];
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(tmp);
+
+        String linkInfo = "";
+
+        if (HelperCalander.isLanguagePersian) {
+            linkInfo = str[3];
+        } else {
+            linkInfo = str[2];
+        }
+
+        try {
+
+            String splitText[] = linkInfo.split("@");
+
+            int autherIndex = Integer.parseInt(splitText[0]);
+            int authLeng = Integer.parseInt(splitText[1]);
+            long id = Long.parseLong(splitText[2]);
+            boolean isAutherUser = Boolean.parseBoolean(splitText[3]);
+
+            insertClickSpanLink(strBuilder, autherIndex, autherIndex + authLeng, isAutherUser, id);
+
+            if (splitText.length > 4) {
+
+                int targetIndex = Integer.parseInt(splitText[4]);
+                int targetLeng = Integer.parseInt(splitText[5]);
+                long targetId = Long.parseLong(splitText[6]);
+
+                insertClickSpanLink(strBuilder, targetIndex, targetIndex + targetLeng, true, targetId);
+            }
+
+            int indexFirst = tmp.indexOf("*");
+            int indexLast = tmp.lastIndexOf("*");
+            String stringValue = G.context.getString(Integer.parseInt(tmp.substring(indexFirst + 1, indexLast)));
+
+            strBuilder.replace(indexFirst, indexLast + 1, stringValue);
+        } catch (Exception e) {
+
+        }
+
+        return strBuilder;
+    }
+
+    public static void insertClickSpanLink(SpannableStringBuilder builder, int start, int end, final boolean isUser, final long id) {
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override public void onClick(View widget) {
+
+                if (isUser) {
+
+                    if (id > 0) {
+                        gotToUserRoom(id);
+                    }
+                } else {
+                    if (id > 0) {
+                        goToRoom(id);
+                    }
+                }
+            }
+
+            @Override public void updateDrawState(TextPaint ds) {
+                ds.linkColor = Color.DKGRAY;
+                super.updateDrawState(ds);
+            }
+        };
+
+        builder.setSpan(clickableSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    private static void gotToUserRoom(final long id) {
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+        if (realmRoom != null) {
+            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+            intent.putExtra("RoomId", realmRoom.getId());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            G.currentActivity.startActivity(intent);
+        } else {
+            G.onChatGetRoom = new OnChatGetRoom() {
+                @Override public void onChatGetRoom(final long roomId) {
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override public void run() {
+
+                            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+                            intent.putExtra("peerId", id);
+                            intent.putExtra("RoomId", roomId);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            G.currentActivity.startActivity(intent);
+                        }
+                    });
+                }
+
+                @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+
+                }
+
+                @Override public void onChatGetRoomTimeOut() {
+
+                }
+
+                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                }
+            };
+
+            new RequestChatGetRoom().chatGetRoom(id);
+        }
+
+        realm.close();
+    }
+
+    private static void goToRoom(Long id) {
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+        if (realmRoom != null) {
+            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+            intent.putExtra("RoomId", realmRoom.getId());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            G.currentActivity.startActivity(intent);
+        } else {
+            HelperInfo.needUpdateRoomInfo(id);
+        }
+        realm.close();
+    }
+
 }

@@ -15,6 +15,7 @@ import com.iGap.G;
 import com.iGap.activities.ActivityChat;
 import com.iGap.adapter.items.chat.AbstractMessage;
 import com.iGap.fragments.FragmentShowMember;
+import com.iGap.helper.HelperLogMessage;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoUserInfo;
 import com.iGap.realm.RealmAvatar;
@@ -108,6 +109,17 @@ public class UserInfoResponse extends MessageHandler {
 
             }
         });
+
+        // update log message in realm room message after get user info
+        if (G.logMessageUpdatList.containsKey(builder.getUser().getId())) {
+
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    HelperLogMessage.updateLogMessageAfterGetUserInfo(G.logMessageUpdatList.get(builder.getUser().getId()));
+                }
+            }, 500);
+        }
+
     }
 
     @Override

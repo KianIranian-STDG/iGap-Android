@@ -23,6 +23,7 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.iGap.helper.HelperCheckInternetConnection;
+import com.iGap.helper.HelperLogMessage;
 import com.iGap.helper.HelperNotificationAndBadge;
 import com.iGap.interfaces.IClientSearchUserName;
 import com.iGap.interfaces.OnChangeUserPhotoListener;
@@ -169,6 +170,7 @@ public class G extends MultiDexApplication {
 
     public static HashMap<Integer, String> lookupMap = new HashMap<>();
     public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
+    public static HashMap<Long, HelperLogMessage.StructLog> logMessageUpdatList = new HashMap<>();
 
     public static Activity currentActivity;
     public static Activity latestActivity;

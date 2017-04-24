@@ -330,7 +330,7 @@ import org.parceler.Parcel;
         }
         if (input.hasLog()) {
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
-            message.setLogMessage(HelperLogMessage.logMessage(roomId, input.getAuthor(), input.getLog()));
+            message.setLogMessage(HelperLogMessage.logMessage(roomId, input.getAuthor(), input.getLog(), message.getMessageId()));
         }
         if (input.hasContact()) {
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
@@ -470,6 +470,10 @@ import org.parceler.Parcel;
 
     public String getLogMessage() {
         return HelperLogMessage.convertLogmessage(logMessage);
+    }
+
+    public String getLogMessageWithLinkInfo() {
+        return logMessage;
     }
 
     public void setLogMessage(String logMessage) {
@@ -759,6 +763,8 @@ import org.parceler.Parcel;
                     if (realmRoom != null) {
                         realmRoom.setUnreadCount(0);
                     }
+
+                    realm.where(RealmRegisteredInfo.class).findAll().deleteAllFromRealm();
                 }
             });
         }
