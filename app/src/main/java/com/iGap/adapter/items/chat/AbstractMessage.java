@@ -164,13 +164,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
+
+        if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogItem.ViewHolder) {
+            return;
+        }
+
+
         Realm realm = Realm.getDefaultInstance();
         /**
          * this use for select foreground in activity chat for search item and hash item
          *
          */
-
-        if (holder instanceof ProgressWaiting.ViewHolder) return;
 
         mMessage.view = holder.itemView;
 

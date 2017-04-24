@@ -20,6 +20,7 @@ import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
 import com.iGap.activities.ActivityChat;
+import com.iGap.activities.ActivityContactsProfile;
 import com.iGap.interfaces.OnChatGetRoom;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRegisteredInfo;
@@ -369,11 +370,13 @@ public class HelperLogMessage {
             e.printStackTrace();
         }
 
+        if (str.length < 3) {
+            return new SpannableStringBuilder(convertLogmessage(text));
+        }
+
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(tmp);
 
         String linkInfo = "";
-
-
 
         try {
 
@@ -444,8 +447,15 @@ public class HelperLogMessage {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
         if (realmRoom != null) {
-            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+            //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+            //intent.putExtra("RoomId", realmRoom.getId());
+            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //G.currentActivity.startActivity(intent);
+
+            Intent intent = new Intent(G.context, ActivityContactsProfile.class);
+            intent.putExtra("peerId", id);
             intent.putExtra("RoomId", realmRoom.getId());
+            intent.putExtra("enterFrom", "GROUP");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.currentActivity.startActivity(intent);
         } else {
@@ -454,9 +464,16 @@ public class HelperLogMessage {
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override public void run() {
 
-                            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+                            //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+                            //intent.putExtra("peerId", id);
+                            //intent.putExtra("RoomId", roomId);
+                            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            //G.currentActivity.startActivity(intent);
+
+                            Intent intent = new Intent(G.context, ActivityContactsProfile.class);
                             intent.putExtra("peerId", id);
                             intent.putExtra("RoomId", roomId);
+                            intent.putExtra("enterFrom", "GROUP");
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             G.currentActivity.startActivity(intent);
                         }
