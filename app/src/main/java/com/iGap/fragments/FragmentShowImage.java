@@ -21,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -539,23 +540,23 @@ public class FragmentShowImage extends Fragment {
 
                     txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + mFList.size());
                     showImageInfo(mFList.get(position));
-
                     ProtoGlobal.RoomMessageType type;
-
                     if (mFList.get(position).getForwardMessage() != null) {
                         type = mFList.get(position).getForwardMessage().getMessageType();
                     } else {
                         type = mFList.get(position).getMessageType();
                     }
-                    if (type == ProtoGlobal.RoomMessageType.VIDEO && mMediaPlayer != null) {
+
+                    Log.i("FFFFFFFF", "onPageSelected: " + type);
+                    if (type == ProtoGlobal.RoomMessageType.VIDEO || type == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                         File f = new File(getFilePath(position));
                         if (f.exists()) {
-                            touchImageView.setVisibility(View.VISIBLE);
                             imgPlay.setVisibility(View.VISIBLE);
+                            touchImageView.setVisibility(View.VISIBLE);
                         } else {
                             imgPlay.setVisibility(View.GONE);
                         }
-                    } else if (type == ProtoGlobal.RoomMessageType.IMAGE) {
+                    } else if (type == ProtoGlobal.RoomMessageType.IMAGE || type == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                         imgPlay.setVisibility(View.GONE);
                     }
 
@@ -564,8 +565,7 @@ public class FragmentShowImage extends Fragment {
                     }
                 }
 
-                @Override
-                public void onPageScrollStateChanged(int state) {
+                @Override public void onPageScrollStateChanged(int state) {
                 }
             });
 
@@ -790,7 +790,6 @@ public class FragmentShowImage extends Fragment {
         public int getAudioSessionId() {
             return 0;
         }
-
     }
 
     public String getFilePath(int position) {
@@ -829,8 +828,6 @@ public class FragmentShowImage extends Fragment {
                 result = AndroidUtils.getFilePathWithCashId(roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getName(), G.DIR_TEMP, true);
             }
         }
-
-
 
         return result;
     }
