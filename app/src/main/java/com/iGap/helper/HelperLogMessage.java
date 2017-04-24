@@ -373,13 +373,15 @@ public class HelperLogMessage {
 
         String linkInfo = "";
 
-        if (HelperCalander.isLanguagePersian) {
-            linkInfo = str[3];
-        } else {
-            linkInfo = str[2];
-        }
+
 
         try {
+
+            if (HelperCalander.isLanguagePersian) {
+                linkInfo = str[3];
+            } else {
+                linkInfo = str[2];
+            }
 
             String splitText[] = linkInfo.split("@");
 
