@@ -987,6 +987,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * actions : set app color, load avatar, set background, set title, set status chat or member for group or channel
      */
     private void startPageFastInitialize() {
+
+        attachFile = new AttachFile(this);
+
         mRealm = Realm.getDefaultInstance();
 
         Bundle extras = getIntent().getExtras();
@@ -1088,7 +1091,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         prgWaiting = (ProgressBar) findViewById(R.id.chl_prgWaiting);
 
         voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile, this);
-        attachFile = new AttachFile(this);
+
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
         prgWaiting.setVisibility(View.VISIBLE);
         lastDateCalendar.clear();

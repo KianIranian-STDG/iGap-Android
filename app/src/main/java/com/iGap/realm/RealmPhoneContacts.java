@@ -68,15 +68,21 @@ public class RealmPhoneContacts extends RealmObject {
 
     private static void addContactToDB(final StructListOfContact item, Realm realm) {
 
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+        try {
 
-                RealmPhoneContacts _realmPhoneContacts = realm.createObject(RealmPhoneContacts.class, item.getPhone());
-                _realmPhoneContacts.setFirstName(item.firstName);
-                _realmPhoneContacts.setLastName(item.lastName);
-            }
-        });
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+
+                    RealmPhoneContacts _realmPhoneContacts = realm.createObject(RealmPhoneContacts.class, item.getPhone());
+                    _realmPhoneContacts.setFirstName(item.firstName);
+                    _realmPhoneContacts.setLastName(item.lastName);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private static ArrayList<StructListOfContact> fillContactsToDB(ArrayList<StructListOfContact> list) {
