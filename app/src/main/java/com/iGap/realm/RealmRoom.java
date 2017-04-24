@@ -161,8 +161,11 @@ public class RealmRoom extends RealmObject {
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
                 realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoomExtra()));
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, room.getChatRoomExtra().getPeer().getId()).findFirst();
-                realmRoom.setAvatar(realmRegisteredInfo != null ? realmRegisteredInfo.getLastAvatar() : null);
+                /**
+                 * update user info for detect current status(online,offline,...)
+                 * and also update another info
+                 */
+                realmRoom.setAvatar(RealmRegisteredInfo.putOrUpdate(room.getChatRoomExtra().getPeer()).getLastAvatar());
                 break;
             case GROUP:
                 realmRoom.setType(RoomType.GROUP);
@@ -305,7 +308,8 @@ public class RealmRoom extends RealmObject {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
 
                     if (type == ProtoGlobal.Room.Type.GROUP) {
                         GroupChatRole mRole;

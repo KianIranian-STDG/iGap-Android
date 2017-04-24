@@ -499,30 +499,37 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             room.setUnreadCount(0);
                             realm.copyToRealmOrUpdate(room);
 
-                            /**
-                             * set member count
-                             * set this code in onResume for update this value when user
-                             * come back from profile activities
-                             */
+                            if (room.getType() != CHAT) {
+                                /**
+                                 * set member count
+                                 * set this code in onResume for update this value when user
+                                 * come back from profile activities
+                                 */
 
-                            String members = null;
-                            if (room.getType() == GROUP && room.getGroupRoom() != null) {
-                                members = room.getGroupRoom().getParticipantsCountLabel();
-                            } else if (room.getType() == CHANNEL && room.getChannelRoom() != null) {
-                                members = room.getChannelRoom().getParticipantsCountLabel();
-                            }
+                                String members = null;
+                                if (room.getType() == GROUP && room.getGroupRoom() != null) {
+                                    members = room.getGroupRoom().getParticipantsCountLabel();
+                                } else if (room.getType() == CHANNEL && room.getChannelRoom() != null) {
+                                    members = room.getChannelRoom().getParticipantsCountLabel();
+                                }
 
-                            final String finalMembers = members;
-                            if (finalMembers != null) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        txtLastSeen.setText(finalMembers + " " + getResources().getString(member));
-                                        avi.setVisibility(View.GONE);
+                                final String finalMembers = members;
+                                if (finalMembers != null) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            txtLastSeen.setText(finalMembers + " " + getResources().getString(member));
+                                            avi.setVisibility(View.GONE);
 
-                                        if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
-                                    }
-                                });
+                                            if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                        }
+                                    });
+                                }
+                            } else {
+                                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, room.getChatRoom().getPeerId()).findFirst();
+                                if (realmRegisteredInfo != null) {
+                                    setUserStatus(realmRegisteredInfo.getStatus(), realmRegisteredInfo.getLastSeen());
+                                }
                             }
                         }
                     }
@@ -1235,7 +1242,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         initComponent();
         initAppbarSelected();
         getDraft();
-        getUserInfo();
+        //getUserInfo();
         checkAction();
         insertShearedData();
 
@@ -3084,13 +3091,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     public void onUserUpdateStatus(long userId, final long time, final String status) {
         if (chatType == CHAT && chatPeerId == userId) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    userStatus = AppUtils.getStatsForUser(status);
-                    setUserStatus(userStatus, time);
-                }
-            });
+            userStatus = AppUtils.getStatsForUser(status);
+            setUserStatus(userStatus, time);
         }
     }
 
@@ -3331,34 +3333,39 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * @param status current state
      * @param time if state is not online set latest online time
      */
-    private void setUserStatus(String status, long time) {
-        userStatus = status;
-        userTime = time;
-        if (RealmRoom.isCloudRoom(mRoomId)) {
-            txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
-            avi.setVisibility(View.GONE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-            }
-        } else {
-            if (status != null) {
-                if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true, false));
+    private void setUserStatus(final String status, final long time) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                userStatus = status;
+                userTime = time;
+                if (RealmRoom.isCloudRoom(mRoomId)) {
+                    txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
+                    avi.setVisibility(View.GONE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                        //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                    }
                 } else {
-                    txtLastSeen.setText(status);
-                }
-                avi.setVisibility(View.GONE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                }
-                // change english number to persian number
-                if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (status != null) {
+                        if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true, false));
+                        } else {
+                            txtLastSeen.setText(status);
+                        }
+                        avi.setVisibility(View.GONE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                            //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                        }
+                        // change english number to persian number
+                        if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
-                checkAction();
+                        checkAction();
+                    }
+                }
             }
-        }
+        });
     }
 
     private void replay(StructMessageInfo item) {

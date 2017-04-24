@@ -33,7 +33,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,7 +159,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         if (mRealm != null) mRealm.close();
     }
@@ -176,9 +176,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             if (changeListener == null) {
 
                 changeListener = new RealmChangeListener<RealmModel>() {
-                    @Override public void onChange(final RealmModel element) {
+                    @Override
+                    public void onChange(final RealmModel element) {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 String countText = ((RealmRoom) element).getSharedMediaCount();
 
                                 if (countText == null || countText.length() == 0) {
@@ -251,10 +253,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             rrg.addChangeListener(new RealmChangeListener<RealmModel>() {
                 @Override
                 public void onChange(RealmModel element) {
-
                     isBlockUser = rrg.isBlockUser();
-
-                    Log.e("ddd", "addChangeListener     " + element);
                 }
             });
         }
@@ -690,11 +689,13 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                 try {
                     HelperPermision.getContactPermision(ActivityContactsProfile.this, new OnGetPermission() {
-                        @Override public void Allow() throws IOException {
+                        @Override
+                        public void Allow() throws IOException {
                             showPopupPhoneNumber(vgPhoneNumber, mPhone);
                         }
 
-                        @Override public void deny() {
+                        @Override
+                        public void deny() {
 
                         }
                     });
@@ -751,7 +752,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         });
 
         realm.close();
-        getUserInfo(); // client should send request for get user info because need to update user online timing
+        //getUserInfo(); // client should send request for get user info because need to update user online timing
         setUserStatus(userStatus, lastSeen);
 
         setAvatar();
@@ -1160,7 +1161,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         G.onUserContactdelete = new OnUserContactDelete() {
             @Override
             public void onContactDelete() {
-                // get user info after delete it for show nickname
+                /**
+                 * get user info after delete it for show nickname
+                 */
                 getUserInfo();
             }
 

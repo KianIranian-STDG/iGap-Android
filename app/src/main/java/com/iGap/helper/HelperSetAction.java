@@ -54,7 +54,7 @@ public class HelperSetAction {
     }
 
     /**
-     * set action for showing audience typing.
+     * set action for cancel audience typing.
      *
      * @param roomId roomId that send action from that
      */

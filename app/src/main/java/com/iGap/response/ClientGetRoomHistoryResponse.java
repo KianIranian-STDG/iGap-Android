@@ -46,23 +46,18 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
             public void run() {
 
                 final Realm realm = Realm.getDefaultInstance();
-
                 final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
-
                 final ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
                         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-
                         for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
                             if (roomMessage.getAuthor().hasUser()) {
                                 HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                             }
-
                             realmRoomMessages.add(RealmRoomMessage.putOrUpdate(roomMessage, Long.parseLong(identity)));
-
                             if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
                                 if (!G.isAppInFg) {
                                     G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, Long.parseLong(identity));

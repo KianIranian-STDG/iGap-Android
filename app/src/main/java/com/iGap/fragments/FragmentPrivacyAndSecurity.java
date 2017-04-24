@@ -167,12 +167,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         txtActiveSessions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 FragmentActiveSessions fragmentActiveSessions = new FragmentActiveSessions();
-
                 getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(st_layoutParent, fragmentActiveSessions, null).commit();
-
-
             }
         });
 
@@ -180,7 +176,6 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         txtBlockedUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 FragmentBlockedUser fragmentBlockedUser = new FragmentBlockedUser();
                 getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null).commit();
             }
@@ -220,11 +215,6 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             }
         });
 
-
-
-
-
-
         txtDestruction = (TextView) view.findViewById(R.id.stps_txt_Self_destruction);
 
         sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -237,10 +227,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             }
         });
 
-
-
         new RequestUserProfileGetSelfRemove().userProfileGetSelfRemove();
-
     }
 
     private void selfDestructs() {
