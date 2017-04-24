@@ -60,19 +60,25 @@ public class HelperLogMessage {
 
     public static void updateLogMessageAfterGetUserInfo(final StructLog item) {
 
+
         Realm realm = Realm.getDefaultInstance();
 
-        final RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, item.messageID).findFirst();
+        try {
 
-        if (roomMessage != null) {
+            final RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, item.messageID).findFirst();
 
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
-                    roomMessage.setLogMessage(HelperLogMessage.logMessage(item.roomId, item.author, item.messageLog, item.messageID));
+            if (roomMessage != null) {
 
-                    G.logMessageUpdatList.remove(item.updateID);
-                }
-            });
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        roomMessage.setLogMessage(HelperLogMessage.logMessage(item.roomId, item.author, item.messageLog, item.messageID));
+
+                        G.logMessageUpdatList.remove(item.updateID);
+                    }
+                });
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
         realm.close();

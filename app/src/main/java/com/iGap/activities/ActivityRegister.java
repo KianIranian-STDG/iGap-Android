@@ -1217,6 +1217,8 @@ public class ActivityRegister extends ActivityEnhanced {
                                 intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
                                 startActivity(intent);
                                 finish();
+
+                                G.onUserInfoResponse = null;
                             }
                         });
                     }
