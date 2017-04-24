@@ -399,7 +399,7 @@ public class FragmentShowImage extends Fragment {
                 if (file.exists()) {
                     progress.setVisibility(View.GONE);
                     G.imageLoader.displayImage(suitablePath(path), touchImageView);
-                    if (rm.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE) {
+                    if (rm.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || rm.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                         touchImageView.setVisibility(View.VISIBLE);
                         imgPlay.setVisibility(View.GONE);
                         isFirstPlay = false;
