@@ -742,14 +742,12 @@ import org.parceler.Parcel;
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-
                     realm.where(RealmRoomMessage.class).findAll().deleteAllFromRealm();
                     RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAll();
 
                     for (RealmRoom room : rooms) {
                         room.setUnreadCount(0);
                     }
-
                 }
             });
         } else {
@@ -757,14 +755,11 @@ import org.parceler.Parcel;
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-
                     realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                     if (realmRoom != null) {
                         realmRoom.setUnreadCount(0);
                     }
-
-                    realm.where(RealmRegisteredInfo.class).findAll().deleteAllFromRealm();
                 }
             });
         }
