@@ -273,8 +273,7 @@ import static java.lang.Long.parseLong;
 public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 
     public static ActivityChat activityChat;
-    public static Activity activityChatForFinish;
-    public static MusicPlayer musicPlayer;
+    public MusicPlayer musicPlayer;
     private AttachFile attachFile;
     private EditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
@@ -550,7 +549,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.onUserInfoResponse = this;
         G.onChannelAddMessageReaction = this;
         G.onChannelGetMessagesStats = this;
-        activityChatForFinish = this;
         activityChat = this;
         G.onSetAction = this;
         G.onUserUpdateStatus = this;
