@@ -11,6 +11,7 @@
 
 package com.iGap.realm;
 
+import android.util.Log;
 import com.iGap.helper.HelperString;
 import com.iGap.module.structs.StructListOfContact;
 import com.iGap.request.RequestUserContactImport;
@@ -86,13 +87,23 @@ public class RealmPhoneContacts extends RealmObject {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override public void execute(Realm realm) {
 
-                    RealmPhoneContacts _realmPhoneContacts = realm.createObject(RealmPhoneContacts.class, item.getPhone());
-                    _realmPhoneContacts.setFirstName(item.firstName);
-                    _realmPhoneContacts.setLastName(item.lastName);
+                    //RealmPhoneContacts _realmPhoneContacts = realm.createObject(RealmPhoneContacts.class, item.getPhone());
+                    //_realmPhoneContacts.setFirstName(item.firstName);
+                    //_realmPhoneContacts.setLastName(item.lastName);
+
+                    RealmPhoneContacts realmPhoneContacts = new RealmPhoneContacts();
+                    realmPhoneContacts.setPhone(item.getPhone());
+                    realmPhoneContacts.setFirstName(item.firstName);
+                    realmPhoneContacts.setLastName(item.lastName);
+
+                    realm.copyToRealmOrUpdate(realmPhoneContacts);
+
+
+
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("dddd", "realm phone contact   addContactToDB   " + e.toString());
         }
 
 

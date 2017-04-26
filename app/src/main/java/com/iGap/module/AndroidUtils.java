@@ -31,7 +31,6 @@ import android.view.Display;
 import android.view.View;
 import com.iGap.G;
 import com.iGap.R;
-import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoGlobal;
 import java.io.File;
 import java.io.FileInputStream;
@@ -74,9 +73,12 @@ public final class AndroidUtils {
 
     public static String getAudioArtistName(String filePath) throws IllegalArgumentException {
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+
         Uri uri;
-        if (!HelperString.isExternal(filePath)) {
-            uri = Uri.parse(filePath);
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            uri = Uri.fromFile(file);
         } else {
             uri = Uri.parse("content://media" + filePath);
         }
@@ -87,9 +89,15 @@ public final class AndroidUtils {
 
     public static long getAudioDuration(Context context, String filePath) throws IllegalArgumentException {
 
+        if (filePath == null || filePath.length() == 0) {
+            return 1;
+        }
+
         Uri uri;
-        if (!HelperString.isExternal(filePath)) {
-            uri = Uri.parse(filePath);
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            uri = Uri.fromFile(file);
         } else {
             uri = Uri.parse("content://media" + filePath);
         }
@@ -503,9 +511,11 @@ public final class AndroidUtils {
         String _result = "";
 
         try {
-            _hash = makeSHA1Hash(cashId);
-        } catch (NoSuchAlgorithmException e) {
-        } catch (UnsupportedEncodingException e) {
+            if (cashId != null && cashId.length() > 0) {
+                _hash = makeSHA1Hash(cashId);
+            }
+        } catch (Exception e) {
+
         }
 
         _result = _Dir + "/" + _hash + _mimeType;
@@ -531,9 +541,11 @@ public final class AndroidUtils {
         String _result = "";
 
         try {
-            _hash = makeSHA1Hash(cashId);
-        } catch (NoSuchAlgorithmException e) {
-        } catch (UnsupportedEncodingException e) {
+            if (cashId != null && cashId.length() > 0) {
+                _hash = makeSHA1Hash(cashId);
+            }
+        } catch (Exception e) {
+
         }
 
         if (selectDir.equals(G.DIR_TEMP)) {

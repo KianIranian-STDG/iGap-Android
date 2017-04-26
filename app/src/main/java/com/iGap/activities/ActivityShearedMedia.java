@@ -1266,10 +1266,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 if (at.getLocalThumbnailPath() != null) {
                     result = at.getLocalThumbnailPath();
                 }
-            }
 
-            if (result.length() < 1) {
-                AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), G.DIR_TEMP, true);
+                if (result.length() < 1) {
+                    AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), G.DIR_TEMP, true);
+                }
+
             }
 
             return result;
@@ -1283,14 +1284,16 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
 
             if (at != null) {
-                if (at.getLocalFilePath() != null) result = at.getLocalFilePath();
-            }
+                if (at.getLocalFilePath() != null) {
+                    result = at.getLocalFilePath();
+                }
 
-            ProtoGlobal.RoomMessageType messageType =
-                mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getMessageType() : mList.get(position).item.getMessageType();
+                ProtoGlobal.RoomMessageType messageType =
+                    mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getMessageType() : mList.get(position).item.getMessageType();
 
-            if (result.length() < 1) {
-                result = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
+                if (result.length() < 1) {
+                    result = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
+                }
             }
 
             return result;
