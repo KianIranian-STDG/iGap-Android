@@ -29,8 +29,7 @@ import java.util.List;
  * Created by Saurabh on 14/12/15.
  */
 @CoordinatorLayout.DefaultBehavior(MoveUpwardBehaviour.class)
-public class ArcMenu
-        extends FrameLayout {
+public class ArcMenu extends FrameLayout {
 
     private static final double POSITIVE_QUADRANT = 90;
     private static final double NEGATIVE_QUADRANT = -90;
@@ -75,7 +74,14 @@ public class ArcMenu
     private void init(TypedArray attr) {
         Resources resources = getResources();
 
-        mDrawable = attr.getDrawable(R.styleable.ArcMenu_menu_scr);
+        try {
+            mDrawable = attr.getDrawable(R.styleable.ArcMenu_menu_scr);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
         //  mColorStateList = attr.getColorStateList(R.styleable.ArcMenu_menu_color);
         mColorStateList = ColorStateList.valueOf(Color.parseColor(G.appBarColor));
 
@@ -89,9 +95,10 @@ public class ArcMenu
 
         if (mDrawable == null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mDrawable = resources.getDrawable(android.R.drawable.ic_dialog_email, null);
+
+                mDrawable = resources.getDrawable(R.mipmap.plus, null);
             } else {
-                mDrawable = resources.getDrawable(android.R.drawable.ic_dialog_email);
+                mDrawable = resources.getDrawable(R.mipmap.plus);
             }
         }
 

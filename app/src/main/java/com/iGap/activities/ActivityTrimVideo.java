@@ -136,9 +136,14 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
             videoHeight = bmp.getHeight();
             videoWidth = bmp.getWidth();
 
-            txtDetail.setText(videoWidth + "X" + videoHeight);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
+        }catch (RuntimeException e){
+            e.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
+        txtDetail.setText(videoWidth + "X" + videoHeight);
     }
 }
