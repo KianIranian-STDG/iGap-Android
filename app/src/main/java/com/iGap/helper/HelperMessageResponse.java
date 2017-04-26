@@ -22,8 +22,8 @@ import io.realm.Realm;
 import static com.iGap.G.authorHash;
 
 /**
- * helper message response for get message and detect message is for
- * chat, group or channel and after set
+ * helper message response for get message and detect message that is for
+ * chat, group or channel and after set it to the realm and update view
  */
 public class HelperMessageResponse {
 
@@ -34,48 +34,37 @@ public class HelperMessageResponse {
             @Override
             public void execute(Realm realm) {
 
+                /**
+                 * put message to realm
+                 */
                 RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(roomMessage, roomId);
-
-                boolean isAuthorUser = false;
-                if (roomMessage.getAuthor().hasUser()) {
-                    isAuthorUser = true;
-                }
 
                 /**
                  * because user may have more than one device, his another device should not
                  * be recipient but sender. so I check current userId with room message user id,
                  * and if not equals and response is null, so we sure recipient is another user
                  */
-                if (response.getId().isEmpty()) { // i'm recipient
-
-                    if (isAuthorUser) {
+                if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
+                    /**
+                     * i'm recipient
+                     *
+                     * if author has user check that client have latest info for this user or no
+                     * if author don't have use this means that message is from channel so client
+                     * don't have user id for message sender for get info
+                     */
+                    if (roomMessage.getAuthor().hasUser()) {
                         HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                     }
+                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHANNEL, roomId);
 
-                    /**
-                     * show notification if this message isn't for another account
-                     */
-                    if (isAuthorUser) {
-                        if (!roomMessage.getAuthor().getHash().equals(authorHash) && !roomMessage.getLog().getType().toString().equals("ROOM_CREATED")) {
-                            G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHANNEL, roomId);
-                        }
-                    } else {
-                        if (!roomMessage.getLog().getType().toString().equals("ROOM_CREATED")) {
-                            G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHANNEL, roomId);
-                        }
-                    }
-
-                } else { // i'm the sender
-
+                } else if (!response.getId().isEmpty()) {
                     /**
                      * i'm the sender
                      *
                      * delete message that created with fake messageId as identity
                      * because in new version of realm client can't update primary key
                      */
-                    if (!response.getId().isEmpty()) {
-                        RealmRoomMessage.deleteMessage(realm, Long.parseLong(identity));
-                    }
+                    RealmRoomMessage.deleteMessage(realm, Long.parseLong(identity));
                 }
 
                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -86,6 +75,9 @@ public class HelperMessageResponse {
                     new RequestClientGetRoom().clientGetRoom(roomId, null);
                 } else {
 
+                    /**
+                     * update unread count if new messageId that received is bigger than latest messageId that exist
+                     */
                     if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
                         room.setUnreadCount(room.getUnreadCount() + 1);
                     }
@@ -104,20 +96,16 @@ public class HelperMessageResponse {
             }
         });
 
-            if (response.getId().isEmpty()) {
-                /**
-                 * invoke following callback when i'm not the sender, because
-                 * I already done everything after sending message
-                 */
-                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst() != null) {
-                    G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHANNEL);
-                }
-            } else {
-                /**
-                 * invoke following callback when I'm the sender and the message has updated
-                 */
-                G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
-            }
+        if (response.getId().isEmpty()) {
+            /**
+             * invoke following callback when i'm not the sender, because i already done everything after sending message
+             */
+            G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHANNEL);
+        } else {
+            /**
+             * invoke following callback when I'm the sender and the message has updated
+             */
+            G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
+        }
     }
-
 }

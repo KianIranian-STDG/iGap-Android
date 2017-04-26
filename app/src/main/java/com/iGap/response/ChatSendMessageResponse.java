@@ -10,18 +10,9 @@
 
 package com.iGap.response;
 
-import com.iGap.G;
-import com.iGap.helper.HelperInfo;
+import com.iGap.helper.HelperMessageResponse;
 import com.iGap.proto.ProtoChatSendMessage;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmRoom;
-import com.iGap.realm.RealmRoomFields;
-import com.iGap.realm.RealmRoomMessage;
-import com.iGap.request.RequestClientGetRoom;
-import io.realm.Realm;
 
-import static com.iGap.G.authorHash;
-import static com.iGap.G.userId;
 import static com.iGap.realm.RealmRoomMessage.makeFailed;
 
 public class ChatSendMessageResponse extends MessageHandler {
@@ -42,83 +33,7 @@ public class ChatSendMessageResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoChatSendMessage.ChatSendMessageResponse.Builder builder = (ProtoChatSendMessage.ChatSendMessageResponse.Builder) message;
-        Realm realm = Realm.getDefaultInstance();
-        final ProtoGlobal.RoomMessage roomMessage = builder.getRoomMessage();
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                /**
-                 * put message to realm
-                 */
-                RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(roomMessage, builder.getRoomId());
-
-                /**
-                 * because user may have more than one device, his another device should not
-                 * be recipient but sender. so I check current userId with room message user id,
-                 * and if not equals and response is null, so we sure recipient is another user
-                 */
-
-                if (userId != roomMessage.getAuthor().getUser().getUserId()) {
-                    /**
-                     * i'm the recipient
-                     */
-                    HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, builder.getRoomId());
-
-                } else {
-                    /**
-                     * i'm the sender
-                     *
-                     * delete message that created with fake messageId as identity
-                     * because in new version of realm client can't update primary key
-                     */
-                    if (!builder.getResponse().getId().isEmpty()) {
-                        RealmRoomMessage.deleteMessage(realm, Long.parseLong(identity));
-                    }
-                }
-
-
-                /**
-                 * if first message received but the room doesn't exist, create new room
-                 */
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                if (room == null) {
-                    new RequestClientGetRoom().clientGetRoom(builder.getRoomId(), null);
-                } else {
-
-                    if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
-                        room.setUnreadCount(room.getUnreadCount() + 1);
-                    }
-
-                    /**
-                     * update last message sent/received in room table
-                     */
-                    if (room.getLastMessage() != null) {
-                        if (room.getLastMessage().getMessageId() <= roomMessage.getMessageId()) {
-                            room.setLastMessage(realmRoomMessage);
-                        }
-                    } else {
-                        room.setLastMessage(realmRoomMessage);
-                    }
-                }
-            }
-        });
-
-        if (builder.getResponse().getId().isEmpty()) {
-            /**
-             * invoke following callback when i'm not the sender, because I already done everything after sending message
-             */
-            G.chatSendMessageUtil.onMessageReceive(builder.getRoomId(), roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHAT);
-        } else {
-            /**
-             * invoke following callback when I'm the sender and the message has updated
-             */
-            G.chatSendMessageUtil.onMessageUpdate(builder.getRoomId(), roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
-        }
-
-        realm.close();
+        HelperMessageResponse.handleMessage(builder.getRoomId(), builder.getRoomMessage(), builder.getResponse(), this.identity);
     }
 
     @Override

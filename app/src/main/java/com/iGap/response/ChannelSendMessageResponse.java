@@ -10,15 +10,10 @@
 
 package com.iGap.response;
 
-import android.os.Handler;
-import android.os.Looper;
-import com.iGap.G;
 import com.iGap.helper.HelperMessageResponse;
 import com.iGap.proto.ProtoChannelSendMessage;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageFields;
-import io.realm.Realm;
+
+import static com.iGap.realm.RealmRoomMessage.makeFailed;
 
 public class ChannelSendMessageResponse extends MessageHandler {
 
@@ -39,43 +34,12 @@ public class ChannelSendMessageResponse extends MessageHandler {
         super.handler();
         final ProtoChannelSendMessage.ChannelSendMessageResponse.Builder channelSendMessageResponse = (ProtoChannelSendMessage.ChannelSendMessageResponse.Builder) message;
         HelperMessageResponse.handleMessage(channelSendMessageResponse.getRoomId(), channelSendMessageResponse.getRoomMessage(), channelSendMessageResponse.getResponse(), this.identity);
-
     }
 
     @Override
     public void error() {
         super.error();
-        makeFailed();
-    }
-
-    /**
-     * make messages failed
-     */
-    private void makeFailed() {
-        // message failed
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
-                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                            message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-                        }
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
-                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
-                        }
-                    }
-                });
-            }
-        });
+        makeFailed(Long.parseLong(identity));
     }
 
     @Override
