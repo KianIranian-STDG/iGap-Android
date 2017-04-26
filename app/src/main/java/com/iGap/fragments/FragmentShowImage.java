@@ -21,7 +21,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -124,6 +123,8 @@ public class FragmentShowImage extends Fragment {
     }
 
     private boolean getIntentData(Bundle bundle) {
+
+        if (getActivity() != null) getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         if (bundle != null) { // get a list of image
 
@@ -547,7 +548,7 @@ public class FragmentShowImage extends Fragment {
                         type = mFList.get(position).getMessageType();
                     }
 
-                    Log.i("FFFFFFFF", "onPageSelected: " + type);
+                    if (mMediaPlayer.isPlaying()) mMediaPlayer.pause();
                     if (type == ProtoGlobal.RoomMessageType.VIDEO || type == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                         File f = new File(getFilePath(position));
                         if (f.exists()) {
@@ -559,7 +560,6 @@ public class FragmentShowImage extends Fragment {
                     } else if (type == ProtoGlobal.RoomMessageType.IMAGE || type == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                         imgPlay.setVisibility(View.GONE);
                     }
-
                     if (videoController != null) {
                         videoController.hide();
                     }
