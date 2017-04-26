@@ -11,6 +11,7 @@
 
 package com.iGap.realm;
 
+import com.iGap.helper.HelperString;
 import com.iGap.module.enums.GroupChatRole;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
@@ -130,7 +131,12 @@ public class RealmGroupRoom extends RealmObject {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        try {
+            this.username = username;
+        } catch (Exception e) {
+            this.username = HelperString.getUtf8String(username);
+        }
+
     }
 
     public boolean isPrivate() {

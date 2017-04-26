@@ -11,6 +11,7 @@
 
 package com.iGap.realm;
 
+import com.iGap.helper.HelperString;
 import io.realm.RealmObject;
 
 public class RealmInviteFriend extends RealmObject {
@@ -25,7 +26,12 @@ public class RealmInviteFriend extends RealmObject {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        try {
+            this.phone = phone;
+        } catch (Exception e) {
+            this.phone = HelperString.getUtf8String(phone);
+        }
+
     }
 
     public String getFirstName() {
@@ -33,7 +39,12 @@ public class RealmInviteFriend extends RealmObject {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        try {
+            this.firstName = firstName;
+        } catch (Exception e) {
+            this.firstName = HelperString.getUtf8String(firstName);
+        }
+
     }
 
     public String getLastName() {
@@ -41,7 +52,12 @@ public class RealmInviteFriend extends RealmObject {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        try {
+            this.lastName = lastName;
+        } catch (Exception e) {
+            this.lastName = HelperString.getUtf8String(lastName);
+        }
+
     }
 
     public String getDisplayName() {
@@ -49,6 +65,10 @@ public class RealmInviteFriend extends RealmObject {
     }
 
     public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+        try {
+            this.displayName = displayName;
+        } catch (Exception e) {
+            this.displayName = HelperString.getUtf8String(displayName);
+        }
     }
 }

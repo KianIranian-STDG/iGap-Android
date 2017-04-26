@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -217,5 +218,24 @@ public class HelperString {
         result[lastIndex] = string.substring(j);
 
         return result;
+    }
+
+    public static String getUtf8String(String text) {
+        // s=  URLEncoder.encode(message, "utf-8");
+
+        String result = "";
+
+        try {
+
+            byte[] utf8 = text.getBytes("UTF-8");
+
+            // Convert from UTF-8 to Unicode
+            result = new String(utf8, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+
+        }
+
+        return result;
+
     }
 }

@@ -11,6 +11,7 @@
 
 package com.iGap.realm;
 
+import com.iGap.helper.HelperString;
 import io.realm.RealmObject;
 
 public class RealmRoomDraft extends RealmObject {
@@ -23,7 +24,11 @@ public class RealmRoomDraft extends RealmObject {
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        try {
+            this.message = message;
+        } catch (Exception e) {
+            this.message = HelperString.getUtf8String(message);
+        }
     }
 
     public long getReplyToMessageId() {

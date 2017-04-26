@@ -11,6 +11,7 @@
 
 package com.iGap.realm;
 
+import com.iGap.helper.HelperString;
 import com.iGap.module.structs.StructListOfContact;
 import com.iGap.request.RequestUserContactImport;
 import com.iGap.request.RequestUserContactsGetList;
@@ -38,7 +39,13 @@ public class RealmPhoneContacts extends RealmObject {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+
+        try {
+            this.firstName = firstName;
+        } catch (Exception e) {
+            this.firstName = HelperString.getUtf8String(firstName);
+        }
+
     }
 
     public String getLastName() {
@@ -46,7 +53,13 @@ public class RealmPhoneContacts extends RealmObject {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+
+        try {
+            this.lastName = lastName;
+        } catch (Exception e) {
+            this.lastName = HelperString.getUtf8String(lastName);
+        }
+
     }
 
     public static void sendContactList(final ArrayList<StructListOfContact> list, final boolean force) {

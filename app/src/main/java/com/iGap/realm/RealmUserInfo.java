@@ -11,6 +11,7 @@
 
 package com.iGap.realm;
 
+import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.RealmObject;
 
@@ -44,8 +45,14 @@ public class RealmUserInfo extends RealmObject {
         return this.email;
     }
 
-    public void setEmail(String value) {
-        this.email = value;
+    public void setEmail(String email) {
+
+        try {
+            this.email = email;
+        } catch (Exception e) {
+            this.email = HelperString.getUtf8String(email);
+        }
+
     }
 
     public ProtoGlobal.Gender getGender() {

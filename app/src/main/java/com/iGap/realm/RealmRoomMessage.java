@@ -16,6 +16,7 @@ import android.text.format.DateUtils;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.helper.HelperLogMessage;
+import com.iGap.helper.HelperString;
 import com.iGap.helper.HelperUploadFile;
 import com.iGap.helper.HelperUrl;
 import com.iGap.interfaces.OnActivityChatStart;
@@ -416,7 +417,12 @@ import org.parceler.Parcel;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+
+        try {
+            this.message = message;
+        } catch (Exception e) {
+            this.message = HelperString.getUtf8String(message);
+        }
 
         String linkInfo = HelperUrl.getLinkInfo(message);
         if (linkInfo.length() > 0) {

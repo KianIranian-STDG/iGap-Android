@@ -11,6 +11,7 @@
 
 package com.iGap.realm;
 
+import com.iGap.helper.HelperString;
 import io.realm.RealmObject;
 
 public class RealmContacts extends RealmObject {
@@ -44,7 +45,13 @@ public class RealmContacts extends RealmObject {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        try {
+            this.username = username;
+        } catch (Exception e) {
+            this.username = HelperString.getUtf8String(username);
+        }
+
+
     }
 
     public long getPhone() {
@@ -60,7 +67,12 @@ public class RealmContacts extends RealmObject {
     }
 
     public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+        try {
+            this.first_name = first_name;
+        } catch (Exception e) {
+            this.first_name = HelperString.getUtf8String(first_name);
+        }
+
     }
 
     public String getLast_name() {
@@ -68,7 +80,12 @@ public class RealmContacts extends RealmObject {
     }
 
     public void setLast_name(String last_name) {
-        this.last_name = last_name;
+        try {
+            this.last_name = last_name;
+        } catch (Exception e) {
+            this.last_name = HelperString.getUtf8String(last_name);
+        }
+
     }
 
     public String getDisplay_name() {
@@ -76,7 +93,12 @@ public class RealmContacts extends RealmObject {
     }
 
     public void setDisplay_name(String display_name) {
-        this.display_name = display_name;
+        try {
+            this.display_name = display_name;
+        } catch (Exception e) {
+            this.display_name = HelperString.getUtf8String(display_name);
+        }
+
     }
 
     public String getInitials() {

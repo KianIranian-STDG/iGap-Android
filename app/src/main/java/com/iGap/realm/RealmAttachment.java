@@ -13,6 +13,7 @@ package com.iGap.realm;
 
 import android.support.annotation.Nullable;
 import com.iGap.G;
+import com.iGap.helper.HelperString;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.SUID;
@@ -162,7 +163,14 @@ public class RealmAttachment extends RealmObject {
     }
 
     public void setName(String name) {
-        this.name = name;
+
+        try {
+            this.name = name;
+        } catch (Exception e) {
+            this.name = HelperString.getUtf8String(name);
+        }
+
+
     }
 
     public long getSize() {

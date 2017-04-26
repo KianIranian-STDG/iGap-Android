@@ -11,6 +11,7 @@
 
 package com.iGap.realm;
 
+import com.iGap.helper.HelperString;
 import com.iGap.module.SUID;
 import com.iGap.module.StringListParcelConverter;
 import com.iGap.proto.ProtoGlobal;
@@ -65,7 +66,12 @@ public class RealmRoomMessageContact extends RealmObject {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        try {
+            this.firstName = firstName;
+        } catch (Exception e) {
+            this.firstName = HelperString.getUtf8String(firstName);
+        }
+
     }
 
     public String getLastName() {
@@ -73,7 +79,12 @@ public class RealmRoomMessageContact extends RealmObject {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        try {
+            this.lastName = lastName;
+        } catch (Exception e) {
+            this.lastName = HelperString.getUtf8String(lastName);
+        }
+
     }
 
     public String getNickName() {
@@ -81,7 +92,12 @@ public class RealmRoomMessageContact extends RealmObject {
     }
 
     public void setNickName(String nickName) {
-        this.nickName = nickName;
+        try {
+            this.nickName = nickName;
+        } catch (Exception e) {
+            this.nickName = HelperString.getUtf8String(nickName);
+        }
+
     }
 
     public RealmList<RealmString> getPhones() {

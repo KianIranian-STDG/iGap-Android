@@ -12,6 +12,7 @@
 package com.iGap.realm;
 
 import com.iGap.G;
+import com.iGap.helper.HelperString;
 import com.iGap.module.TimeUtils;
 import com.iGap.module.enums.ChannelChatRole;
 import com.iGap.module.enums.GroupChatRole;
@@ -406,7 +407,13 @@ public class RealmRoom extends RealmObject {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        try {
+            this.title = title;
+        } catch (Exception e) {
+            this.title = HelperString.getUtf8String(title);
+        }
+
+
     }
 
     public String getInitials() {

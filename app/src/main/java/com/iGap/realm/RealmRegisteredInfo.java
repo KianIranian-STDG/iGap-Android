@@ -11,6 +11,7 @@
 
 package com.iGap.realm;
 
+import com.iGap.helper.HelperString;
 import com.iGap.module.AppUtils;
 import com.iGap.proto.ProtoGlobal;
 import io.realm.Realm;
@@ -77,7 +78,12 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        try {
+            this.username = username;
+        } catch (Exception e) {
+            this.username = HelperString.getUtf8String(username);
+        }
+
     }
 
     public String getPhoneNumber() {
@@ -93,7 +99,12 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        try {
+            this.firstName = firstName;
+        } catch (Exception e) {
+            this.firstName = HelperString.getUtf8String(firstName);
+        }
+
     }
 
     public String getLastName() {
@@ -101,7 +112,11 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        try {
+            this.lastName = lastName;
+        } catch (Exception e) {
+            this.lastName = HelperString.getUtf8String(lastName);
+        }
     }
 
     public String getDisplayName() {
@@ -109,7 +124,12 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+        try {
+            this.displayName = displayName;
+        } catch (Exception e) {
+            this.displayName = HelperString.getUtf8String(displayName);
+        }
+
     }
 
     public String getInitials() {

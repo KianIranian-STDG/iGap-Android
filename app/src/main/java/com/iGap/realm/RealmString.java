@@ -10,6 +10,7 @@
 
 package com.iGap.realm;
 
+import com.iGap.helper.HelperString;
 import io.realm.RealmObject;
 import io.realm.RealmStringRealmProxy;
 import org.parceler.Parcel;
@@ -25,7 +26,14 @@ public class RealmString extends RealmObject {
         return string;
     }
 
-    public void setString(String s) {
-        this.string = s;
+    public void setString(String string) {
+
+        try {
+            this.string = string;
+        } catch (Exception e) {
+            this.string = HelperString.getUtf8String(string);
+        }
+
+
     }
 }
