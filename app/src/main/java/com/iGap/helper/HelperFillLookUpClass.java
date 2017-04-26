@@ -165,6 +165,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30610, "ProtoClientSubscribeToRoom.ClientSubscribeToRoomResponse");
         lookupMap.put(30611, "ProtoClientUnsubscribeFromRoom.ClientUnsubscribeFromRoomResponse");
         lookupMap.put(30612, "ProtoClientSearchUsername.ClientSearchUsernameResponse");
+        lookupMap.put(30613, "ProtoClientCountRoomHistory.ClientCountRoomHistoryResponse");
 
         // FileUpload 7xx , 307xx
         lookupMap.put(30700, "ProtoFileUploadOption.FileUploadOptionResponse");
