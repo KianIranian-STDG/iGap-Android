@@ -20,7 +20,9 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.request.RequestClientGetRoom;
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
+import java.util.List;
 
 public class RealmRoom extends RealmObject {
     @PrimaryKey private long id;
@@ -199,6 +201,51 @@ public class RealmRoom extends RealmObject {
         realm.close();
 
         return realmRoom;
+    }
+
+
+    /**
+     * put fetched chat to database
+     *
+     * @param rooms ProtoGlobal.Room
+     */
+    public static void putChatToDatabase(final List<ProtoGlobal.Room> rooms) {
+
+        /**
+         * (( hint : i don't used from mRealm instance ,because i have an error
+         * that realm is closed, and for avoid from that error i used from
+         * new instance for this action ))
+         */
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
+                for (int i = 0; i < list.size(); i++) {
+                    list.get(i).setDeleted(true);
+                }
+
+                for (ProtoGlobal.Room room : rooms) {
+                    RealmRoom.putOrUpdate(room);
+                }
+
+                // delete messages and rooms that was deleted
+                RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
+                for (RealmRoom item : deletedRoomsList) {
+                    /**
+                     * delete all message in deleted room
+                     */
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
+                    item.deleteFromRealm();
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                realm.close();
+            }
+        });
     }
 
 

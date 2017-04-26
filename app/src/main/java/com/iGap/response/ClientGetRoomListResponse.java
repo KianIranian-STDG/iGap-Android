@@ -11,8 +11,12 @@
 package com.iGap.response;
 
 import com.iGap.G;
+import com.iGap.helper.HelperClientCondition;
 import com.iGap.proto.ProtoClientGetRoomList;
 import com.iGap.proto.ProtoError;
+import com.iGap.request.RequestClientCondition;
+
+import static com.iGap.realm.RealmRoom.putChatToDatabase;
 
 public class ClientGetRoomListResponse extends MessageHandler {
 
@@ -28,19 +32,27 @@ public class ClientGetRoomListResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
         ProtoClientGetRoomList.ClientGetRoomListResponse.Builder clientGetRoomListResponse = (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
-        G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse());
+        if (G.onClientGetRoomListResponse != null) {
+            G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse());
+        } else {
+            new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+            putChatToDatabase(clientGetRoomListResponse.getRoomsList());
+        }
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
 
         G.onClientGetRoomListResponse.onTimeout();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;

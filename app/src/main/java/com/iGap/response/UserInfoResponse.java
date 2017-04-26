@@ -10,7 +10,6 @@
 
 package com.iGap.response;
 
-import android.os.Handler;
 import com.iGap.G;
 import com.iGap.activities.ActivityChat;
 import com.iGap.adapter.items.chat.AbstractMessage;
@@ -42,7 +41,7 @@ public class UserInfoResponse extends MessageHandler {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
