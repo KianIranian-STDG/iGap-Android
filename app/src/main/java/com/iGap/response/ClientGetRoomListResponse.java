@@ -35,12 +35,17 @@ public class ClientGetRoomListResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoClientGetRoomList.ClientGetRoomListResponse.Builder clientGetRoomListResponse = (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
+        final ProtoClientGetRoomList.ClientGetRoomListResponse.Builder clientGetRoomListResponse = (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
         if (G.onClientGetRoomListResponse != null) {
             G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse());
         } else {
             new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
-            putChatToDatabase(clientGetRoomListResponse.getRoomsList());
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    putChatToDatabase(clientGetRoomListResponse.getRoomsList());
+                }
+            });
         }
     }
 

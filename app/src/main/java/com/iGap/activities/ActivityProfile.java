@@ -255,6 +255,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        G.onUserInfoResponse = null;
                                         hideProgressBar();
                                         Intent intent = new Intent(context, ActivityMain.class);
                                         intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
@@ -457,7 +458,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
             showProgressBar();
             HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                @Override
+                public void OnProgress(int progress, FileUploadStructure struct) {
                     if (progress < 100) {
                         prgWait.setProgress(progress);
                     } else {
@@ -465,7 +467,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                     }
                 }
 
-                @Override public void OnError() {
+                @Override
+                public void OnError() {
                     hideProgressBar();
                 }
             });

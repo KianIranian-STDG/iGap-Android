@@ -11,6 +11,8 @@
 
 package com.iGap.realm;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
 import com.iGap.Config;
@@ -86,6 +88,20 @@ import org.parceler.Parcel;
         //message.setMessageId(newMessageId);
 
         realm.close();
+        return message;
+    }
+
+    /**
+     * delete message from realm
+     * hint : use this method in realm transaction
+     *
+     * @param messageId find this id
+     */
+    public static RealmRoomMessage deleteMessage(Realm realm, long messageId) {
+        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        if (message != null) {
+            message.deleteFromRealm();
+        }
         return message;
     }
 
@@ -836,5 +852,34 @@ import org.parceler.Parcel;
             }
         }
         return 0;
+    }
+
+    /**
+     * make messages failed
+     */
+    public static void makeFailed(final long messageId) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+                        }
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
+                        }
+                    }
+                });
+            }
+        });
     }
 }

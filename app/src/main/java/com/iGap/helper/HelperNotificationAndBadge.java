@@ -493,12 +493,7 @@ public class HelperNotificationAndBadge {
     }
 
     public void checkAlert(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
-
-
-        // TODO: 12/7/2016 (molareza) must set G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.GROUP, builder.getRoomId()) on  ChannelSendMessage for receive notification and check it
-
         idRoom = roomId;
-
         int vipCheck = checkSpecialNotification(updateNotification, type, roomId);
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         int checkAlert = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);

@@ -38,8 +38,7 @@ public class RealmGroupRoom extends RealmObject {
      * @param room ProtoGlobal.GroupRoom
      * @return RealmGroupRoom
      */
-    public static RealmGroupRoom convert(ProtoGlobal.GroupRoom room, RealmGroupRoom realmGroupRoom,
-                                         Realm realm) {
+    public static RealmGroupRoom convert(ProtoGlobal.GroupRoom room, RealmGroupRoom realmGroupRoom, Realm realm) {
         if (realmGroupRoom == null) {
             realmGroupRoom = realm.createObject(RealmGroupRoom.class);
         }

@@ -35,7 +35,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1097,7 +1096,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         // delete messages and rooms in the deleted room
                         RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
                         for (RealmRoom item : deletedRoomsList) {
-                            Log.i("GGG", "getTitle : " + item.getTitle());
                             realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
                             item.deleteFromRealm();
                         }
@@ -1120,8 +1118,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-
-
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {

@@ -21,6 +21,7 @@ import com.iGap.request.RequestUserLogin;
 import com.iGap.request.RequestWrapper;
 import io.realm.Realm;
 
+import static com.iGap.G.authorHash;
 import static com.iGap.G.clientConditionGlobal;
 import static com.iGap.G.context;
 import static com.iGap.G.firstEnter;
@@ -103,6 +104,7 @@ public class LoginActions extends Application {
 
                     if (userInfo != null) {
                         userId = userInfo.getUserId();
+                        authorHash = userInfo.getAuthorHash();
                     }
 
                     if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {

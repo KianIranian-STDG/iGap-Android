@@ -197,6 +197,7 @@ public class G extends MultiDexApplication {
     public static String toggleButtonColor;
     public static String attachmentColor;
     public static String headerTextColor;
+    public static String authorHash;
 
     public static boolean isAppInFg = false;
     public static boolean isScrInFg = false;

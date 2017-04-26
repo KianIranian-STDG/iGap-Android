@@ -130,7 +130,7 @@ public class RealmRoom extends RealmObject {
      */
     public static RealmRoom putOrUpdate(ProtoGlobal.Room room) {
         Realm realm = Realm.getDefaultInstance();
-        putChatToClientCondition(room);
+        putChatToClientCondition(realm, room);
 
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
 
@@ -250,12 +250,10 @@ public class RealmRoom extends RealmObject {
     }
 
 
-    private static void putChatToClientCondition(final ProtoGlobal.Room room) {
-        Realm realm = Realm.getDefaultInstance();
+    private static void putChatToClientCondition(Realm realm, final ProtoGlobal.Room room) {
         if (realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, room.getId()).findFirst() == null) {
             realm.createObject(RealmClientCondition.class, room.getId());
         }
-        realm.close();
     }
 
     public static void convertAndSetDraft(final long roomId, final String message, final long replyToMessageId) {

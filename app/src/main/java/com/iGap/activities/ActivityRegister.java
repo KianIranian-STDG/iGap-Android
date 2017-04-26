@@ -1213,12 +1213,11 @@ public class ActivityRegister extends ActivityEnhanced {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                G.onUserInfoResponse = null;
                                 Intent intent = new Intent(G.context, ActivityMain.class);
                                 intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
                                 startActivity(intent);
                                 finish();
-
-                                G.onUserInfoResponse = null;
                             }
                         });
                     }

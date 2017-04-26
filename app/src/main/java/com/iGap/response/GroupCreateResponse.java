@@ -32,8 +32,7 @@ public class GroupCreateResponse extends MessageHandler {
     public void handler() {
 
         super.handler();
-        ProtoGroupCreate.GroupCreateResponse.Builder builder =
-                (ProtoGroupCreate.GroupCreateResponse.Builder) message;
+        ProtoGroupCreate.GroupCreateResponse.Builder builder = (ProtoGroupCreate.GroupCreateResponse.Builder) message;
         G.onGroupCreate.onGroupCreate(builder.getRoomId());
     }
 

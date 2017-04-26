@@ -51,7 +51,7 @@ public class WebSocketClient {
     private static synchronized WebSocket createSocketConnection() {
         WebSocket websocketFactory = null;
         try {
-            websocketFactory = new WebSocketFactory().setConnectionTimeout((int) (10 * DateUtils.SECOND_IN_MILLIS)).createSocket(Config.urlWebsocket);
+            websocketFactory = new WebSocketFactory().setConnectionTimeout((int) (10 * DateUtils.SECOND_IN_MILLIS)).createSocket(Config.URL_WEBSOCKET);
             websocketFactory.addListener(new WebSocketAdapter() {
 
                 @Override
