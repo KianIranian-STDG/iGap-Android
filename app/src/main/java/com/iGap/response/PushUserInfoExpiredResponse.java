@@ -10,8 +10,6 @@
 
 package com.iGap.response;
 
-import com.iGap.G;
-import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoPushUserInfoExpired;
 
 public class PushUserInfoExpiredResponse extends MessageHandler {
@@ -43,12 +41,6 @@ public class PushUserInfoExpiredResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-        if (G.onChannelAddMessageReaction != null) {
-            G.onChannelAddMessageReaction.onError(majorCode, minorCode);
-        }
     }
 }
 

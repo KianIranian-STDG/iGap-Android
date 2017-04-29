@@ -253,13 +253,13 @@ public final class StartupActions {
      * list of actionId that can be doing without login
      */
     private void fillUnLoginList() {
-        unLogin.add("30100");
-        unLogin.add("30101");
-        unLogin.add("30102");
-        unLogin.add("30500");
-        unLogin.add("30501");
-        unLogin.add("30502");
-        unLogin.add("30503");
+        unLogin.add("100");
+        unLogin.add("101");
+        unLogin.add("102");
+        unLogin.add("500");
+        unLogin.add("501");
+        unLogin.add("502");
+        unLogin.add("503");
     }
 
     /**
@@ -267,9 +267,9 @@ public final class StartupActions {
      * and after that user login send this request again
      */
     private void fillWaitingRequestActionIdAllowed() {
-        waitingActionIds.add("30201");
-        waitingActionIds.add("30310");
-        waitingActionIds.add("30410");
+        waitingActionIds.add("201");
+        waitingActionIds.add("310");
+        waitingActionIds.add("410");
         //waitingActionIds.add("700");
         //waitingActionIds.add("701");
         //waitingActionIds.add("702");
