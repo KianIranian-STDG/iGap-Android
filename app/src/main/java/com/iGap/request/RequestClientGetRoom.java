@@ -32,7 +32,7 @@ public class RequestClientGetRoom {
             identity = mode.toString();
         }
 
-        RequestWrapper requestWrapper = new RequestWrapper(602, clientGetRoom, identity + "*" + roomId);
+        RequestWrapper requestWrapper = new RequestWrapper(30602, clientGetRoom, identity + "*" + roomId);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

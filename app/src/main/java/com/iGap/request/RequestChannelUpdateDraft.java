@@ -25,7 +25,7 @@ public class RequestChannelUpdateDraft {
         builder.setRoomId(roomId);
         builder.setDraft(draft);
 
-        RequestWrapper requestWrapper = new RequestWrapper(415, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30415, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

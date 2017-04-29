@@ -19,7 +19,7 @@ public class RequestUserProfileGetEmail {
         ProtoUserProfileGetEmail.UserProfileGetEmail.Builder builder =
                 ProtoUserProfileGetEmail.UserProfileGetEmail.newBuilder();
 
-        RequestWrapper requestWrapper = new RequestWrapper(110, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30110, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

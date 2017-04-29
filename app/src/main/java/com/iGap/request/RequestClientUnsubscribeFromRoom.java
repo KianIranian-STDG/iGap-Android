@@ -19,7 +19,7 @@ public class RequestClientUnsubscribeFromRoom {
         ProtoClientUnsubscribeFromRoom.ClientUnsubscribeFromRoom.Builder builder = ProtoClientUnsubscribeFromRoom.ClientUnsubscribeFromRoom.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(611, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30611, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

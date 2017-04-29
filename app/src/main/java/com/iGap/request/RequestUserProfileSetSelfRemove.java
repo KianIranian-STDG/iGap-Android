@@ -21,7 +21,7 @@ public class RequestUserProfileSetSelfRemove {
 
         builder.setSelfRemove(numberOfMonth);
 
-        RequestWrapper requestWrapper = new RequestWrapper(120, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30120, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

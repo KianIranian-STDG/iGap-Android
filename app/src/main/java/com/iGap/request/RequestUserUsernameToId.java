@@ -20,7 +20,7 @@ public class RequestUserUsernameToId {
                 ProtoUserUsernameToId.UserUsernameToId.newBuilder();
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(113, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30113, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -22,7 +22,7 @@ public class RequestChatUpdateStatus {
         chatUpdateStatus.setMessageId(messageId);
         chatUpdateStatus.setStatus(roomMessageStatus);
 
-        RequestWrapper requestWrapper = new RequestWrapper(202, chatUpdateStatus);
+        RequestWrapper requestWrapper = new RequestWrapper(30202, chatUpdateStatus);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

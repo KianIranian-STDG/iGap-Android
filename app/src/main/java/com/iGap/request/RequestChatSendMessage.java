@@ -56,7 +56,7 @@ public class RequestChatSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02 
     }
 
     public RequestChatSendMessage sendMessage(String fakeMessageIdAsIdentity) {
-        RequestWrapper requestWrapper = new RequestWrapper(201, chatSendMessage, fakeMessageIdAsIdentity);
+        RequestWrapper requestWrapper = new RequestWrapper(30201, chatSendMessage, fakeMessageIdAsIdentity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

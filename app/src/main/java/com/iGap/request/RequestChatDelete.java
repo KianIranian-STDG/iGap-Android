@@ -20,7 +20,7 @@ public class RequestChatDelete {
         ProtoChatDelete.ChatDelete.Builder builder = ProtoChatDelete.ChatDelete.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(206, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30206, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

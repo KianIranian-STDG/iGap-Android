@@ -32,7 +32,7 @@ public class RequestUserContactsEdit {
             builder.setLastName(last_name);
         }
 
-        RequestWrapper requestWrapper = new RequestWrapper(109, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30109, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

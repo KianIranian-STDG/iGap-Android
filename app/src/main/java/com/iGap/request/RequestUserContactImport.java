@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class RequestUserContactImport {
 
     public void contactImport(ArrayList<StructListOfContact> itemContactList, boolean force) {
-        RequestWrapper requestWrapper = new RequestWrapper(106, contact(itemContactList, force));
+        RequestWrapper requestWrapper = new RequestWrapper(30106, contact(itemContactList, force));
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
@@ -28,7 +28,7 @@ public class RequestUserContactImport {
 
     public void contactImportAndGetResponse(ArrayList<StructListOfContact> itemContactList, boolean force) {
 
-        RequestWrapper requestWrapper = new RequestWrapper(106, contact(itemContactList, force), "identity");
+        RequestWrapper requestWrapper = new RequestWrapper(30106, contact(itemContactList, force), "identity");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

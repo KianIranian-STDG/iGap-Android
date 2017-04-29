@@ -22,7 +22,7 @@ public class RequestInfoPage {
         infoPage.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         infoPage.setId(id);
 
-        RequestWrapper requestWrapper = new RequestWrapper(503, infoPage);
+        RequestWrapper requestWrapper = new RequestWrapper(30503, infoPage);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

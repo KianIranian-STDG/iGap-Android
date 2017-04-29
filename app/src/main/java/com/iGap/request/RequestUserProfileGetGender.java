@@ -19,7 +19,7 @@ public class RequestUserProfileGetGender {
         ProtoUserProfileGetGender.UserProfileGetGender.Builder builder =
                 ProtoUserProfileGetGender.UserProfileGetGender.newBuilder();
 
-        RequestWrapper requestWrapper = new RequestWrapper(111, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30111, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

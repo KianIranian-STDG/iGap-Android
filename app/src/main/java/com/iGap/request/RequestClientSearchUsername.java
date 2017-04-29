@@ -20,7 +20,7 @@ public class RequestClientSearchUsername {
         ProtoClientSearchUsername.ClientSearchUsername.Builder builder = ProtoClientSearchUsername.ClientSearchUsername.newBuilder();
         builder.setQuery(query);
 
-        RequestWrapper requestWrapper = new RequestWrapper(612, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30612, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

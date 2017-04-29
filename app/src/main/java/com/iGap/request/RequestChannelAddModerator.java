@@ -20,7 +20,7 @@ public class RequestChannelAddModerator {
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(403, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30403, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

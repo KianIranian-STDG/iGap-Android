@@ -22,7 +22,7 @@ public class RequestClientGetRoomHistory {
         builder.setFirstMessageId(firstMessageId);
         builder.setDirection(direction);
 
-        RequestWrapper requestWrapper = new RequestWrapper(603, builder, identity);
+        RequestWrapper requestWrapper = new RequestWrapper(30603, builder, identity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

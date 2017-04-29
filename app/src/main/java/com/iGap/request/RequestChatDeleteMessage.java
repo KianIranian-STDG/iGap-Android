@@ -22,7 +22,7 @@ public class RequestChatDeleteMessage {
         chatDeleteMessage.setRoomId(roomId);
         chatDeleteMessage.setMessageId(messageId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(204, chatDeleteMessage);
+        RequestWrapper requestWrapper = new RequestWrapper(30204, chatDeleteMessage);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

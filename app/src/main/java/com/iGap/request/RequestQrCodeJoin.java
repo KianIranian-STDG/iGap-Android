@@ -20,7 +20,7 @@ public class RequestQrCodeJoin {
         ProtoQrCodeJoin.QrCodeJoin.Builder builder = ProtoQrCodeJoin.QrCodeJoin.newBuilder();
         builder.setInviteToken(inviteToken);
 
-        RequestWrapper requestWrapper = new RequestWrapper(800, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30800, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

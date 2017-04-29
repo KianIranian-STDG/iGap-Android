@@ -21,7 +21,7 @@ public class RequestGroupGetMemberList {
         builder.setRoomId(roomId);
         builder.setFilterRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL);
 
-        RequestWrapper requestWrapper = new RequestWrapper(317, builder, roomId + "");
+        RequestWrapper requestWrapper = new RequestWrapper(30317, builder, roomId + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

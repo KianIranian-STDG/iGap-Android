@@ -20,7 +20,7 @@ public class RequestChannelDeleteMessage {
         builder.setRoomId(roomId);
         builder.setMessageId(messageId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(411, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30411, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

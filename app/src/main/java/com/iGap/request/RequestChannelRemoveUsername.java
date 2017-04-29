@@ -19,7 +19,7 @@ public class RequestChannelRemoveUsername {
         ProtoChannelRemoveUsername.ChannelRemoveUsername.Builder builder = ProtoChannelRemoveUsername.ChannelRemoveUsername.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(420, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30420, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

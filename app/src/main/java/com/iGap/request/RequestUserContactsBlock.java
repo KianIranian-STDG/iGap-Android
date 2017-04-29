@@ -20,7 +20,7 @@ public class RequestUserContactsBlock {
         ProtoUserContactsBlock.UserContactsBlock.Builder builder = ProtoUserContactsBlock.UserContactsBlock.newBuilder();
         builder.setUserId(userId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(128, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30128, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

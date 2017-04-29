@@ -22,7 +22,7 @@ public class RequestFileUploadOption {
         fileUploadOption.setSize(fileUploadStructure.fileSize);
 
         try {
-            RequestWrapper requestWrapper = new RequestWrapper(700, fileUploadOption, identity);
+            RequestWrapper requestWrapper = new RequestWrapper(30700, fileUploadOption, identity);
 
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -23,7 +23,7 @@ public class RequestInfoLocation {
         infoLocation.setRequest(
                 ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
 
-        RequestWrapper requestWrapper = new RequestWrapper(500, infoLocation);
+        RequestWrapper requestWrapper = new RequestWrapper(30500, infoLocation);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

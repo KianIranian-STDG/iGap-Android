@@ -23,7 +23,7 @@ public class RequestChatEditMessage {
         chatEditMessage.setMessageId(messageId);
         chatEditMessage.setMessage(message);
 
-        RequestWrapper requestWrapper = new RequestWrapper(203, chatEditMessage);
+        RequestWrapper requestWrapper = new RequestWrapper(30203, chatEditMessage);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

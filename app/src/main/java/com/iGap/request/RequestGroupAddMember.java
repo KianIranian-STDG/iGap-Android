@@ -25,7 +25,7 @@ public class RequestGroupAddMember {
         builder.setRoomId(roomId);
         builder.setMember(member);
 
-        RequestWrapper requestWrapper = new RequestWrapper(301, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30301, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

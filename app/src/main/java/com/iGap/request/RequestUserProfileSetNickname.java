@@ -20,7 +20,7 @@ public class RequestUserProfileSetNickname {
         userProfileNickName.setNickname(nickName);
 
         Log.i("SSSS", "userProfileNickName : " + userProfileNickName);
-        RequestWrapper requestWrapper = new RequestWrapper(105, userProfileNickName);
+        RequestWrapper requestWrapper = new RequestWrapper(30105, userProfileNickName);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

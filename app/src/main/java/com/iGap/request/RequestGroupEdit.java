@@ -22,7 +22,7 @@ public class RequestGroupEdit {
         builder.setName(name);
         builder.setDescription(description);
 
-        RequestWrapper requestWrapper = new RequestWrapper(305, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30305, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

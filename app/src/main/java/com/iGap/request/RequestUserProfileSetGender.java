@@ -24,7 +24,7 @@ public class RequestUserProfileSetGender {
 
         Log.i("XXX", "RequestUserProfileSetGender gender : " + gender);
 
-        RequestWrapper requestWrapper = new RequestWrapper(104, userProfileGender);
+        RequestWrapper requestWrapper = new RequestWrapper(30104, userProfileGender);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

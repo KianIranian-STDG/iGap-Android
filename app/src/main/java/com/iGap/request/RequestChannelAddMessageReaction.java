@@ -24,7 +24,7 @@ public class RequestChannelAddMessageReaction {
 
         String identity = Long.toString(roomId) + '*' + Long.toString(messageId) + '*' + roomMessageReaction.toString();
 
-        RequestWrapper requestWrapper = new RequestWrapper(424, builder, identity);
+        RequestWrapper requestWrapper = new RequestWrapper(30424, builder, identity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
@@ -40,7 +40,7 @@ public class RequestChannelAddMessageReaction {
 
         String identity = Long.toString(roomId) + '*' + Long.toString(messageId) + '*' + roomMessageReaction.toString() + '*' + Long.toString(forwardedMessageId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(424, builder, identity);
+        RequestWrapper requestWrapper = new RequestWrapper(30424, builder, identity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

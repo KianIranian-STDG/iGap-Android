@@ -23,7 +23,7 @@ public class RequestFileUploadStatus {
         builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         builder.setToken(token);
 
-        RequestWrapper requestWrapper = new RequestWrapper(703, builder, fileHashAsIdentity);
+        RequestWrapper requestWrapper = new RequestWrapper(30703, builder, fileHashAsIdentity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

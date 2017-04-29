@@ -20,7 +20,7 @@ public class RequestUserGetDeleteToken {
         ProtoUserGetDeleteToken.UserGetDeleteToken.Builder builder =
                 ProtoUserGetDeleteToken.UserGetDeleteToken.newBuilder();
 
-        RequestWrapper requestWrapper = new RequestWrapper(118, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30118, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

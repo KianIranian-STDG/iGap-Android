@@ -19,7 +19,7 @@ public class RequestChannelRevokeLink {
         ProtoChannelRevokeLink.ChannelRevokeLink.Builder builder = ProtoChannelRevokeLink.ChannelRevokeLink.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(421, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30421, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -548,7 +548,7 @@ public class FragmentShowImage extends Fragment {
                         type = mFList.get(position).getMessageType();
                     }
 
-                    if (mMediaPlayer.isPlaying()) mMediaPlayer.pause();
+                    if (mMediaPlayer != null && mMediaPlayer.isPlaying()) mMediaPlayer.stop();
                     if (type == ProtoGlobal.RoomMessageType.VIDEO || type == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                         File f = new File(getFilePath(position));
                         if (f.exists()) {

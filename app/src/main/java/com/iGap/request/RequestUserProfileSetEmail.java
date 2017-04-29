@@ -23,7 +23,7 @@ public class RequestUserProfileSetEmail {
                 ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         userProfileEmail.setEmail(email);
 
-        RequestWrapper requestWrapper = new RequestWrapper(103, userProfileEmail, null);
+        RequestWrapper requestWrapper = new RequestWrapper(30103, userProfileEmail, null);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

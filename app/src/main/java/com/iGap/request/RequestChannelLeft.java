@@ -19,7 +19,7 @@ public class RequestChannelLeft {
         ProtoChannelLeft.ChannelLeft.Builder builder = ProtoChannelLeft.ChannelLeft.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(409, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30409, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

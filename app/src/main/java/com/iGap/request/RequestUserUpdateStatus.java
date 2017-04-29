@@ -18,7 +18,7 @@ public class RequestUserUpdateStatus {
         ProtoUserUpdateStatus.UserUpdateStatus.Builder builder = ProtoUserUpdateStatus.UserUpdateStatus.newBuilder();
         builder.setStatus(status);
 
-        RequestWrapper requestWrapper = new RequestWrapper(124, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30124, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

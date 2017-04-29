@@ -21,7 +21,7 @@ public class RequestUserProfileCheckUsername {
 
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(122, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30122, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

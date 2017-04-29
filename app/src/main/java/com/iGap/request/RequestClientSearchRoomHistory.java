@@ -22,7 +22,7 @@ public class RequestClientSearchRoomHistory {
         builder.setOffset(offset);
         builder.setFilter(filter);
 
-        RequestWrapper requestWrapper = new RequestWrapper(605, builder, filter.toString());
+        RequestWrapper requestWrapper = new RequestWrapper(30605, builder, filter.toString());
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

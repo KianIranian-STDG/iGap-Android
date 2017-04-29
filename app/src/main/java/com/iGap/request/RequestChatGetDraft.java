@@ -21,7 +21,7 @@ public class RequestChatGetDraft {
                 ProtoChatGetDraft.ChatGetDraft.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(208, builder, roomId + "");
+        RequestWrapper requestWrapper = new RequestWrapper(30208, builder, roomId + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -21,7 +21,7 @@ public class RequestUserAvatarDelete {
                 ProtoUserAvatarDelete.UserAvatarDelete.newBuilder();
         builder.setId(id);
 
-        RequestWrapper requestWrapper = new RequestWrapper(115, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30115, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

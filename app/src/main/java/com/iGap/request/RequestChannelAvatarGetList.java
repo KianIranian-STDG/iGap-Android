@@ -19,7 +19,7 @@ public class RequestChannelAvatarGetList {
         ProtoChannelAvatarGetList.ChannelAvatarGetList.Builder builder = ProtoChannelAvatarGetList.ChannelAvatarGetList.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(414, builder, roomId + "");
+        RequestWrapper requestWrapper = new RequestWrapper(30414, builder, roomId + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

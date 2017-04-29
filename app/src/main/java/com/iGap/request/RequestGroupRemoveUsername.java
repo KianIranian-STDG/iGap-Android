@@ -19,7 +19,7 @@ public class RequestGroupRemoveUsername {
         ProtoGroupRemoveUsername.GroupRemoveUsername.Builder builder = ProtoGroupRemoveUsername.GroupRemoveUsername.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(323, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30323, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

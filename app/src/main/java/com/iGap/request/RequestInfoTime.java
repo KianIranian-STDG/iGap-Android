@@ -22,7 +22,7 @@ public class RequestInfoTime {
         ProtoInfoTime.InfoTime.Builder infoTime = ProtoInfoTime.InfoTime.newBuilder();
         infoTime.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
 
-        RequestWrapper requestWrapper = new RequestWrapper(502, infoTime);
+        RequestWrapper requestWrapper = new RequestWrapper(30502, infoTime);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

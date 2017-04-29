@@ -18,7 +18,7 @@ public class RequestChannelGetDraft {
         ProtoChannelGetDraft.ChannelGetDraft.Builder builder = ProtoChannelGetDraft.ChannelGetDraft.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(416, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30416, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

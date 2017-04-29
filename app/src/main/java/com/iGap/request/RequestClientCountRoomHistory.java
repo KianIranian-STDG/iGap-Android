@@ -19,7 +19,7 @@ public class RequestClientCountRoomHistory {
         ProtoClientCountRoomHistory.ClientCountRoomHistory.Builder builder = ProtoClientCountRoomHistory.ClientCountRoomHistory.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(613, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30613, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

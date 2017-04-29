@@ -20,7 +20,7 @@ public class RequestGroupDeleteMessage {
         builder.setRoomId(roomId);
         builder.setMessageId(messageId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(320, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(30320, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
