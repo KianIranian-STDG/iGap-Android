@@ -100,7 +100,7 @@ public class VoiceRecord {
     }
 
     private void startRecording() {
-        final long currentTime = System.currentTimeMillis();
+
         outputFile = G.DIR_AUDIOS + "/" + "record_" + HelperString.getRandomFileName(3) + ".mp3";
 
         if (mediaRecorder != null) {

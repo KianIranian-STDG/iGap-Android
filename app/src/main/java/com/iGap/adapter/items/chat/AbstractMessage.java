@@ -1261,7 +1261,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void downLoadFile(final VH holder, RealmAttachment attachment, int priority) {
 
-        if (attachment == null) return;
+        if (attachment == null || attachment.getCacheId() == null) {
+            return;
+        }
 
         final MessageProgress progressBar = (MessageProgress) holder.itemView.findViewById(R.id.progress);
 

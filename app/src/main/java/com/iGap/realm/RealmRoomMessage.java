@@ -335,7 +335,9 @@ import org.parceler.Parcel;
             message.getAttachment().setSize(input.getAttachment().getSize());
             message.getAttachment().setCacheId(input.getAttachment().getCacheId());
 
-            if (message.getAttachment().getName() == null) message.getAttachment().setName(input.getAttachment().getName());
+            if (message.getAttachment().getName() == null) {
+                message.getAttachment().setName(input.getAttachment().getName());
+            }
 
         }
         if (input.hasLocation()) {

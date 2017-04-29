@@ -95,6 +95,34 @@ public class RealmAttachment extends RealmObject {
             realmAttachment.setSize(file.getSize());
             realmAttachment.setToken(file.getToken());
             realmAttachment.setWidth(file.getWidth());
+        } else {
+
+            String _filePath = realmAttachment.getLocalFilePath();
+
+            if (_filePath != null && _filePath.length() > 0) {
+                if (_filePath.contains(G.DIR_APP)) {
+                    String _defaultFilePAth = "";
+                    switch (attachmentFor) {
+                        case MESSAGE_ATTACHMENT:
+                            _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), messageType);
+                            break;
+                        case AVATAR:
+                            _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
+                            break;
+                    }
+
+                    if (!_filePath.equals(_defaultFilePAth)) {
+                        File _File1 = new File(_filePath);
+                        if (_File1.exists()) {
+                            _File1.renameTo(new File(_defaultFilePAth));
+                            realmAttachment.setLocalFilePath(_defaultFilePAth);
+                        }
+                    }
+                }
+            }
+
+
+
         }
 
         return realmAttachment;
