@@ -31,7 +31,7 @@ public class Config {
     public static final int ACTION_TIME_OUT = (int) (2 * DateUtils.SECOND_IN_MILLIS);
     public static final int GET_MESSAGE_STATE_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);
     public static final int GET_MESSAGE_STATE_TIME_OUT_CHECKING = (int) (DateUtils.SECOND_IN_MILLIS);
-    public static final int LOOKUP_MAP_RESPONSE_OFFSET = 30000;
+    //public static final int LOOKUP_MAP_RESPONSE_OFFSET = 30000;
     public static final int MAX_TEXT_ATTACHMENT_LENGTH = 200;
     public static final int MAX_TEXT_LENGTH = 4096;
     public static final int LAST_SEEN_DELAY_CHECKING = (int) (60 * DateUtils.SECOND_IN_MILLIS);

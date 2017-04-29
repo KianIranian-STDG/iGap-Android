@@ -11,7 +11,6 @@
 package com.iGap.helper;
 
 import android.util.Log;
-import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.proto.ProtoError;
 import com.iGap.proto.ProtoRequest;
@@ -92,13 +91,13 @@ public class HelperUnpackMessage {
                                 currentProto = errorResponse;
                             }
                             G.requestQueueMap.remove(currentResponseId);
-                            instanceResponseClass(currentRequestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto, currentRequestWrapper.identity, "error");
+                            instanceResponseClass(currentRequestWrapper.getActionId(), currentProto, currentRequestWrapper.identity, "error");
                         }
                     } else {
                         RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
 
-                        instanceResponseClass(requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, protoObject, requestWrapper.identity, "error");
+                        instanceResponseClass(requestWrapper.getActionId(), protoObject, requestWrapper.identity, "error");
                     }
                 } else {
                     if (responseId.contains(".")) {
