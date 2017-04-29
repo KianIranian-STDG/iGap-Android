@@ -36,7 +36,7 @@ public class HelperMessageResponse {
         /**
          * if from latest message was time out don't need delay otherwise set delay
          */
-        if (HelperTimeOut.timeoutChecking(0, latestMessageTime, 100)) {
+        if (HelperTimeOut.timeoutChecking(0, latestMessageTime, 500)) {
             delay = 0;
         } else {
             delay++;
