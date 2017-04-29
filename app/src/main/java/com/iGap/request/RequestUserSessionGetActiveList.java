@@ -16,7 +16,7 @@ public class RequestUserSessionGetActiveList {
 
     public void userSessionGetActiveList() {
         ProtoUserSessionGetActiveList.UserSessionGetActiveList.Builder chatClearMessage = ProtoUserSessionGetActiveList.UserSessionGetActiveList.newBuilder();
-        RequestWrapper requestWrapper = new RequestWrapper(30125, chatClearMessage);
+        RequestWrapper requestWrapper = new RequestWrapper(125, chatClearMessage);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

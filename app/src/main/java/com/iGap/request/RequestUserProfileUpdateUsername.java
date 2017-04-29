@@ -19,7 +19,7 @@ public class RequestUserProfileUpdateUsername {
         ProtoUserProfileUpdateUsername.UserProfileUpdateUsername.Builder builder = ProtoUserProfileUpdateUsername.UserProfileUpdateUsername.newBuilder();
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30123, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(123, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

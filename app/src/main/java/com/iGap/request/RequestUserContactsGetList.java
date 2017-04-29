@@ -18,7 +18,7 @@ public class RequestUserContactsGetList {
     public void userContactGetList() {
 
         ProtoUserContactsGetList.UserContactsGetList.Builder builder = ProtoUserContactsGetList.UserContactsGetList.newBuilder();
-        RequestWrapper requestWrapper = new RequestWrapper(30107, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(107, builder);
 
         try {
             RequestQueue.sendRequest(requestWrapper);

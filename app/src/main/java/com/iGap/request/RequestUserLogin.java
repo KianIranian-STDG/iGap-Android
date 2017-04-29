@@ -52,7 +52,7 @@ public class RequestUserLogin {
 
         userLogin.setLanguage(typeLanguage());
 
-        RequestWrapper requestWrapper = new RequestWrapper(30102, userLogin);
+        RequestWrapper requestWrapper = new RequestWrapper(102, userLogin);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

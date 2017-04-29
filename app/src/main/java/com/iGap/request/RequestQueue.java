@@ -94,6 +94,7 @@ public class RequestQueue {
 
             if (G.isSecure) {
                 if (G.userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
+                    Log.i("PPP", "ActionId : " + requestWrapper.actionId + " Request => " + G.lookupMap.get(requestWrapper.actionId + 30000));
                     message = AESCrypt.encrypt(G.symmetricKey, message);
                     WebSocket webSocket = WebSocketClient.getInstance();
                     if (webSocket != null) {
@@ -178,7 +179,7 @@ public class RequestQueue {
             G.requestQueueMap.remove(key);
 
             int actionId = requestWrapper.getActionId();
-            String className = G.lookupMap.get(actionId);
+            String className = G.lookupMap.get(actionId + Config.LOOKUP_MAP_RESPONSE_OFFSET);
             String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
 
             ProtoResponse.Response.Builder responseBuilder = ProtoResponse.Response.newBuilder();

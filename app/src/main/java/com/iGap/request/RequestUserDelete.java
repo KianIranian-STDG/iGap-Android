@@ -21,7 +21,7 @@ public class RequestUserDelete {
         builder.setToken(token);
         builder.setReason(reason);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30119, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(119, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

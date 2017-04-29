@@ -18,7 +18,7 @@ public class RequestUserVerifyNewDevice {
         ProtoUserVerifyNewDevice.UserVerifyNewDevice.Builder builder = ProtoUserVerifyNewDevice.UserVerifyNewDevice.newBuilder();
         builder.setToken(token);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30145, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(145, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

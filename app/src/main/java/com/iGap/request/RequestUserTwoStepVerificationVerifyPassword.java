@@ -18,7 +18,7 @@ public class RequestUserTwoStepVerificationVerifyPassword {
         ProtoUserTwoStepVerificationVerifyPassword.UserTwoStepVerificationVerifyPassword.Builder builder = ProtoUserTwoStepVerificationVerifyPassword.UserTwoStepVerificationVerifyPassword.newBuilder();
         builder.setPassword(password);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30132, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(132, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

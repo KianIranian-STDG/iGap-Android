@@ -20,10 +20,8 @@ public class RequestUserContactsEdit {
 
     public void contactsEdit(long phone, String first_name, String last_name) {
         Realm realm = Realm.getDefaultInstance();
-        ProtoUserContactsEdit.UserContactsEdit.Builder builder =
-                ProtoUserContactsEdit.UserContactsEdit.newBuilder();
-        RealmContacts realmItem =
-                realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, phone).findFirst();
+        ProtoUserContactsEdit.UserContactsEdit.Builder builder = ProtoUserContactsEdit.UserContactsEdit.newBuilder();
+        RealmContacts realmItem = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, phone).findFirst();
 
         if (realmItem != null) {
 
@@ -32,7 +30,7 @@ public class RequestUserContactsEdit {
             builder.setLastName(last_name);
         }
 
-        RequestWrapper requestWrapper = new RequestWrapper(30109, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(109, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

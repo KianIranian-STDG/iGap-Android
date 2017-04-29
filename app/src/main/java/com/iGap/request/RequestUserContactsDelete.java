@@ -20,7 +20,7 @@ public class RequestUserContactsDelete {
         ProtoUserContactsDelete.UserContactsDelete.Builder builder =
                 ProtoUserContactsDelete.UserContactsDelete.newBuilder();
         builder.setPhone(Long.parseLong(phone));
-        RequestWrapper requestWrapper = new RequestWrapper(30108, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(108, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

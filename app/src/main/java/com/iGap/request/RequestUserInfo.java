@@ -18,7 +18,7 @@ public class RequestUserInfo {
         ProtoUserInfo.UserInfo.Builder builder = ProtoUserInfo.UserInfo.newBuilder();
         builder.setUserId(userId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30117, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(117, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

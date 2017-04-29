@@ -17,11 +17,10 @@ public class RequestUserAvatarAdd {
 
     public void userAddAvatar(String attachment) {
 
-        ProtoUserAvatarAdd.UserAvatarAdd.Builder builder =
-                ProtoUserAvatarAdd.UserAvatarAdd.newBuilder();
+        ProtoUserAvatarAdd.UserAvatarAdd.Builder builder = ProtoUserAvatarAdd.UserAvatarAdd.newBuilder();
         builder.setAttachment(attachment);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30114, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(114, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

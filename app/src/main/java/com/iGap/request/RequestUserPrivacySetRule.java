@@ -20,7 +20,7 @@ public class RequestUserPrivacySetRule {
         builder.setType(privacyType);
         builder.setLevel(privacyLevel);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30144, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(144, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
