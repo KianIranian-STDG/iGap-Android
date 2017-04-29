@@ -1607,17 +1607,20 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                 if (file.exists()) {
                     messageProgress.setVisibility(View.GONE);
-                    MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
-                    Uri uri = (Uri) Uri.fromFile(file);
-                    mediaMetadataRetriever.setDataSource(context, uri);
-                    String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-
-                    if (artist == null) artist = context.getString(R.string.unknown_artist);
-
-                    txtFileInfo.setText(artist);
 
                     try {
+
+                        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+                        Uri uri = Uri.fromFile(file);
                         mediaMetadataRetriever.setDataSource(context, uri);
+                        String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+
+                        if (artist == null) {
+                            artist = context.getString(R.string.unknown_artist);
+                        }
+                        txtFileInfo.setText(artist);
+
+
                         byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
                         if (data != null) {
                             Bitmap mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);

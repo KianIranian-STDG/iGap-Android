@@ -75,7 +75,10 @@ public class HelperConnectionState {
                             snack.setAction(R.string.cancel, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    snack.dismiss();
+                                    if (snack != null) {
+                                        snack.dismiss();
+                                    }
+
                                 }
                             });
                             snack.setText(finalMessage2);
