@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import com.iGap.Config;
 import com.iGap.G;
+import com.iGap.WebSocketClient;
 import com.iGap.helper.HelperPermision;
 import com.iGap.helper.HelperSetStatusBarColor;
 import com.iGap.module.AttachFile;
@@ -69,6 +70,14 @@ public class ActivityEnhanced extends AppCompatActivity {
         if (!G.isAppInFg) {
             G.isAppInFg = true;
             G.isChangeScrFg = false;
+
+            /**
+             * if user isn't login and page come in foreground try for reconnect
+             */
+            if (!G.userLogin) {
+                WebSocketClient.reconnect(false);
+            }
+
         } else {
             G.isChangeScrFg = true;
         }
