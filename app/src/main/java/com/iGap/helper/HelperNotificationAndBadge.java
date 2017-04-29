@@ -45,7 +45,6 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
-import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -53,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
+import static com.iGap.G.authorHash;
 import static com.iGap.G.context;
 
 public class HelperNotificationAndBadge {
@@ -104,212 +104,19 @@ public class HelperNotificationAndBadge {
         remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_notification_small);
         remoteViewsLarge = new RemoteViews(context.getPackageName(), R.layout.layout_notification);
 
-        Intent intentClose = new Intent(context, RemoteActionReciver.class);
+        Intent intentClose = new Intent(context, RemoteActionReceiver.class);
         intentClose.putExtra("Action", "strClose");
         PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 1, intentClose, 0);
         remoteViewsLarge.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
     }
 
-    //private void setRemoteViewsNormal() {
-    //
-    //    String avatarPath = null;
-    //    if (unreadMessageCount == 1) {
-    //        remoteViews.setTextViewText(R.id.ln_txt_header, list.get(0).name);
-    //        remoteViews.setTextViewText(R.id.ln_txt_time, list.get(0).time);
-    //        remoteViews.setTextViewText(R.id.ln_txt_message_notification, list.get(0).message);
-    //
-    //    } else {
-    //        remoteViews.setTextViewText(R.id.ln_txt_header, context.getString(R.string.igap));
-    //        if ((list.size() - 1) > 0) {
-    //            remoteViews.setTextViewText(R.id.ln_txt_time, list.get(list.size() - 1).time);
-    //        }
-    //
-    //        String s = "";
-    //        if (countUnicChat == 1) {
-    //            s = " " + context.getString(R.string.chat);
-    //        } else if (countUnicChat > 1) {
-    //            s = " " + context.getString(R.string.chats);
-    //        }
-    //
-    //        String str = String.format(" %d " + context.getString(R.string.new_messages_from) + " %d " + s, unreadMessageCount + countChannelMessage, countUnicChat);
-    //
-    //        mContent = str;
-    //
-    //        remoteViews.setTextViewText(R.id.ln_txt_message_notification, str);
-    //    }
-    //
-    //    if (isFromOnRoom) {
-    //        Realm realm = Realm.getDefaultInstance();
-    //        RealmAvatar realmAvatarPath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, senderId).findFirst();
-    //        if (realmAvatarPath != null) {
-    //            if (realmAvatarPath.getFile().isFileExistsOnLocal()) {
-    //                avatarPath = realmAvatarPath.getFile().getLocalFilePath();
-    //            } else if (realmAvatarPath.getFile().isThumbnailExistsOnLocal()) {
-    //                avatarPath = realmAvatarPath.getFile().getLocalThumbnailPath();
-    //            }
-    //        }
-    //        if (avatarPath != null) {
-    //            Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
-    //            if (bitmap != null) {
-    //                remoteViews.setImageViewBitmap(R.id.ln_imv_avatar_notification, bitmap);
-    //            } else {
-    //                remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
-    //            }
-    //        } else {
-    //            remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
-    //        }
-    //    } else {
-    //        remoteViews.setImageViewResource(R.id.ln_imv_avatar_notification, R.mipmap.icon);
-    //    }
-    //}
-
     private void setOnTextClick(int resLayot, int indexItem) {
-
         Intent intent = new Intent(context, ActivityChat.class);
         intent.putExtra("RoomId", list.get(indexItem).roomId);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 30 + indexItem, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         ActivityPopUpNotification.isGoingToChatFromPopUp = true;
         remoteViewsLarge.setOnClickPendingIntent(resLayot, pendingIntent);
     }
-
-    //private void setRemoteViewsLarge() {
-    //
-    //    if (unreadMessageCount == 1) {
-    //
-    //        remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
-    //        remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.GONE);
-    //        remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.GONE);
-    //        remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
-    //
-    //        setOnTextClick(R.id.ln_ll_message_a, 0);
-    //
-    //        remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
-    //        remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
-    //        remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, list.get(0).time);
-    //    } else if (unreadMessageCount == 2) {
-    //
-    //        if (isFromOnRoom) {
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
-    //
-    //            setOnTextClick(R.id.ln_ll_message_a, 0);
-    //            setOnTextClick(R.id.ln_ll_message_b, 0);
-    //            setOnTextClick(R.id.ln_ll_message_c, 0);
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, "");
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, "");
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, "");
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(0).message);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(0).time);
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c1, "");
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c2, list.get(1).message);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c3, list.get(1).time);
-    //        } else {
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.GONE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
-    //
-    //            setOnTextClick(R.id.ln_ll_message_a, 0);
-    //            setOnTextClick(R.id.ln_ll_message_b, 1);
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, list.get(0).time);
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, list.get(1).name);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(1).message);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(1).time);
-    //        }
-    //    } else if (unreadMessageCount >= 3) {
-    //
-    //        if (isFromOnRoom) {
-    //
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.VISIBLE);
-    //            setOnTextClick(R.id.ln_ll_message_a, 0);
-    //            setOnTextClick(R.id.ln_ll_message_b, 0);
-    //            setOnTextClick(R.id.ln_ll_message_c, 0);
-    //            setOnTextClick(R.id.ln_ll_message_d, 0);
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, "");
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, "");
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, "");
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(0).message);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(0).time);
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c1, "");
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c2, list.get(1).message);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c3, list.get(1).time);
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_d1, "");
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_d2, list.get(2).message);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_d3, list.get(2).time);
-    //        } else {
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_a, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_b, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_c, View.VISIBLE);
-    //            remoteViewsLarge.setViewVisibility(R.id.ln_ll_message_d, View.GONE);
-    //
-    //            setOnTextClick(R.id.ln_ll_message_a, 0);
-    //            setOnTextClick(R.id.ln_ll_message_b, 1);
-    //            setOnTextClick(R.id.ln_ll_message_c, 2);
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a1, list.get(0).name);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a2, list.get(0).message);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_a3, list.get(0).time);
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b1, list.get(1).name);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b2, list.get(1).message);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_b3, list.get(1).time);
-    //
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c1, list.get(2).name);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c2, list.get(2).message);
-    //            remoteViewsLarge.setTextViewText(R.id.ln_txt_c3, list.get(2).time);
-    //        }
-    //    }
-    //
-    //    if (unreadMessageCount >= 4) {
-    //        remoteViewsLarge.setViewVisibility(R.id.ln_txt_more, View.VISIBLE);
-    //    } else {
-    //        remoteViewsLarge.setViewVisibility(R.id.ln_txt_more, View.GONE);
-    //    }
-    //
-    //    String chatCount = "";
-    //
-    //    if (countUnicChat == 1) {
-    //        chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chat);
-    //    } else if (countUnicChat > 1) {
-    //        chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chats);
-    //    }
-    //
-    //    String newmess = "";
-    //    if (unreadMessageCount + countChannelMessage == 1) {
-    //        newmess = context.getString(R.string.new_message);
-    //        chatCount = "";
-    //    } else {
-    //        newmess = context.getString(R.string.new_messages);
-    //    }
-    //
-    //    remoteViewsLarge.setTextViewText(R.id.ln_txt_unread_message, unreadMessageCount + countChannelMessage + " " + newmess + " " + chatCount);
-    //
-    //    if (unreadMessageCount + countChannelMessage == 1) {
-    //        remoteViewsLarge.setViewVisibility(R.id.mln_btn_replay, View.VISIBLE);
-    //        remoteViewsLarge.setViewVisibility(R.id.ln_txt_replay, View.VISIBLE);
-    //    } else {
-    //        remoteViewsLarge.setViewVisibility(R.id.mln_btn_replay, View.GONE);
-    //        remoteViewsLarge.setViewVisibility(R.id.ln_txt_replay, View.GONE);
-    //    }
-    //}
 
     private NotificationCompat.InboxStyle getBigStyle() {
 
@@ -339,15 +146,15 @@ public class HelperNotificationAndBadge {
             chatCount = context.getString(R.string.from) + " " + countUnicChat + " " + context.getString(R.string.chats);
         }
 
-        String newmess = "";
+        String newMessage = "";
         if (unreadMessageCount + countChannelMessage == 1) {
-            newmess = context.getString(R.string.new_message);
+            newMessage = context.getString(R.string.new_message);
             chatCount = "";
         } else {
-            newmess = context.getString(R.string.new_messages);
+            newMessage = context.getString(R.string.new_messages);
         }
 
-        String _summary = unreadMessageCount + countChannelMessage + " " + newmess + " " + chatCount;
+        String _summary = unreadMessageCount + countChannelMessage + " " + newMessage + " " + chatCount;
         _style.setSummaryText(_summary);
 
         return _style;
@@ -397,8 +204,7 @@ public class HelperNotificationAndBadge {
         }
     }
 
-    //*****************************************************************************************
-    // notification ***********************
+    //************************** notification ***********************
 
     private int getNotificationIcon() {
         boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
@@ -419,33 +225,20 @@ public class HelperNotificationAndBadge {
             pi = PendingIntent.getActivity(context, notificationId, new Intent(context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        //  setRemoteViewsNormal();
-
         getNotificationSmallInfo();
 
-        String messageToshow = list.get(0).message;
+        String messageToShow = list.get(0).message;
         if (list.get(0).message.length() > 40) {
-            messageToshow = messageToshow.substring(0, 40);
+            messageToShow = messageToShow.substring(0, 40);
         }
 
-        notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon()).setLargeIcon(mBitmapIcon)
-            .setContentTitle(mHeader)
-            .setContentText(mContent)
-            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-            .setStyle(getBigStyle())
-            .setContentIntent(pi)
-            .build();
+        notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon()).setLargeIcon(mBitmapIcon).setContentTitle(mHeader).setContentText(mContent).setCategory(NotificationCompat.CATEGORY_MESSAGE).setStyle(getBigStyle()).setContentIntent(pi).build();
 
 
         if (currentAlarm + delayAlarm < System.currentTimeMillis()) {
 
-            alarmNotification(messageToshow);
+            alarmNotification(messageToShow);
         }
-
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        //    setRemoteViewsLarge();
-        //    notification.bigContentView = remoteViewsLarge;
-        //}
 
         notificationManager.notify(notificationId, notification);
     }
@@ -492,103 +285,93 @@ public class HelperNotificationAndBadge {
         currentAlarm = System.currentTimeMillis();
     }
 
-    public void checkAlert(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
+    public void checkAlert(Realm realm, boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
         idRoom = roomId;
         int vipCheck = checkSpecialNotification(updateNotification, type, roomId);
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         int checkAlert = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
         if (vipCheck == ENABLE) {
-            updateNotificationAndBadge(updateNotification, type);
+            updateNotificationAndBadge(realm, updateNotification, type);
         } else if (vipCheck == DEFAULT) {
             if (checkAlert == 1) {
-                updateNotificationAndBadge(updateNotification, type);
+                updateNotificationAndBadge(realm, updateNotification, type);
             }
         } else if (vipCheck == DISABLE) {
-            return;
+            // do nothing
         }
     }
 
-    private void updateNotificationAndBadge(boolean updateNotification, ProtoGlobal.Room.Type type) {
+    private void updateNotificationAndBadge(Realm realm, boolean updateNotification, ProtoGlobal.Room.Type type) {
 
         sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-
-        Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, idRoom).findFirst();
         switch (type) {
             case CHAT:
+                if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getRealmNotificationSetting() != null) {
+                    if (realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor() != -1) {
+                        led = realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor();
+                    } else {
+                        led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
+                    }
 
-                if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getRealmNotificationSetting() != null && realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor() != -1) {
+                    if (realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate() != -1) {
+                        vibrator = realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate();
+                    } else {
+                        vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
+                    }
 
-                    led = realmRoom.getChatRoom().getRealmNotificationSetting().getLedColor();
-
-                } else {
-                    led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
-                }
-                if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getRealmNotificationSetting() != null && realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate() != -1) {
-
-                    vibrator = realmRoom.getChatRoom().getRealmNotificationSetting().getVibrate();
-                } else {
-                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
-                }
-                //    popupNotification = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 3);
-
-                if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getRealmNotificationSetting() != null && realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
-
-                    sound = realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound();
-                } else {
-                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
+                    if (realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
+                        sound = realmRoom.getChatRoom().getRealmNotificationSetting().getIdRadioButtonSound();
+                    } else {
+                        sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
+                    }
                 }
                 messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
-
                 break;
 
             case GROUP:
-                if (realmRoom != null && realmRoom.getGroupRoom() != null && realmRoom.getGroupRoom().getRealmNotificationSetting() != null && realmRoom.getGroupRoom().getRealmNotificationSetting().getLedColor() != -1) {
-                    led = realmRoom.getGroupRoom().getRealmNotificationSetting().getLedColor();
-                } else {
-                    led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
+                if (realmRoom != null && realmRoom.getGroupRoom() != null && realmRoom.getGroupRoom().getRealmNotificationSetting() != null) {
+                    if (realmRoom.getGroupRoom().getRealmNotificationSetting().getLedColor() != -1) {
+                        led = realmRoom.getGroupRoom().getRealmNotificationSetting().getLedColor();
+                    } else {
+                        led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
+                    }
+
+                    if (realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate() != -1) {
+                        vibrator = realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate();
+                    } else {
+                        vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
+                    }
+
+                    if (realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
+                        sound = realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound();
+                    } else {
+                        sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
+                    }
                 }
-
-                if (realmRoom != null && realmRoom.getGroupRoom() != null && realmRoom.getGroupRoom().getRealmNotificationSetting() != null && realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate() != -1) {
-
-                    vibrator = realmRoom.getGroupRoom().getRealmNotificationSetting().getVibrate();
-
-                } else {
-                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
-                }
-
-                if (realmRoom != null && realmRoom.getGroupRoom() != null && realmRoom.getGroupRoom().getRealmNotificationSetting() != null && realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
-
-                    sound = realmRoom.getGroupRoom().getRealmNotificationSetting().getIdRadioButtonSound();
-                } else {
-                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
-                }
-
                 messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
-
 
                 break;
             case CHANNEL:
 
-                if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().getRealmNotificationSetting() != null && realmRoom.getChannelRoom().getRealmNotificationSetting().getLedColor() != -1) {
-                    led = realmRoom.getChannelRoom().getRealmNotificationSetting().getLedColor();
-                } else {
-                    led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
-                }
+                if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().getRealmNotificationSetting() != null) {
+                    if (realmRoom.getChannelRoom().getRealmNotificationSetting().getLedColor() != -1) {
+                        led = realmRoom.getChannelRoom().getRealmNotificationSetting().getLedColor();
+                    } else {
+                        led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
+                    }
 
-                if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().getRealmNotificationSetting() != null && realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1) {
+                    if (realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1) {
+                        vibrator = realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate();
+                    } else {
+                        vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
+                    }
 
-                    vibrator = realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate();
-
-                } else {
-                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
-                }
-
-                if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().getRealmNotificationSetting() != null && realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
-
-                    sound = realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound();
-                } else {
-                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
+                    if (realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
+                        sound = realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound();
+                    } else {
+                        sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
+                    }
                 }
 
                 messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
@@ -609,86 +392,72 @@ public class HelperNotificationAndBadge {
 
         list.clear();
         senderList.clear();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        long userId = realmUserInfo.getUserId();
-        String authorHash = realmUserInfo.getAuthorHash();
 
         popUpList.clear();
 
-        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
-            .or()
-            .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString())
-            .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+        RealmResults<RealmRoomMessage> realmRoomMessages =
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString()).or().equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString()).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, authorHash).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         if (!realmRoomMessages.isEmpty()) {
             for (RealmRoomMessage roomMessage : realmRoomMessages) {
-
                 if (roomMessage != null) {
-                    if (roomMessage.getUserId() != userId) {
-                        if (!roomMessage.getAuthorHash().equals(authorHash)) {// for channel message
-                            RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-                            if (realmRoom1 != null && realmRoom1.getType() != null && realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
+                    RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                    if (realmRoom1 != null && realmRoom1.getType() != null && realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
+                        unreadMessageCount++;
+                        messageOne = roomMessage.getMessage();
 
-                                    unreadMessageCount++;
-                                    messageOne = roomMessage.getMessage();
+                        if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
+                            senderId = realmRoom1.getId();
+                        } else {
+                            senderId = realmRoom1.getChatRoom().getPeerId();
+                        }
 
-                                if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                    senderId = realmRoom1.getId();
+                        addItemToPopUPList(roomMessage);
+
+                        if (unreadMessageCount == 1 || unreadMessageCount == 2 || unreadMessageCount == 3) {
+                            Item item = new Item();
+
+                            item.name = realmRoom1.getTitle() + " : ";
+                            item.roomId = realmRoom1.getId();
+
+
+                            String text = "";
+                            try {
+                                if (roomMessage.getLogMessage() != null) {
+                                    text = roomMessage.getLogMessage();
                                 } else {
-                                    senderId = realmRoom1.getChatRoom().getPeerId();
+                                    text = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getMessage() : roomMessage.getMessage();
                                 }
 
+                                if (text.length() < 1) if (roomMessage.getReplyTo() != null) text = roomMessage.getReplyTo().getMessage();
+                                if (text.length() < 1) text = ActivityPopUpNotification.getTextOfMessageType(roomMessage.getMessageType());
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
 
+                            item.message = text;
+                            item.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
+                            list.add(item);
+                        }
 
-                                addItemToPopUPList(roomMessage);
+                        if (unreadMessageCount == 1) roomId = roomMessage.getRoomId();
 
-                                    if (unreadMessageCount == 1 || unreadMessageCount == 2 || unreadMessageCount == 3) {
-                                        Item item = new Item();
+                        if (roomId != roomMessage.getRoomId()) {
+                            isFromOnRoom = false;
+                        }
 
-                                        item.name = realmRoom1.getTitle() + " : ";
-                                        item.roomId = realmRoom1.getId();
-
-
-                                        String text = "";
-                                        try {
-                                            if (roomMessage.getLogMessage() != null) {
-                                                text = roomMessage.getLogMessage();
-                                            } else {
-                                                text = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getMessage() : roomMessage.getMessage();
-                                            }
-
-                                            if (text.length() < 1) if (roomMessage.getReplyTo() != null) text = roomMessage.getReplyTo().getMessage();
-                                            if (text.length() < 1) text = ActivityPopUpNotification.getTextOfMessageType(roomMessage.getMessageType());
-                                        } catch (NullPointerException e) {
-
-                                        }
-
-                                        item.message = text;
-                                        item.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
-                                        list.add(item);
-                                    }
-
-                                    if (unreadMessageCount == 1) roomId = roomMessage.getRoomId();
-
-                                    if (roomId != roomMessage.getRoomId()) {
-                                        isFromOnRoom = false;
-                                    }
-
-                                    boolean isAdd = true;
-                                    for (int k = 0; k < senderList.size(); k++) {
-                                        if (senderList.get(k) == roomMessage.getRoomId()) {
-                                            isAdd = false;
-                                            break;
-                                        }
-                                    }
-
-                                    if (isAdd) senderList.add(roomMessage.getRoomId());
-
-                            } else {
-                                Log.i("CCCC", "IS CHANNEL");
+                        boolean isAdd = true;
+                        for (int k = 0; k < senderList.size(); k++) {
+                            if (senderList.get(k) == roomMessage.getRoomId()) {
+                                isAdd = false;
+                                break;
                             }
                         }
+
+                        if (isAdd) senderList.add(roomMessage.getRoomId());
+
+                    } else {
+                        // now just show count for channel message
                     }
                 }
             }
@@ -709,8 +478,6 @@ public class HelperNotificationAndBadge {
             countUnicChat += senderList.size();
         }
 
-        realm.close();
-
         if (list.size() == 0) {
             return;
         }
@@ -718,31 +485,16 @@ public class HelperNotificationAndBadge {
         try {
             ShortcutBadger.applyCount(context, unreadMessageCount);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         try {
-            if (unreadMessageCount + countChannelMessage == 0) {
-                if (updateNotification) {
-                    //  notificationManager.cancel(notificationId);
-                }
-            } else {
-                if (updateNotification) {
-                    setNotification();
-                }
+            if (updateNotification) {
+                setNotification();
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
-
-
-
-
-
-
-
-
-
     }
 
     public void cancelNotification() {
@@ -907,9 +659,8 @@ public class HelperNotificationAndBadge {
         try {
             if (taskInfo.get(0).topActivity.getClassName().toString().toLowerCase().contains("launcher")) return true;
         } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        // com.android.launcher"
 
         return false;
     }
@@ -937,7 +688,7 @@ public class HelperNotificationAndBadge {
 
             popUpList.add(sp);
         } catch (NullPointerException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -978,20 +729,18 @@ public class HelperNotificationAndBadge {
             return screenOn;
         } else {
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            //noinspection deprecation
             return pm.isScreenOn();
         }
     }
 
 
-    public static class RemoteActionReciver extends BroadcastReceiver {
+    public static class RemoteActionReceiver extends BroadcastReceiver {
 
-        public RemoteActionReciver() {
+        public RemoteActionReceiver() {
         }
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
             G.helperNotificationAndBadge.cancelNotification();
         }
     }

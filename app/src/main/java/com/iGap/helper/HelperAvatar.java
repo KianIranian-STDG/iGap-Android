@@ -12,6 +12,7 @@ package com.iGap.helper;
 
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.interfaces.OnAvatarAdd;
 import com.iGap.interfaces.OnAvatarDelete;
@@ -46,7 +47,7 @@ import java.util.HashMap;
 public class HelperAvatar {
 
     private static HashMap<Long, ArrayList<OnAvatarGet>> onAvatarGetHashMap = new HashMap<>();
-    private static HashMap<Long, Boolean> mReapeatList = new HashMap<>();
+    private static HashMap<Long, Boolean> mRepeatList = new HashMap<>();
 
     public enum AvatarType {
         USER, ROOM
@@ -99,7 +100,7 @@ public class HelperAvatar {
 
     private static String copyAvatar(String src, ProtoGlobal.Avatar avatar) {
         try {
-            /*
+            /**
              * G.DIR_IMAGE_USER use for all avatars , user or room
              */
             String avatarPath = AndroidUtils.getFilePathWithCashId(avatar.getFile().getCacheId(), avatar.getFile().getName(), G.DIR_IMAGE_USER, false);
@@ -119,7 +120,8 @@ public class HelperAvatar {
             if (realmAvatar.getFile().getLocalThumbnailPath() == null) {
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         realmAvatar.getFile().setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(realmAvatar.getFile().getCacheId(), realmAvatar.getFile().getName(), G.DIR_IMAGE_USER, true));
                     }
                 });
@@ -129,14 +131,15 @@ public class HelperAvatar {
             if (realmAvatar.getFile().getLocalFilePath() == null) {
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         realmAvatar.getFile().setLocalFilePath(AndroidUtils.getFilePathWithCashId(realmAvatar.getFile().getCacheId(), realmAvatar.getFile().getName(), G.DIR_IMAGE_USER, false));
                     }
                 });
                 realm.close();
             }
-        } catch (Exception E) {
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -192,20 +195,20 @@ public class HelperAvatar {
                                         Realm realm1 = Realm.getDefaultInstance();
                                         for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
 
-                                                //onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
-                                                ArrayList<OnAvatarGet> listeners = (onAvatarGetHashMap.get(realmAvatar1.getOwnerId()));
+                                            //onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
+                                            ArrayList<OnAvatarGet> listeners = (onAvatarGetHashMap.get(realmAvatar1.getOwnerId()));
 
-                                                if (listeners != null) {
-                                                    for (OnAvatarGet listener : listeners) {
-                                                        if (listener != null) {
-                                                            listener.onAvatarGet(filepath, realmAvatar1.getOwnerId());
-                                                        } else {
-                                                            onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
-                                                        }
+                                            if (listeners != null) {
+                                                for (OnAvatarGet listener : listeners) {
+                                                    if (listener != null) {
+                                                        listener.onAvatarGet(filepath, realmAvatar1.getOwnerId());
+                                                    } else {
+                                                        onAvatarGet.onAvatarGet(filepath, realmAvatar1.getOwnerId());
                                                     }
-
-                                                    onAvatarGetHashMap.remove(realmAvatar1.getOwnerId());
                                                 }
+
+                                                onAvatarGetHashMap.remove(realmAvatar1.getOwnerId());
+                                            }
 
                                             //  break;
 
@@ -243,27 +246,32 @@ public class HelperAvatar {
 
         try {
 
-            if (mReapeatList.containsKey(ownerId)) {
+            if (mRepeatList.containsKey(ownerId)) {
                 return;
             }
 
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
 
-                    mReapeatList.put(ownerId, true);
+                    mRepeatList.put(ownerId, true);
 
                     HelperAvatar.getAvatar(ownerId, avatarType, new OnAvatarGet() {
-                        @Override public void onAvatarGet(final String avatarPath, final long ownerId) {
+                        @Override
+                        public void onAvatarGet(final String avatarPath, final long ownerId) {
                             G.handler.post(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     onAvatarGet.onAvatarGet(avatarPath, ownerId);
                                 }
                             });
                         }
 
-                        @Override public void onShowInitials(final String initials, final String color) {
+                        @Override
+                        public void onShowInitials(final String initials, final String color) {
                             G.handler.post(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     onAvatarGet.onShowInitials(initials, color);
                                 }
                             });
@@ -288,6 +296,7 @@ public class HelperAvatar {
         Realm realm = Realm.getDefaultInstance();
         for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.UID, Sort.DESCENDING)) {
             if (avatar.getFile() != null) {
+                Log.i("AAA", "getLastAvatar avatarId : " + avatar.getId());
                 return avatar;
             }
         }
@@ -448,7 +457,8 @@ public class HelperAvatar {
 
         }
 
-        @Override public void onFileDownload(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+        @Override
+        public void onFileDownload(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
             if (progress == 100) {
                 String _newPath = filePath.replace(G.DIR_TEMP, G.DIR_IMAGE_USER);
                 try {

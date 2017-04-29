@@ -10,6 +10,7 @@
 
 package com.iGap.response;
 
+import android.util.Log;
 import com.iGap.module.SUID;
 import com.iGap.module.enums.AttachmentFor;
 import com.iGap.proto.ProtoUserAvatarGetList;
@@ -53,7 +54,10 @@ public class UserAvatarGetListResponse extends MessageHandler {
                     realmAvatar.setOwnerId(userId);
                     realmAvatar.setUid(SUID.id().get());
                     realmAvatar.setFile(RealmAttachment.build(userAvatarGetListResponse.getAvatarList().get(i).getFile(), AttachmentFor.AVATAR, null));
+                    Log.i("AAA", "userId : " + userId);
+                    Log.i("AAA", "avatarId : " + userAvatarGetListResponse.getAvatarList().get(i).getId());
                 }
+
             }
         });
 

@@ -122,50 +122,29 @@ public class HelperUrl {
     }
 
     private static boolean isTextLink(String text) {
-
-        if ((text.startsWith("http://") && text.length() > 10) || (text.startsWith("https://") && text.length() > 11) || (text.startsWith("ftp://")
-            && text.length() > 9) || (text.startsWith("ftps://") && text.length() > 10) || (text.startsWith("gopher:") && text.length() > 11)) {
+        if ((text.startsWith("http://") && text.length() > 10) || (text.startsWith("https://") && text.length() > 11) || (text.startsWith("ftp://") && text.length() > 9) || (text.startsWith("ftps://") && text.length() > 10) || (text.startsWith("gopher:") && text.length() > 11)) {
             return true;
         }
 
-        String[] strings = new String[] {
-            "abogado", "ac", "academy", "accountants", "active", "actor", "ad", "adult", "ae", "aero", "af", "ag", "agency", "ai", "airforce", "al", "allfinanz", "alsace", "am", "amsterdam", "an",
-            "android", "ao", "apartments", "aq", "aquarelle", "ar", "archi", "army", "arpa", "as", "asia", "associates", "at", "attorney", "au", "auction", "audio", "autos", "aw", "ax", "axa", "az",
-            "ba", "band", "bank", "bar", "barclaycard", "barclays", "bargains", "bayern", "bb", "bd", "be", "beer", "berlin", "best", "bf", "bg", "bh", "bi", "bid", "bike", "bingo", "bio", "biz",
-            "bj", "black", "blackfriday", "bloomberg", "blue", "bm", "bmw", "bn", "bnpparibas", "bo", "boo", "boutique", "br", "brussels", "bs", "bt", "budapest", "build", "builders", "business",
-            "buzz", "bv", "bw", "by", "bz", "bzh", "ca", "cab", "cal", "camera", "camp", "cancerresearch", "canon", "capetown", "capital", "caravan", "cards", "care", "career", "careers", "cartier",
-            "casa", "cash", "cat", "catering", "cc", "cd", "center", "ceo", "cern", "cf", "cg", "ch", "channel", "chat", "cheap", "christmas", "chrome", "church", "ci", "citic", "city", "ck", "cl",
-            "claims", "cleaning", "click", "clinic", "clothing", "club", "cm", "cn", "co", "coach", "codes", "coffee", "college", "cologne", "com", "community", "company", "computer", "condos",
-            "construction", "consulting", "contractors", "cooking", "cool", "coop", "country", "cr", "credit", "creditcard", "cricket", "crs", "cruises", "cu", "cuisinella", "cv", "cw", "cx", "cy",
-            "cymru", "cz", "dabur", "dad", "dance", "dating", "day", "dclk", "de", "deals", "degree", "delivery", "democrat", "dental", "dentist", "desi", "design", "dev", "diamonds", "diet",
-            "digital", "direct", "directory", "discount", "dj", "dk", "dm", "dnp", "do", "docs", "domains", "doosan", "durban", "dvag", "dz", "eat", "ec", "edu", "education", "ee", "eg", "email",
-            "emerck", "energy", "engineer", "engineering", "enterprises", "equipment", "er", "es", "esq", "estate", "et", "eu", "eurovision", "eus", "events", "everbank", "exchange", "expert",
-            "exposed", "fail", "farm", "fashion", "feedback", "fi", "finance", "financial", "firmdale", "fish", "fishing", "fit", "fitness", "fj", "fk", "flights", "florist", "flowers", "flsmidth",
-            "fly", "fm", "fo", "foo", "forsale", "foundation", "fr", "frl", "frogans", "fund", "furniture", "futbol", "ga", "gal", "gallery", "garden", "gb", "gbiz", "gd", "ge", "gent", "gf", "gg",
-            "ggee", "gh", "gi", "gift", "gifts", "gives", "gl", "glass", "gle", "global", "globo", "gm", "gmail", "gmo", "gmx", "gn", "goog", "google", "gop", "gov", "gp", "gq", "gr", "graphics",
-            "gratis", "green", "gripe", "gs", "gt", "gu", "guide", "guitars", "guru", "gw", "gy", "hamburg", "hangout", "haus", "healthcare", "help", "here", "hermes", "hiphop", "hiv", "hk", "hm",
-            "hn", "holdings", "holiday", "homes", "horse", "host", "hosting", "house", "how", "hr", "ht", "hu", "ibm", "id", "ie", "ifm", "il", "im", "immo", "immobilien", "in", "industries", "info",
-            "ing", "ink", "institute", "insure", "int", "international", "investments", "io", "iq", "ir", "irish", "is", "it", "iwc", "jcb", "je", "jetzt", "jm", "jo", "jobs", "joburg", "jp",
-            "juegos", "kaufen", "kddi", "ke", "kg", "kh", "ki", "kim", "kitchen", "kiwi", "km", "kn", "koeln", "kp", "kr", "krd", "kred", "kw", "ky", "kyoto", "kz", "la", "lacaixa", "land", "lat",
-            "latrobe", "lawyer", "lb", "lc", "lds", "lease", "legal", "lgbt", "li", "lidl", "life", "lighting", "limited", "limo", "link", "lk", "loans", "london", "lotte", "lotto", "lr", "ls", "lt",
-            "ltda", "lu", "luxe", "luxury", "lv", "ly", "ma", "madrid", "maison", "management", "mango", "market", "marketing", "marriott", "mc", "md", "me", "media", "meet", "melbourne", "meme",
-            "memorial", "menu", "mg", "mh", "miami", "mil", "mini", "mk", "ml", "mm", "mn", "mo", "mobi", "moda", "moe", "monash", "money", "mormon", "mortgage", "moscow", "motorcycles", "mov", "mp",
-            "mq", "mr", "ms", "mt", "mu", "museum", "mv", "mw", "mx", "my", "mz", "na", "nagoya", "name", "navy", "nc", "ne", "net", "network", "neustar", "new", "nexus", "nf", "ng", "ngo", "nhk",
-            "ni", "nico", "ninja", "nl", "no", "np", "nr", "nra", "nrw", "ntt", "nu", "nyc", "nz", "okinawa", "om", "one", "ong", "onl", "ooo", "org", "organic", "osaka", "otsuka", "ovh", "pa",
-            "paris", "partners", "parts", "party", "pe", "pf", "pg", "ph", "pharmacy", "photo", "photography", "photos", "physio", "pics", "pictures", "pink", "pizza", "pk", "pl", "place", "plumbing",
-            "pm", "pn", "pohl", "poker", "porn", "post", "pr", "praxi", "press", "pro", "prod", "productions", "prof", "properties", "property", "ps", "pt", "pub", "pw", "py", "qa", "qpon", "quebec",
-            "re", "realtor", "recipes", "red", "rehab", "reise", "reisen", "reit", "ren", "rentals", "repair", "report", "republican", "rest", "restaurant", "reviews", "rich", "rio", "rip", "ro",
-            "rocks", "rodeo", "rs", "rsvp", "ru", "ruhr", "rw", "ryukyu", "sa", "saarland", "sale", "samsung", "sarl", "saxo", "sb", "sc", "sca", "scb", "schmidt", "schule", "schwarz", "science",
-            "scot", "sd", "se", "services", "sew", "sexy", "sg", "sh", "shiksha", "shoes", "shriram", "si", "singles", "sj", "sk", "sky", "sl", "sm", "sn", "so", "social", "software", "sohu", "solar",
-            "solutions", "soy", "space", "spiegel", "sr", "st", "style", "su", "supplies", "supply", "support", "surf", "surgery", "suzuki", "sv", "sx", "sy", "sydney", "systems", "sz", "taipei",
-            "tatar", "tattoo", "tax", "tc", "td", "technology", "tel", "temasek", "tennis", "tf", "tg", "th", "tienda", "tips", "tires", "tirol", "tj", "tk", "tl", "tm", "tn", "to", "today", "tokyo",
-            "tools", "top", "toshiba", "town", "toys", "tp", "tr", "trade", "training", "travel", "trust", "tt", "tui", "tv", "tw", "tz", "ua", "ug", "uk", "university", "uno", "uol", "us", "uy",
-            "uz", "va", "vacations", "vc", "ve", "vegas", "ventures", "versicherung", "vet", "vg", "vi", "viajes", "video", "villas", "vision", "vlaanderen", "vn", "vodka", "vote", "voting", "voto",
-            "voyage", "vu", "wales", "wang", "watch", "webcam", "website", "wed", "wedding", "wf", "whoswho", "wien", "wiki", "williamhill", "wme", "work", "works", "world", "ws", "wtc", "wtf", "佛山",
-            "集团", "在线", "한국", "ভারত", "八卦", "موقع", "公益", "公司", "移动", "我爱你", "москва", "қаз", "онлайн", "сайт", "срб", "淡马锡", "орг", "삼성", "சிங்கப்பூர்", "商标", "商店", "商城", "дети", "мкд", "中文网", "中信",
-            "中国", "中國", "谷歌", "భారత్", "ලංකා", "ભારત", "भारत", "网店", "संगठन", "网络", "укр", "香港", "台湾", "台灣", "手机", "мон", "الجزائر", "عمان", "ایران", "امارات", "بازار", "الاردن", "بھارت", "المغرب",
-            "السعودية", "مليسيا", "شبكة", "გე", "机构", "组织机构", "ไทย", "سورية", "рус", "рф", "تونس", "みんな", "グーグル", "世界", "ਭਾਰਤ", "网址", "游戏", "vermögensberater", "vermögensberatung", "企业", "مصر", "قطر",
-            "广东", "இலங்கை", "இந்தியா", "新加坡", "فلسطين", "政务", "xxx", "xyz", "yachts", "yandex", "ye", "yoga", "yokohama", "youtube", "yt", "za", "zip", "zm", "zone", "zuerich", "zw"
+        String[] strings = new String[]{
+                "abogado", "ac", "academy", "accountants", "active", "actor", "ad", "adult", "ae", "aero", "af", "ag", "agency", "ai", "airforce", "al", "allfinanz", "alsace", "am", "amsterdam", "an", "android", "ao", "apartments", "aq", "aquarelle", "ar", "archi", "army", "arpa", "as", "asia", "associates", "at", "attorney", "au", "auction", "audio", "autos", "aw", "ax", "axa", "az", "ba",
+                "band", "bank", "bar", "barclaycard", "barclays", "bargains", "bayern", "bb", "bd", "be", "beer", "berlin", "best", "bf", "bg", "bh", "bi", "bid", "bike", "bingo", "bio", "biz", "bj", "black", "blackfriday", "bloomberg", "blue", "bm", "bmw", "bn", "bnpparibas", "bo", "boo", "boutique", "br", "brussels", "bs", "bt", "budapest", "build", "builders", "business", "buzz", "bv", "bw",
+                "by", "bz", "bzh", "ca", "cab", "cal", "camera", "camp", "cancerresearch", "canon", "capetown", "capital", "caravan", "cards", "care", "career", "careers", "cartier", "casa", "cash", "cat", "catering", "cc", "cd", "center", "ceo", "cern", "cf", "cg", "ch", "channel", "chat", "cheap", "christmas", "chrome", "church", "ci", "citic", "city", "ck", "cl", "claims", "cleaning", "click",
+                "clinic", "clothing", "club", "cm", "cn", "co", "coach", "codes", "coffee", "college", "cologne", "com", "community", "company", "computer", "condos", "construction", "consulting", "contractors", "cooking", "cool", "coop", "country", "cr", "credit", "creditcard", "cricket", "crs", "cruises", "cu", "cuisinella", "cv", "cw", "cx", "cy", "cymru", "cz", "dabur", "dad", "dance",
+                "dating", "day", "dclk", "de", "deals", "degree", "delivery", "democrat", "dental", "dentist", "desi", "design", "dev", "diamonds", "diet", "digital", "direct", "directory", "discount", "dj", "dk", "dm", "dnp", "do", "docs", "domains", "doosan", "durban", "dvag", "dz", "eat", "ec", "edu", "education", "ee", "eg", "email", "emerck", "energy", "engineer", "engineering",
+                "enterprises", "equipment", "er", "es", "esq", "estate", "et", "eu", "eurovision", "eus", "events", "everbank", "exchange", "expert", "exposed", "fail", "farm", "fashion", "feedback", "fi", "finance", "financial", "firmdale", "fish", "fishing", "fit", "fitness", "fj", "fk", "flights", "florist", "flowers", "flsmidth", "fly", "fm", "fo", "foo", "forsale", "foundation", "fr", "frl",
+                "frogans", "fund", "furniture", "futbol", "ga", "gal", "gallery", "garden", "gb", "gbiz", "gd", "ge", "gent", "gf", "gg", "ggee", "gh", "gi", "gift", "gifts", "gives", "gl", "glass", "gle", "global", "globo", "gm", "gmail", "gmo", "gmx", "gn", "goog", "google", "gop", "gov", "gp", "gq", "gr", "graphics", "gratis", "green", "gripe", "gs", "gt", "gu", "guide", "guitars", "guru",
+                "gw", "gy", "hamburg", "hangout", "haus", "healthcare", "help", "here", "hermes", "hiphop", "hiv", "hk", "hm", "hn", "holdings", "holiday", "homes", "horse", "host", "hosting", "house", "how", "hr", "ht", "hu", "ibm", "id", "ie", "ifm", "il", "im", "immo", "immobilien", "in", "industries", "info", "ing", "ink", "institute", "insure", "int", "international", "investments", "io",
+                "iq", "ir", "irish", "is", "it", "iwc", "jcb", "je", "jetzt", "jm", "jo", "jobs", "joburg", "jp", "juegos", "kaufen", "kddi", "ke", "kg", "kh", "ki", "kim", "kitchen", "kiwi", "km", "kn", "koeln", "kp", "kr", "krd", "kred", "kw", "ky", "kyoto", "kz", "la", "lacaixa", "land", "lat", "latrobe", "lawyer", "lb", "lc", "lds", "lease", "legal", "lgbt", "li", "lidl", "life", "lighting",
+                "limited", "limo", "link", "lk", "loans", "london", "lotte", "lotto", "lr", "ls", "lt", "ltda", "lu", "luxe", "luxury", "lv", "ly", "ma", "madrid", "maison", "management", "mango", "market", "marketing", "marriott", "mc", "md", "me", "media", "meet", "melbourne", "meme", "memorial", "menu", "mg", "mh", "miami", "mil", "mini", "mk", "ml", "mm", "mn", "mo", "mobi", "moda", "moe",
+                "monash", "money", "mormon", "mortgage", "moscow", "motorcycles", "mov", "mp", "mq", "mr", "ms", "mt", "mu", "museum", "mv", "mw", "mx", "my", "mz", "na", "nagoya", "name", "navy", "nc", "ne", "net", "network", "neustar", "new", "nexus", "nf", "ng", "ngo", "nhk", "ni", "nico", "ninja", "nl", "no", "np", "nr", "nra", "nrw", "ntt", "nu", "nyc", "nz", "okinawa", "om", "one", "ong",
+                "onl", "ooo", "org", "organic", "osaka", "otsuka", "ovh", "pa", "paris", "partners", "parts", "party", "pe", "pf", "pg", "ph", "pharmacy", "photo", "photography", "photos", "physio", "pics", "pictures", "pink", "pizza", "pk", "pl", "place", "plumbing", "pm", "pn", "pohl", "poker", "porn", "post", "pr", "praxi", "press", "pro", "prod", "productions", "prof", "properties",
+                "property", "ps", "pt", "pub", "pw", "py", "qa", "qpon", "quebec", "re", "realtor", "recipes", "red", "rehab", "reise", "reisen", "reit", "ren", "rentals", "repair", "report", "republican", "rest", "restaurant", "reviews", "rich", "rio", "rip", "ro", "rocks", "rodeo", "rs", "rsvp", "ru", "ruhr", "rw", "ryukyu", "sa", "saarland", "sale", "samsung", "sarl", "saxo", "sb", "sc", "sca",
+                "scb", "schmidt", "schule", "schwarz", "science", "scot", "sd", "se", "services", "sew", "sg", "sh", "shiksha", "shoes", "shriram", "si", "singles", "sj", "sk", "sky", "sl", "sm", "sn", "so", "social", "software", "sohu", "solar", "solutions", "soy", "space", "spiegel", "sr", "st", "style", "su", "supplies", "supply", "support", "surf", "surgery", "suzuki", "sv", "sx", "sy",
+                "sydney", "systems", "sz", "taipei", "tatar", "tattoo", "tax", "tc", "td", "technology", "tel", "temasek", "tennis", "tf", "tg", "th", "tienda", "tips", "tires", "tirol", "tj", "tk", "tl", "tm", "tn", "to", "today", "tokyo", "tools", "top", "toshiba", "town", "toys", "tp", "tr", "trade", "training", "travel", "trust", "tt", "tui", "tv", "tw", "tz", "ua", "ug", "uk", "university",
+                "uno", "uol", "us", "uy", "uz", "va", "vacations", "vc", "ve", "vegas", "ventures", "versicherung", "vet", "vg", "vi", "viajes", "video", "villas", "vision", "vlaanderen", "vn", "vodka", "vote", "voting", "voto", "voyage", "vu", "wales", "wang", "watch", "webcam", "website", "wed", "wedding", "wf", "whoswho", "wien", "wiki", "williamhill", "wme", "work", "works", "world", "ws",
+                "wtc", "wtf", "佛山", "集团", "在线", "한국", "ভারত", "八卦", "موقع", "公益", "公司", "移动", "我爱你", "москва", "қаз", "онлайн", "сайт", "срб", "淡马锡", "орг", "삼성", "சிங்கப்பூர்", "商标", "商店", "商城", "дети", "мкд", "中文网", "中信", "中国", "中國", "谷歌", "భారత్", "ලංකා", "ભારત", "भारत", "网店", "संगठन", "网络", "укр", "香港", "台湾", "台灣", "手机", "мон", "الجزائر", "عمان", "ایران", "امارات", "بازار", "الاردن", "بھارت",
+                "المغرب", "السعودية", "مليسيا", "شبكة", "გე", "机构", "组织机构", "ไทย", "سورية", "рус", "рф", "تونس", "みんな", "グーグル", "世界", "ਭਾਰਤ", "网址", "游戏", "vermögensberater", "vermögensberatung", "企业", "مصر", "قطر", "广东", "இலங்கை", "இந்தியா", "新加坡", "فلسطين", "政务", "xxx", "xyz", "yachts", "yandex", "ye", "yoga", "yokohama", "youtube", "yt", "za", "zip", "zm", "zone", "zuerich", "zw"
         };
 
         List<String> urlList = new ArrayList<String>(Arrays.asList(strings));
@@ -234,7 +213,8 @@ public class HelperUrl {
                 }
             }
 
-            @Override public void updateDrawState(TextPaint ds) {
+            @Override
+            public void updateDrawState(TextPaint ds) {
                 ds.linkColor = LinkColor;
                 super.updateDrawState(ds);
             }
@@ -253,16 +233,19 @@ public class HelperUrl {
         CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();
 
         mCustomTabsHelperFragment.setConnectionCallback(new CustomTabsActivityHelper.ConnectionCallback() {
-            @Override public void onCustomTabsConnected() {
+            @Override
+            public void onCustomTabsConnected() {
                 mCustomTabsHelperFragment.mayLaunchUrl(PROJECT_URI, null, null);
             }
 
-            @Override public void onCustomTabsDisconnected() {
+            @Override
+            public void onCustomTabsDisconnected() {
             }
         });
 
         CustomTabsHelperFragment.open(G.currentActivity, mCustomTabsIntent, PROJECT_URI, new CustomTabsActivityHelper.CustomTabsFallback() {
-            @Override public void openUri(Activity activity, Uri uri) {
+            @Override
+            public void openUri(Activity activity, Uri uri) {
                 try {
                     activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
                 } catch (ActivityNotFoundException e) {
@@ -293,7 +276,8 @@ public class HelperUrl {
                 }
             }
 
-            @Override public void updateDrawState(TextPaint ds) {
+            @Override
+            public void updateDrawState(TextPaint ds) {
                 ds.linkColor = LinkColor;
                 super.updateDrawState(ds);
             }
@@ -318,7 +302,8 @@ public class HelperUrl {
                 }
             }
 
-            @Override public void updateDrawState(TextPaint ds) {
+            @Override
+            public void updateDrawState(TextPaint ds) {
                 ds.linkColor = LinkColor;
                 super.updateDrawState(ds);
             }
@@ -375,13 +360,15 @@ public class HelperUrl {
     private static void insertHashLink(final String text, SpannableStringBuilder builder, int start, final String messageID) {
 
         ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override public void onClick(View widget) {
+            @Override
+            public void onClick(View widget) {
                 if (ActivityChat.hashListener != null) {
                     ActivityChat.hashListener.complete(true, text, messageID);
                 }
             }
 
-            @Override public void updateDrawState(TextPaint ds) {
+            @Override
+            public void updateDrawState(TextPaint ds) {
                 ds.linkColor = LinkColor;
                 super.updateDrawState(ds);
             }
@@ -443,12 +430,14 @@ public class HelperUrl {
     private static void insertAtSignLink(final String text, SpannableStringBuilder builder, int start) {
 
         ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override public void onClick(View widget) {
+            @Override
+            public void onClick(View widget) {
 
                 checkUsernameAndGoToRoom(text, ChatEntery.profile);
             }
 
-            @Override public void updateDrawState(TextPaint ds) {
+            @Override
+            public void updateDrawState(TextPaint ds) {
                 ds.linkColor = LinkColor;
                 super.updateDrawState(ds);
             }
@@ -537,9 +526,9 @@ public class HelperUrl {
 
         if (text.trim().length() < 1) return linkInfo;
 
-        linkInfo += analaysAtSignLinkInfo(text);
+        linkInfo += analysisAtSignLinkInfo(text);
 
-        linkInfo += analaysHashLinkInfo(text);
+        linkInfo += analysisHashLinkInfo(text);
 
         String newText = text.toLowerCase();
 
@@ -564,7 +553,7 @@ public class HelperUrl {
         return linkInfo;
     }
 
-    private static String analaysAtSignLinkInfo(String text) {
+    private static String analysisAtSignLinkInfo(String text) {
 
         String result = "";
         if (text == null || text.length() < 1) return result;
@@ -606,7 +595,7 @@ public class HelperUrl {
         return result;
     }
 
-    private static String analaysHashLinkInfo(String text) {
+    private static String analysisHashLinkInfo(String text) {
 
         String result = "";
         if (text == null || text.length() < 1) return result;
@@ -661,12 +650,14 @@ public class HelperUrl {
             showIndeterminateProgressDialog();
 
             G.onClientCheckInviteLink = new OnClientCheckInviteLink() {
-                @Override public void onClientCheckInviteLinkResponse(ProtoGlobal.Room room) {
+                @Override
+                public void onClientCheckInviteLinkResponse(ProtoGlobal.Room room) {
                     closeDialogWaiting();
                     openDialogJoin(room, token);
                 }
 
-                @Override public void onError(int majorCode, int minorCode) {
+                @Override
+                public void onError(int majorCode, int minorCode) {
                     Log.e("ddd", majorCode + "   " + minorCode);
 
                     closeDialogWaiting();
@@ -700,17 +691,20 @@ public class HelperUrl {
         }
 
         new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
 
                         RealmRoom realmRoom = RealmRoom.putOrUpdate(room);
                         realmRoom.setDeleted(true);
                     }
                 }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
+                    @Override
+                    public void onSuccess() {
 
                         String title = G.context.getString(R.string.do_you_want_to_join_to_this);
                         String memberNumber = "";
@@ -731,38 +725,35 @@ public class HelperUrl {
                         final String finalTitle = title;
 
                         G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
-                                final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle)
-                                    .customView(R.layout.dialog_alert_join, true)
-                                    .positiveText(R.string.join)
-                                    .cancelable(false)
-                                    .negativeText(android.R.string.cancel)
-                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle).customView(R.layout.dialog_alert_join, true).positiveText(R.string.join).cancelable(false).negativeText(android.R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                            joinToRoom(token, room);
+                                        joinToRoom(token, room);
+                                    }
+                                }).onNegative(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                        final Realm realm = Realm.getDefaultInstance();
+
+                                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+
+                                        if (realmRoom != null) {
+                                            realm.executeTransaction(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    realmRoom.deleteFromRealm();
+                                                }
+                                            });
                                         }
-                                    })
-                                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                            final Realm realm = Realm.getDefaultInstance();
-
-                                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
-
-                                            if (realmRoom != null) {
-                                                realm.executeTransaction(new Realm.Transaction() {
-                                                    @Override public void execute(Realm realm) {
-                                                        realmRoom.deleteFromRealm();
-                                                    }
-                                                });
-                                            }
-
-                                            realm.close();
-                                        }
-                                    })
-                                    .build();
+                                        realm.close();
+                                    }
+                                }).build();
 
                                 imageView[0] = (CircleImageView) dialog.findViewById(R.id.daj_img_room_picture);
 
@@ -773,13 +764,14 @@ public class HelperUrl {
                                 txtMemeberNumber.setText(finalMemberNumber);
 
                                 HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
-                                    @Override public void onAvatarGet(final String avatarPath, long roomId) {
+                                    @Override
+                                    public void onAvatarGet(final String avatarPath, long roomId) {
                                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
                                     }
 
-                                    @Override public void onShowInitials(String initials, String color) {
-                                        imageView[0].setImageBitmap(
-                                            HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                                    @Override
+                                    public void onShowInitials(String initials, String color) {
+                                        imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                                     }
                                 });
                                 dialog.show();
@@ -789,7 +781,8 @@ public class HelperUrl {
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
-                    @Override public void onError(Throwable error) {
+                    @Override
+                    public void onError(Throwable error) {
                         realm.close();
                     }
                 });
@@ -802,7 +795,8 @@ public class HelperUrl {
             showIndeterminateProgressDialog();
 
             G.onClientJoinByInviteLink = new OnClientJoinByInviteLink() {
-                @Override public void onClientJoinByInviteLinkResponse() {
+                @Override
+                public void onClientJoinByInviteLinkResponse() {
 
                     closeDialogWaiting();
 
@@ -813,7 +807,8 @@ public class HelperUrl {
                     if (realmRoom != null) {
 
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
 
                                 if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
                                     realmRoom.setReadOnly(false);
@@ -831,7 +826,8 @@ public class HelperUrl {
                     G.currentActivity.startActivity(intent);
                 }
 
-                @Override public void onError(int majorCode, int minorCode) {
+                @Override
+                public void onError(int majorCode, int minorCode) {
                     closeDialogWaiting();
                 }
             };
@@ -850,21 +846,22 @@ public class HelperUrl {
         if (userName == null || userName.length() < 1) return;
 
         if (G.userLogin) {
-        // this methode check user name and if it is ok go to room
-        G.onClientResolveUsername = new OnClientResolveUsername() {
-            @Override public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
-                openChat(userName, type, user, room, chatEntery);
-            }
+            // this methode check user name and if it is ok go to room
+            G.onClientResolveUsername = new OnClientResolveUsername() {
+                @Override
+                public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
+                    openChat(userName, type, user, room, chatEntery);
+                }
 
-            @Override public void onError(int majorCode, int minorCode) {
-                Log.e("qqqqqqqqq", "majorCode" + majorCode + "   " + minorCode);
-                closeDialogWaiting();
-            }
-        };
+                @Override
+                public void onError(int majorCode, int minorCode) {
+                    closeDialogWaiting();
+                }
+            };
 
-        showIndeterminateProgressDialog();
+            showIndeterminateProgressDialog();
 
-        new RequestClientResolveUsername().channelAddMessageReaction(userName);
+            new RequestClientResolveUsername().channelAddMessageReaction(userName);
         } else {
             closeDialogWaiting();
             HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
@@ -968,16 +965,12 @@ public class HelperUrl {
         try {
             if (G.currentActivity != null) {
                 G.currentActivity.runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         if (dialogWaiting != null && dialogWaiting.isShowing()) {
 
                         } else {
-                            dialogWaiting = new MaterialDialog.Builder(G.currentActivity).title(R.string.please_wait)
-                                .content(R.string.please_wait)
-                                .progress(true, 0)
-                                .cancelable(false)
-                                .progressIndeterminateStyle(false)
-                                .show();
+                            dialogWaiting = new MaterialDialog.Builder(G.currentActivity).title(R.string.please_wait).content(R.string.please_wait).progress(true, 0).cancelable(false).progressIndeterminateStyle(false).show();
                         }
                     }
                 });
@@ -996,11 +989,13 @@ public class HelperUrl {
         closeDialogWaiting();
 
         new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
 
                         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
                         if (realmRegisteredInfo == null) {
@@ -1021,14 +1016,16 @@ public class HelperUrl {
                         realmRegisteredInfo.setMutual(user.getMutual());
                     }
                 }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
+                    @Override
+                    public void onSuccess() {
 
                         goToActivity(roomid, user.getId(), chatEntery);
 
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
-                    @Override public void onError(Throwable error) {
+                    @Override
+                    public void onError(Throwable error) {
                         realm.close();
                     }
                 });
@@ -1065,18 +1062,21 @@ public class HelperUrl {
         closeDialogWaiting();
 
         new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
 
                         RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room);
                         realmRoom1.setDeleted(true);                            // if in chat activity join to room set deleted goes to false
                     }
                 }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
+                    @Override
+                    public void onSuccess() {
 
                         Intent intent = new Intent(G.currentActivity, ActivityChat.class);
                         intent.putExtra("RoomId", room.getId());
@@ -1089,7 +1089,8 @@ public class HelperUrl {
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
-                    @Override public void onError(Throwable error) {
+                    @Override
+                    public void onError(Throwable error) {
                         realm.close();
                     }
                 });
@@ -1122,7 +1123,8 @@ public class HelperUrl {
             if (countTime < 15) {
                 final int finalCountTime = countTime;
                 G.handler.postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         checkConnection(path, finalCountTime);
                     }

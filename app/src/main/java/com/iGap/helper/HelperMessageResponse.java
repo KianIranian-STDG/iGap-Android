@@ -55,7 +55,7 @@ public class HelperMessageResponse {
                     if (roomMessage.getAuthor().hasUser()) {
                         HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                     }
-                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHANNEL, roomId);
+                    G.helperNotificationAndBadge.checkAlert(realm, true, ProtoGlobal.Room.Type.CHANNEL, roomId);
 
                 } else if (!response.getId().isEmpty()) {
                     /**

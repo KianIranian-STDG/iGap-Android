@@ -34,7 +34,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver android:name=".module.MusicPlayer$customButtonListener"/>
-        <receiver android:name=".helper.HelperNotificationAndBadge$RemoteActionReciver"/>
+        <receiver android:name=".helper.HelperNotificationAndBadge$RemoteActionReceiver" />
 
         <activity
             android:name=".activities.ActivityChat"

@@ -78,7 +78,7 @@ public class FragmentShowImage extends Fragment {
 
     private ArrayList<RealmRoomMessage> mFList = new ArrayList<>();
 
-    private Long mRoomid;
+    private Long mRoomId;
     private Long selectedFileToken;
     private Realm mRealm;
     private MediaPlayer mMediaPlayer;
@@ -128,17 +128,17 @@ public class FragmentShowImage extends Fragment {
 
         if (bundle != null) { // get a list of image
 
-            mRoomid = bundle.getLong("RoomId");
+            mRoomId = bundle.getLong("RoomId");
             selectedFileToken = bundle.getLong("SelectedImage");
             if (bundle.getString("TYPE") != null) type = bundle.getString("TYPE");
-            if (mRoomid == null) {
+            if (mRoomId == null) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 return false;
             }
 
             mRealm = Realm.getDefaultInstance();
 
-            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomid).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
 
             if (mRealmList.size() < 1) {
                 getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();

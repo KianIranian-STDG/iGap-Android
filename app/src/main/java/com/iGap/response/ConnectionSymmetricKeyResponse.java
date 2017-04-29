@@ -13,6 +13,7 @@ package com.iGap.response;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.WebSocketClient;
+import com.iGap.module.LoginActions;
 import com.iGap.proto.ProtoConnectionSecuring;
 import com.neovisionaries.ws.client.WebSocket;
 
@@ -57,9 +58,10 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
             G.ivSize = builder.getSymmetricIvSize();
             String sm = builder.getSymmetricMethod();
             G.symmetricMethod = sm.split("-")[2];
-            if (G.onSecuring != null) {
-                G.onSecuring.onSecure();
+            if (G.onSecuring == null) {
+                new LoginActions();
             }
+            G.onSecuring.onSecure();
         }
     }
 
