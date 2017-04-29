@@ -22,7 +22,7 @@ public class RequestGroupGetDraft {
 
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30316, builder, roomId + "");
+        RequestWrapper requestWrapper = new RequestWrapper(316, builder, roomId + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

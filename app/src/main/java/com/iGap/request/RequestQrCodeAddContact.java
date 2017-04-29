@@ -22,7 +22,7 @@ public class RequestQrCodeAddContact {
         builder.setFirstName(firstName);
         builder.setLastName(lastName);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30803, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(803, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

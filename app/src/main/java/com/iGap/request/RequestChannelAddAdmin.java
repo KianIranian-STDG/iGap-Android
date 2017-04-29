@@ -19,7 +19,7 @@ public class RequestChannelAddAdmin {
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30402, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(402, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

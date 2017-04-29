@@ -21,7 +21,7 @@ public class RequestGroupAvatarDelete {
         builder.setRoomId(roomId);
         builder.setId(id);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30313, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(313, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -21,7 +21,7 @@ public class RequestInfoCountry {
                 ProtoInfoCountry.InfoCountry.newBuilder();
         infoCountry.setIsoCode(isoCode);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30501, infoCountry);
+        RequestWrapper requestWrapper = new RequestWrapper(501, infoCountry);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

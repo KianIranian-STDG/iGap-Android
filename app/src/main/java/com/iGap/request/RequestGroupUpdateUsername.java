@@ -20,7 +20,7 @@ public class RequestGroupUpdateUsername {
         builder.setRoomId(roomId);
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30322, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(322, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

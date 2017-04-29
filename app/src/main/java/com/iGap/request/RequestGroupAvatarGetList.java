@@ -20,7 +20,7 @@ public class RequestGroupAvatarGetList {
         ProtoGroupAvatarGetList.GroupAvatarGetList.Builder builder = ProtoGroupAvatarGetList.GroupAvatarGetList.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30314, builder, roomId + "");
+        RequestWrapper requestWrapper = new RequestWrapper(314, builder, roomId + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

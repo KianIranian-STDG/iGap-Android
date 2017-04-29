@@ -20,7 +20,7 @@ public class RequestGroupLeft {
         ProtoGroupLeft.GroupLeft.Builder builder = ProtoGroupLeft.GroupLeft.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30309, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(309, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

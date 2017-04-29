@@ -21,7 +21,7 @@ public class RequestGroupCheckUsername {
         builder.setRoomId(roomId);
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30321, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(321, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

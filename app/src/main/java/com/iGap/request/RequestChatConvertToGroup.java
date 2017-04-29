@@ -22,7 +22,7 @@ public class RequestChatConvertToGroup {
         builder.setName(name);
         builder.setDescription(description);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30209, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(209, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

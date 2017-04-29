@@ -20,7 +20,7 @@ public class RequestGroupDelete {
         ProtoGroupDelete.GroupDelete.Builder builder = ProtoGroupDelete.GroupDelete.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30318, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(318, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

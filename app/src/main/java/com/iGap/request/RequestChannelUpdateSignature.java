@@ -19,7 +19,7 @@ public class RequestChannelUpdateSignature {
         builder.setRoomId(roomId);
         builder.setSignature(signature);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30422, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(422, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

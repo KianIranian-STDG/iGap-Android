@@ -18,7 +18,7 @@ public class RequestClientJoinByInviteLink {
         ProtoClientJoinByInviteLink.ClientJoinByInviteLink.Builder builder = ProtoClientJoinByInviteLink.ClientJoinByInviteLink.newBuilder();
         builder.setInviteToken(inviteToken);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30608, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(608, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

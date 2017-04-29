@@ -28,7 +28,7 @@ public class RequestClientCondition {
             }, Config.UPDATING_TIME_SHOWING);
         }
 
-        RequestWrapper requestWrapper = new RequestWrapper(30600, clientCondition);
+        RequestWrapper requestWrapper = new RequestWrapper(600, clientCondition);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

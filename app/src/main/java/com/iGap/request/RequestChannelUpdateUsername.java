@@ -20,7 +20,7 @@ public class RequestChannelUpdateUsername {
         builder.setRoomId(roomId);
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30419, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(419, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -56,7 +56,7 @@ public class RequestGroupSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02
     }
 
     public RequestGroupSendMessage sendMessage(String fakeMessageIdAsIdentity) {
-        RequestWrapper requestWrapper = new RequestWrapper(30310, groupSendMessage, fakeMessageIdAsIdentity);
+        RequestWrapper requestWrapper = new RequestWrapper(310, groupSendMessage, fakeMessageIdAsIdentity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

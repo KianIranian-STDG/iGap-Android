@@ -19,7 +19,7 @@ public class RequestChannelAvatarDelete {
         builder.setRoomId(roomId);
         builder.setId(avatarId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30413, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(413, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

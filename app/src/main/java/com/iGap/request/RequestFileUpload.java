@@ -27,7 +27,7 @@ public class RequestFileUpload {
         fileUploadInit.setOffset(offset);
         fileUploadInit.setBytes(ByteString.copyFrom(bytes));
 
-        RequestWrapper requestWrapper = new RequestWrapper(30702, fileUploadInit, identity);
+        RequestWrapper requestWrapper = new RequestWrapper(702, fileUploadInit, identity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

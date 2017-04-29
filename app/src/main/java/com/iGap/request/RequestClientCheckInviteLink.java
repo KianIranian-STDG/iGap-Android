@@ -20,7 +20,7 @@ public class RequestClientCheckInviteLink {
         ProtoClientCheckInviteLink.ClientCheckInviteLink.Builder builder = ProtoClientCheckInviteLink.ClientCheckInviteLink.newBuilder();
         builder.setInviteToken(inviteToken);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30607, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(607, builder);
 
         try {
             RequestQueue.sendRequest(requestWrapper);

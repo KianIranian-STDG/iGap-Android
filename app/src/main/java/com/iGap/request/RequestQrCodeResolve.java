@@ -21,7 +21,7 @@ public class RequestQrCodeResolve {
         builder.setUsername(username);
         builder.setMessageId(messageId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30801, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(801, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

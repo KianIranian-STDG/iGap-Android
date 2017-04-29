@@ -19,7 +19,7 @@ public class RequestChannelAvatarAdd {
         builder.setRoomId(roomId);
         builder.setAttachment(attachment);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30412, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(412, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

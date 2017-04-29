@@ -19,7 +19,7 @@ public class RequestClientJoinByUsername {
         ProtoClientJoinByUsername.ClientJoinByUsername.Builder builder = ProtoClientJoinByUsername.ClientJoinByUsername.newBuilder();
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30609, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(609, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

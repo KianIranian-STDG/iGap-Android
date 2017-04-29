@@ -22,7 +22,7 @@ public class RequestChannelEditMessage {
         chatEditMessage.setMessageId(messageId);
         chatEditMessage.setMessage(message);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30425, chatEditMessage);
+        RequestWrapper requestWrapper = new RequestWrapper(425, chatEditMessage);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -19,7 +19,7 @@ public class RequestChannelKickMember {
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30407, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(407, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

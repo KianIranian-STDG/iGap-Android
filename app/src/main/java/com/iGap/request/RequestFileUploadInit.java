@@ -32,7 +32,7 @@ public class RequestFileUploadInit {
         fileUploadInit.setFileHash(ByteString.copyFrom(fileHash));
         fileUploadInit.setFileName(fileName);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30701, fileUploadInit, identity);
+        RequestWrapper requestWrapper = new RequestWrapper(701, fileUploadInit, identity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -20,7 +20,7 @@ public class RequestGroupRevokeLink {
         ProtoGroupRevokeLink.GroupRevokeLink.Builder builder = ProtoGroupRevokeLink.GroupRevokeLink.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30324, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(324, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

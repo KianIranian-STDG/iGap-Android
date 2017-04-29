@@ -18,7 +18,7 @@ public class RequestClientSubscribeToRoom {
         ProtoClientSubscribeToRoom.ClientSubscribeToRoom.Builder builder = ProtoClientSubscribeToRoom.ClientSubscribeToRoom.newBuilder();
         builder.setRoomId(roomId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30610, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(610, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

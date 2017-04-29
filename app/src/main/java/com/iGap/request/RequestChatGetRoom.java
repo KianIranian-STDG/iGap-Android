@@ -21,7 +21,7 @@ public class RequestChatGetRoom {
                 ProtoChatGetRoom.ChatGetRoom.newBuilder();
         chatGetRoom.setPeerId(peerId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30200, chatGetRoom);
+        RequestWrapper requestWrapper = new RequestWrapper(200, chatGetRoom);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

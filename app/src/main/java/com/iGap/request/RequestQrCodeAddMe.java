@@ -19,7 +19,7 @@ public class RequestQrCodeAddMe {
 
         ProtoQrCodeAddMe.QrCodeAddMe.Builder builder = ProtoQrCodeAddMe.QrCodeAddMe.newBuilder();
 
-        RequestWrapper requestWrapper = new RequestWrapper(30804, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(804, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

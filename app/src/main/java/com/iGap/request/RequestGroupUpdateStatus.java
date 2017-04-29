@@ -27,7 +27,7 @@ public class RequestGroupUpdateStatus {
         Log.i("III", "roomId : " + roomId);
         Log.i("III", "messageId : " + messageId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30311, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(311, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

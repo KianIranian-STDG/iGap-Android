@@ -22,7 +22,7 @@ public class RequestGroupClearMessage {
         builder.setRoomId(roomId);
         builder.setClearId(clearId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30304, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(304, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

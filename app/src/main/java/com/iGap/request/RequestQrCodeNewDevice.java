@@ -28,7 +28,7 @@ public class RequestQrCodeNewDevice {
         builder.setDevice(device);
         builder.setDeviceName(deviceName);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30802, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(802, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

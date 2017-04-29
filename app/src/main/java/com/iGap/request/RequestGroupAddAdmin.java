@@ -22,7 +22,7 @@ public class RequestGroupAddAdmin {
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30302, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(302, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

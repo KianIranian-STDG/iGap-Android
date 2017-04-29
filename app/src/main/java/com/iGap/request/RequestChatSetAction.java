@@ -21,7 +21,7 @@ public class RequestChatSetAction {
         builder.setRoomId(roomId);
         builder.setAction(clientAction);
         builder.setActionId(actionId);
-        RequestWrapper requestWrapper = new RequestWrapper(30210, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(210, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -18,7 +18,7 @@ public class RequestClientResolveUsername {
         ProtoClientResolveUsername.ClientResolveUsername.Builder builder = ProtoClientResolveUsername.ClientResolveUsername.newBuilder();
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30606, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(606, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

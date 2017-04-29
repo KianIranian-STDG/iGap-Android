@@ -21,7 +21,7 @@ public class RequestGroupCreate {
         builder.setName(name);
         builder.setDescription(description);
 
-        RequestWrapper requestWrapper = new RequestWrapper(30300, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(300, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
