@@ -714,6 +714,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
 
                 latestUri = null; // check
+            } else if (AttachFile.request_code_VIDEO_CAPTURED == requestCode) {
+
+                listPathString = new ArrayList<>();
+                listPathString.add(AttachFile.videoPath);
+
+                latestUri = null; // check
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     if (data.getClipData() != null) { // multi select file
@@ -4233,13 +4239,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
                             String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
                                     "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                            mainVideoPath = AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
+                            mainVideoPath = AttachFile.getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
 
                             new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
                             sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                         } else {
                             for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                                compressedPath.put(AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
+                                compressedPath.put(AttachFile.getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
                                 sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                             }
                         }
@@ -4264,12 +4270,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
                                     String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR +
                                             "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                                    mainVideoPath = AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
+                                    mainVideoPath = AttachFile.getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
 
                                     new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
                                     sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                                 } else {
-                                    compressedPath.put(AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
+                                    compressedPath.put(AttachFile.getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
                                     sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                                 }
                             } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
@@ -5337,7 +5343,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         /**
          * check if path is uri detect real path from uri
          */
-        String path = AndroidUtils.pathFromContentUri(getApplicationContext(), Uri.parse(filePath));
+        String path = AttachFile.getFilePathFromUri(Uri.parse(filePath));
         if (path != null) {
             filePath = path;
         }

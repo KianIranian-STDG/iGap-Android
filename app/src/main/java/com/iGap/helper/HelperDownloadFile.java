@@ -330,7 +330,13 @@ public class HelperDownloadFile {
 
         if (item.moveToDirectoryPAth.length() > 0) {
             try {
-                AndroidUtils.cutFromTemp(item.path, item.moveToDirectoryPAth);
+
+                File _File = new File(item.moveToDirectoryPAth);
+                if (!_File.exists()) {
+                    AndroidUtils.cutFromTemp(item.path, item.moveToDirectoryPAth);
+                }
+
+
             } catch (IOException e) {
             }
         }

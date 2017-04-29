@@ -79,12 +79,17 @@ public final class AndroidUtils {
 
         if (file.exists()) {
             uri = Uri.fromFile(file);
-        } else {
-            uri = Uri.parse("content://media" + filePath);
+
+            try {
+                metaRetriever.setDataSource(G.context, uri);
+                return metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            } catch (Exception e) {
+
+            }
+
         }
 
-        metaRetriever.setDataSource(G.context, uri);
-        return metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+        return "";
     }
 
     public static long getAudioDuration(Context context, String filePath) throws IllegalArgumentException {
@@ -98,14 +103,20 @@ public final class AndroidUtils {
 
         if (file.exists()) {
             uri = Uri.fromFile(file);
-        } else {
-            uri = Uri.parse("content://media" + filePath);
+
+            try {
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                mmr.setDataSource(context, uri);
+                String durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                return Integer.parseInt(durationStr);
+            } catch (Exception e) {
+
+            }
+
+
         }
 
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(context, uri);
-        String durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        return Integer.parseInt(durationStr);
+        return 1;
     }
 
     public static String getRealPathFromURI(Context context, Uri contentUri) {
@@ -123,16 +134,6 @@ public final class AndroidUtils {
         }
     }
 
-    public static String pathFromContentUri(Context context, Uri contentUri) {
-        if (contentUri != null && contentUri.getScheme() != null) {
-            if (contentUri.getScheme().equals("content")) {
-                return getRealPathFromURI(context, contentUri);
-            } else if (contentUri.getScheme().equals("file")) {
-                return contentUri.getPath();
-            }
-        }
-        return null;
-    }
 
     public static int[] getImageDimens(String filePath) {
 
