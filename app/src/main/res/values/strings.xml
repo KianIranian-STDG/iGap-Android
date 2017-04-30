@@ -823,4 +823,6 @@
   <string name="file_save_to_picture_folder">File save to picture folder</string>
   <string name="title_limit_chat_to_unknown_contact">Limit Chat</string>
   <string name="text_limit_chat_to_unknown_contact">you have wait until time is finish</string>
+  <string name="text_limit_Create_Group">you just create 25 Group or Channel</string>
+  <string name="title_limit_Create_Group">Limit Create Room</string>
 </resources>

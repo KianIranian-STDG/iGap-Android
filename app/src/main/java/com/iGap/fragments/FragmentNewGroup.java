@@ -523,8 +523,14 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
             @Override
             public void onError(int majorCode, int minorCode) {
                 hideProgressBar();
+                if (majorCode == 479) {
+                    G.handler.post(new Runnable() {
+                        @Override public void run() {
+                            ShowDialogLimitCreate();
+                        }
+                    });
+                }
             }
-
             @Override
             public void onTimeOut() {
                 hideProgressBar();
@@ -532,6 +538,10 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         };
 
         new RequestChannelCreate().channelCreate(edtGroupName.getText().toString(), edtDescription.getText().toString());
+    }
+
+    private void ShowDialogLimitCreate() {
+        new MaterialDialog.Builder(mActivity).title(R.string.title_limit_Create_Group).content(R.string.text_limit_Create_Group).positiveText(R.string.B_ok).show();
     }
 
     private void chatToGroup() {
@@ -627,6 +637,13 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
             @Override
             public void onError(int majorCode, int minorCode) {
                 hideProgressBar();
+                if (majorCode == 380) {
+                    G.handler.post(new Runnable() {
+                        @Override public void run() {
+                            ShowDialogLimitCreate();
+                        }
+                    });
+                }
             }
         };
 
