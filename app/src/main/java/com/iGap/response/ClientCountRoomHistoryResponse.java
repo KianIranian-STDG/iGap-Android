@@ -10,6 +10,7 @@
 
 package com.iGap.response;
 
+import com.iGap.activities.ActivityShearedMedia;
 import com.iGap.proto.ProtoClientCountRoomHistory;
 
 public class ClientCountRoomHistoryResponse extends MessageHandler {
@@ -31,14 +32,10 @@ public class ClientCountRoomHistoryResponse extends MessageHandler {
         super.handler();
 
         ProtoClientCountRoomHistory.ClientCountRoomHistoryResponse.Builder builder = (ProtoClientCountRoomHistory.ClientCountRoomHistoryResponse.Builder) message;
-        builder.getAudio();
-        builder.getMedia();
-        builder.getImage();
-        builder.getVideo();
-        builder.getVoice();
-        builder.getGif();
-        builder.getFile();
-        builder.getUrl();
+        long _roomId = Long.parseLong(identity);
+
+        ActivityShearedMedia.updateStringSharedMediaCount(builder, _roomId);
+
     }
 
     @Override

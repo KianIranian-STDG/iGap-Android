@@ -58,6 +58,7 @@ import com.iGap.module.AppUtils;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.structs.StructMessageInfo;
+import com.iGap.proto.ProtoClientCountRoomHistory;
 import com.iGap.proto.ProtoClientSearchRoomHistory;
 import com.iGap.proto.ProtoFileDownload;
 import com.iGap.proto.ProtoGlobal;
@@ -66,6 +67,7 @@ import com.iGap.realm.RealmRoom;
 import com.iGap.realm.RealmRoomFields;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmRoomMessageFields;
+import com.iGap.request.RequestClientCountRoomHistory;
 import com.iGap.request.RequestClientSearchRoomHistory;
 import io.meness.github.messageprogress.MessageProgress;
 import io.realm.Realm;
@@ -122,13 +124,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private static long countOFFILE = 0;
     private static long countOFLink = 0;
 
-    private static boolean isImageGet = false;
-    private static boolean isVideoGet = false;
-    private static boolean isAudioGet = false;
-    private static boolean isVoiceGet = false;
-    private static boolean isGifGet = false;
-    private static boolean isFileGet = false;
-    private static boolean isLinkGet = false;
 
     private LinearLayout mediaLayout;
     private MusicPlayer musicPlayer;
@@ -341,7 +336,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                             @Override public void run() {
                                 int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
-                                if (lastVisiblePosition + 20 >= offset) {
+                                if (lastVisiblePosition + 25 >= offset) {
 
                                 new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, mFilter);
                                 isSendRequestForLoading = true;
@@ -456,15 +451,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         break;
                 }
 
-                final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (room != null) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            room.setSharedMediaCount(getStringSharedMediaCount());
-                        }
-                    });
-                }
+                updateStringSharedMediaCount(null, roomId);
 
                 adapter.resetSelected();
 
@@ -869,33 +856,19 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
     }
 
-    private static void updateCountOfSharedMedia(long roomId) {
+    public static void updateStringSharedMediaCount(ProtoClientCountRoomHistory.ClientCountRoomHistoryResponse.Builder proto, long roomId) {
 
-        /**
-         * after get response for all requests update info
-         * do this action for avoid from hide and show in sheared media show info
-         */
+        if (proto != null) {
 
-        if (isImageGet && isVideoGet && isAudioGet && isVoiceGet && isGifGet && isFileGet && isLinkGet) {
-            String countStr = getStringSharedMediaCount();
-            Realm realm = Realm.getDefaultInstance();
-
-            final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-            if (room != null) {
-                final String finalCountStr = countStr;
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        room.setSharedMediaCount(finalCountStr);
-                    }
-                });
-            }
-
-            realm.close();
+            countOFImage = proto.getImage();
+            countOFVIDEO = proto.getVideo();
+            countOFAUDIO = proto.getAudio();
+            countOFVOICE = proto.getVoice();
+            countOFGIF = proto.getGif();
+            countOFFILE = proto.getFile();
+            countOFLink = proto.getUrl();
         }
-    }
 
-    private static String getStringSharedMediaCount() {
 
         String result = "";
 
@@ -909,93 +882,31 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         result = result.trim();
 
-        if (result.length() < 1) result = context.getString(R.string.there_is_no_sheared_media);
+        if (result.length() < 1) {
+            result = context.getString(R.string.there_is_no_sheared_media);
+        }
 
-        return result;
+        Realm realm = Realm.getDefaultInstance();
+
+        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (room != null) {
+            final String finalResult = result;
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override public void execute(Realm realm) {
+                    room.setSharedMediaCount(finalResult);
+                }
+            });
+        }
+
+        realm.close();
+
+
     }
 
-    public static void getCountOfSharedMedia(final long roomId) {
+    public static void getCountOfSharedMedia(long roomId) {
 
-        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override
-            public void onClientSearchRoomHistory(final int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, String identity) {
+        new RequestClientCountRoomHistory().clientCountRoomHistory(roomId);
 
-                if (notDeletedCount > 0) {
-                    switch (identity) {
-                        case "IMAGE":
-                            countOFImage = notDeletedCount;
-                            isImageGet = true;
-                            break;
-                        case "VIDEO":
-                            countOFVIDEO = notDeletedCount;
-                            isVideoGet = true;
-                            break;
-                        case "AUDIO":
-                            countOFAUDIO = notDeletedCount;
-                            isAudioGet = true;
-                            break;
-                        case "VOICE":
-                            countOFVOICE = notDeletedCount;
-                            isVoiceGet = true;
-                            break;
-                        case "GIF":
-                            countOFGIF = notDeletedCount;
-                            isGifGet = true;
-                            break;
-                        case "FILE":
-                            countOFFILE = notDeletedCount;
-                            isFileGet = true;
-                            break;
-                        case "URL":
-                            countOFLink = notDeletedCount;
-                            isLinkGet = true;
-                            break;
-                    }
-
-                    updateCountOfSharedMedia(roomId);
-                }
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode, String identity) {
-                switch (identity) {
-                    case "IMAGE":
-                        isImageGet = true;
-                        break;
-                    case "VIDEO":
-                        isVideoGet = true;
-                        break;
-                    case "AUDIO":
-                        isAudioGet = true;
-                        break;
-                    case "VOICE":
-                        isVoiceGet = true;
-                        break;
-                    case "GIF":
-                        isGifGet = true;
-                        break;
-                    case "FILE":
-                        isFileGet = true;
-                        break;
-                    case "URL":
-                        isLinkGet = true;
-                        break;
-                }
-                updateCountOfSharedMedia(roomId);
-            }
-        };
-
-
-        countOFImage = countOFVIDEO = countOFAUDIO = countOFVOICE = countOFGIF = countOFFILE = countOFLink = 0;
-        isImageGet = isVideoGet = isAudioGet = isVoiceGet = isGifGet = isFileGet = isLinkGet = false;
-
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE);
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO);
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE);
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF);
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE);
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, 0, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL);
     }
 
     //****************************************************    Adapter    ****************************************
