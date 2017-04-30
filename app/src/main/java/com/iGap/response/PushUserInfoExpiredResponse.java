@@ -11,6 +11,10 @@
 package com.iGap.response;
 
 import com.iGap.proto.ProtoPushUserInfoExpired;
+import com.iGap.realm.RealmRegisteredInfo;
+import com.iGap.realm.RealmRegisteredInfoFields;
+import com.iGap.request.RequestUserInfo;
+import io.realm.Realm;
 
 public class PushUserInfoExpiredResponse extends MessageHandler {
 
@@ -26,20 +30,24 @@ public class PushUserInfoExpiredResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override
-    public void handler() {
+    @Override public void handler() {
         super.handler();
         ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.Builder builder = (ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.Builder) message;
         builder.getUserId();
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUserId()).findFirst();
+
+        if (realmRegisteredInfo != null) {
+            new RequestUserInfo().userInfo(builder.getUserId());
+        }
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         super.timeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         super.error();
     }
 }
