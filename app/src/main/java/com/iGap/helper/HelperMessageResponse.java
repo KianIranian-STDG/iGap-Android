@@ -46,16 +46,15 @@ public class HelperMessageResponse {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Realm realm = Realm.getDefaultInstance();
+                final Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
 
                         /**
                          * put message to realm
                          */
                         RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(roomMessage, roomId);
-
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                         /**
                          * because user may have more than one device, his another device should not
                          * be recipient but sender. so I check current userId with room message user id,
@@ -72,8 +71,12 @@ public class HelperMessageResponse {
                             if (roomMessage.getAuthor().hasUser()) {
                                 HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                             }
-                            G.helperNotificationAndBadge.checkAlert(realm, true, ProtoGlobal.Room.Type.CHANNEL, roomId);
+                            ProtoGlobal.Room.Type type = ProtoGlobal.Room.Type.CHAT;
+                            if (room != null) {
+                                type = room.getType();
+                            }
 
+                            G.helperNotificationAndBadge.checkAlert(true, type, roomId);
                         } else if (!response.getId().isEmpty()) {
                             /**
                              * i'm the sender
@@ -84,7 +87,6 @@ public class HelperMessageResponse {
                             RealmRoomMessage.deleteMessage(realm, Long.parseLong(identity));
                         }
 
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                         if (room == null) {
                             /**
                              * if first message received but the room doesn't exist, send request for create new room
@@ -125,6 +127,12 @@ public class HelperMessageResponse {
                              */
                             G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
                         }
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
                     }
                 });
             }

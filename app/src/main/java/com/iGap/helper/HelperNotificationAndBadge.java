@@ -77,9 +77,9 @@ public class HelperNotificationAndBadge {
     private RemoteViews remoteViewsLarge;
     private SharedPreferences sharedPreferences;
     private int led;
-    private int vibrator;
+    private int vibrator = 1;
     private int popupNotification;
-    private int sound;
+    private int sound = 0;
     private int messagePeriview;
     private boolean isMute;
     private String inRoomVibrator;  //specially for each room
@@ -285,25 +285,26 @@ public class HelperNotificationAndBadge {
         currentAlarm = System.currentTimeMillis();
     }
 
-    public void checkAlert(Realm realm, boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
+    public void checkAlert(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
         idRoom = roomId;
         int vipCheck = checkSpecialNotification(updateNotification, type, roomId);
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         int checkAlert = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
         if (vipCheck == ENABLE) {
-            updateNotificationAndBadge(realm, updateNotification, type);
+            updateNotificationAndBadge(updateNotification, type);
         } else if (vipCheck == DEFAULT) {
             if (checkAlert == 1) {
-                updateNotificationAndBadge(realm, updateNotification, type);
+                updateNotificationAndBadge(updateNotification, type);
             }
         } else if (vipCheck == DISABLE) {
             // do nothing
         }
     }
 
-    private void updateNotificationAndBadge(Realm realm, boolean updateNotification, ProtoGlobal.Room.Type type) {
+    private void updateNotificationAndBadge(boolean updateNotification, ProtoGlobal.Room.Type type) {
 
         sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, idRoom).findFirst();
         switch (type) {
             case CHAT:
@@ -325,6 +326,10 @@ public class HelperNotificationAndBadge {
                     } else {
                         sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
                     }
+                } else {
+                    led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
+                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
+                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
                 }
                 messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
                 break;
@@ -348,6 +353,10 @@ public class HelperNotificationAndBadge {
                     } else {
                         sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
                     }
+                } else {
+                    led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
+                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
+                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
                 }
                 messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
 
@@ -372,8 +381,11 @@ public class HelperNotificationAndBadge {
                     } else {
                         sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
                     }
+                } else {
+                    led = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
+                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
+                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
                 }
-
                 messagePeriview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
                 break;
         }
@@ -495,6 +507,8 @@ public class HelperNotificationAndBadge {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        realm.close();
     }
 
     public void cancelNotification() {
@@ -559,19 +573,19 @@ public class HelperNotificationAndBadge {
                 intVibrator = new long[]{0, 0, 0};
                 break;
             case 1:
-                intVibrator = new long[]{0, 350, 0};
+                intVibrator = new long[] { 0, 300, 0 };
                 break;
             case 2:
                 intVibrator = new long[]{0, 200, 0};
                 break;
             case 3:
-                intVibrator = new long[]{0, 1000, 0};
+                intVibrator = new long[] { 0, 700, 0 };
                 break;
             case 4:
                 AudioManager am2 = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
                 switch (am2.getRingerMode()) {
                     case AudioManager.RINGER_MODE_SILENT:
-                        intVibrator = new long[]{0, 350, 0};
+                        intVibrator = new long[] { 0, 300, 0 };
                         break;
                     case AudioManager.RINGER_MODE_VIBRATE:
                         Log.i("MyApp", "Vibrate mode");
