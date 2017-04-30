@@ -33,6 +33,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -120,6 +121,7 @@ import com.iGap.interfaces.OnChatDeleteMessageResponse;
 import com.iGap.interfaces.OnChatEditMessageResponse;
 import com.iGap.interfaces.OnChatMessageRemove;
 import com.iGap.interfaces.OnChatMessageSelectionChanged;
+import com.iGap.interfaces.OnChatSendMessage;
 import com.iGap.interfaces.OnChatSendMessageResponse;
 import com.iGap.interfaces.OnChatUpdateStatusResponse;
 import com.iGap.interfaces.OnClearChatHistory;
@@ -1259,6 +1261,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 scrollToLastPositionMessageId();
             }
         }, 300);
+
+        G.onChatSendMessage = new OnChatSendMessage() {
+            @Override public void Error(int majorCode, int minorCode, final int waitTime) {
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        showErrorDialog(waitTime);
+                    }
+                });
+            }
+        };
     }
 
 
@@ -6343,6 +6355,43 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
             });
         }
+    }
+
+    private void showErrorDialog(final int time) {
+
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialogWait = new MaterialDialog.Builder(G.currentActivity).title(getResources().getString(R.string.title_limit_chat_to_unknown_contact))
+            .customView(R.layout.dialog_remind_time, wrapInScrollView)
+            .positiveText(R.string.B_ok)
+            .autoDismiss(false)
+            .canceledOnTouchOutside(true)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    dialog.dismiss();
+                }
+            })
+            .show();
+
+        View v = dialogWait.getCustomView();
+        //dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+        final TextView txtText = (TextView) v.findViewById(R.id.textRemindTime);
+        txtText.setText(getResources().getString(R.string.text_limit_chat_to_unknown_contact));
+        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+            @Override public void onTick(long millisUntilFinished) {
+                int seconds = (int) ((millisUntilFinished) / 1000);
+                long s = seconds % 60;
+                long m = (seconds / 60) % 60;
+                long h = (seconds / (60 * 60)) % 24;
+                remindTime.setText(String.format("%d:%02d:%02d", h, m, s));
+            }
+
+            @Override public void onFinish() {
+                remindTime.setText("00:00");
+            }
+        };
+        countWaitTimer.start();
     }
 
 }

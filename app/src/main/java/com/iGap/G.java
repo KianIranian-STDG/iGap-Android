@@ -52,6 +52,7 @@ import com.iGap.interfaces.OnChatDelete;
 import com.iGap.interfaces.OnChatDeleteMessageResponse;
 import com.iGap.interfaces.OnChatEditMessageResponse;
 import com.iGap.interfaces.OnChatGetRoom;
+import com.iGap.interfaces.OnChatSendMessage;
 import com.iGap.interfaces.OnClearChatHistory;
 import com.iGap.interfaces.OnClientCheckInviteLink;
 import com.iGap.interfaces.OnClientCondition;
@@ -251,6 +252,7 @@ public class G extends MultiDexApplication {
     public static OnChatEditMessageResponse onChatEditMessageResponse;
     public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
     public static OnChatDelete onChatDelete;
+    public static OnChatSendMessage onChatSendMessage;
     public static OnUserUsernameToId onUserUsernameToId;
     public static OnUserProfileGetNickname onUserProfileGetNickname;
     public static OnGroupCreate onGroupCreate;

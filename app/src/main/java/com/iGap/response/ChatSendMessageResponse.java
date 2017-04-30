@@ -10,8 +10,10 @@
 
 package com.iGap.response;
 
+import com.iGap.G;
 import com.iGap.helper.HelperMessageResponse;
 import com.iGap.proto.ProtoChatSendMessage;
+import com.iGap.proto.ProtoError;
 
 import static com.iGap.realm.RealmRoomMessage.makeFailed;
 
@@ -40,6 +42,15 @@ public class ChatSendMessageResponse extends MessageHandler {
     public void error() {
         super.error();
         makeFailed(Long.parseLong(identity));
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        int waitTime = errorResponse.getWait();
+
+        if (majorCode == 234 && G.onChatSendMessage != null) {
+            G.onChatSendMessage.Error(majorCode, minorCode, waitTime);
+        }
     }
 
     @Override
