@@ -44,6 +44,21 @@ public final class ProtoChannelGetMemberList {
      * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
      */
     com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole getFilterRole();
+
+    /**
+     * <code>optional .proto.Pagination pagination = 4;</code>
+     */
+    boolean hasPagination();
+
+    /**
+     * <code>optional .proto.Pagination pagination = 4;</code>
+     */
+    com.iGap.proto.ProtoGlobal.Pagination getPagination();
+
+    /**
+     * <code>optional .proto.Pagination pagination = 4;</code>
+     */
+    com.iGap.proto.ProtoGlobal.PaginationOrBuilder getPaginationOrBuilder();
   }
   /**
    * Protobuf type {@code proto.ChannelGetMemberList}
@@ -110,6 +125,19 @@ public final class ProtoChannelGetMemberList {
               filterRole_ = rawValue;
               break;
             }
+            case 34: {
+              com.iGap.proto.ProtoGlobal.Pagination.Builder subBuilder = null;
+              if (pagination_ != null) {
+                subBuilder = pagination_.toBuilder();
+              }
+              pagination_ = input.readMessage(com.iGap.proto.ProtoGlobal.Pagination.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(pagination_);
+                pagination_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -153,7 +181,8 @@ public final class ProtoChannelGetMemberList {
        * <code>ADMIN = 3;</code>
        */
       ADMIN(3),
-      UNRECOGNIZED(-1),;
+      UNRECOGNIZED(-1),
+      ;
 
       /**
        * <code>ALL = 0;</code>
@@ -198,8 +227,7 @@ public final class ProtoChannelGetMemberList {
             return MODERATOR;
           case 3:
             return ADMIN;
-          default:
-            return null;
+          default: return null;
         }
       }
 
@@ -292,6 +320,30 @@ public final class ProtoChannelGetMemberList {
       return result == null ? com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.UNRECOGNIZED : result;
     }
 
+    public static final int PAGINATION_FIELD_NUMBER = 4;
+    private com.iGap.proto.ProtoGlobal.Pagination pagination_;
+
+    /**
+     * <code>optional .proto.Pagination pagination = 4;</code>
+     */
+    public boolean hasPagination() {
+      return pagination_ != null;
+    }
+
+    /**
+     * <code>optional .proto.Pagination pagination = 4;</code>
+     */
+    public com.iGap.proto.ProtoGlobal.Pagination getPagination() {
+      return pagination_ == null ? com.iGap.proto.ProtoGlobal.Pagination.getDefaultInstance() : pagination_;
+    }
+
+    /**
+     * <code>optional .proto.Pagination pagination = 4;</code>
+     */
+    public com.iGap.proto.ProtoGlobal.PaginationOrBuilder getPaginationOrBuilder() {
+      return getPagination();
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -313,6 +365,9 @@ public final class ProtoChannelGetMemberList {
       if (filterRole_ != com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.ALL.getNumber()) {
         output.writeEnum(3, filterRole_);
       }
+      if (pagination_ != null) {
+        output.writeMessage(4, getPagination());
+      }
     }
 
     public int getSerializedSize() {
@@ -325,10 +380,14 @@ public final class ProtoChannelGetMemberList {
           .computeMessageSize(1, getRequest());
       }
       if (roomId_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream.computeUInt64Size(2, roomId_);
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(2, roomId_);
       }
       if (filterRole_ != com.iGap.proto.ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.ALL.getNumber()) {
         size += com.google.protobuf.CodedOutputStream.computeEnumSize(3, filterRole_);
+      }
+      if (pagination_ != null) {
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(4, getPagination());
       }
       memoizedSize = size;
       return size;
@@ -348,11 +407,15 @@ public final class ProtoChannelGetMemberList {
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
       if (hasRequest()) {
-        result = result && getRequest()
-            .equals(other.getRequest());
+        result = result && getRequest().equals(other.getRequest());
       }
-      result = result && (getRoomId() == other.getRoomId());
+      result = result && (getRoomId()
+          == other.getRoomId());
       result = result && filterRole_ == other.filterRole_;
+      result = result && (hasPagination() == other.hasPagination());
+      if (hasPagination()) {
+        result = result && getPagination().equals(other.getPagination());
+      }
       return result;
     }
 
@@ -368,9 +431,14 @@ public final class ProtoChannelGetMemberList {
         hash = (53 * hash) + getRequest().hashCode();
       }
       hash = (37 * hash) + ROOM_ID_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getRoomId());
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getRoomId());
       hash = (37 * hash) + FILTER_ROLE_FIELD_NUMBER;
       hash = (53 * hash) + filterRole_;
+      if (hasPagination()) {
+        hash = (37 * hash) + PAGINATION_FIELD_NUMBER;
+        hash = (53 * hash) + getPagination().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -499,6 +567,12 @@ public final class ProtoChannelGetMemberList {
 
         filterRole_ = 0;
 
+        if (paginationBuilder_ == null) {
+          pagination_ = null;
+        } else {
+          pagination_ = null;
+          paginationBuilder_ = null;
+        }
         return this;
       }
 
@@ -528,6 +602,11 @@ public final class ProtoChannelGetMemberList {
         }
         result.roomId_ = roomId_;
         result.filterRole_ = filterRole_;
+        if (paginationBuilder_ == null) {
+          result.pagination_ = pagination_;
+        } else {
+          result.pagination_ = paginationBuilder_.build();
+        }
         onBuilt();
         return result;
       }
@@ -577,6 +656,9 @@ public final class ProtoChannelGetMemberList {
         }
         if (other.filterRole_ != 0) {
           setFilterRoleValue(other.getFilterRoleValue());
+        }
+        if (other.hasPagination()) {
+          mergePagination(other.getPagination());
         }
         onChanged();
         return this;
@@ -776,7 +858,7 @@ public final class ProtoChannelGetMemberList {
         if (value == null) {
           throw new NullPointerException();
         }
-
+        
         filterRole_ = value.getNumber();
         onChanged();
         return this;
@@ -785,10 +867,126 @@ public final class ProtoChannelGetMemberList {
        * <code>optional .proto.ChannelGetMemberList.FilterRole filter_role = 3;</code>
        */
       public Builder clearFilterRole() {
-
+        
         filterRole_ = 0;
         onChanged();
         return this;
+      }
+
+      private com.iGap.proto.ProtoGlobal.Pagination pagination_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoGlobal.Pagination, com.iGap.proto.ProtoGlobal.Pagination.Builder, com.iGap.proto.ProtoGlobal.PaginationOrBuilder> paginationBuilder_;
+
+      /**
+       * <code>optional .proto.Pagination pagination = 4;</code>
+       */
+      public boolean hasPagination() {
+        return paginationBuilder_ != null || pagination_ != null;
+      }
+
+      /**
+       * <code>optional .proto.Pagination pagination = 4;</code>
+       */
+      public com.iGap.proto.ProtoGlobal.Pagination getPagination() {
+        if (paginationBuilder_ == null) {
+          return pagination_ == null ? com.iGap.proto.ProtoGlobal.Pagination.getDefaultInstance() : pagination_;
+        } else {
+          return paginationBuilder_.getMessage();
+        }
+      }
+
+      /**
+       * <code>optional .proto.Pagination pagination = 4;</code>
+       */
+      public Builder setPagination(com.iGap.proto.ProtoGlobal.Pagination value) {
+        if (paginationBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          pagination_ = value;
+          onChanged();
+        } else {
+          paginationBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Pagination pagination = 4;</code>
+       */
+      public Builder setPagination(com.iGap.proto.ProtoGlobal.Pagination.Builder builderForValue) {
+        if (paginationBuilder_ == null) {
+          pagination_ = builderForValue.build();
+          onChanged();
+        } else {
+          paginationBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Pagination pagination = 4;</code>
+       */
+      public Builder mergePagination(com.iGap.proto.ProtoGlobal.Pagination value) {
+        if (paginationBuilder_ == null) {
+          if (pagination_ != null) {
+            pagination_ = com.iGap.proto.ProtoGlobal.Pagination.newBuilder(pagination_).mergeFrom(value).buildPartial();
+          } else {
+            pagination_ = value;
+          }
+          onChanged();
+        } else {
+          paginationBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Pagination pagination = 4;</code>
+       */
+      public Builder clearPagination() {
+        if (paginationBuilder_ == null) {
+          pagination_ = null;
+          onChanged();
+        } else {
+          pagination_ = null;
+          paginationBuilder_ = null;
+        }
+
+        return this;
+      }
+
+      /**
+       * <code>optional .proto.Pagination pagination = 4;</code>
+       */
+      public com.iGap.proto.ProtoGlobal.Pagination.Builder getPaginationBuilder() {
+
+        onChanged();
+        return getPaginationFieldBuilder().getBuilder();
+      }
+
+      /**
+       * <code>optional .proto.Pagination pagination = 4;</code>
+       */
+      public com.iGap.proto.ProtoGlobal.PaginationOrBuilder getPaginationOrBuilder() {
+        if (paginationBuilder_ != null) {
+          return paginationBuilder_.getMessageOrBuilder();
+        } else {
+          return pagination_ == null ? com.iGap.proto.ProtoGlobal.Pagination.getDefaultInstance() : pagination_;
+        }
+      }
+
+      /**
+       * <code>optional .proto.Pagination pagination = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoGlobal.Pagination, com.iGap.proto.ProtoGlobal.Pagination.Builder, com.iGap.proto.ProtoGlobal.PaginationOrBuilder> getPaginationFieldBuilder() {
+        if (paginationBuilder_ == null) {
+          paginationBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.iGap.proto.ProtoGlobal.Pagination, com.iGap.proto.ProtoGlobal.Pagination.Builder, com.iGap.proto.ProtoGlobal.PaginationOrBuilder>(getPagination(), getParentForChildren(), isClean());
+          pagination_ = null;
+        }
+        return paginationBuilder_;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2313,23 +2511,24 @@ public final class ProtoChannelGetMemberList {
       getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+  private static  com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
     java.lang.String[] descriptorData = {
-      "\n\032ChannelGetMemberList.proto\022\005proto\032\rReq" +
-              "uest.proto\032\016Response.proto\032\014Global.proto" +
-              "\"\302\001\n\024ChannelGetMemberList\022\037\n\007request\030\001 \001" +
-              "(\0132\016.proto.Request\022\017\n\007room_id\030\002 \001(\004\022;\n\013f" +
-              "ilter_role\030\003 \001(\0162&.proto.ChannelGetMembe" +
-              "rList.FilterRole\";\n\nFilterRole\022\007\n\003ALL\020\000\022" +
-              "\n\n\006MEMBER\020\001\022\r\n\tMODERATOR\020\002\022\t\n\005ADMIN\020\003\"\276\001" +
-              "\n\034ChannelGetMemberListResponse\022!\n\010respon" +
-              "se\030\001 \001(\0132\017.proto.Response\022:\n\006member\030\002 \003(" +
-              "\0132*.proto.ChannelGetMemberListResponse.M", "ember\032?\n\006Member\022\016\n\006userId\030\001 \001(\004\022%\n\004role\030" +
-            "\002 \001(\0162\027.proto.ChannelRoom.RoleB+\n\016com.iG" +
-      "ap.protoB\031ProtoChannelGetMemberListb\006pro" +
-      "to3"
+            "\n\032ChannelGetMemberList.proto\022\005proto\032\rReq" +
+                    "uest.proto\032\016Response.proto\032\014Global.proto" +
+                    "\"\351\001\n\024ChannelGetMemberList\022\037\n\007request\030\001 \001" +
+                    "(\0132\016.proto.Request\022\017\n\007room_id\030\002 \001(\004\022;\n\013f" +
+                    "ilter_role\030\003 \001(\0162&.proto.ChannelGetMembe" +
+                    "rList.FilterRole\022%\n\npagination\030\004 \001(\0132\021.p" +
+                    "roto.Pagination\";\n\nFilterRole\022\007\n\003ALL\020\000\022\n" +
+                    "\n\006MEMBER\020\001\022\r\n\tMODERATOR\020\002\022\t\n\005ADMIN\020\003\"\276\001\n" +
+                    "\034ChannelGetMemberListResponse\022!\n\010respons" +
+                    "e\030\001 \001(\0132\017.proto.Response\022:\n\006member\030\002 \003(\013", "2*.proto.ChannelGetMemberListResponse.Me" +
+            "mber\032?\n\006Member\022\016\n\006userId\030\001 \001(\004\022%\n\004role\030\002" +
+      " \001(\0162\027.proto.ChannelRoom.RoleB+\n\016com.iGa" +
+      "p.protoB\031ProtoChannelGetMemberListb\006prot" +
+      "o3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2346,10 +2545,10 @@ public final class ProtoChannelGetMemberList {
           com.iGap.proto.ProtoResponse.getDescriptor(),
           com.iGap.proto.ProtoGlobal.getDescriptor(),
         }, assigner);
-    internal_static_proto_ChannelGetMemberList_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_ChannelGetMemberList_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChannelGetMemberList_descriptor,
-        new java.lang.String[] { "Request", "RoomId", "FilterRole", });
+    internal_static_proto_ChannelGetMemberList_descriptor = getDescriptor().getMessageTypes().get(0);
+    internal_static_proto_ChannelGetMemberList_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_ChannelGetMemberList_descriptor,
+        new java.lang.String[] { "Request", "RoomId", "FilterRole", "Pagination", });
     internal_static_proto_ChannelGetMemberListResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChannelGetMemberListResponse_fieldAccessorTable = new

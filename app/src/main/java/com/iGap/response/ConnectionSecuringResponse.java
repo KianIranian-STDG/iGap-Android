@@ -67,6 +67,7 @@ public class ConnectionSecuringResponse extends MessageHandler {
 
         ProtoConnectionSecuring.ConnectionSymmetricKey.Builder connectionSymmetricKey = ProtoConnectionSecuring.ConnectionSymmetricKey.newBuilder();
         connectionSymmetricKey.setSymmetricKey(ByteString.copyFrom(encryption));
+        //connectionSymmetricKey.setVersion(2);
         RequestWrapper requestWrapper = new RequestWrapper(2, connectionSymmetricKey);
         try {
             RequestQueue.sendRequest(requestWrapper);

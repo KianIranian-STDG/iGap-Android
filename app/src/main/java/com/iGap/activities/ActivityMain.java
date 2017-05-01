@@ -958,7 +958,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (heartBeatTimeOut()) {
                     WebSocketClient.checkConnection();
                 }
-                new RequestClientGetRoomList().clientGetRoomList();
+                new RequestClientGetRoomList().clientGetRoomList(0, 0);
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
@@ -1065,7 +1065,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void run() {
                 if (G.isSecure && G.userLogin) {
-                    new RequestClientGetRoomList().clientGetRoomList();
+                    new RequestClientGetRoomList().clientGetRoomList(0, 0);
                 } else {
                     testIsSecure();
                 }

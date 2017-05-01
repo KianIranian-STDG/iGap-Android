@@ -38,6 +38,8 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
         ProtoConnectionSecuring.ConnectionSymmetricKeyResponse.Status status = builder.getStatus();
         int statusNumber = status.getNumber();
 
+        //builder.getSecurityIssue(); true means reject
+
         if (statusNumber == Config.REJECT) {
 
             G.allowForConnect = false;

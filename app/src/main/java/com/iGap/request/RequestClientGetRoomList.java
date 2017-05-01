@@ -17,9 +17,10 @@ import com.iGap.proto.ProtoRequest;
 
 public class RequestClientGetRoomList {
 
-    public void clientGetRoomList() {
+    public void clientGetRoomList(int offset, int limit) {
         ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
         clientGetRoomList.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+        //clientGetRoomList.setPagination(new RequestPagination().pagination(offset, limit));
 
         RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList);
         try {

@@ -133,7 +133,8 @@ public class FragmentShowMember extends Fragment {
                 if (G.userLogin) {
 
                     G.handler.postDelayed(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             if (progressBar != null) {
                                 progressBar.setVisibility(View.VISIBLE);
@@ -150,7 +151,8 @@ public class FragmentShowMember extends Fragment {
 
     class getAcynkMember extends AsyncTask {
 
-        @Override protected Object doInBackground(Object[] params) {
+        @Override
+        protected Object doInBackground(Object[] params) {
 
             getMemberList();
 
@@ -173,7 +175,8 @@ public class FragmentShowMember extends Fragment {
                     if (mCurrentUpdateCount >= mMemberCount) {
 
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 fillAdapter();
                                 if (progressBar != null) {
                                     progressBar.setVisibility(View.GONE);
@@ -224,15 +227,16 @@ public class FragmentShowMember extends Fragment {
         };
 
         getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 mCurrentUpdateCount = 0;
 
                 RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
                 if (realmRoom != null) {
                     if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                        new RequestGroupGetMemberList().getMemberList(mRoomID);
+                        new RequestGroupGetMemberList().getMemberList(mRoomID, 0, 0);
                     } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID);
+                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID, 0, 0);
                     }
                 }
             }
@@ -597,7 +601,8 @@ public class FragmentShowMember extends Fragment {
             this.extraLayoutSpace = extraLayoutSpace;
         }
 
-        @Override protected int getExtraLayoutSpace(RecyclerView.State state) {
+        @Override
+        protected int getExtraLayoutSpace(RecyclerView.State state) {
             if (extraLayoutSpace > 0) {
                 return extraLayoutSpace;
             }
