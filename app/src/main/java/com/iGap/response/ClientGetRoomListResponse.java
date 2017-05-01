@@ -40,12 +40,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
             G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse());
         } else {
             new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    putChatToDatabase(clientGetRoomListResponse.getRoomsList());
-                }
-            }).start();
+            putChatToDatabase(clientGetRoomListResponse.getRoomsList());
         }
     }
 
