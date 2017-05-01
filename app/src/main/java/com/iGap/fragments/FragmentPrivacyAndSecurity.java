@@ -172,7 +172,12 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentActiveSessions fragmentActiveSessions = new FragmentActiveSessions();
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(st_layoutParent, fragmentActiveSessions, null).commit();
+                getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(st_layoutParent, fragmentActiveSessions, null)
+                    .commit();
             }
         });
 

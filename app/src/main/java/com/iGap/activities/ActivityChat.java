@@ -3842,13 +3842,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         long selectedFileToken = Long.parseLong(messageInfo.messageID);
 
-        android.app.Fragment fragment = FragmentShowImage.newInstance();
+        FragmentShowImage fragment = FragmentShowImage.newInstance();
         Bundle bundle = new Bundle();
         bundle.putLong("RoomId", mRoomId);
         bundle.putLong("SelectedImage", selectedFileToken);
         fragment.setArguments(bundle);
 
-        getFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, fragment, "ShowImageMessage").commit();
+        getSupportFragmentManager().beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+            .replace(R.id.ac_ll_parent, fragment, "ShowImageMessage")
+            .commit();
     }
 
     /**

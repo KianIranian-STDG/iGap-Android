@@ -10,8 +10,6 @@
 
 package com.iGap.activities;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.GridLayoutManager;
@@ -238,10 +237,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     @Override
     public void onBackPressed() {
-        FragmentShowImage myFragment = (FragmentShowImage) getFragmentManager().findFragmentByTag("Show_Image_fragment_shared_media");
+        FragmentShowImage myFragment = (FragmentShowImage) getSupportFragmentManager().findFragmentByTag("Show_Image_fragment_shared_media");
 
         if (myFragment != null && myFragment.isVisible()) {
-            getFragmentManager().beginTransaction().remove(myFragment).commit();
+            getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
 
             // for update view that image download in fragment show image
             int count = FragmentShowImage.downloadedList.size();
@@ -1333,14 +1332,17 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             long selectedFileToken = mList.get(position).item.getMessageId();
 
-            Fragment fragment = FragmentShowImage.newInstance();
+            FragmentShowImage fragment = FragmentShowImage.newInstance();
             Bundle bundle = new Bundle();
             bundle.putLong("RoomId", roomId);
             bundle.putLong("SelectedImage", selectedFileToken);
             bundle.putString("TYPE", ProtoGlobal.RoomMessageType.IMAGE.toString());
             fragment.setArguments(bundle);
 
-            ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
+            getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                .replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media")
+                .commit();
         }
     }
 
@@ -1464,7 +1466,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
             fragment.setArguments(bundle);
 
-            ((Activity) context).getFragmentManager().beginTransaction().replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
+            getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                .replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media")
+                .commit();
         }
     }
 

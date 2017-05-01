@@ -338,9 +338,11 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                                 bundle.putString("TYPE", type.toString());
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);
-                                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-
-                                        .replace(fragmentContainer, fragment, "contactGroup_fragment").commitAllowingStateLoss();
+                                getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .replace(fragmentContainer, fragment, "contactGroup_fragment")
+                                    .commitAllowingStateLoss();
                                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
                                 //ActivityMain.mLeftDrawerLayout.closeDrawer();
                             }

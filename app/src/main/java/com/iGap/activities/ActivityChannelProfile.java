@@ -454,7 +454,12 @@ public class ActivityChannelProfile extends ActivityEnhanced
                     FragmentShowAvatars.appBarLayout = fab;
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
-                    ActivityChannelProfile.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
+                    ActivityChannelProfile.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer_channel_profile, fragment, null)
+                        .commit();
                 }
                 realm.close();
             }

@@ -109,7 +109,11 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     private void initComponent(View view) {
 
         SupportMapFragment mapFragment = new SupportMapFragment();
-        getActivity().getSupportFragmentManager().beginTransaction().replace(mf_fragment_map_view, mapFragment, null).commit();
+        getActivity().getSupportFragmentManager()
+            .beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+            .replace(mf_fragment_map_view, mapFragment, null)
+            .commit();
         mapFragment.getMapAsync(FragmentMap.this);
 
         Button btnSendPosition = (Button) view.findViewById(R.id.mf_btn_send_position);

@@ -10,7 +10,6 @@
 
 package com.iGap.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +17,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -132,7 +132,7 @@ public class FragmentShowImage extends Fragment {
             selectedFileToken = bundle.getLong("SelectedImage");
             if (bundle.getString("TYPE") != null) type = bundle.getString("TYPE");
             if (mRoomId == null) {
-                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 return false;
             }
 
@@ -141,7 +141,7 @@ public class FragmentShowImage extends Fragment {
             mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
 
             if (mRealmList.size() < 1) {
-                getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
                 return false;
             }
 
@@ -182,7 +182,7 @@ public class FragmentShowImage extends Fragment {
 
             return true;
         } else {
-            getActivity().getFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
             return false;
         }
     }
