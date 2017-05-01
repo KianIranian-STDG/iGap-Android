@@ -395,6 +395,9 @@ public class SearchFragment extends Fragment {
                             if (getActivity() != null) {
                                 getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
                             }
+
+                            G.onChatGetRoom = null;
+
                         }
                     });
                 }

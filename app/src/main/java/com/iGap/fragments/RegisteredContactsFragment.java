@@ -361,6 +361,8 @@ public class RegisteredContactsFragment extends Fragment {
                 public void onChatGetRoom(final long roomId) {
                     hideProgress();
                     getUserInfo(peerId, roomId);
+
+                    G.onChatGetRoom = null;
                 }
 
                 @Override
@@ -435,6 +437,8 @@ public class RegisteredContactsFragment extends Fragment {
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 context.startActivity(intent);
                                                 mActivity.getSupportFragmentManager().popBackStack();
+
+                                                G.onUserInfoResponse = null;
                                             }
                                         });
                                     } catch (IllegalStateException e) {

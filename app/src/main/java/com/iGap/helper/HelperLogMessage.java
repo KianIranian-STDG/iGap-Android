@@ -481,6 +481,8 @@ public class HelperLogMessage {
                             intent.putExtra("enterFrom", "GROUP");
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             G.currentActivity.startActivity(intent);
+
+                            G.onChatGetRoom = null;
                         }
                     });
                 }

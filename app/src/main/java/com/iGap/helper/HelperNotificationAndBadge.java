@@ -427,8 +427,6 @@ public class HelperNotificationAndBadge {
                         unreadMessageCount++;
                         messageOne = roomMessage.getMessage();
 
-                        Log.e("dddddd", realmRoom1.getTitle() + "");
-
                         if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
                             senderId = realmRoom1.getId();
                         } else {
@@ -490,13 +488,20 @@ public class HelperNotificationAndBadge {
             startActivityPopUpNotification(type, popUpList);
 
             countChannelMessage = 0;
+            unreadMessageCount = 0;
 
             RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
             for (RealmRoom realmRoom1 : realmRooms) {
-                if (realmRoom1.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom1.getUnreadCount() > 0) {
-                    countChannelMessage += realmRoom1.getUnreadCount();
-                    countUnicChat++;
+                if (realmRoom1.getUnreadCount() > 0) {
+
+                    if (realmRoom1.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                        countChannelMessage += realmRoom1.getUnreadCount();
+                        countUnicChat++;
+                    } else {
+                        unreadMessageCount += realmRoom1.getUnreadCount();
+                    }
                 }
+
             }
 
             countUnicChat += senderList.size();

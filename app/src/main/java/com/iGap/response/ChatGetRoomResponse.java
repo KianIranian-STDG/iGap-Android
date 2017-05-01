@@ -55,9 +55,15 @@ public class ChatGetRoomResponse extends MessageHandler {
             });
             realm.close();
 
-            G.onChatGetRoom.onChatGetRoomCompletely(chatGetRoomResponse.getRoom());
+            if (G.onChatGetRoom != null) {
+                G.onChatGetRoom.onChatGetRoomCompletely(chatGetRoomResponse.getRoom());
+            }
+
         } else {
-            G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoom().getId());
+            if (G.onChatGetRoom != null) {
+                G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoom().getId());
+            }
+
         }
 
 
@@ -66,7 +72,9 @@ public class ChatGetRoomResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-        G.onChatGetRoom.onChatGetRoomTimeOut();
+        if (G.onChatGetRoom != null) {
+            G.onChatGetRoom.onChatGetRoomTimeOut();
+        }
     }
 
     @Override
@@ -75,8 +83,9 @@ public class ChatGetRoomResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        G.onChatGetRoom.onChatGetRoomError(majorCode, minorCode);
+        if (G.onChatGetRoom != null) {
+            G.onChatGetRoom.onChatGetRoomError(majorCode, minorCode);
+        }
     }
 }
 

@@ -115,7 +115,7 @@ public class LoginActions extends Application {
                     login();
                 }
             }
-        }, 1000);
+        }, 500);
     }
 
     private static void getUserInfo() {

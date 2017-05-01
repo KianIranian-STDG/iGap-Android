@@ -389,6 +389,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                         realm.close();
                                         startActivity(intent);
                                         finish();
+
+                                        G.onChatGetRoom = null;
+
                                     }
                                 });
                             }

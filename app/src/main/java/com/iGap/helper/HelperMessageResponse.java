@@ -38,18 +38,18 @@ public class HelperMessageResponse {
         /**
          * if from latest message was time out don't need delay otherwise set delay
          */
-        if (HelperTimeOut.timeoutChecking(0, latestMessageTime, 500)) {
-            delay = 0;
-        } else {
-            delay++;
-        }
-        latestMessageTime = System.currentTimeMillis();
+        //if (HelperTimeOut.timeoutChecking(0, latestMessageTime, 500)) {
+        //    delay = 0;
+        //} else {
+        //    delay++;
+        //}
+        //latestMessageTime = System.currentTimeMillis();
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override public void run() {
                         final Realm realm = Realm.getDefaultInstance();
 
-                        realm.executeTransactionAsync(new Realm.Transaction() {
+                        realm.executeTransaction(new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
 
                                 /**
@@ -117,30 +117,22 @@ public class HelperMessageResponse {
                                 }
 
                             }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override public void onSuccess() {
-
-                                if (response.getId().isEmpty()) {
-                                    /**
-                                     * invoke following callback when i'm not the sender, because i already done everything after sending message
-                                     */
-                                    G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHANNEL);
-                                } else {
-                                    /**
-                                     * invoke following callback when I'm the sender and the message has updated
-                                     */
-                                    G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
-                                }
-
-                                realm.close();
-                            }
-                        }, new Realm.Transaction.OnError() {
-                            @Override public void onError(Throwable error) {
-                                realm.close();
-                            }
                         });
+                        if (response.getId().isEmpty()) {
+                            /**
+                             * invoke following callback when i'm not the sender, because i already done everything after sending message
+                             */
+                            G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, ProtoGlobal.Room.Type.CHANNEL);
+                        } else {
+                            /**
+                             * invoke following callback when I'm the sender and the message has updated
+                             */
+                            G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
+                        }
+
+                        realm.close();
                     }
-        }, 500 * delay);
+        });
 
     }
 }

@@ -457,7 +457,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 });
             }
-        }, 1000);
+        }, 500);
 
         try {
             ShortcutBadger.applyCount(context, 0);

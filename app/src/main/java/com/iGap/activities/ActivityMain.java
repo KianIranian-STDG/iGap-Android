@@ -1439,6 +1439,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     intent.putExtra("RoomId", roomId);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
+
+                    G.onChatGetRoom = null;
                 }
 
                 @Override
