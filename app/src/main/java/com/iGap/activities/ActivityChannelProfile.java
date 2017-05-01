@@ -193,7 +193,9 @@ public class ActivityChannelProfile extends ActivityEnhanced
     @Override protected void onStop() {
         super.onStop();
 
-        if (mRoom != null) mRoom.removeChangeListeners();
+        if (mRoom != null) {
+            mRoom.removeAllChangeListeners();
+        }
     }
 
     @Override protected void onDestroy() {
@@ -213,22 +215,27 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
                 changeListener = new RealmChangeListener<RealmModel>() {
                     @Override public void onChange(final RealmModel element) {
-                        runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                String countText = ((RealmRoom) element).getSharedMediaCount();
 
-                                if (countText == null || countText.length() == 0) {
-                                    txtSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
-                                } else {
+                        if (((RealmRoom) element).isValid()) {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    String countText = ((RealmRoom) element).getSharedMediaCount();
 
-                                    if (HelperCalander.isLanguagePersian) {
-                                        txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
+                                    if (countText == null || countText.length() == 0) {
+                                        txtSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
                                     } else {
-                                        txtSharedMedia.setText(countText);
+
+                                        if (HelperCalander.isLanguagePersian) {
+                                            txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
+                                        } else {
+                                            txtSharedMedia.setText(countText);
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
+
+
                     }
                 };
             }

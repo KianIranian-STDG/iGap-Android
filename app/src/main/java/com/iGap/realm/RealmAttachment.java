@@ -78,14 +78,16 @@ public class RealmAttachment extends RealmObject {
             RealmThumbnail smallThumbnail = realm.where(RealmThumbnail.class).equalTo("id", smallId).findFirst();
             realmAttachment.setSmallThumbnail(smallThumbnail);
 
-            String tempFilePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_TEMP, true);
+            String tempFilePath = "";
             String filePath = "";
             switch (attachmentFor) {
                 case MESSAGE_ATTACHMENT:
                     filePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), messageType);
+                    tempFilePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_TEMP, true);
                     break;
                 case AVATAR:
                     filePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
+                    tempFilePath = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true);
                     break;
             }
 
@@ -108,6 +110,11 @@ public class RealmAttachment extends RealmObject {
                             break;
                         case AVATAR:
                             _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
+
+                            if (realmAttachment.getLocalThumbnailPath() == null) {
+                                realmAttachment.setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true));
+                            }
+
                             break;
                     }
 

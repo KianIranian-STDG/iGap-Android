@@ -1283,32 +1283,38 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
 
-        runOnUiThread(new Runnable() {
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+                final Realm realm = Realm.getDefaultInstance();
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                Realm realm = Realm.getDefaultInstance();
+                if (realmRoom != null) {
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(final Realm realm) {
-
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                        if (realmRoom != null) {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override public void execute(Realm realm) {
 
                             if (realmRoom.getType() != null) {
                                 String action = HelperGetAction.getAction(roomId, realmRoom.getType(), clientAction);
                                 realmRoom.setActionState(action, userId);
                             }
                         }
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override public void onSuccess() {
 
-                    }
-                });
+                            realm.close();
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override public void onError(Throwable error) {
+                            realm.close();
+                        }
+                    });
+                } else {
+                    realm.close();
+                }
+
+
+
             }
         });
     }
@@ -1474,10 +1480,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         @Override
         public void onBindRealmViewHolder(final ViewHolder holder, final int i) {
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
 
                     RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
@@ -1657,8 +1659,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         final RealmAvatar realmAvatar = getLastAvatar(idForGetAvatar);
                         if (realmAvatar != null) {
 
-                            HelperAvatar.updatePath(realmAvatar);
-
                             if (realmAvatar.getFile().isFileExistsOnLocal()) {
                                 G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
                             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
@@ -1739,10 +1739,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
                         holder.unreadMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.unreadMessage.getText().toString()));
                     }
-
-
-                }
-            });
         }
 
         public class ViewHolder extends RealmViewHolder {

@@ -328,29 +328,31 @@ public class HelperDownloadFile {
 
         StructDownLoad item = list.get(cashId + selector);
 
-        if (item.moveToDirectoryPAth.length() > 0) {
-            try {
+        if (item != null) {
 
-                File _File = new File(item.moveToDirectoryPAth);
-                if (!_File.exists()) {
-                    AndroidUtils.cutFromTemp(item.path, item.moveToDirectoryPAth);
+            if (item.moveToDirectoryPAth.length() > 0) {
+                try {
+
+                    File _File = new File(item.moveToDirectoryPAth);
+                    if (!_File.exists()) {
+                        AndroidUtils.cutFromTemp(item.path, item.moveToDirectoryPAth);
+                    }
+                } catch (IOException e) {
                 }
+            }
 
-
-            } catch (IOException e) {
+            switch (item.selector) {
+                case FILE:
+                    setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
+                    break;
+                case SMALL_THUMBNAIL:
+                case LARGE_THUMBNAIL:
+                    setThumbnailPathDataBaseAttachment(cashId, item.path);
+                    break;
             }
         }
 
 
-        switch (item.selector) {
-            case FILE:
-                setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
-                break;
-            case SMALL_THUMBNAIL:
-            case LARGE_THUMBNAIL:
-                setThumbnailPathDataBaseAttachment(cashId, item.path);
-                break;
-        }
     }
 
     private static void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {

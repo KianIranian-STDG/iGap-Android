@@ -196,7 +196,12 @@ public class HelperLogMessage {
             finalTypeRoom = "صفحه";
         }
 
+        if (authorName == null || authorName.length() == 0) {
+            return "";
+        }
+
         englishResult = authorName + " " + logMessage + " " + targetName;
+
         linkInfoEnglish = englishResult.indexOf(authorName)
             + "@"
             + authorName.length()

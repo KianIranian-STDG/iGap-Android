@@ -123,7 +123,7 @@ import org.parceler.Parcel;
                     callback.sendDeliveredStatus(realmRoom, roomMessage);
                 }
 
-                element.removeChangeListeners();
+                element.removeAllChangeListeners();
                 realm.close();
             }
         });
@@ -180,7 +180,7 @@ import org.parceler.Parcel;
                     }
                 });
 
-                element.removeChangeListeners();
+                element.removeAllChangeListeners();
                 realm.close();
             }
         });
@@ -190,50 +190,66 @@ import org.parceler.Parcel;
 
         if (G.userLogin) {
 
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-                    RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findAll();
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+            new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+                @Override public void run() {
+                    final Realm realm = Realm.getDefaultInstance();
 
-                    if (realmClientCondition != null) {
-                        for (RealmRoomMessage roomMessage : realmRoomMessages) {
-                            if (roomMessage != null) {
-                                /**
-                                 * don't send seen for own message
-                                 */
-                                if (roomMessage.getUserId() != userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
-                                    roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-                                    RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
-                                    realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override public void execute(Realm realm) {
 
-                                    realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                    callback.sendSeenStatus(roomMessage);
-                                } else {
-                                    if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
+                            long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+                                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                                .notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString())
+                                .findAll();
+                            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+
+                            if (realmClientCondition != null) {
+                                for (RealmRoomMessage roomMessage : realmRoomMessages) {
+                                    if (roomMessage != null) {
                                         /**
-                                         * check timeout, because when forward message to room ,message state is sending
-                                         * and add forward message to Realm from here and finally client have duplicated message
+                                         * don't send seen for own message
                                          */
-                                        if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
-                                            if (roomMessage.getAttachment() != null) {
-                                                if (!HelperUploadFile.isUploading(roomMessage.getMessageId() + "")) {
-                                                    callback.resendMessageNeedsUpload(roomMessage);
+                                        if (roomMessage.getUserId() != userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
+                                            roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                                            RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
+                                            realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
+
+                                            realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                            callback.sendSeenStatus(roomMessage);
+                                        } else {
+                                            if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
+                                                /**
+                                                 * check timeout, because when forward message to room ,message state is sending
+                                                 * and add forward message to Realm from here and finally client have duplicated message
+                                                 */
+                                                if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
+                                                    if (roomMessage.getAttachment() != null) {
+                                                        if (!HelperUploadFile.isUploading(roomMessage.getMessageId() + "")) {
+                                                            callback.resendMessageNeedsUpload(roomMessage);
+                                                        }
+                                                    } else {
+                                                        callback.resendMessage(roomMessage);
+                                                    }
                                                 }
-                                            } else {
-                                                callback.resendMessage(roomMessage);
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override public void onSuccess() {
+
+                            realm.close();
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override public void onError(Throwable error) {
+                            realm.close();
+                        }
+                    });
                 }
             });
-            realm.close();
         }
     }
 
@@ -879,6 +895,8 @@ import org.parceler.Parcel;
                         if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                             G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
                         }
+
+                        realm.close();
                     }
                 });
             }

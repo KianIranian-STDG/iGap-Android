@@ -11,6 +11,7 @@
 
 package com.iGap.realm;
 
+import android.os.Handler;
 import com.iGap.G;
 import com.iGap.helper.HelperString;
 import com.iGap.module.TimeUtils;
@@ -218,33 +219,42 @@ public class RealmRoom extends RealmObject {
          * new instance for this action ))
          */
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
-                for (int i = 0; i < list.size(); i++) {
-                    list.get(i).setDeleted(true);
-                }
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+                final Realm realm = Realm.getDefaultInstance();
 
-                for (ProtoGlobal.Room room : rooms) {
-                    RealmRoom.putOrUpdate(room);
-                }
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
 
-                // delete messages and rooms that was deleted
-                RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
-                for (RealmRoom item : deletedRoomsList) {
-                    /**
-                     * delete all message in deleted room
-                     */
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
-                    item.deleteFromRealm();
-                }
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                realm.close();
+                        RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
+                        for (int i = 0; i < list.size(); i++) {
+                            list.get(i).setDeleted(true);
+                        }
+
+                        for (ProtoGlobal.Room room : rooms) {
+                            RealmRoom.putOrUpdate(room);
+                        }
+
+                        // delete messages and rooms that was deleted
+                        RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
+                        for (RealmRoom item : deletedRoomsList) {
+                            /**
+                             * delete all message in deleted room
+                             */
+                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
+                            item.deleteFromRealm();
+                        }
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
             }
         });
     }

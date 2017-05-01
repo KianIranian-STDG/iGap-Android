@@ -74,7 +74,7 @@ public class ServiceContact extends Service {
         }
 
         private void fetchContacts() {
-            G.handler.post(new Runnable() {
+            new Thread(new Runnable() {
                 @Override public void run() {
                     try {
                         ArrayList<StructListOfContact> contactList = new ArrayList<>();
@@ -147,7 +147,7 @@ public class ServiceContact extends Service {
                         e.printStackTrace();
                     }
                 }
-            });
+            }).start();
         }
     }
 }

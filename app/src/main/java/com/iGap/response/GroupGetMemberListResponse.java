@@ -10,6 +10,7 @@
 
 package com.iGap.response;
 
+import android.os.Handler;
 import com.iGap.G;
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoGroupGetMemberList;
@@ -41,31 +42,41 @@ public class GroupGetMemberListResponse extends MessageHandler {
 
         G.onGroupGetMemberList.onGroupGetMemberList(builder.getMemberList());
 
-
         final RealmList<RealmMember> newMembers = new RealmList<>();
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
-                if (realmRoom != null) {
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+                final Realm realm = Realm.getDefaultInstance();
 
-                    realmRoom.getGroupRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
-                    realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
 
-                    for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : builder.getMemberList()) {
-                        RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
-                        realmMem.setRole(member.getRole().toString());
-                        realmMem.setPeerId(member.getUserId());
-                        newMembers.add(realmMem);
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
+                        if (realmRoom != null) {
+
+                            realmRoom.getGroupRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
+                            realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
+
+                            for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : builder.getMemberList()) {
+                                RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
+                                realmMem.setRole(member.getRole().toString());
+                                realmMem.setPeerId(member.getUserId());
+                                newMembers.add(realmMem);
+                            }
+                            realmRoom.getGroupRoom().setMembers(newMembers);
+                        }
                     }
-                    realmRoom.getGroupRoom().setMembers(newMembers);
-                }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
             }
         });
-
-        realm.close();
     }
 
     @Override

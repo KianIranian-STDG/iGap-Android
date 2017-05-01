@@ -37,7 +37,7 @@ public class GroupSetActionResponse extends MessageHandler {
         final ProtoGroupSetAction.GroupSetActionResponse.Builder builder = (ProtoGroupSetAction.GroupSetActionResponse.Builder) message;
         Log.i("VVV", "GroupSetActionResponse : " + builder.getAction());
 
-        G.handler.post(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();
@@ -49,21 +49,28 @@ public class GroupSetActionResponse extends MessageHandler {
                             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                             if (realmUserInfo.getUserInfo().getId() != builder.getUserId()) {
                                 HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+                            }
+                        }
+                    });
 
-                                if (G.onSetAction != null) {
-                                    G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
-                                }
+                    realm.close();
 
-                                if (G.onSetActionInRoom != null) {
-                                    G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
-                                }
+                    G.handler.post(new Runnable() {
+                        @Override public void run() {
+
+                            if (G.onSetAction != null) {
+                                G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+                            }
+
+                            if (G.onSetActionInRoom != null) {
+                                G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
                             }
                         }
                     });
                 }
-                realm.close();
+
             }
-        });
+        }).start();
 
     }
 

@@ -210,7 +210,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         super.onStop();
 
         if (rrg != null) {
-            rrg.removeChangeListeners();
+            rrg.removeAllChangeListeners();
         }
 
         if (mRealm != null) {
@@ -1147,7 +1147,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     }
                 });
 
-                element.removeChangeListeners();
+                element.removeAllChangeListeners();
                 realm.close();
             }
         });
@@ -1236,7 +1236,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     }
                 });
 
-                element.removeChangeListeners();
+                element.removeAllChangeListeners();
                 realm.close();
                 finish();
                 // call this for finish activity chat when delete chat

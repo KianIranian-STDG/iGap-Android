@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -98,6 +99,7 @@ public class RegisteredContactsFragment extends Fragment {
         if (realmContacts != null) {
             if (contactsChangeListener != null) {
                 realmContacts.addChangeListener(contactsChangeListener);
+
             }
 
         }
@@ -107,7 +109,9 @@ public class RegisteredContactsFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
-        if (realmContacts != null) realmContacts.removeChangeListeners();
+        if (realmContacts != null) {
+            realmContacts.removeAllChangeListeners();
+        }
     }
 
     @Override
@@ -138,13 +142,6 @@ public class RegisteredContactsFragment extends Fragment {
         mRealm = Realm.getDefaultInstance();
 
         realmContacts = mRealm.where(RealmContacts.class).findAll();
-        contactsChangeListener = new RealmChangeListener<RealmResults<RealmContacts>>() {
-            @Override
-            public void onChange(RealmResults<RealmContacts> element) {
-                fillAdapter();
-            }
-        };
-
 
         sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         /**
@@ -303,6 +300,7 @@ public class RegisteredContactsFragment extends Fragment {
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(stickyHeaderAdapter.wrap(itemAdapter.wrap(headerAdapter.wrap(fastAdapter))));
 
+
         //this adds the Sticky Headers within our list
         decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
         rv.addItemDecoration(decoration);
@@ -328,6 +326,18 @@ public class RegisteredContactsFragment extends Fragment {
         }
 
         fillAdapter();
+
+        contactsChangeListener = new RealmChangeListener<RealmResults<RealmContacts>>() {
+            @Override public void onChange(RealmResults<RealmContacts> element) {
+
+                rv.post(new Runnable() {
+                    @Override public void run() {
+                        fillAdapter();
+                    }
+                });
+            }
+        };
+
 
     }
 
@@ -384,16 +394,14 @@ public class RegisteredContactsFragment extends Fragment {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+                if (user.getId() == peerId) {
 
-                        if (user.getId() == peerId) {
-                            Realm realm = Realm.getDefaultInstance();
+                    new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+                        @Override public void run() {
+                            final Realm realm = Realm.getDefaultInstance();
 
                             realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
+                                @Override public void execute(Realm realm) {
                                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
                                     if (realmRegisteredInfo == null) {
                                         realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
@@ -414,27 +422,34 @@ public class RegisteredContactsFragment extends Fragment {
                                     realmRegisteredInfo.setMutual(user.getMutual());
                                 }
                             }, new Realm.Transaction.OnSuccess() {
-                                @Override
-                                public void onSuccess() {
+                                @Override public void onSuccess() {
                                     try {
-                                        hideProgress();
-                                        Intent intent = new Intent(context, ActivityChat.class);
-                                        intent.putExtra("peerId", peerId);
-                                        intent.putExtra("RoomId", roomId);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        context.startActivity(intent);
-                                        mActivity.getSupportFragmentManager().popBackStack();
+
+                                        G.handler.post(new Runnable() {
+                                            @Override public void run() {
+                                                hideProgress();
+                                                Intent intent = new Intent(context, ActivityChat.class);
+                                                intent.putExtra("peerId", peerId);
+                                                intent.putExtra("RoomId", roomId);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                context.startActivity(intent);
+                                                mActivity.getSupportFragmentManager().popBackStack();
+                                            }
+                                        });
                                     } catch (IllegalStateException e) {
                                         e.printStackTrace();
                                     }
+
+                                    realm.close();
+                                }
+                            }, new Realm.Transaction.OnError() {
+                                @Override public void onError(Throwable error) {
+                                    realm.close();
                                 }
                             });
-
-                            realm.close();
                         }
-
-                    }
-                });
+                    });
+                }
 
             }
 
@@ -517,30 +532,36 @@ public class RegisteredContactsFragment extends Fragment {
 
     private void fillAdapter() {
 
-        contacts.clear();
-        itemAdapter.clear();
-        items.clear();
+        try {
 
-        contacts = Contacts.retrieve(null);
-        if (contacts != null && fastAdapter != null && itemAdapter != null) {
-            for (StructContactInfo contact : contacts) {
-                items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
-            }
-            itemAdapter.add(items);
+            contacts.clear();
+            itemAdapter.clear();
+            items.clear();
 
-            //so the headers are aware of changes
-            stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                @Override
-                public void onChanged() {
-                    decoration.invalidateHeaders();
+            contacts = Contacts.retrieve(null);
+            if (contacts != null && fastAdapter != null && itemAdapter != null) {
+                for (StructContactInfo contact : contacts) {
+                    items.add(new ContactItem().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
                 }
-            });
-            //restore selections (this has to be done after the items were added
-            //  fastAdapter.withSavedInstanceState(savedInstanceState);
-            fastAdapter.notifyDataSetChanged();
-        }
+                itemAdapter.add(items);
 
-        if (edtSearch.getText().length() > 0) itemAdapter.filter(edtSearch.getText());
+                //so the headers are aware of changes
+                stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                    @Override public void onChanged() {
+                        decoration.invalidateHeaders();
+                    }
+                });
+                //restore selections (this has to be done after the items were added
+                //  fastAdapter.withSavedInstanceState(savedInstanceState);
+                // fastAdapter.notifyDataSetChanged();
+            }
+
+            if (edtSearch.getText().length() > 0) {
+                itemAdapter.filter(edtSearch.getText());
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     @Override public void onDetach() {

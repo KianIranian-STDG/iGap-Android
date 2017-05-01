@@ -10,7 +10,6 @@
 
 package com.iGap.response;
 
-import com.iGap.G;
 import com.iGap.proto.ProtoChatUpdateDraft;
 import com.iGap.realm.RealmRoom;
 
@@ -35,14 +34,14 @@ public class ChatUpdateDraftResponse extends MessageHandler {
        /*
         * if another account get UpdateDraftResponse set draft to RealmRoom
         */
-        G.handler.post(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 if (updateDraft.getResponse().getId().isEmpty()) {
                     RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo());
                 }
             }
-        });
+        }).start();
 
     }
 

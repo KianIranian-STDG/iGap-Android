@@ -33,7 +33,7 @@ public class ChatSetActionResponse extends MessageHandler {
         super.handler();
         final ProtoChatSetAction.ChatSetActionResponse.Builder builder = (ProtoChatSetAction.ChatSetActionResponse.Builder) message;
 
-        G.handler.post(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
@@ -51,7 +51,7 @@ public class ChatSetActionResponse extends MessageHandler {
                 });
                 realm.close();
             }
-        });
+        }).start();
 
     }
 

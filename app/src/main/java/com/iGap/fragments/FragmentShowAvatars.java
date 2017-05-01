@@ -139,11 +139,17 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
     @Override public void onDestroyView() {
         super.onDestroyView();
 
-        if (avatarList != null) avatarList.removeChangeListeners();
+        if (avatarList != null) {
+            avatarList.removeAllChangeListeners();
+        }
 
-        if (appBarLayout != null) appBarLayout.setVisibility(View.VISIBLE);
+        if (appBarLayout != null) {
+            appBarLayout.setVisibility(View.VISIBLE);
+        }
 
-        if (mRealm != null) mRealm.close();
+        if (mRealm != null) {
+            mRealm.close();
+        }
     }
 
     @Override public void onAttach(Context context) {
@@ -606,7 +612,9 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             @Override public void onDeleteAvatar(long roomId, final long avatarId) {
                 G.handler.post(new Runnable() {
                     @Override public void run() {
-                        if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
+                        if (onComplete != null) {
+                            onComplete.complete(true, "" + avatarId, "");
+                        }
                     }
                 });
             }

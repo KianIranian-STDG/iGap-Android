@@ -68,8 +68,15 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        G.onClientGetRoomHistoryResponse.onGetRoomHistory(Long.parseLong(identity), builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId());
                         realm.close();
+
+                        G.handler.post(new Runnable() {
+                            @Override public void run() {
+                                G.onClientGetRoomHistoryResponse.onGetRoomHistory(Long.parseLong(identity), builder.getMessageList().get(0).getMessageId(),
+                                    builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId());
+                            }
+                        });
+
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override

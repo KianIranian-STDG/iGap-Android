@@ -221,7 +221,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     @Override
     protected void onPause() {
         super.onPause();
-        if (realmUserInfo != null) realmUserInfo.removeChangeListeners();
+        if (realmUserInfo != null) {
+            realmUserInfo.removeAllChangeListeners();
+        }
     }
 
     @Override

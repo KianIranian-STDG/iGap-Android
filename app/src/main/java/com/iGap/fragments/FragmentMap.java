@@ -151,7 +151,6 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                                 }
                             });
                         } catch (Exception e) {
-                            Log.e("ddd", "fragment map     mMap.snapshot     " + e.toString());
                             close();
                             ActivityChat activity = (ActivityChat) getActivity();
                             activity.sendPosition(latitude, longitude, null);

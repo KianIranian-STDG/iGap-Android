@@ -15,7 +15,6 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -128,8 +127,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
 
         holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
-        Log.e("ddd", _st + "");
-
 
         if (mMessage.messageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.onCompleteChat = holder.complete;

@@ -11,6 +11,8 @@
 
 package com.iGap.realm;
 
+import android.os.Handler;
+import com.iGap.G;
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoChannelGetMemberList;
 import io.realm.Realm;
@@ -52,29 +54,41 @@ public class RealmMember extends RealmObject {
 
     public static void convertProtoMemberListToRealmMember(final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder builder, final String identity) {
         final RealmList<RealmMember> newMembers = new RealmList<>();
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
-                realmRoom.getChannelRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
-                RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+                final Realm realm = Realm.getDefaultInstance();
 
-                if (realmRoom != null) {
-                    for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : builder.getMemberList()) {
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
+                        realmRoom.getChannelRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
+                        RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
 
-                        RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
-                        realmMem.setRole(member.getRole().toString());
-                        realmMem.setPeerId(member.getUserId());
-                        newMembers.add(realmMem);
-                        realmRoom.getChannelRoom().setMembers(newMembers);
+                        if (realmRoom != null) {
+                            for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : builder.getMemberList()) {
+
+                                RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
+                                realmMem.setRole(member.getRole().toString());
+                                realmMem.setPeerId(member.getUserId());
+                                newMembers.add(realmMem);
+                                realmRoom.getChannelRoom().setMembers(newMembers);
+                            }
+                        }
+
                     }
-                }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
             }
         });
-
-        realm.close();
     }
 
 }

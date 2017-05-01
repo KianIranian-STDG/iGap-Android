@@ -10,6 +10,7 @@
 
 package com.iGap.response;
 
+import android.os.Handler;
 import com.iGap.Config;
 import com.iGap.G;
 import com.iGap.helper.HelperTimeOut;
@@ -50,14 +51,15 @@ public class UserContactsGetListResponse extends MessageHandler {
         if (HelperTimeOut.timeoutChecking(0, getListTime, Config.GET_CONTACT_LIST_TIME_OUT)) {
             getListTime = System.currentTimeMillis();
 
-            G.handler.post(new Runnable() {
+            new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
+                    final Realm realm = Realm.getDefaultInstance();
 
-                    Realm realm = Realm.getDefaultInstance();
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
+
                             realm.delete(RealmContacts.class);
 
                             for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
@@ -84,9 +86,16 @@ public class UserContactsGetListResponse extends MessageHandler {
                                 listResponse.setAvatar(RealmAvatar.put(registerUser.getId(), registerUser.getAvatar(), true));
                             }
                         }
-                    });
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override public void onSuccess() {
 
-                    realm.close();
+                            realm.close();
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override public void onError(Throwable error) {
+                            realm.close();
+                        }
+                    });
                 }
             });
         }

@@ -35,7 +35,7 @@ public class UserAvatarAddResponse extends MessageHandler {
 
         final ProtoUserAvatarAdd.UserAvatarAddResponse.Builder userAvatarAddResponse = (ProtoUserAvatarAdd.UserAvatarAddResponse.Builder) message;
 
-        G.handler.post(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
@@ -51,7 +51,7 @@ public class UserAvatarAddResponse extends MessageHandler {
                 }
                 realm.close();
             }
-        });
+        }).start();
 
         G.handler.postDelayed(new Runnable() {
             @Override

@@ -2946,7 +2946,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                         new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(message.messageID));
                                                     }
                                                 }
-                                                element.removeChangeListeners();
+                                                element.removeAllChangeListeners();
                                             }
                                         }
                                     });
@@ -3058,9 +3058,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             Realm realm = Realm.getDefaultInstance();
             final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
 
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (realmRoom != null) {
-                realmRoom.setActionState(action, userId);
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        realmRoom.setActionState(action, userId);
+                    }
+                });
+
             }
             realm.close();
             runOnUiThread(new Runnable() {
@@ -3782,7 +3788,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
                     }
                 });
-                element.removeChangeListeners();
+                element.removeAllChangeListeners();
+
                 realm.close();
                 finish();
             }
@@ -5855,47 +5862,58 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
 
     private void sendForwardedMessage(final StructMessageInfo messageInfo) {
-        final Realm realm = Realm.getDefaultInstance();
+
         final long messageId = SUID.id().get();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
 
-                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+                final Realm realm = Realm.getDefaultInstance();
 
-                if (roomMessage != null) {
-                    long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-                    RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
-                    if (roomMessage.getForwardMessage() != null) {
-                        forwardedMessage.setForwardMessage(roomMessage.getForwardMessage());
-                        forwardedMessage.setHasMessageLink(roomMessage.getForwardMessage().getHasMessageLink());
-                    } else {
-                        forwardedMessage.setForwardMessage(roomMessage);
-                        forwardedMessage.setHasMessageLink(roomMessage.getHasMessageLink());
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
+
+                        if (roomMessage != null) {
+                            long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                            RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
+                            if (roomMessage.getForwardMessage() != null) {
+                                forwardedMessage.setForwardMessage(roomMessage.getForwardMessage());
+                                forwardedMessage.setHasMessageLink(roomMessage.getForwardMessage().getHasMessageLink());
+                            } else {
+                                forwardedMessage.setForwardMessage(roomMessage);
+                                forwardedMessage.setHasMessageLink(roomMessage.getHasMessageLink());
+                            }
+
+                            forwardedMessage.setCreateTime(TimeUtils.currentLocalTime());
+                            forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+                            forwardedMessage.setRoomId(mRoomId);
+                            forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                            forwardedMessage.setUserId(userId);
+                            forwardedMessage.setShowMessage(true);
+
+                            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setLastMessage(forwardedMessage);
+                        }
+
                     }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
 
-                    forwardedMessage.setCreateTime(TimeUtils.currentLocalTime());
-                    forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                    forwardedMessage.setRoomId(mRoomId);
-                    forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                    forwardedMessage.setUserId(userId);
-                    forwardedMessage.setShowMessage(true);
+                        RealmRoomMessage forwardedMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                        if (forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
+                            switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
+                            scrollToEnd();
 
-                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setLastMessage(forwardedMessage);
-                }
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                RealmRoomMessage forwardedMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                if (forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
-                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
-                    scrollToEnd();
+                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
+                            chatSendMessageUtil.buildForward(chatType, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
+                        }
 
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
-                    chatSendMessageUtil.buildForward(chatType, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
-                }
-                realm.close();
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
             }
         });
     }
@@ -5947,7 +5965,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (!addTop && messageInfo.showTime) {
 
                     if (mAdapter.getItemCount() > 0) {
-                        if (RealmRoomMessage.isTimeDayDiferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
+                        if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDiferent(messageInfo.time,
+                            mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
                             mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                         }
                     } else {

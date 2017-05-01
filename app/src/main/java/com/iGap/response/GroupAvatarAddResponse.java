@@ -10,6 +10,7 @@
 
 package com.iGap.response;
 
+import android.os.Handler;
 import com.iGap.G;
 import com.iGap.proto.ProtoGroupAvatarAdd;
 import com.iGap.realm.RealmAvatar;
@@ -33,10 +34,12 @@ public class GroupAvatarAddResponse extends MessageHandler {
         super.handler();
 
         final ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder groupAvatarAddResponse = (ProtoGroupAvatarAdd.GroupAvatarAddResponse.Builder) message;
-        G.handler.post(new Runnable() {
+
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                Realm realm = Realm.getDefaultInstance();
+                final Realm realm = Realm.getDefaultInstance();
+
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -45,12 +48,22 @@ public class GroupAvatarAddResponse extends MessageHandler {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-                        if (G.onGroupAvatarResponse != null) {
-                            G.onGroupAvatarResponse.onAvatarAdd(groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
-                        }
+
+                        G.handler.post(new Runnable() {
+                            @Override public void run() {
+                                if (G.onGroupAvatarResponse != null) {
+                                    G.onGroupAvatarResponse.onAvatarAdd(groupAvatarAddResponse.getRoomId(), groupAvatarAddResponse.getAvatar());
+                                }
+                            }
+                        });
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
                     }
                 });
-                realm.close();
             }
         });
 

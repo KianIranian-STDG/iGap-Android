@@ -329,7 +329,7 @@ public class FragmentShowMember extends Fragment {
         public long userid;
 
         public MemberAdapter(Context context, RealmResults<RealmMember> realmResults, ProtoGlobal.Room.Type roomType, String mainRole, long userid) {
-            //super(context, realmResults, true, false, "");
+
             super(context, realmResults, true, false, false, "");
 
             this.roomType = roomType;

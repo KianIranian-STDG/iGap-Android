@@ -21,7 +21,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -170,8 +169,6 @@ public class ShowCustomList extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                Log.e("ddd", charSequence + "  " + i + "   " + i1 + "   " + i2);
 
                 if (charSequence.length() + i + i1 + i2 > 0) itemAdapter.filter(charSequence);
 

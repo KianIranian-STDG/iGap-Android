@@ -658,8 +658,6 @@ public class HelperUrl {
 
                 @Override
                 public void onError(int majorCode, int minorCode) {
-                    Log.e("ddd", majorCode + "   " + minorCode);
-
                     closeDialogWaiting();
                 }
             };
@@ -1152,7 +1150,6 @@ public class HelperUrl {
                         checkUsernameAndGoToRoom(token, ChatEntery.profile);
                     }
 
-                    Log.e("ddd", "token = " + token);
                 }
             } else {
 
@@ -1162,7 +1159,6 @@ public class HelperUrl {
                     checkUsernameAndGoToRoom(domain, ChatEntery.profile);
                 }
 
-                Log.e("ddd", "domain  =  " + domain);
             }
         } else {
             closeDialogWaiting();

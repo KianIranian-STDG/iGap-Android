@@ -125,7 +125,7 @@ public class FragmentBlockedUser extends Fragment {
     public class BlockListAdapter extends RealmBasedRecyclerViewAdapter<RealmRegisteredInfo, BlockListAdapter.ViewHolder> {
 
         public BlockListAdapter(Context context, RealmResults<RealmRegisteredInfo> realmResults) {
-            super(context, realmResults, true, true, false, "");
+            super(context, realmResults, true, false, false, "");
         }
 
         public class ViewHolder extends RealmViewHolder {

@@ -10,6 +10,7 @@
 
 package com.iGap.response;
 
+import android.os.Handler;
 import com.iGap.G;
 import com.iGap.proto.ProtoChannelAvatarAdd;
 import com.iGap.realm.RealmAvatar;
@@ -35,10 +36,11 @@ public class ChannelAvatarAddResponse extends MessageHandler {
 
         final ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder builder = (ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder) message;
 
-        G.handler.post(new Runnable() {
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                Realm realm = Realm.getDefaultInstance();
+                final Realm realm = Realm.getDefaultInstance();
+
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -48,14 +50,24 @@ public class ChannelAvatarAddResponse extends MessageHandler {
                     @Override
                     public void onSuccess() {
                         if (G.onChannelAvatarAdd != null) {
-                            G.onChannelAvatarAdd.onAvatarAdd(builder.getRoomId(), builder.getAvatar());
+
+                            G.handler.post(new Runnable() {
+                                @Override public void run() {
+                                    G.onChannelAvatarAdd.onAvatarAdd(builder.getRoomId(), builder.getAvatar());
+                                }
+                            });
+
                         }
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
                     }
                 });
-                realm.close();
             }
         });
-
     }
 
     @Override

@@ -105,9 +105,13 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     @Override public void onPause() {
         super.onPause();
 
-        if (realmUserInfo != null) realmUserInfo.removeChangeListeners();
+        if (realmUserInfo != null) {
+            realmUserInfo.removeAllChangeListeners();
+        }
 
-        if (realmPrivacy != null) realmPrivacy.removeChangeListeners();
+        if (realmPrivacy != null) {
+            realmPrivacy.removeAllChangeListeners();
+        }
     }
 
     @Override public void onDestroy() {

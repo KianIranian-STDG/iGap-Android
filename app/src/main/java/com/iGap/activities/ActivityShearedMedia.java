@@ -159,7 +159,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         super.onStop();
 
         if (mRealmList != null) {
-            mRealmList.removeChangeListeners();
+            mRealmList.removeAllChangeListeners();
         }
     }
 
@@ -332,17 +332,15 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 if (isThereAnyMoreItemToLoad) {
                     if (!isSendRequestForLoading) {
 
-                        new Thread(new Runnable() {
-                            @Override public void run() {
+
                                 int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
-                                if (lastVisiblePosition + 25 >= offset) {
+                        if (lastVisiblePosition + 30 >= offset) {
 
                                 new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, mFilter);
                                 isSendRequestForLoading = true;
                                 }
-                            }
-                        }).start();
+
 
 
 
@@ -651,7 +649,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private ArrayList<StructShearedMedia> loadLoackData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter, String type) {
 
-        if (mRealmList != null) mRealmList.removeChangeListeners();
+        if (mRealmList != null) {
+            mRealmList.removeAllChangeListeners();
+        }
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -717,33 +717,39 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         offset = 0;
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
-            @Override
-            public void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, String identity) {
-                isSendRequestForLoading = false;
+            @Override public void onClientSearchRoomHistory(int totalCount, final int notDeletedCount, final List<ProtoGlobal.RoomMessage> resultList, String identity) {
 
-                //for (ProtoGlobal.RoomMessage message : resultList) {
-                //    Log.e("dd", message + "");
-                //}
+                new Thread(new Runnable() {
+                    @Override public void run() {
 
-                offset += resultList.size();
+                        isSendRequestForLoading = false;
 
-                if (notDeletedCount > 0) {
-                    saveDataToLocal(resultList, roomId);
-                } else {
-                    Toast.makeText(ActivityShearedMedia.this, R.string.there_is_no_sheared_media, Toast.LENGTH_LONG).show();
-                }
+                        //for (ProtoGlobal.RoomMessage message : resultList) {
+                        //    Log.e("dd", message + "");
+                        //}
 
-                if (notDeletedCount > offset && notDeletedCount > mListcount) {
-                    isThereAnyMoreItemToLoad = true;
-                } else {
-                    isThereAnyMoreItemToLoad = false;
+                        offset += resultList.size();
 
-                    if (onScrollListener != null) {
-                        recyclerView.removeOnScrollListener(onScrollListener);
+                        if (notDeletedCount > 0) {
+                            saveDataToLocal(resultList, roomId);
+                        } else {
+                            Toast.makeText(ActivityShearedMedia.this, R.string.there_is_no_sheared_media, Toast.LENGTH_LONG).show();
+                        }
+
+                        if (notDeletedCount > offset && notDeletedCount > mListcount) {
+                            isThereAnyMoreItemToLoad = true;
+                        } else {
+                            isThereAnyMoreItemToLoad = false;
+
+                            if (onScrollListener != null) {
+                                recyclerView.removeOnScrollListener(onScrollListener);
+                            }
+                        }
+
+                        Log.e("dddd", "isThereAnyMoreItemToLoad   " + isThereAnyMoreItemToLoad + "    " + offset);
+
                     }
-                }
-
-                Log.e("dddd", "isThereAnyMoreItemToLoad   " + isThereAnyMoreItemToLoad + "    " + offset);
+                }).start();
             }
 
             @Override
@@ -752,35 +758,36 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
         };
 
-        new Thread(new Runnable() {
-            @Override public void run() {
-                new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, filter);
-            }
-        }).start();
-
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, filter);
 
         isSendRequestForLoading = true;
     }
 
     public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
 
-        handler.post(new Runnable() {
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+                final Realm realm = Realm.getDefaultInstance();
 
-                Realm realm = Realm.getDefaultInstance();
-
-                realm.executeTransaction(new Realm.Transaction() {
+                realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
+
                         for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
                             RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, false, realm);
                         }
                     }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
+                    }
                 });
-
-                realm.close();
-
             }
         });
     }

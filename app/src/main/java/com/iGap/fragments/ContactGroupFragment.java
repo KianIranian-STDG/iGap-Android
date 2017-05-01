@@ -441,7 +441,9 @@ public class ContactGroupFragment extends Fragment {
             @Override
             public void run() {
                 //                prgWaiting.setVisibility(View.VISIBLE);
-                if (getActivity() != null) getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (getActivity() != null) {
+                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
             }
         });
     }
@@ -452,7 +454,9 @@ public class ContactGroupFragment extends Fragment {
             public void run() {
 
                 //                prgWaiting.setVisibility(View.GONE);
-                if (getActivity() != null) getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (getActivity() != null) {
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
             }
         });
     }

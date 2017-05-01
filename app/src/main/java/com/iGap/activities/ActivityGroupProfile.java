@@ -195,7 +195,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     protected void onStop() {
         super.onStop();
 
-        if (mRoom != null) mRoom.removeChangeListeners();
+        if (mRoom != null) {
+            mRoom.removeAllChangeListeners();
+        }
     }
 
     @Override

@@ -20,7 +20,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.widget.ImageView;
 import com.iGap.R;
 import java.io.File;
@@ -229,7 +228,6 @@ public class HelperMimeType {
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            Log.e("ddd", "LoadImageToImageView");
             if (result != null && imv != null) {
                 imv.setImageBitmap(result);
             }

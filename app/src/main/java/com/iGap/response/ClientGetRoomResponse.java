@@ -76,7 +76,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                     new HelperGetUserInfo(new OnGetUserInfo() {
                         @Override
                         public void onGetUserInfo(ProtoGlobal.RegisteredUser registeredUser) {
-                            G.handler.post(new Runnable() {
+                            new Thread(new Runnable() {
                                 @Override
                                 public void run() {
                                     Realm realm1 = Realm.getDefaultInstance();
@@ -89,13 +89,19 @@ public class ClientGetRoomResponse extends MessageHandler {
                                         @Override
                                         public void onSuccess() {
                                             if (G.onClientGetRoomResponse != null) {
-                                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identity);
+
+                                                G.handler.post(new Runnable() {
+                                                    @Override public void run() {
+                                                        G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identity);
+                                                    }
+                                                });
+
                                             }
                                         }
                                     });
                                     realm1.close();
                                 }
-                            });
+                            }).start();
                         }
                     }).getUserInfo(clientGetRoom.getRoom().getChatRoomExtra().getPeer().getId());
 

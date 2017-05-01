@@ -10,6 +10,7 @@
 
 package com.iGap.response;
 
+import android.os.Handler;
 import com.iGap.G;
 import com.iGap.helper.HelperSetAction;
 import com.iGap.helper.HelperUploadFile;
@@ -52,10 +53,11 @@ public class FileUploadResponse extends MessageHandler {
     private void makeFailed() {
         // message failed
 
-        G.handler.post(new Runnable() {
+        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();
+
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -63,14 +65,26 @@ public class FileUploadResponse extends MessageHandler {
                         if (message != null) {
                             message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
                         }
+
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
+
                         final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
                         if (message != null) {
-                            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
+                            G.handler.post(new Runnable() {
+                                @Override public void run() {
+                                    G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
+                                }
+                            });
                         }
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
                     }
                 });
             }
