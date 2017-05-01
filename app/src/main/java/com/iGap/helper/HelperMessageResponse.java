@@ -11,6 +11,7 @@
 package com.iGap.helper;
 
 import android.os.Handler;
+import android.os.Looper;
 import com.iGap.G;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoResponse;
@@ -44,11 +45,7 @@ public class HelperMessageResponse {
         }
         latestMessageTime = System.currentTimeMillis();
 
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override public void run() {
                         final Realm realm = Realm.getDefaultInstance();
 
@@ -143,8 +140,7 @@ public class HelperMessageResponse {
                             }
                         });
                     }
-                });
-            }
         }, 500 * delay);
+
     }
 }

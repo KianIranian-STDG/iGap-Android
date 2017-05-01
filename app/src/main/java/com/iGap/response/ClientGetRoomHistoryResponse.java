@@ -11,6 +11,7 @@
 package com.iGap.response;
 
 import android.os.Handler;
+import android.os.Looper;
 import com.iGap.G;
 import com.iGap.helper.HelperInfo;
 import com.iGap.proto.ProtoClientGetRoomHistory;
@@ -41,7 +42,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
 
         final int[] i = {0};
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
 

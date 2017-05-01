@@ -11,6 +11,7 @@
 package com.iGap.response;
 
 import android.os.Handler;
+import android.os.Looper;
 import com.iGap.G;
 import com.iGap.proto.ProtoChannelAvatarAdd;
 import com.iGap.realm.RealmAvatar;
@@ -36,7 +37,7 @@ public class ChannelAvatarAddResponse extends MessageHandler {
 
         final ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder builder = (ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder) message;
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();

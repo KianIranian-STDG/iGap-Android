@@ -12,7 +12,6 @@ package com.iGap.response;
 
 import com.iGap.G;
 import com.iGap.proto.ProtoChatSetAction;
-import io.realm.Realm;
 
 public class ChatSetActionResponse extends MessageHandler {
 
@@ -28,40 +27,24 @@ public class ChatSetActionResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override
-    public void handler() {
+    @Override public void handler() {
         super.handler();
         final ProtoChatSetAction.ChatSetActionResponse.Builder builder = (ProtoChatSetAction.ChatSetActionResponse.Builder) message;
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        if (G.onSetAction != null) {
-                            G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
-                        }
+        if (G.onSetAction != null) {
+            G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+        }
 
-                        if (G.onSetActionInRoom != null) {
-                            G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
-                        }
-                    }
-                });
-                realm.close();
-            }
-        }).start();
-
+        if (G.onSetActionInRoom != null) {
+            G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+        }
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         super.timeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         super.error();
     }
 }

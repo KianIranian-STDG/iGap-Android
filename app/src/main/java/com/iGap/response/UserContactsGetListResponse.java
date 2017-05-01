@@ -11,8 +11,8 @@
 package com.iGap.response;
 
 import android.os.Handler;
+import android.os.Looper;
 import com.iGap.Config;
-import com.iGap.G;
 import com.iGap.helper.HelperTimeOut;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoUserContactsGetList;
@@ -51,7 +51,7 @@ public class UserContactsGetListResponse extends MessageHandler {
         if (HelperTimeOut.timeoutChecking(0, getListTime, Config.GET_CONTACT_LIST_TIME_OUT)) {
             getListTime = System.currentTimeMillis();
 
-            new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
                     final Realm realm = Realm.getDefaultInstance();

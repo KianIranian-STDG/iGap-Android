@@ -11,6 +11,7 @@
 package com.iGap.helper;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import com.iGap.G;
@@ -139,7 +140,7 @@ public class HelperAvatar {
                     @Override
                     public void onDownload(final String filepath, final String token) {
 
-                        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
                                 final Realm realm = Realm.getDefaultInstance();
@@ -366,7 +367,7 @@ public class HelperAvatar {
 
     public static void avatarDelete(final long ownerId, final long avatarId, final AvatarType avatarType, @Nullable final OnAvatarDelete onAvatarDelete) {
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();
@@ -498,7 +499,7 @@ public class HelperAvatar {
                     @Override
                     public void onDownload(final String filepath, final String token) {
 
-                        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
                                 final Realm realm = Realm.getDefaultInstance();

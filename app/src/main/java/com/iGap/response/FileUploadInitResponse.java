@@ -11,6 +11,7 @@
 package com.iGap.response;
 
 import android.os.Handler;
+import android.os.Looper;
 import com.iGap.G;
 import com.iGap.helper.HelperSetAction;
 import com.iGap.helper.HelperUploadFile;
@@ -62,7 +63,7 @@ public class FileUploadInitResponse extends MessageHandler {
     private void makeFailed() {
         // message failed
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();

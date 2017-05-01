@@ -213,6 +213,11 @@ public class HelperNotificationAndBadge {
 
     private void setNotification() {
 
+        if (G.isAppInFg) {
+
+            return;
+        }
+
 
         PendingIntent pi;
 
@@ -404,11 +409,15 @@ public class HelperNotificationAndBadge {
 
         list.clear();
         senderList.clear();
-
         popUpList.clear();
 
-        RealmResults<RealmRoomMessage> realmRoomMessages =
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString()).or().equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString()).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, authorHash).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
+            .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
+            .or()
+            .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString())
+            .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, authorHash)
+            .equalTo(RealmRoomMessageFields.DELETED, false)
+            .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         if (!realmRoomMessages.isEmpty()) {
             for (RealmRoomMessage roomMessage : realmRoomMessages) {
@@ -417,6 +426,8 @@ public class HelperNotificationAndBadge {
                     if (realmRoom1 != null && realmRoom1.getType() != null && realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
                         unreadMessageCount++;
                         messageOne = roomMessage.getMessage();
+
+                        Log.e("dddddd", realmRoom1.getTitle() + "");
 
                         if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
                             senderId = realmRoom1.getId();
@@ -452,9 +463,9 @@ public class HelperNotificationAndBadge {
                             list.add(item);
                         }
 
-                        if (unreadMessageCount == 1) roomId = roomMessage.getRoomId();
-
-                        if (roomId != roomMessage.getRoomId()) {
+                        if (unreadMessageCount == 1) {
+                            roomId = roomMessage.getRoomId();
+                        } else if (roomId != roomMessage.getRoomId()) {
                             isFromOnRoom = false;
                         }
 
@@ -466,7 +477,9 @@ public class HelperNotificationAndBadge {
                             }
                         }
 
-                        if (isAdd) senderList.add(roomMessage.getRoomId());
+                        if (isAdd) {
+                            senderList.add(roomMessage.getRoomId());
+                        }
 
                     } else {
                         // now just show count for channel message
@@ -477,15 +490,14 @@ public class HelperNotificationAndBadge {
             startActivityPopUpNotification(type, popUpList);
 
             countChannelMessage = 0;
-            int countChat = 0;
+
             RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
             for (RealmRoom realmRoom1 : realmRooms) {
                 if (realmRoom1.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom1.getUnreadCount() > 0) {
                     countChannelMessage += realmRoom1.getUnreadCount();
-                    countChat++;
+                    countUnicChat++;
                 }
             }
-            countUnicChat += countChat;
 
             countUnicChat += senderList.size();
         }
@@ -495,7 +507,7 @@ public class HelperNotificationAndBadge {
         }
 
         try {
-            ShortcutBadger.applyCount(context, unreadMessageCount);
+            ShortcutBadger.applyCount(context, unreadMessageCount + countChannelMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }

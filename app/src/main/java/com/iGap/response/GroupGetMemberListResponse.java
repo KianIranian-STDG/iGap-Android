@@ -11,6 +11,7 @@
 package com.iGap.response;
 
 import android.os.Handler;
+import android.os.Looper;
 import com.iGap.G;
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoGroupGetMemberList;
@@ -44,7 +45,7 @@ public class GroupGetMemberListResponse extends MessageHandler {
 
         final RealmList<RealmMember> newMembers = new RealmList<>();
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 

@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.FragmentActivity;
@@ -688,7 +689,7 @@ public class HelperUrl {
             return;
         }
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();
@@ -986,7 +987,7 @@ public class HelperUrl {
 
         closeDialogWaiting();
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();
@@ -1059,7 +1060,7 @@ public class HelperUrl {
     private static void addRoomToDataBaseAndGoToRoom(final String username, final ProtoGlobal.Room room) {
         closeDialogWaiting();
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
 

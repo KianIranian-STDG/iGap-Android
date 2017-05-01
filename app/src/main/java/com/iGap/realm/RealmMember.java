@@ -12,7 +12,7 @@
 package com.iGap.realm;
 
 import android.os.Handler;
-import com.iGap.G;
+import android.os.Looper;
 import com.iGap.module.SUID;
 import com.iGap.proto.ProtoChannelGetMemberList;
 import io.realm.Realm;
@@ -55,7 +55,7 @@ public class RealmMember extends RealmObject {
     public static void convertProtoMemberListToRealmMember(final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder builder, final String identity) {
         final RealmList<RealmMember> newMembers = new RealmList<>();
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 

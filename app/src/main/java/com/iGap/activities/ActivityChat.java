@@ -457,7 +457,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 });
             }
-        }, 500);
+        }, 1000);
 
         try {
             ShortcutBadger.applyCount(context, 0);
@@ -5868,7 +5868,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         final long messageId = SUID.id().get();
 
-        new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 

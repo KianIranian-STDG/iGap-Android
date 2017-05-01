@@ -190,7 +190,7 @@ import org.parceler.Parcel;
 
         if (G.userLogin) {
 
-            new Handler(G.currentActivity.getMainLooper()).post(new Runnable() {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override public void run() {
                     final Realm realm = Realm.getDefaultInstance();
 
