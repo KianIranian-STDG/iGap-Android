@@ -20,7 +20,7 @@ public class RequestGroupGetMemberList {
         ProtoGroupGetMemberList.GroupGetMemberList.Builder builder = ProtoGroupGetMemberList.GroupGetMemberList.newBuilder();
         builder.setRoomId(roomId);
         builder.setFilterRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL);
-        // builder.setPagination(new RequestPagination().pagination(offset, limit));
+        builder.setPagination(new RequestPagination().pagination(offset, limit));
 
         RequestWrapper requestWrapper = new RequestWrapper(317, builder, roomId + "");
         try {

@@ -13,12 +13,16 @@ package com.iGap.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,10 +47,13 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.CircleImageView;
 import com.iGap.module.CustomTextViewMedium;
+import com.iGap.module.DeviceUtils;
+import com.iGap.module.EndlessRecyclerViewScrollListener;
 import com.iGap.module.LastSeenTimeUtil;
 import com.iGap.module.MaterialDesignTextView;
 import com.iGap.module.enums.GroupChatRole;
 import com.iGap.module.structs.StructContactInfo;
+import com.iGap.module.structs.StructMessageInfo;
 import com.iGap.proto.ProtoChannelGetMemberList;
 import com.iGap.proto.ProtoGlobal;
 import com.iGap.proto.ProtoGroupGetMemberList;
@@ -65,8 +72,10 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.iGap.R.string.member;
 
 public class FragmentShowMember extends Fragment {
 
@@ -90,9 +99,13 @@ public class FragmentShowMember extends Fragment {
     private boolean isNeedGetMemberList = false;
     private int mMemberCount = 0;
     private int mCurrentUpdateCount = 0;
+    public static List<StructMessageInfo> lists = new ArrayList<>();
+
+    private int offset = 0;
+    private int limit = 50;
 
     public static OnComplete infoUpdateListenerCount = null;
-
+    private EndlessRecyclerViewScrollListener scrollListener;
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
         Bundle bundle = new Bundle();
         bundle.putLong(ROOMIDARGUMENT, roomId);
@@ -143,7 +156,6 @@ public class FragmentShowMember extends Fragment {
                             new getAcynkMember().execute();
                         }
                     }, 100);
-
                 }
             }
         }
@@ -160,20 +172,15 @@ public class FragmentShowMember extends Fragment {
         }
     }
 
-
     private void getMemberList() {
-        mMemberCount = 200;
+        mMemberCount = offset;
 
         infoUpdateListenerCount = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
 
                 try {
-
                     mCurrentUpdateCount++;
-
-                    if (mCurrentUpdateCount >= mMemberCount) {
-
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -183,9 +190,7 @@ public class FragmentShowMember extends Fragment {
                                 }
                             }
                         });
-
                         infoUpdateListenerCount = null;
-                    }
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -197,10 +202,20 @@ public class FragmentShowMember extends Fragment {
             public void onGroupGetMemberList(final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
 
                 mMemberCount = members.size();
-
+                Realm realm = Realm.getDefaultInstance();
                 for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
-                    new RequestUserInfo().userInfo(member.getUserId(), mRoomID + "");
+                    final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, member.getUserId()).findFirst();
+                    if (realmRegisteredInfo == null) {
+                        new RequestUserInfo().userInfo(member.getUserId());
+                    } else {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                if (infoUpdateListenerCount != null) infoUpdateListenerCount.complete(true, "", "");
+                            }
+                        });
+                    }
                 }
+
             }
         };
 
@@ -225,24 +240,34 @@ public class FragmentShowMember extends Fragment {
 
             }
         };
-
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mCurrentUpdateCount = 0;
 
-                RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+                final RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
                 if (realmRoom != null) {
                     if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                        new RequestGroupGetMemberList().getMemberList(mRoomID, 0, 0);
+
+                        mRealm.executeTransaction(new Realm.Transaction() {
+                            @Override public void execute(Realm realm) {
+                                if (realmRoom.getGroupRoom().getMembers() != null) realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
+                            }
+                        });
+                        new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit);
                     } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID, 0, 0);
+                        if (realmRoom.getGroupRoom().getMembers() == null || realmRoom.getChannelRoom().getMembers().size() == 0) {
+                            new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit);
+                        } else {
+                            fillAdapter();
+                            if (progressBar != null) {
+                                progressBar.setVisibility(View.GONE);
+                            }
+                    }
                     }
                 }
             }
         });
-
-
     }
 
     @Override
@@ -255,11 +280,11 @@ public class FragmentShowMember extends Fragment {
     private void initComponent(View view) {
 
         mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.fcm_recycler_view_show_member);
-        mRecyclerView.setItemViewCacheSize(500);
+        mRecyclerView.setItemViewCacheSize(100);
 
-        PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(getActivity());
+        final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(getActivity());
         mRecyclerView.getRecycleView().setLayoutManager(preCachingLayoutManager);
-
+        preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(getActivity()));
 
         progressBar = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
 
@@ -281,15 +306,47 @@ public class FragmentShowMember extends Fragment {
         } else if (selectedRole.toString().equals(ProtoGlobal.ChannelRoom.Role.ADMIN.toString())) {
             txtNumberOfMember.setText(getResources().getString(R.string.list_admin));
         } else {
-            txtNumberOfMember.setText(getResources().getString(R.string.member));
+            txtNumberOfMember.setText(getResources().getString(member));
         }
 
         if (!isNeedGetMemberList) {
             fillAdapter();
         }
+
+        scrollListener = new EndlessRecyclerViewScrollListener(preCachingLayoutManager) {
+            @Override public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+
+                loadMoreMember(page, totalItemsCount, view);
+            }
+        };
+
+        mRecyclerView.getRecycleView().addOnScrollListener(scrollListener);
+
+    }
+
+    private void loadMoreMember(int page, int totalItemsCount, RecyclerView view) {
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override public void run() {
+                mCurrentUpdateCount = 0;
+                limit = 50;
+                RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+                offset = realmRoom.getGroupRoom().getMembers().size();
+                if (realmRoom != null) {
+                    if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                        new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit);
+                    } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit);
+                    }
+                }
+            }
+        });
     }
 
     private void fillAdapter() {
+
 
         RealmList<RealmMember> memberList = null;
 
@@ -298,6 +355,7 @@ public class FragmentShowMember extends Fragment {
 
             if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
                 memberList = realmRoom.getGroupRoom().getMembers();
+                Log.i("AAAAAAAAAAA", "fillAdapter memberList: " + memberList);
 
                 role = realmRoom.getGroupRoom().getRole().toString();
             } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
@@ -467,7 +525,13 @@ public class FragmentShowMember extends Fragment {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+
+                            G.handler.postDelayed(new Runnable() {
+                                @Override public void run() {
+                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                                }
+                            }, 0);
+
                         }
                     });
                 }
@@ -477,7 +541,13 @@ public class FragmentShowMember extends Fragment {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            holder.image.setImageBitmap(com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            G.handler.postDelayed(new Runnable() {
+                                @Override public void run() {
+                                    holder.image.setImageBitmap(
+                                        com.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                                }
+                            }, 0);
+
                         }
                     });
                 }
@@ -577,7 +647,7 @@ public class FragmentShowMember extends Fragment {
     }
 
     public class PreCachingLayoutManager extends LinearLayoutManager {
-        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 2500;
+        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 600;
         private int extraLayoutSpace = -1;
         private Context context;
 
@@ -607,6 +677,25 @@ public class FragmentShowMember extends Fragment {
                 return extraLayoutSpace;
             }
             return DEFAULT_EXTRA_LAYOUT_SPACE;
+        }
+
+        private static final float MILLISECONDS_PER_INCH = 2000f; //default is 25f (bigger = slower)
+
+        @Override public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+
+            final LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
+
+                @Override public PointF computeScrollVectorForPosition(int targetPosition) {
+                    return PreCachingLayoutManager.this.computeScrollVectorForPosition(targetPosition);
+                }
+
+                @Override protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                    return MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
+                }
+            };
+
+            linearSmoothScroller.setTargetPosition(position);
+            startSmoothScroll(linearSmoothScroller);
         }
     }
 

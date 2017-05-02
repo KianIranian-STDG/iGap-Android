@@ -41,7 +41,6 @@ public class GroupGetMemberListResponse extends MessageHandler {
 
         final ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder builder = (ProtoGroupGetMemberList.GroupGetMemberListResponse.Builder) message;
 
-        G.onGroupGetMemberList.onGroupGetMemberList(builder.getMemberList());
 
         final RealmList<RealmMember> newMembers = new RealmList<>();
 
@@ -56,20 +55,24 @@ public class GroupGetMemberListResponse extends MessageHandler {
                         if (realmRoom != null) {
 
                             realmRoom.getGroupRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
-                            realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
 
+                            int i = 0;
+                            newMembers.addAll(realmRoom.getGroupRoom().getMembers());
                             for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : builder.getMemberList()) {
+                                i += 1;
                                 RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
                                 realmMem.setRole(member.getRole().toString());
                                 realmMem.setPeerId(member.getUserId());
                                 newMembers.add(realmMem);
                             }
+
                             realmRoom.getGroupRoom().setMembers(newMembers);
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override public void onSuccess() {
                         realm.close();
+                        if (G.onGroupGetMemberList != null) G.onGroupGetMemberList.onGroupGetMemberList(builder.getMemberList());
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override public void onError(Throwable error) {

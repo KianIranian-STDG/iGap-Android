@@ -59,7 +59,7 @@ public class GroupAddMemberResponse extends MessageHandler {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        members.add(realmMember);
+                        members.add(0, realmMember);
                     }
                 });
                 if (G.onGroupAddMember != null) {

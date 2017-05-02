@@ -36,4 +36,9 @@ public class StructContactInfo {
         this.isSelected = isSelected;
         this.phone = phone;
     }
+
+    public StructContactInfo() {
+
+    }
+
 }

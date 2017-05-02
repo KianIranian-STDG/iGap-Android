@@ -17,7 +17,7 @@ public class RequestChannelGetMemberList {
     public void channelGetMemberList(long roomId, int offset, int limit) {
         ProtoChannelGetMemberList.ChannelGetMemberList.Builder builder = ProtoChannelGetMemberList.ChannelGetMemberList.newBuilder();
         builder.setRoomId(roomId);
-        //builder.setPagination(new RequestPagination().pagination(offset, limit));
+        builder.setPagination(new RequestPagination().pagination(offset, limit));
 
         RequestWrapper requestWrapper = new RequestWrapper(417, builder, roomId + "");
         try {
