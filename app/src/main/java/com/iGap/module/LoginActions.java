@@ -59,7 +59,8 @@ public class LoginActions extends Application {
 
         G.onUserLogin = new OnUserLogin() {
             @Override public void onLogin() {
-                G.handler.post(new Runnable() {
+
+                new Thread(new Runnable() {
                     @Override public void run() {
                         clientConditionGlobal = HelperClientCondition.computeClientCondition();
                         /**
@@ -84,7 +85,10 @@ public class LoginActions extends Application {
                         getUserInfo();
                         sendWaitingRequestWrappers();
                     }
-                });
+                }).start();
+
+
+
             }
 
             @Override public void onLoginError(int majorCode, int minorCode) {

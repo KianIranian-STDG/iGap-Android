@@ -39,8 +39,15 @@ public class ClientGetRoomListResponse extends MessageHandler {
         if (G.onClientGetRoomListResponse != null) {
             G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse(), Boolean.parseBoolean(identity));
         } else {
-            new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
-            putChatToDatabase(clientGetRoomListResponse.getRoomsList(), false, false);
+
+            new Thread(new Runnable() {
+                @Override public void run() {
+                    new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+                    putChatToDatabase(clientGetRoomListResponse.getRoomsList(), false, false);
+                }
+            }).start();
+
+
         }
     }
 

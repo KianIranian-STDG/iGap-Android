@@ -40,6 +40,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -112,6 +113,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private long roomId = 0;
     Handler handler;
     private int changesize = 0;
+    ProgressBar progressBar;
 
     private RecyclerView.OnScrollListener onScrollListener;
 
@@ -256,6 +258,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private void initComponent() {
 
+        progressBar = (ProgressBar) findViewById(R.id.asm_progress_bar_waiting);
+        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+
         appBarLayout = (AppBarLayout) findViewById(R.id.asm_appbar_shared_media);
 
         findViewById(R.id.asm_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
@@ -313,6 +318,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                             new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, mFilter);
                             isSendRequestForLoading = true;
+                            progressBar.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -683,6 +689,12 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
             @Override public void onClientSearchRoomHistory(int totalCount, final int notDeletedCount, final List<ProtoGlobal.RoomMessage> resultList, String identity) {
 
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+
                 new Thread(new Runnable() {
                     @Override public void run() {
 
@@ -716,12 +728,19 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             }
 
             @Override public void onError(int majorCode, int minorCode, String identity) {
+
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+
                 isSendRequestForLoading = false;
             }
         };
 
         new RequestClientSearchRoomHistory().clientSearchRoomHistory(roomId, offset, filter);
-
+        progressBar.setVisibility(View.VISIBLE);
         isSendRequestForLoading = true;
     }
 

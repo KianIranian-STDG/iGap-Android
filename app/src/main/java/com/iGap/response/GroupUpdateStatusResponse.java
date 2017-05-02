@@ -10,6 +10,8 @@
 
 package com.iGap.response;
 
+import android.os.Handler;
+import android.os.Looper;
 import com.iGap.G;
 import com.iGap.proto.ProtoGroupUpdateStatus;
 import com.iGap.proto.ProtoResponse;
@@ -42,41 +44,54 @@ public class GroupUpdateStatusResponse extends MessageHandler {
         final ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder builder = (ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder) message;
         final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                if (!response.getId().isEmpty()) { // I'm sender
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+                final Realm realm = Realm.getDefaultInstance();
 
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
-                    RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
-                    for (int i = offlineSeen.size() - 1; i >= 0; i--) {
-                        RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
-                        realmOfflineSeen.deleteFromRealm();
-                    }
-                } else { // I'm recipient
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
 
-                    /**
-                     * clear unread count if another account was saw this message
-                     */
-                    RealmRoom.clearUnreadCount(builder.getRoomId(), builder.getUpdaterAuthorHash(), builder.getStatus());
+                        if (!response.getId().isEmpty()) { // I'm sender
 
-                    /**
-                     * find message from database and update its status
-                     */
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).findFirst();
-                    if (roomMessage != null) {
-                        roomMessage.setStatus(builder.getStatus().toString());
-                        realm.copyToRealmOrUpdate(roomMessage);
+                            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
+                            RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
+                            for (int i = offlineSeen.size() - 1; i >= 0; i--) {
+                                RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
+                                realmOfflineSeen.deleteFromRealm();
+                            }
+                        } else { // I'm recipient
 
-                        if (G.chatUpdateStatusUtil != null) {
-                            G.chatUpdateStatusUtil.onChatUpdateStatus(builder.getRoomId(), builder.getMessageId(), builder.getStatus(), builder.getStatusVersion());
+                            /**
+                             * clear unread count if another account was saw this message
+                             */
+                            RealmRoom.clearUnreadCount(builder.getRoomId(), builder.getUpdaterAuthorHash(), builder.getStatus());
+
+                            /**
+                             * find message from database and update its status
+                             */
+                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).findFirst();
+                            if (roomMessage != null) {
+                                roomMessage.setStatus(builder.getStatus().toString());
+                                realm.copyToRealmOrUpdate(roomMessage);
+
+                                if (G.chatUpdateStatusUtil != null) {
+                                    G.chatUpdateStatusUtil.onChatUpdateStatus(builder.getRoomId(), builder.getMessageId(), builder.getStatus(), builder.getStatusVersion());
+                                }
+                            }
                         }
                     }
-                }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override public void onSuccess() {
+
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
             }
         });
-        realm.close();
     }
 
     @Override

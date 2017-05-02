@@ -289,7 +289,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     firstTimeEnterToApp = false;
                     sendClientCondition();
                 } else {
-                    new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+
+                    new Thread(new Runnable() {
+                        @Override public void run() {
+                            new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+                        }
+                    }).start();
+
+
                 }
 
                 if (fromLogin) {
@@ -334,6 +341,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        progressBar.setVisibility(View.GONE);
                         firstTimeEnterToApp = false;
                         getChatsList();
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
@@ -1102,6 +1110,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     mOffset = 0;
                     isThereAnyMoreItemToLoad = true;
                     new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+                    isSendRequestForLoading = true;
 
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
@@ -1215,6 +1224,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     mOffset = 0;
                     new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+                    isSendRequestForLoading = true;
                     progressBar.setVisibility(View.VISIBLE);
 
                 } else {
