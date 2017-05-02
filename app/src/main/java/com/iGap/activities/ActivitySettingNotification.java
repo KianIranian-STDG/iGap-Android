@@ -17,9 +17,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -257,16 +255,9 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                                         break;
                                     case 1:
                                         txtVibrateMessage.setText(getResources().getString(R.string.array_Default));
-                                        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                                        switch (am.getRingerMode()) {
-                                            case AudioManager.RINGER_MODE_VIBRATE:
-                                                Vibrator vSilent =
-                                                        (Vibrator) G.context.getSystemService(
-                                                                Context.VIBRATOR_SERVICE);
-                                                vSilent.vibrate(
-                                                        AudioManager.VIBRATE_SETTING_ONLY_SILENT);
-                                                break;
-                                        }
+                                        Vibrator vDefault = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                        vDefault.vibrate(350);
+
                                         break;
                                     case 2:
                                         txtVibrateMessage.setText(getResources().getString(R.string.array_Short));
@@ -303,19 +294,23 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         });
 
         txtPopupNotification = (TextView) findViewById(R.id.stns_txt_popupNotification_message_text);
-        String popupNotification = getResources().getString(R.string.array_No_popup);
 
         int mode = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
 
-        if (mode == 1) {
-            popupNotification = getResources().getString(R.string.array_Only_when_screen_on);
-        } else if (mode == 2) {
-            popupNotification = getResources().getString(R.string.array_Only_when_screen_off);
-        } else if (mode == 3) {
-            popupNotification = getResources().getString(R.string.array_Always_show_popup);
+        switch (mode) {
+            case 0:
+                txtPopupNotification.setText(getResources().getString(R.string.array_No_popup));
+                break;
+            case 1:
+                txtPopupNotification.setText(getResources().getString(R.string.array_Only_when_screen_on));
+                break;
+            case 2:
+                txtPopupNotification.setText(getResources().getString(R.string.array_Only_when_screen_off));
+                break;
+            case 3:
+                txtPopupNotification.setText(getResources().getString(R.string.array_Always_show_popup));
+                break;
         }
-
-        txtPopupNotification.setText(popupNotification);
 
         ViewGroup ltPopupNotification = (ViewGroup) findViewById(R.id.stns_layout_popupNotification_message);
         ltPopupNotification.setOnClickListener(new View.OnClickListener() {
@@ -329,30 +324,10 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                             public void onSelection(MaterialDialog dialog, View view, int which,
                                                     CharSequence text) {
 
-
+                                txtPopupNotification.setText(text.toString());
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                switch (which) {
-                                    case 0:
-                                        txtPopupNotification.setText(getResources().getString(R.string.array_No_popup));
-                                        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
-                                        editor.apply();
-                                        break;
-                                    case 1:
-                                        txtPopupNotification.setText(getResources().getString(R.string.array_Only_when_screen_on));
-                                        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 1);
-                                        editor.apply();
-                                        break;
-                                    case 2:
-                                        txtPopupNotification.setText(getResources().getString(R.string.array_Only_when_screen_off));
-                                        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 2);
-                                        editor.apply();
-                                        break;
-                                    case 3:
-                                        txtPopupNotification.setText(getResources().getString(R.string.array_Always_show_popup));
-                                        editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 3);
-                                        editor.apply();
-                                        break;
-                                }
+                                editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, which);
+                                editor.apply();
                             }
                         })
                         .show();
@@ -363,7 +338,11 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         poRbDialogSoundMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
         txtSoundMessage = (TextView) findViewById(R.id.stns_txt_sound_text);
         String soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, getResources().getString(R.string.array_Default_Notification_tone));
-        txtSoundMessage.setText(soundMessage);
+        if (poRbDialogSoundMessage == 0) {
+            txtSoundMessage.setText(getResources().getString(R.string.array_Default_Notification_tone));
+        } else {
+            txtSoundMessage.setText(soundMessage);
+        }
         ViewGroup ltSoundMessage = (ViewGroup) findViewById(R.id.stns_layout_sound_message);
 
         ltSoundMessage.setOnClickListener(new View.OnClickListener() {
@@ -445,8 +424,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                                         poRbDialogSoundMessage = which;
 
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE,
-                                                text.toString());
+                                        editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, text.toString());
                                         editor.putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, which);
                                         editor.apply();
 
@@ -656,10 +634,24 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                         .show();
             }
         });
-        txtPopupNotificationGroup =
-                (TextView) findViewById(R.id.stns_txt_popupNotification_group_text);
-        String popupNotificationGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Default));
-        txtPopupNotificationGroup.setText(popupNotificationGroup);
+        txtPopupNotificationGroup = (TextView) findViewById(R.id.stns_txt_popupNotification_group_text);
+        int modeGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
+        switch (modeGroup) {
+            case 0:
+                txtPopupNotificationGroup.setText(getResources().getString(R.string.array_No_popup));
+                break;
+            case 1:
+                txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Only_when_screen_on));
+                break;
+            case 2:
+                txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Only_when_screen_off));
+                break;
+            case 3:
+                txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Always_show_popup));
+                break;
+        }
+
+
         ViewGroup ltPopupNotificationGroup = (ViewGroup) findViewById(R.id.stns_layout_popupNotification_group);
         ltPopupNotificationGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -672,53 +664,10 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                             public void onSelection(MaterialDialog dialog, View view, int which,
                                                     CharSequence text) {
 
-                                sharedPreferences =
-                                        getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                switch (which) {
-                                    case 0:
-                                        txtPopupNotificationGroup.setText(getResources().getString(R.string.array_No_popup));
-                                        editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_No_popup));
-                                        editor.apply();
-                                        break;
-                                    case 1:
-                                        txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Only_when_screen_on));
-                                        editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Only_when_screen_on));
-                                        editor.apply();
-                                        PowerManager pmOn =
-                                                (PowerManager) getSystemService(Context.POWER_SERVICE);
-                                        boolean isScreenOn;
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-                                            isScreenOn = pmOn.isInteractive();
-                                        } else {
-                                            isScreenOn = pmOn.isScreenOn();
-                                        }
-                                        if (isScreenOn) {
-                                            // TODO: 10/1/2016 when screen is on
-                                        }
-                                        break;
-                                    case 2:
-                                        txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Only_when_screen_off));
-                                        editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Only_when_screen_off));
-                                        editor.apply();
-                                        PowerManager pmOff =
-                                                (PowerManager) getSystemService(Context.POWER_SERVICE);
-                                        boolean isScreenOff;
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-                                            isScreenOff = pmOff.isInteractive();
-                                        } else {
-                                            isScreenOff = pmOff.isScreenOn();
-                                        }
-                                        if (!isScreenOff) {
-                                            // TODO: 10/1/2016 when screen is off
-                                        }
-                                        break;
-                                    case 3:
-                                        txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Always_show_popup));
-                                        editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_Always_show_popup));
-                                        editor.apply();
-                                        break;
-                                }
+                                txtPopupNotificationGroup.setText(text.toString());
+                                editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, which);
+                                editor.apply();
                             }
                         })
                         .show();
@@ -728,7 +677,12 @@ public class ActivitySettingNotification extends ActivityEnhanced {
         poRbDialogSoundGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
         txtSoundGroup = (TextView) findViewById(R.id.stns_txt_sound_group_text);
         String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, getResources().getString(R.string.array_Default_Notification_tone));
-        txtSoundGroup.setText(soundGroup);
+        if (poRbDialogSoundGroup == 0) {
+            txtSoundGroup.setText(getResources().getString(R.string.array_Default_Notification_tone));
+        } else {
+            txtSoundGroup.setText(soundGroup);
+        }
+
         ViewGroup ltSoundGroup = (ViewGroup) findViewById(R.id.stns_layout_sound_group);
         ltSoundGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1178,7 +1132,7 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                                 editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
                                 editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 0);
-                                editor.putString(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, getResources().getString(R.string.array_No_popup));
+                                editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
                                 editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 0);
                                 editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0);
                                 editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0);
