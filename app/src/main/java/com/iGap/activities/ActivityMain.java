@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,9 +34,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +46,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
@@ -95,6 +99,7 @@ import com.iGap.libs.rippleeffect.RippleView;
 import com.iGap.module.AndroidUtils;
 import com.iGap.module.AppUtils;
 import com.iGap.module.CircleImageView;
+import com.iGap.module.DeviceUtils;
 import com.iGap.module.LoginActions;
 import com.iGap.module.MusicPlayer;
 import com.iGap.module.MyAppBarLayout;
@@ -157,6 +162,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
     public static boolean needUpdateSortList = false;
+    ProgressBar progressBar;
 
     public static MyAppBarLayout appBarLayout;
 
@@ -173,7 +179,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public static int curentMainRoomListPosition = 0;
     private int mOffset = 0;
-    private int mLimit = 30;
+    private int mLimit = 20;
     private RecyclerView.OnScrollListener onScrollListener;
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = false;
@@ -198,7 +204,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRealm = Realm.getDefaultInstance();
+        progressBar = (ProgressBar) findViewById(R.id.ac_progress_bar_waiting);
+        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
         G application = (G) getApplication();
@@ -315,6 +322,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        progressBar.setVisibility(View.GONE);
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                     }
                 });
@@ -386,6 +394,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    private Realm getRealm() {
+
+        if (mRealm == null) {
+            mRealm = Realm.getDefaultInstance();
+        }
+
+        return mRealm;
+    }
+
 
     @Override
     protected void onStart() {
@@ -439,7 +456,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //navigationView.setNavigationItemSelectedListener(this);
 
-        RealmUserInfo realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
+        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
             String username = realmUserInfo.getUserInfo().getDisplayName();
             String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
@@ -951,7 +968,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public class PreCachingLayoutManager extends LinearLayoutManager {
-        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 6000;
+        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 600;
         private int extraLayoutSpace = -1;
         private Context context;
 
@@ -981,13 +998,33 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
             return DEFAULT_EXTRA_LAYOUT_SPACE;
         }
+
+        private static final float MILLISECONDS_PER_INCH = 2000f; //default is 25f (bigger = slower)
+
+        @Override public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+
+            final LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
+
+                @Override public PointF computeScrollVectorForPosition(int targetPosition) {
+                    return PreCachingLayoutManager.this.computeScrollVectorForPosition(targetPosition);
+                }
+
+                @Override protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                    return MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
+                }
+            };
+
+            linearSmoothScroller.setTargetPosition(position);
+            startSmoothScroll(linearSmoothScroller);
+        }
     }
+
 
 
     private void initRecycleView() {
 
         mRecyclerView = (RealmRecyclerView) findViewById(R.id.cl_recycler_view_contact);
-        mRecyclerView.setItemViewCacheSize(100);
+        mRecyclerView.setItemViewCacheSize(50);
         mRecyclerView.setDrawingCacheEnabled(true);
 
         PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(this);
@@ -995,7 +1032,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
         mRecyclerView.getRecycleView().setLayoutManager(mLayoutManager);
 
-        RealmResults<RealmRoom> results = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+        preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(ActivityMain.this));
+
+        RealmResults<RealmRoom> results = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);
         mRecyclerView.setAdapter(roomAdapter);
 
@@ -1009,10 +1048,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
-                        if (lastVisiblePosition + 15 >= mOffset) {
+                        if (lastVisiblePosition + 10 >= mOffset) {
 
                             mOffset = mRecyclerView.getRecycleView().getAdapter().getItemCount();
                             new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+                            progressBar.setVisibility(View.VISIBLE);
 
                             isSendRequestForLoading = true;
                         }
@@ -1062,6 +1102,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     mOffset = 0;
                     isThereAnyMoreItemToLoad = true;
                     new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+
                 } else {
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -1100,7 +1141,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void muteNotification(final Long id, final boolean mute) {
 
-        mRealm.executeTransaction(new Realm.Transaction() {
+        getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst().setMute(!mute);
@@ -1174,6 +1215,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     mOffset = 0;
                     new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+                    progressBar.setVisibility(View.VISIBLE);
 
                 } else {
                     testIsSecure();
@@ -1644,8 +1686,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                                     } else {
 
-                                        Realm realm1 = Realm.getDefaultInstance();
-                                        RealmRegisteredInfo realmRegisteredInfo = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
+                                        RealmRegisteredInfo realmRegisteredInfo =
+                                            getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
                                         if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
 
                                             String _name = realmRegisteredInfo.getDisplayName();
@@ -1666,7 +1708,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                                 }
                                             }
                                         }
-                                        realm1.close();
                                     }
 
                                     if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
