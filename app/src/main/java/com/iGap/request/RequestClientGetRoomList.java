@@ -11,18 +11,20 @@
 
 package com.iGap.request;
 
-import com.iGap.helper.HelperString;
 import com.iGap.proto.ProtoClientGetRoomList;
-import com.iGap.proto.ProtoRequest;
 
 public class RequestClientGetRoomList {
 
     public void clientGetRoomList(int offset, int limit) {
-        ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
-        clientGetRoomList.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
-        //clientGetRoomList.setPagination(new RequestPagination().pagination(offset, limit));
+        clientGetRoomList(offset, limit, false);
+    }
 
-        RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList);
+    public void clientGetRoomList(int offset, int limit, boolean fromLogin) {
+        ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
+        //clientGetRoomList.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+        clientGetRoomList.setPagination(new RequestPagination().pagination(offset, limit));
+
+        RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList, fromLogin + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 import com.iGap.G;
+import com.iGap.activities.ActivityMain;
 import com.iGap.helper.HelperClientCondition;
 import com.iGap.interfaces.OnSecuring;
 import com.iGap.interfaces.OnUserInfoResponse;
@@ -45,8 +46,7 @@ public class LoginActions extends Application {
      */
     private void initSecureInterface() {
         G.onSecuring = new OnSecuring() {
-            @Override
-            public void onSecure() {
+            @Override public void onSecure() {
                 login();
             }
         };
@@ -58,11 +58,9 @@ public class LoginActions extends Application {
     public static void login() {
 
         G.onUserLogin = new OnUserLogin() {
-            @Override
-            public void onLogin() {
+            @Override public void onLogin() {
                 G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         clientConditionGlobal = HelperClientCondition.computeClientCondition();
                         /**
                          * in first enter to app client send clientCondition after get room list
@@ -75,7 +73,7 @@ public class LoginActions extends Application {
                          * app is background send clientCondition (: .
                          */
                         if (!firstTimeEnterToApp || !isAppInFg) {
-                            new RequestClientGetRoomList().clientGetRoomList(0, 0);
+                            getRoomList();
                         }
 
                         if (firstEnter) {
@@ -89,15 +87,13 @@ public class LoginActions extends Application {
                 });
             }
 
-            @Override
-            public void onLoginError(int majorCode, int minorCode) {
+            @Override public void onLoginError(int majorCode, int minorCode) {
 
             }
         };
 
         G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (G.isSecure) {
                     Realm realm = Realm.getDefaultInstance();
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -118,20 +114,42 @@ public class LoginActions extends Application {
         }, 500);
     }
 
+    private static void getRoomList() {
+
+        int _limit = ActivityMain.curentMainRoomListPosition + 20;
+
+        if (_limit < 100) {
+            new RequestClientGetRoomList().clientGetRoomList(0, _limit, true);
+        } else {
+
+            new RequestClientGetRoomList().clientGetRoomList(0, 100, true);
+
+            int offset = 100;
+
+            for (int i = 100; i < _limit; i += 100) {
+                offset += 100;
+
+                new RequestClientGetRoomList().clientGetRoomList(i, 100);
+            }
+
+            if (offset < _limit) {
+                new RequestClientGetRoomList().clientGetRoomList(offset, 100);
+            }
+        }
+    }
+
     private static void getUserInfo() {
         Realm realm = Realm.getDefaultInstance();
         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
         realm.close();
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 // fill own user info
                 if (userId == user.getId()) {
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
+                        @Override public void execute(Realm realm) {
                             RealmRegisteredInfo.putOrUpdate(user);
                         }
                     });
@@ -140,13 +158,11 @@ public class LoginActions extends Application {
                 }
             }
 
-            @Override
-            public void onUserInfoTimeOut() {
+            @Override public void onUserInfoTimeOut() {
 
             }
 
-            @Override
-            public void onUserInfoError(int majorCode, int minorCode) {
+            @Override public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };
@@ -169,16 +185,14 @@ public class LoginActions extends Application {
             isSendContact = true;
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                 G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         RealmPhoneContacts.sendContactList(Contacts.getListOfContact(), false);
                     }
                 });
             }
         } else {
             G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     importContact();
                 }
             }, 2000);
@@ -191,15 +205,13 @@ public class LoginActions extends Application {
     public static void sendWaitingRequestWrappers() {
         for (RequestWrapper requestWrapper : RequestQueue.WAITING_REQUEST_WRAPPERS) {
             RequestQueue.RUNNING_REQUEST_WRAPPERS.add(requestWrapper);
-
         }
         RequestQueue.WAITING_REQUEST_WRAPPERS.clear();
 
         for (int i = 0; i < RequestQueue.RUNNING_REQUEST_WRAPPERS.size(); i++) {
             final int j = i;
             G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+                @Override public void run() {
                     try {
                         RequestQueue.sendRequest(RequestQueue.RUNNING_REQUEST_WRAPPERS.get(j));
                     } catch (IllegalAccessException e) {

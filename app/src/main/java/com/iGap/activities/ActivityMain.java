@@ -171,6 +171,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private DrawerLayout drawer;
     private Toolbar mainToolbar;
 
+    public static int curentMainRoomListPosition = 0;
+    private int mOffset = 0;
+    private int mLimit = 30;
+    private RecyclerView.OnScrollListener onScrollListener;
+    boolean isSendRequestForLoading = false;
+    boolean isThereAnyMoreItemToLoad = false;
+
     private RealmRecyclerView mRecyclerView;
     private Realm mRealm;
     private RoomAdapter roomAdapter;
@@ -264,27 +271,54 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         };
 
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
-            @Override
-            public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response) {
+            @Override public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+
+                /**
+                 * to first enter to app , client first compute clientCondition then
+                 * getRoomList and finally send condition that before get clientCondition;
+                 * in else state compute new client condition with latest messaging state
+                 */
+                if (firstTimeEnterToApp) {
+                    firstTimeEnterToApp = false;
+                    sendClientCondition();
+                } else {
+                    new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+                }
+
+                if (fromLogin) {
+                    mOffset = 0;
+                }
+
+                boolean deleteBefore = false;
+                if (mOffset == 0) {
+                    deleteBefore = true;
+                }
+
+                if (roomList.size() > 0) {
+                    putChatToDatabase(roomList, deleteBefore, false);
+                } else {
+                    putChatToDatabase(roomList, deleteBefore, true);
+                }
+
+                mOffset += roomList.size();
+
+                if (roomList.size() > 0) {
+                    isThereAnyMoreItemToLoad = true;
+                } else {
+                    isThereAnyMoreItemToLoad = false;
+                }
+
+                isSendRequestForLoading = false;
+
+
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        /**
-                         * to first enter to app , client first compute clientCondition then
-                         * getRoomList and finally send condition that before get clientCondition;
-                         * in else state compute new client condition with latest messaging state
-                         */
-                        if (firstTimeEnterToApp) {
-                            firstTimeEnterToApp = false;
-                            sendClientCondition();
-                        } else {
-                            new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
-                        }
-
-                        putChatToDatabase(roomList);
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                     }
                 });
+
             }
 
             @Override
@@ -916,20 +950,84 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
     }
 
+    public class PreCachingLayoutManager extends LinearLayoutManager {
+        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 6000;
+        private int extraLayoutSpace = -1;
+        private Context context;
+
+        public PreCachingLayoutManager(Context context) {
+            super(context);
+            this.context = context;
+        }
+
+        public PreCachingLayoutManager(Context context, int extraLayoutSpace) {
+            super(context);
+            this.context = context;
+            this.extraLayoutSpace = extraLayoutSpace;
+        }
+
+        public PreCachingLayoutManager(Context context, int orientation, boolean reverseLayout) {
+            super(context, orientation, reverseLayout);
+            this.context = context;
+        }
+
+        public void setExtraLayoutSpace(int extraLayoutSpace) {
+            this.extraLayoutSpace = extraLayoutSpace;
+        }
+
+        @Override protected int getExtraLayoutSpace(RecyclerView.State state) {
+            if (extraLayoutSpace > 0) {
+                return extraLayoutSpace;
+            }
+            return DEFAULT_EXTRA_LAYOUT_SPACE;
+        }
+    }
+
+
     private void initRecycleView() {
 
         mRecyclerView = (RealmRecyclerView) findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemViewCacheSize(100);
         mRecyclerView.setDrawingCacheEnabled(true);
 
-        //PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(this);
-        //mRecyclerView.getRecycleView().setLayoutManager(preCachingLayoutManager);
-        //LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
-        //mRecyclerView.getRecycleView().setLayoutManager(mLayoutManager);
+        PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(this);
+        mRecyclerView.getRecycleView().setLayoutManager(preCachingLayoutManager);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(ActivityMain.this);
+        mRecyclerView.getRecycleView().setLayoutManager(mLayoutManager);
 
         RealmResults<RealmRoom> results = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);
         mRecyclerView.setAdapter(roomAdapter);
+
+        onScrollListener = new RecyclerView.OnScrollListener() {
+
+            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (isThereAnyMoreItemToLoad) {
+                    if (!isSendRequestForLoading) {
+
+                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+
+                        if (lastVisiblePosition + 15 >= mOffset) {
+
+                            mOffset = mRecyclerView.getRecycleView().getAdapter().getItemCount();
+                            new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+
+                            isSendRequestForLoading = true;
+                        }
+                    }
+                }
+            }
+
+            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                curentMainRoomListPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+            }
+        };
+
+        mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
         params.setBehavior(new ShouldScrolledBehavior((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager(), roomAdapter));
@@ -959,7 +1057,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (heartBeatTimeOut()) {
                     WebSocketClient.checkConnection();
                 }
-                new RequestClientGetRoomList().clientGetRoomList(0, 0);
+                if (isSendRequestForLoading == false) {
+
+                    mOffset = 0;
+                    isThereAnyMoreItemToLoad = true;
+                    new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+                } else {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+
             }
         });
         swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
@@ -1001,7 +1107,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        //  roomAdapter.updateUiById(id);
     }
 
     private void clearHistory(Long id) {
@@ -1066,7 +1171,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void run() {
                 if (G.isSecure && G.userLogin) {
-                    new RequestClientGetRoomList().clientGetRoomList(0, 0);
+
+                    mOffset = 0;
+                    new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+
                 } else {
                     testIsSecure();
                 }

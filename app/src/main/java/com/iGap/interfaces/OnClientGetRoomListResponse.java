@@ -16,7 +16,7 @@ import com.iGap.proto.ProtoResponse;
 import java.util.List;
 
 public interface OnClientGetRoomListResponse {
-    void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response);
+    void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin);
 
     void onError(int majorCode, int minorCode);
 

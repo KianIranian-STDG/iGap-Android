@@ -10,6 +10,8 @@
 
 package com.iGap.response;
 
+import android.os.Handler;
+import android.os.Looper;
 import com.iGap.G;
 import com.iGap.activities.ActivityChat;
 import com.iGap.adapter.items.chat.AbstractMessage;
@@ -76,18 +78,22 @@ public class ClientGetRoomResponse extends MessageHandler {
                     new HelperGetUserInfo(new OnGetUserInfo() {
                         @Override
                         public void onGetUserInfo(ProtoGlobal.RegisteredUser registeredUser) {
-                            new Thread(new Runnable() {
+
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Realm realm1 = Realm.getDefaultInstance();
-                                    realm1.executeTransactionAsync(new Realm.Transaction() {
+                                    final Realm realm = Realm.getDefaultInstance();
+
+                                    realm.executeTransactionAsync(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
                                             putOrUpdate(clientGetRoom.getRoom());
+
                                         }
-                                    }, new OnSuccess() {
+                                    }, new Realm.Transaction.OnSuccess() {
                                         @Override
                                         public void onSuccess() {
+
                                             if (G.onClientGetRoomResponse != null) {
 
                                                 G.handler.post(new Runnable() {
@@ -97,11 +103,16 @@ public class ClientGetRoomResponse extends MessageHandler {
                                                 });
 
                                             }
+
+                                            realm.close();
+                                        }
+                                    }, new Realm.Transaction.OnError() {
+                                        @Override public void onError(Throwable error) {
+                                            realm.close();
                                         }
                                     });
-                                    realm1.close();
                                 }
-                            }).start();
+                            });
                         }
                     }).getUserInfo(clientGetRoom.getRoom().getChatRoomExtra().getPeer().getId());
 

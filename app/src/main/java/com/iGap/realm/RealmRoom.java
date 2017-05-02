@@ -212,7 +212,7 @@ public class RealmRoom extends RealmObject {
      *
      * @param rooms ProtoGlobal.Room
      */
-    public static void putChatToDatabase(final List<ProtoGlobal.Room> rooms) {
+    public static void putChatToDatabase(final List<ProtoGlobal.Room> rooms, final boolean deleteBefore, final boolean cleanDeletedRoommessage) {
 
         /**
          * (( hint : i don't used from mRealm instance ,because i have an error
@@ -227,23 +227,27 @@ public class RealmRoom extends RealmObject {
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
 
-                        RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
-                        for (int i = 0; i < list.size(); i++) {
-                            list.get(i).setDeleted(true);
+                        if (deleteBefore) {
+                            RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
+                            for (int i = 0; i < list.size(); i++) {
+                                list.get(i).setDeleted(true);
+                            }
                         }
 
                         for (ProtoGlobal.Room room : rooms) {
                             RealmRoom.putOrUpdate(room);
                         }
 
-                        // delete messages and rooms that was deleted
-                        RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
-                        for (RealmRoom item : deletedRoomsList) {
-                            /**
-                             * delete all message in deleted room
-                             */
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
-                            item.deleteFromRealm();
+                        if (cleanDeletedRoommessage) {
+                            // delete messages and rooms that was deleted
+                            RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
+                            for (RealmRoom item : deletedRoomsList) {
+                                /**
+                                 * delete all message in deleted room
+                                 */
+                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
+                                item.deleteFromRealm();
+                            }
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {
