@@ -720,7 +720,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         });
 
         realm.close();
-        //getUserInfo(); // client should send request for get user info because need to update user online timing
+        getUserInfo(); // client should send request for get user info because need to update user online timing
         setUserStatus(userStatus, lastSeen);
 
         setAvatar();

@@ -337,7 +337,8 @@ public class G extends MultiDexApplication {
     public static OnGetWallpaper onGetWallpaper;
     public static IClientSearchUserName onClientSearchUserName;
 
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
@@ -348,7 +349,8 @@ public class G extends MultiDexApplication {
         new StartupActions();
     }
 
-    @Override protected void attachBaseContext(Context base) {
+    @Override
+    protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }

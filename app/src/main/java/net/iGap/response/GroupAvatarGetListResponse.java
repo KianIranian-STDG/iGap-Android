@@ -11,8 +11,11 @@
 package net.iGap.response;
 
 import io.realm.Realm;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupAvatarGetList;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
@@ -31,7 +34,8 @@ public class GroupAvatarGetListResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
 
         //ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder userAvatarGetListResponse = (ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder) message;
@@ -41,30 +45,52 @@ public class GroupAvatarGetListResponse extends MessageHandler {
         final long roomId = Long.parseLong(identity);
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 // delete all avatar in roomId
                 realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findAll().deleteAllFromRealm();
 
-                ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder groupAvatarGetListResponse = (ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder) message;
+                ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder builder = (ProtoGroupAvatarGetList.GroupAvatarGetListResponse.Builder) message;
+
+                List<ProtoGlobal.Avatar> avatarList = new ArrayList<>();
+                ArrayList<Long> checkedList = new ArrayList<>();
+
+                for (int j = 0; j < builder.getAvatarList().size(); j++) {
+                    long bigAvatarId = 0;
+                    ProtoGlobal.Avatar avatar = null;
+                    for (int i = 0; i < builder.getAvatarList().size(); i++) {
+                        if (builder.getAvatarList().get(i).getId() > bigAvatarId && !checkedList.contains(builder.getAvatarList().get(i).getId())) {
+                            bigAvatarId = builder.getAvatarList().get(i).getId();
+                            avatar = builder.getAvatarList().get(i);
+                        }
+                    }
+                    checkedList.add(bigAvatarId);
+                    avatarList.add(avatar);
+                }
+
                 // add all list to realm avatar
-                for (int i = (groupAvatarGetListResponse.getAvatarList().size() - 1); i >= 0; i--) {
-                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, groupAvatarGetListResponse.getAvatarList().get(i).getId());
+                for (int i = avatarList.size() - 1; i >= 0; i--) {
+                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatarList.get(i).getId());
                     realmAvatar.setOwnerId(roomId);
                     realmAvatar.setUid(SUID.id().get());
-                    realmAvatar.setFile(RealmAttachment.build(groupAvatarGetListResponse.getAvatarList().get(i).getFile(), AttachmentFor.AVATAR, null));
+                    realmAvatar.setFile(RealmAttachment.build(avatarList.get(i).getFile(), AttachmentFor.AVATAR, null));
                 }
             }
         });
 
         realm.close();
+
+
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

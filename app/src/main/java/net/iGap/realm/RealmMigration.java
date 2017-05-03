@@ -89,6 +89,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                 .addField(RealmPhoneContactsFields.FIRST_NAME, String.class)
                 .addField(RealmPhoneContactsFields.LAST_NAME, String.class);
             realmPhoneContacts.addPrimaryKey(RealmPhoneContactsFields.PHONE);
+            oldVersion++;
         }
     }
 }

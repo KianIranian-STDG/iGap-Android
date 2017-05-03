@@ -376,7 +376,7 @@ public class ActivityChat extends ActivityEnhanced
     public static String titleStatic;
 
     private Boolean isGoingFromUserLink = false;
-    private Boolean isNotJoin = false;
+    private Boolean isNotJoin = false; // this value will be trued when come to this chat with username
     private boolean isCheckBottomSheet = false;
     private boolean firsInitScrollPosition = false;
     private boolean initHash = false;
@@ -426,7 +426,7 @@ public class ActivityChat extends ActivityEnhanced
             @Override public void run() {
                 RealmRoomMessage.fetchMessages(mRoomId, new OnActivityChatStart() {
                     @Override public void resendMessage(RealmRoomMessage message) {
-                        G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
+                        //G.chatSendMessageUtil.build(chatType, message.getRoomId(), message);
                     }
 
                     @Override public void resendMessageNeedsUpload(RealmRoomMessage message) {

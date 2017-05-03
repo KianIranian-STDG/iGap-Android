@@ -268,7 +268,8 @@ public class HelperAvatar {
 
     public static RealmAvatar getLastAvatar(long ownerId, Realm realm) {
 
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.UID, Sort.DESCENDING)) {
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
+
             if (avatar.getFile() != null) {
                 Log.i("AAA", "getLastAvatar avatarId : " + avatar.getId());
                 return avatar;

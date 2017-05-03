@@ -11,9 +11,12 @@
 package net.iGap.response;
 
 import io.realm.Realm;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoChannelAvatarGetList;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
@@ -32,25 +35,39 @@ public class ChannelAvatarGetListResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
-
-        //ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder builder = (ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder) message;
-        //builder.getAvatarList();
 
         Realm realm = Realm.getDefaultInstance();
         final long roomId = Long.parseLong(identity);
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
-                // delete all avatar in roomid
                 realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findAll().deleteAllFromRealm();
 
                 ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder builder = (ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder) message;
 
+                List<ProtoGlobal.Avatar> avatarList = new ArrayList<>();
+                ArrayList<Long> checkedList = new ArrayList<>();
+
+                for (int j = 0; j < builder.getAvatarList().size(); j++) {
+                    long bigAvatarId = 0;
+                    ProtoGlobal.Avatar avatar = null;
+                    for (int i = 0; i < builder.getAvatarList().size(); i++) {
+                        if (builder.getAvatarList().get(i).getId() > bigAvatarId && !checkedList.contains(builder.getAvatarList().get(i).getId())) {
+                            bigAvatarId = builder.getAvatarList().get(i).getId();
+                            avatar = builder.getAvatarList().get(i);
+                        }
+                    }
+                    checkedList.add(bigAvatarId);
+                    avatarList.add(avatar);
+                }
+
                 // add all list to realm avatar
-                for (int i = (builder.getAvatarList().size() - 1); i >= 0; i--) {
+                for (int i = avatarList.size() - 1; i >= 0; i--) {
                     RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, builder.getAvatarList().get(i).getId());
                     realmAvatar.setOwnerId(roomId);
                     realmAvatar.setUid(SUID.id().get());
@@ -62,11 +79,13 @@ public class ChannelAvatarGetListResponse extends MessageHandler {
         realm.close();
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

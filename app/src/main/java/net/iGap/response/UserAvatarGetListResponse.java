@@ -10,10 +10,12 @@
 
 package net.iGap.response;
 
-import android.util.Log;
 import io.realm.Realm;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserAvatarGetList;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
@@ -32,28 +34,45 @@ public class UserAvatarGetListResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
 
         Realm realm = Realm.getDefaultInstance();
         final long userId = Long.parseLong(identity);
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 // delete all avatar in roomId
                 realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll().deleteAllFromRealm();
 
+                List<ProtoGlobal.Avatar> avatarList = new ArrayList<>();
                 ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder userAvatarGetListResponse = (ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder) message;
 
+
+                ArrayList<Long> checkedList = new ArrayList<>();
+                for (int j = 0; j < userAvatarGetListResponse.getAvatarList().size(); j++) {
+                    long bigAvatarId = 0;
+                    ProtoGlobal.Avatar avatar = null;
+                    for (int i = 0; i < userAvatarGetListResponse.getAvatarList().size(); i++) {
+                        if (userAvatarGetListResponse.getAvatarList().get(i).getId() > bigAvatarId && !checkedList.contains(userAvatarGetListResponse.getAvatarList().get(i).getId())) {
+                            bigAvatarId = userAvatarGetListResponse.getAvatarList().get(i).getId();
+                            avatar = userAvatarGetListResponse.getAvatarList().get(i);
+                        }
+                    }
+                    checkedList.add(bigAvatarId);
+                    avatarList.add(avatar);
+                }
+
                 // add all list to realm avatar
-                for (int i = (userAvatarGetListResponse.getAvatarList().size() - 1); i >= 0; i--) {
-                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, userAvatarGetListResponse.getAvatarList().get(i).getId());
+                //for (int i = 0; i < avatarList.size(); i++) {
+                for (int i = avatarList.size() - 1; i >= 0; i--) {
+                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatarList.get(i).getId());
                     realmAvatar.setOwnerId(userId);
                     realmAvatar.setUid(SUID.id().get());
                     realmAvatar.setFile(RealmAttachment.build(userAvatarGetListResponse.getAvatarList().get(i).getFile(), AttachmentFor.AVATAR, null));
-                    Log.i("AAA", "userId : " + userId);
-                    Log.i("AAA", "avatarId : " + userAvatarGetListResponse.getAvatarList().get(i).getId());
                 }
             }
         });
@@ -61,11 +80,13 @@ public class UserAvatarGetListResponse extends MessageHandler {
         realm.close();
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

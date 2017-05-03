@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
@@ -33,17 +32,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.vending.licensing.AESObfuscator;
 import com.google.android.vending.licensing.LicenseChecker;
 import com.google.android.vending.licensing.LicenseCheckerCallback;
 import com.google.android.vending.licensing.Policy;
-import com.google.android.vending.licensing.ServerManagedPolicy;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
-import net.iGap.BuildConfig;
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterViewPager;
@@ -165,11 +160,11 @@ public class ActivityIntroduce extends ActivityEnhanced {
     }
 
     private void licenceChecker() {
-        // Construct the LicenseCheckerCallback. The library calls this when done.
-        mLicenseCheckerCallback = new MyLicenseCheckerCallback();
-        // Construct the LicenseChecker with a Policy.
-        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        mChecker = new LicenseChecker(this, new ServerManagedPolicy(this, new AESObfuscator(Config.SALT, BuildConfig.APPLICATION_ID, android_id)), Config.BASE64_PUBLIC_KEY);
+        //// Construct the LicenseCheckerCallback. The library calls this when done.
+        //mLicenseCheckerCallback = new MyLicenseCheckerCallback();
+        //// Construct the LicenseChecker with a Policy.
+        //String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        //mChecker = new LicenseChecker(this, new ServerManagedPolicy(this, new AESObfuscator(Config.SALT, BuildConfig.APPLICATION_ID, android_id)), Config.BASE64_PUBLIC_KEY);
     }
 
     private void goToProgram(Bundle savedInstanceState) {

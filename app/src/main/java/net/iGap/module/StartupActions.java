@@ -3,7 +3,6 @@ package net.iGap.module;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.util.Log;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -202,7 +201,8 @@ public final class StartupActions {
      */
     public static void makeFolder() {
         new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 new File(DIR_APP).mkdirs();
                 new File(DIR_IMAGES).mkdirs();
                 new File(DIR_VIDEOS).mkdirs();
@@ -300,7 +300,6 @@ public final class StartupActions {
         try {
             Realm.compactRealm(configuration);
         } catch (UnsupportedOperationException e) {
-            Log.e("ErrorLog", " G.realmConfiguration        " + e.toString());
             e.printStackTrace();
         }
     }

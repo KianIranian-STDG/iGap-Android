@@ -1379,36 +1379,22 @@ public class ActivityMain extends ActivityEnhanced
 
     @Override public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
-                final Realm realm = Realm.getDefaultInstance();
-                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        final Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                if (realmRoom != null) {
+        if (realmRoom != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
 
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
-
-                            if (realmRoom.getType() != null) {
-                                String action = HelperGetAction.getAction(roomId, realmRoom.getType(), clientAction);
-                                realmRoom.setActionState(action, userId);
-                            }
-                        }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override public void onSuccess() {
-
-                            realm.close();
-                        }
-                    }, new Realm.Transaction.OnError() {
-                        @Override public void onError(Throwable error) {
-                            realm.close();
-                        }
-                    });
-                } else {
-                    realm.close();
+                    if (realmRoom.getType() != null) {
+                        String action = HelperGetAction.getAction(roomId, realmRoom.getType(), clientAction);
+                        realmRoom.setActionState(action, userId);
+                    }
                 }
-            }
-        });
+            });
+        }
+        realm.close();
     }
 
     //******* GroupAvatar and ChannelAvatar

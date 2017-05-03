@@ -86,7 +86,7 @@ public class RealmAvatar extends RealmObject {
      * hint : i need do this action because client read avatars from RealmAvatar and sort descending
      * avatars for get latest avatar
      */
-
+    //TODO [Saeed Mozaffari] [2017-05-03 1:25 PM] - now avatar sorted with avatarId so client don't need to work with uid and update it
     private static void updateAvatarUid(final long avatarId) {
         Realm realm = Realm.getDefaultInstance();
         RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
