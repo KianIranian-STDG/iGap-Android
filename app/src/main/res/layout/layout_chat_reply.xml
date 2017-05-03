@@ -53,7 +53,7 @@
             android:text="SAMPLE TEXT"/>
     </LinearLayout>
 
-    <com.iGap.module.MaterialDesignTextView
+  <net.iGap.module.MaterialDesignTextView
         android:id="@+id/cancelIcon"
         android:layout_width="@dimen/dp40"
         android:layout_height="match_parent"

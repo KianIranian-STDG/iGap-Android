@@ -55,7 +55,7 @@
         />
   </LinearLayout>
 
-  <com.iGap.module.MaterialDesignTextView
+  <net.iGap.module.MaterialDesignTextView
       android:id="@+id/cslhf_imv_cansel"
       android:layout_width="@dimen/dp40"
       android:layout_height="match_parent"

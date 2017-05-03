@@ -156,7 +156,7 @@
                     >
 
 
-                  <com.iGap.module.MaterialDesignTextView
+                  <net.iGap.module.MaterialDesignTextView
                       android:id="@+id/csla_btn_play_music"
                       android:layout_width="@dimen/dp32"
                       android:layout_height="match_parent"

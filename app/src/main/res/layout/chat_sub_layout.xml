@@ -9,7 +9,7 @@
         android:layout_width="@dimen/dp68"
         android:layout_height="match_parent">
 
-        <com.iGap.module.CircleImageView
+      <net.iGap.module.CircleImageView
             android:id="@+id/cs_img_contact_picture"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
@@ -129,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <com.iGap.module.MaterialDesignTextView
+                  <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/cs_txt_mute"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
