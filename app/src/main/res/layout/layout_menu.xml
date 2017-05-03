@@ -39,7 +39,7 @@
             >
 
 
-          <com.iGap.module.CircleImageView
+          <net.iGap.module.CircleImageView
               android:id="@+id/lm_imv_user_picture"
               android:layout_width="@dimen/dp80"
               android:layout_height="@dimen/dp80"
@@ -73,7 +73,7 @@
               android:textSize="@dimen/sp14"
               />
         </LinearLayout>
-        <com.iGap.module.MaterialDesignTextView
+        <net.iGap.module.MaterialDesignTextView
             android:id="@+id/lm_txt_cloud"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
               style="@style/NavigationDrawer.Item"
               >
 
-            <com.iGap.module.MaterialDesignTextView
+            <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/lm_txt_icon_new_chat"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -161,7 +161,7 @@
               style="@style/NavigationDrawer.Item"
               >
 
-            <com.iGap.module.MaterialDesignTextView
+            <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/lm_txt_icon_group"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -243,7 +243,7 @@
               >
 
 
-            <com.iGap.module.MaterialDesignTextView
+            <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/amr_btn_search"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -293,7 +293,7 @@
               style="@style/NavigationDrawer.Item"
               >
 
-            <com.iGap.module.MaterialDesignTextView
+            <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/lm_txt_icon_contacts"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -332,7 +332,7 @@
               style="@style/NavigationDrawer.Item"
               >
 
-            <com.iGap.module.MaterialDesignTextView
+            <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/lm_txt_icon_invite_friends"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -372,7 +372,7 @@
               style="@style/NavigationDrawer.Item"
               >
 
-            <com.iGap.module.MaterialDesignTextView
+            <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/lm_txt_icon_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -410,7 +410,7 @@
               android:orientation="horizontal"
               >
 
-            <com.iGap.module.MaterialDesignTextView
+            <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/lm_txt_icon_igap_faq"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
