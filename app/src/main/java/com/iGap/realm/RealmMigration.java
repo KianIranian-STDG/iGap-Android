@@ -66,7 +66,6 @@ public class RealmMigration implements io.realm.RealmMigration {
                 realmRoomMessageSchema.addField(RealmRoomMessageFields.HAS_EMOJI_IN_TEXT, boolean.class, FieldAttribute.REQUIRED);
                 realmRoomMessageSchema.addField(RealmRoomMessageFields.LINK_INFO, String.class);
             }
-
             oldVersion++;
         }
 
@@ -81,6 +80,18 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 7) {
             RealmObjectSchema realmPhoneContacts = schema.create(RealmPhoneContacts.class.getSimpleName()).addField(RealmPhoneContactsFields.PHONE, String.class).addField(RealmPhoneContactsFields.FIRST_NAME, String.class).addField(RealmPhoneContactsFields.LAST_NAME, String.class);
             realmPhoneContacts.addPrimaryKey(RealmPhoneContactsFields.PHONE);
+        }
+
+        if (oldVersion == 8) {
+            RealmObjectSchema roomSchema = schema.get(RealmRoom.class.getSimpleName());
+            RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
+            if (roomSchema != null) {
+                roomSchema.addRealmObjectField("firstUnreadMessage", realmRoomMessageSchema);
+            }
+
+            if (realmRoomMessageSchema != null) {
+                realmRoomMessageSchema.addField("futureMessageId", long.class, FieldAttribute.REQUIRED);
+            }
         }
     }
 }

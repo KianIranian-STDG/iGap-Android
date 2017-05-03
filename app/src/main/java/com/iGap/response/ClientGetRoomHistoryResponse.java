@@ -12,6 +12,7 @@ package com.iGap.response;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import com.iGap.G;
 import com.iGap.helper.HelperInfo;
 import com.iGap.proto.ProtoClientGetRoomHistory;
@@ -20,7 +21,6 @@ import com.iGap.proto.ProtoGlobal;
 import com.iGap.realm.RealmRoomMessage;
 import com.iGap.realm.RealmUserInfo;
 import io.realm.Realm;
-import java.util.ArrayList;
 
 public class ClientGetRoomHistoryResponse extends MessageHandler {
 
@@ -40,7 +40,10 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        final int[] i = {0};
+        String[] identityParams = identity.split("\\*");
+        final long roomId = Long.parseLong(identityParams[0]);
+        final long reachMessageId = Long.parseLong(identityParams[1]);
+        final String direction = identityParams[2];
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -48,20 +51,22 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
 
                 final Realm realm = Realm.getDefaultInstance();
                 final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
-                final ArrayList<RealmRoomMessage> realmRoomMessages = new ArrayList<>();
+
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-
+                        Log.i("MMM", "history size : " + builder.getMessageList().size());
                         final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
                         for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
                             if (roomMessage.getAuthor().hasUser()) {
                                 HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                             }
-                            realmRoomMessages.add(RealmRoomMessage.putOrUpdate(roomMessage, Long.parseLong(identity)));
+
+                            RealmRoomMessage.putOrUpdate(roomMessage, roomId);
+
                             if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
                                 if (!G.isAppInFg) {
-                                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, Long.parseLong(identity));
+                                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, roomId);
                                 }
                             }
                         }
@@ -72,9 +77,9 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                         realm.close();
 
                         G.handler.post(new Runnable() {
-                            @Override public void run() {
-                                G.onClientGetRoomHistoryResponse.onGetRoomHistory(Long.parseLong(identity), builder.getMessageList().get(0).getMessageId(),
-                                    builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId());
+                            @Override
+                            public void run() {
+                                G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), reachMessageId, direction);
                             }
                         });
 
@@ -97,12 +102,13 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-
+        String[] identityParams = identity.split("\\*");
+        final String direction = identityParams[1];
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         if (G.onClientGetRoomHistoryResponse != null) {
-            G.onClientGetRoomHistoryResponse.onGetRoomHistoryError(majorCode, minorCode);
+            G.onClientGetRoomHistoryResponse.onGetRoomHistoryError(majorCode, minorCode, direction);
         }
     }
 }

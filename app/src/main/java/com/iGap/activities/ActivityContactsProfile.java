@@ -301,8 +301,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone)).findFirst();
 
-        // agar ba click roye karbar dar safheye goruh vared in ghesmat shodim va karbar dar list contact haye ma vojud nadasht shomareye karbar
-        // namyesh dade nemishavad
+        /**
+         * if this user isn't in my contacts don't show phone number
+         */
         if (realmContacts == null && enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
             showNumber = false;
         }
@@ -759,7 +760,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         });
 
         realm.close();
-        //getUserInfo(); // client should send request for get user info because need to update user online timing
+        getUserInfo(); // client should send request for get user info because need to update user online timing
         setUserStatus(userStatus, lastSeen);
 
         setAvatar();

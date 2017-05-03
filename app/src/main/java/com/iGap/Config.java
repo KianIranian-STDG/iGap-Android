@@ -53,7 +53,7 @@ public class Config {
     public static String default_attachmentColor = "#31bdb6";
     public static String default_headerTextColor = "#31bdb6";
 
-    public static final String URL_WEBSOCKET = "wss://secure.igap.net/hybrid/";
+    public static final String URL_WEBSOCKET = "wss://secure.igap.net/test/";
 
 
     public static final byte[] SALT = new byte[]{
