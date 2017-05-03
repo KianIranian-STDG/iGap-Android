@@ -222,7 +222,7 @@
                 android:padding="@dimen/dp8"
                 android:text="@string/md_emoticon_with_happy_face"/>
 
-            <io.github.meness.emoji.EmojiEditText
+          <net.iGap.emoji.EmojiEditText
                 android:id="@+id/acs_edt_chat"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

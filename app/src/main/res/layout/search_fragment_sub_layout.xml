@@ -58,7 +58,7 @@
             </LinearLayout>
 
 
-            <io.github.meness.emoji.EmojiTextView
+          <net.iGap.emoji.EmojiTextView
                 android:id="@+id/sfsl_txt_contact_lastseen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

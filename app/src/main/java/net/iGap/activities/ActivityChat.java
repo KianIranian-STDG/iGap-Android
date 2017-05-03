@@ -77,15 +77,6 @@ import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
-import io.github.meness.emoji.EmojiEditText;
-import io.github.meness.emoji.EmojiTextView;
-import io.github.meness.emoji.emoji.Emoji;
-import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
-import io.github.meness.emoji.listeners.OnEmojiClickedListener;
-import io.github.meness.emoji.listeners.OnEmojiPopupDismissListener;
-import io.github.meness.emoji.listeners.OnEmojiPopupShownListener;
-import io.github.meness.emoji.listeners.OnSoftKeyboardCloseListener;
-import io.github.meness.emoji.listeners.OnSoftKeyboardOpenListener;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -126,6 +117,15 @@ import net.iGap.adapter.items.chat.UnreadMessage;
 import net.iGap.adapter.items.chat.VideoItem;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.VoiceItem;
+import net.iGap.emoji.EmojiEditText;
+import net.iGap.emoji.EmojiTextView;
+import net.iGap.emoji.emoji.Emoji;
+import net.iGap.emoji.listeners.OnEmojiBackspaceClickListener;
+import net.iGap.emoji.listeners.OnEmojiClickedListener;
+import net.iGap.emoji.listeners.OnEmojiPopupDismissListener;
+import net.iGap.emoji.listeners.OnEmojiPopupShownListener;
+import net.iGap.emoji.listeners.OnSoftKeyboardCloseListener;
+import net.iGap.emoji.listeners.OnSoftKeyboardOpenListener;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperAvatar;
@@ -281,7 +281,7 @@ public class ActivityChat extends ActivityEnhanced
     private AttachFile attachFile;
     private EditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
-    private io.github.meness.emoji.EmojiEditText edtChat;
+    private net.iGap.emoji.EmojiEditText edtChat;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private MaterialDesignTextView imvMicButton;
@@ -302,7 +302,7 @@ public class ActivityChat extends ActivityEnhanced
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
     private ProtoGlobal.Room.Type chatType;
-    private io.github.meness.emoji.EmojiPopup emojiPopup;
+    private net.iGap.emoji.EmojiPopup emojiPopup;
     public static OnComplete onMusicListener;
     private GroupChatRole groupRole;
     private ChannelChatRole channelRole;
@@ -3823,7 +3823,7 @@ public class ActivityChat extends ActivityEnhanced
      * emoji initialization
      */
     private void setUpEmojiPopup() {
-        emojiPopup = io.github.meness.emoji.EmojiPopup.Builder.fromRootView(findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        emojiPopup = net.iGap.emoji.EmojiPopup.Builder.fromRootView(findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override public void onEmojiBackspaceClicked(final View v) {
 
             }

@@ -14,10 +14,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.LinearLayout;
-import io.github.meness.emoji.EmojiTextView;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.emoji.EmojiTextView;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 

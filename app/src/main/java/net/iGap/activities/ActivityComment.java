@@ -24,18 +24,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import io.github.meness.emoji.EmojiEditText;
-import io.github.meness.emoji.emoji.Emoji;
-import io.github.meness.emoji.listeners.OnEmojiBackspaceClickListener;
-import io.github.meness.emoji.listeners.OnEmojiClickedListener;
-import io.github.meness.emoji.listeners.OnEmojiPopupDismissListener;
-import io.github.meness.emoji.listeners.OnEmojiPopupShownListener;
-import io.github.meness.emoji.listeners.OnSoftKeyboardCloseListener;
-import io.github.meness.emoji.listeners.OnSoftKeyboardOpenListener;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterComment;
+import net.iGap.emoji.EmojiEditText;
+import net.iGap.emoji.emoji.Emoji;
+import net.iGap.emoji.listeners.OnEmojiBackspaceClickListener;
+import net.iGap.emoji.listeners.OnEmojiClickedListener;
+import net.iGap.emoji.listeners.OnEmojiPopupDismissListener;
+import net.iGap.emoji.listeners.OnEmojiPopupShownListener;
+import net.iGap.emoji.listeners.OnSoftKeyboardCloseListener;
+import net.iGap.emoji.listeners.OnSoftKeyboardOpenListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
@@ -154,7 +154,7 @@ public class ActivityComment extends ActivityEnhanced {
         }
     }
 
-    private io.github.meness.emoji.EmojiPopup emojiPopup;
+    private net.iGap.emoji.EmojiPopup emojiPopup;
 
     private void initRecycleView() {
 
@@ -167,7 +167,7 @@ public class ActivityComment extends ActivityEnhanced {
     }
 
     private void setUpEmojiPopup() {
-        emojiPopup = io.github.meness.emoji.EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        emojiPopup = net.iGap.emoji.EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override public void onEmojiBackspaceClicked(final View v) {
                 Log.d("MainActivity", "Clicked on Backspace");
             }
