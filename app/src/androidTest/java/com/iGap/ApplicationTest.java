@@ -1,4 +1,4 @@
-package com.iGap;
+package net.iGap;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -1,4 +1,4 @@
-package com.iGap.proto;
+package net.iGap.proto;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -18,6 +18,6 @@ import static org.junit.Assert.assertEquals;
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.iGap.proto.test", appContext.getPackageName());
+        assertEquals("net.iGap.proto.test", appContext.getPackageName());
     }
 }

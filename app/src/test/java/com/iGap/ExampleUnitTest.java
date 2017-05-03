@@ -1,4 +1,4 @@
-package com.iGap;
+package net.iGap;
 
 import org.junit.Test;
 
