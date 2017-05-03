@@ -265,7 +265,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
         if (isRoomExist) {
 
-            avatarList = mRealm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAllSorted(RealmAvatarFields.UID, Sort.DESCENDING);
+            avatarList = mRealm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING);
             avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
                 @Override public void onChange(RealmResults<RealmAvatar> element) {
 
