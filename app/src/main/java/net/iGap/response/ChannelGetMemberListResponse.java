@@ -31,13 +31,16 @@ public class ChannelGetMemberListResponse extends MessageHandler {
     @Override public void handler() {
         super.handler();
 
-        ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder builder = (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder) message;
-
-        if (G.onChannelGetMemberList != null) {
-            G.onChannelGetMemberList.onChannelGetMemberList(builder.getMemberList());
-        }
+        final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder builder = (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder) message;
 
         RealmMember.convertProtoMemberListToRealmMember(builder, identity);
+        if (G.onChannelGetMemberList != null) {
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    G.onChannelGetMemberList.onChannelGetMemberList(builder.getMemberList());
+                }
+            }, 500);
+        }
     }
 
     @Override public void timeOut() {
