@@ -19,7 +19,6 @@ import io.realm.annotations.PrimaryKey;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.helper.HelperString;
-import net.iGap.module.TimeUtils;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -136,7 +135,6 @@ public class RealmRoom extends RealmObject {
 
         if (realmRoom == null) {
             realmRoom = realm.createObject(RealmRoom.class, room.getId());
-            realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
         }
 
         realmRoom.isDeleted = false;
@@ -184,11 +182,6 @@ public class RealmRoom extends RealmObject {
                 break;
         }
         realmRoom.setLastMessage(RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId()));
-        if (room.getLastMessage().getUpdateTime() == 0) {
-            realmRoom.setUpdatedTime(room.getLastMessage().getCreateTime());
-        } else {
-            realmRoom.setUpdatedTime(room.getLastMessage().getUpdateTime());
-        }
 
         RealmRoomDraft realmRoomDraft = realmRoom.getDraft();
         if (realmRoomDraft == null) {

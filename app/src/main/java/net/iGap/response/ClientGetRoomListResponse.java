@@ -41,7 +41,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
 
             new Thread(new Runnable() {
                 @Override public void run() {
-                    new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
+                    new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
                     putChatToDatabase(clientGetRoomListResponse.getRoomsList(), false, false);
                 }
             }).start();

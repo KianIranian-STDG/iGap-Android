@@ -278,22 +278,6 @@ public class ActivityMain extends ActivityEnhanced
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
             @Override public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
 
-                /**
-                 * to first enter to app , client first compute clientCondition then
-                 * getRoomList and finally send condition that before get clientCondition;
-                 * in else state compute new client condition with latest messaging state
-                 */
-                if (firstTimeEnterToApp) {
-                    firstTimeEnterToApp = false;
-                    sendClientCondition();
-                } else {
-
-                    new Thread(new Runnable() {
-                        @Override public void run() {
-                            new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition());
-                        }
-                    }).start();
-                }
 
                 if (fromLogin) {
                     mOffset = 0;
@@ -306,19 +290,31 @@ public class ActivityMain extends ActivityEnhanced
 
                 if (roomList.size() > 0) {
                     putChatToDatabase(roomList, deleteBefore, false);
+                    isThereAnyMoreItemToLoad = true;
                 } else {
                     putChatToDatabase(roomList, deleteBefore, true);
+                    isThereAnyMoreItemToLoad = false;
+                }
+
+                /**
+                 * to first enter to app , client first compute clientCondition then
+                 * getRoomList and finally send condition that before get clientCondition;
+                 * in else state compute new client condition with latest messaging state
+                 */
+                if (firstTimeEnterToApp) {
+                    firstTimeEnterToApp = false;
+                    sendClientCondition();
+                } else if (fromLogin || mOffset == 0) {
+
+                    new Thread(new Runnable() {
+                        @Override public void run() {
+                            new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
+                        }
+                    }).start();
                 }
 
                 mOffset += roomList.size();
 
-                if (roomList.size() > 0) {
-                    isThereAnyMoreItemToLoad = true;
-                } else {
-                    isThereAnyMoreItemToLoad = false;
-                }
-
-                isSendRequestForLoading = false;
 
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
@@ -326,6 +322,9 @@ public class ActivityMain extends ActivityEnhanced
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                     }
                 });
+
+                isSendRequestForLoading = false;
+
             }
 
             @Override public void onTimeout() {
@@ -380,6 +379,7 @@ public class ActivityMain extends ActivityEnhanced
     private void sendClientCondition() {
         if (clientConditionGlobal != null) {
             new RequestClientCondition().clientCondition(clientConditionGlobal);
+
         } else {
             G.handler.postDelayed(new Runnable() {
                 @Override public void run() {
@@ -1020,12 +1020,12 @@ public class ActivityMain extends ActivityEnhanced
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
                         if (lastVisiblePosition + 10 >= mOffset) {
+                            isSendRequestForLoading = true;
 
-                            mOffset = mRecyclerView.getRecycleView().getAdapter().getItemCount();
+                            //  mOffset = mRecyclerView.getRecycleView().getAdapter().getItemCount();
                             new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
                             progressBar.setVisibility(View.VISIBLE);
 
-                            isSendRequestForLoading = true;
                         }
                     }
                 }

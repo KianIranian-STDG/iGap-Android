@@ -13,6 +13,7 @@ package net.iGap.helper;
 import android.util.Log;
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 import io.realm.Sort;
 import java.util.List;
 import net.iGap.proto.ProtoClientCondition;
@@ -30,12 +31,20 @@ import net.iGap.realm.RealmRoomMessageFields;
  */
 public class HelperClientCondition {
 
-    public static ProtoClientCondition.ClientCondition.Builder computeClientCondition() {
+    public static ProtoClientCondition.ClientCondition.Builder computeClientCondition(Long roomid) {
 
         Realm realm = Realm.getDefaultInstance();
         ProtoClientCondition.ClientCondition.Builder clientCondition = ProtoClientCondition.ClientCondition.newBuilder();
 
-        for (RealmClientCondition realmClientCondition : realm.where(RealmClientCondition.class).findAll()) {
+        RealmResults<RealmClientCondition> clientConditionList;
+
+        if (roomid != null) {
+            clientConditionList = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomid).findAll();
+        } else {
+            clientConditionList = realm.where(RealmClientCondition.class).findAll();
+        }
+
+        for (RealmClientCondition realmClientCondition : clientConditionList) {
             if (realmClientCondition.isManaged()) {
                 ProtoClientCondition.ClientCondition.Room.Builder room = ProtoClientCondition.ClientCondition.Room.newBuilder();
                 room.setRoomId(realmClientCondition.getRoomId());

@@ -436,8 +436,6 @@ public class HelperNotificationAndBadge {
                             break;
                         }
 
-                        Log.e("ddddd", realmRoom1.getTitle() + "       " + roomMessage.getMessageType());
-
 
                         if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
                             senderId = realmRoom1.getId();
@@ -495,8 +493,6 @@ public class HelperNotificationAndBadge {
                 }
             }
 
-            Log.e("dddddd", "unread message  " + unreadMessageCount + "    " + senderList.size());
-
 
             startActivityPopUpNotification(type, popUpList);
 
@@ -511,8 +507,6 @@ public class HelperNotificationAndBadge {
                 }
             }
             unreadMessageCount = countChannelMessage + 1;
-
-            Log.e("dddddd", "cannel   " + countChannelMessage + "    " + countUnicChat);
 
             //  countUnicChat += senderList.size();
         }

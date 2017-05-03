@@ -23,7 +23,6 @@ import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestWrapper;
 
 import static net.iGap.G.authorHash;
-import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
 import static net.iGap.G.firstEnter;
 import static net.iGap.G.firstTimeEnterToApp;
@@ -62,10 +61,9 @@ public class LoginActions extends Application {
             @Override
             public void onLogin() {
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        clientConditionGlobal = HelperClientCondition.computeClientCondition();
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        G.clientConditionGlobal = HelperClientCondition.computeClientCondition(null);
                         /**
                          * in first enter to app client send clientCondition after get room list
                          * but, in another login when user not closed app after login client send
@@ -88,7 +86,10 @@ public class LoginActions extends Application {
                         getUserInfo();
                         //sendWaitingRequestWrappers();
                     }
-                }).start();
+                });
+
+
+
             }
 
             @Override
