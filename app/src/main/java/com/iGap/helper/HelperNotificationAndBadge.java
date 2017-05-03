@@ -147,14 +147,14 @@ public class HelperNotificationAndBadge {
         }
 
         String newMessage = "";
-        if (unreadMessageCount + countChannelMessage == 1) {
+        if (unreadMessageCount == 1) {
             newMessage = context.getString(R.string.new_message);
             chatCount = "";
         } else {
             newMessage = context.getString(R.string.new_messages);
         }
 
-        String _summary = unreadMessageCount + countChannelMessage + " " + newMessage + " " + chatCount;
+        String _summary = unreadMessageCount + " " + newMessage + " " + chatCount;
         _style.setSummaryText(_summary);
 
         return _style;
@@ -178,7 +178,7 @@ public class HelperNotificationAndBadge {
                 s = " " + context.getString(R.string.chats);
             }
 
-            String str = String.format(" %d " + context.getString(R.string.new_messages_from) + " %d " + s, unreadMessageCount + countChannelMessage, countUnicChat);
+            String str = String.format(" %d " + context.getString(R.string.new_messages_from) + " %d " + s, unreadMessageCount, countUnicChat);
 
             mContent = str;
         }
@@ -421,11 +421,18 @@ public class HelperNotificationAndBadge {
 
         if (!realmRoomMessages.isEmpty()) {
             for (RealmRoomMessage roomMessage : realmRoomMessages) {
-                if (roomMessage != null) {
+                if (roomMessage != null && !roomMessage.getMessageType().toString().equals("LOG")) {
                     RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
                     if (realmRoom1 != null && realmRoom1.getType() != null && realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
                         unreadMessageCount++;
                         messageOne = roomMessage.getMessage();
+
+                        if (unreadMessageCount > 3) {
+                            break;
+                        }
+
+                        Log.e("ddddd", realmRoom1.getTitle() + "       " + roomMessage.getMessageType());
+
 
                         if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
                             senderId = realmRoom1.getId();
@@ -485,26 +492,26 @@ public class HelperNotificationAndBadge {
                 }
             }
 
+            Log.e("dddddd", "unread message  " + unreadMessageCount + "    " + senderList.size());
+
+
             startActivityPopUpNotification(type, popUpList);
 
             countChannelMessage = 0;
-            unreadMessageCount = 0;
 
             RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
             for (RealmRoom realmRoom1 : realmRooms) {
+                //  realmRoom1.getType() == ProtoGlobal.Room.Type.CHANNEL &&
                 if (realmRoom1.getUnreadCount() > 0) {
-
-                    if (realmRoom1.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                        countChannelMessage += realmRoom1.getUnreadCount();
-                        countUnicChat++;
-                    } else {
-                        unreadMessageCount += realmRoom1.getUnreadCount();
-                    }
+                    countChannelMessage += realmRoom1.getUnreadCount();
+                    countUnicChat++;
                 }
-
             }
+            unreadMessageCount = countChannelMessage + 1;
 
-            countUnicChat += senderList.size();
+            Log.e("dddddd", "cannel   " + countChannelMessage + "    " + countUnicChat);
+
+            //  countUnicChat += senderList.size();
         }
 
         if (list.size() == 0) {
@@ -512,7 +519,7 @@ public class HelperNotificationAndBadge {
         }
 
         try {
-            ShortcutBadger.applyCount(context, unreadMessageCount + countChannelMessage);
+            ShortcutBadger.applyCount(context, unreadMessageCount);
         } catch (Exception e) {
             e.printStackTrace();
         }
