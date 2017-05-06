@@ -11,7 +11,6 @@
 package net.iGap.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -32,7 +31,6 @@ import net.iGap.helper.HelperMimeType;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructExplorerItem;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityExplorer extends ActivityEnhanced {
 
@@ -51,9 +49,6 @@ public class ActivityExplorer extends ActivityEnhanced {
     String mode = "normal";
     boolean first = true;
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

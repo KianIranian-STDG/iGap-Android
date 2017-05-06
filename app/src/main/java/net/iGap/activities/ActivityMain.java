@@ -140,7 +140,6 @@ import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.view.View.GONE;
 import static net.iGap.G.clientConditionGlobal;
@@ -190,9 +189,6 @@ public class ActivityMain extends ActivityEnhanced
     private Realm mRealm;
     private RoomAdapter roomAdapter;
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override protected void onDestroy() {
         super.onDestroy();

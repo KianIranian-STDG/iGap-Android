@@ -10,7 +10,6 @@
 
 package net.iGap.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -35,7 +34,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.realm.RealmWallpaper;
 import net.iGap.request.RequestInfoWallpaper;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityChatBackground extends ActivityEnhanced {
 
@@ -91,10 +89,6 @@ public class ActivityChatBackground extends ActivityEnhanced {
         super.onResume();
 
         G.currentActivity = this;
-    }
-
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override public void onCreate(Bundle savedInstanceState) {

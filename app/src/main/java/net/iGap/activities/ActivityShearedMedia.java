@@ -89,7 +89,6 @@ import net.iGap.request.RequestClientSearchRoomHistory;
 import org.parceler.Parcels;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static net.iGap.G.context;
 import static net.iGap.module.AndroidUtils.suitablePath;
@@ -199,10 +198,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         if (changeListener != null) {
             mRealmList.addChangeListener(changeListener);
         }
-    }
-
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override public void onCreate(Bundle savedInstanceState) {

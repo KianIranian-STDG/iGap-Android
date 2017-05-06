@@ -10,7 +10,6 @@
 
 package net.iGap.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -61,7 +60,6 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserProfileSetNickname;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static net.iGap.G.context;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
@@ -84,9 +82,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
     private boolean existAvatar = false;
     private Typeface titleTypeface;
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override protected void onResume() {
         super.onResume();

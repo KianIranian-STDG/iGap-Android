@@ -38,7 +38,6 @@ import net.iGap.R;
 import net.iGap.helper.MyService;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivitySettingNotification extends ActivityEnhanced {
 
@@ -59,9 +58,6 @@ public class ActivitySettingNotification extends ActivityEnhanced {
 
     private SharedPreferences sharedPreferences;
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

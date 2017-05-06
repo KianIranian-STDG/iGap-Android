@@ -133,7 +133,6 @@ import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestGroupUpdateUsername;
 import net.iGap.request.RequestUserInfo;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static net.iGap.G.context;
 import static net.iGap.R.id.fragmentContainer_group_profile;
@@ -243,9 +242,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
     }
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

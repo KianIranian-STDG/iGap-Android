@@ -13,7 +13,6 @@ package net.iGap.activities;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -99,7 +98,6 @@ import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsEdit;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static net.iGap.G.context;
 
@@ -141,9 +139,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private String avatarPath;
     private RealmList<RealmAvatar> avatarList;
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override protected void onPause() {
         super.onPause();

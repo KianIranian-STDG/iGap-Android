@@ -12,7 +12,6 @@ package net.iGap.activities;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -115,7 +114,6 @@ import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestUserSessionLogout;
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static net.iGap.G.context;
 import static net.iGap.G.onRefreshActivity;
@@ -197,9 +195,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
     }
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override protected void onResume() {
         super.onResume();

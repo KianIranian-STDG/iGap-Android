@@ -10,7 +10,6 @@
 
 package net.iGap.activities;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -21,7 +20,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MaterialDesignTextView;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityNewChanelFinish extends ActivityEnhanced {
 
@@ -30,9 +28,6 @@ public class ActivityNewChanelFinish extends ActivityEnhanced {
     private EditText edtLink;
     private TextView txtFinish, txtCancel;
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

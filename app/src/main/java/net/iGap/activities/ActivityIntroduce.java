@@ -15,7 +15,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,7 +51,6 @@ import net.iGap.module.StartupActions;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoLocation;
 import net.iGap.request.RequestInfoPage;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityIntroduce extends ActivityEnhanced {
 
@@ -83,9 +81,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private LicenseCheckerCallback mLicenseCheckerCallback;
     private LicenseChecker mChecker;
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override protected void onPause() {
         super.onPause();

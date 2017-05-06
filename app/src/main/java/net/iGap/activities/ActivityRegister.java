@@ -83,7 +83,6 @@ import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestWrapper;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityRegister extends ActivityEnhanced {
 
@@ -134,9 +133,6 @@ public class ActivityRegister extends ActivityEnhanced {
         SOCKET, TIME_OUT, INVALID_CODE
     }
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -13,7 +13,6 @@ package net.iGap.activities;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -132,7 +131,6 @@ import net.iGap.request.RequestChannelRevokeLink;
 import net.iGap.request.RequestChannelUpdateSignature;
 import net.iGap.request.RequestChannelUpdateUsername;
 import net.iGap.request.RequestUserInfo;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static net.iGap.G.context;
 
@@ -150,10 +148,6 @@ public class ActivityChannelProfile extends ActivityEnhanced
     private TextView txtChannelName;
     TextView txtSharedMedia;
     private EditText edtRevoke;
-
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     private String title;
     private String initials;

@@ -34,7 +34,6 @@ import net.iGap.interfaces.OnComplete;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityMediaPlayer extends ActivityEnhanced {
 
@@ -52,9 +51,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
     private ImageView img_MusicImage_default_icon;
     private TextView btnPlay;
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

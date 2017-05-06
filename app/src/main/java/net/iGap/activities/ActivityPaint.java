@@ -49,7 +49,6 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnColorChangedListenerSelect;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ColorPiker;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * for draw a paint and send to other user or save in device folder
@@ -68,9 +67,6 @@ public class ActivityPaint extends ActivityEnhanced {
     private Paint paint;
     private FrameLayout frameLayout;
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

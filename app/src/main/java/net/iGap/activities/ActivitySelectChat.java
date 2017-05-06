@@ -58,7 +58,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.view.View.GONE;
 import static net.iGap.G.context;
@@ -77,9 +76,6 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Typeface titleTypeface;
 
-    @Override protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
 
     @Override protected void onDestroy() {
         super.onDestroy();
