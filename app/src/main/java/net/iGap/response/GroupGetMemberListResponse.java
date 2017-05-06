@@ -52,7 +52,7 @@ public class GroupGetMemberListResponse extends MessageHandler {
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
                         if (realmRoom != null) {
 
-                            realmRoom.getGroupRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
+                            //   realmRoom.getGroupRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
 
                             int i = 0;
                             newMembers.addAll(realmRoom.getGroupRoom().getMembers());

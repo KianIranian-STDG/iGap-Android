@@ -196,7 +196,9 @@ public class ActivityMain extends ActivityEnhanced
 
     @Override protected void onDestroy() {
         super.onDestroy();
-        if (mRealm != null) mRealm.close();
+        if (mRealm != null) {
+            mRealm.close();
+        }
     }
 
     @Override public void onCreate(Bundle savedInstanceState) {
