@@ -343,6 +343,13 @@ public class ActivityChat extends ActivityEnhanced
     private ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<>();
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
 
+    private class StructBackGroundSeen {
+        private Long messageID;
+        ProtoGlobal.Room.Type roomType;
+    }
+
+    private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
+
     private TextView txtSpamUser;
     private TextView txtSpamClose;
     private TextView send;
@@ -581,6 +588,16 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         };
+
+        if (backGroundSeenList != null && backGroundSeenList.size() > 0) {
+            for (int i = 0; i < backGroundSeenList.size(); i++) {
+
+                G.chatUpdateStatusUtil.sendUpdateStatus(backGroundSeenList.get(i).roomType, mRoomId, backGroundSeenList.get(i).messageID, ProtoGlobal.RoomMessageStatus.SEEN);
+            }
+
+            backGroundSeenList.clear();
+        }
+
     }
 
     @Override protected void onPause() {
@@ -991,6 +1008,7 @@ public class ActivityChat extends ActivityEnhanced
     private void startPageFastInitialize() {
 
         attachFile = new AttachFile(this);
+        backGroundSeenList.clear();
 
         mRealm = Realm.getDefaultInstance();
 
@@ -2493,10 +2511,34 @@ public class ActivityChat extends ActivityEnhanced
 
                                                 if (!isNotJoin) {
                                                     // make update status to message sender that i've read his message
+
+                                                    StructBackGroundSeen _BackGroundSeen = null;
+
+                                                    ProtoGlobal.RoomMessageStatus roomMessageStatus;
+                                                    if (G.isAppInFg) {
+                                                        roomMessageStatus = ProtoGlobal.RoomMessageStatus.SEEN;
+                                                    } else {
+
+                                                        roomMessageStatus = ProtoGlobal.RoomMessageStatus.DELIVERED;
+
+                                                        _BackGroundSeen = new StructBackGroundSeen();
+                                                        _BackGroundSeen.messageID = roomMessage.getMessageId();
+                                                        _BackGroundSeen.roomType = roomType;
+                                                    }
+
                                                     if (chatType == CHAT) {
-                                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
+
+                                                        if (_BackGroundSeen != null) {
+                                                            backGroundSeenList.add(_BackGroundSeen);
+                                                        }
+
                                                     } else if (chatType == GROUP && (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN)) {
-                                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
+
+                                                        if (_BackGroundSeen != null) {
+                                                            backGroundSeenList.add(_BackGroundSeen);
+                                                        }
                                                     }
                                                 }
                                             }
