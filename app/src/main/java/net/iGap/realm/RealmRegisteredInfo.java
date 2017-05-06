@@ -148,6 +148,13 @@ public class RealmRegisteredInfo extends RealmObject {
         return AppUtils.getStatsForUser(status);
     }
 
+    /**
+     * this method will be returned exactly the value that got from server
+     */
+    public String getMainStatus() {
+        return status;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }

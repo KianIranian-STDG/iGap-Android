@@ -22,6 +22,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 
@@ -141,7 +142,7 @@ public class LastSeenTimeUtil {
             long value = entry.getValue();
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
             if (realmRegisteredInfo != null) {
-                if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals("آنلاین")) {
+                if (realmRegisteredInfo.getStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals("آنلاین") && !realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
                     String showLastSeen;
                     if (timeOut(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS)) {
                         showLastSeen = computeDays(realmRegisteredInfo.getLastSeen(), true);
@@ -168,7 +169,8 @@ public class LastSeenTimeUtil {
         userIdList.clear();
         if (hashMapLastSeen.size() > 0) {
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     updateLastSeenTime();
                 }
             }, Config.LAST_SEEN_DELAY_CHECKING);

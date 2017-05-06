@@ -30,24 +30,26 @@ public class PushUserInfoExpiredResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
         ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.Builder builder = (ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.Builder) message;
-        builder.getUserId();
 
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUserId()).findFirst();
-
         if (realmRegisteredInfo != null) {
             new RequestUserInfo().userInfo(builder.getUserId());
         }
+        realm.close();
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }
