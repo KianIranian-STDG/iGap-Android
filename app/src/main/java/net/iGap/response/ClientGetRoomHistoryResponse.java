@@ -58,7 +58,12 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                             realmRoomMessages.add(RealmRoomMessage.putOrUpdate(roomMessage, Long.parseLong(identity)));
                             if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
                                 if (!G.isAppInFg) {
-                                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, Long.parseLong(identity));
+                                    G.handler.postDelayed(new Runnable() {
+                                        @Override public void run() {
+                                            G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, Long.parseLong(identity));
+                                        }
+                                    }, 200);
+
                                 }
                             }
                         }

@@ -65,11 +65,10 @@ public class HelperNotificationAndBadge {
     private int unreadMessageCount = 0;
     private String messageOne = "";
     private boolean isFromOnRoom = true;
-    int countChannelMessage = 0;
     private long roomId = 0;
     private long senderId = 0;
     private ArrayList<Item> list = new ArrayList<>();
-    private ArrayList<Long> senderList = new ArrayList<>();
+
     private NotificationManager notificationManager;
     private Notification notification;
     private int notificationId = 20;
@@ -408,12 +407,8 @@ public class HelperNotificationAndBadge {
         inAppPreview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0);
         inChat_Sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0);
 
-        unreadMessageCount = 0;
-        isFromOnRoom = true;
-        countUnicChat = 0;
-
         list.clear();
-        senderList.clear();
+        unreadMessageCount = 0;
         popUpList.clear();
 
         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
@@ -436,16 +431,9 @@ public class HelperNotificationAndBadge {
                             break;
                         }
 
-
-                        if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
-                            senderId = realmRoom1.getId();
-                        } else {
-                            senderId = realmRoom1.getChatRoom().getPeerId();
-                        }
-
                         addItemToPopUPList(roomMessage);
 
-                        if (unreadMessageCount == 1 || unreadMessageCount == 2 || unreadMessageCount == 3) {
+                        if (unreadMessageCount <= 3) {
                             Item item = new Item();
 
                             item.name = realmRoom1.getTitle() + " : ";
@@ -468,27 +456,21 @@ public class HelperNotificationAndBadge {
                             item.message = text;
                             item.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
                             list.add(item);
-                        }
 
-                        if (unreadMessageCount == 1) {
-                            roomId = roomMessage.getRoomId();
-                        } else if (roomId != roomMessage.getRoomId()) {
-                            isFromOnRoom = false;
-                        }
+                            if (unreadMessageCount == 1) {
+                                roomId = roomMessage.getRoomId();
 
-                        boolean isAdd = true;
-                        for (int k = 0; k < senderList.size(); k++) {
-                            if (senderList.get(k) == roomMessage.getRoomId()) {
-                                isAdd = false;
-                                break;
+                                if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                    senderId = realmRoom1.getId();
+                                } else {
+                                    senderId = realmRoom1.getChatRoom().getPeerId();
+                                }
+
                             }
+
+
                         }
 
-                        if (isAdd) {
-                            senderList.add(roomMessage.getRoomId());
-                        }
-                    } else {
-                        // now just show count for channel message
                     }
                 }
             }
@@ -496,19 +478,29 @@ public class HelperNotificationAndBadge {
 
             startActivityPopUpNotification(type, popUpList);
 
-            countChannelMessage = 0;
+            isFromOnRoom = false;
+
+            unreadMessageCount = 0;
+            countUnicChat = 0;
 
             RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
             for (RealmRoom realmRoom1 : realmRooms) {
                 //  realmRoom1.getType() == ProtoGlobal.Room.Type.CHANNEL &&
                 if (realmRoom1.getUnreadCount() > 0) {
-                    countChannelMessage += realmRoom1.getUnreadCount();
-                    countUnicChat++;
+                    unreadMessageCount += realmRoom1.getUnreadCount();
+                    ++countUnicChat;
                 }
             }
-            unreadMessageCount = countChannelMessage + 1;
 
-            //  countUnicChat += senderList.size();
+            if (countUnicChat == 1) {
+                isFromOnRoom = true;
+            } else {
+                isFromOnRoom = false;
+            }
+
+
+
+
         }
 
         if (list.size() == 0) {

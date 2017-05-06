@@ -343,7 +343,9 @@ public class HelperUrl {
 
             if (isHash) {
                 if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
-                    if (tmp.length() > 0) insertHashLink(tmp, builder, start, messageID);
+                    if (tmp.length() > 0) {
+                        insertHashLink(tmp, builder, start, messageID);
+                    }
 
                     tmp = "";
                     isHash = false;
@@ -411,7 +413,9 @@ public class HelperUrl {
                     //    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
                     //    s.equals(":") || s.equals("'") || s.equals("?") || s.equals("<") || s.equals(">") || s.equals(",") || s.equals(" ") ||
                     //    s.equals("\\") || s.equals("|") || s.equals("//") || s.codePointAt(0) == 8192 || s.equals(enter) || s.equals("")) {
-                    if (tmp.length() > 0) insertAtSignLink(tmp, builder, start);
+                    if (tmp.length() > 0) {
+                        insertAtSignLink(tmp, builder, start);
+                    }
 
                     tmp = "";
                     isAtSign = false;
@@ -520,9 +524,13 @@ public class HelperUrl {
 
         String linkInfo = "";
 
-        if (text == null) return linkInfo;
+        if (text == null) {
+            return linkInfo;
+        }
 
-        if (text.trim().length() < 1) return linkInfo;
+        if (text.trim().length() < 1) {
+            return linkInfo;
+        }
 
         linkInfo += analysisAtSignLinkInfo(text);
 
@@ -554,7 +562,9 @@ public class HelperUrl {
     private static String analysisAtSignLinkInfo(String text) {
 
         String result = "";
-        if (text == null || text.length() < 1) return result;
+        if (text == null || text.length() < 1) {
+            return result;
+        }
 
         String s = "";
         String tmp = "";
@@ -574,7 +584,9 @@ public class HelperUrl {
             if (isAtSign) {
                 if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
 
-                    if (tmp.length() > 0) result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
+                    if (tmp.length() > 0) {
+                        result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
+                    }
 
                     tmp = "";
                     isAtSign = false;
@@ -596,7 +608,9 @@ public class HelperUrl {
     private static String analysisHashLinkInfo(String text) {
 
         String result = "";
-        if (text == null || text.length() < 1) return result;
+        if (text == null || text.length() < 1) {
+            return result;
+        }
 
         String s = "";
         String tmp = "";
@@ -616,7 +630,9 @@ public class HelperUrl {
 
             if (isHash) {
                 if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
-                    if (tmp.length() > 0) result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
+                    if (tmp.length() > 0) {
+                        result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
+                    }
 
                     tmp = "";
                     isHash = false;
@@ -627,7 +643,9 @@ public class HelperUrl {
         }
 
         if (isHash) {
-            if (tmp.length() > 0) result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
+            if (tmp.length() > 0) {
+                result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
+            }
         }
 
         return result;

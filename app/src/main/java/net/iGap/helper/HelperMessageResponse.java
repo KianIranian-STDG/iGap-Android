@@ -76,7 +76,14 @@ public class HelperMessageResponse {
                         type = room.getType();
                     }
 
-                    G.helperNotificationAndBadge.checkAlert(true, type, roomId);
+                    final ProtoGlobal.Room.Type finalType = type;
+                    G.handler.postDelayed(new Runnable() {
+                        @Override public void run() {
+                            G.helperNotificationAndBadge.checkAlert(true, finalType, roomId);
+                        }
+                    }, 200);
+
+
                 } else if (!response.getId().isEmpty()) {
                     /**
                      * i'm the sender
