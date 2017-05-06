@@ -2539,17 +2539,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
                                     // I'm in the room
                                     if (roomId == mRoomId) {
-                                        // I'm in the room, so unread messages count is 0. it means, I read all messages
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                                                if (room != null) {
-                                                    room.setUnreadCount(0);
-                                                }
-                                            }
-                                        });
-
                                         /**
                                          * when user receive message, I send update status as SENT to the message sender
                                          * but imagine user is not in the room (or he is in another room) and received
@@ -2557,23 +2546,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                          * status request as SEEN to the message sender
                                          */
 
-                                        //Start ClientCondition OfflineSeen
                                         realm.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
                                                 final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
-
-                                                if (realmRoomMessage != null) {
-                                                    if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                                                        realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-
-                                                        RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
-                                                        realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
-                                                        realm.copyToRealmOrUpdate(realmOfflineSeen);
-                                                        realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                                    }
-                                                }
-
                                                 if (!isNotJoin) {
                                                     // make update status to message sender that i've read his message
 
@@ -2581,6 +2557,27 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                                                     ProtoGlobal.RoomMessageStatus roomMessageStatus;
                                                     if (G.isAppInFg) {
+
+                                                        /**
+                                                         * I'm in the room, so unread messages count is 0. it means, I read all messages
+                                                         */
+                                                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                                        if (room != null) {
+                                                            room.setUnreadCount(0);
+                                                        }
+
+                                                        if (realmRoomMessage != null) {
+                                                            if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                                                                realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+
+                                                                RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
+                                                                realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
+                                                                realm.copyToRealmOrUpdate(realmOfflineSeen);
+                                                                realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                                            }
+                                                        }
+
+
                                                         roomMessageStatus = ProtoGlobal.RoomMessageStatus.SEEN;
                                                     } else {
 

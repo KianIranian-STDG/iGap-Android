@@ -78,19 +78,24 @@ public class HelperMessageResponse {
 
                     final ProtoGlobal.Room.Type finalType = type;
                     G.handler.postDelayed(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             G.helperNotificationAndBadge.checkAlert(true, finalType, roomId);
                         }
                     }, 200);
 
 
-                } else if (!response.getId().isEmpty()) {
-                    /**
-                     * i'm the sender
-                     *
-                     * delete message that created with fake messageId as identity
-                     * because in new version of realm client can't update primary key
-                     */
+                    //} else if (!response.getId().isEmpty()) {
+                    //    /**
+                    //     * i'm the sender
+                    //     *
+                    //     * delete message that created with fake messageId as identity
+                    //     * because in new version of realm client can't update primary key
+                    //     */
+                    //    RealmRoomMessage.deleteMessage(realm, Long.parseLong(identity));
+                }
+
+                if (identity != null && identity.length() > 0) {
                     RealmRoomMessage.deleteMessage(realm, Long.parseLong(identity));
                 }
 
