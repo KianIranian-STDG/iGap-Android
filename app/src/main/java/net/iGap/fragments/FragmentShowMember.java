@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
@@ -103,7 +105,7 @@ public class FragmentShowMember extends Fragment {
 
     private int offset = 0;
     private int limit = 50;
-
+    private FragmentActivity mActivity;
     public static OnComplete infoUpdateListenerCount = null;
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -176,15 +178,18 @@ public class FragmentShowMember extends Fragment {
 
                 try {
                     mCurrentUpdateCount++;
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            fillAdapter();
-                            if (progressBar != null) {
-                                progressBar.setVisibility(View.GONE);
+                    if (mCurrentUpdateCount >= mMemberCount) {
+
+                        mActivity.runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                fillAdapter();
+                                if (progressBar != null) {
+                                    progressBar.setVisibility(View.GONE);
+                                }
                             }
-                        }
-                    });
-                    infoUpdateListenerCount = null;
+                        });
+                        infoUpdateListenerCount = null;
+                    }
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -201,7 +206,7 @@ public class FragmentShowMember extends Fragment {
                     if (realmRegisteredInfo == null) {
                         new RequestUserInfo().userInfo(member.getUserId());
                     } else {
-                        getActivity().runOnUiThread(new Runnable() {
+                        mActivity.runOnUiThread(new Runnable() {
                             @Override public void run() {
                                 if (infoUpdateListenerCount != null) infoUpdateListenerCount.complete(true, "", "");
                             }
@@ -683,5 +688,10 @@ public class FragmentShowMember extends Fragment {
             linearSmoothScroller.setTargetPosition(position);
             startSmoothScroll(linearSmoothScroller);
         }
+    }
+
+    @Override public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }
