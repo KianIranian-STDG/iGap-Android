@@ -4091,7 +4091,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     mRealm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            realmRoom.setLastScrollPositionMessageId(final_lastScrolledMessageID);
+                            //realmRoom.setLastScrollPositionMessageId(final_lastScrolledMessageID);
                         }
                     });
                 }
@@ -6264,7 +6264,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private int totalItemCount; // all item in recycler view
 
     //==========test value
-    private int scrollEnd = 1;
+    private int scrollEnd = 2;
 
     private void getLocalMessages() {
         Realm realm = Realm.getDefaultInstance();
@@ -6308,7 +6308,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     .equalTo(RealmRoomMessageFields.DELETED, false)
                     .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
                     .findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
-            gapDetection(resultsUp, UP);
+            /**
+             * if for UP state client have message detect gap otherwise try for get online message
+             * because maybe client have message but not exist in Realm yet
+             */
+            if (resultsUp.size() > 1) {
+                gapDetection(resultsUp, UP);
+            } else {
+                getOnlineMessage(firstUnreadMessage.getMessageId(), UP);
+            }
 
             results = resultsDown;
             gapMessageId = gapDetection(results, direction);
@@ -6720,14 +6728,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
                 if (progressState == SHOW) {
                     if ((mAdapter.getAdapterItemCount() > 0) && !(mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
-                        final int index = progressIndex;
+                        //final int index = progressIndex;
                         recyclerView.post(new Runnable() {
                             @Override
                             public void run() {
                                 if (direction == DOWN) {
                                     mAdapter.add(new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
                                 } else {
-                                    mAdapter.add(index, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                                    mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
                                 }
                             }
                         });
@@ -6738,14 +6746,57 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                      * for detect progress so client need delay for detect this instance
                      */
                     if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
-                        mAdapter.remove(progressIndex);
+                        //mAdapter.remove(progressIndex);
+                        if (direction == DOWN) {
+                            int count = 0;
+                            if (mAdapter.getItemCount() > 10) {
+                                count = mAdapter.getItemCount() - 10;
+                            }
+                            for (int i = (mAdapter.getItemCount() - 1); i >= count; i--) {
+                                if ((mAdapter.getAdapterItem(i) instanceof ProgressWaiting)) {
+                                    mAdapter.remove(i);
+                                    break;
+                                }
+                            }
+                        } else {
+                            int count = 10;
+                            if (mAdapter.getItemCount() < 10) {
+                                count = mAdapter.getItemCount();
+                            }
+                            for (int i = 0; i < count; i++) {
+                                if ((mAdapter.getAdapterItem(i) instanceof ProgressWaiting)) {
+                                    mAdapter.remove(i);
+                                    break;
+                                }
+                            }
+                        }
                     } else {
                         final int index = progressIndex;
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(index) instanceof ProgressWaiting)) {
-                                    mAdapter.remove(index);
+                                if (direction == DOWN) {
+                                    int count = 0;
+                                    if (mAdapter.getItemCount() > 10) {
+                                        count = mAdapter.getItemCount() - 10;
+                                    }
+                                    for (int i = (mAdapter.getItemCount() - 1); i >= count; i--) {
+                                        if ((mAdapter.getAdapterItem(i) instanceof ProgressWaiting)) {
+                                            mAdapter.remove(i);
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    int count = 10;
+                                    if (mAdapter.getItemCount() < 10) {
+                                        count = mAdapter.getItemCount();
+                                    }
+                                    for (int i = 0; i < count; i++) {
+                                        if ((mAdapter.getAdapterItem(i) instanceof ProgressWaiting)) {
+                                            mAdapter.remove(i);
+                                            break;
+                                        }
+                                    }
                                 }
                             }
                         }, 500);
