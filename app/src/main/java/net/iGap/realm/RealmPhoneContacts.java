@@ -114,6 +114,11 @@ public class RealmPhoneContacts extends RealmObject {
 
             boolean _addItem = false;
             final StructListOfContact _item = list.get(i);
+
+            if (_item.getPhone() == null || _item.getPhone().length() == 0) {
+                continue;
+            }
+
             final RealmPhoneContacts _realmPhoneContacts = realm.where(RealmPhoneContacts.class).equalTo(RealmPhoneContactsFields.PHONE, _item.getPhone()).findFirst();
 
             if (_realmPhoneContacts == null) {

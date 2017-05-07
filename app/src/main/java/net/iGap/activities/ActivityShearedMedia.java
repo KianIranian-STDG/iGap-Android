@@ -42,7 +42,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -114,6 +113,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private int changesize = 0;
     ProgressBar progressBar;
 
+    private boolean isChangeSelectType = false;
+
     private RecyclerView.OnScrollListener onScrollListener;
 
     private static long countOFImage = 0;
@@ -163,6 +164,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         changeListener = new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
             @Override public void onChange(RealmResults<RealmRoomMessage> element) {
+
+                if (isChangeSelectType) {
+                    return;
+                }
 
                 if (changesize - element.size() != 0) {
 
@@ -512,7 +517,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 float cardViewWidth = getResources().getDimension(R.dimen.dp120);
                 int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
 
-                if (newSpanCount < 3) newSpanCount = 3;
+                if (newSpanCount < 3) {
+                    newSpanCount = 3;
+                }
 
                 spanItemCount = newSpanCount;
                 gLayoutManager.setSpanCount(newSpanCount);
@@ -523,14 +530,21 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private void fillListImage() {
 
+        isChangeSelectType = true;
+
         txtSharedMedia.setText(R.string.shared_image);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE;
         mNewList = loadLoackData(mFilter, ProtoGlobal.RoomMessageType.IMAGE.toString());
         adapter = new ImageAdapter(ActivityShearedMedia.this, mNewList);
         initLayoutRecycleviewForImage();
+
+        isChangeSelectType = false;
+
     }
 
     private void fillListVideo() {
+
+        isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_video);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO;
@@ -538,9 +552,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mNewList = loadLoackData(mFilter, ProtoGlobal.RoomMessageType.VIDEO.toString());
         adapter = new VideoAdapter(ActivityShearedMedia.this, mNewList);
         initLayoutRecycleviewForImage();
+
+        isChangeSelectType = false;
+
     }
 
     private void fillListAudio() {
+
+        isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_audio);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO;
@@ -550,9 +569,15 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityShearedMedia.this));
         recyclerView.setAdapter(adapter);
+
+        isChangeSelectType = false;
+
     }
 
     private void fillListVoice() {
+
+        isChangeSelectType = true;
+
         txtSharedMedia.setText(R.string.shared_voice);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE;
 
@@ -561,9 +586,15 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityShearedMedia.this));
         recyclerView.setAdapter(adapter);
+
+        isChangeSelectType = false;
+
     }
 
     private void fillListGif() {
+
+        isChangeSelectType = true;
+
         txtSharedMedia.setText(R.string.shared_gif);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF;
 
@@ -571,9 +602,15 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         adapter = new GifAdapter(ActivityShearedMedia.this, mNewList);
 
         initLayoutRecycleviewForImage();
+
+        isChangeSelectType = false;
+
     }
 
     private void fillListFile() {
+
+        isChangeSelectType = true;
+
         txtSharedMedia.setText(R.string.shared_file);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE;
 
@@ -582,9 +619,14 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityShearedMedia.this));
         recyclerView.setAdapter(adapter);
+
+        isChangeSelectType = false;
+
     }
 
     private void fillListLink() {
+
+        isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_links);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL;
@@ -608,6 +650,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         recyclerView.setAdapter(adapter);
 
         realm.close();
+
+        isChangeSelectType = false;
+
     }
 
     //********************************************************************************************
@@ -704,7 +749,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         if (notDeletedCount > 0) {
                             saveDataToLocal(resultList, roomId);
                         } else {
-                            Toast.makeText(ActivityShearedMedia.this, R.string.there_is_no_sheared_media, Toast.LENGTH_LONG).show();
+                            //  Toast.makeText(ActivityShearedMedia.this, R.string.there_is_no_sheared_media, Toast.LENGTH_LONG).show();
                         }
 
                         if (notDeletedCount > offset && notDeletedCount > mListcount) {
