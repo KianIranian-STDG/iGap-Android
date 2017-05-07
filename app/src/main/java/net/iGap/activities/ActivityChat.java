@@ -6531,7 +6531,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
 
                     final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
-                    //Collections.sort(realmRoomMessages, SortMessages.DESC);
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                         structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
                     }
@@ -6551,21 +6550,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                      * hide progress if have any error
                      */
                     progressItem(HIDE, direction);
-                    //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
-                    //runOnUiThread(new Runnable() {
-                    //    @Override
-                    //    public void run() {
-                    //        mAdapter.notifyDataSetChanged();
-                    //        //recyclerView.removeOnScrollListener(scrollListener); // remove check for up and down
-                    //    }
-                    //});
 
                     if (majorCode == 617) {
-                        Log.i("MMM", "NOT History " + direction);
                         if (direction.equals(UP.toString())) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
                                     mAdapter.notifyDataSetChanged();
                                     //recyclerView.removeOnScrollListener(scrollListener); // remove check for up and down
                                 }
@@ -6573,15 +6564,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             isWaitingForHistoryUp = false;
                             allowGetHistoryUp = false;
                         } else {
-                            //runOnUiThread(new Runnable() {
-                            //    @Override
-                            //    public void run() {
-                            //        recyclerView.removeOnScrollListener(scrollListener); // remove check for up and down
-                            //    }
-                            //});
-                            //TODO [Saeed Mozaffari] [2017-04-19 10:45 AM] - get from local after this step for insuring that received any message
-                            Log.i("MMM", "Down History End");
-                            Log.i("VVV", "ALLOW FOR ADD TO VIEW");
                             addToView = true;
                             isWaitingForHistoryDown = false;
                             allowGetHistoryDown = false;
@@ -6660,6 +6642,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * @param direction define direction for show progress in UP or DOWN
      */
     private void progressItem(final ProgressState progressState, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+        //TODO [Saeed Mozaffari] [2017-05-07 11:16 AM] - don't need to check ten latest item for remove progress view
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
