@@ -825,4 +825,6 @@
   <string name="text_limit_chat_to_unknown_contact">Please wait for the process to finish (You are not allowed to send messages to more than 10 Unknown Users regularly at the same time; after getting to number 10, you get stopped until the end of countdown timer)</string>
   <string name="title_limit_Create_Group">Restriction in Number of Rooms</string>
   <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
+  <string name="calls">Calls</string>
+  <string name="igap_call">iGap Call</string>
 </resources>

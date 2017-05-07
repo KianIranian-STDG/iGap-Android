@@ -323,6 +323,44 @@
           </LinearLayout>
 
           <LinearLayout
+              android:id="@+id/lm_ll_call"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="@dimen/dp6"
+              android:layout_marginTop="@dimen/dp4"
+              android:orientation="horizontal"
+              style="@style/NavigationDrawer.Item"
+              >
+
+            <com.iGap.module.MaterialDesignTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:minWidth="@dimen/dp32"
+                android:text="@string/md_phone"
+                android:textAppearance="@style/TextIconAppearance.menu"
+                android:textSize="@dimen/sp22"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginStart="@dimen/dp4"
+                android:paddingBottom="@dimen/dp8"
+                android:paddingLeft="@dimen/dp8"
+                android:paddingRight="@dimen/dp8"
+                android:paddingTop="@dimen/dp12"
+                android:text="@string/calls"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/sp14"
+
+                />
+
+          </LinearLayout>
+
+          <LinearLayout
               android:id="@+id/lm_ll_invite_friends"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"

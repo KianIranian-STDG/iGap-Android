@@ -641,6 +641,36 @@ public class ActivityMain extends ActivityEnhanced
             }
         });
 
+        ViewGroup itemNavCall = (ViewGroup) findViewById(R.id.lm_ll_call);
+        itemNavCall.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override public void run() {
+
+                        Fragment fragment = FragmentCall.newInstance();
+                        try {
+                            getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .addToBackStack(null)
+                                .replace(R.id.fragmentContainer, fragment)
+                                .commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+                    }
+                }, 256);
+            }
+        });
+
+
+
+
         ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
         itemNavSend.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
