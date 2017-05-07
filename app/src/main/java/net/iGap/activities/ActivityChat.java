@@ -56,7 +56,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1854,7 +1853,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void run() {
 
-                getLocalMessages();
+                getMessages();
                 manageForwardedMessage();
 
                 /**
@@ -1904,7 +1903,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         resetMessagingValue();
                         unreadCount = countNewMessage;
                         firstUnreadMessage = firstUnreadMessageInChat;
-                        getLocalMessages();
+                        getMessages();
 
                         int position1 = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
                         if (position1 > 0) {
@@ -1925,7 +1924,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                      */
                     if (!addToView) {
                         resetMessagingValue();
-                        getLocalMessages();
+                        getMessages();
                     } else {
                         scrollToEnd();
                     }
@@ -6186,7 +6185,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     /**
+     * **********************************************************************
      * *************************** Message Loader ***************************
+     * **********************************************************************
      */
 
     private boolean addToView; // allow to message for add to recycler view or no
@@ -6198,7 +6199,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private long gapMessageIdDown; // messageId that maybe lost in local
     private long reachMessageIdUp; // messageId that will be checked after getHistory for detect reached to that or no
     private long reachMessageIdDown; // messageId that will be checked after getHistory for detect reached to that or no
-    //TODO [Saeed Mozaffari] [2017-03-01 7:28 PM] - check for use this field
     private boolean allowGetHistoryUp = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
     private boolean allowGetHistoryDown = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
     private long startFutureMessageIdUp; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
@@ -6206,11 +6206,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
+    private int scrollEnd = 10; // to determine the limits to get to the bottom of the list
 
-    //==========test value
-    private int scrollEnd = 2;
-
-    private void getLocalMessages() {
+    private void getMessages() {
         Realm realm = Realm.getDefaultInstance();
 
         ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction;
@@ -6268,9 +6266,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             results = resultsUp;
             gapMessageId = gapDetection(resultsUp, UP);
         }
-
-        //long gapMessageId = gapDetection(results, direction);
-        Log.i("MMM", "gapMessageId : " + gapMessageId + " || direction : " + direction);
 
         if (results.size() > 0) {
 
@@ -6544,7 +6539,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
 
                 @Override
-                public void onError(int majorCode, int minorCode, String direction) {
+                public void onError(int majorCode, int minorCode, long messageIdGetHistory, String direction) {
                     hideProgress();
                     /**
                      * hide progress if have any error
@@ -6570,8 +6565,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
                     }
 
+
+                    /**
+                     * if time out came up try again for get history with previous value
+                     */
                     if (majorCode == 5) {
-                        //TODO [Saeed Mozaffari] [2017-02-28 3:56 PM] - retry for get message after timeout
+                        if (direction.equals(UP.toString())) {
+                            getOnlineMessage(messageIdGetHistory, UP);
+                        } else {
+                            getOnlineMessage(messageIdGetHistory, DOWN);
+                        }
                     }
                 }
             });
@@ -6696,7 +6699,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             }
                         }
                     } else {
-                        final int index = progressIndex;
+                        //final int index = progressIndex;
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {

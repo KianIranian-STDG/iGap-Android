@@ -35,16 +35,18 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
 
         String[] identityParams = identity.split("\\*");
         final long roomId = Long.parseLong(identityParams[0]);
-        final long reachMessageId = Long.parseLong(identityParams[1]);
-        final String direction = identityParams[2];
+        final long reachMessageId = Long.parseLong(identityParams[2]);
+        final String direction = identityParams[3];
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 final Realm realm = Realm.getDefaultInstance();
                 final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
@@ -64,7 +66,8 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                                 if (!G.isAppInFg) {
                                     G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, roomId);
                                     G.handler.postDelayed(new Runnable() {
-                                        @Override public void run() {
+                                        @Override
+                                        public void run() {
                                             G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, roomId);
                                         }
                                     }, 200);
@@ -104,12 +107,13 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
     public void error() {
         super.error();
         String[] identityParams = identity.split("\\*");
-        final String direction = identityParams[2];
+        long messageIdGetHistory = Long.parseLong(identityParams[1]);
+        String direction = identityParams[2];
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         if (G.onClientGetRoomHistoryResponse != null) {
-            G.onClientGetRoomHistoryResponse.onGetRoomHistoryError(majorCode, minorCode, direction);
+            G.onClientGetRoomHistoryResponse.onGetRoomHistoryError(majorCode, minorCode, messageIdGetHistory, direction);
         }
     }
 }

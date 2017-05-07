@@ -128,8 +128,8 @@ public final class MessageLoader {
 
     //*********** get message from server
 
-    public static void getOnlineMessage(final long roomId, final long messageId, final long reachMessageId, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
-        new RequestClientGetRoomHistory().getRoomHistory(roomId, messageId, direction, Long.toString(roomId) + "*" + reachMessageId + "*" + direction);
+    public static void getOnlineMessage(final long roomId, final long messageIdGetHistory, final long reachMessageId, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
+        new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistory, direction, Long.toString(roomId) + "*" + messageIdGetHistory + "*" + reachMessageId + "*" + direction);
 
         G.onClientGetRoomHistoryResponse = new OnClientGetRoomHistoryResponse() {
             @Override
@@ -173,7 +173,7 @@ public final class MessageLoader {
                         /**
                          * clear before state gap for avoid compute this message for gap state again
                          */
-                        clearGap(roomId, messageId, finalMessageId, historyDirection, realm);
+                        clearGap(roomId, messageIdGetHistory, finalMessageId, historyDirection, realm);
 
                         /**
                          * if not reached to gap yet and exist reachMessageId
@@ -190,7 +190,7 @@ public final class MessageLoader {
             }
 
             @Override
-            public void onGetRoomHistoryError(int majorCode, int minorCode, final String direction) {
+            public void onGetRoomHistoryError(int majorCode, int minorCode, long messageIdGetHistory, final String direction) {
                 if (majorCode == 617) {
                     /**
                      * clear all gap state because not exist any more message
@@ -216,7 +216,7 @@ public final class MessageLoader {
                     //realm.close();
                 }
 
-                onMessageReceive.onError(majorCode, minorCode, direction);
+                onMessageReceive.onError(majorCode, minorCode, messageIdGetHistory, direction);
             }
         };
     }
