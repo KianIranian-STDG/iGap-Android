@@ -263,6 +263,8 @@ import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.MessageLoader.getLocalMessage;
 import static net.iGap.module.enums.ProgressState.HIDE;
 import static net.iGap.module.enums.ProgressState.SHOW;
+import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
+import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -1782,15 +1784,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         recyclerView.addOnScrollListener(scrollListener);
 
 
-                        recyclerView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mAdapter.add(new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
-                            }
-                        });
+                        //recyclerView.post(new Runnable() {
+                        //    @Override
+                        //    public void run() {
+                        //        mAdapter.add(new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                        //    }
+                        //});
                         /**
                          * get history from server
                          */
+                        resetMessagingValue();
+                        topMore = true;
                         getOnlineMessage(0, UP);
                     }
                 });
@@ -1897,7 +1901,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
                         linearLayout.scrollToPositionWithOffset(position, 0);
                     } else {
-                        resetMessagingValue(false);
+                        resetMessagingValue();
                         unreadCount = countNewMessage;
                         firstUnreadMessage = firstUnreadMessageInChat;
                         getLocalMessages();
@@ -1920,7 +1924,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                      * items and reload again from bottom
                      */
                     if (!addToView) {
-                        resetMessagingValue(true);
+                        resetMessagingValue();
                         getLocalMessages();
                     } else {
                         scrollToEnd();
@@ -6346,6 +6350,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 totalItemCount = (recyclerView.getLayoutManager()).getItemCount();
                 firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
+                //TODO [Saeed Mozaffari] [2017-05-07 10:28 AM] - check scroll to top and bottom
                 if (firstVisiblePosition < scrollEnd) {
                     /**
                      * scroll to top
@@ -6485,7 +6490,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     RealmResults<RealmRoomMessage> realmRoomMessages;
                     Sort sort;
                     ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction directionEnum;
-                    if (directionString.equals(ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP.toString())) {
+                    if (directionString.equals(UP.toString())) {
                         startFutureMessageId = startFutureMessageIdUp = startMessageId;
                         directionEnum = UP;
                         sort = Sort.DESCENDING;
@@ -6530,7 +6535,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                         structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
                     }
-                    if (directionString.equals(ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP.toString())) {
+                    if (directionString.equals(UP.toString())) {
                         switchAddItem(structMessageInfos, true);
                     } else {
                         switchAddItem(structMessageInfos, false);
@@ -6557,7 +6562,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     if (majorCode == 617) {
                         Log.i("MMM", "NOT History " + direction);
-                        if (direction.equals(ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP.toString())) {
+                        if (direction.equals(UP.toString())) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -6744,7 +6749,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void progressItem(final ProgressState progressState, final String direction) {
-        if (direction.equals(ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP.toString())) {
+        if (direction.equals(UP.toString())) {
             progressItem(progressState, UP);
         } else {
             progressItem(progressState, DOWN);
@@ -6754,15 +6759,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     /**
      * reset to default value for reload message again
      */
-    private void resetMessagingValue(boolean clearUnread) {
-
-        prgWaiting.setVisibility(View.VISIBLE);
-
+    private void resetMessagingValue() {
         clearAdapterItems();
 
-        if (clearUnread) {
-            unreadCount = 0;
-        }
+        prgWaiting.setVisibility(View.VISIBLE);
 
         addToView = true;
         topMore = false;
@@ -6780,6 +6780,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         firstVisiblePosition = 0;
         visibleItemCount = 0;
         totalItemCount = 0;
+        unreadCount = 0;
     }
 
 }

@@ -9,25 +9,25 @@
 */
 
 
-package com.iGap.module;
+package net.iGap.module;
 
-import com.iGap.G;
-import com.iGap.interfaces.OnClientGetRoomHistoryResponse;
-import com.iGap.interfaces.OnMessageReceive;
-import com.iGap.module.structs.StructMessageInfo;
-import com.iGap.proto.ProtoClientGetRoomHistory;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmRoomMessage;
-import com.iGap.realm.RealmRoomMessageFields;
-import com.iGap.request.RequestClientGetRoomHistory;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
+import net.iGap.G;
+import net.iGap.interfaces.OnClientGetRoomHistoryResponse;
+import net.iGap.interfaces.OnMessageReceive;
+import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.proto.ProtoClientGetRoomHistory;
+import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.request.RequestClientGetRoomHistory;
 
-import static com.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP;
+import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP;
 
 public final class MessageLoader {
 

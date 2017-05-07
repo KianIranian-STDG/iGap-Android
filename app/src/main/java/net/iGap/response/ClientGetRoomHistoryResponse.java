@@ -13,7 +13,6 @@ package net.iGap.response;
 import android.os.Handler;
 import android.os.Looper;
 import io.realm.Realm;
-import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.helper.HelperInfo;
 import net.iGap.proto.ProtoClientGetRoomHistory;
@@ -105,7 +104,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
     public void error() {
         super.error();
         String[] identityParams = identity.split("\\*");
-        final String direction = identityParams[1];
+        final String direction = identityParams[2];
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
