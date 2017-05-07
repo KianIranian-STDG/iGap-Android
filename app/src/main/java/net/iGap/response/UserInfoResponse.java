@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.activities.ActivityChat;
@@ -47,7 +48,7 @@ public class UserInfoResponse extends MessageHandler {
             @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
 
                         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId()).findFirst();
@@ -68,12 +69,8 @@ public class UserInfoResponse extends MessageHandler {
                         realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
                         RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar(), true);
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
-                        if (FragmentShowMember.infoUpdateListenerCount != null) {
-                            FragmentShowMember.infoUpdateListenerCount.complete(true, "", "");
-                        }
+
+                        Log.i("YYYYYYYYYYY", "execute: " + builder.getUser().getId() + "---- --- " + identity);
                     }
                 });
 
@@ -104,7 +101,9 @@ public class UserInfoResponse extends MessageHandler {
                         if (G.onUserInfoForAvatar != null) {
                             G.onUserInfoForAvatar.onUserInfoForAvatar(builder.getUser());
                         }
-
+                        if (FragmentShowMember.infoUpdateListenerCount != null) {
+                            FragmentShowMember.infoUpdateListenerCount.complete(true, "" + builder.getUser().getId(), "OK");
+                        }
 
                         // updata chat message header forward after get user or room info
                         if (AbstractMessage.updateForwardInfo != null) {
@@ -144,7 +143,11 @@ public class UserInfoResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         G.onUserInfoResponse.onUserInfoError(majorCode, minorCode);
-
+        Log.i("SSSSSSSSS", "000run: ");
+        if (FragmentShowMember.infoUpdateListenerCount != null) {
+            Log.i("SSSSSSSSS", "run: " + identity);
+            FragmentShowMember.infoUpdateListenerCount.complete(true, "", "ERROR");
+        }
         if (FragmentShowMember.infoUpdateListenerCount != null) {
             FragmentShowMember.infoUpdateListenerCount.complete(true, "", "");
         }

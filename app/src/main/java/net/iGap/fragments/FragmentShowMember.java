@@ -17,6 +17,8 @@ import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -42,7 +44,6 @@ import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityChannelProfile;
-import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityContactsProfile;
 import net.iGap.activities.ActivityGroupProfile;
 import net.iGap.activities.ActivitySetting;
@@ -61,6 +62,7 @@ import net.iGap.module.DeviceUtils;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.SUID;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.module.structs.StructMessageInfo;
@@ -102,12 +104,15 @@ public class FragmentShowMember extends Fragment {
     private int mMemberCount = 0;
     private int mCurrentUpdateCount = 0;
     public static List<StructMessageInfo> lists = new ArrayList<>();
-
+    List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> listMembers = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
+    private boolean isFirstFill = true;
     private int offset = 0;
-    private int limit = 50;
+    private int limit = 30;
     private FragmentActivity mActivity;
-    public static OnComplete infoUpdateListenerCount = null;
+    public static OnComplete infoUpdateListenerCount;
     private EndlessRecyclerViewScrollListener scrollListener;
+    private boolean isDeleteMemberList = true;
+
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
         Bundle bundle = new Bundle();
@@ -170,28 +175,52 @@ public class FragmentShowMember extends Fragment {
         }
     }
 
+    private RealmList<RealmMember> listAsli = new RealmList<>();
     private void getMemberList() {
-        mMemberCount = offset;
-
+        mMemberCount = listMembers.size();
         infoUpdateListenerCount = new OnComplete() {
-            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override public void complete(boolean result, final String messageOne, String MessageTow) {
 
-                try {
-                    mCurrentUpdateCount++;
-                    if (mCurrentUpdateCount >= mMemberCount) {
+                if (MessageTow.contains("OK")) {
+                    final RealmList<RealmMember> newMembers = new RealmList<>();
 
-                        mActivity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                fillAdapter();
-                                if (progressBar != null) {
-                                    progressBar.setVisibility(View.GONE);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override public void run() {
+
+                            final Realm realm = Realm.getDefaultInstance();
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override public void execute(Realm realm) {
+                                    for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : listMembers) {
+                                        if (Long.parseLong(messageOne) == member.getUserId()) {
+
+                                            mCurrentUpdateCount++;
+                                            Log.i("DDDDDDD", "eee: " + mCurrentUpdateCount);
+                                            RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
+                                            realmMem.setRole(member.getRole().toString());
+                                            realmMem.setPeerId(member.getUserId());
+                                            listAsli.add(0, realmMem);
+                                            break;
+                                        }
+                                    }
                                 }
-                            }
-                        });
-                        infoUpdateListenerCount = null;
-                    }
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
+                            }, new Realm.Transaction.OnSuccess() {
+                                @Override public void onSuccess() {
+                                    realm.close();
+                                    Log.i("DDDDDDD", "complete: " + mCurrentUpdateCount + " --- mMemberCount:  " + mMemberCount);
+
+                                    fillItem();
+                                }
+                            }, new Realm.Transaction.OnError() {
+                                @Override public void onError(Throwable error) {
+                                    realm.close();
+                                }
+                            });
+
+                            realm.close();
+                        }
+                    });
+                } else {
+                    mCurrentUpdateCount++;
                 }
             }
         };
@@ -200,17 +229,26 @@ public class FragmentShowMember extends Fragment {
             @Override public void onGroupGetMemberList(final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
 
                 mMemberCount = members.size();
-                Realm realm = Realm.getDefaultInstance();
-                for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
-                    final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, member.getUserId()).findFirst();
-                    if (realmRegisteredInfo == null) {
-                        new RequestUserInfo().userInfo(member.getUserId());
-                    } else {
-                        mActivity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                if (infoUpdateListenerCount != null) infoUpdateListenerCount.complete(true, "", "");
+                if (mMemberCount > 0) {
+                    if (mAdapter != null) mAdapter.addLoadMore();
+                    listMembers.clear();
+                    for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
+                        listMembers.add(member);
+                        new RequestUserInfo().userInfo(member.getUserId(), "" + member.getUserId());
+                    }
+                } else {
+                    G.handler.post(new Runnable() {
+                        @Override public void run() {
+                            if (mAdapter != null) mAdapter.removeLoadMore();
+                            if (progressBar != null) {
+                                progressBar.setVisibility(View.GONE);
                             }
-                        });
+                        }
+                    });
+                    isOne = true;
+                    if (isFirstFill) {
+                        fillAdapter();
+                        isFirstFill = false;
                     }
                 }
             }
@@ -233,7 +271,7 @@ public class FragmentShowMember extends Fragment {
                     } else {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override public void run() {
-                                if (infoUpdateListenerCount != null) infoUpdateListenerCount.complete(true, "", "");
+                                if (infoUpdateListenerCount != null) infoUpdateListenerCount.complete(true, "" + member.getUserId(), "");
                             }
                         });
                     }
@@ -274,6 +312,42 @@ public class FragmentShowMember extends Fragment {
                 }
             }
         });
+    }
+
+    private void fillItem() {
+
+        if (!isOne && mCurrentUpdateCount > 0) isOne = true;
+        if (mCurrentUpdateCount >= mMemberCount) {
+            try {
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override public void execute(Realm realm) {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+                        listAsli.addAll(0, realmRoom.getGroupRoom().getMembers());
+                        realmRoom.getGroupRoom().setMembers(listAsli);
+                        listAsli.clear();
+                    }
+                });
+                realm.close();
+
+                if (isFirstFill) {
+                    fillAdapter();
+                    isFirstFill = false;
+                }
+
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+
+                        if (mAdapter != null) mAdapter.removeLoadMore();
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override public void onDestroy() {
@@ -329,25 +403,23 @@ public class FragmentShowMember extends Fragment {
         mRecyclerView.getRecycleView().addOnScrollListener(scrollListener);
     }
 
+    private boolean isOne = true;
     private void loadMoreMember(int page, int totalItemsCount, RecyclerView view) {
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
-                mCurrentUpdateCount = 0;
-                limit = 50;
-                RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
-
-                if (realmRoom != null) {
-                    if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                        offset = realmRoom.getGroupRoom().getMembers().size();
-                        new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit);
-                    } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                        offset = realmRoom.getChannelRoom().getMembers().size();
-                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit);
-                    }
+        if (isOne) {
+            isOne = false;
+            mCurrentUpdateCount = 0;
+            offset += limit;
+            limit = 30;
+            RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+            if (realmRoom != null) {
+                if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                    new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit);
+                } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                    new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit);
                 }
             }
-        });
+        }
     }
 
     private void fillAdapter() {
@@ -359,8 +431,6 @@ public class FragmentShowMember extends Fragment {
 
             if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
                 memberList = realmRoom.getGroupRoom().getMembers();
-                Log.i("AAAAAAAAAAA", "fillAdapter memberList: " + memberList);
-
                 role = realmRoom.getGroupRoom().getRole().toString();
             } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                 memberList = realmRoom.getChannelRoom().getMembers();
@@ -376,8 +446,8 @@ public class FragmentShowMember extends Fragment {
                     mList = memberList.where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll();
                 }
 
-                if (mList.size() > 0 && getActivity() != null) {
-                    mAdapter = new MemberAdapter(getActivity(), mList, realmRoom.getType(), mMainRole, userID);
+                if (mList.size() > 0 && mActivity != null) {
+                    mAdapter = new MemberAdapter(mActivity, mList, realmRoom.getType(), mMainRole, userID);
                     mRecyclerView.setAdapter(mAdapter);
                 }
             } else {
@@ -457,8 +527,8 @@ public class FragmentShowMember extends Fragment {
                                     intent.putExtra("enterFrom", ProtoGlobal.Room.Type.GROUP.toString());
                                 }
 
-                                getActivity().finish();
-                                if (ActivityChat.activityChat != null) ActivityChat.activityChat.finish();
+                                //getActivity().finish();
+                                //if (ActivityChat.activityChat != null) ActivityChat.activityChat.finish();
 
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
