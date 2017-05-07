@@ -1337,6 +1337,24 @@ public class ActivityMain extends ActivityEnhanced
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
 
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                if (room != null && realmRoomMessage != null) {
+                    /**
+                     * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                     */
+                    if (room.getUnreadCount() <= 1) {
+                        realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
+                        room.setFirstUnreadMessage(realmRoomMessage);
+                    }
+                }
+            }
+        });
+
+
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager()).findFirstVisibleItemPosition();
