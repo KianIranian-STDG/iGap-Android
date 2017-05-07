@@ -71,7 +71,7 @@ public class ActivityEnhanced extends AppCompatActivity {
              * if user isn't login and page come in foreground try for reconnect
              */
             if (!G.userLogin) {
-                WebSocketClient.reconnect(false);
+                WebSocketClient.reconnect(true);
             }
         } else {
             G.isChangeScrFg = true;

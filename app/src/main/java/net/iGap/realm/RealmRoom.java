@@ -38,6 +38,7 @@ public class RealmRoom extends RealmObject {
     private RealmGroupRoom groupRoom;
     private RealmChannelRoom channelRoom;
     private RealmRoomMessage lastMessage;
+    private RealmRoomMessage firstUnreadMessage;
     private RealmRoomDraft draft;
     private long updatedTime;
     private String sharedMediaCount = "";
@@ -95,6 +96,14 @@ public class RealmRoom extends RealmObject {
 
     public void setLastScrollPositionMessageId(long lastScrollPositionMessageId) {
         this.lastScrollPositionMessageId = lastScrollPositionMessageId;
+    }
+
+    public RealmRoomMessage getFirstUnreadMessage() {
+        return firstUnreadMessage;
+    }
+
+    public void setFirstUnreadMessage(RealmRoomMessage firstUnreadMessage) {
+        this.firstUnreadMessage = firstUnreadMessage;
     }
 
     public RealmRoomMessage getLastMessage() {
@@ -181,7 +190,28 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getGroupRoom().setPrivate(room.getGroupRoomExtra().hasPrivateExtra());
                 break;
         }
-        realmRoom.setLastMessage(RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId()));
+
+        /**
+         * set setFirstUnreadMessage
+         */
+        if (room.hasFirstUnreadMessage()) {
+            RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(room.getFirstUnreadMessage(), room.getId());
+            //realmRoomMessage.setPreviousMessageId(room.getFirstUnreadMessage().getMessageId());
+            realmRoomMessage.setFutureMessageId(room.getFirstUnreadMessage().getMessageId());
+            realmRoom.setFirstUnreadMessage(realmRoomMessage);
+        }
+
+        if (room.hasLastMessage()) {
+            RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId());
+            //realmRoomMessage.setPreviousMessageId(room.getFirstUnreadMessage().getMessageId());
+            realmRoomMessage.setFutureMessageId(room.getLastMessage().getMessageId());
+            realmRoom.setLastMessage(realmRoomMessage);
+            if (room.getLastMessage().getUpdateTime() == 0) {
+                realmRoom.setUpdatedTime(room.getLastMessage().getCreateTime());
+            } else {
+                realmRoom.setUpdatedTime(room.getLastMessage().getUpdateTime());
+            }
+        }
 
         RealmRoomDraft realmRoomDraft = realmRoom.getDraft();
         if (realmRoomDraft == null) {
@@ -215,7 +245,8 @@ public class RealmRoom extends RealmObject {
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
 
                         if (deleteBefore) {
                             RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
@@ -241,12 +272,14 @@ public class RealmRoom extends RealmObject {
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
+                    @Override
+                    public void onSuccess() {
 
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
-                    @Override public void onError(Throwable error) {
+                    @Override
+                    public void onError(Throwable error) {
                         realm.close();
                     }
                 });
@@ -264,7 +297,8 @@ public class RealmRoom extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null) {
                     RealmRoomDraft realmRoomDraft = realm.createObject(RealmRoomDraft.class);
@@ -291,7 +325,8 @@ public class RealmRoom extends RealmObject {
     public static void createEmptyRoom(final long roomId) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom == null) {
                     realmRoom = realm.createObject(RealmRoom.class, roomId);
@@ -355,7 +390,8 @@ public class RealmRoom extends RealmObject {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
 
                     if (type == ProtoGlobal.Room.Type.GROUP) {
                         GroupChatRole mRole;

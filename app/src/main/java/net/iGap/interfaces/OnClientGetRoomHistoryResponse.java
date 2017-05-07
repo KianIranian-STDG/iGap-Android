@@ -11,7 +11,7 @@
 package net.iGap.interfaces;
 
 public interface OnClientGetRoomHistoryResponse {
-    void onGetRoomHistory(long roomId, long startMessageId, long endMessageId);
+    void onGetRoomHistory(long roomId, long startMessageId, long endMessageId, long reachMessageId, String direction);
 
-    void onGetRoomHistoryError(int majorCode, int minorCode);
+    void onGetRoomHistoryError(int majorCode, int minorCode, String direction);
 }
