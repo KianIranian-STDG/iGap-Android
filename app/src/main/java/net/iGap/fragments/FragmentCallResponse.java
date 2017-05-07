@@ -1,4 +1,4 @@
-package com.iGap.fragments;
+package net.iGap.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.iGap.G;
-import com.iGap.R;
-import com.iGap.helper.HelperPublicMethod;
-import com.iGap.module.MaterialDesignTextView;
 import com.wang.avi.AVLoadingIndicatorView;
+import net.iGap.G;
+import net.iGap.R;
+import net.iGap.helper.HelperPublicMethod;
+import net.iGap.module.MaterialDesignTextView;
 
 /**
  * Created by android3 on 4/18/2017.

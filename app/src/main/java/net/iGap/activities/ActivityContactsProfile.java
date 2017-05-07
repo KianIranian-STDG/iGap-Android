@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentNotification;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperAvatar;

@@ -1,4 +1,4 @@
-package com.iGap.fragments;
+package net.iGap.fragments;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -13,14 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.iGap.G;
-import com.iGap.R;
-import com.iGap.helper.HelperPublicMethod;
-import com.iGap.libs.rippleeffect.RippleView;
-import com.iGap.module.CircleImageView;
-import com.iGap.module.MaterialDesignTextView;
 import java.io.IOException;
 import java.util.ArrayList;
+import net.iGap.G;
+import net.iGap.R;
+import net.iGap.helper.HelperPublicMethod;
+import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.CircleImageView;
+import net.iGap.module.MaterialDesignTextView;
 
 /**
  * Created by android3 on 4/18/2017.

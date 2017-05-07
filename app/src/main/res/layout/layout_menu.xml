@@ -332,7 +332,7 @@
               style="@style/NavigationDrawer.Item"
               >
 
-            <com.iGap.module.MaterialDesignTextView
+            <net.iGap.module.MaterialDesignTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"

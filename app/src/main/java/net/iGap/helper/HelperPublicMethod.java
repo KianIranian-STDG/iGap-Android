@@ -1,19 +1,21 @@
-package com.iGap.helper;
+package net.iGap.helper;
 
 import android.content.Intent;
-import com.iGap.G;
-import com.iGap.activities.ActivityChat;
-import com.iGap.interfaces.OnChatGetRoom;
-import com.iGap.interfaces.OnUserInfoResponse;
-import com.iGap.proto.ProtoGlobal;
-import com.iGap.realm.RealmAvatar;
-import com.iGap.realm.RealmRegisteredInfo;
-import com.iGap.realm.RealmRegisteredInfoFields;
-import com.iGap.realm.RealmRoom;
-import com.iGap.realm.RealmRoomFields;
-import com.iGap.request.RequestChatGetRoom;
-import com.iGap.request.RequestUserInfo;
+import android.os.Handler;
+import android.os.Looper;
 import io.realm.Realm;
+import net.iGap.G;
+import net.iGap.activities.ActivityChat;
+import net.iGap.interfaces.OnChatGetRoom;
+import net.iGap.interfaces.OnUserInfoResponse;
+import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAvatar;
+import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomFields;
+import net.iGap.request.RequestChatGetRoom;
+import net.iGap.request.RequestUserInfo;
 
 /**
  * Created by android3 on 4/18/2017.
@@ -52,6 +54,8 @@ public class HelperPublicMethod {
                     }
 
                     getUserInfo(peerId, roomId, oncomplet, onError);
+
+                    G.onChatGetRoom = null;
                 }
 
                 @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
@@ -83,7 +87,7 @@ public class HelperPublicMethod {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
-                G.handler.post(new Runnable() {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override public void run() {
 
                         if (user.getId() == peerId) {
@@ -119,6 +123,9 @@ public class HelperPublicMethod {
                                         }
 
                                         goToRoom(roomId, peerId);
+
+                                        G.onUserInfoResponse = null;
+
                                     } catch (IllegalStateException e) {
                                         e.printStackTrace();
                                     }

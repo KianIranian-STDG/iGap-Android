@@ -68,6 +68,7 @@ import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.emoji.EmojiTextView;
 import net.iGap.fragments.ContactGroupFragment;
+import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentNewGroup;
