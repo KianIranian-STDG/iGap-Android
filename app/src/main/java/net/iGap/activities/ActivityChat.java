@@ -6191,6 +6191,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 fetchMessageId = getSavedState();
 
                 if (hasUnread()) {
+                    if (firstUnreadMessage == null) {
+                        resetMessagingValue();
+                        getMessages();
+                        return;
+                    }
                     countNewMessage = unreadCount;
                     txtNewUnreadMessage.setVisibility(View.VISIBLE);
                     txtNewUnreadMessage.setText(countNewMessage + "");
@@ -6199,6 +6204,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     firstUnreadMessageInChat = firstUnreadMessage;
                 }
             } else {
+                if (firstUnreadMessage == null) {
+                    resetMessagingValue();
+                    getMessages();
+                    return;
+                }
                 unreadLayoutMessage();
                 fetchMessageId = firstUnreadMessage.getMessageId();
             }
