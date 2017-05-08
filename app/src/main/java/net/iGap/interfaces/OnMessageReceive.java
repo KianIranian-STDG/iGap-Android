@@ -15,7 +15,7 @@ public interface OnMessageReceive {
     /**
      * message that reached from server
      */
-    void onMessage(long roomId, long startMessageId, long endMessageId, boolean gapReached, String direction);
+    void onMessage(long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, String direction);
 
     void onError(int majorCode, int minorCode, long messageIdGetHistory, String direction);
 

@@ -27,6 +27,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientGetRoomHistory;
 
+import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP;
 
 public final class MessageLoader {
@@ -140,35 +141,44 @@ public final class MessageLoader {
                  */
 
                 boolean gapReached = false;
+                boolean jumpOverLocal = false;
 
                 if (UP.toString().equals(historyDirection)) {
-                    if (reachMessageId >= startMessageId) {
+                    if (startMessageId <= reachMessageId) {
                         gapReached = true;
+                        /**
+                         * if gapReached now check that future gap is reached or no. if future gap reached this means
+                         * that with get this history , client jumped from local messages and now is in another gap
+                         */
+                        if (startMessageId <= (long) gapExist(roomId, reachMessageId, convertDirection(historyDirection))[0]) {
+                            jumpOverLocal = true;
+                        }
                     }
                 } else {
-                    if (reachMessageId <= endMessageId) {
+                    if (endMessageId >= reachMessageId) {
                         gapReached = true;
+                        /**
+                         * if gapReached now check that future gap is reached or no. if future gap reached this means
+                         * that with get this history , client jumped from local messages and now is in another gap
+                         */
+                        if (endMessageId >= (long) gapExist(roomId, reachMessageId, convertDirection(historyDirection))[0]) {
+                            jumpOverLocal = true;
+                        }
                     }
                 }
 
                 final boolean gapReachedFinal = gapReached;
+                final boolean jumpFromLocalFinal = jumpOverLocal;
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         long finalMessageId;
-                        boolean finalMessageGap;
                         if (UP.toString().equals(historyDirection)) {
                             finalMessageId = startMessageId;
                         } else {
                             finalMessageId = endMessageId;
                         }
-
-                        /**
-                         * if latest message that client get from server is a gap step (Up or Down gap)
-                         * we should set gap again to this message after clear it
-                         */
-                        // finalMessageGap = isGap(realm, finalMessageId, historyDirection);
 
                         /**
                          * clear before state gap for avoid compute this message for gap state again
@@ -179,14 +189,14 @@ public final class MessageLoader {
                          * if not reached to gap yet and exist reachMessageId
                          * set new gap state for compute message for gap
                          */
-                        if ((!gapReachedFinal && reachMessageId > 0)) {//finalMessageGap ||
+                        if (jumpFromLocalFinal || (!gapReachedFinal && reachMessageId > 0)) {
                             setGap(finalMessageId, historyDirection, realm);
                         }
                     }
                 });
                 realm.close();
 
-                onMessageReceive.onMessage(roomId, startMessageId, endMessageId, gapReached, historyDirection);
+                onMessageReceive.onMessage(roomId, startMessageId, endMessageId, gapReached, jumpOverLocal, historyDirection);
             }
 
             @Override
@@ -287,12 +297,12 @@ public final class MessageLoader {
          */
         if (gapMessageId > 0) {
             if (direction == UP) {
-                RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery = realm.where(RealmRoomMessage.class).lessThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId());
+                RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery = realm.where(RealmRoomMessage.class).lessThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).equalTo(RealmRoomMessageFields.PREVIOUS_MESSAGE_ID, 0);
                 if (realmRoomMessageRealmQuery != null && realmRoomMessageRealmQuery.max(RealmRoomMessageFields.MESSAGE_ID) != null) {
                     reachMessageId = (long) realmRoomMessageRealmQuery.max(RealmRoomMessageFields.MESSAGE_ID);
                 }
             } else {
-                RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery = realm.where(RealmRoomMessage.class).greaterThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId());
+                RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery = realm.where(RealmRoomMessage.class).greaterThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).equalTo(RealmRoomMessageFields.FUTURE_MESSAGE_ID, 0);
                 if (realmRoomMessageRealmQuery != null && realmRoomMessageRealmQuery.min(RealmRoomMessageFields.MESSAGE_ID) != null) {
                     reachMessageId = (long) realmRoomMessageRealmQuery.min(RealmRoomMessageFields.MESSAGE_ID);
                 }
@@ -394,5 +404,16 @@ public final class MessageLoader {
                 G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, realmRoomMessage.getMessageId(), status);
             }
         }
+    }
+
+
+    /**
+     * change direction string to ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction
+     */
+    public static ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction convertDirection(String direction) {
+        if (direction.equals(UP.toString())) {
+            return UP;
+        }
+        return DOWN;
     }
 }

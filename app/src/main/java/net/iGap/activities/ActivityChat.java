@@ -405,10 +405,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private long chatPeerId;
     private long userTime;
     private long messageId;
+    private long savedScrollMessageId;
     public long mRoomId = 0;
     public static long mRoomIdStatic = 0;
 
-    private int scrollPosition = 0;
     private int countNewMessage = 0;
     private int lastPosition = 0;
     private int unreadCount = 0;
@@ -1229,6 +1229,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 isChatReadOnly = realmRoom.getReadOnly();
                 unreadCount = realmRoom.getUnreadCount();
                 firstUnreadMessage = realmRoom.getFirstUnreadMessage();
+                savedScrollMessageId = realmRoom.getLastScrollPositionMessageId();
 
                 if (isChatReadOnly) {
                     viewAttachFile.setVisibility(View.GONE);
@@ -1283,13 +1284,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         //getUserInfo();
         checkAction();
         insertShearedData();
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                scrollToLastPositionMessageId();
-            }
-        }, 300);
 
         G.onChatSendMessage = new OnChatSendMessage() {
             @Override
@@ -1782,13 +1776,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         recyclerView.addOnScrollListener(scrollListener);
 
-
-                        //recyclerView.post(new Runnable() {
-                        //    @Override
-                        //    public void run() {
-                        //        mAdapter.add(new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
-                        //    }
-                        //});
+                        saveMessageIdPositionState(0);
                         /**
                          * get history from server
                          */
@@ -3344,6 +3332,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      */
     public void clearHistory(long chatId) {
         llScrollNavigate.setVisibility(View.GONE);
+        saveMessageIdPositionState(0);
         clearHistoryMessage(chatId);
     }
 
@@ -4033,19 +4022,29 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 final RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
-                    final long final_lastScrolledMessageID = lastScrolledMessageID;
-                    mRealm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            //realmRoom.setLastScrollPositionMessageId(final_lastScrolledMessageID);
-                        }
-                    });
+                    saveMessageIdPositionState(lastScrolledMessageID);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * save latest messageId position that user saw in chat before close it
+     */
+    private void saveMessageIdPositionState(final long position) {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                if (realmRoom != null) {
+                    realmRoom.setLastScrollPositionMessageId(position);
+                }
+            }
+        });
+    }
+
 
     /**
      * get images for show in bottom sheet
@@ -4697,44 +4696,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         });
     }
 
-    private void addLayoutUnreadMessage() {
-
-        int unreadPosition = 0;
-        int timeLayoutCount = 0;
-
-        for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-            try {
-                if ((mAdapter.getAdapterItem(i) instanceof TimeItem)) {
-                    if (i > 0) timeLayoutCount++;
-                    continue;
-                }
-
-                if (mAdapter.getAdapterItem(i).mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) || mAdapter.getAdapterItem(i).mMessage.isSenderMe() || mAdapter.getAdapterItem(i).mMessage.isAuthorMe()) {
-                    unreadPosition = i;
-                    break;
-                }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
-
-        int unreadMessageCount = mAdapter.getAdapterItemCount() - 1 - unreadPosition - timeLayoutCount;
-
-        scrollPosition = unreadMessageCount;
-
-        if (unreadMessageCount > 0) {
-            RealmRoomMessage unreadMessage = new RealmRoomMessage();
-            unreadMessage.setMessageId(TimeUtils.currentLocalTime());
-            // -1 means time message
-            unreadMessage.setUserId(-1);
-            unreadMessage.setMessage(unreadMessageCount + " " + getString(R.string.unread_message));
-            unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-            mAdapter.add(unreadPosition + 1, new UnreadMessage(this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
-
-            LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
-            llm.scrollToPositionWithOffset(unreadPosition + 1, 0);
-        }
-    }
 
     /**
      * initialize bottomSheet for use in attachment
@@ -6219,17 +6180,32 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         RealmResults<RealmRoomMessage> results;
         RealmResults<RealmRoomMessage> resultsDown = null;
         RealmResults<RealmRoomMessage> resultsUp = null;
-        if (hasUnread()) {
+        long fetchMessageId = 0; // with this value realm will be queried for get message
+        if (hasUnread() || hasSavedState()) {
 
             /**
              * show unread layout and also set firstUnreadMessageId in startFutureMessageIdUp
              * for try load top message and also topMore default value is true for this target
              */
-            unreadLayoutMessage();
-            startFutureMessageIdUp = firstUnreadMessage.getMessageId();
+            if (hasSavedState()) {
+                fetchMessageId = getSavedState();
+
+                if (hasUnread()) {
+                    countNewMessage = unreadCount;
+                    txtNewUnreadMessage.setVisibility(View.VISIBLE);
+                    txtNewUnreadMessage.setText(countNewMessage + "");
+                    llScrollNavigate.setVisibility(View.VISIBLE);
+                    //unreadLayoutMessage();
+                    firstUnreadMessageInChat = firstUnreadMessage;
+                }
+            } else {
+                unreadLayoutMessage();
+                fetchMessageId = firstUnreadMessage.getMessageId();
+            }
+            startFutureMessageIdUp = fetchMessageId;
 
             // we have firstUnreadMessage but for gapDetection method we need RealmResult so get this message with query; if we change gap detection method will be can use from firstUnreadMessage
-            resultsDown = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, firstUnreadMessage.getMessageId()).findAll();
+            resultsDown = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findAll();
 
             addToView = false;
             direction = DOWN;
@@ -6243,13 +6219,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         long gapMessageId;
         if (direction == DOWN) {
-            resultsUp = realm.where(RealmRoomMessage.class)
-                    .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-                    .lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, firstUnreadMessage.getMessageId())
-                    .notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0)
-                    .equalTo(RealmRoomMessageFields.DELETED, false)
-                    .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-                    .findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+            resultsUp = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
@@ -6257,7 +6227,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             if (resultsUp.size() > 1) {
                 gapDetection(resultsUp, UP);
             } else {
-                getOnlineMessage(firstUnreadMessage.getMessageId(), UP);
+                getOnlineMessage(fetchMessageId, UP);
             }
 
             results = resultsDown;
@@ -6332,6 +6302,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             switchAddItem(messageInfos, true);
         } else {
             switchAddItem(messageInfos, false);
+            if (hasSavedState()) { //TODO [Saeed Mozaffari] [2017-05-02 6:48 PM] - how keep state after add item to recycler view for avoid from find item position and scroll to position again
+                int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
+                LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                linearLayout.scrollToPositionWithOffset(position, 0);
+                savedScrollMessageId = 0;
+            }
         }
 
         /**
@@ -6470,7 +6446,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             MessageLoader.getOnlineMessage(mRoomId, oldMessageId, reachMessageId, direction, new OnMessageReceive() {
                 @Override
-                public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached, String directionString) {
+                public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, String directionString) {
                     if (roomId != mRoomId) {
                         return;
                     }
@@ -6501,12 +6477,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
 
                     /**
-                     * when reached to gap set gapMessageIdUp = 0 , do this action
-                     * means that gap not exist (need this value for future get message)
-                     * set topMore/bottomMore true for allow that get message from
-                     * local after that gap reached
+                     * when reached to gap and not jumped over local, set gapMessageIdUp = 0; do this action
+                     * means that gap not exist (need this value for future get message) set topMore/bottomMore
+                     * local after that gap reached true for allow that get message from
                      */
-                    if (gapReached) {
+                    if (gapReached && !jumpOverLocal) {
                         if (directionEnum == UP) {
                             gapMessageIdUp = 0;
                             reachMessageIdUp = 0;
@@ -6621,13 +6596,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void unreadLayoutMessage() {
         int unreadMessageCount = unreadCount;
         if (unreadMessageCount > 0) {
+            //int position = mAdapter.findPositionByMessageId(realmRoomMessage.getMessageId());
+            //if (position != -1) {
             RealmRoomMessage unreadMessage = new RealmRoomMessage();
             unreadMessage.setMessageId(TimeUtils.currentLocalTime());
             // -1 means time message
             unreadMessage.setUserId(-1);
             unreadMessage.setMessage(unreadMessageCount + " " + getString(R.string.unread_message));
             unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-            mAdapter.add(0, new UnreadMessage(this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
+            mAdapter.add(0, new UnreadMessage(ActivityChat.this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
+            //}
         }
     }
 
@@ -6636,6 +6614,20 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      */
     private boolean hasUnread() {
         return unreadCount > 0;
+    }
+
+    /**
+     * check that this room has saved state or no
+     */
+    private boolean hasSavedState() {
+        return savedScrollMessageId > 0;
+    }
+
+    /**
+     * return saved scroll messageId
+     */
+    private long getSavedState() {
+        return savedScrollMessageId;
     }
 
     /**

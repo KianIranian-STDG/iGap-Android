@@ -108,7 +108,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
         super.error();
         String[] identityParams = identity.split("\\*");
         long messageIdGetHistory = Long.parseLong(identityParams[1]);
-        String direction = identityParams[2];
+        String direction = identityParams[3];
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

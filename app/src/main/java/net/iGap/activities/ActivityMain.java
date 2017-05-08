@@ -1337,7 +1337,8 @@ public class ActivityMain extends ActivityEnhanced
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
 
-        mRealm.executeTransaction(new Realm.Transaction() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -1353,6 +1354,7 @@ public class ActivityMain extends ActivityEnhanced
                 }
             }
         });
+        realm.close();
 
 
         runOnUiThread(new Runnable() {
