@@ -168,7 +168,7 @@ public final class MessageLoader {
                 }
 
                 final boolean gapReachedFinal = gapReached;
-                final boolean jumpFromLocalFinal = jumpOverLocal;
+                final boolean jumpOverLocalFinal = jumpOverLocal;
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
@@ -189,7 +189,7 @@ public final class MessageLoader {
                          * if not reached to gap yet and exist reachMessageId
                          * set new gap state for compute message for gap
                          */
-                        if (jumpFromLocalFinal || (!gapReachedFinal && reachMessageId > 0)) {
+                        if (jumpOverLocalFinal || (!gapReachedFinal && reachMessageId > 0)) {
                             setGap(finalMessageId, historyDirection, realm);
                         }
                     }
@@ -301,10 +301,25 @@ public final class MessageLoader {
                 if (realmRoomMessageRealmQuery != null && realmRoomMessageRealmQuery.max(RealmRoomMessageFields.MESSAGE_ID) != null) {
                     reachMessageId = (long) realmRoomMessageRealmQuery.max(RealmRoomMessageFields.MESSAGE_ID);
                 }
+
+                if (reachMessageId == 0) {
+                    RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery1 = realm.where(RealmRoomMessage.class).lessThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId());
+                    if (realmRoomMessageRealmQuery1 != null && realmRoomMessageRealmQuery1.max(RealmRoomMessageFields.MESSAGE_ID) != null) {
+                        reachMessageId = (long) realmRoomMessageRealmQuery1.max(RealmRoomMessageFields.MESSAGE_ID);
+                    }
+                }
+
             } else {
                 RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery = realm.where(RealmRoomMessage.class).greaterThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).equalTo(RealmRoomMessageFields.FUTURE_MESSAGE_ID, 0);
                 if (realmRoomMessageRealmQuery != null && realmRoomMessageRealmQuery.min(RealmRoomMessageFields.MESSAGE_ID) != null) {
                     reachMessageId = (long) realmRoomMessageRealmQuery.min(RealmRoomMessageFields.MESSAGE_ID);
+                }
+
+                if (reachMessageId == 0) {
+                    RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery1 = realm.where(RealmRoomMessage.class).greaterThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId());
+                    if (realmRoomMessageRealmQuery1 != null && realmRoomMessageRealmQuery1.min(RealmRoomMessageFields.MESSAGE_ID) != null) {
+                        reachMessageId = (long) realmRoomMessageRealmQuery1.min(RealmRoomMessageFields.MESSAGE_ID);
+                    }
                 }
             }
         }

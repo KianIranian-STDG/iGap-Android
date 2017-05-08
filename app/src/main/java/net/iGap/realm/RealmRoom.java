@@ -203,7 +203,7 @@ public class RealmRoom extends RealmObject {
 
         if (room.hasLastMessage()) {
             RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId());
-            //realmRoomMessage.setPreviousMessageId(room.getFirstUnreadMessage().getMessageId());
+            realmRoomMessage.setPreviousMessageId(room.getLastMessage().getMessageId());
             realmRoomMessage.setFutureMessageId(room.getLastMessage().getMessageId());
             realmRoom.setLastMessage(realmRoomMessage);
             if (room.getLastMessage().getUpdateTime() == 0) {

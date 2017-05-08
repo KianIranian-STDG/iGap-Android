@@ -2862,7 +2862,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
          * if in current room client have new message that not seen yet
          * after first new message come in the view change view for unread count
          */
-        if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.getMessageId() == Long.parseLong(messageInfo.messageID)) {
+        if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == Long.parseLong(messageInfo.messageID)) {
             countNewMessage = 0;
             txtNewUnreadMessage.setVisibility(View.GONE);
             txtNewUnreadMessage.setText(countNewMessage + "");
@@ -6507,7 +6507,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         /**
                          * check this state because if user is near to top view and not scroll get top message from server
                          */
-                        getOnlineMessage(startFutureMessageId, directionEnum);
+                        //getOnlineMessage(startFutureMessageId, directionEnum);
                     }
 
                     final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();

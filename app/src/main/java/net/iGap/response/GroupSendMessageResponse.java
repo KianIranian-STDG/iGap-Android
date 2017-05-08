@@ -29,18 +29,21 @@ public class GroupSendMessageResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
         final ProtoGroupSendMessage.GroupSendMessageResponse.Builder builder = (ProtoGroupSendMessage.GroupSendMessageResponse.Builder) message;
         HelperMessageResponse.handleMessage(builder.getRoomId(), builder.getRoomMessage(), builder.getResponse(), this.identity);
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
         makeFailed(Long.parseLong(identity));
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 }
