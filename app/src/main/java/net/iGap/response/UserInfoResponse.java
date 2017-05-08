@@ -12,7 +12,6 @@ package net.iGap.response;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.activities.ActivityChat;
@@ -69,8 +68,6 @@ public class UserInfoResponse extends MessageHandler {
                         realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
                         RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar(), true);
-
-                        Log.i("YYYYYYYYYYY", "execute: " + builder.getUser().getId() + "---- --- " + identity);
                     }
                 });
 
@@ -143,9 +140,7 @@ public class UserInfoResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         G.onUserInfoResponse.onUserInfoError(majorCode, minorCode);
-        Log.i("SSSSSSSSS", "000run: ");
         if (FragmentShowMember.infoUpdateListenerCount != null) {
-            Log.i("SSSSSSSSS", "run: " + identity);
             FragmentShowMember.infoUpdateListenerCount.complete(true, "", "ERROR");
         }
         if (FragmentShowMember.infoUpdateListenerCount != null) {

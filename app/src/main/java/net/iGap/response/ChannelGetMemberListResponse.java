@@ -35,11 +35,7 @@ public class ChannelGetMemberListResponse extends MessageHandler {
 
         RealmMember.convertProtoMemberListToRealmMember(builder, identity);
         if (G.onChannelGetMemberList != null) {
-            G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
-                    G.onChannelGetMemberList.onChannelGetMemberList(builder.getMemberList());
-                }
-            }, 500);
+            G.onChannelGetMemberList.onChannelGetMemberList(builder.getMemberList());
         }
     }
 
