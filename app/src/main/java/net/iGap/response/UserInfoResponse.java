@@ -47,7 +47,7 @@ public class UserInfoResponse extends MessageHandler {
             @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
 
                         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId()).findFirst();
@@ -68,12 +68,6 @@ public class UserInfoResponse extends MessageHandler {
                         realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
 
                         RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar(), true);
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
-                        if (FragmentShowMember.infoUpdateListenerCount != null) {
-                            FragmentShowMember.infoUpdateListenerCount.complete(true, "", "");
-                        }
                     }
                 });
 
@@ -104,7 +98,9 @@ public class UserInfoResponse extends MessageHandler {
                         if (G.onUserInfoForAvatar != null) {
                             G.onUserInfoForAvatar.onUserInfoForAvatar(builder.getUser());
                         }
-
+                        if (FragmentShowMember.infoUpdateListenerCount != null) {
+                            FragmentShowMember.infoUpdateListenerCount.complete(true, "" + builder.getUser().getId(), "OK");
+                        }
 
                         // updata chat message header forward after get user or room info
                         if (AbstractMessage.updateForwardInfo != null) {
@@ -144,7 +140,9 @@ public class UserInfoResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         G.onUserInfoResponse.onUserInfoError(majorCode, minorCode);
-
+        if (FragmentShowMember.infoUpdateListenerCount != null) {
+            FragmentShowMember.infoUpdateListenerCount.complete(true, "", "ERROR");
+        }
         if (FragmentShowMember.infoUpdateListenerCount != null) {
             FragmentShowMember.infoUpdateListenerCount.complete(true, "", "");
         }

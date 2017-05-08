@@ -14,10 +14,14 @@ import android.os.Handler;
 import android.os.Looper;
 import io.realm.Realm;
 import io.realm.RealmList;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.module.SUID;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmMember;
+import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 
@@ -45,7 +49,7 @@ public class GroupGetMemberListResponse extends MessageHandler {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
-
+                final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
 
@@ -54,23 +58,29 @@ public class GroupGetMemberListResponse extends MessageHandler {
 
                             //   realmRoom.getGroupRoom().setParticipantsCountLabel(builder.getMemberCount() + "");
 
-                            int i = 0;
-                            newMembers.addAll(realmRoom.getGroupRoom().getMembers());
+                            members.clear();
+                            newMembers.clear();
                             for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : builder.getMemberList()) {
-                                i += 1;
-                                RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
-                                realmMem.setRole(member.getRole().toString());
-                                realmMem.setPeerId(member.getUserId());
-                                newMembers.add(realmMem);
+
+                                final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, member.getUserId()).findFirst();
+                                if (realmRegisteredInfo != null) {
+                                    RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
+                                    realmMem.setRole(member.getRole().toString());
+                                    realmMem.setPeerId(member.getUserId());
+                                    newMembers.add(realmMem);
+                                } else {
+                                    members.add(member);
+                                }
                             }
 
+                            newMembers.addAll(0, realmRoom.getGroupRoom().getMembers());
                             realmRoom.getGroupRoom().setMembers(newMembers);
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {
                     @Override public void onSuccess() {
                         realm.close();
-                        if (G.onGroupGetMemberList != null) G.onGroupGetMemberList.onGroupGetMemberList(builder.getMemberList());
+                        if (G.onGroupGetMemberList != null) G.onGroupGetMemberList.onGroupGetMemberList(members);
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override public void onError(Throwable error) {

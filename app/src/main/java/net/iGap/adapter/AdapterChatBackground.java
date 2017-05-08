@@ -47,7 +47,8 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         this.mList = List;
     }
 
-    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == CHOOSE) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_choose, parent, false);
@@ -58,46 +59,54 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
         if (holder.getItemViewType() == ALL) {
 
             final ViewHolderItem holder2 = (ViewHolderItem) holder;
 
-            if (mList.get(position).getWallpaperType() == ActivityChatBackground.WallpaperType.proto) {
-                ProtoGlobal.File pf = mList.get(position).getProtoWallpaper().getFile();
+            if (mList.size() < (position + 1)) {
+                return;
+            }
+            ActivityChatBackground.StructWallpaper wallpaper = mList.get(position);
+
+            if (wallpaper.getWallpaperType() == ActivityChatBackground.WallpaperType.proto) {
+                ProtoGlobal.File pf = wallpaper.getProtoWallpaper().getFile();
 
                 final String path = G.DIR_CHAT_BACKGROUND + "/" + "thumb_" + pf.getCacheId() + "_" + pf.getName();
 
                 if (!new File(path).exists()) {
-                    HelperDownloadFile.startDownload(pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4,
-                        new HelperDownloadFile.UpdateListener() {
-                            @Override public void OnProgress(String mPath, int progress) {
-                                if (progress == 100) {
-                                    G.currentActivity.runOnUiThread(new Runnable() {
-                                        @Override public void run() {
-                                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
-                                        }
-                                    });
-                                }
+                    HelperDownloadFile.startDownload(pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4, new HelperDownloadFile.UpdateListener() {
+                        @Override
+                        public void OnProgress(String mPath, int progress) {
+                            if (progress == 100) {
+                                G.currentActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
+                                    }
+                                });
                             }
+                        }
 
-                            @Override public void OnError(String token) {
-                            }
-                        });
+                        @Override
+                        public void OnError(String token) {
+                        }
+                    });
                 } else {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
                 }
             } else {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(mList.get(position).getPath()), holder2.img);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(wallpaper.getPath()), holder2.img);
             }
 
             String bigImagePath;
-            if (mList.get(position).getWallpaperType() == ActivityChatBackground.WallpaperType.proto) {
-                ProtoGlobal.File pf = mList.get(position).getProtoWallpaper().getFile();
+            if (wallpaper.getWallpaperType() == ActivityChatBackground.WallpaperType.proto) {
+                ProtoGlobal.File pf = wallpaper.getProtoWallpaper().getFile();
                 bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
             } else {
-                bigImagePath = mList.get(position).getPath();
+                bigImagePath = wallpaper.getPath();
             }
 
             if (new File(bigImagePath).exists()) {
@@ -107,12 +116,13 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             } else {
                 holder2.mPath = "";
                 holder2.messageProgress.setVisibility(View.VISIBLE);
-                if (HelperDownloadFile.isDownLoading(mList.get(position).getProtoWallpaper().getFile().getCacheId())) {
+                if (HelperDownloadFile.isDownLoading(wallpaper.getProtoWallpaper().getFile().getCacheId())) {
                     startDownload(position, holder2.messageProgress, holder2.contentLoading);
                 }
 
                 holder2.messageProgress.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         downloadFile(position, holder2.messageProgress, holder2.contentLoading);
                     }
                 });
@@ -120,15 +130,15 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
             if (selected_position == position) {
                 holder2.itemView.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-                holder2.itemView.setPadding((int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4),
-                    (int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4));
+                holder2.itemView.setPadding((int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4));
             } else {
                 holder2.itemView.setBackgroundColor(Color.TRANSPARENT);
             }
         }
     }
 
-    @Override public int getItemViewType(int position) {
+    @Override
+    public int getItemViewType(int position) {
 
         if (position == 0) {
             return CHOOSE;
@@ -137,7 +147,8 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         return mList.size();
     }
 
@@ -151,33 +162,31 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             imageView = (ImageView) itemView.findViewById(R.id.imgBackgroundImage);
 
             imageView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
-                    new MaterialDialog.Builder(G.currentActivity).title(G.context.getString(R.string.choose_picture))
-                        .negativeText(G.context.getString(R.string.cancel))
-                        .items(R.array.profile)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                @Override
+                public void onClick(View view) {
+                    new MaterialDialog.Builder(G.currentActivity).title(G.context.getString(R.string.choose_picture)).negativeText(G.context.getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                AttachFile attachFile = new AttachFile(G.currentActivity);
+                            AttachFile attachFile = new AttachFile(G.currentActivity);
 
-                                if (text.toString().equals(G.context.getString(R.string.from_camera))) {
-                                    try {
-                                        attachFile.requestTakePicture();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                } else {
-                                    try {
-                                        attachFile.requestOpenGalleryForImageSingleSelect();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                            if (text.toString().equals(G.context.getString(R.string.from_camera))) {
+                                try {
+                                    attachFile.requestTakePicture();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
-
-                                dialog.dismiss();
+                            } else {
+                                try {
+                                    attachFile.requestOpenGalleryForImageSingleSelect();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        })
-                        .show();
+
+                            dialog.dismiss();
+                        }
+                    }).show();
                 }
             });
         }
@@ -202,7 +211,8 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
 
             img.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                     if (mPath.length() > 0) {
 
@@ -237,12 +247,14 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         String path = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
 
         HelperDownloadFile.startDownload(pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2, new HelperDownloadFile.UpdateListener() {
-            @Override public void OnProgress(String mPath, final int progress) {
+            @Override
+            public void OnProgress(String mPath, final int progress) {
 
                 if (messageProgress != null) {
 
                     G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             if (progress < 100) {
                                 messageProgress.withProgress(progress);
                             } else {
@@ -256,10 +268,12 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 }
             }
 
-            @Override public void OnError(String token) {
+            @Override
+            public void OnError(String token) {
 
                 G.currentActivity.runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         messageProgress.withProgress(0);
                         messageProgress.withDrawable(R.drawable.ic_download, true);
                         contentLoading.setVisibility(View.GONE);
