@@ -182,6 +182,17 @@ public class HelperFillLookUpClass {
         lookupMap.put(30803, "ProtoQrCodeAddContact.QrCodeAddContactResponse");
         lookupMap.put(30804, "ProtoQrCodeAddMe.QrCodeAddMeResponse");
 
+        // Signaling 9xx , 309xx
+        lookupMap.put(30900, "ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse");
+        lookupMap.put(30901, "ProtoSignalingOffer.SignalingOfferResponse");
+        lookupMap.put(30902, "ProtoSignalingRinging.SignalingRingingResponse");
+        lookupMap.put(30903, "ProtoSignalingAccept.SignalingAcceptResponse");
+        lookupMap.put(30904, "ProtoSignalingCandidate.SignalingCandidateResponse");
+        lookupMap.put(30905, "ProtoSignalingLeave.SignalingLeaveResponse");
+        lookupMap.put(30906, "ProtoSignalingSessionHold.SignalingSessionHoldResponse");
+        lookupMap.put(30907, "ProtoSignalingGetLog.SignalingGetLogResponse");
+        lookupMap.put(30908, "ProtoSignalingClearLog.SignalingClearLogResponse");
+
         // Push 600xx
         lookupMap.put(60000, "ProtoPushLoginToken.PushLoginTokenResponse");
         lookupMap.put(60001, "ProtoPushTwoStepVerification.PushTwoStepVerificationResponse");
