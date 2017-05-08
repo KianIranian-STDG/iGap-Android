@@ -57,7 +57,8 @@
                         android:layout_marginEnd="@dimen/dp8"
                         android:paddingBottom="2dp"
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/sp14"/>
+                        android:textSize="@dimen/sp18"
+                        />
 
                   <net.iGap.emoji.EmojiTextView
                         android:id="@+id/cs_txt_contact_name"
@@ -67,9 +68,10 @@
                         android:paddingBottom="1dp"
                         android:singleLine="true"
                         android:text="Name"
-                        android:textColor="@android:color/black"
+                      android:textColor="@color/black90"
                         android:textSize="@dimen/sp15"
-                        android:textStyle="bold"/>
+                      fontPath="fonts/IRANSansMobile_Bold.ttf"
+                      />
 
 
                 </LinearLayout>
@@ -139,8 +141,8 @@
                         android:layout_marginEnd="@dimen/dp4"
                         android:text="@string/md_muted"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/sp14"
+                      android:textColor="@color/grayNew"
+                      android:textSize="@dimen/sp16"
                         />
 
                     <ImageView
