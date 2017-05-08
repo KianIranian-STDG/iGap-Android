@@ -154,7 +154,7 @@ import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 public class ActivityMain extends ActivityEnhanced
     implements OnUserInfoMyClient, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar,
-    OnClientCondition {
+    OnClientCondition, OnClientGetRoomListResponse {
 
     public static boolean isMenuButtonAddShown = false;
     FloatingActionButton btnStartNewChat;
@@ -273,87 +273,7 @@ public class ActivityMain extends ActivityEnhanced
             }
         };
 
-        G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
-            @Override public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
 
-
-                if (fromLogin) {
-                    mOffset = 0;
-                }
-
-                boolean deleteBefore = false;
-                if (mOffset == 0) {
-                    deleteBefore = true;
-                }
-
-                if (roomList.size() > 0) {
-                    putChatToDatabase(roomList, deleteBefore, false);
-                    isThereAnyMoreItemToLoad = true;
-                } else {
-                    putChatToDatabase(roomList, deleteBefore, true);
-                    isThereAnyMoreItemToLoad = false;
-                }
-
-                /**
-                 * to first enter to app , client first compute clientCondition then
-                 * getRoomList and finally send condition that before get clientCondition;
-                 * in else state compute new client condition with latest messaging state
-                 */
-                if (firstTimeEnterToApp) {
-                    firstTimeEnterToApp = false;
-                    sendClientCondition();
-                } else if (fromLogin || mOffset == 0) {
-
-                    new Thread(new Runnable() {
-                        @Override public void run() {
-                            new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
-                        }
-                    }).start();
-                }
-
-                mOffset += roomList.size();
-
-
-                runOnUiThread(new Runnable() {
-                    @Override public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
-                    }
-                });
-
-                isSendRequestForLoading = false;
-
-            }
-
-            @Override public void onTimeout() {
-                runOnUiThread(new Runnable() {
-                    @Override public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        firstTimeEnterToApp = false;
-                        getChatsList();
-                        swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
-                    }
-                });
-            }
-
-            @Override public void onError(int majorCode, int minorCode) {
-
-                runOnUiThread(new Runnable() {
-                    @Override public void run() {
-                        swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
-                    }
-                });
-
-                if (majorCode == 9) {
-                    if (G.currentActivity != null) {
-                        G.currentActivity.finish();
-                    }
-                    Intent intent = new Intent(G.context, ActivityProfile.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    G.context.startActivity(intent);
-                }
-            }
-        };
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
@@ -938,6 +858,82 @@ public class ActivityMain extends ActivityEnhanced
         });
     }
 
+    @Override public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+
+        if (fromLogin) {
+            mOffset = 0;
+        }
+
+        boolean deleteBefore = false;
+        if (mOffset == 0) {
+            deleteBefore = true;
+        }
+
+        if (roomList.size() > 0) {
+            putChatToDatabase(roomList, deleteBefore, false);
+            isThereAnyMoreItemToLoad = true;
+        } else {
+            putChatToDatabase(roomList, deleteBefore, true);
+            isThereAnyMoreItemToLoad = false;
+        }
+
+        /**
+         * to first enter to app , client first compute clientCondition then
+         * getRoomList and finally send condition that before get clientCondition;
+         * in else state compute new client condition with latest messaging state
+         */
+        if (firstTimeEnterToApp) {
+            firstTimeEnterToApp = false;
+            sendClientCondition();
+        } else if (fromLogin || mOffset == 0) {
+
+            new Thread(new Runnable() {
+                @Override public void run() {
+                    new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
+                }
+            }).start();
+        }
+
+        mOffset += roomList.size();
+
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                progressBar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
+            }
+        });
+
+        isSendRequestForLoading = false;
+    }
+
+    @Override public void onError(int majorCode, int minorCode) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
+            }
+        });
+
+        if (majorCode == 9) {
+            if (G.currentActivity != null) {
+                G.currentActivity.finish();
+            }
+            Intent intent = new Intent(G.context, ActivityProfile.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            G.context.startActivity(intent);
+        }
+    }
+
+    @Override public void onTimeout() {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                progressBar.setVisibility(View.GONE);
+                firstTimeEnterToApp = false;
+                getChatsList();
+                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
+            }
+        });
+    }
+
     public class PreCachingLayoutManager extends LinearLayoutManager {
         private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 600;
         private int extraLayoutSpace = -1;
@@ -1312,6 +1308,7 @@ public class ActivityMain extends ActivityEnhanced
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         G.onClientCondition = this;
         G.onSetActionInRoom = this;
+        G.onClientGetRoomListResponse = this;
 
         getChatsList();
         startService(new Intent(this, ServiceContact.class));
