@@ -13,7 +13,6 @@ public final class ProtoResponse {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface ResponseOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.Response)
           com.google.protobuf.MessageOrBuilder {
@@ -22,7 +21,6 @@ public final class ProtoResponse {
      * <code>optional string id = 1;</code>
      */
     java.lang.String getId();
-
     /**
      * <code>optional string id = 1;</code>
      */
@@ -33,7 +31,6 @@ public final class ProtoResponse {
      */
     int getTimestamp();
   }
-
   /**
    * Protobuf type {@code proto.Response}
    */
@@ -44,7 +41,6 @@ public final class ProtoResponse {
     private Response(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private Response() {
       id_ = "";
       timestamp_ = 0;
@@ -104,7 +100,6 @@ public final class ProtoResponse {
 
     public static final int ID_FIELD_NUMBER = 1;
     private volatile java.lang.Object id_;
-
     /**
      * <code>optional string id = 1;</code>
      */
@@ -119,7 +114,6 @@ public final class ProtoResponse {
         return s;
       }
     }
-
     /**
      * <code>optional string id = 1;</code>
      */
@@ -136,7 +130,6 @@ public final class ProtoResponse {
 
     public static final int TIMESTAMP_FIELD_NUMBER = 2;
     private int timestamp_;
-
     /**
      * <code>optional uint32 timestamp = 2;</code>
      */
@@ -145,7 +138,6 @@ public final class ProtoResponse {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -180,7 +172,6 @@ public final class ProtoResponse {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -256,15 +247,12 @@ public final class ProtoResponse {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoResponse.Response prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -274,7 +262,6 @@ public final class ProtoResponse {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.Response}
      */
@@ -298,12 +285,10 @@ public final class ProtoResponse {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         id_ = "";
@@ -360,7 +345,6 @@ public final class ProtoResponse {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof net.iGap.proto.ProtoResponse.Response) {
           return mergeFrom((net.iGap.proto.ProtoResponse.Response) other);
@@ -403,7 +387,6 @@ public final class ProtoResponse {
       }
 
       private java.lang.Object id_ = "";
-
       /**
        * <code>optional string id = 1;</code>
        */
@@ -418,7 +401,6 @@ public final class ProtoResponse {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string id = 1;</code>
        */
@@ -432,7 +414,6 @@ public final class ProtoResponse {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string id = 1;</code>
        */
@@ -440,12 +421,11 @@ public final class ProtoResponse {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         id_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string id = 1;</code>
        */
@@ -455,7 +435,6 @@ public final class ProtoResponse {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string id = 1;</code>
        */
@@ -464,21 +443,19 @@ public final class ProtoResponse {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         id_ = value;
         onChanged();
         return this;
       }
 
       private int timestamp_;
-
       /**
        * <code>optional uint32 timestamp = 2;</code>
        */
       public int getTimestamp() {
         return timestamp_;
       }
-
       /**
        * <code>optional uint32 timestamp = 2;</code>
        */
@@ -488,7 +465,6 @@ public final class ProtoResponse {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint32 timestamp = 2;</code>
        */
@@ -513,7 +489,6 @@ public final class ProtoResponse {
 
     // @@protoc_insertion_point(class_scope:proto.Response)
     private static final net.iGap.proto.ProtoResponse.Response DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new net.iGap.proto.ProtoResponse.Response();
     }
@@ -551,10 +526,10 @@ public final class ProtoResponse {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
-            "\n\016Response.proto\022\005proto\")\n\010Response\022\n\n\002i" + "d\030\001 \001(\t\022\021\n\ttimestamp\030\002 \001(\rB\037\n\016net.iGap.p" +
+            "\n\016Response.proto\022\005proto\")\n\010Response\022\n\n\002i" +
+                    "d\030\001 \001(\t\022\021\n\ttimestamp\030\002 \001(\rB\037\n\016net.iGap.p" +
                     "rotoB\rProtoResponseb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
