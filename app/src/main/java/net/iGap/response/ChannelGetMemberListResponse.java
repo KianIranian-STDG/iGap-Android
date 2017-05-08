@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.proto.ProtoChannelGetMemberList;
 import net.iGap.realm.RealmMember;
 
@@ -34,9 +33,7 @@ public class ChannelGetMemberListResponse extends MessageHandler {
         final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder builder = (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder) message;
 
         RealmMember.convertProtoMemberListToRealmMember(builder, identity);
-        if (G.onChannelGetMemberList != null) {
-            G.onChannelGetMemberList.onChannelGetMemberList(builder.getMemberList());
-        }
+
     }
 
     @Override public void timeOut() {

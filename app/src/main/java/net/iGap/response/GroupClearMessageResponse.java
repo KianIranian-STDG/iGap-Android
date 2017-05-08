@@ -34,7 +34,8 @@ public class GroupClearMessageResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
         final ProtoGroupClearMessage.GroupClearMessageResponse.Builder builder = (ProtoGroupClearMessage.GroupClearMessageResponse.Builder) message;
         builder.getRoomId();
@@ -43,7 +44,8 @@ public class GroupClearMessageResponse extends MessageHandler {
         Realm realm = Realm.getDefaultInstance();
         if (builder.getResponse().getId().isEmpty()) { // another account cleared message
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
                     realmClientCondition.setClearId(builder.getClearId());
                 }
@@ -52,23 +54,28 @@ public class GroupClearMessageResponse extends MessageHandler {
         }
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                if (realmRoom != null) {
-                    //  realmRoom.setUpdatedTime(builder.getResponse().getTimestamp() * DateUtils.SECOND_IN_MILLIS);
+                if (realmRoom != null && ((realmRoom.getLastMessage() == null) || (realmRoom.getLastMessage().getMessageId() <= builder.getRoomId()))) {
                     realmRoom.setUnreadCount(0);
                     realmRoom.setLastMessage(null);
                 }
 
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).
-                    lessThan(RealmRoomMessageFields.MESSAGE_ID, builder.getClearId()).findAll().deleteAllFromRealm();
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).lessThan(RealmRoomMessageFields.MESSAGE_ID, builder.getClearId()).findAll().deleteAllFromRealm();
             }
         });
 
         realm.close();
     }
 
-    @Override public void error() {
+    @Override
+    public void timeOut() {
+        super.timeOut();
+    }
+
+    @Override
+    public void error() {
         super.error();
     }
 }

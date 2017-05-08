@@ -141,7 +141,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private RealmList<RealmAvatar> avatarList;
 
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
 
         if (G.onUpdateUserStatusInChangePage != null) {
@@ -152,12 +153,14 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         if (mRealm != null) mRealm.close();
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
 
         super.onResume();
 
@@ -167,9 +170,14 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             if (changeListener == null) {
 
                 changeListener = new RealmChangeListener<RealmModel>() {
-                    @Override public void onChange(final RealmModel element) {
+                    @Override
+                    public void onChange(final RealmModel element) {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
+                                if (!((RealmRoom) element).isValid() || ((RealmRoom) element).isDeleted()) {
+                                    return;
+                                }
                                 String countText = ((RealmRoom) element).getSharedMediaCount();
 
                                 if (countText == null || countText.length() == 0) {
@@ -194,7 +202,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         }
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
 
         if (rrg != null) {
@@ -206,7 +215,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         }
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_profile);
         final Realm realm = Realm.getDefaultInstance();
@@ -236,7 +246,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             isBlockUser = rrg.isBlockUser();
 
             rrg.addChangeListener(new RealmChangeListener<RealmModel>() {
-                @Override public void onChange(RealmModel element) {
+                @Override
+                public void onChange(RealmModel element) {
                     isBlockUser = rrg.isBlockUser();
                 }
             });
@@ -284,8 +295,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone)).findFirst();
 
-        // agar ba click roye karbar dar safheye goruh vared in ghesmat shodim va karbar dar list contact haye ma vojud nadasht shomareye karbar
-        // namyesh dade nemishavad
+        /**
+         * if this user isn't in my contacts don't show phone number
+         */
         if (realmContacts == null && enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
             showNumber = false;
         }
@@ -313,15 +325,12 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         }*/
 
         imgUser.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Realm realm = Realm.getDefaultInstance();
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
                     FragmentShowAvatars.appBarLayout = fab;
-                    getSupportFragmentManager().beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat))
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat)).commit();
                 }
                 realm.close();
             }
@@ -330,14 +339,16 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         txtBack = (MaterialDesignTextView) findViewById(R.id.chi_txt_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.chi_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
 
         fab = (FloatingActionButton) findViewById(R.id.chi_fab_setPic);
         fab.setOnClickListener(new View.OnClickListener() { //fab button
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
 
@@ -354,9 +365,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                         finish();
                     } else {
                         G.onChatGetRoom = new OnChatGetRoom() {
-                            @Override public void onChatGetRoom(final long roomId) {
+                            @Override
+                            public void onChatGetRoom(final long roomId) {
                                 G.currentActivity.runOnUiThread(new Runnable() {
-                                    @Override public void run() {
+                                    @Override
+                                    public void run() {
                                         //  ActivityChat.activityChatForFinish.finish();
 
                                         Realm realm = Realm.getDefaultInstance();
@@ -373,15 +386,18 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                 });
                             }
 
-                            @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+                            @Override
+                            public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
 
                             }
 
-                            @Override public void onChatGetRoomTimeOut() {
+                            @Override
+                            public void onChatGetRoomTimeOut() {
 
                             }
 
-                            @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+                            @Override
+                            public void onChatGetRoomError(int majorCode, int minorCode) {
 
                             }
                         };
@@ -404,7 +420,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         layoutNickname = (ViewGroup) findViewById(R.id.chi_layout_nickname);
         layoutNickname.setOnClickListener(new View.OnClickListener() {
-                                              @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                                                   final LinearLayout layoutNickname = new LinearLayout(ActivityContactsProfile.this);
                                                   layoutNickname.setOrientation(LinearLayout.VERTICAL);
@@ -469,18 +486,14 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                   layoutNickname.addView(inputFirstName, layoutParams);
                                                   layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
-                                                  final MaterialDialog dialog = new MaterialDialog.Builder(ActivityContactsProfile.this).title(getResources().getString(R.string.pu_nikname_profileUser))
-                                                      .positiveText(getResources().getString(R.string.B_ok))
-                                                      .customView(layoutNickname, true)
-                                                      .widgetColor(getResources().getColor(R.color.toolbar_background))
-                                                      .negativeText(getResources().getString(R.string.B_cancel))
-                                                      .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivityContactsProfile.this).title(getResources().getString(R.string.pu_nikname_profileUser)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                                                   final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                                                   positive.setEnabled(false);
 
                                                   edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                                                      @Override public void onFocusChange(View view, boolean b) {
+                                                      @Override
+                                                      public void onFocusChange(View view, boolean b) {
                                                           if (b) {
                                                               viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                                                           } else {
@@ -490,7 +503,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                   });
 
                                                   edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                                                      @Override public void onFocusChange(View view, boolean b) {
+                                                      @Override
+                                                      public void onFocusChange(View view, boolean b) {
                                                           if (b) {
                                                               viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                                                           } else {
@@ -501,15 +515,18 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                                                   final String finalFirsName = firsName;
                                                   edtFirstName.addTextChangedListener(new TextWatcher() {
-                                                      @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                                      @Override
+                                                      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                                                       }
 
-                                                      @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                                      @Override
+                                                      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                                                       }
 
-                                                      @Override public void afterTextChanged(Editable editable) {
+                                                      @Override
+                                                      public void afterTextChanged(Editable editable) {
 
                                                           if (!edtFirstName.getText().toString().equals(finalFirsName)) {
                                                               positive.setEnabled(true);
@@ -521,15 +538,18 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                                                   final String finalLastName = lastName;
                                                   edtLastName.addTextChangedListener(new TextWatcher() {
-                                                      @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                                      @Override
+                                                      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                                                       }
 
-                                                      @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                                      @Override
+                                                      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                                                       }
 
-                                                      @Override public void afterTextChanged(Editable editable) {
+                                                      @Override
+                                                      public void afterTextChanged(Editable editable) {
                                                           if (!edtLastName.getText().toString().equals(finalLastName)) {
                                                               positive.setEnabled(true);
                                                           } else {
@@ -539,7 +559,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                   });
 
                                                   positive.setOnClickListener(new View.OnClickListener() {
-                                                                                  @Override public void onClick(View view) {
+                                                      @Override
+                                                      public void onClick(View view) {
 
                                                                                       long po = Long.parseLong(mPhone);
                                                                                       String firstName = edtFirstName.getText().toString();
@@ -553,28 +574,33 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                                                   dialog.show();
                                                   G.onUserContactEdit = new OnUserContactEdit() {
-                                                      @Override public void onContactEdit(final String firstName, final String lastName) {
+                                                      @Override
+                                                      public void onContactEdit(final String firstName, final String lastName) {
                                                           Realm realm1 = Realm.getDefaultInstance();
                                                           final RealmContacts realmUser = realm1.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
                                                           realm1.executeTransaction(new Realm.Transaction() {
-                                                              @Override public void execute(Realm realm) {
+                                                              @Override
+                                                              public void execute(Realm realm) {
                                                                   realmUser.setFirst_name(firstName);
                                                                   realmUser.setLast_name(lastName);
                                                               }
                                                           });
                                                           realm1.close();
                                                           runOnUiThread(new Runnable() {
-                                                              @Override public void run() {
+                                                              @Override
+                                                              public void run() {
                                                                   txtNickname.setText(firstName + " " + lastName);
                                                               }
                                                           });
                                                       }
 
-                                                      @Override public void onContactEditTimeOut() {
+                                                      @Override
+                                                      public void onContactEditTimeOut() {
 
                                                       }
 
-                                                      @Override public void onContactEditError(int majorCode, int minorCode) {
+                                                      @Override
+                                                      public void onContactEditError(int majorCode, int minorCode) {
 
                                                       }
                                                   };
@@ -619,7 +645,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener()
 
         {
-            @Override public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 ViewGroup viewGroup = (ViewGroup) findViewById(R.id.chi_root_circleImage);
                 if (verticalOffset < -5) {
@@ -645,7 +672,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         RippleView rippleMenu = (RippleView) findViewById(R.id.chi_ripple_menuPopup);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 showPopUp();
             }
         });
@@ -659,15 +687,18 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         });
 
         vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 try {
                     HelperPermision.getContactPermision(ActivityContactsProfile.this, new OnGetPermission() {
-                        @Override public void Allow() throws IOException {
+                        @Override
+                        public void Allow() throws IOException {
                             showPopupPhoneNumber(vgPhoneNumber, mPhone);
                         }
 
-                        @Override public void deny() {
+                        @Override
+                        public void deny() {
 
                         }
                     });
@@ -682,7 +713,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         vgSharedMedia = (ViewGroup) findViewById(R.id.chi_layout_SharedMedia);
 
         vgSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 Intent intent = new Intent(ActivityContactsProfile.this, ActivityShearedMedia.class);
                 intent.putExtra("RoomID", sheardId);
@@ -693,7 +725,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         txtBlockContact = (TextView) findViewById(R.id.chi_txt_blockContact);
 
         txtBlockContact.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showAlertDialog(getString(R.string.block_this_contact), getString(R.string.block), getString(R.string.cancel));
             }
         });
@@ -701,7 +734,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         txtClearChat = (TextView) findViewById(R.id.chi_txt_clearChat);
 
         txtClearChat.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showAlertDialog(getString(R.string.clear_this_chat), getString(R.string.clear), getString(R.string.cancel));
             }
         });
@@ -709,17 +743,14 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         txtNotifyAndSound = (TextView) findViewById(R.id.chi_txtNotifyAndSound);
 
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
                 bundle.putString("PAGE", "CONTACT");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction()
-                    .addToBackStack(null)
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.chi_layoutParent, fragmentNotification)
-                    .commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, fragmentNotification).commit();
             }
         });
 
@@ -734,17 +765,21 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     private void setAvatar() {
         HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
-            @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+            @Override
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgUser);
                     }
                 });
             }
 
-            @Override public void onShowInitials(final String initials, final String color) {
+            @Override
+            public void onShowInitials(final String initials, final String color) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         imgUser.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgUser.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
                     }
                 });
@@ -777,7 +812,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         boolean isExist = false;
         Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
         String[] mPhoneNumberProjection = {
-            ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME
+                ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME
         };
         Cursor cur = context.getContentResolver().query(lookupUri, mPhoneNumberProjection, null, null, null);
         try {
@@ -790,7 +825,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         if (isExist) {
             new MaterialDialog.Builder(this).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     switch (which) {
                         case 0:
                             String call = "+" + Long.parseLong(mPhone);
@@ -819,7 +855,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }).show();
         } else {
             new MaterialDialog.Builder(this).title(R.string.phone_number).items(R.array.phone_number).itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     switch (which) {
                         case 0:
 
@@ -828,28 +865,21 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                             ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
-                            ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
-                                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-                                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
-                                .build());
+                            ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI).withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null).withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null).build());
 
                             //------------------------------------------------------ Names
 
-                            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                                .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name)
-                                .build());
+                            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI).withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0).withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE).withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name).build());
 
                             //------------------------------------------------------ Mobile Number
 
                             ops.add(ContentProviderOperation.
-                                newInsert(ContactsContract.Data.CONTENT_URI)
-                                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
-                                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-                                .build());
+                                    newInsert(ContactsContract.Data.CONTENT_URI)
+                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                                    .build());
 
                             try {
                                 G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
@@ -965,7 +995,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             popupWindow.dismiss();
         }
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override public void onDismiss() {
+            @Override
+            public void onDismiss() {
                 //TODO do sth here on dismiss
             }
         });
@@ -975,42 +1006,37 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         //                popupWindow.showAsDropDown(v);
 
         text1.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 blockOrUnblockUser();
                 popupWindow.dismiss();
             }
         });
         text2.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.clear_history)
-                    .content(R.string.clear_history_content)
-                    .positiveText(R.string.B_ok)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        }
-                    })
-                    .negativeText(R.string.B_cancel)
-                    .show();
+                    }
+                }).negativeText(R.string.B_cancel).show();
 
                 popupWindow.dismiss();
             }
         });
         text3.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.to_delete_contact)
-                    .content(R.string.delete_text)
-                    .positiveText(R.string.B_ok)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            deleteContact();
-                        }
-                    })
-                    .negativeText(R.string.B_cancel)
-                    .show();
+                        deleteContact();
+                    }
+                }).negativeText(R.string.B_cancel).show();
 
                 popupWindow.dismiss();
             }
@@ -1034,7 +1060,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         builder.setMessage(message);
         builder.setPositiveButton(positive, new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialogInterface, int i) {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
                 clearHistory();
                 dialogInterface.dismiss();
             }
@@ -1042,7 +1069,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         builder.setMessage(message);
         builder.setNegativeButton(negitive, new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialogInterface, int i) {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
 
                 dialogInterface.dismiss();
             }
@@ -1086,9 +1114,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override public void onChange(final RealmClientCondition element) {
+            @Override
+            public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
 
                         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
@@ -1127,14 +1157,16 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     private void deleteContact() {
         G.onUserContactdelete = new OnUserContactDelete() {
-            @Override public void onContactDelete() {
+            @Override
+            public void onContactDelete() {
                 /**
                  * get user info after delete it for show nickname
                  */
                 getUserInfo();
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
 
             }
         };
@@ -1144,20 +1176,24 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private void getUserInfo() {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         txtNickname.setText(user.getDisplayName());
                     }
                 });
             }
 
-            @Override public void onUserInfoTimeOut() {
+            @Override
+            public void onUserInfoTimeOut() {
 
             }
 
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };
@@ -1167,19 +1203,23 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     private void deleteChat() {
         G.onChatDelete = new OnChatDelete() {
-            @Override public void onChatDelete(long roomId) {
+            @Override
+            public void onChatDelete(long roomId) {
             }
 
-            @Override public void onChatDeleteError(int majorCode, int minorCode) {
+            @Override
+            public void onChatDeleteError(int majorCode, int minorCode) {
 
             }
         };
         final Realm realm = Realm.getDefaultInstance();
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
         realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override public void onChange(final RealmClientCondition element) {
+            @Override
+            public void onChange(final RealmClientCondition element) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(final Realm realm) {
+                    @Override
+                    public void execute(final Realm realm) {
                         if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, roomId).findFirst() == null) {
                             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
                             realmOfflineDelete.setOfflineDelete(userId);
@@ -1205,11 +1245,13 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         });
     }
 
-    @Override public void onUserUpdateStatus(long userId, final long time, final String status) {
+    @Override
+    public void onUserUpdateStatus(long userId, final long time, final String status) {
 
         if (this.userId == userId) {
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     setUserStatus(AppUtils.getStatsForUser(status), time);
                 }
             });

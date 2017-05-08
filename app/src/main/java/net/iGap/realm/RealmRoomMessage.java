@@ -69,6 +69,7 @@ import org.parceler.Parcel;
     // for channel message should be exist in other rooms (forwarded message)
     private RealmChannelExtra channelExtra;
     private long previousMessageId;
+    private long futureMessageId;
     private String linkInfo;
 
     public long getUpdateOrCreateTime() {
@@ -634,6 +635,14 @@ import org.parceler.Parcel;
 
     public void setPreviousMessageId(long previousMessageId) {
         this.previousMessageId = previousMessageId;
+    }
+
+    public long getFutureMessageId() {
+        return futureMessageId;
+    }
+
+    public void setFutureMessageId(long futureMessageId) {
+        this.futureMessageId = futureMessageId;
     }
 
     public boolean isSenderMe() {
