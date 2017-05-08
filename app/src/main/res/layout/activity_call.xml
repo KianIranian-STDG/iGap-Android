@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_call_fragment"
     android:clickable="true"
-    android:layoutDirection="ltr"
     android:elevation="999dp"
+    android:layoutDirection="ltr"
     android:orientation="vertical"
     >
 
@@ -15,6 +15,19 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       >
+
+
+    <android.opengl.GLSurfaceView
+        android:id="@+id/fcr_glview_call"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <android.view.SurfaceView
+        android:id="@+id/fcr_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
 
     <ImageView
         android:id="@+id/fcr_imv_background"
@@ -173,10 +186,10 @@
             android:id="@+id/fcr_btn_mic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp28"
             android:text="@string/md_mic"
             android:textAppearance="@style/TextIconAppearance.all"
             android:textColor="@color/white"
+            android:textSize="@dimen/sp28"
             />
 
         <LinearLayout
@@ -190,10 +203,10 @@
               android:id="@+id/fcr_btn_chat"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:textSize="@dimen/sp28"
               android:text="@string/md_chat"
               android:textAppearance="@style/TextIconAppearance.all"
               android:textColor="@color/white"
+              android:textSize="@dimen/sp28"
               />
 
         </LinearLayout>
@@ -203,10 +216,10 @@
             android:id="@+id/fcr_btn_speaker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp28"
             android:text="@string/md_muted"
             android:textAppearance="@style/TextIconAppearance.all"
             android:textColor="@color/white"
+            android:textSize="@dimen/sp28"
             />
       </LinearLayout>
 
@@ -215,4 +228,6 @@
 
 
   </FrameLayout>
+
+
 </LinearLayout>

@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityCall;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
@@ -81,21 +83,14 @@ public class FragmentCall extends Fragment {
 
     //*************************************************************************************************************
 
-    public static void call(long userID, FragmentActivity activity, int resContainer) {
+    public static void call(long userID, FragmentActivity activity) {
 
-        FragmentCallResponse fragmentCallResponse = FragmentCallResponse.newInstance(userID);
+        Intent intent = new Intent(activity, ActivityCall.class);
+        intent.putExtra(ActivityCall.UserIdStr, userID);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        try {
+        activity.startActivity(intent);
 
-            activity.getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null)
-                .replace(resContainer, fragmentCallResponse)
-                .commit();
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
     }
 
     private ArrayList<StructCall> fillLogListCall() {
@@ -218,7 +213,7 @@ public class FragmentCall extends Fragment {
 
                 rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                     @Override public void onComplete(RippleView rippleView) throws IOException {
-                        call(callList.get(getPosition()).userId, getActivity(), R.id.fragmentContainer);
+                        call(callList.get(getPosition()).userId, getActivity());
                     }
                 });
             }

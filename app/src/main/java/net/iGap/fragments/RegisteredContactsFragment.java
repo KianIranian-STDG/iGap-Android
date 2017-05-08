@@ -193,7 +193,7 @@ public class RegisteredContactsFragment extends Fragment {
 
                 if (isCallAction) {
                     getActivity().getSupportFragmentManager().popBackStack();
-                    FragmentCall.call(item.mContact.peerId, getActivity(), R.id.fragmentContainer);
+                    FragmentCall.call(item.mContact.peerId, getActivity());
                 } else {
                     showProgress();
 
