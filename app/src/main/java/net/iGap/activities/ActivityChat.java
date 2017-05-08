@@ -6438,7 +6438,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * @param oldMessageId if set oldMessageId=0 messages will be get from latest message that exist in server
      */
     private void getOnlineMessage(final long oldMessageId, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        if ((direction == UP && !isWaitingForHistoryUp) || (direction == DOWN && !isWaitingForHistoryDown)) {
+        if ((direction == UP && !isWaitingForHistoryUp && allowGetHistoryUp) || (direction == DOWN && !isWaitingForHistoryDown && allowGetHistoryDown)) {
 
             long reachMessageId;
             if (direction == UP) {
