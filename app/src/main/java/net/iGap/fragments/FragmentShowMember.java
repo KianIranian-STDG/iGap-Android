@@ -104,6 +104,7 @@ public class FragmentShowMember extends Fragment {
     private int mCurrentUpdateCount = 0;
     public static List<StructMessageInfo> lists = new ArrayList<>();
     List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> listMembers = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
+    List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> listMembersChannal = new ArrayList<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member>();
     private boolean isFirstFill = true;
     private int offset = 0;
     private int limit = 12;
@@ -187,28 +188,44 @@ public class FragmentShowMember extends Fragment {
                             final Realm realm = Realm.getDefaultInstance();
                             realm.executeTransactionAsync(new Realm.Transaction() {
                                 @Override public void execute(Realm realm) {
-                                    final RealmList<RealmMember> listAsli = new RealmList<>();
+                                    final RealmList<RealmMember> newMemberList = new RealmList<>();
                                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
-                                    for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : listMembers) {
-                                        if (Long.parseLong(messageOne) == member.getUserId()) {
-
-                                            mCurrentUpdateCount++;
-                                            RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
-                                            realmMem.setRole(member.getRole().toString());
-                                            realmMem.setPeerId(member.getUserId());
-                                            realmMem = realm.copyToRealm(realmMem);
-                                            listAsli.add(realmMem);
-                                            listAsli.addAll(0, realmRoom.getGroupRoom().getMembers());
-                                            realmRoom.getGroupRoom().setMembers(listAsli);
-                                            listAsli.clear();
-                                            fillItem();
-
-                                            break;
+                                    if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                        for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : listMembers) {
+                                            if (Long.parseLong(messageOne) == member.getUserId()) {
+                                                mCurrentUpdateCount++;
+                                                RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
+                                                realmMem.setRole(member.getRole().toString());
+                                                realmMem.setPeerId(member.getUserId());
+                                                realmMem = realm.copyToRealm(realmMem);
+                                                newMemberList.add(realmMem);
+                                                newMemberList.addAll(0, realmRoom.getGroupRoom().getMembers());
+                                                realmRoom.getGroupRoom().setMembers(newMemberList);
+                                                newMemberList.clear();
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : listMembersChannal) {
+                                            if (Long.parseLong(messageOne) == member.getUserId()) {
+                                                mCurrentUpdateCount++;
+                                                RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
+                                                realmMem.setRole(member.getRole().toString());
+                                                realmMem.setPeerId(member.getUserId());
+                                                realmMem = realm.copyToRealm(realmMem);
+                                                newMemberList.add(realmMem);
+                                                newMemberList.addAll(0, realmRoom.getChannelRoom().getMembers());
+                                                realmRoom.getChannelRoom().setMembers(newMemberList);
+                                                newMemberList.clear();
+                                                break;
+                                            }
                                         }
                                     }
+
                                 }
                             }, new Realm.Transaction.OnSuccess() {
                                 @Override public void onSuccess() {
+                                    fillItem();
                                     realm.close();
                                 }
                             }, new Realm.Transaction.OnError() {
@@ -216,7 +233,6 @@ public class FragmentShowMember extends Fragment {
                                     realm.close();
                                 }
                             });
-                            realm.close();
                         }
                     });
                 } else {
@@ -263,6 +279,7 @@ public class FragmentShowMember extends Fragment {
                 for (final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : members) {
                     final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, member.getUserId()).findFirst();
                     if (realmRegisteredInfo == null) {
+                        listMembersChannal.add(member);
                         new RequestUserInfo().userInfo(member.getUserId());
                     } else {
                         getActivity().runOnUiThread(new Runnable() {
@@ -321,8 +338,8 @@ public class FragmentShowMember extends Fragment {
 
     private void fillItem() {
 
-        if (!isOne && mCurrentUpdateCount > 0) isOne = true;
         if (mCurrentUpdateCount >= mMemberCount) {
+            if (!isOne && mCurrentUpdateCount > 0) isOne = true;
             try {
                 if (isFirstFill) {
                     fillAdapter();
