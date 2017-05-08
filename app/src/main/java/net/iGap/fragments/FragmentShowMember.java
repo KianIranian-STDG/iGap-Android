@@ -434,9 +434,8 @@ public class FragmentShowMember extends Fragment {
 
     private void fillAdapter() {
 
-        RealmList<RealmMember> memberList = null;
-
         Realm realm = Realm.getDefaultInstance();
+        RealmList<RealmMember> memberList = null;
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
         if (realmRoom != null) {
 
