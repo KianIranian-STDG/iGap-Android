@@ -167,9 +167,9 @@
   <string name="st_crop">Crop and Resize Photo</string>
   <string name="st_send_by_enter">Send by Enter Key</string>
   <string name="st_title_Media">Multimedia</string>
-  <string name="st_auto_download_data">Auto download (using Mobile Data)</string>
-  <string name="st_auto_download_wifi">Auto download (using Wi-Fi)</string>
-  <string name="st_auto_download_roaming">Auto download (using Data Roaming)</string>
+  <string name="st_auto_download_data">Auto download\n(using Mobile Data)</string>
+  <string name="st_auto_download_wifi">Auto download\n(using Wi-Fi)</string>
+  <string name="st_auto_download_roaming">Auto download\n(using Data Roaming)</string>
   <string name="st_auto_gif">Auto Play GIFs</string>
   <string name="st_save_to_gallery">Save to Gallery</string>
   <string name="st_title_support">iGap Support</string>
@@ -596,7 +596,7 @@
   <string name="just_owner_can_delete">Just Creator can delete</string>
 
   <string name="shate_audio_file">Share audio File</string>
-  <string name="last_seen">last seen</string>
+  <string name="last_seen">Last seen</string>
   <string name="remove">Remove</string>
   <string name="please_check_your_connenction">Please check your connection</string>
   <string name="errore_verification_sms">Error verification SMS</string>
