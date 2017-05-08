@@ -282,20 +282,19 @@ public class FragmentShowMember extends Fragment {
                         listMembersChannal.add(member);
                         new RequestUserInfo().userInfo(member.getUserId());
                     } else {
-                        getActivity().runOnUiThread(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override public void run() {
-                                if (infoUpdateListenerCount != null) infoUpdateListenerCount.complete(true, "" + member.getUserId(), "OK");
-                                G.handler.post(new Runnable() {
-                                    @Override public void run() {
-
-                                        if (mAdapter != null) mAdapter.addLoadMore();
-                                        if (progressBar != null) {
-                                            progressBar.setVisibility(View.GONE);
-                                        }
-                                    }
-                                });
+                                if (mAdapter != null) mAdapter.removeLoadMore();
+                                if (progressBar != null) {
+                                    progressBar.setVisibility(View.GONE);
+                                }
                             }
                         });
+                        isOne = true;
+                        if (isFirstFill) {
+                            fillAdapter();
+                            isFirstFill = false;
+                        }
                     }
                 }
             }
@@ -437,7 +436,8 @@ public class FragmentShowMember extends Fragment {
 
         RealmList<RealmMember> memberList = null;
 
-        RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
         if (realmRoom != null) {
 
             if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
@@ -462,10 +462,10 @@ public class FragmentShowMember extends Fragment {
                     mRecyclerView.setAdapter(mAdapter);
                 }
             } else {
-                // close
+                realm.close();
             }
         } else {
-            // close
+            realm.close();
         }
     }
 
