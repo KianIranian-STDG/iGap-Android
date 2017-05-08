@@ -22,11 +22,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,12 +39,14 @@ import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 import io.realm.Sort;
 import java.util.ArrayList;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.emoji.EmojiTextView;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -50,6 +54,7 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -58,12 +63,14 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.request.RequestClientGetRoomList;
 
 import static android.view.View.GONE;
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
+import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 public class ActivitySelectChat extends ActivityEnhanced {
 
@@ -76,6 +83,14 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Typeface titleTypeface;
 
+    ProgressBar progressBar;
+
+    private int mOffset = 0;
+    private int mLimit = 20;
+    private RecyclerView.OnScrollListener onScrollListener;
+    boolean isSendRequestForLoading = false;
+    boolean isThereAnyMoreItemToLoad = true;
+
 
     @Override protected void onDestroy() {
         super.onDestroy();
@@ -87,6 +102,9 @@ public class ActivitySelectChat extends ActivityEnhanced {
         setContentView(R.layout.activity_main);
 
         mRealm = Realm.getDefaultInstance();
+
+        progressBar = (ProgressBar) findViewById(R.id.ac_progress_bar_waiting);
+        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         mForwardMessages = getIntent().getExtras().getParcelableArrayList(ARG_FORWARD_MESSAGE);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -126,6 +144,76 @@ public class ActivitySelectChat extends ActivityEnhanced {
             @Override public void onClick(View view) {
             }
         });
+
+        G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
+            @Override public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+
+                if (fromLogin) {
+                    mOffset = 0;
+                }
+
+                boolean deleteBefore = false;
+                if (mOffset == 0) {
+                    deleteBefore = true;
+                }
+
+                if (roomList.size() > 0) {
+                    putChatToDatabase(roomList, deleteBefore, false);
+                    isThereAnyMoreItemToLoad = true;
+                } else {
+                    putChatToDatabase(roomList, deleteBefore, true);
+                    isThereAnyMoreItemToLoad = false;
+                }
+
+                mOffset += roomList.size();
+
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        progressBar.setVisibility(View.GONE);
+                        swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
+                    }
+                });
+
+                isSendRequestForLoading = false;
+            }
+
+            @Override public void onTimeout() {
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+            }
+
+            @Override public void onError(int majorCode, int minorCode) {
+
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
+                    }
+                });
+
+                if (majorCode == 9) {
+                    if (G.currentActivity != null) {
+                        G.currentActivity.finish();
+                    }
+                    Intent intent = new Intent(G.context, ActivityProfile.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    G.context.startActivity(intent);
+                }
+            }
+        };
+
+
+
+
+
+
+
+
+
+
+
     }
 
     private void initRecycleView() {
@@ -142,6 +230,37 @@ public class ActivitySelectChat extends ActivityEnhanced {
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
         params.setBehavior(new ShouldScrolledBehavior((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager(), roomAdapter));
         mRecyclerView.getRecycleView().setLayoutParams(params);
+
+        onScrollListener = new RecyclerView.OnScrollListener() {
+
+            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (isThereAnyMoreItemToLoad) {
+                    if (!isSendRequestForLoading) {
+
+                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+
+                        if (lastVisiblePosition + 10 >= mOffset) {
+                            isSendRequestForLoading = true;
+
+                            //  mOffset = mRecyclerView.getRecycleView().getAdapter().getItemCount();
+                            new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+                            progressBar.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }
+
+            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                ActivityMain.curentMainRoomListPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+            }
+        };
+
+        mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
+
     }
 
     public class ShouldScrolledBehavior extends AppBarLayout.ScrollingViewBehavior {

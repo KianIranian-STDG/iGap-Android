@@ -171,9 +171,9 @@
   <string name="st_crop">"بریدن و بهبود حجم تصویر"</string>
   <string name="st_send_by_enter">"با زدن کلید اینتر ارسال کن"</string>
   <string name="st_title_Media">"چند رسانه ای"</string>
-  <string name="st_auto_download_data">"بارگیری خودکار در حالت اتصال به اینترنت سیم کارت"</string>
-  <string name="st_auto_download_wifi">"بارگیری خودکار در حالت اتصال به وای فای"</string>
-  <string name="st_auto_download_roaming">"بارگیری خودکار در حالت اتصال به رومینگ داده ها"</string>
+  <string name="st_auto_download_data">"بارگیری خودکار سیم کارت"</string>
+  <string name="st_auto_download_wifi">"بارگیری خودکار وای فای"</string>
+  <string name="st_auto_download_roaming">"بارگیری خودکار رومینگ داده"</string>
   <string name="st_auto_gif">"اجرای خودکار تصاویر متحرک"</string>
   <string name="st_save_to_gallery">"ذخیره‌ کردن در گالری"</string>
   <string name="st_title_support">"بخش پشتیبانی برنامه"</string>
@@ -209,8 +209,8 @@
   <string name="st_Repeat_Notifications">"پیام‌های چسبیده شده"</string>
   <string name="st_title_reset">"بازنشانی"</string>
   <string name="st_reset_all_notification">"بازنشانی همهٔ اعلانات"</string>
-  <string name="st_text_reset_all_notification">"تمامی تنظیمات معمول اعلانات را برای همهٔ مخاطبین و گروه های خود خنثی کنید."</string>
-  <string name="st_dialog_reset_all_notification">"آیا مطئنید که می‌خواهید تمامی تنظیمات معمول اعلانات را خنثی کنید؟"</string>
+  <string name="st_text_reset_all_notification">"تمامی تنظیمات معمول اعلانات را برای همهٔ مخاطبین و گروه های خود به حالت اولیه برگردانید."</string>
+  <string name="st_dialog_reset_all_notification">"آیا مطئنید که می‌خواهید تمامی تنظیمات معمول اعلانات را به حالت اولیه برگردانید؟"</string>
   <string name="st_dialog_reset_all_notification_yes">"بلی"</string>
   <string name="st_dialog_reset_all_notification_no">"خیر"</string>
   <string name="st_title_Background">"پس زمينهٔ گفتگو"</string>
@@ -463,9 +463,9 @@
   <string name="if_you_are_away_for">"اگر دور باشید"</string>
   <string name="st_Gander">"جنسیت:"</string>
   <string name="st_email">"ایمیل:"</string>
-  <string name="month_1">" ۱ماه"</string>
-  <string name="month_3">"۳ ماه"</string>
-  <string name="month_6">"۶ ماه"</string>
+  <string name="month_1">"یک ماه"</string>
+  <string name="month_3">"سه ماه"</string>
+  <string name="month_6">"شش ماه"</string>
   <string name="year_1">"یک سال"</string>
   <string name="E_114">"خطایی از سمت کلاینت: ایمیل اشتباه است."</string>
   <string name="E_115">"خطای درونی سرور"</string>

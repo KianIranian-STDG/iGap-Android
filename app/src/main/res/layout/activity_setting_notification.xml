@@ -986,7 +986,7 @@
             >
 
 
-          <TextView
+          <com.uncopt.android.widget.text.justify.JustifiedTextView
               android:id="@+id/stns_txt_keep_alive_service"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
@@ -994,7 +994,7 @@
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_text_keep_alive_service"
               android:textColor="@color/cardview_dark_background"
-              android:textSize="@dimen/sp16"
+              android:textSize="@dimen/sp13"
               android:textStyle="normal"
               fontPath="fonts/IRANSansMobile.ttf"
               />
