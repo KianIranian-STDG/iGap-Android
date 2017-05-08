@@ -160,6 +160,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogItem.ViewHolder || holder instanceof TimeItem.ViewHolder) {
             return;
         }
+        /**
+         * for return message that start showing to view
+         */
+        messageClickListener.onItemShowingMessageId(mMessage);
 
         Realm realm = Realm.getDefaultInstance();
         /**

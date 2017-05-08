@@ -31,7 +31,9 @@ public interface IMessageItem {
 
     void onReplyClick(RealmRoomMessage replyMessage);
 
-    void onDownloadAllEqualCashId(String token, String messageid);
+    void onDownloadAllEqualCashId(String token, String messageId);
+
+    void onItemShowingMessageId(StructMessageInfo messageInfo);
 
     //void onVoteClick(StructMessageInfo message, String vote, ProtoGlobal.RoomMessageReaction reaction);
 }
