@@ -30,6 +30,9 @@ public class SignalingClearLogResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoSignalingClearLog.SignalingClearLogResponse.Builder builder = (ProtoSignalingClearLog.SignalingClearLogResponse.Builder) message;
+
+        long clearId = builder.getClearId();
+        // TODO: 5/8/2017  nejati    delete call log from realm
     }
 
     @Override

@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import java.util.List;
 import net.iGap.proto.ProtoSignalingGetLog;
 
 public class SignalingGetLogResponse extends MessageHandler {
@@ -31,6 +32,22 @@ public class SignalingGetLogResponse extends MessageHandler {
         super.handler();
 
         ProtoSignalingGetLog.SignalingGetLogResponse.Builder builder = (ProtoSignalingGetLog.SignalingGetLogResponse.Builder) message;
+
+        List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> list = builder.getSignalingLogList();
+
+        for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item : list) {
+
+            item.getId();
+            item.getType();
+            item.getStatus();
+            item.getPeer();
+            item.getOfferTime();
+            item.getDuration();
+
+            // TODO: 5/8/2017  nejati  make callLog in dp and add this item on it
+        }
+
+
     }
 
     @Override

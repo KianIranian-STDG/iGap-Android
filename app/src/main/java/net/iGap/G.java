@@ -34,6 +34,12 @@ import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.interfaces.IClientSearchUserName;
+import net.iGap.interfaces.ISignalingAccept;
+import net.iGap.interfaces.ISignalingCondidate;
+import net.iGap.interfaces.ISignalingLeave;
+import net.iGap.interfaces.ISignalingOffer;
+import net.iGap.interfaces.ISignalingRinging;
+import net.iGap.interfaces.ISignalingSesionHold;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChannelAddAdmin;
 import net.iGap.interfaces.OnChannelAddMember;
@@ -337,6 +343,13 @@ public class G extends MultiDexApplication {
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
     public static IClientSearchUserName onClientSearchUserName;
+
+    public static ISignalingOffer iSignalingOffer;
+    public static ISignalingRinging iSignalingRinging;
+    public static ISignalingAccept iSignalingAccept;
+    public static ISignalingCondidate iSignalingCondidate;
+    public static ISignalingLeave iSignalingLeave;
+    public static ISignalingSesionHold iSignalingSesionHold;
 
     @Override
     public void onCreate() {
