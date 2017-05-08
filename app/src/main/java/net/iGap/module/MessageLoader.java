@@ -150,7 +150,7 @@ public final class MessageLoader {
                          * if gapReached now check that future gap is reached or no. if future gap reached this means
                          * that with get this history , client jumped from local messages and now is in another gap
                          */
-                        if (startMessageId <= (long) gapExist(roomId, reachMessageId, convertDirection(historyDirection))[0]) {
+                        if (startMessageId <= (long) gapExist(roomId, reachMessageId, UP)[0]) {
                             jumpOverLocal = true;
                         }
                     }
@@ -161,7 +161,7 @@ public final class MessageLoader {
                          * if gapReached now check that future gap is reached or no. if future gap reached this means
                          * that with get this history , client jumped from local messages and now is in another gap
                          */
-                        if (endMessageId >= (long) gapExist(roomId, reachMessageId, convertDirection(historyDirection))[0]) {
+                        if (endMessageId >= (long) gapExist(roomId, reachMessageId, DOWN)[0]) {
                             jumpOverLocal = true;
                         }
                     }

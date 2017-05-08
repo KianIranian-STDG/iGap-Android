@@ -6156,12 +6156,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private boolean bottomMore; // more message exist in local for load in bottom direction
     private boolean isWaitingForHistoryUp; // client send request for getHistory, avoid for send request again
     private boolean isWaitingForHistoryDown; // client send request for getHistory, avoid for send request again
+    private boolean allowGetHistoryUp = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
+    private boolean allowGetHistoryDown = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
     private long gapMessageIdUp; // messageId that maybe lost in local
     private long gapMessageIdDown; // messageId that maybe lost in local
     private long reachMessageIdUp; // messageId that will be checked after getHistory for detect reached to that or no
     private long reachMessageIdDown; // messageId that will be checked after getHistory for detect reached to that or no
-    private boolean allowGetHistoryUp = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
-    private boolean allowGetHistoryDown = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
     private long startFutureMessageIdUp; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
     private long startFutureMessageIdDown; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
     private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
@@ -6179,7 +6179,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
          */
         RealmResults<RealmRoomMessage> results;
         RealmResults<RealmRoomMessage> resultsDown = null;
-        RealmResults<RealmRoomMessage> resultsUp = null;
+        RealmResults<RealmRoomMessage> resultsUp;
         long fetchMessageId = 0; // with this value realm will be queried for get message
         if (hasUnread() || hasSavedState()) {
 
