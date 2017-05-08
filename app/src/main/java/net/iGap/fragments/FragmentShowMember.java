@@ -140,7 +140,8 @@ public class FragmentShowMember extends Fragment {
             mMainRole = getArguments().getString(MAINROOL);
             userID = getArguments().getLong(USERID);
             selectedRole = getArguments().getString(SELECTEDROLE);
-            isNeedGetMemberList = getArguments().getBoolean(ISNEEDGETMEMBERLIST);
+            //isNeedGetMemberList = getArguments().getBoolean(ISNEEDGETMEMBERLIST);
+            isNeedGetMemberList = true;
 
             if (mRoomID > 0) {
                 initComponent(view);
@@ -397,9 +398,9 @@ public class FragmentShowMember extends Fragment {
             txtNumberOfMember.setText(getResources().getString(member));
         }
 
-        if (!isNeedGetMemberList) {
-            fillAdapter();
-        }
+        //if (!isNeedGetMemberList) {
+        //    fillAdapter();
+        //}
 
         scrollListener = new EndlessRecyclerViewScrollListener(preCachingLayoutManager) {
             @Override public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
