@@ -48,13 +48,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 import io.realm.Sort;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -812,74 +806,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     }
 
     //********************************************************************************************
-
-    /**
-     * Simple Class to serialize object to byte arrays
-     *
-     * @author Nick Russler
-     *         http://www.whitebyte.info
-     */
-    public static class SerializationUtils {
-
-        /**
-         * @param obj - object to serialize to a byte array
-         * @return byte array containing the serialized obj
-         */
-        public static byte[] serialize(Object obj) {
-            byte[] result = null;
-            ByteArrayOutputStream fos = null;
-
-            try {
-                fos = new ByteArrayOutputStream();
-                ObjectOutputStream o = new ObjectOutputStream(fos);
-                o.writeObject(obj);
-                result = fos.toByteArray();
-            } catch (IOException e) {
-                System.err.println(e);
-            } finally {
-                try {
-                    fos.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return result;
-        }
-
-        /**
-         * @param arr - the byte array that holds the serialized object
-         * @return the deserialized object
-         */
-        public static Object deserialize(byte[] arr) {
-            InputStream fis = null;
-
-            try {
-                fis = new ByteArrayInputStream(arr);
-                ObjectInputStream o = new ObjectInputStream(fis);
-                return o.readObject();
-            } catch (IOException e) {
-                System.err.println(e);
-            } catch (ClassNotFoundException e) {
-                System.err.println(e);
-            } finally {
-                try {
-                    fis.close();
-                } catch (Exception e) {
-                }
-            }
-
-            return null;
-        }
-
-        /**
-         * @param obj - object to be cloned
-         * @return a clone of obj
-         */
-        @SuppressWarnings("unchecked") public static <T> T cloneObject(T obj) {
-            return (T) deserialize(serialize(obj));
-        }
-    }
 
     public static void updateStringSharedMediaCount(ProtoClientCountRoomHistory.ClientCountRoomHistoryResponse.Builder proto, long roomId) {
 

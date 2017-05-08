@@ -214,6 +214,7 @@ public class G extends MultiDexApplication {
     public static boolean hasNetworkBefore;
     public static boolean isSendContact = false;
     public static boolean latestMobileDataState;
+    public static boolean needGetSignalingConfiguration = true;
 
     public static int ivSize;
     public static int userTextSize = 0;
