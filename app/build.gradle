@@ -114,5 +114,4 @@ dependencies {
 
   // compile 'io.pristine:libjingle:11139@aar'
   compile 'io.pristine:libjingle:8871@aar'
-  compile 'com.github.nkzawa:socket.io-client:0.4.2'
 }

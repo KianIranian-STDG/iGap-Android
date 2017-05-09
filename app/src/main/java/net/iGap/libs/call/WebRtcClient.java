@@ -2,9 +2,6 @@ package net.iGap.libs.call;
 
 import android.opengl.EGLContext;
 import android.util.Log;
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -36,7 +33,6 @@ public class WebRtcClient {
     private MediaStream localMS;
     private VideoSource videoSource;
     private RtcListener mListener;
-    private Socket client;
 
     /**
      * Implement this interface to be notified of events.
@@ -108,7 +104,7 @@ public class WebRtcClient {
         message.put("to", to);
         message.put("type", type);
         message.put("payload", payload);
-        client.emit("message", message);
+        ////  client.emit("message", message);
     }
 
     private class MessageHandler {

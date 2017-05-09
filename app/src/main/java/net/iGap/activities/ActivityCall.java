@@ -197,9 +197,8 @@ public class ActivityCall extends ActivityEnhanced implements WebRtcClient.RtcLi
 
     private void initCall() {
 
-        // mSocketAddress = "http://" + host + (":" + port + "/");
-
-        mSocketAddress = "http://localhost:8888/";
+        mSocketAddress = "http://" + host + (":" + port + "/");
+        //mSocketAddress = "http://localhost:8888/";
 
         glSurfaceView = (GLSurfaceView) findViewById(R.id.fcr_glview_call);
         glSurfaceView.setPreserveEGLContextOnPause(true);
