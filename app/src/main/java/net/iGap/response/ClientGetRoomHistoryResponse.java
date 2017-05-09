@@ -19,7 +19,6 @@ import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmUserInfo;
 
 public class ClientGetRoomHistoryResponse extends MessageHandler {
 
@@ -54,7 +53,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+
                         for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
                             if (roomMessage.getAuthor().hasUser()) {
                                 HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
@@ -62,18 +61,6 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
 
                             RealmRoomMessage.putOrUpdate(roomMessage, roomId);
 
-                            if (roomMessage.getAuthor().getUser().getUserId() != userId) { // show notification if this message isn't for another account
-                                if (!G.isAppInFg) {
-                                    G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, roomId);
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            G.helperNotificationAndBadge.checkAlert(true, ProtoGlobal.Room.Type.CHAT, roomId);
-                                        }
-                                    }, 200);
-
-                                }
-                            }
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {

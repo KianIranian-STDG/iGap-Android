@@ -11,6 +11,8 @@
 package net.iGap.helper;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
+import me.leolin.shortcutbadger.ShortcutBadger;
 import net.iGap.G;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
@@ -54,7 +56,7 @@ public class HelperMessageResponse {
                  * put message to realm
                  */
                 RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(roomMessage, roomId);
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 /**
                  * because user may have more than one device, his another device should not
                  * be recipient but sender. so I check current userId with room message user id,
@@ -71,18 +73,7 @@ public class HelperMessageResponse {
                     if (roomMessage.getAuthor().hasUser()) {
                         HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                     }
-                    ProtoGlobal.Room.Type type = ProtoGlobal.Room.Type.CHAT;
-                    if (room != null) {
-                        type = room.getType();
-                    }
 
-                    final ProtoGlobal.Room.Type finalType = type;
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            G.helperNotificationAndBadge.checkAlert(true, finalType, roomId);
-                        }
-                    }, 200);
 
 
                     //} else if (!response.getId().isEmpty()) {
@@ -111,6 +102,30 @@ public class HelperMessageResponse {
                      */
                     if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
                         room.setUnreadCount(room.getUnreadCount() + 1);
+
+                        if (G.isAppInFg) {
+
+                            updateBadgeOnly();
+                        } else {
+
+                            ProtoGlobal.Room.Type type = ProtoGlobal.Room.Type.CHAT;
+                            if (room != null) {
+                                type = room.getType();
+                            }
+
+                            final ProtoGlobal.Room.Type finalType = type;
+                            G.handler.postDelayed(new Runnable() {
+                                @Override public void run() {
+
+                                    G.helperNotificationAndBadge.checkAlert(true, finalType, roomId);
+                                }
+                            }, 200);
+                        }
+
+
+
+
+
                     }
 
                     /**
@@ -150,4 +165,32 @@ public class HelperMessageResponse {
         //    }
         //});
     }
+
+    private static void updateBadgeOnly() {
+
+        G.handler.postDelayed(new Runnable() {
+            @Override public void run() {
+
+                Realm realm = Realm.getDefaultInstance();
+
+                int unreadMessageCount = 0;
+
+                RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+                for (RealmRoom realmRoom1 : realmRooms) {
+                    if (realmRoom1.getUnreadCount() > 0) {
+                        unreadMessageCount += realmRoom1.getUnreadCount();
+                    }
+                }
+
+                realm.close();
+
+                try {
+                    ShortcutBadger.applyCount(G.context, unreadMessageCount);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 200);
+    }
+
 }

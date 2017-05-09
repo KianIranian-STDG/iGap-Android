@@ -212,11 +212,6 @@ public class HelperNotificationAndBadge {
 
     private void setNotification() {
 
-        if (G.isAppInFg) {
-
-            return;
-        }
-
         PendingIntent pi;
 
         if (isFromOnRoom) {
@@ -295,6 +290,7 @@ public class HelperNotificationAndBadge {
     }
 
     public void checkAlert(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
+
         idRoom = roomId;
         int vipCheck = checkSpecialNotification(updateNotification, type, roomId);
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
@@ -503,7 +499,7 @@ public class HelperNotificationAndBadge {
 
         }
 
-        if (list.size() == 0) {
+        if (unreadMessageCount == 0) {
             return;
         }
 
