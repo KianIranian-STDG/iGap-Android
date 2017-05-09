@@ -81,6 +81,7 @@ import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLogout;
+import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
@@ -903,6 +904,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (roomList.size() > 0) {
             putChatToDatabase(roomList, deleteBefore, false);
             isThereAnyMoreItemToLoad = true;
+
+            HelperNotificationAndBadge.updateBadgeOnly();
+
         } else {
             putChatToDatabase(roomList, deleteBefore, true);
             isThereAnyMoreItemToLoad = false;

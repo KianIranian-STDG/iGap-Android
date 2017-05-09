@@ -810,4 +810,31 @@ public class HelperNotificationAndBadge {
         realm.close();
         return 0;
     }
+
+    public static void updateBadgeOnly() {
+
+        G.handler.postDelayed(new Runnable() {
+            @Override public void run() {
+
+                Realm realm = Realm.getDefaultInstance();
+
+                int unreadMessageCount = 0;
+
+                RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+                for (RealmRoom realmRoom1 : realmRooms) {
+                    if (realmRoom1.getUnreadCount() > 0) {
+                        unreadMessageCount += realmRoom1.getUnreadCount();
+                    }
+                }
+
+                realm.close();
+
+                try {
+                    ShortcutBadger.applyCount(G.context, unreadMessageCount);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 200);
+    }
 }

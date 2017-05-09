@@ -11,8 +11,6 @@
 package net.iGap.helper;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
-import me.leolin.shortcutbadger.ShortcutBadger;
 import net.iGap.G;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
@@ -104,8 +102,7 @@ public class HelperMessageResponse {
                         room.setUnreadCount(room.getUnreadCount() + 1);
 
                         if (G.isAppInFg) {
-
-                            updateBadgeOnly();
+                            HelperNotificationAndBadge.updateBadgeOnly();
                         } else {
 
                             ProtoGlobal.Room.Type type = ProtoGlobal.Room.Type.CHAT;
@@ -166,31 +163,6 @@ public class HelperMessageResponse {
         //});
     }
 
-    private static void updateBadgeOnly() {
 
-        G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
-
-                Realm realm = Realm.getDefaultInstance();
-
-                int unreadMessageCount = 0;
-
-                RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-                for (RealmRoom realmRoom1 : realmRooms) {
-                    if (realmRoom1.getUnreadCount() > 0) {
-                        unreadMessageCount += realmRoom1.getUnreadCount();
-                    }
-                }
-
-                realm.close();
-
-                try {
-                    ShortcutBadger.applyCount(G.context, unreadMessageCount);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 200);
-    }
 
 }

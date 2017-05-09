@@ -112,6 +112,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private int changesize = 0;
     ProgressBar progressBar;
 
+    private Realm mRealm;
+
     private boolean isChangeSelectType = false;
 
     private RecyclerView.OnScrollListener onScrollListener;
@@ -142,6 +144,15 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private int offset;
 
+    private Realm getRealm() {
+        if (mRealm == null || mRealm.isClosed()) {
+
+            mRealm = Realm.getDefaultInstance();
+        }
+
+        return mRealm;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -158,6 +169,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         if (mRealmList != null) {
             mRealmList.removeAllChangeListeners();
+        }
+
+        if (mRealm != null) {
+            mRealm.close();
         }
     }
 
@@ -401,9 +416,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                Realm realm = Realm.getDefaultInstance();
-
-                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                 if (realmRoom != null) {
                     ActivityChat.deleteSelectedMessages(roomId, adapter.SelectedList, realmRoom.getType());
@@ -437,7 +450,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                 adapter.resetSelected();
 
-                realm.close();
+
             }
         });
 
@@ -645,16 +658,21 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         txtSharedMedia.setText(R.string.shared_links);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.URL;
 
-        Realm realm = Realm.getDefaultInstance();
+        if (mRealmList != null) {
+            mRealmList.removeAllChangeListeners();
+        }
 
-        mRealmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+        mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                 equalTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.TEXT.toString()).
                 equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
                 findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
+        setListener();
+
         changesize = mRealmList.size();
 
         getDataFromServer(mFilter);
+
         mListcount = mRealmList.size();
 
         mNewList = addTimeToList(mRealmList);
@@ -662,8 +680,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(ActivityShearedMedia.this));
         recyclerView.setAdapter(adapter);
-
-        realm.close();
 
         isChangeSelectType = false;
 
@@ -677,9 +693,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             mRealmList.removeAllChangeListeners();
         }
 
-        Realm realm = Realm.getDefaultInstance();
-
-        mRealmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+        mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                 contains(RealmRoomMessageFields.MESSAGE_TYPE, type).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         setListener();
@@ -689,9 +703,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         getDataFromServer(filter);
         mListcount = mRealmList.size();
 
-        //realm.close();
+        ArrayList<StructShearedMedia> list = addTimeToList(mRealmList);
 
-        return addTimeToList(mRealmList);
+        return list;
     }
 
     private ArrayList<StructShearedMedia> addTimeToList(RealmResults<RealmRoomMessage> list) {
