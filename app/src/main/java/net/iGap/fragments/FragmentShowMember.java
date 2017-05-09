@@ -108,7 +108,7 @@ public class FragmentShowMember extends Fragment {
     List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> listMembersChannal = new ArrayList<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member>();
     private boolean isFirstFill = true;
     private int offset = 0;
-    private int limit = 12;
+    private int limit = 30;
     private FragmentActivity mActivity;
     public static OnComplete infoUpdateListenerCount;
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -234,6 +234,7 @@ public class FragmentShowMember extends Fragment {
                                 public void onSuccess() {
                                     fillItem();
                                     realm.close();
+
                                 }
                             }, new Realm.Transaction.OnError() {
                                 @Override
@@ -255,7 +256,7 @@ public class FragmentShowMember extends Fragment {
 
                 mMemberCount = members.size();
                 if (mMemberCount > 0) {
-                    if (mAdapter != null) mAdapter.addLoadMore();
+
                     listMembers.clear();
                     for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
                         listMembers.add(member);
@@ -265,7 +266,7 @@ public class FragmentShowMember extends Fragment {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (mAdapter != null) mAdapter.addLoadMore();
+
                             if (progressBar != null) {
                                 progressBar.setVisibility(View.GONE);
                             }
@@ -285,7 +286,7 @@ public class FragmentShowMember extends Fragment {
             public void onChannelGetMemberList(List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> members) {
 
                 mMemberCount = members.size();
-                if (mAdapter != null) mAdapter.addLoadMore();
+
                 Realm realm = Realm.getDefaultInstance();
                 for (final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : members) {
                     final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, member.getUserId()).findFirst();
@@ -296,7 +297,7 @@ public class FragmentShowMember extends Fragment {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                //if (mAdapter != null) mAdapter.addLoadMore();
+
                                 if (progressBar != null) {
                                     progressBar.setVisibility(View.GONE);
                                 }
@@ -313,12 +314,26 @@ public class FragmentShowMember extends Fragment {
 
             @Override
             public void onError(int majorCode, int minorCode) {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
 
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
             }
 
             @Override
             public void onTimeOut() {
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
 
+                        if (progressBar != null) {
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
             }
         };
         getActivity().runOnUiThread(new Runnable() {
@@ -353,6 +368,7 @@ public class FragmentShowMember extends Fragment {
     }
 
     private void fillItem() {
+
         if (mCurrentUpdateCount >= mMemberCount) {
             if (!isOne && mCurrentUpdateCount > 0) isOne = true;
             try {
@@ -365,7 +381,6 @@ public class FragmentShowMember extends Fragment {
                     @Override
                     public void run() {
 
-                        if (mAdapter != null) mAdapter.removeLoadMore();
                         if (progressBar != null) {
                             progressBar.setVisibility(View.GONE);
                         }
@@ -422,6 +437,10 @@ public class FragmentShowMember extends Fragment {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
 
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+
                 loadMoreMember(page, totalItemsCount, view);
             }
         };
@@ -436,7 +455,7 @@ public class FragmentShowMember extends Fragment {
         if (isOne) {
             isOne = false;
             mCurrentUpdateCount = 0;
-            limit = 12;
+
             offset += limit;
             RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
             if (realmRoom != null) {
