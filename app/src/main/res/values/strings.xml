@@ -167,9 +167,12 @@
   <string name="st_crop">Crop and Resize Photo</string>
   <string name="st_send_by_enter">Send by Enter Key</string>
   <string name="st_title_Media">Multimedia</string>
-  <string name="st_auto_download_data">Auto download\n(using Mobile Data)</string>
-  <string name="st_auto_download_wifi">Auto download\n(using Wi-Fi)</string>
-  <string name="st_auto_download_roaming">Auto download\n(using Data Roaming)</string>
+  <string name="st_auto_download_data">Auto download (using Mobile Data)</string>
+  <string name="title_auto_download_data">Auto download\n(using Mobile Data)</string>
+  <string name="st_auto_download_wifi">Auto download (using Wi-Fi)</string>
+  <string name="title_auto_download_wifi">Auto download\n(using Wi-Fi)</string>
+  <string name="st_auto_download_roaming">Auto download (using Data Roaming)</string>
+  <string name="title_auto_download_roaming">Auto download\n(using Data Roaming)</string>
   <string name="st_auto_gif">Auto Play GIFs</string>
   <string name="st_save_to_gallery">Save to Gallery</string>
   <string name="st_title_support">iGap Support</string>

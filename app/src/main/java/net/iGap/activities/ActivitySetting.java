@@ -1649,7 +1649,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_DATA_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
                 KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 5);
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
                     KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -1698,7 +1698,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_WIFI_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
                 KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5);
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
                     KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -1750,7 +1750,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_ROAMING_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
                 KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
                     KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {

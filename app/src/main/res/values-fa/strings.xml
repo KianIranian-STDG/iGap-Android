@@ -172,8 +172,11 @@
   <string name="st_send_by_enter">"با زدن کلید اینتر ارسال کن"</string>
   <string name="st_title_Media">"چند رسانه ای"</string>
   <string name="st_auto_download_data">"بارگیری خودکار در حالت اتصال به اینترنت سیم کارت"</string>
+  <string name="title_auto_download_data">بارگیری خودکار در حالت اتصال به اینترنت سیم کارت</string>
   <string name="st_auto_download_wifi">"بارگیری خودکار در حالت اتصال به وای فای"</string>
+  <string name="title_auto_download_wifi">بارگیری خودکار در حالت اتصال به وای فای</string>
   <string name="st_auto_download_roaming">"بارگیری خودکار در حالت اتصال به رومینگ داده ها"</string>
+  <string name="title_auto_download_roaming">بارگیری خودکار در حالت اتصال به رومینگ داده ها</string>
   <string name="st_auto_gif">"اجرای خودکار تصاویر متحرک"</string>
   <string name="st_save_to_gallery">"ذخیره‌ کردن در گالری"</string>
   <string name="st_title_support">"بخش پشتیبانی برنامه"</string>
