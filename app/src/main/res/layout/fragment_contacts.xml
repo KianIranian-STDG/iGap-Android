@@ -198,7 +198,12 @@
             android:layout_width="match_parent"
             android:paddingBottom="@dimen/dp6"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:scrollbarThumbVertical="@color/toolbar_background"
+            android:scrollbarSize="5dp"
+            />
 
 
     </android.support.design.widget.CoordinatorLayout>

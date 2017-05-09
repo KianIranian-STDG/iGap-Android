@@ -855,7 +855,6 @@ public class FragmentShowImage extends Fragment {
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
             isLockScreen = true;
-            mAdapter.pause();
         }
     }
 
