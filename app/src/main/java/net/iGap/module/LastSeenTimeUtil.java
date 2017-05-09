@@ -93,9 +93,8 @@ public class LastSeenTimeUtil {
 
                     break;
                 case 1:
-
-                    time = G.context.getResources().getString(R.string.last_seen) + " " + G.context.getResources().getString(R.string.yesterday) + " " + exactlyTime;
-
+                    //time = G.context.getResources().getString(R.string.last_seen) + " " + G.context.getResources().getString(R.string.yesterday) + " " + exactlyTime;
+                    time = G.context.getResources().getString(R.string.yesterday) + " " + exactlyTime;
                     break;
                 case 2:
                     time = G.context.getResources().getString(R.string.two_day);//+ exactlyTime
@@ -117,7 +116,8 @@ public class LastSeenTimeUtil {
                     break;
             }
         } else {
-            time = G.context.getResources().getString(R.string.last_seen) + " " + HelperCalander.checkHijriAndReturnTime(beforeMillis) + " " + exactlyTime;
+            //time = G.context.getResources().getString(R.string.last_seen) + " " + HelperCalander.checkHijriAndReturnTime(beforeMillis) + " " + exactlyTime;
+            time = HelperCalander.checkHijriAndReturnTime(beforeMillis) + " " + exactlyTime;
         }
 
         if (HelperCalander.isLanguagePersian) {

@@ -645,10 +645,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             });
             realm.close();
         }
-
-        if (mRealm != null) mRealm.close();
-
         super.onStop();
+
+        if (mRealm != null) {
+            mRealm.close();
+        }
     }
 
     @Override
@@ -2862,7 +2863,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
          * if in current room client have new message that not seen yet
          * after first new message come in the view change view for unread count
          */
-        if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == Long.parseLong(messageInfo.messageID)) {
+        if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isManaged() && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == Long.parseLong(messageInfo.messageID)) {
             countNewMessage = 0;
             txtNewUnreadMessage.setVisibility(View.GONE);
             txtNewUnreadMessage.setText(countNewMessage + "");
