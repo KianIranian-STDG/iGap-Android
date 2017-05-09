@@ -13,7 +13,6 @@ package net.iGap.helper;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -65,7 +64,8 @@ public class HelperAvatar {
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 if (src == null) {
                     return;
                 }
@@ -116,6 +116,14 @@ public class HelperAvatar {
 
     public static void getAvatar(final long ownerId, AvatarType avatarType, Realm _realm, final OnAvatarGet onAvatarGet) {
 
+        /**
+         * first show user initials and after that show avatar if exist
+         */
+        String[] initialsStart = showInitials(ownerId, avatarType);
+        if (initialsStart != null) {
+            onAvatarGet.onShowInitials(initialsStart[0], initialsStart[1]);
+        }
+
         final RealmAvatar realmAvatar = getLastAvatar(ownerId, _realm);
         if (realmAvatar != null) {
 
@@ -135,22 +143,27 @@ public class HelperAvatar {
                 }
 
                 new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
-                    @Override public void onDownload(final String filepath, final String token) {
+                    @Override
+                    public void onDownload(final String filepath, final String token) {
 
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 final Realm realm = Realm.getDefaultInstance();
                                 realm.executeTransactionAsync(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
                                         for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
                                             realmAvatar1.getFile().setLocalThumbnailPath(filepath);
                                         }
                                     }
                                 }, new Realm.Transaction.OnSuccess() {
-                                    @Override public void onSuccess() {
+                                    @Override
+                                    public void onSuccess() {
 
                                         G.handler.post(new Runnable() {
-                                            @Override public void run() {
+                                            @Override
+                                            public void run() {
                                                 Realm realm1 = Realm.getDefaultInstance();
                                                 for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
 
@@ -179,7 +192,8 @@ public class HelperAvatar {
                                         realm.close();
                                     }
                                 }, new Realm.Transaction.OnError() {
-                                    @Override public void onError(Throwable error) {
+                                    @Override
+                                    public void onError(Throwable error) {
                                         realm.close();
                                     }
                                 });
@@ -187,7 +201,8 @@ public class HelperAvatar {
                         });
                     }
 
-                    @Override public void onError() {
+                    @Override
+                    public void onError() {
 
                     }
                 });
@@ -214,39 +229,38 @@ public class HelperAvatar {
      */
 
     public static void getAvatar(final long ownerId, AvatarType avatarType, final OnAvatarGet onAvatarGet) {
-
         Realm realm = Realm.getDefaultInstance();
-
         getAvatar(ownerId, avatarType, realm, onAvatarGet);
-
         realm.close();
     }
 
     private static void getAvatarAfterTime(final long ownerId, final AvatarType avatarType, final OnAvatarGet onAvatarGet) {
 
         try {
-
             if (mRepeatList.containsKey(ownerId)) {
                 return;
             }
-
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
-
+                @Override
+                public void run() {
                     mRepeatList.put(ownerId, true);
 
                     HelperAvatar.getAvatar(ownerId, avatarType, new OnAvatarGet() {
-                        @Override public void onAvatarGet(final String avatarPath, final long ownerId) {
+                        @Override
+                        public void onAvatarGet(final String avatarPath, final long ownerId) {
                             G.handler.post(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     onAvatarGet.onAvatarGet(avatarPath, ownerId);
                                 }
                             });
                         }
 
-                        @Override public void onShowInitials(final String initials, final String color) {
+                        @Override
+                        public void onShowInitials(final String initials, final String color) {
                             G.handler.post(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     onAvatarGet.onShowInitials(initials, color);
                                 }
                             });
@@ -255,7 +269,7 @@ public class HelperAvatar {
                 }
             }, 1500);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -267,15 +281,11 @@ public class HelperAvatar {
      */
 
     public static RealmAvatar getLastAvatar(long ownerId, Realm realm) {
-
         for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
-
             if (avatar.getFile() != null) {
-                Log.i("AAA", "getLastAvatar avatarId : " + avatar.getId());
                 return avatar;
             }
         }
-
         return null;
     }
 
@@ -315,7 +325,7 @@ public class HelperAvatar {
         realm.close();
 
         if (initials != null && color != null) {
-            return new String[] { initials, color };
+            return new String[]{initials, color};
         }
 
         return null;
@@ -330,7 +340,6 @@ public class HelperAvatar {
      */
 
     public static boolean checkExistAvatar(final long ownerId) {
-
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmAvatar> results = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAll();
         if (results.size() > 0) {
@@ -353,43 +362,45 @@ public class HelperAvatar {
     public static void avatarDelete(final long ownerId, final long avatarId, final AvatarType avatarType, @Nullable final OnAvatarDelete onAvatarDelete) {
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
                         if (realmAvatar != null) {
                             realmAvatar.deleteFromRealm();
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
-
+                    @Override
+                    public void onSuccess() {
                         if (onAvatarDelete != null) {
                             getAvatar(ownerId, avatarType, new OnAvatarGet() {
-                                @Override public void onAvatarGet(String avatarPath, long ownerId) {
+                                @Override
+                                public void onAvatarGet(String avatarPath, long ownerId) {
                                     onAvatarDelete.latestAvatarPath(avatarPath);
                                 }
 
-                                @Override public void onShowInitials(String initials, String color) {
+                                @Override
+                                public void onShowInitials(String initials, String color) {
                                     onAvatarDelete.showInitials(initials, color);
                                 }
                             });
                         }
-
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
-                    @Override public void onError(Throwable error) {
-
+                    @Override
+                    public void onError(Throwable error) {
                         if (onAvatarDelete != null) {
                             String[] initials = showInitials(ownerId, avatarType);
                             if (initials != null) {
                                 onAvatarDelete.showInitials(initials[0], initials[1]);
                             }
                         }
-
                         realm.close();
                     }
                 });
@@ -424,7 +435,8 @@ public class HelperAvatar {
             new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector, identity);
         }
 
-        @Override public void onFileDownload(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+        @Override
+        public void onFileDownload(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
             if (progress == 100) {
                 String _newPath = filePath.replace(G.DIR_TEMP, G.DIR_IMAGE_USER);
                 try {
@@ -435,10 +447,11 @@ public class HelperAvatar {
 
                 onDownload.onDownload(_newPath, token);
             } else {
-                // I don't use offset in getting thumbnail
+                /**
+                 * don't use offset in getting thumbnail
+                 */
                 try {
                     String identity = token + '*' + selector.toString() + '*' + fileSize + '*' + filePath + '*' + offset + '*' + false;
-
                     new RequestFileDownload().download(token, offset, (int) fileSize, selector, identity);
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
@@ -446,86 +459,9 @@ public class HelperAvatar {
             }
         }
 
-        @Override public void onError() {
+        @Override
+        public void onError() {
             //TODO [Saeed Mozaffari] [2016-12-13 9:28 AM] - do something on download error (( hint : if was timeout reDownload file))
-        }
-    }
-
-    //======================do this for room list
-
-    public static void getAvatar1(final long ownerId, AvatarType avatarType, final OnAvatarGet onAvatarGet) {
-
-        final Realm realm = Realm.getDefaultInstance();
-
-        final RealmAvatar realmAvatar = getLastAvatar(ownerId, realm);
-
-        realm.close();
-
-        if (realmAvatar != null) {
-            if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalFilePath(), ownerId);
-            } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalThumbnailPath(), ownerId);
-            } else {
-
-                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
-                    @Override public void onDownload(final String filepath, final String token) {
-
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override public void run() {
-                                final Realm realm = Realm.getDefaultInstance();
-
-                                realm.executeTransactionAsync(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
-                                        for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).findAll()) {
-                                            if (realmAvatar1.getFile().getToken().equals(token)) {
-                                                realmAvatar1.getFile().setLocalThumbnailPath(filepath);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }, new Realm.Transaction.OnSuccess() {
-                                    @Override public void onSuccess() {
-
-                                        G.handler.post(new Runnable() {
-                                            @Override public void run() {
-                                                Realm realm1 = Realm.getDefaultInstance();
-                                                for (RealmAvatar realmAvatar1 : realm1.where(RealmAvatar.class).findAll()) {
-                                                    if (realmAvatar1.getFile().getToken().equals(token)) {
-                                                        G.onUpdateAvatar.onUpdateAvatar(getRoomId(realmAvatar1.getOwnerId()));
-                                                        break;
-                                                    }
-                                                }
-                                                realm1.close();
-                                            }
-                                        });
-
-                                        realm.close();
-                                    }
-                                }, new Realm.Transaction.OnError() {
-                                    @Override public void onError(Throwable error) {
-                                        realm.close();
-                                    }
-                                });
-                            }
-                        });
-                    }
-
-                    @Override public void onError() {
-
-                    }
-                });
-
-                String[] initials = showInitials(ownerId, avatarType);
-                if (initials != null) {
-                    onAvatarGet.onShowInitials(initials[0], initials[1]);
-                }
-            }
-        } else {
-            String[] initials = showInitials(ownerId, avatarType);
-            if (initials != null) {
-                onAvatarGet.onShowInitials(initials[0], initials[1]);
-            }
         }
     }
 
@@ -547,11 +483,13 @@ public class HelperAvatar {
             HelperInfo.needUpdateUser(userId, null);
         }
 
-        @Override public void onUserInfoForAvatar(final ProtoGlobal.RegisteredUser user) {
+        @Override
+        public void onUserInfoForAvatar(final ProtoGlobal.RegisteredUser user) {
 
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
                         if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == user.getId()) {
                             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();

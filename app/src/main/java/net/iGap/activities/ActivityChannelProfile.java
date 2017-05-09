@@ -52,7 +52,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmModel;
-import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -134,13 +133,11 @@ import net.iGap.request.RequestUserInfo;
 
 import static net.iGap.G.context;
 
-public class ActivityChannelProfile extends ActivityEnhanced
-    implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete, OnChannelLeft, OnChannelEdit,
-    OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
+public class ActivityChannelProfile extends ActivityEnhanced implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
 
     private AppBarLayout appBarLayout;
     private TextView txtDescription, txtChannelLink, txtChannelNameInfo;
-    private MaterialDesignTextView imgPupupMenul;
+    private MaterialDesignTextView imgPopupMenu;
     private CircleImageView imgCircleImageView;
     private FloatingActionButton fab;
     private PopupWindow popupWindow;
@@ -166,15 +163,12 @@ public class ActivityChannelProfile extends ActivityEnhanced
     private LinearLayout lytDeleteChannel;
     private LinearLayout lytNotification;
     private AttachFile attachFile;
-    private long avatarId;
     private long roomId;
     private boolean isPrivate;
     private String linkUsername;
     private boolean isSignature;
     private TextView txtLinkTitle;
     private boolean isPopup = false;
-    private int limitation = 50; // limit for show member in list
-    private int currentOffset = 0;
 
     private boolean isNeedGetMemberList = true;
 
@@ -182,7 +176,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
 
         if (mRoom != null) {
@@ -190,12 +185,14 @@ public class ActivityChannelProfile extends ActivityEnhanced
         }
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         if (mRealm != null) mRealm.close();
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
 
         super.onResume();
 
@@ -205,11 +202,13 @@ public class ActivityChannelProfile extends ActivityEnhanced
             if (changeListener == null) {
 
                 changeListener = new RealmChangeListener<RealmModel>() {
-                    @Override public void onChange(final RealmModel element) {
+                    @Override
+                    public void onChange(final RealmModel element) {
 
                         if (((RealmRoom) element).isValid()) {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
 
                                     if (countText == null || countText.length() == 0) {
@@ -236,7 +235,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         }
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_channel);
 
@@ -308,7 +308,7 @@ public class ActivityChannelProfile extends ActivityEnhanced
         txtLinkTitle = (TextView) findViewById(R.id.txt_channel_link_title);
         ViewGroup vgRootAddMember = (ViewGroup) findViewById(R.id.agp_root_layout_add_member);
         ViewGroup ltLink = (ViewGroup) findViewById(R.id.layout_channel_link);
-        imgPupupMenul = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
+        imgPopupMenu = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
         txtDescription = (TextView) findViewById(R.id.txt_description);
         if ((role == ChannelChatRole.MEMBER) || (role == ChannelChatRole.MODERATOR)) {
             vgRootAddMember.setVisibility(View.GONE);
@@ -337,10 +337,10 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
             fab.setVisibility(View.VISIBLE);
 
-            imgPupupMenul.setVisibility(View.VISIBLE);
+            imgPopupMenu.setVisibility(View.VISIBLE);
         } else {
             fab.setVisibility(View.GONE);
-            imgPupupMenul.setVisibility(View.GONE);
+            imgPopupMenu.setVisibility(View.GONE);
         }
 
         if (role != ChannelChatRole.OWNER) {
@@ -350,32 +350,37 @@ public class ActivityChannelProfile extends ActivityEnhanced
         }
 
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showListForCustomRole(ProtoGlobal.ChannelRoom.Role.ADMIN.toString());
             }
         });
 
         lytListModerator.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showListForCustomRole(ProtoGlobal.ChannelRoom.Role.MODERATOR.toString());
             }
         });
 
         lytDeleteChannel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 deleteChannel();
             }
         });
 
         lytNotification.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 notificationAndSound();
             }
         });
 
         final RippleView rippleBack = (RippleView) findViewById(R.id.pch_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -389,7 +394,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         titleToolbar = (TextView) findViewById(R.id.pch_txt_titleToolbar);
         titleToolbar.setText("" + title);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 ViewGroup viewGroup = (ViewGroup) findViewById(R.id.pch_root_circleImage);
                 if (verticalOffset < -5) {
@@ -408,13 +414,15 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
         RippleView rippleMenu = (RippleView) findViewById(R.id.pch_ripple_menuPopup);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 showPopUp();
             }
         });
 
         fab.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 startDialogSelectPicture(R.array.profile);
             }
@@ -422,18 +430,14 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
         imgCircleImageView = (CircleImageView) findViewById(R.id.pch_img_circleImage);
         imgCircleImageView.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 Realm realm = Realm.getDefaultInstance();
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
                     FragmentShowAvatars.appBarLayout = fab;
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
-                    ActivityChannelProfile.this.getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer_channel_profile, fragment, null)
-                        .commit();
+                    ActivityChannelProfile.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
                 }
                 realm.close();
             }
@@ -442,7 +446,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         txtChannelLink = (TextView) findViewById(R.id.txt_channel_link);
 
         lytSharedMedia.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(ActivityChannelProfile.this, ActivityShearedMedia.class);
                 intent.putExtra("RoomID", roomId);
                 startActivity(intent);
@@ -450,13 +455,15 @@ public class ActivityChannelProfile extends ActivityEnhanced
         });
 
         lytChannelName.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 ChangeGroupName();
             }
         });
 
         lytChannelDescription.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 ChangeGroupDescription();
             }
         });
@@ -465,13 +472,10 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
         TextView txtShowMember = (TextView) findViewById(R.id.agp_txt_show_member);
         txtShowMember.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userId, "", isNeedGetMemberList);
-                getSupportFragmentManager().beginTransaction()
-                    .addToBackStack("null")
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.fragmentContainer_channel_profile, fragment, "Show_member")
-                    .commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, "Show_member").commit();
 
                 isNeedGetMemberList = false;
             }
@@ -479,7 +483,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
         ViewGroup layoutAddMember = (ViewGroup) findViewById(R.id.agp_layout_add_member);
         layoutAddMember.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 addMemberToChannel();
             }
         });
@@ -494,7 +499,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         setTextChannelLik();
 
         ltLink.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 isPopup = false;
                 if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
@@ -512,12 +518,13 @@ public class ActivityChannelProfile extends ActivityEnhanced
         attachFile = new AttachFile(this);
 
         setAvatar();
-        setAvatarChannel();
+        //setAvatarChannel();
         initRecycleView();
         showAdminOrModeratorList();
 
         FragmentShowAvatars.onComplete = new OnComplete() {
-            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
 
                 //                showImage();
                 long mAvatarId = 0;
@@ -527,18 +534,20 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
                 final long finalMAvatarId = mAvatarId;
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         HelperAvatar.avatarDelete(roomId, finalMAvatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
-                            @Override public void latestAvatarPath(String avatarPath) {
+                            @Override
+                            public void latestAvatarPath(String avatarPath) {
                                 setImage(avatarPath);
                             }
 
-                            @Override public void showInitials(final String initials, final String color) {
+                            @Override
+                            public void showInitials(final String initials, final String color) {
                                 runOnUiThread(new Runnable() {
-                                    @Override public void run() {
-                                        imgCircleImageView.setImageBitmap(
-                                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials,
-                                                color));
+                                    @Override
+                                    public void run() {
+                                        imgCircleImageView.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                                     }
                                 });
                             }
@@ -558,11 +567,13 @@ public class ActivityChannelProfile extends ActivityEnhanced
         }
 
         G.onChannelUpdateSignature = new OnChannelUpdateSignature() {
-            @Override public void onChannelUpdateSignatureResponse(final long roomId, final boolean signature) {
+            @Override
+            public void onChannelUpdateSignatureResponse(final long roomId, final boolean signature) {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                         realmRoom.getChannelRoom().setSignature(signature);
                     }
@@ -571,14 +582,17 @@ public class ActivityChannelProfile extends ActivityEnhanced
                 realm.close();
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override public void onClick(View view) {
+                            @Override
+                            public void onClick(View view) {
                                 snack.dismiss();
                             }
                         });
@@ -595,7 +609,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         };
 
         txtSignature.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 if (toggleEnableSignature.isChecked()) {
                     toggleEnableSignature.setChecked(false);
@@ -652,25 +667,27 @@ public class ActivityChannelProfile extends ActivityEnhanced
         layoutRevoke.addView(inputRevoke, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.channel_link_title_revoke))
-            .positiveText(getResources().getString(R.string.revoke))
-            .customView(layoutRevoke, true)
-            .widgetColor(getResources().getColor(R.color.toolbar_background))
-            .negativeText(getResources().getString(R.string.B_cancel))
-            .neutralText(R.string.array_Copy)
-            .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    String copy;
-                    copy = txtChannelLink.getText().toString();
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                    clipboard.setPrimaryClip(clip);
-                }
-            })
-            .build();
+                .positiveText(getResources().getString(R.string.revoke))
+                .customView(layoutRevoke, true)
+                .widgetColor(getResources().getColor(R.color.toolbar_background))
+                .negativeText(getResources().getString(R.string.B_cancel))
+                .neutralText(R.string.array_Copy)
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = txtChannelLink.getText().toString();
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                })
+                .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 new RequestChannelRevokeLink().channelRevokeLink(roomId);
             }
         });
@@ -712,91 +729,56 @@ public class ActivityChannelProfile extends ActivityEnhanced
         layoutChannelLink.addView(inputChannelLink, layoutParams);
         layoutChannelLink.addView(txtLink, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.channel_link))
-            .positiveText(getResources().getString(R.string.array_Copy))
-            .customView(layoutChannelLink, true)
-            .widgetColor(getResources().getColor(R.color.toolbar_background))
-            .negativeText(getResources().getString(R.string.B_cancel))
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    String copy;
-                    copy = txtChannelLink.getText().toString();
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                    clipboard.setPrimaryClip(clip);
-                }
-            })
-            .build();
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.channel_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutChannelLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = txtChannelLink.getText().toString();
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                }).build();
 
         dialog.show();
     }
 
     private void setAvatar() {
         HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
-            @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+            @Override
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgCircleImageView);
                     }
                 });
             }
 
-            @Override public void onShowInitials(final String initials, final String color) {
+            @Override
+            public void onShowInitials(final String initials, final String color) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
-                        imgCircleImageView.setImageBitmap(
-                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    @Override
+                    public void run() {
+                        imgCircleImageView.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
             }
         });
     }
 
-    private void setAvatarChannel() {
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatar> avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findAll();
-
-        if (avatars.isEmpty()) {
-            imgCircleImageView.setImageBitmap(
-                net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-            return;
-        }
-        RealmAvatar realmAvatar = null;
-        for (int i = avatars.size() - 1; i >= 0; i--) {
-            RealmAvatar avatar = avatars.get(i);
-            if (avatar.getFile() != null) {
-                realmAvatar = avatar;
-                break;
-            }
-        }
-
-        if (realmAvatar == null) {
-            imgCircleImageView.setImageBitmap(
-                net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-            return;
-        }
-
-        if (realmAvatar.getFile().isFileExistsOnLocal()) {
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imgCircleImageView);
-        } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imgCircleImageView);
-        } else {
-            imgCircleImageView.setImageBitmap(
-                net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-        }
-
-        realm.close();
-    }
-
-    //=============================================================== Channel Members ==============
+    /**
+     * ************************************* Channel Members *************************************
+     */
 
     public static OnMenuClick onMenuClick;
 
     private void initRecycleView() {
 
         onMenuClick = new OnMenuClick() {
-            @Override public void clicked(View view, StructContactInfo info) {
+            @Override
+            public void clicked(View view, StructContactInfo info) {
                 new CreatePopUpMessage().show(view, info);
             }
         };
@@ -806,11 +788,7 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
     private void showListForCustomRole(String SelectedRole) {
         FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userId, SelectedRole, isNeedGetMemberList);
-        getSupportFragmentManager().beginTransaction()
-            .addToBackStack("null")
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            .replace(R.id.fragmentContainer_channel_profile, fragment, "Show_member")
-            .commit();
+        getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, "Show_member").commit();
 
         isNeedGetMemberList = false;
     }
@@ -844,7 +822,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         }
 
         Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
-            @Override public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
+            @Override
+            public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
 
                 for (int i = 0; i < list.size(); i++) {
                     new RequestChannelAddMember().channelAddMember(roomId, list.get(i).peerId, 0);
@@ -856,11 +835,7 @@ public class ActivityChannelProfile extends ActivityEnhanced
         bundle.putBoolean("DIALOG_SHOWING", false);
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            .addToBackStack(null)
-            .replace(R.id.coordinator, fragment)
-            .commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.coordinator, fragment).commit();
     }
 
     //****** create popup
@@ -954,7 +929,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
     private void startDialogSelectPicture(int r) {
 
         new MaterialDialog.Builder(this).title(R.string.choose_picture).negativeText(R.string.cansel).items(r).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+            @Override
+            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(getString(R.string.from_camera))) {
 
                     if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
@@ -962,21 +938,25 @@ public class ActivityChannelProfile extends ActivityEnhanced
                         try {
 
                             HelperPermision.getStoragePermision(ActivityChannelProfile.this, new OnGetPermission() {
-                                @Override public void Allow() throws IOException {
+                                @Override
+                                public void Allow() throws IOException {
                                     HelperPermision.getCameraPermission(ActivityChannelProfile.this, new OnGetPermission() {
-                                        @Override public void Allow() {
+                                        @Override
+                                        public void Allow() {
                                             // this dialog show 2 way for choose image : gallery and camera
                                             dialog.dismiss();
                                             useCamera();
                                         }
 
-                                        @Override public void deny() {
+                                        @Override
+                                        public void deny() {
 
                                         }
                                     });
                                 }
 
-                                @Override public void deny() {
+                                @Override
+                                public void deny() {
 
                                 }
                             });
@@ -1019,7 +999,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
     private void setMemberCount(final long roomId, final boolean plus) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null && realmRoom.getChannelRoom() != null) {
                     if (HelperString.isNumeric(realmRoom.getChannelRoom().getParticipantsCountLabel())) {
@@ -1066,34 +1047,28 @@ public class ActivityChannelProfile extends ActivityEnhanced
     private String dialogName;
 
     private void ChangeGroupDescription() {
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_description)
-            .positiveText(getString(R.string.save))
-            .alwaysCallInputCallback()
-            .widgetColor(getResources().getColor(R.color.toolbar_background))
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    editChannelRequest(txtChannelNameInfo.getText().toString(), dialogDesc);
-                    showProgressBar();
-                }
-            })
-            .negativeText(getString(R.string.cancel))
-            .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
-            .input(getString(R.string.please_enter_group_description), txtDescription.getText().toString(), new MaterialDialog.InputCallback() {
-                @Override public void onInput(MaterialDialog dialog, CharSequence input) {
-                    // Do something
-                    View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                    dialogDesc = input.toString();
-                    if (!input.toString().equals(txtDescription.getText().toString())) {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(R.string.channel_description).positiveText(getString(R.string.save)).alwaysCallInputCallback().widgetColor(getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                editChannelRequest(txtChannelNameInfo.getText().toString(), dialogDesc);
+                showProgressBar();
+            }
+        }).negativeText(getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(getString(R.string.please_enter_group_description), txtDescription.getText().toString(), new MaterialDialog.InputCallback() {
+            @Override
+            public void onInput(MaterialDialog dialog, CharSequence input) {
+                // Do something
+                View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                dialogDesc = input.toString();
+                if (!input.toString().equals(txtDescription.getText().toString())) {
 
-                        positive.setClickable(true);
-                        positive.setAlpha(1.0f);
-                    } else {
-                        positive.setClickable(false);
-                        positive.setAlpha(0.5f);
-                    }
+                    positive.setClickable(true);
+                    positive.setAlpha(1.0f);
+                } else {
+                    positive.setClickable(false);
+                    positive.setAlpha(0.5f);
                 }
-            })
-            .show();
+            }
+        }).show();
     }
 
     private void ChangeGroupName() {
@@ -1122,27 +1097,25 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.channel_name))
-            .positiveText(getResources().getString(R.string.save))
-            .customView(layoutUserName, true)
-            .widgetColor(getResources().getColor(R.color.toolbar_background))
-            .negativeText(getResources().getString(R.string.B_cancel))
-            .build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.channel_name)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
         final String finalChannelName = title;
         positive.setEnabled(false);
         edtNameChannel.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (!edtNameChannel.getText().toString().equals(finalChannelName)) {
                     positive.setEnabled(true);
                 } else {
@@ -1152,27 +1125,33 @@ public class ActivityChannelProfile extends ActivityEnhanced
         });
 
         G.onChannelEdit = new OnChannelEdit() {
-            @Override public void onChannelEdit(final long roomId, final String name, final String description) {
+            @Override
+            public void onChannelEdit(final long roomId, final String name, final String description) {
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         hideProgressBar();
                         txtChannelNameInfo.setText(name);
                     }
                 });
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         hideProgressBar();
                     }
                 });
             }
 
-            @Override public void onTimeOut() {
+            @Override
+            public void onTimeOut() {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         hideProgressBar();
                     }
                 });
@@ -1180,7 +1159,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         };
 
         positive.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 new RequestChannelEdit().channelEdit(roomId, edtNameChannel.getText().toString(), txtDescription.getText().toString());
                 dialog.dismiss();
@@ -1189,7 +1169,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         });
 
         edtNameChannel.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View view, boolean b) {
+            @Override
+            public void onFocusChange(View view, boolean b) {
                 if (b) {
                     viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                 } else {
@@ -1205,7 +1186,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
     private void editChannelResponse(long roomIdR, final String name, final String description) {
 
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 hideProgressBar();
                 txtChannelNameInfo.setText(name);
                 txtDescription.setText(description);
@@ -1248,7 +1230,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
     //***On Add Avatar Response From Server
 
-    @Override public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
+    @Override
+    public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
         /**
          * if another account do this action we haven't avatar source and have
          * to download avatars . for do this action call HelperAvatar.getAvatar
@@ -1257,10 +1240,12 @@ public class ActivityChannelProfile extends ActivityEnhanced
             setAvatar();
         } else {
             HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
-                @Override public void onAvatarAdd(final String avatarPath) {
+                @Override
+                public void onAvatarAdd(final String avatarPath) {
 
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             hideProgressBar();
                             setImage(avatarPath);
                         }
@@ -1271,25 +1256,30 @@ public class ActivityChannelProfile extends ActivityEnhanced
         }
     }
 
-    @Override public void onAvatarAddError() {
+    @Override
+    public void onAvatarAddError() {
         hideProgressBar();
     }
 
     //***On Avatar Delete
 
-    @Override public void onChannelAvatarDelete(final long roomId, final long avatarId) {
+    @Override
+    public void onChannelAvatarDelete(final long roomId, final long avatarId) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 HelperAvatar.avatarDelete(roomId, avatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
-                    @Override public void latestAvatarPath(String avatarPath) {
+                    @Override
+                    public void latestAvatarPath(String avatarPath) {
                         setImage(avatarPath);
                     }
 
-                    @Override public void showInitials(final String initials, final String color) {
+                    @Override
+                    public void showInitials(final String initials, final String color) {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                imgCircleImageView.setImageBitmap(
-                                    net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            @Override
+                            public void run() {
+                                imgCircleImageView.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                             }
                         });
                     }
@@ -1300,19 +1290,22 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
     //***Edit Channel
 
-    @Override public void onChannelEdit(long roomId, String name, String description) {
+    @Override
+    public void onChannelEdit(long roomId, String name, String description) {
         editChannelResponse(roomId, name, description);
     }
 
     //***Delete Channel
 
-    @Override public void onChannelDelete(long roomId) {
+    @Override
+    public void onChannelDelete(long roomId) {
         closeActivity();
     }
 
     //***Left Channel
 
-    @Override public void onChannelLeft(long roomId, long memberId) {
+    @Override
+    public void onChannelLeft(long roomId, long memberId) {
         closeActivity();
     }
 
@@ -1320,7 +1313,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
     private void closeActivity() {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 hideProgressBar();
                 ActivityChannelProfile.this.finish();
                 if (ActivityChat.activityChat != null) {
@@ -1333,39 +1327,47 @@ public class ActivityChannelProfile extends ActivityEnhanced
     //***Get Member List
 
     //***Member
-    @Override public void onChannelAddMember(Long roomId, Long userId, ProtoGlobal.ChannelRoom.Role role) {
+    @Override
+    public void onChannelAddMember(Long roomId, Long userId, ProtoGlobal.ChannelRoom.Role role) {
         channelAddMemberResponse(roomId, userId, role);
     }
 
-    @Override public void onChannelKickMember(long roomId, long memberId) {
+    @Override
+    public void onChannelKickMember(long roomId, long memberId) {
         channelKickMember(roomId, memberId);
     }
 
     //***Moderator
-    @Override public void onChannelAddModerator(long roomId, long memberId) {
+    @Override
+    public void onChannelAddModerator(long roomId, long memberId) {
 
     }
 
-    @Override public void onChannelKickModerator(long roomId, long memberId) {
+    @Override
+    public void onChannelKickModerator(long roomId, long memberId) {
 
     }
 
     //***Admin
-    @Override public void onChannelAddAdmin(long roomId, long memberId) {
+    @Override
+    public void onChannelAddAdmin(long roomId, long memberId) {
 
     }
 
-    @Override public void onChannelKickAdmin(long roomId, long memberId) {
+    @Override
+    public void onChannelKickAdmin(long roomId, long memberId) {
 
     }
 
     //***time out and errors for either of this interfaces
 
-    @Override public void onChannelRevokeLink(long roomId, final String inviteLink, final String inviteToken) {
+    @Override
+    public void onChannelRevokeLink(long roomId, final String inviteLink, final String inviteToken) {
 
         hideProgressBar();
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 edtRevoke.setText("" + inviteLink);
                 txtChannelLink.setText("" + inviteLink);
             }
@@ -1377,7 +1379,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         final RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 realmChannelRoom.setInviteLink(inviteLink);
                 realmChannelRoom.setInvite_token(inviteToken);
@@ -1386,14 +1389,17 @@ public class ActivityChannelProfile extends ActivityEnhanced
         realm.close();
     }
 
-    @Override public void onError(int majorCode, int minorCode) {
+    @Override
+    public void onError(int majorCode, int minorCode) {
         hideProgressBar();
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         snack.dismiss();
                     }
                 });
@@ -1402,14 +1408,17 @@ public class ActivityChannelProfile extends ActivityEnhanced
         });
     }
 
-    @Override public void onTimeOut() {
+    @Override
+    public void onTimeOut() {
         hideProgressBar();
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         snack.dismiss();
                     }
                 });
@@ -1474,16 +1483,17 @@ public class ActivityChannelProfile extends ActivityEnhanced
         popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
         popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources()
 
-            .
+                .
 
-                getDimension(R.dimen.dp16), (int) getResources()
+                        getDimension(R.dimen.dp16), (int) getResources()
 
-            .
+                .
 
-                getDimension(R.dimen.dp32));
+                        getDimension(R.dimen.dp32));
 
         text3.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 isPopup = true;
 
@@ -1500,15 +1510,18 @@ public class ActivityChannelProfile extends ActivityEnhanced
     private void convertToPrivate() {
 
         G.onChannelRemoveUsername = new OnChannelRemoveUsername() {
-            @Override public void onChannelRemoveUsername(final long roomId) {
+            @Override
+            public void onChannelRemoveUsername(final long roomId) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         isPrivate = true;
                         setTextChannelLik();
                         Realm realm = Realm.getDefaultInstance();
 
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                 RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                                 realmChannelRoom.setPrivate(true);
@@ -1519,38 +1532,31 @@ public class ActivityChannelProfile extends ActivityEnhanced
                 });
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
 
             }
         };
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_private))
-            .content(getString(R.string.channel_text_convert_to_private))
-            .positiveText(R.string.B_ok)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_private)).content(getString(R.string.channel_text_convert_to_private)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                    new RequestChannelRemoveUsername().channelRemoveUsername(roomId);
-                }
-            })
-            .negativeText(R.string.B_cancel)
-            .show();
+                new RequestChannelRemoveUsername().channelRemoveUsername(roomId);
+            }
+        }).negativeText(R.string.B_cancel).show();
     }
 
     private void convertToPublic() {
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_public))
-            .content(getString(R.string.channel_text_convert_to_public))
-            .positiveText(R.string.B_ok)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_public)).content(getString(R.string.channel_text_convert_to_public)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                    dialog.dismiss();
-                    setUsername();
-                }
-            })
-            .negativeText(R.string.B_cancel)
-            .show();
+                dialog.dismiss();
+                setUsername();
+            }
+        }).negativeText(R.string.B_cancel).show();
     }
 
     private void setUsername() {
@@ -1585,21 +1591,18 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username))
-            .positiveText(getResources().getString(R.string.save))
-            .customView(layoutUserName, true)
-            .widgetColor(getResources().getColor(R.color.toolbar_background))
-            .negativeText(getResources().getString(R.string.B_cancel))
-            .build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
 
         G.onChannelCheckUsername = new OnChannelCheckUsername() {
-            @Override public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
+            @Override
+            public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
 
                             positive.setEnabled(true);
@@ -1622,24 +1625,29 @@ public class ActivityChannelProfile extends ActivityEnhanced
                 });
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
 
             }
 
-            @Override public void onTimeOut() {
+            @Override
+            public void onTimeOut() {
 
             }
         };
 
         edtUserName.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
                 if (!editable.toString().contains("iGap.net/")) {
                     edtUserName.setText("iGap.net/");
@@ -1658,10 +1666,12 @@ public class ActivityChannelProfile extends ActivityEnhanced
         });
 
         G.onChannelUpdateUsername = new OnChannelUpdateUsername() {
-            @Override public void onChannelUpdateUsername(final long roomId, final String username) {
+            @Override
+            public void onChannelUpdateUsername(final long roomId, final String username) {
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         isPrivate = false;
                         dialog.dismiss();
@@ -1671,7 +1681,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                 RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                                 realmChannelRoom.setUsername("iGap.net" + edtUserName.getText().toString());
@@ -1683,12 +1694,14 @@ public class ActivityChannelProfile extends ActivityEnhanced
                 });
             }
 
-            @Override public void onError(final int majorCode, int minorCode, final int time) {
+            @Override
+            public void onError(final int majorCode, int minorCode, final int time) {
 
                 switch (majorCode) {
                     case 457:
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 if (dialog.isShowing()) dialog.dismiss();
                                 dialogWaitTime(R.string.CHANNEL_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
                             }
@@ -1697,13 +1710,15 @@ public class ActivityChannelProfile extends ActivityEnhanced
                 }
             }
 
-            @Override public void onTimeOut() {
+            @Override
+            public void onTimeOut() {
 
             }
         };
 
         positive.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 String userName = edtUserName.getText().toString().replace("iGap.net/", "");
                 new RequestChannelUpdateUsername().channelUpdateUsername(roomId, userName);
@@ -1711,7 +1726,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         });
 
         edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View view, boolean b) {
+            @Override
+            public void onFocusChange(View view, boolean b) {
                 if (b) {
                     viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                 } else {
@@ -1739,7 +1755,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
         }
 
         new MaterialDialog.Builder(ActivityChannelProfile.this).title(title).content(deleteText).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 if (role.equals(ChannelChatRole.OWNER)) {
                     new RequestChannelDelete().channelDelete(roomId);
@@ -1757,7 +1774,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
     private void setImage(final String imagePath) {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (new File(imagePath).exists()) {
                     imgCircleImageView.setPadding(0, 0, 0, 0);
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
@@ -1774,16 +1792,13 @@ public class ActivityChannelProfile extends ActivityEnhanced
         bundle.putString("PAGE", "CHANNEL");
         bundle.putLong("ID", roomId);
         fragmentNotification.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            .addToBackStack(null)
-            .replace(R.id.fragmentContainer_channel_profile, fragmentNotification)
-            .commit();
+        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_channel_profile, fragmentNotification).commit();
     }
 
     //*** onActivityResult
 
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
@@ -1815,7 +1830,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
             showProgressBar();
             HelperUploadFile.startUploadTaskAvatar(filePath, avatarId, new HelperUploadFile.UpdateListener() {
-                @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                @Override
+                public void OnProgress(int progress, FileUploadStructure struct) {
                     if (progress < 100) {
                         prgWait.setProgress(progress);
                     } else {
@@ -1823,7 +1839,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
                     }
                 }
 
-                @Override public void OnError() {
+                @Override
+                public void OnError() {
                     hideProgressBar();
                 }
             });
@@ -1832,7 +1849,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
     private void showProgressBar() {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (prgWait != null) {
                     prgWait.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -1843,7 +1861,8 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
     private void hideProgressBar() {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 prgWait.setVisibility(View.GONE);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
@@ -1852,30 +1871,27 @@ public class ActivityChannelProfile extends ActivityEnhanced
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(title)
-            .customView(R.layout.dialog_remind_time, wrapInScrollView)
-            .positiveText(R.string.B_ok)
-            .autoDismiss(false)
-            .canceledOnTouchOutside(false)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                }
-            })
-            .show();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+            }
+        }).show();
 
         View v = dialog.getCustomView();
 
         final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
-            @Override public void onTick(long millisUntilFinished) {
+            @Override
+            public void onTick(long millisUntilFinished) {
                 int seconds = (int) ((millisUntilFinished) / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
                 remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
             }
 
-            @Override public void onFinish() {
+            @Override
+            public void onFinish() {
                 remindTime.setText("00:00");
             }
         };
