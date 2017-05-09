@@ -580,29 +580,59 @@ public class FragmentShowMember extends Fragment {
                 @Override
                 public boolean onLongClick(View v) {
 
-                    if (role.equals(GroupChatRole.OWNER.toString())) {
+                    if (getActivity() instanceof ActivityGroupProfile) {
 
-                        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                        if (role.equals(GroupChatRole.OWNER.toString())) {
 
-                            ((ActivityGroupProfile) getActivity()).kickMember(mContact.peerId);
-                        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
 
-                            ((ActivityGroupProfile) getActivity()).kickAdmin(mContact.peerId);
-                        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                                ((ActivityGroupProfile) getActivity()).kickMember(mContact.peerId);
+                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
 
-                            ((ActivityGroupProfile) getActivity()).kickModerator(mContact.peerId);
+                                ((ActivityGroupProfile) getActivity()).kickAdmin(mContact.peerId);
+                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+
+                                ((ActivityGroupProfile) getActivity()).kickModerator(mContact.peerId);
+                            }
+                        } else if (role.equals(GroupChatRole.ADMIN.toString())) {
+
+                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                                ((ActivityGroupProfile) getActivity()).kickMember(mContact.peerId);
+                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                                ((ActivityGroupProfile) getActivity()).kickModerator(mContact.peerId);
+                            }
+                        } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
+
+                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                                ((ActivityGroupProfile) getActivity()).kickMember(mContact.peerId);
+                            }
                         }
-                    } else if (role.equals(GroupChatRole.ADMIN.toString())) {
+                    } else if (getActivity() instanceof ActivityChannelProfile) {
 
-                        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                            ((ActivityGroupProfile) getActivity()).kickMember(mContact.peerId);
-                        } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                            ((ActivityGroupProfile) getActivity()).kickModerator(mContact.peerId);
-                        }
-                    } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
+                        if (role.equals(GroupChatRole.OWNER.toString())) {
 
-                        if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                            ((ActivityGroupProfile) getActivity()).kickMember(mContact.peerId);
+                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+
+                                ((ActivityChannelProfile) getActivity()).kickMember(mContact.peerId);
+                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+
+                                ((ActivityChannelProfile) getActivity()).kickAdmin(mContact.peerId);
+                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+
+                                ((ActivityChannelProfile) getActivity()).kickModerator(mContact.peerId);
+                            }
+                        } else if (role.equals(GroupChatRole.ADMIN.toString())) {
+
+                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                                ((ActivityChannelProfile) getActivity()).kickMember(mContact.peerId);
+                            } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                                ((ActivityChannelProfile) getActivity()).kickModerator(mContact.peerId);
+                            }
+                        } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
+
+                            if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                                ((ActivityChannelProfile) getActivity()).kickMember(mContact.peerId);
+                            }
                         }
                     }
 

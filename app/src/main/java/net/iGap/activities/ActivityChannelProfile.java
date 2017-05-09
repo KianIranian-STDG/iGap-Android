@@ -1214,16 +1214,51 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
     //********* kick user from roles
 
-    private void kickMember(Long peerId) {
-        new RequestChannelKickMember().channelKickMember(roomId, peerId);
+    public void kickMember(final Long peerId) {
+
+        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_kick_this_member)
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    new RequestChannelKickMember().channelKickMember(roomId, peerId);
+                }
+            })
+            .show();
+
+
+
     }
 
-    private void kickModerator(Long peerId) {
-        new RequestChannelKickModerator().channelKickModerator(roomId, peerId);
+    public void kickModerator(final Long peerId) {
+
+        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member)
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    new RequestChannelKickModerator().channelKickModerator(roomId, peerId);
+                }
+            })
+            .show();
     }
 
-    private void kickAdmin(Long peerId) {
-        new RequestChannelKickAdmin().channelKickAdmin(roomId, peerId);
+    public void kickAdmin(final Long peerId) {
+
+        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member)
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    new RequestChannelKickAdmin().channelKickAdmin(roomId, peerId);
+                }
+            })
+            .show();
+
+
+
+
     }
 
     //************************************************** interfaces
