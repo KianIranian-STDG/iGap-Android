@@ -670,9 +670,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     public void onBackPressed() {
 
-        android.app.Fragment fragment = getFragmentManager().findFragmentByTag("ShowImageMessage");
+        FragmentShowImage fragment = (FragmentShowImage) getSupportFragmentManager().findFragmentByTag("ShowImageMessage");
         if (fragment != null) {
-            getFragmentManager().beginTransaction().remove(fragment).commit();
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             // for update view that image download in fragment show image
             int count = FragmentShowImage.downloadedList.size();
 
