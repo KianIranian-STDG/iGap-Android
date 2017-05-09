@@ -274,7 +274,8 @@ public class RegisteredContactsFragment extends Fragment {
             @Override public void onComplete(RippleView rippleView) {
                 // close and remove fragment from stack
 
-                getActivity().getSupportFragmentManager().popBackStack();
+                //getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().onBackPressed();
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleView.getWindowToken(), 0);
             }

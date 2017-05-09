@@ -267,6 +267,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
+                        lockNavigation();
                     }
                 });
             }
@@ -445,6 +446,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 }, 256);
+                lockNavigation();
             }
         });
 
@@ -475,6 +477,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 }, 256);
+                lockNavigation();
             }
         });
 
@@ -504,6 +507,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 }, 256);
+                lockNavigation();
             }
         });
 
@@ -531,6 +535,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 }, 256);
+                lockNavigation();
             }
         });
 
@@ -561,6 +566,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 }, 256);
+                lockNavigation();
             }
         });
 
@@ -731,6 +737,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
+                lockNavigation();
             }
         });
 
@@ -837,6 +844,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     e.getStackTrace();
                 }
                 arcMenu.toggleMenu();
+                lockNavigation();
             }
         });
 
@@ -854,6 +862,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
+                lockNavigation();
 
                 arcMenu.toggleMenu();
             }
@@ -873,6 +882,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
+                lockNavigation();
                 arcMenu.toggleMenu();
             }
         });
@@ -1278,8 +1288,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
+        openNavigation();
         SearchFragment myFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("Search_fragment");
-
         FragmentNewGroup fragmentNeGroup = (FragmentNewGroup) getSupportFragmentManager().findFragmentByTag("newGroup_fragment");
         FragmentCreateChannel fragmentCreateChannel = (FragmentCreateChannel) getSupportFragmentManager().findFragmentByTag("createChannel_fragment");
         ContactGroupFragment fragmentContactGroup = (ContactGroupFragment) getSupportFragmentManager().findFragmentByTag("contactGroup_fragment");
@@ -1338,6 +1348,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 ActivityMain.this.recreate();
             }
         };
+
+        if (drawer != null) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        }
 
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
         arcMenu.setBackgroundTintColor();
@@ -1971,5 +1985,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     return null;
             }
         }
+    }
+
+    private void lockNavigation() {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    private void openNavigation() {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 }

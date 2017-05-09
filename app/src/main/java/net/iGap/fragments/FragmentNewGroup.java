@@ -279,7 +279,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 } else {
                     G.IMAGE_NEW_CHANEL.delete();
                 }
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                //getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                getActivity().onBackPressed();
             }
         });
 

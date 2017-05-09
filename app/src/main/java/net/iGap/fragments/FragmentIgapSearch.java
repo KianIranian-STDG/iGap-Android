@@ -178,7 +178,8 @@ public class FragmentIgapSearch extends Fragment {
 
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIgapSearch.this).commit();
+                //getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIgapSearch.this).commit();
+                getActivity().onBackPressed();
             }
         });
 
