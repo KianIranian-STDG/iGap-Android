@@ -405,7 +405,13 @@
 
 
           </LinearLayout>
-
+          <View
+              android:id="@+id/topLine"
+              android:layout_width="match_parent"
+              android:layout_height="1px"
+              android:layout_marginBottom="@dimen/dp4"
+              android:background="@color/gray"
+              />
 
           <LinearLayout
               android:layout_width="match_parent"
