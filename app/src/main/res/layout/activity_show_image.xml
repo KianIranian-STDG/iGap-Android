@@ -113,13 +113,24 @@
         android:id="@+id/asi_txt_image_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="name"
         android:textColor="@android:color/white"
-        android:visibility="invisible"
+        android:visibility="visible"
+        android:textSize="@dimen/sp14"
+        />
+
+    <TextView
+        android:id="@+id/asi_txt_image_time"
+        android:text="time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/sp14"
         />
 
     <TextView
         android:id="@+id/asi_txt_image_date"
+        android:text="date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"

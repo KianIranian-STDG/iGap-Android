@@ -49,12 +49,13 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.TimeUtils;
 import net.iGap.module.TouchImageView;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 
@@ -65,6 +66,7 @@ public class FragmentShowImage extends Fragment {
     private TextView txtImageNumber;
     private TextView txtImageName;
     private TextView txtImageDate;
+    private TextView txtImageTime;
     private EmojiTextView txtImageDesc;
     private LinearLayout toolbarShowImage;
     private boolean isShowToolbar = true;
@@ -214,9 +216,10 @@ public class FragmentShowImage extends Fragment {
         viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
 
         txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
-        txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
         ltImageName = (ViewGroup) view.findViewById(R.id.asi_layout_image_name);
+        txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
         txtImageDate = (TextView) view.findViewById(R.id.asi_txt_image_date);
+        txtImageTime = (TextView) view.findViewById(R.id.asi_txt_image_time);
         txtImageDesc = (EmojiTextView) view.findViewById(R.id.asi_txt_image_desc);
         toolbarShowImage = (LinearLayout) view.findViewById(R.id.toolbarShowImage);
 
@@ -271,12 +274,31 @@ public class FragmentShowImage extends Fragment {
         } else {
             txtImageDesc.setVisibility(View.GONE);
         }
-        if (realmRoomMessageFinal.getAttachment() != null) {
-            txtImageName.setText(realmRoomMessageFinal.getAttachment().getName());
+
+        RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessageFinal.getUserId()).findFirst();
+
+        if (realmRegisteredInfo != null) {
+            txtImageName.setText(realmRegisteredInfo.getDisplayName());
+        } else {
+            txtImageName.setText("");
         }
+
+        if (G.userId == realmRoomMessageFinal.getUserId()) {
+
+            txtImageName.setText(R.string.txt_you);
+        }
+
         if (realmRoomMessageFinal.getUpdateTime() != 0) {
-            txtImageDate.setText(TimeUtils.toLocal(realmRoomMessageFinal.getUpdateTime(), G.CHAT_MESSAGE_TIME));
+            txtImageTime.setText(HelperCalander.getClocktime(realmRoomMessageFinal.getUpdateTime(), true));
+            txtImageDate.setText(HelperCalander.checkHijriAndReturnTime(realmRoomMessageFinal.getUpdateTime() / 1000));
         }
+
+        if (HelperCalander.isLanguagePersian) {
+            txtImageName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageName.getText().toString()));
+            txtImageTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageTime.getText().toString()));
+            txtImageDate.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageDate.getText().toString()));
+        }
+
     }
 
     public void popUpMenuShowImage() {
