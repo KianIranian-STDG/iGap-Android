@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -176,7 +177,8 @@ public final class StartupActions {
      * detect language and set font type face
      */
     private void languageDetection(SharedPreferences sharedPreferences) {
-        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "en");
+
+        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
 
         switch (language) {
             case "فارسی":
