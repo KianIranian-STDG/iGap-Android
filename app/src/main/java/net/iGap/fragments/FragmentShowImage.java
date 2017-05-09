@@ -91,6 +91,7 @@ public class FragmentShowImage extends Fragment {
     public int po;
     private String path;
     private String type = null;
+    private boolean isLockScreen = false;
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
@@ -847,5 +848,26 @@ public class FragmentShowImage extends Fragment {
             videoController.hide();
             videoController = null;
         }
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
+            isLockScreen = true;
+            mAdapter.pause();
+        }
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+
+        if (isLockScreen) {
+
+            if (videoController != null) {
+                videoController.show();
+            }
+        }
+
     }
 }
