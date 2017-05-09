@@ -75,11 +75,13 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     public FragmentPrivacyAndSecurity() {
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_privacy_and_security, container, false);
     }
 
-    @Override public void onResume() {
+    @Override
+    public void onResume() {
         super.onResume();
 
         if (realmUserInfo != null) {
@@ -99,7 +101,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         }
     }
 
-    @Override public void onPause() {
+    @Override
+    public void onPause() {
         super.onPause();
 
         if (realmUserInfo != null) {
@@ -111,13 +114,15 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         }
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
 
         if (mRealm != null) mRealm.close();
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
@@ -130,8 +135,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
         realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
         userInfoListener = new RealmChangeListener<RealmModel>() {
-            @Override public void onChange(RealmModel element) {
-
+            @Override
+            public void onChange(RealmModel element) {
                 selfRemove = ((RealmUserInfo) element).getSelfRemove();
                 setTextSelfDestructs();
             }
@@ -139,48 +144,43 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
         realmPrivacy = mRealm.where(RealmPrivacy.class).findFirst();
         privacyListener = new RealmChangeListener<RealmModel>() {
-            @Override public void onChange(RealmModel element) {
+            @Override
+            public void onChange(RealmModel element) {
                 updatePrivacyUI((RealmPrivacy) element);
             }
         };
 
         RelativeLayout parentPrivacySecurity = (RelativeLayout) view.findViewById(R.id.parentPrivacySecurity);
         parentPrivacySecurity.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
             }
         });
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.stps_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentPrivacyAndSecurity.this).commit();
             }
         });
 
         TextView txtActiveSessions = (TextView) view.findViewById(R.id.stps_activitySessions);
         txtActiveSessions.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 FragmentActiveSessions fragmentActiveSessions = new FragmentActiveSessions();
-                getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .addToBackStack(null)
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(st_layoutParent, fragmentActiveSessions, null)
-                    .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(st_layoutParent, fragmentActiveSessions, null).commit();
             }
         });
 
         TextView txtBlockedUser = (TextView) view.findViewById(R.id.stps_txt_blocked_user);
         txtBlockedUser.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 FragmentBlockedUser fragmentBlockedUser = new FragmentBlockedUser();
-                getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null)
-                    .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null).commit();
             }
         });
 
@@ -195,30 +195,42 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         layoutWhoCanSeeMyLastSeen = (LinearLayout) view.findViewById(R.id.stps_ll_who_can_see_my_last_seen);
 
         layoutWhoCanSeeMyAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                getStringFromEnumString(realmPrivacy.getWhoCanSeeMyAvatar());
-                openDialogWhoCan(ProtoGlobal.PrivacyType.AVATAR, poWhoCan);
+            @Override
+            public void onClick(View v) {
+                if (realmPrivacy != null) {
+                    getStringFromEnumString(realmPrivacy.getWhoCanSeeMyAvatar());
+                    openDialogWhoCan(ProtoGlobal.PrivacyType.AVATAR, poWhoCan);
+                }
             }
         });
 
         layoutWhoCanInviteMeToChannel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel());
-                openDialogWhoCan(ProtoGlobal.PrivacyType.CHANNEL_INVITE, poWhoCan);
+            @Override
+            public void onClick(View v) {
+                if (realmPrivacy != null) {
+                    getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel());
+                    openDialogWhoCan(ProtoGlobal.PrivacyType.CHANNEL_INVITE, poWhoCan);
+                }
             }
         });
 
         layoutWhoCanInviteMeToGroup.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup());
-                openDialogWhoCan(ProtoGlobal.PrivacyType.GROUP_INVITE, poWhoCan);
+            @Override
+            public void onClick(View v) {
+                if (realmPrivacy != null) {
+                    getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup());
+                    openDialogWhoCan(ProtoGlobal.PrivacyType.GROUP_INVITE, poWhoCan);
+                }
             }
         });
 
         layoutWhoCanSeeMyLastSeen.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                getStringFromEnumString(realmPrivacy.getWhoCanSeeMyLastSeen());
-                openDialogWhoCan(ProtoGlobal.PrivacyType.USER_STATUS, poWhoCan);
+            @Override
+            public void onClick(View v) {
+                if (realmPrivacy != null) {
+                    getStringFromEnumString(realmPrivacy.getWhoCanSeeMyLastSeen());
+                    openDialogWhoCan(ProtoGlobal.PrivacyType.USER_STATUS, poWhoCan);
+                }
             }
         });
 
@@ -228,7 +240,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         poSelfRemove = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_SELF_REMOVE, 2);
         ViewGroup ltSelfDestruction = (ViewGroup) view.findViewById(R.id.stps_layout_Self_destruction);
         ltSelfDestruction.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 selfDestructs();
             }
         });
@@ -238,43 +251,37 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
     private void selfDestructs() {
 
-        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.self_destructs))
-            .titleGravity(GravityEnum.START)
-            .titleColor(getResources().getColor(android.R.color.black))
-            .items(R.array.account_self_destruct)
-            .itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
-                @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.self_destructs)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
+            @Override
+            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                    switch (which) {
-                        case 0: {
-                            txtDestruction.setText(getResources().getString(R.string.month_1));
-                            new RequestUserProfileSetSelfRemove().userProfileSetSelfRemove(1);
-                            break;
-                        }
-                        case 1: {
-                            txtDestruction.setText(getResources().getString(R.string.month_3));
-                            new RequestUserProfileSetSelfRemove().userProfileSetSelfRemove(3);
-                            break;
-                        }
-                        case 2: {
-
-                            txtDestruction.setText(getResources().getString(R.string.month_6));
-                            new RequestUserProfileSetSelfRemove().userProfileSetSelfRemove(6);
-                            break;
-                        }
-                        case 3: {
-
-                            txtDestruction.setText(getResources().getString(R.string.year_1));
-                            new RequestUserProfileSetSelfRemove().userProfileSetSelfRemove(12);
-                            break;
-                        }
+                switch (which) {
+                    case 0: {
+                        txtDestruction.setText(getResources().getString(R.string.month_1));
+                        new RequestUserProfileSetSelfRemove().userProfileSetSelfRemove(1);
+                        break;
                     }
-                    return false;
+                    case 1: {
+                        txtDestruction.setText(getResources().getString(R.string.month_3));
+                        new RequestUserProfileSetSelfRemove().userProfileSetSelfRemove(3);
+                        break;
+                    }
+                    case 2: {
+
+                        txtDestruction.setText(getResources().getString(R.string.month_6));
+                        new RequestUserProfileSetSelfRemove().userProfileSetSelfRemove(6);
+                        break;
+                    }
+                    case 3: {
+
+                        txtDestruction.setText(getResources().getString(R.string.year_1));
+                        new RequestUserProfileSetSelfRemove().userProfileSetSelfRemove(12);
+                        break;
+                    }
                 }
-            })
-            .positiveText(getResources().getString(R.string.B_ok))
-            .negativeText(getResources().getString(R.string.B_cancel))
-            .show();
+                return false;
+            }
+        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
     }
 
     private void setTextSelfDestructs() throws IllegalStateException {
@@ -304,33 +311,28 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
     private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType, int position) {
 
-        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.privacy_setting))
-            .titleGravity(GravityEnum.START)
-            .titleColor(getResources().getColor(android.R.color.black))
-            .items(R.array.privacy_setting_array).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
-                @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.privacy_setting)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.privacy_setting_array).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
+            @Override
+            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                    switch (which) {
-                        case 0: {
-                            RealmPrivacy.sendUpdatePrivacyToServer(privacyType, ProtoGlobal.PrivacyLevel.ALLOW_ALL);
+                switch (which) {
+                    case 0: {
+                        RealmPrivacy.sendUpdatePrivacyToServer(privacyType, ProtoGlobal.PrivacyLevel.ALLOW_ALL);
 
-                            break;
-                        }
-                        case 1: {
-                            RealmPrivacy.sendUpdatePrivacyToServer(privacyType, ProtoGlobal.PrivacyLevel.ALLOW_CONTACTS);
-                            break;
-                        }
-                        case 2: {
-                            RealmPrivacy.sendUpdatePrivacyToServer(privacyType, ProtoGlobal.PrivacyLevel.DENY_ALL);
-                            break;
-                        }
+                        break;
                     }
-                    return false;
+                    case 1: {
+                        RealmPrivacy.sendUpdatePrivacyToServer(privacyType, ProtoGlobal.PrivacyLevel.ALLOW_CONTACTS);
+                        break;
+                    }
+                    case 2: {
+                        RealmPrivacy.sendUpdatePrivacyToServer(privacyType, ProtoGlobal.PrivacyLevel.DENY_ALL);
+                        break;
+                    }
                 }
-            })
-            .positiveText(getResources().getString(R.string.B_ok))
-            .negativeText(getResources().getString(R.string.B_cancel))
-            .show();
+                return false;
+            }
+        }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
     }
 
     private void updatePrivacyUI(RealmPrivacy realmPrivacy) {

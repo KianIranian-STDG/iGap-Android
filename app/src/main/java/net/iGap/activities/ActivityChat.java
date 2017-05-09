@@ -1282,7 +1282,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         initComponent();
         initAppbarSelected();
         getDraft();
-        //getUserInfo();
+        getUserInfo();
         checkAction();
         insertShearedData();
 
