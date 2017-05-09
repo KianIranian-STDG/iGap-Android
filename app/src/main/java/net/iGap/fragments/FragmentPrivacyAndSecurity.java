@@ -70,6 +70,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
     private RealmPrivacy realmPrivacy;
     private RealmChangeListener<RealmModel> privacyListener;
+    private int poWhoCan;
 
     public FragmentPrivacyAndSecurity() {
     }
@@ -195,25 +196,29 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
         layoutWhoCanSeeMyAvatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                openDialogWhoCan(ProtoGlobal.PrivacyType.AVATAR);
+                getStringFromEnumString(realmPrivacy.getWhoCanSeeMyAvatar());
+                openDialogWhoCan(ProtoGlobal.PrivacyType.AVATAR, poWhoCan);
             }
         });
 
         layoutWhoCanInviteMeToChannel.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                openDialogWhoCan(ProtoGlobal.PrivacyType.CHANNEL_INVITE);
+                getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel());
+                openDialogWhoCan(ProtoGlobal.PrivacyType.CHANNEL_INVITE, poWhoCan);
             }
         });
 
         layoutWhoCanInviteMeToGroup.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                openDialogWhoCan(ProtoGlobal.PrivacyType.GROUP_INVITE);
+                getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup());
+                openDialogWhoCan(ProtoGlobal.PrivacyType.GROUP_INVITE, poWhoCan);
             }
         });
 
         layoutWhoCanSeeMyLastSeen.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                openDialogWhoCan(ProtoGlobal.PrivacyType.USER_STATUS);
+                getStringFromEnumString(realmPrivacy.getWhoCanSeeMyLastSeen());
+                openDialogWhoCan(ProtoGlobal.PrivacyType.USER_STATUS, poWhoCan);
             }
         });
 
@@ -297,13 +302,12 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         }
     }
 
-    private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType) {
+    private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType, int position) {
 
         new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.privacy_setting))
             .titleGravity(GravityEnum.START)
             .titleColor(getResources().getColor(android.R.color.black))
-            .items(R.array.privacy_setting_array)
-            .itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
+            .items(R.array.privacy_setting_array).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
                 @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                     switch (which) {
@@ -340,16 +344,20 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     private int getStringFromEnumString(String str) {
 
         if (str == null || str.length() == 0) {
+            poWhoCan = 0;
             return R.string.everybody;
         }
 
         int resString = 0;
 
         if (str.equals(ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString())) {
+            poWhoCan = 0;
             resString = R.string.everybody;
         } else if (str.equals(ProtoGlobal.PrivacyLevel.ALLOW_CONTACTS.toString())) {
+            poWhoCan = 1;
             resString = R.string.my_contacts;
         } else {
+            poWhoCan = 2;
             resString = R.string.no_body;
         }
 
