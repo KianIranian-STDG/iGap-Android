@@ -112,17 +112,12 @@ public class HelperMessageResponse {
 
                             final ProtoGlobal.Room.Type finalType = type;
                             G.handler.postDelayed(new Runnable() {
-                                @Override public void run() {
-
+                                @Override
+                                public void run() {
                                     G.helperNotificationAndBadge.checkAlert(true, finalType, roomId);
                                 }
                             }, 200);
                         }
-
-
-
-
-
                     }
 
                     /**

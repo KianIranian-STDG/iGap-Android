@@ -55,7 +55,9 @@ import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -139,6 +141,7 @@ import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
@@ -406,6 +409,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private long userTime;
     private long messageId;
     private long savedScrollMessageId;
+    private long latestButtonClickTime; // use from this field for avoid from show button again after click it
     public long mRoomId = 0;
     public static long mRoomIdStatic = 0;
 
@@ -1864,7 +1868,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                latestButtonClickTime = System.currentTimeMillis();
                 /**
                  * have unread
                  */
@@ -1949,7 +1953,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 } else if (state < 0) { //down
 
                     if (mAdapter.getItemCount() - lastVisiblePosition > 10) {
-                        llScrollNavigate.setVisibility(View.VISIBLE);
+                        /**
+                         * show llScrollNavigate if timeout from latest click
+                         */
+                        if (HelperTimeOut.timeoutChecking(0, latestButtonClickTime, (int) (2 * DateUtils.SECOND_IN_MILLIS))) {
+                            llScrollNavigate.setVisibility(View.VISIBLE);
+                        }
                         if (countNewMessage > 0) {
                             txtNewUnreadMessage.setText(countNewMessage + "");
                             txtNewUnreadMessage.setVisibility(View.VISIBLE);
@@ -6335,13 +6344,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 totalItemCount = (recyclerView.getLayoutManager()).getItemCount();
                 firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
+
                 //TODO [Saeed Mozaffari] [2017-05-07 10:28 AM] - check scroll to top and bottom
                 if (firstVisiblePosition < scrollEnd) {
+                    Log.i("EEE", "scrollListener UP");
+
                     /**
                      * scroll to top
                      */
                     loadMessage(UP);
                 } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
+                    Log.i("EEE", "scrollListener Bottom");
+
                     /**
                      * scroll to bottom
                      */
@@ -6411,11 +6425,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     /**
                      * send request to server for clientGetRoomHistory
                      */
-
+                    long oldMessageId;
                     if (structMessageInfos.size() > 0) {
-                        long oldMessageId = Long.parseLong(structMessageInfos.get(structMessageInfos.size() - 1).messageID);
-                        getOnlineMessage(oldMessageId, direction);
+                        oldMessageId = Long.parseLong(structMessageInfos.get(structMessageInfos.size() - 1).messageID);
+                    } else {
+                        oldMessageId = gapMessageId;
                     }
+
+                    getOnlineMessage(oldMessageId, direction);
                 }
             }
 
