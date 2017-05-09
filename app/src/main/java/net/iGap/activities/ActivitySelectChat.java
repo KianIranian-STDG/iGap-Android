@@ -45,6 +45,7 @@ import net.iGap.R;
 import net.iGap.emoji.EmojiTextView;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnComplete;
@@ -55,8 +56,6 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
-import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
@@ -92,12 +91,14 @@ public class ActivitySelectChat extends ActivityEnhanced {
     boolean isThereAnyMoreItemToLoad = true;
 
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         if (mRealm != null) mRealm.close();
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -141,12 +142,14 @@ public class ActivitySelectChat extends ActivityEnhanced {
         txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
             }
         });
 
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
-            @Override public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+            @Override
+            public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
 
                 if (fromLogin) {
                     mOffset = 0;
@@ -168,7 +171,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 mOffset += roomList.size();
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         progressBar.setVisibility(View.GONE);
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                     }
@@ -177,18 +181,22 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 isSendRequestForLoading = false;
             }
 
-            @Override public void onTimeout() {
+            @Override
+            public void onTimeout() {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         progressBar.setVisibility(View.GONE);
                     }
                 });
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                     }
                 });
@@ -203,17 +211,6 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 }
             }
         };
-
-
-
-
-
-
-
-
-
-
-
     }
 
     private void initRecycleView() {
@@ -233,7 +230,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
         onScrollListener = new RecyclerView.OnScrollListener() {
 
-            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 if (isThereAnyMoreItemToLoad) {
@@ -252,7 +250,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 }
             }
 
-            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 ActivityMain.curentMainRoomListPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
@@ -273,7 +272,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
             this.mAdapter = adapter;
         }
 
-        @Override public boolean onInterceptTouchEvent(CoordinatorLayout parent, View child, MotionEvent ev) {
+        @Override
+        public boolean onInterceptTouchEvent(CoordinatorLayout parent, View child, MotionEvent ev) {
             return shouldScrolled();
         }
 
@@ -303,18 +303,19 @@ public class ActivitySelectChat extends ActivityEnhanced {
             this.mComplete = complete;
         }
 
-        @Override public ActivitySelectChat.RoomAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        @Override
+        public ActivitySelectChat.RoomAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
             View v = inflater.inflate(R.layout.chat_sub_layout, viewGroup, false);
             return new ActivitySelectChat.RoomAdapter.ViewHolder(v);
         }
 
-        @Override public void onBindRealmViewHolder(ActivitySelectChat.RoomAdapter.ViewHolder holder, int i) {
+        @Override
+        public void onBindRealmViewHolder(final ActivitySelectChat.RoomAdapter.ViewHolder holder, int i) {
 
             RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
             if (mInfo != null && mInfo.isValid() && !mInfo.isDeleted()) {
-                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (!RealmRoom.isCloudRoom(mInfo.getId())
-                    && mInfo.getActionStateUserId() != userId))))) {
+                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (!RealmRoom.isCloudRoom(mInfo.getId()) && mInfo.getActionStateUserId() != userId))))) {
                     //holder.messageStatus.setVisibility(GONE);
                     holder.lastMessageSender.setVisibility(View.GONE);
                     holder.lastMessage.setVisibility(View.VISIBLE);
@@ -333,8 +334,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 } else {
                     holder.avi.setVisibility(View.GONE);
                     if (mInfo.getLastMessage() != null) {
-                        String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(),
-                            mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                        String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
                         if (lastMessage == null) {
                             lastMessage = mInfo.getLastMessage().getMessage();
                         }
@@ -364,13 +364,11 @@ public class ActivitySelectChat extends ActivityEnhanced {
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
                                 Realm realm1 = Realm.getDefaultInstance();
-                                RealmResults<RealmRoomMessage> results =
-                                    realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.getId()).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                                RealmResults<RealmRoomMessage> results = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mInfo.getId()).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
                                 if (!results.isEmpty()) {
                                     RealmRoomMessage realmRoomMessage = results.first();
                                     if (realmRoomMessage != null) {
-                                        RealmRegisteredInfo realmRegisteredInfo =
-                                            realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessage.getUserId()).findFirst();
+                                        RealmRegisteredInfo realmRegisteredInfo = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessage.getUserId()).findFirst();
                                         if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
                                             if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
                                                 if (HelperCalander.isLanguagePersian) {
@@ -484,47 +482,18 @@ public class ActivitySelectChat extends ActivityEnhanced {
                     avatarType = HelperAvatar.AvatarType.ROOM;
                 }
 
-                final RealmAvatar realmAvatar = getLastAvatar(idForGetAvatar);
-                if (realmAvatar != null) {
-
-                    if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
-                    } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
-                    } else {
-                        HelperAvatar.getAvatar1(idForGetAvatar, avatarType, new OnAvatarGet() {
-                            @Override public void onAvatarGet(final String avatarPath, final long ownerId) {
-                        /*G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
-                            }
-                        });*/
-                            }
-
-                            @Override public void onShowInitials(final String initials, final String color) {
-                        /*G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                            }
-                        });*/
-                            }
-                        });
-
-                        String[] initials = showInitials(idForGetAvatar, avatarType);
-                        if (initials != null) {
-                            holder.image.setImageBitmap(
-                                net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
-                        }
+                HelperAvatar.getAvatar(idForGetAvatar, avatarType, new OnAvatarGet() {
+                    @Override
+                    public void onAvatarGet(String avatarPath, long roomId) {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                     }
-                } else {
-                    String[] initials = showInitials(idForGetAvatar, avatarType);
-                    if (initials != null) {
-                        holder.image.setImageBitmap(
-                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
+
+                    @Override
+                    public void onShowInitials(String initials, String color) {
+                        holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
-                }
+                });
+
 
                 holder.chatIcon.setTypeface(typeFaceIcon);
                 if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
@@ -542,25 +511,6 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 }
 
                 holder.name.setText(mInfo.getTitle());
-
-           /* if (mInfo.isDeleted()) {
-                long lastMessageTime = AppUtils.computeLastMessageTime(mInfo.getId());
-                if (lastMessageTime != 0) {
-                    holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(lastMessageTime));
-
-                    holder.lastSeen.setVisibility(View.VISIBLE);
-                } else {
-                    holder.lastSeen.setVisibility(GONE);
-                }
-            } else {
-                if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
-                    holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
-
-                    holder.lastSeen.setVisibility(View.VISIBLE);
-                } else {
-                    holder.lastSeen.setVisibility(GONE);
-                }
-            }*/
 
                 if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
                     holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
@@ -590,7 +540,9 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 }
             }
 
-            // for change english number to persian number
+            /**
+             * for change english number to persian number
+             */
             if (HelperCalander.isLanguagePersian) {
                 holder.lastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.lastMessage.getText().toString()));
                 holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
@@ -632,7 +584,8 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
 
                 view.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         if (!realmResults.get(getPosition()).getReadOnly()) {
                             Intent intent = new Intent(ActivitySelectChat.this, ActivityChat.class);
@@ -646,64 +599,6 @@ public class ActivitySelectChat extends ActivityEnhanced {
                         }
                     }
                 });
-            }
-        }
-
-        private RealmAvatar getLastAvatar(long ownerId) {
-            Realm realm = Realm.getDefaultInstance();
-            for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.UID, Sort.DESCENDING)) {
-                if (avatar.getFile() != null) {
-                    return avatar;
-                }
-            }
-            realm.close();
-            return null;
-        }
-
-        public String[] showInitials(long ownerId, HelperAvatar.AvatarType avatarType) {
-            Realm realm = Realm.getDefaultInstance();
-            String initials = null;
-            String color = null;
-            if (avatarType == HelperAvatar.AvatarType.USER) {
-
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, ownerId).findFirst();
-                if (realmRegisteredInfo != null) {
-                    initials = realmRegisteredInfo.getInitials();
-                    color = realmRegisteredInfo.getColor();
-                } else {
-                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
-                        if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
-                            new HelperAvatar.UserInfo().getUserInfo(ownerId);
-                            initials = realmRoom.getInitials();
-                            color = realmRoom.getColor();
-                        }
-                    }
-                }
-            } else if (avatarType == HelperAvatar.AvatarType.ROOM) {
-
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, ownerId).findFirst();
-                if (realmRoom != null) {
-                    initials = realmRoom.getInitials();
-                    color = realmRoom.getColor();
-                }
-            }
-            realm.close();
-
-            if (initials != null && color != null) {
-                return new String[] { initials, color };
-            }
-
-            return null;
-        }
-
-        private void updateUiById(Long id) {
-
-            for (int i = 0; i < realmResults.size(); i++) {
-
-                if (realmResults.get(i).getId() == id) {
-                    notifyItemChanged(i);
-                    break;
-                }
             }
         }
 

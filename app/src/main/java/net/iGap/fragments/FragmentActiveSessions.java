@@ -66,12 +66,14 @@ public class FragmentActiveSessions extends Fragment {
         // Required empty public constructor
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_active_sessions, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.acs_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
@@ -81,7 +83,8 @@ public class FragmentActiveSessions extends Fragment {
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.stas_txt_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.stas_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 getActivity().getSupportFragmentManager().popBackStack();
                 //                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentActiveSessions.this).commit();
@@ -90,7 +93,8 @@ public class FragmentActiveSessions extends Fragment {
 
         ViewGroup root = (ViewGroup) view.findViewById(R.id.stas_rootActiveSession);
         root.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
             }
         });
@@ -102,10 +106,12 @@ public class FragmentActiveSessions extends Fragment {
         rcvContent.setAdapter(fastItemAdapter);
 
         G.onUserSessionGetActiveList = new OnUserSessionGetActiveList() {
-            @Override public void onUserSessionGetActiveList(final List<ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Session> session) {
+            @Override
+            public void onUserSessionGetActiveList(final List<ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Session> session) {
 
                 getActivity().runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         for (int i = 0; i < session.size(); i++) {
 
@@ -144,14 +150,16 @@ public class FragmentActiveSessions extends Fragment {
 
         G.onUserSessionTerminate = new OnUserSessionTerminate() {
 
-            @Override public void onUserSessionTerminate(final Long messageid) {
+            @Override
+            public void onUserSessionTerminate(final Long messageId) {
                 getActivity().runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         prgWaiting.setVisibility(View.GONE);
 
                         for (int i = 0; i < list.size(); i++) {
-                            if (list.get(i).getSessionId() == messageid) {
+                            if (list.get(i).getSessionId() == messageId) {
                                 int j = fastItemAdapter.getPosition(list.get(i).getSessionId());
                                 if (j >= 0) {
                                     fastItemAdapter.remove(j);
@@ -163,15 +171,18 @@ public class FragmentActiveSessions extends Fragment {
                 });
             }
 
-            @Override public void onTimeOut() {
+            @Override
+            public void onTimeOut() {
                 getActivity().runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         prgWaiting.setVisibility(View.GONE);
                         final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override public void onClick(View view) {
+                            @Override
+                            public void onClick(View view) {
                                 snack.dismiss();
                             }
                         });
@@ -180,14 +191,17 @@ public class FragmentActiveSessions extends Fragment {
                 });
             }
 
-            @Override public void onError() {
+            @Override
+            public void onError() {
                 getActivity().runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         prgWaiting.setVisibility(View.GONE);
                         final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getString(R.string.error), Snackbar.LENGTH_LONG);
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override public void onClick(View view) {
+                            @Override
+                            public void onClick(View view) {
                                 snack.dismiss();
                             }
                         });
@@ -199,102 +213,99 @@ public class FragmentActiveSessions extends Fragment {
 
         fastItemAdapter.withSelectable(true);
         fastItemAdapter.withOnClickListener(new FastAdapter.OnClickListener() {
-            @Override public boolean onClick(final View v, IAdapter adapter, final IItem item, final int position) {
+            @Override
+            public boolean onClick(final View v, IAdapter adapter, final IItem item, final int position) {
 
                 if (item instanceof AdapterActiveSessions) {
                     if (((AdapterActiveSessions) item).getItem().isCurrent()) {
-                        new MaterialDialog.Builder(getActivity()).title(R.string.active_session_title)
-                            .content(R.string.active_session_content)
-                            .positiveText(R.string.B_ok)
-                            .negativeText(R.string.B_cancel)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new MaterialDialog.Builder(getActivity()).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                    prgWaiting.setVisibility(View.VISIBLE);
-                                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWaiting.setVisibility(View.VISIBLE);
+                                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                                    G.onUserSessionLogout = new OnUserSessionLogout() {
-                                        @Override public void onUserSessionLogout() {
+                                G.onUserSessionLogout = new OnUserSessionLogout() {
+                                    @Override
+                                    public void onUserSessionLogout() {
 
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override public void run() {
-                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                    prgWaiting.setVisibility(View.GONE);
-                                                }
-                                            });
-                                        }
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                prgWaiting.setVisibility(View.GONE);
+                                            }
+                                        });
+                                    }
 
-                                        @Override public void onError() {
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override public void run() {
-                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                    prgWaiting.setVisibility(View.GONE);
-                                                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
+                                    @Override
+                                    public void onError() {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                prgWaiting.setVisibility(View.GONE);
+                                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
 
-                                        @Override public void onTimeOut() {
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override public void run() {
-                                                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                    prgWaiting.setVisibility(View.GONE);
-                                                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
-                                    };
+                                    @Override
+                                    public void onTimeOut() {
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                                prgWaiting.setVisibility(View.GONE);
+                                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
+                                };
 
-                                    new RequestUserSessionLogout().userSessionLogout();
-                                }
-                            })
-                            .show();
+                                new RequestUserSessionLogout().userSessionLogout();
+                            }
+                        }).show();
                     } else {
-                        new MaterialDialog.Builder(getActivity()).title(R.string.active_session_title)
-                            .content(R.string.active_session_content)
-                            .positiveText(R.string.B_ok)
-                            .negativeText(R.string.B_cancel)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    prgWaiting.setVisibility(View.VISIBLE);
-                                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessions) item).getItem().getSessionId());
-                                }
-                            })
-                            .show();
+                        new MaterialDialog.Builder(getActivity()).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                prgWaiting.setVisibility(View.VISIBLE);
+                                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                new RequestUserSessionTerminate().userSessionTerminate(((AdapterActiveSessions) item).getItem().getSessionId());
+                            }
+                        }).show();
                     }
                 } else {
                     final int size = list.size();
                     if (size > 1) {
-                        new MaterialDialog.Builder(getActivity()).title(R.string.active_session_title)
-                            .content(R.string.active_session_content)
-                            .positiveText(R.string.B_ok)
-                            .negativeText(R.string.B_cancel)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new MaterialDialog.Builder(getActivity()).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                    v.setVisibility(View.GONE); // click on AdapterActiveSessionsHeader
+                                v.setVisibility(View.GONE); // click on AdapterActiveSessionsHeader
 
-                                    for (int i = 0; i < size; i++) {
-                                        if (!list.get(i).isCurrent()) {
-                                            new RequestUserSessionTerminate().userSessionTerminate(list.get(i).getSessionId());
-                                        }
+                                for (int i = 0; i < size; i++) {
+                                    if (!list.get(i).isCurrent()) {
+                                        new RequestUserSessionTerminate().userSessionTerminate(list.get(i).getSessionId());
                                     }
                                 }
-                            })
-                            .show();
+                            }
+                        }).show();
                     }
                 }
                 return false;

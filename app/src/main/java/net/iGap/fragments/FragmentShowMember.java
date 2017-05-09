@@ -37,7 +37,6 @@ import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
-import io.realm.Sort;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +69,6 @@ import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoChannelGetMemberList;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
-import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmMemberFields;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -130,11 +127,14 @@ public class FragmentShowMember extends Fragment {
         return fragmentShowMember;
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_show_member, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
 
@@ -152,16 +152,13 @@ public class FragmentShowMember extends Fragment {
             }
 
             if (isNeedGetMemberList) {
-
                 if (G.userLogin) {
-
                     G.handler.postDelayed(new Runnable() {
-                        @Override public void run() {
-
+                        @Override
+                        public void run() {
                             if (progressBar != null) {
                                 progressBar.setVisibility(View.VISIBLE);
                             }
-
                             new getAcynkMember().execute();
                         }
                     }, 100);
@@ -172,7 +169,8 @@ public class FragmentShowMember extends Fragment {
 
     class getAcynkMember extends AsyncTask {
 
-        @Override protected Object doInBackground(Object[] params) {
+        @Override
+        protected Object doInBackground(Object[] params) {
 
             getMemberList();
 
@@ -184,15 +182,18 @@ public class FragmentShowMember extends Fragment {
     private void getMemberList() {
         mMemberCount = listMembers.size();
         infoUpdateListenerCount = new OnComplete() {
-            @Override public void complete(boolean result, final String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, final String messageOne, String MessageTow) {
 
                 if (MessageTow.contains("OK")) {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             final Realm realm = Realm.getDefaultInstance();
                             realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override public void execute(Realm realm) {
+                                @Override
+                                public void execute(Realm realm) {
                                     final RealmList<RealmMember> newMemberList = new RealmList<>();
                                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
                                     if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
@@ -229,12 +230,14 @@ public class FragmentShowMember extends Fragment {
 
                                 }
                             }, new Realm.Transaction.OnSuccess() {
-                                @Override public void onSuccess() {
+                                @Override
+                                public void onSuccess() {
                                     fillItem();
                                     realm.close();
                                 }
                             }, new Realm.Transaction.OnError() {
-                                @Override public void onError(Throwable error) {
+                                @Override
+                                public void onError(Throwable error) {
                                     realm.close();
                                 }
                             });
@@ -247,7 +250,8 @@ public class FragmentShowMember extends Fragment {
         };
 
         G.onGroupGetMemberList = new OnGroupGetMemberList() {
-            @Override public void onGroupGetMemberList(final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
+            @Override
+            public void onGroupGetMemberList(final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
 
                 mMemberCount = members.size();
                 if (mMemberCount > 0) {
@@ -259,7 +263,8 @@ public class FragmentShowMember extends Fragment {
                     }
                 } else {
                     G.handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             if (mAdapter != null) mAdapter.addLoadMore();
                             if (progressBar != null) {
                                 progressBar.setVisibility(View.GONE);
@@ -276,7 +281,8 @@ public class FragmentShowMember extends Fragment {
         };
 
         G.onChannelGetMemberList = new OnChannelGetMemberList() {
-            @Override public void onChannelGetMemberList(List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> members) {
+            @Override
+            public void onChannelGetMemberList(List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> members) {
 
                 mMemberCount = members.size();
                 if (mAdapter != null) mAdapter.addLoadMore();
@@ -288,7 +294,8 @@ public class FragmentShowMember extends Fragment {
                         new RequestUserInfo().userInfo(member.getUserId());
                     } else {
                         G.handler.post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 //if (mAdapter != null) mAdapter.addLoadMore();
                                 if (progressBar != null) {
                                     progressBar.setVisibility(View.GONE);
@@ -304,16 +311,19 @@ public class FragmentShowMember extends Fragment {
                 }
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
 
             }
 
-            @Override public void onTimeOut() {
+            @Override
+            public void onTimeOut() {
 
             }
         };
         getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 mCurrentUpdateCount = 0;
 
                 final RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
@@ -321,7 +331,8 @@ public class FragmentShowMember extends Fragment {
                     if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
 
                         mRealm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 if (realmRoom.getGroupRoom().getMembers() != null) realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
                             }
                         });
@@ -329,19 +340,19 @@ public class FragmentShowMember extends Fragment {
                     } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
 
                         mRealm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 if (realmRoom.getChannelRoom().getMembers() != null) realmRoom.getChannelRoom().getMembers().deleteAllFromRealm();
                             }
                         });
                         new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit);
-                        }
+                    }
                 }
             }
         });
     }
 
     private void fillItem() {
-
         if (mCurrentUpdateCount >= mMemberCount) {
             if (!isOne && mCurrentUpdateCount > 0) isOne = true;
             try {
@@ -351,7 +362,8 @@ public class FragmentShowMember extends Fragment {
                 }
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         if (mAdapter != null) mAdapter.removeLoadMore();
                         if (progressBar != null) {
@@ -365,7 +377,8 @@ public class FragmentShowMember extends Fragment {
         }
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
 
         if (mRealm != null) mRealm.close();
@@ -386,7 +399,8 @@ public class FragmentShowMember extends Fragment {
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 getActivity().getSupportFragmentManager().popBackStack();
             }
@@ -402,12 +416,9 @@ public class FragmentShowMember extends Fragment {
             txtNumberOfMember.setText(getResources().getString(member));
         }
 
-        //if (!isNeedGetMemberList) {
-        //    fillAdapter();
-        //}
-
         scrollListener = new EndlessRecyclerViewScrollListener(preCachingLayoutManager) {
-            @Override public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
 
@@ -419,6 +430,7 @@ public class FragmentShowMember extends Fragment {
     }
 
     private boolean isOne = true;
+
     private void loadMoreMember(int page, int totalItemsCount, RecyclerView view) {
 
         if (isOne) {
@@ -488,7 +500,8 @@ public class FragmentShowMember extends Fragment {
             this.userid = userid;
         }
 
-        @Override public MemberAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        @Override
+        public MemberAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
             View v = inflater.inflate(R.layout.contact_item_group_profile, viewGroup, false);
             return new ViewHolder(v);
         }
@@ -516,7 +529,8 @@ public class FragmentShowMember extends Fragment {
             }
         }
 
-        @Override public void onBindRealmViewHolder(final MemberAdapter.ViewHolder holder, int i) {
+        @Override
+        public void onBindRealmViewHolder(final MemberAdapter.ViewHolder holder, int i) {
 
             final StructContactInfo mContact = convertRealmToStruct(mRealm, realmResults.get(i));
 
@@ -525,10 +539,12 @@ public class FragmentShowMember extends Fragment {
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     try {
                         HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
-                            @Override public void Allow() {
+                            @Override
+                            public void Allow() {
 
                                 Intent intent = null;
 
@@ -549,7 +565,8 @@ public class FragmentShowMember extends Fragment {
                                 startActivity(intent);
                             }
 
-                            @Override public void deny() {
+                            @Override
+                            public void deny() {
 
                             }
                         });
@@ -560,7 +577,8 @@ public class FragmentShowMember extends Fragment {
             });
 
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View v) {
+                @Override
+                public boolean onLongClick(View v) {
 
                     if (role.equals(GroupChatRole.OWNER.toString())) {
 
@@ -602,35 +620,18 @@ public class FragmentShowMember extends Fragment {
 
             setRoleStarColor(holder.roleStar, mContact);
 
-            final RealmAvatar realmAvatar = getLastAvatar(mContact.peerId);
-            if (realmAvatar != null) {
 
-                if (realmAvatar.getFile().isFileExistsOnLocal()) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), holder.image);
-                } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), holder.image);
-                } else {
-                    HelperAvatar.getAvatar1(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
-                        @Override public void onAvatarGet(final String avatarPath, final long ownerId) {
-                            //empty
-                        }
-
-                        @Override public void onShowInitials(final String initials, final String color) {
-                            //empty
-                        }
-                    });
-
-                    String[] initials = showInitials(mContact.peerId, HelperAvatar.AvatarType.USER);
-                    if (initials != null) {
-                        holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
-                    }
+            HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+                @Override
+                public void onAvatarGet(String avatarPath, long roomId) {
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                 }
-            } else {
-                String[] initials = showInitials(mContact.peerId, HelperAvatar.AvatarType.USER);
-                if (initials != null) {
-                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials[0], initials[1]));
+
+                @Override
+                public void onShowInitials(String initials, String color) {
+                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                 }
-            }
+            });
 
             if (mContact.status != null) {
                 if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -644,8 +645,7 @@ public class FragmentShowMember extends Fragment {
                 holder.btnMenu.setVisibility(View.GONE);
             } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
 
-                if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) || (mContact.role.equals(
-                    ProtoGlobal.GroupRoom.Role.MODERATOR.toString()))) {
+                if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString()))) {
                     holder.btnMenu.setVisibility(View.GONE);
                 } else {
                     showPopup(holder, mContact);
@@ -674,7 +674,8 @@ public class FragmentShowMember extends Fragment {
             holder.btnMenu.setVisibility(View.VISIBLE);
 
             holder.btnMenu.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                     if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
                         if (ActivityChannelProfile.onMenuClick != null) {
@@ -710,8 +711,7 @@ public class FragmentShowMember extends Fragment {
             long id = realmMember.getPeerId();
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
             if (realmRegisteredInfo != null) {
-                StructContactInfo s =
-                    new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
+                StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
                 s.role = role;
                 s.avatar = realmRegisteredInfo.getLastAvatar();
                 s.initials = realmRegisteredInfo.getInitials();
@@ -750,7 +750,8 @@ public class FragmentShowMember extends Fragment {
             this.extraLayoutSpace = extraLayoutSpace;
         }
 
-        @Override protected int getExtraLayoutSpace(RecyclerView.State state) {
+        @Override
+        protected int getExtraLayoutSpace(RecyclerView.State state) {
             if (extraLayoutSpace > 0) {
                 return extraLayoutSpace;
             }
@@ -759,15 +760,18 @@ public class FragmentShowMember extends Fragment {
 
         private static final float MILLISECONDS_PER_INCH = 2000f; //default is 25f (bigger = slower)
 
-        @Override public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+        @Override
+        public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
 
             final LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
 
-                @Override public PointF computeScrollVectorForPosition(int targetPosition) {
+                @Override
+                public PointF computeScrollVectorForPosition(int targetPosition) {
                     return PreCachingLayoutManager.this.computeScrollVectorForPosition(targetPosition);
                 }
 
-                @Override protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                @Override
+                protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
                     return MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
                 }
             };
@@ -777,55 +781,9 @@ public class FragmentShowMember extends Fragment {
         }
     }
 
-    @Override public void onAttach(Activity activity) {
+    @Override
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
-    }
-
-    private RealmAvatar getLastAvatar(long ownerId) {
-        Realm realm = Realm.getDefaultInstance();
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAllSorted(RealmAvatarFields.UID, Sort.DESCENDING)) {
-            if (avatar.getFile() != null) {
-                return avatar;
-            }
-        }
-        realm.close();
-        return null;
-    }
-
-    public String[] showInitials(long ownerId, HelperAvatar.AvatarType avatarType) {
-        Realm realm = Realm.getDefaultInstance();
-        String initials = null;
-        String color = null;
-        if (avatarType == HelperAvatar.AvatarType.USER) {
-
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, ownerId).findFirst();
-            if (realmRegisteredInfo != null) {
-                initials = realmRegisteredInfo.getInitials();
-                color = realmRegisteredInfo.getColor();
-            } else {
-                for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
-                    if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
-                        new HelperAvatar.UserInfo().getUserInfo(ownerId);
-                        initials = realmRoom.getInitials();
-                        color = realmRoom.getColor();
-                    }
-                }
-            }
-        } else if (avatarType == HelperAvatar.AvatarType.ROOM) {
-
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, ownerId).findFirst();
-            if (realmRoom != null) {
-                initials = realmRoom.getInitials();
-                color = realmRoom.getColor();
-            }
-        }
-        realm.close();
-
-        if (initials != null && color != null) {
-            return new String[] { initials, color };
-        }
-
-        return null;
     }
 }
