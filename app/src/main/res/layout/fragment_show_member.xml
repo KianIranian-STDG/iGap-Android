@@ -67,9 +67,13 @@
     <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
         android:id="@+id/fcm_recycler_view_show_member"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:rrvLayoutType="LinearLayout"
         android:overScrollMode="never"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@color/toolbar_background"
+        android:scrollbarSize="5dp"
         />
 
     <ProgressBar
