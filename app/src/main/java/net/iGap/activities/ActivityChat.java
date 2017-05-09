@@ -2026,6 +2026,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
 
+                    if (listPathString.size() == 0) {
+                        return;
+                    }
                     sendMessage(latestRequestCode, listPathString.get(0));
                     listPathString.clear();
                     ll_attach_text.setVisibility(View.GONE);

@@ -689,7 +689,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         getDataFromServer(filter);
         mListcount = mRealmList.size();
 
-        realm.close();
+        //realm.close();
 
         return addTimeToList(mRealmList);
     }

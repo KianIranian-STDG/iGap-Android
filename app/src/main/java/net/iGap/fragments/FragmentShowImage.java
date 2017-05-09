@@ -550,6 +550,9 @@ public class FragmentShowImage extends Fragment {
                 @Override public void onPageSelected(final int position) {
 
                     txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + mFList.size());
+                    if (HelperCalander.isLanguagePersian) {
+                        txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
+                    }
                     showImageInfo(mFList.get(position));
                     ProtoGlobal.RoomMessageType type;
                     if (mFList.get(position).getForwardMessage() != null) {
