@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|top"
-            android:text="@string/st_sound"
+            android:text="@string/array_Default"
             android:textColor="@color/cardview_dark_background"
             android:textSize="@dimen/sp14"
             android:textStyle="normal" />
@@ -126,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|top"
-            android:text="@string/st_sound"
+            android:text="@string/array_Default"
             android:textColor="@color/cardview_dark_background"
             android:textSize="@dimen/sp14"
             android:textStyle="normal" />
