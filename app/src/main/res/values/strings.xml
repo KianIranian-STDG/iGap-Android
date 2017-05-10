@@ -580,10 +580,10 @@
   <string name="skip">Skip</string>
   <string name="settings">Settings</string>
   <string name="please_write_your_message">Please type your message!</string>
-  <string name="share_audio_file">Share audio file</string>
-  <string name="share_image">Share image</string>
-  <string name="share_video_file">Share video file</string>
-  <string name="share_file">Share file</string>
+  <string name="share_audio_file">Shared Audios</string>
+  <string name="share_image">Shared Images</string>
+  <string name="share_video_file">Shared Videos</string>
+  <string name="share_file">Shared Files</string>
   <string name="text_copied">Text Copied</string>
 
   <string name="message">Message</string>
@@ -620,12 +620,12 @@
   <string name="to_delete_chat">Delete Chat</string>
   <string name="picture_save_to_galary">"picture saved to gallery"</string>
   <string name="my_location_title">My Location</string>
-  <string name="shared_image">Shared images</string>
-  <string name="shared_video">Shared video</string>
-  <string name="shared_audio">Shared audio</string>
-  <string name="shared_voice">Shared voice</string>
-  <string name="shared_gif">Shared GIF</string>
-  <string name="shared_file">Shared file</string>
+  <string name="shared_image">Shared Images</string>
+  <string name="shared_video">Shared Videos</string>
+  <string name="shared_audio">Shared Audios</string>
+  <string name="shared_voice">Shared Voices</string>
+  <string name="shared_gif">Shared Gifs</string>
+  <string name="shared_file">Shared Files</string>
   <string name="qr_payment">QR Payment</string>
   <string name="charge_balance">Charge balance</string>
   <string name="total_balance">Total balance</string>
