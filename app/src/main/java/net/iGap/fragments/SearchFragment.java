@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
@@ -65,6 +66,7 @@ public class SearchFragment extends Fragment {
     private boolean chatHeaderGone = true;
     private boolean contactHeaderGone = true;
     private boolean messageHeaderGone = true;
+    private ImageView imvNothingFound;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -86,6 +88,10 @@ public class SearchFragment extends Fragment {
         view.findViewById(R.id.sfl_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
         view.findViewById(R.id.sfl_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
+        imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
+        imvNothingFound.setImageResource(R.drawable.find2);
+        imvNothingFound.setVisibility(View.VISIBLE);
+
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -101,9 +107,11 @@ public class SearchFragment extends Fragment {
                 if (charSequence.length() > 0) {
                     btnClose.setTextColor(Color.WHITE);
                     ((View) rippleDown).setEnabled(true);
+                    imvNothingFound.setVisibility(View.GONE);
                 } else {
                     btnClose.setTextColor(getResources().getColor(R.color.colorChatMessageSelectableItemBg));
                     ((View) rippleDown).setEnabled(false);
+                    imvNothingFound.setVisibility(View.GONE);
                 }
             }
 
@@ -153,6 +161,7 @@ public class SearchFragment extends Fragment {
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
                 edtSearch.setText("");
+                imvNothingFound.setVisibility(View.GONE);
             }
         });
 

@@ -138,7 +138,7 @@
           android:layout_width="@dimen/dp160"
           android:layout_height="@dimen/dp160"
           android:layout_margin="@dimen/dp20"
-          app:srcCompat="@mipmap/find"
+          app:srcCompat="@drawable/find1"
           android:layout_gravity="top|center"
           android:visibility="gone"
           android:id="@+id/sfl_imv_nothing_found"
