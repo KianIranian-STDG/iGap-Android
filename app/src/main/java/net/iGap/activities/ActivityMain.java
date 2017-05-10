@@ -905,7 +905,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             putChatToDatabase(roomList, deleteBefore, false);
             isThereAnyMoreItemToLoad = true;
 
-            HelperNotificationAndBadge.updateBadgeOnly();
 
         } else {
             putChatToDatabase(roomList, deleteBefore, true);
@@ -1379,6 +1378,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         HelperUrl.getLinkinfo(getIntent(), ActivityMain.this);
         getIntent().setData(null);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        HelperNotificationAndBadge.updateBadgeOnly();
     }
 
     @Override

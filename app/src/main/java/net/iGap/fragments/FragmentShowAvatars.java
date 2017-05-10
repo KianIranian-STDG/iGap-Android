@@ -226,6 +226,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
         txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
         ltImageName = (ViewGroup) view.findViewById(R.id.asi_layout_image_name);
+        ltImageName.setVisibility(View.GONE);
 
         toolbarShowImage = (LinearLayout) view.findViewById(R.id.toolbarShowImage);
 
@@ -304,9 +305,9 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
         }
 
-        if (avatarList.get(0).getFile() != null) {
-            txtImageName.setText(avatarList.get(0).getFile().getName());
-        }
+        //if (avatarList.get(0).getFile() != null) {
+        //    txtImageName.setText(avatarList.get(0).getFile().getName());
+        //}
 
         viewPager.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
@@ -323,9 +324,9 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
                 txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + avatarList.size());
 
-                if (avatarList.get(position).getFile() != null) {
-                    txtImageName.setText(avatarList.get(position).getFile().getName());
-                }
+                //if (avatarList.get(position).getFile() != null) {
+                //    txtImageName.setText(avatarList.get(position).getFile().getName());
+                //}
             }
 
             @Override public void onPageScrollStateChanged(int state) {
@@ -513,15 +514,15 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                 @Override public void onClick(View view) {
                     if (isShowToolbar) {
                         toolbarShowImage.animate().setDuration(150).alpha(0F).start();
-                        ltImageName.setVisibility(View.GONE);
-                        ltImageName.animate().setDuration(150).alpha(0F).start();
+                        //  ltImageName.setVisibility(View.GONE);
+                        // ltImageName.animate().setDuration(150).alpha(0F).start();
                         toolbarShowImage.setVisibility(View.GONE);
                         isShowToolbar = false;
                     } else {
                         toolbarShowImage.animate().setDuration(150).alpha(1F).start();
                         toolbarShowImage.setVisibility(View.VISIBLE);
-                        ltImageName.animate().setDuration(150).alpha(1F).start();
-                        ltImageName.setVisibility(View.VISIBLE);
+                        //  ltImageName.animate().setDuration(150).alpha(1F).start();
+                        //  ltImageName.setVisibility(View.VISIBLE);
                         isShowToolbar = true;
                     }
                 }

@@ -214,6 +214,8 @@ public class G extends MultiDexApplication {
     public static boolean hasNetworkBefore;
     public static boolean isSendContact = false;
     public static boolean latestMobileDataState;
+    public static boolean showVoteChannelLayout = true;
+    public static boolean showSenderNameInGroup = false;
 
     public static int ivSize;
     public static int userTextSize = 0;

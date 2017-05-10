@@ -104,6 +104,18 @@ public final class StartupActions {
             context.startService(intent);
         }
 
+        // setting for show layout vote in channel
+        G.showVoteChannelLayout = preferences.getInt(SHP_SETTING.KEY_VOTE, 1) == 1;
+
+        //setting for show layout sender name in group
+        G.showSenderNameInGroup = preferences.getInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0) == 1;
+
+
+
+
+
+
+
         /**
          * detect need save to gallery automatically
          */

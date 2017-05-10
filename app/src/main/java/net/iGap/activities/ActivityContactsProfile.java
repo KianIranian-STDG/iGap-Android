@@ -327,9 +327,22 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             @Override
             public void onClick(View view) {
                 Realm realm = Realm.getDefaultInstance();
+
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
                     FragmentShowAvatars.appBarLayout = fab;
-                    getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat)).commit();
+
+                    FragmentShowAvatars fragment;
+                    if (userId == G.userId) {
+                        fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
+                    } else {
+                        fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat);
+                    }
+
+                    getSupportFragmentManager().beginTransaction()
+                        .addToBackStack(null)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.chi_layoutParent, fragment)
+                        .commit();
                 }
                 realm.close();
             }

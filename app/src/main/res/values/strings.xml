@@ -37,7 +37,7 @@
   <string name="rg_Select_Country">Select your Country</string>
   <string name="rg_agreement_text_register">Recheck and confirm your phone number! We\'re sending a verification code to this number</string>
   <string name="rg_verify_register1">Connecting</string>
-  <string name="rg_verify_register2">waiting for the Verification Code</string>
+  <string name="rg_verify_register2">Waiting for the Code</string>
   <string name="rg_verify_register3">Creating Security Key</string>
   <string name="rg_verify_register4">Finalizing Registration</string>
   <string name="rg_verify_dialog_try_code">I entered manually</string>
@@ -547,7 +547,7 @@
   <string name="device">Device:</string>
   <string name="country">Country:</string>
   <string name="create_time">Create time:</string>
-  <string name="ip">ip:</string>
+  <string name="ip">IP:</string>
   <string name="current_session">Current Session</string>
   <string name="Active_session">Active Session</string>
   <string name="terminate">Terminate</string>
@@ -814,7 +814,7 @@
   <string name="OCCUPYING_LIMIT_EXCEEDED">RECEIVING IS LIMITED</string>
   <string name="st_trim">Trim Video</string>
   <string name="st_compress">Compress Video</string>
-  <string name="compressing"> compressing...</string>
+  <string name="compressing"> Compressing... </string>
   <string name="selected_color_can_not_set_on_yout_device">Selected color cannot be set on your device</string>
   <string name="keep_media_forever">Forever</string>
   <string name="keep_media_1week">1 Week</string>
@@ -828,4 +828,5 @@
   <string name="text_limit_chat_to_unknown_contact">Please wait for the process to finish (You are not allowed to send messages to more than 10 Unknown Users regularly at the same time; after getting to number 10, you get stopped until the end of countdown timer)</string>
   <string name="title_limit_Create_Group">Restriction in Number of Rooms</string>
   <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
+  <string name="show_sender_name_in_group">Show sender name in Group</string>
 </resources>

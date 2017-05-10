@@ -284,7 +284,7 @@ public class FragmentShowImage extends Fragment {
             txtImageName.setText("");
         }
 
-        if (G.userId == realmRoomMessageFinal.getUserId()) {
+        if (G.authorHash.equals(realmRoomMessageFinal.getAuthorHash())) {
 
             txtImageName.setText(R.string.txt_you);
         }

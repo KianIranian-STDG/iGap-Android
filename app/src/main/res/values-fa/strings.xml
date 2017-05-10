@@ -830,4 +830,5 @@
   <string name="text_limit_chat_to_unknown_contact">لطفاً تا اتمام زمان منتظر بمانید (شما تنها می توانید همزمان حداکثر به ۱۰ کاربر ناشناس پیغام دهید؛ بعد از دهمین کاربر از ادامه این کار متوقف خواهید شد و باید تا اتمام شمارش معکوس صبر کنید).</string>
   <string name="title_limit_Create_Group">محدودیت در تعداد ساخت اتاق های گفتگو یا اطلاع رسانی</string>
   <string name="text_limit_Create_Group">شما اجازه دارید نهایتاً ۲۵ گروه و یا کانال بسازید</string>
+  <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
 </resources>

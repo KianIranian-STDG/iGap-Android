@@ -1252,6 +1252,46 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
+
+            /*
+          setting toggle show sender name in group
+         */
+        final TextView txtShowSenderNameInGroup = (TextView) findViewById(R.id.as_txt_show_sender_name_group);
+        final ToggleButton toggleShowSenderInGroup = (ToggleButton) findViewById(R.id.as_toggle_show_sender_name_group);
+
+        int checkedEnablShowSenderInGroup = sharedPreferences.getInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0);
+        if (checkedEnablShowSenderInGroup == 1) {
+            toggleShowSenderInGroup.setChecked(true);
+        } else {
+            toggleShowSenderInGroup.setChecked(false);
+        }
+
+        toggleShowSenderInGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (isChecked) {
+                    editor.putInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 1);
+                    editor.apply();
+                    G.showSenderNameInGroup = true;
+                } else {
+                    editor.putInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0);
+                    editor.apply();
+                    G.showSenderNameInGroup = false;
+                }
+            }
+        });
+
+        txtShowSenderNameInGroup.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                toggleShowSenderInGroup.setChecked(!toggleShowSenderInGroup.isChecked());
+            }
+        });
+
+
+
+
          /*
           setting toggle toggle compress
          */

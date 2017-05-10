@@ -202,7 +202,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:scrollbars="vertical"
             android:fadeScrollbars="false"
-            android:scrollbarThumbVertical="@color/toolbar_background"
+            android:scrollbarThumbVertical="@color/background_progress_color"
             android:scrollbarSize="5dp"
             />
 

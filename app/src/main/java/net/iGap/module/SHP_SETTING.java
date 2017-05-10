@@ -31,6 +31,7 @@ public class SHP_SETTING {
     public static final String KEY_TRIM = "KEY_TRIM";
     public static final String KEY_COMPRESS = "KEY_COMPRESS";
     public static final String KEY_VOTE = "KEY_VOTE";
+    public static final String KEY_SHOW_SENDER_NEME_IN_GROUP = "KEY_SHOW_SENDER_NEME_IN_GROUP";
     public static final String KEY_POSITION_GANDER = "KEY_POSITION_GANDER";
     public static final String KEY_POSITION_SELF_REMOVE = "KEY_POSITION_SELF_REMOVE";
 
