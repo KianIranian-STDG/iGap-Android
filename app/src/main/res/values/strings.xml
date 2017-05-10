@@ -520,7 +520,7 @@
   <string name="add_to_list_contact">Add to Contact List</string>
   <string name="text_add_to_list_contact">Do you want to add this phone number to your contacts?</string>
 
-  <string name="delete_account_text">Are you sure to delete your account?</string>
+  <string name="delete_account_text">Are you sure you want to delete your account?</string>
   <string name="text_kick_admin">Are you sure to kick this admin out?</string>
   <string name="text_kick_moderator">Are you sure to kick this moderator out?</string>
   <string name="dialog_readonly_chat">Sorry, you are not allowed to send any messages to this chat.</string>
@@ -669,7 +669,7 @@
   <string name="st_data_shams">Shamsi Date</string>
   <string name="do_you_want_left_this">"Are you sure you want to leave the selected item ?"</string>
   <string name="do_you_want_delete_this">Are you sure you want to delete the selected item ?</string>
-  <string name="content_log_out">Are you sure you want to log out?</string>
+  <string name="content_log_out">Are you sure you want to log out of iGap ?</string>
   <string name="st_signature">Signature</string>
   <string name="one_day">Last day</string>
   <string name="two_day">Two days ago</string>
