@@ -623,11 +623,11 @@
   <string name="waiting_for_connection">در انتظار اتصال به سرور</string>
   <string name="picture_save_to_galary">"ذخیرهٔ تصویر در گالری"</string>
   <string name="my_location_title">موقعیت من</string>
-  <string name="shared_image">تصاویر به اشتراک گذاشته شده</string>
-  <string name="shared_video">ویدئوی به اشتراک گذاشته شده</string>
-  <string name="shared_audio">صوت به اشتراک گذاشته شده</string>
-  <string name="shared_voice">صدای به اشتراک گذاشته شده</string>
-  <string name="shared_gif">تصویر متحرک به اشتراک گذاشته شده</string>
+  <string name="shared_image">تصویر اشتراک گذاشته شده</string>
+  <string name="shared_video">ویدیو اشتراک گذاشته شده</string>
+  <string name="shared_audio">فایل صوتی اشتراک گذاشته شده</string>
+  <string name="shared_voice">پیام صوتی اشتراک گذاشته شده</string>
+  <string name="shared_gif">تصویر متحرک اشتراک گذاشته شده</string>
   <string name="shared_file">فایل به اشتراک گذاشته شده</string>
   <string name="qr_payment">هزینهٔ کیو آر</string>
   <string name="charge_balance">میزان شارژ</string>
