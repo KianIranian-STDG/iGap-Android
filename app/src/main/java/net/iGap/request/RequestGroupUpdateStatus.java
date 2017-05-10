@@ -10,7 +10,6 @@
 
 package net.iGap.request;
 
-import android.util.Log;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupUpdateStatus;
 
@@ -22,9 +21,6 @@ public class RequestGroupUpdateStatus {
         builder.setRoomId(roomId);
         builder.setMessageId(messageId);
         builder.setStatus(status);
-
-        Log.i("III", "roomId : " + roomId);
-        Log.i("III", "messageId : " + messageId);
 
         RequestWrapper requestWrapper = new RequestWrapper(311, builder);
         try {

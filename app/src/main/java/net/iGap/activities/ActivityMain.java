@@ -10,7 +10,9 @@
 
 package net.iGap.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -116,6 +118,7 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyAppBarLayout;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.ShouldScrolledBehavior;
+import net.iGap.module.StartupActions;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
@@ -216,6 +219,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
+        /**
+         * just do this action once
+         */
         if (!isGetContactList) {
             try {
                 HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermission() {
@@ -245,6 +251,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            checkPermission();
         }
 
         G.helperNotificationAndBadge.cancelNotification();
@@ -746,6 +754,55 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
         } else {
             titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+        }
+    }
+
+    private void checkPermission() {
+        try {
+            HelperPermision.getStoragePermision(this, new OnGetPermission() {
+                @Override
+                public void Allow() {
+                    StartupActions.makeFolder();
+                }
+
+                @Override
+                public void deny() {
+
+                    DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            try {
+                                HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
+                                    @Override
+                                    public void Allow() {
+                                        StartupActions.makeFolder();
+                                    }
+
+                                    @Override
+                                    public void deny() {
+                                        finish();
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+
+                    DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    };
+
+                    new AlertDialog.Builder(ActivityMain.this).setMessage(R.string.you_have_to_get_storage_permision_for_continue).setCancelable(false).
+                            setPositiveButton(ActivityMain.this.getString(R.string.ok), onOkListener).setNegativeButton(ActivityMain.this.getString(R.string.cancel), onCancelListener).create().show();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

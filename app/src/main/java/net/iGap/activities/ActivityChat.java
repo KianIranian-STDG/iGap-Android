@@ -57,7 +57,6 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -6347,15 +6346,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 //TODO [Saeed Mozaffari] [2017-05-07 10:28 AM] - check scroll to top and bottom
                 if (firstVisiblePosition < scrollEnd) {
-                    Log.i("EEE", "scrollListener UP");
-
                     /**
                      * scroll to top
                      */
                     loadMessage(UP);
                 } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
-                    Log.i("EEE", "scrollListener Bottom");
-
                     /**
                      * scroll to bottom
                      */

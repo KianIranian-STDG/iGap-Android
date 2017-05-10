@@ -214,28 +214,28 @@ public final class StartupActions {
      * create app folders if not created or removed from phone storage
      */
     public static void makeFolder() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new File(DIR_APP).mkdirs();
-                new File(DIR_IMAGES).mkdirs();
-                new File(DIR_VIDEOS).mkdirs();
-                new File(DIR_AUDIOS).mkdirs();
-                new File(DIR_DOCUMENT).mkdirs();
-                new File(DIR_CHAT_BACKGROUND).mkdirs();
-                new File(DIR_IMAGE_USER).mkdirs();
-                new File(DIR_TEMP).mkdirs();
+        //new Thread(new Runnable() {
+        //    @Override
+        //    public void run() {
+        new File(DIR_APP).mkdirs();
+        new File(DIR_IMAGES).mkdirs();
+        new File(DIR_VIDEOS).mkdirs();
+        new File(DIR_AUDIOS).mkdirs();
+        new File(DIR_DOCUMENT).mkdirs();
+        new File(DIR_CHAT_BACKGROUND).mkdirs();
+        new File(DIR_IMAGE_USER).mkdirs();
+        new File(DIR_TEMP).mkdirs();
 
-                String file = ".nomedia";
-                new File(DIR_IMAGES + "/" + file).mkdirs();
-                new File(DIR_VIDEOS + "/" + file).mkdirs();
-                new File(DIR_AUDIOS + "/" + file).mkdirs();
-                new File(DIR_DOCUMENT + "/" + file).mkdirs();
-                new File(DIR_CHAT_BACKGROUND + "/" + file).mkdirs();
-                new File(DIR_IMAGE_USER + "/" + file).mkdirs();
-                new File(DIR_TEMP + "/" + file).mkdirs();
-            }
-        }).start();
+        String file = ".nomedia";
+        new File(DIR_IMAGES + "/" + file).mkdirs();
+        new File(DIR_VIDEOS + "/" + file).mkdirs();
+        new File(DIR_AUDIOS + "/" + file).mkdirs();
+        new File(DIR_DOCUMENT + "/" + file).mkdirs();
+        new File(DIR_CHAT_BACKGROUND + "/" + file).mkdirs();
+        new File(DIR_IMAGE_USER + "/" + file).mkdirs();
+        new File(DIR_TEMP + "/" + file).mkdirs();
+        //    }
+        //}).start();
 
         //TODO [Saeed Mozaffari] [2017-04-22 12:07 PM] - check this values and if don't need clear that
         IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");

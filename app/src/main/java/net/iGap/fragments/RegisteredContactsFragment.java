@@ -26,7 +26,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +92,8 @@ public class RegisteredContactsFragment extends Fragment {
     RealmChangeListener<RealmResults<RealmContacts>> contactsChangeListener;
     RealmResults<RealmContacts> realmContacts;
 
-    @Override public void onResume() {
+    @Override
+    public void onResume() {
         super.onResume();
 
         if (realmContacts != null) {
@@ -103,7 +103,8 @@ public class RegisteredContactsFragment extends Fragment {
         }
     }
 
-    @Override public void onPause() {
+    @Override
+    public void onPause() {
         super.onPause();
 
         if (realmContacts != null) {
@@ -111,7 +112,8 @@ public class RegisteredContactsFragment extends Fragment {
         }
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
 
         if (mRealm != null) {
@@ -123,11 +125,14 @@ public class RegisteredContactsFragment extends Fragment {
         return new RegisteredContactsFragment();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
-    @Override public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mRealm = Realm.getDefaultInstance();
@@ -195,12 +200,14 @@ public class RegisteredContactsFragment extends Fragment {
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         itemAdapter = new ItemAdapter();
         itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItem>() {
-            @Override public boolean filter(ContactItem item, CharSequence constraint) {
+            @Override
+            public boolean filter(ContactItem item, CharSequence constraint) {
                 return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItem>() {
-            @Override public boolean onClick(View v, IAdapter adapter, ContactItem item, int position) {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, ContactItem item, int position) {
 
                 showProgress();
 
@@ -215,7 +222,8 @@ public class RegisteredContactsFragment extends Fragment {
         edtSearch = (EditText) view.findViewById(R.id.menu_edt_search);
         final TextView txtSearch = (TextView) view.findViewById(R.id.menu_btn_search);
         txtSearch.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 txtClose.setVisibility(View.VISIBLE);
                 edtSearch.setVisibility(View.VISIBLE);
                 edtSearch.setFocusable(true);
@@ -225,7 +233,8 @@ public class RegisteredContactsFragment extends Fragment {
         });
 
         txtClose.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (edtSearch.getText().length() > 0) {
                     edtSearch.setText("");
                 } else {
@@ -240,38 +249,38 @@ public class RegisteredContactsFragment extends Fragment {
         });
 
         edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 itemAdapter.filter(s.toString());
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
         vgAddContact.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 FragmentAddContact fragment = FragmentAddContact.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
                 fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .add(R.id.fragmentContainer, fragment)
-                    .commit();
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).add(R.id.fragmentContainer, fragment).commit();
             }
         });
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.menu_txtBack);
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.menu_ripple_txtBack);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 // close and remove fragment from stack
 
                 //getActivity().getSupportFragmentManager().popBackStack();
@@ -307,18 +316,19 @@ public class RegisteredContactsFragment extends Fragment {
              * if contacts size is zero send request for get contacts list
              * for insuring that contacts not exist really or not
              */
-            Log.i("MMM", "RequestUserContactsGetList 1");
             new RequestUserContactsGetList().userContactGetList();
         }
 
         fillAdapter();
 
         contactsChangeListener = new RealmChangeListener<RealmResults<RealmContacts>>() {
-            @Override public void onChange(RealmResults<RealmContacts> element) {
+            @Override
+            public void onChange(final RealmResults<RealmContacts> contact) {
 
                 rv.post(new Runnable() {
-                    @Override public void run() {
-                        fillAdapter();
+                    @Override
+                    public void run() {
+                        //fillAdapter();
                     }
                 });
             }
@@ -337,27 +347,29 @@ public class RegisteredContactsFragment extends Fragment {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             getActivity().getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
-            //            getActivity().getSupportFragmentManager().popBackStack();
+            //getActivity().getSupportFragmentManager().popBackStack();
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
-                @Override public void onChatGetRoom(final long roomId) {
+                @Override
+                public void onChatGetRoom(final long roomId) {
                     hideProgress();
                     getUserInfo(peerId, roomId);
 
                     G.onChatGetRoom = null;
                 }
 
-                @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+                @Override
+                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
 
                 }
 
-                @Override public void onChatGetRoomTimeOut() {
-
+                @Override
+                public void onChatGetRoomTimeOut() {
                     hideProgress();
                 }
 
-                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
-
+                @Override
+                public void onChatGetRoomError(int majorCode, int minorCode) {
                     hideProgress();
                 }
             };
@@ -370,16 +382,19 @@ public class RegisteredContactsFragment extends Fragment {
     private void getUserInfo(final long peerId, final long roomId) {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
                 if (user.getId() == peerId) {
 
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             final Realm realm = Realm.getDefaultInstance();
 
                             realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override public void execute(Realm realm) {
+                                @Override
+                                public void execute(Realm realm) {
                                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
                                     if (realmRegisteredInfo == null) {
                                         realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
@@ -400,11 +415,12 @@ public class RegisteredContactsFragment extends Fragment {
                                     realmRegisteredInfo.setMutual(user.getMutual());
                                 }
                             }, new Realm.Transaction.OnSuccess() {
-                                @Override public void onSuccess() {
+                                @Override
+                                public void onSuccess() {
                                     try {
-
                                         G.handler.post(new Runnable() {
-                                            @Override public void run() {
+                                            @Override
+                                            public void run() {
                                                 hideProgress();
                                                 Intent intent = new Intent(context, ActivityChat.class);
                                                 intent.putExtra("peerId", peerId);
@@ -423,7 +439,8 @@ public class RegisteredContactsFragment extends Fragment {
                                     realm.close();
                                 }
                             }, new Realm.Transaction.OnError() {
-                                @Override public void onError(Throwable error) {
+                                @Override
+                                public void onError(Throwable error) {
                                     realm.close();
                                 }
                             });
@@ -432,13 +449,13 @@ public class RegisteredContactsFragment extends Fragment {
                 }
             }
 
-            @Override public void onUserInfoTimeOut() {
-
+            @Override
+            public void onUserInfoTimeOut() {
                 hideProgress();
             }
 
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
-
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
                 hideProgress();
             }
         };
@@ -463,7 +480,8 @@ public class RegisteredContactsFragment extends Fragment {
         return -1;
     }
 
-    @Override public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
         if (fastAdapter != null) {
             outState = fastAdapter.saveInstanceState(outState);
@@ -474,8 +492,8 @@ public class RegisteredContactsFragment extends Fragment {
     private void hideProgress() {
 
         G.handler.post(new Runnable() {
-
-            @Override public void run() {
+            @Override
+            public void run() {
                 mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 prgWaiting.setVisibility(View.GONE);
             }
@@ -484,14 +502,16 @@ public class RegisteredContactsFragment extends Fragment {
 
     private void showProgress() {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 prgWaiting.setVisibility(View.VISIBLE);
             }
         });
     }
 
-    @Override public void onAttach(Activity activity) {
+    @Override
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
     }
@@ -519,7 +539,8 @@ public class RegisteredContactsFragment extends Fragment {
 
                 //so the headers are aware of changes
                 stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                    @Override public void onChanged() {
+                    @Override
+                    public void onChanged() {
                         decoration.invalidateHeaders();
                     }
                 });
@@ -532,11 +553,12 @@ public class RegisteredContactsFragment extends Fragment {
                 itemAdapter.filter(edtSearch.getText());
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
-    @Override public void onDetach() {
+    @Override
+    public void onDetach() {
         super.onDetach();
         hideProgress();
     }
