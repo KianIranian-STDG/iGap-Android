@@ -328,7 +328,7 @@ public class RegisteredContactsFragment extends Fragment {
                 rv.post(new Runnable() {
                     @Override
                     public void run() {
-                        //fillAdapter();
+                        fillAdapter();
                     }
                 });
             }

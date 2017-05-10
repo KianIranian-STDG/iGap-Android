@@ -1437,7 +1437,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         getIntent().setData(null);
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
         HelperNotificationAndBadge.updateBadgeOnly();
     }
