@@ -666,6 +666,7 @@
   <string name="delete_and_leave_channel">Delete and Leave Channel</string>
   <string name="txt_draft">Draft: </string>
   <string name="txt_you">You: </string>
+  <string name="you">You</string>
   <string name="st_data_shams">Shamsi Date</string>
   <string name="do_you_want_left_this">"Are you sure you want to leave the selected item ?"</string>
   <string name="do_you_want_delete_this">Are you sure you want to delete the selected item ?</string>

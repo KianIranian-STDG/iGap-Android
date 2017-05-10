@@ -286,7 +286,7 @@ public class FragmentShowImage extends Fragment {
 
         if (G.authorHash.equals(realmRoomMessageFinal.getAuthorHash())) {
 
-            txtImageName.setText(R.string.txt_you);
+            txtImageName.setText(R.string.you);
         }
 
         if (realmRoomMessageFinal.getUpdateTime() != 0) {

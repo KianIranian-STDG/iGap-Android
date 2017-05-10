@@ -677,6 +677,7 @@
   <string name="channel_left">"ترک کانال"</string>
   <string name="please_enter_channel_description">"لطفاً توضیح مختصری برای کانال وارد کنید."</string>
   <string name="txt_you">"شما: "</string>
+  <string name="you">"شما"</string>
   <string name="farvardin">فروردین</string>
   <string name="ordibehst">اردیبهشت</string>
   <string name="khordad">خرداد</string>
