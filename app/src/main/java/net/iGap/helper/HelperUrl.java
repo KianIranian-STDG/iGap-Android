@@ -342,7 +342,7 @@ public class HelperUrl {
             }
 
             if (isHash) {
-                if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
+                if (!(s.matches("\\w") || s.equals("-"))) {
                     if (tmp.length() > 0) {
                         insertHashLink(tmp, builder, start, messageID);
                     }
@@ -407,7 +407,7 @@ public class HelperUrl {
             }
 
             if (isAtSign) {
-                if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
+                if (!(s.matches("\\w") || s.equals("-"))) {
                     //if (s.equals("!") || s.equals("#") || s.equals("$") || s.equals("%") || s.equals("^") || s.equals("&") ||
                     //    s.equals("(") || s.equals(")") || s.equals("-") || s.equals("+") || s.equals("=") || s.equals("!") ||
                     //    s.equals("`") || s.equals("{") || s.equals("}") || s.equals("[") || s.equals("]") || s.equals(";") ||
@@ -493,17 +493,13 @@ public class HelperUrl {
                 int start = Integer.parseInt(info[0]);
                 int end = Integer.parseInt(info[1]);
                 String type = info[2];
-                String message = "";
 
-                if (info.length > 3) {
-                    message = info[3];
-                }
 
                 try {
                     if (type.equals("hash")) {
-                        insertHashLink(message, strBuilder, start, messageID);
+                        insertHashLink(text.substring(start + 1, end), strBuilder, start, messageID);
                     } else if (type.equals("atSighn")) {
-                        insertAtSignLink(message, strBuilder, start);
+                        insertAtSignLink(text.substring(start + 1, end), strBuilder, start);
                     } else if (type.equals("igapLink")) {
                         insertIgapLink(strBuilder, start, end);
                     } else if (type.equals("igapResolve")) {
@@ -547,11 +543,11 @@ public class HelperUrl {
             String str = list[i];
 
             if (str.contains(igapSite2)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapLink.toString() + "_" + "no" + "@";
+                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapLink.toString() + "@";
             } else if (str.contains(igapResolve)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapResolve.toString() + "_" + "no" + "@";
+                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapResolve.toString() + "@";
             } else if (isTextLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.webLink.toString() + "_" + "no" + "@";
+                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.webLink.toString() + "@";
             }
             count += str.length() + 1;
         }
@@ -582,10 +578,10 @@ public class HelperUrl {
             }
 
             if (isAtSign) {
-                if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
+                if (!(s.matches("\\w") || s.equals("-"))) {
 
                     if (tmp.length() > 0) {
-                        result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
+                        result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "@";
                     }
 
                     tmp = "";
@@ -598,7 +594,7 @@ public class HelperUrl {
 
         if (isAtSign) {
             if (tmp.length() > 0) {
-                result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "_" + tmp + "@";
+                result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.atSighn.toString() + "@";
             }
         }
 
@@ -628,10 +624,11 @@ public class HelperUrl {
                 continue;
             }
 
+
             if (isHash) {
-                if (!(s.matches("\\w") || s.equals("_") || s.codePointAt(0) == 95 || s.equals("-") || s.codePointAt(0) == 45)) {
+                if (!(s.matches("\\w") || s.equals("-"))) {
                     if (tmp.length() > 0) {
-                        result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
+                        result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "@";
                     }
 
                     tmp = "";
@@ -644,7 +641,7 @@ public class HelperUrl {
 
         if (isHash) {
             if (tmp.length() > 0) {
-                result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "_" + tmp + "@";
+                result += start + "_" + (start + tmp.length() + 1) + "_" + linkType.hash.toString() + "@";
             }
         }
 
