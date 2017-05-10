@@ -718,6 +718,7 @@
   <string name="ROOM_CONVERTED_TO_PUBLIC">"The Private Page Converted to Public"</string>
   <string name="ROOM_CONVERTED_TO_PRIVATE">"The Public Page Converted to Private"</string>
   <string name="MEMBER_JOINED_BY_INVITE_LINK">"Join by Invitation Link"</string>
+  <string name="MEMBER_JOINED_BY_INVITE_LINK_2">"اضافه شد"</string>
   <string name="Room_Deleted">"Deleted Room"</string>
   <string name="conversation">""</string>
 
