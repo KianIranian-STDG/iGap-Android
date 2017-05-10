@@ -399,7 +399,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private boolean isChatReadOnly = false;
     private boolean isMuteNotification;
     private boolean sendByEnter = false;
-    public static boolean showVoteChannelLayout = true;
+
 
     private long replyToMessageId = 0;
     private long userId;
@@ -1311,11 +1311,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
          * get sendByEnter action from setting value
          */
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
-        sendByEnter = checkedSendByEnter == 1;
-
-        int checkedEnableVote = sharedPreferences.getInt(SHP_SETTING.KEY_VOTE, 1);
-        showVoteChannelLayout = checkedEnableVote == 1;
+        sendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0) == 1;
 
         /**
          * set background
