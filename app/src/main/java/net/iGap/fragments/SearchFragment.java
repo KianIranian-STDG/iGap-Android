@@ -89,7 +89,7 @@ public class SearchFragment extends Fragment {
         view.findViewById(R.id.sfl_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
-        imvNothingFound.setImageResource(R.drawable.find2);
+        imvNothingFound.setImageResource(R.drawable.find1);
         imvNothingFound.setVisibility(View.VISIBLE);
 
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
