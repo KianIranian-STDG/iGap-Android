@@ -323,7 +323,9 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             @Override public void onPageSelected(int position) {
 
                 txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + avatarList.size());
-
+                if (HelperCalander.isLanguagePersian) {
+                    txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
+                }
                 //if (avatarList.get(position).getFile() != null) {
                 //    txtImageName.setText(avatarList.get(position).getFile().getName());
                 //}
