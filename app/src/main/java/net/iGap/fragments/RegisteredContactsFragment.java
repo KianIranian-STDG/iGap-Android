@@ -12,12 +12,9 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -42,12 +39,10 @@ import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.interfaces.OnChatGetRoom;
-import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
@@ -56,18 +51,12 @@ import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
-import net.iGap.request.RequestChatGetRoom;
-import net.iGap.request.RequestUserInfo;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.G.context;
 
 public class RegisteredContactsFragment extends Fragment {
 
@@ -83,6 +72,7 @@ public class RegisteredContactsFragment extends Fragment {
     private FragmentActivity mActivity;
     private EditText edtSearch;
     private Realm mRealm;
+    private boolean isCallAction = false;
 
     @Override public void onDestroy() {
         super.onDestroy();
@@ -145,6 +135,7 @@ public class RegisteredContactsFragment extends Fragment {
         String title = null;
         if (bundle != null) {
             title = bundle.getString("TITLE");
+            isCallAction = bundle.getBoolean("ACTION");
         }
 
         if (title != null) {
@@ -268,121 +259,7 @@ public class RegisteredContactsFragment extends Fragment {
 
     }
 
-    private void chatGetRoom(final long peerId) {
 
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
-
-        if (realmRoom != null) {
-            hideProgress();
-            Intent intent = new Intent(context, ActivityChat.class);
-            intent.putExtra("RoomId", realmRoom.getId());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-            getActivity().getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
-            //getActivity().getSupportFragmentManager().popBackStack();
-        } else {
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override public void onChatGetRoom(final long roomId) {
-                    hideProgress();
-                    getUserInfo(peerId, roomId);
-
-                    G.onChatGetRoom = null;
-                }
-
-                @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
-
-                }
-
-                @Override public void onChatGetRoomTimeOut() {
-                    hideProgress();
-                }
-
-                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
-                    hideProgress();
-                }
-            };
-
-            new RequestChatGetRoom().chatGetRoom(peerId);
-        }
-        realm.close();
-    }
-
-    private void getUserInfo(final long peerId, final long roomId) {
-
-        G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-
-                if (user.getId() == peerId) {
-
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override public void run() {
-                            final Realm realm = Realm.getDefaultInstance();
-
-                            realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override public void execute(Realm realm) {
-                                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, user.getId()).findFirst();
-                                    if (realmRegisteredInfo == null) {
-                                        realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
-                                        realmRegisteredInfo.setId(user.getId());
-                                        realmRegisteredInfo.setDoNotshowSpamBar(false);
-                                    }
-
-                                    RealmAvatar.put(user.getId(), user.getAvatar(), true);
-                                    realmRegisteredInfo.setUsername(user.getUsername());
-                                    realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
-                                    realmRegisteredInfo.setFirstName(user.getFirstName());
-                                    realmRegisteredInfo.setLastName(user.getLastName());
-                                    realmRegisteredInfo.setDisplayName(user.getDisplayName());
-                                    realmRegisteredInfo.setInitials(user.getInitials());
-                                    realmRegisteredInfo.setColor(user.getColor());
-                                    realmRegisteredInfo.setStatus(user.getStatus().toString());
-                                    realmRegisteredInfo.setAvatarCount(user.getAvatarCount());
-                                    realmRegisteredInfo.setMutual(user.getMutual());
-                                }
-                            }, new Realm.Transaction.OnSuccess() {
-                                @Override public void onSuccess() {
-                                    try {
-                                        G.handler.post(new Runnable() {
-                                            @Override public void run() {
-                                                hideProgress();
-                                                Intent intent = new Intent(context, ActivityChat.class);
-                                                intent.putExtra("peerId", peerId);
-                                                intent.putExtra("RoomId", roomId);
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                context.startActivity(intent);
-                                                mActivity.getSupportFragmentManager().popBackStack();
-
-                                                G.onUserInfoResponse = null;
-                                            }
-                                        });
-                                    } catch (IllegalStateException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    realm.close();
-                                }
-                            }, new Realm.Transaction.OnError() {
-                                @Override public void onError(Throwable error) {
-                                    realm.close();
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-
-            @Override public void onUserInfoTimeOut() {
-                hideProgress();
-            }
-
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
-                hideProgress();
-            }
-        };
-
-        new RequestUserInfo().userInfo(peerId);
-    }
 
     private void hideProgress() {
 
@@ -442,9 +319,28 @@ public class RegisteredContactsFragment extends Fragment {
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
-                        showProgress();
 
-                        chatGetRoom(realmResults.get(getPosition()).getId());
+                        if (isCallAction) {
+                            getActivity().getSupportFragmentManager().popBackStack();
+                            FragmentCall.call(realmResults.get(getPosition()).getId(), getActivity());
+                        } else {
+                            showProgress();
+
+                            HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getId(), new HelperPublicMethod.Oncomplet() {
+                                @Override public void complete() {
+                                    hideProgress();
+                                    getActivity().getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
+                                }
+                            }, new HelperPublicMethod.OnError() {
+                                @Override public void error() {
+                                    hideProgress();
+                                }
+                            });
+                        }
+
+
+
+
                     }
                 });
             }
