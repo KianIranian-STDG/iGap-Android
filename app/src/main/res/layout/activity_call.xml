@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_call_fragment"
+    android:clickable="true"
+    android:elevation="999dp"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    >
+
+
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
+
+
+    <android.opengl.GLSurfaceView
+        android:id="@+id/fcr_glview_call"
+        android:layout_width="@dimen/dp120"
+        android:layout_height="@dimen/dp120"
+        android:layout_gravity="center|top"
+
+
+        />
+    <android.view.SurfaceView
+        android:id="@+id/fcr_preview"
+        android:layout_width="@dimen/dp120"
+        android:layout_height="@dimen/dp120"
+        android:layout_gravity="center"
+        />
+
+
+    <ImageView
+        android:id="@+id/fcr_imv_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/dp20"
+        android:orientation="vertical"
+        >
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center_vertical"
+          android:orientation="horizontal"
+          >
+
+
+        <ImageView
+            android:id="@+id/fcr_imv_igap_icon"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="@dimen/dp32"
+
+            app:srcCompat="@mipmap/logo"
+            />
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp6"
+            android:layout_weight="1"
+            android:text="@string/igap_call"
+            />
+      </LinearLayout>
+      <TextView
+          android:id="@+id/fcr_txt_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="name"
+          android:textSize="@dimen/sp22"
+          />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp40"
+          android:gravity="center_vertical"
+          android:orientation="horizontal"
+          >
+        <TextView
+            android:id="@+id/fcr_txt_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="status"
+            />
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/fcr_txt_avi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp12"
+            app:indicatorColor="@color/gray"
+            app:indicatorName="BallPulseIndicator"
+            style="@style/AVLoadingIndicatorView.Small"
+            />
+      </LinearLayout>
+
+      <View
+          android:layout_width="wrap_content"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+          />
+
+      <LinearLayout
+          android:id="@+id/fcr_layout_answer"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/dp20"
+          android:orientation="horizontal"
+          >
+        <Button
+            android:id="@+id/fcr_btn_answer_input_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="answer"
+            />
+        <Button
+            android:id="@+id/fcr_btn_end_input_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="end call"
+            />
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/fcr_layout_caller"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp60"
+          android:gravity="center"
+          android:orientation="horizontal"
+          >
+
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/fcr_btn_close"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:background="@drawable/circle_white"
+            android:gravity="center"
+            android:text="@string/md_close_button"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/gray"
+            />
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/fcr_btn_end"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:layout_marginLeft="@dimen/dp40"
+            android:layout_marginRight="@dimen/dp40"
+            android:background="@drawable/circle_red"
+            android:gravity="center"
+            android:text="@string/md_call_end"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            />
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/fcr_btn_call"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:background="@drawable/circle_mic"
+            android:gravity="center"
+            android:text="@string/md_phone"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            />
+
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/fcr_layout_option"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp40"
+          android:layout_marginTop="@dimen/dp20"
+          android:gravity="center"
+          android:orientation="horizontal"
+          >
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/fcr_btn_mic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/md_mic"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp28"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            >
+
+          <net.iGap.module.MaterialDesignTextView
+              android:id="@+id/fcr_btn_chat"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/md_chat"
+              android:textAppearance="@style/TextIconAppearance.all"
+              android:textColor="@color/white"
+              android:textSize="@dimen/sp28"
+              />
+
+        </LinearLayout>
+
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/fcr_btn_speaker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/md_muted"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp28"
+            />
+      </LinearLayout>
+
+
+    </LinearLayout>
+
+
+  </FrameLayout>
+
+
+</LinearLayout>

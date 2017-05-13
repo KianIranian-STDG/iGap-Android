@@ -830,4 +830,6 @@
   <string name="title_limit_Create_Group">Restriction in Number of Rooms</string>
   <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
   <string name="show_sender_name_in_group">Show sender name in Group</string>
+  <string name="calls">Calls</string>
+  <string name="igap_call">iGap Call</string>
 </resources>

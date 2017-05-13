@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentNotification;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperAvatar;
@@ -683,13 +684,21 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         imgMenu = (MaterialDesignTextView) findViewById(R.id.chi_img_menuPopup);
 
         RippleView rippleMenu = (RippleView) findViewById(R.id.chi_ripple_menuPopup);
-
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
                 showPopUp();
             }
         });
+
+        RippleView rippleCall = (RippleView) findViewById(R.id.chi_ripple_call);
+        rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override public void onComplete(RippleView rippleView) {
+
+                FragmentCall.call(userId, ActivityContactsProfile.this);
+            }
+        });
+
         vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

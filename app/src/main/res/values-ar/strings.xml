@@ -829,4 +829,7 @@
   <string name="text_limit_Create_Group">you just create 25 Group or Channel</string>
   <string name="title_limit_Create_Group">Limit Create Room</string>
   <string name="show_sender_name_in_group">Show sender name in group</string>
+  <string name="calls">Calls</string>
+  <string name="igap_call">iGap Call</string>
+
 </resources>

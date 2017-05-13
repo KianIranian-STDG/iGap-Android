@@ -832,4 +832,6 @@
   <string name="title_limit_Create_Group">محدودیت در تعداد ساخت اتاق های گفتگو یا اطلاع رسانی</string>
   <string name="text_limit_Create_Group">شما اجازه دارید نهایتاً ۲۵ گروه و یا کانال بسازید</string>
   <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
+  <string name="calls">تماس</string>
+  <string name="igap_call">iGap Call</string>
 </resources>

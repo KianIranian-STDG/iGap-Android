@@ -17,6 +17,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestQueue;
+import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
@@ -85,6 +86,12 @@ public class LoginActions extends Application {
                         }
                         getUserInfo();
                         //sendWaitingRequestWrappers();
+
+                        //get Signaling Configuration
+                        if (G.needGetSignalingConfiguration) {
+                            new RequestSignalingGetConfiguration().signalingGetConfiguration();
+                        }
+
                     }
                 });
 
