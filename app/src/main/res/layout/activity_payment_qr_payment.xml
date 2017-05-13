@@ -46,7 +46,8 @@
             android:paddingRight="@dimen/dp60"
             android:text="@string/qr_payment"
             android:textColor="@color/whit_background"
-            android:textSize="@dimen/sp18"/>
+            android:textSize="@dimen/dp18"
+            />
 
     </LinearLayout>
 
@@ -141,7 +142,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/total_balance"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/sp14"/>
+                        android:textSize="@dimen/dp14"
+                        />
 
                     <TextView
                         android:id="@+id/aqp_page_charge_balance_txt_price"
@@ -151,7 +153,8 @@
                         android:layout_below="@id/aqp_page_charge_balance_txt_total_balance"
                         android:text="20,000"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/sp22"/>
+                        android:textSize="@dimen/dp22"
+                        />
 
                     <TextView
                         android:id="@+id/aqp_page_charge_balance_txt_rials"
@@ -161,7 +164,7 @@
                         android:layout_below="@id/aqp_page_charge_balance_txt_price"
                         android:text="@string/rials"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/sp12"
+                        android:textSize="@dimen/dp12"
                         />
 
                 </RelativeLayout>
@@ -185,7 +188,8 @@
                         android:text="@string/charge"
                         android:textColor="@color/white"
 
-                        android:textSize="@dimen/sp16"/>
+                        android:textSize="@dimen/dp16"
+                        />
                 </android.support.v7.widget.CardView>
 
             </LinearLayout>
@@ -228,7 +232,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/charge_balance"
-                        android:textSize="@dimen/sp10"/>
+                        android:textSize="@dimen/dp10"
+                        />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -262,7 +267,8 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:text="@string/transaction_history"
-                        android:textSize="@dimen/sp10"/>
+                        android:textSize="@dimen/dp10"
+                        />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -294,7 +300,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/transfer_mony"
-                        android:textSize="@dimen/sp10"/>
+                        android:textSize="@dimen/dp10"
+                        />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -336,7 +343,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/create_qr_code"
-                        android:textSize="@dimen/sp10"/>
+                        android:textSize="@dimen/dp10"
+                        />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -369,7 +377,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/pay_via_qr_code"
-                        android:textSize="@dimen/sp10"/>
+                        android:textSize="@dimen/dp10"
+                        />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -402,7 +411,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/charge_out"
-                        android:textSize="@dimen/sp10"/>
+                        android:textSize="@dimen/dp10"
+                        />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -425,7 +435,8 @@
                 android:padding="@dimen/dp4"
                 android:text="@string/e_commerce"
                 android:textColor="@color/green"
-                android:textSize="@dimen/sp16"/>
+                android:textSize="@dimen/dp16"
+                />
 
         </android.support.v7.widget.CardView>
 

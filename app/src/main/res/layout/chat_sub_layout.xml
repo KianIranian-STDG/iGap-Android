@@ -96,7 +96,7 @@
               android:paddingBottom="1dp"
               android:singleLine="true"
               android:textColor="#2bbfbd"
-              android:textSize="@dimen/sp13"
+              android:textSize="@dimen/dp13"
               />
 
           <net.iGap.emoji.EmojiTextView
@@ -110,7 +110,7 @@
               android:singleLine="true"
               android:text="LAST MESSAGE"
               android:textColor="#FF616161"
-              android:textSize="@dimen/sp13"
+              android:textSize="@dimen/dp13"
               />
 
           <com.wang.avi.AVLoadingIndicatorView
@@ -154,7 +154,7 @@
               android:text="@string/md_muted"
               android:textAppearance="@style/TextIconAppearance_toolbar"
               android:textColor="@color/grayNew"
-              android:textSize="@dimen/sp16"
+              android:textSize="@dimen/dp16"
               />
 
           <ImageView
@@ -174,7 +174,7 @@
               android:singleLine="true"
               android:text="time"
               android:textColor="@color/gray"
-              android:textSize="@dimen/sp12"
+              android:textSize="@dimen/dp12"
               />
 
 
@@ -192,7 +192,7 @@
             android:singleLine="true"
             android:text="1"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/sp10"
+            android:textSize="@dimen/dp10"
             />
       </LinearLayout>
     </LinearLayout>

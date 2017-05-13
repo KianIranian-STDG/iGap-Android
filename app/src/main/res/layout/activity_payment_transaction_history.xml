@@ -47,7 +47,8 @@
             android:paddingRight="@dimen/dp60"
             android:text="@string/transaction_history"
             android:textColor="@color/whit_background"
-            android:textSize="@dimen/sp18"/>
+            android:textSize="@dimen/dp18"
+            />
 
     </LinearLayout>
 

@@ -35,7 +35,7 @@
                 android:gravity="center"
                 android:text="@string/new_group"
                 android:textColor="@color/whit_background"
-                android:textSize="@dimen/sp18"
+                android:textSize="@dimen/dp18"
                 android:textStyle="bold"
                 android:visibility="visible"/>
 
@@ -128,7 +128,8 @@
                         android:layout_gravity="start"
                         android:paddingTop="@dimen/dp8"
                         android:singleLine="true"
-                        android:textSize="@dimen/sp15"/>
+                        android:textSize="@dimen/dp15"
+                        />
 
                     <View
                         android:id="@+id/ng_view_newGroup"
@@ -163,7 +164,8 @@
                     android:maxLines="4"
                     android:paddingBottom="@dimen/dp8"
                     android:paddingTop="@dimen/dp8"
-                    android:textSize="@dimen/sp15"/>
+                  android:textSize="@dimen/dp15"
+                  />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -180,7 +182,7 @@
                 android:singleLine="false"
                 android:text="@string/chi_NEXT_STEP"
                 android:textColor="@color/toolbar_background"
-                android:textSize="@dimen/sp15"
+                android:textSize="@dimen/dp15"
                 android:textStyle="normal"
 
                 />
@@ -198,7 +200,7 @@
                 android:padding="@dimen/dp12"
                 android:text="@string/B_cancel"
                 android:textColor="@color/toolbar_background"
-                android:textSize="@dimen/sp15"
+                android:textSize="@dimen/dp15"
                 android:textStyle="normal"/>
         </RelativeLayout>
     </ScrollView>

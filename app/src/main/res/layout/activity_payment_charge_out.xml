@@ -47,7 +47,8 @@
             android:paddingRight="@dimen/dp60"
             android:text="@string/charge_out"
             android:textColor="@color/whit_background"
-            android:textSize="@dimen/sp18"/>
+            android:textSize="@dimen/dp18"
+            />
 
 
     </LinearLayout>
@@ -74,14 +75,16 @@
                     android:layout_height="wrap_content"
                     android:text="@string/agrement"
                     android:textColor="@color/black_register"
-                    android:textSize="@dimen/sp14"/>
+                    android:textSize="@dimen/dp14"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp12"
                     android:text="@string/payment_charge_out_text"
-                    android:textSize="@dimen/sp12"/>
+                    android:textSize="@dimen/dp12"
+                    />
             </LinearLayout>
 
 

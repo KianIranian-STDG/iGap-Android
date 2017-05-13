@@ -65,7 +65,7 @@
                         android:text="w"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18"
+                        android:textSize="@dimen/dp18"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:visibility="gone"/>
@@ -79,7 +79,7 @@
                         android:gravity="center"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp18"
+                        android:textSize="@dimen/dp18"
                         android:textStyle="bold"/>
 
                 </LinearLayout>
@@ -104,7 +104,8 @@
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp26"/>
+                    android:textSize="@dimen/dp26"
+                    />
               </net.iGap.libs.rippleeffect.RippleView>
 
             </RelativeLayout>
@@ -136,7 +137,8 @@
             android:hint="@string/search"
             android:maxLines="5"
             android:padding="@dimen/dp20"
-            android:textSize="@dimen/sp15"/>
+            android:textSize="@dimen/dp15"
+            />
     </LinearLayout>
 
 
@@ -198,7 +200,8 @@
                 android:singleLine="true"
                 android:text="New Text"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/sp14"/>
+                android:textSize="@dimen/dp14"
+                />
 
             <TextView
                 android:id="@+id/acs_txt_replay_message"
@@ -208,7 +211,8 @@
                 android:maxWidth="@dimen/dp280"
                 android:singleLine="true"
                 android:text="New Text"
-                android:textSize="@dimen/sp14"/>
+                android:textSize="@dimen/dp14"
+                />
         </LinearLayout>
 
       <net.iGap.module.MaterialDesignTextView
@@ -219,7 +223,7 @@
             android:text="@string/md_close_button"
             android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/sp22"
+          android:textSize="@dimen/dp22"
             android:visibility="visible"/>
 
     </LinearLayout>

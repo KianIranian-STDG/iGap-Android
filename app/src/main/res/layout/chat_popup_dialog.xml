@@ -23,7 +23,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textColor="@color/gray_6c"
-            android:textSize="@dimen/sp26"
+          android:textSize="@dimen/dp26"
             />
 
         <TextView
@@ -41,7 +41,8 @@
 
             android:text="@string/mute_notification"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/sp14"/>
+            android:textSize="@dimen/dp14"
+            />
 
     </RelativeLayout>
 
@@ -63,7 +64,7 @@
             android:layout_alignParentStart="true"
             android:text="@string/md_clearHistory"
             android:textColor="@color/gray_6c"
-            android:textSize="@dimen/sp26"
+          android:textSize="@dimen/dp26"
             />
 
         <TextView
@@ -80,7 +81,8 @@
             android:paddingEnd="@dimen/dp60"
             android:text="@string/clear_history"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/sp14"/>
+            android:textSize="@dimen/dp14"
+            />
     </RelativeLayout>
 
     <RelativeLayout
@@ -101,7 +103,7 @@
             android:layout_alignParentStart="true"
             android:text="@string/md_rubbish_bin"
             android:textColor="@color/gray_6c"
-            android:textSize="@dimen/sp26"
+          android:textSize="@dimen/dp26"
             />
 
         <TextView
@@ -122,7 +124,8 @@
             android:layout_toRightOf="@+id/cm_icon_delete_chat"
             android:text="@string/to_delete_chat"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/sp14"/>
+            android:textSize="@dimen/dp14"
+            />
 
     </RelativeLayout>
 
@@ -134,7 +137,8 @@
         android:padding="@dimen/dp12"
         android:text="@string/cancel"
         android:textColor="@color/green"
-        android:textSize="@dimen/sp14"/>
+        android:textSize="@dimen/dp14"
+        />
 
 
 </LinearLayout>

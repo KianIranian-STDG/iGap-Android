@@ -1612,7 +1612,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 int dim16 = (int) getResources().getDimension(R.dimen.dp16);
                 final int dim12 = (int) getResources().getDimension(R.dimen.dp12);
                 final int dim8 = (int) getResources().getDimension(R.dimen.dp8);
-                int sp16 = (int) getResources().getDimension(R.dimen.sp12);
+                int sp16 = (int) getResources().getDimension(R.dimen.dp12);
                 int sp14_Popup = 14;
 
                 /**
