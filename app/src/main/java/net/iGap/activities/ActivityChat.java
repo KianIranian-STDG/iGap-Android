@@ -3824,7 +3824,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirst();
 
-        if (realmClientCondition.isLoaded() && realmClientCondition.isValid()) {
+        if (realmClientCondition != null && realmClientCondition.isLoaded() && realmClientCondition.isValid()) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {

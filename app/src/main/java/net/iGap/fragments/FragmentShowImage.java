@@ -239,6 +239,10 @@ public class FragmentShowImage extends Fragment {
         if (HelperCalander.isLanguagePersian) {
             txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
         }
+        if (selectedFile >= mFList.size()) {
+            return;
+        }
+
         showImageInfo(mFList.get(selectedFile));
 
         viewPager.setOnClickListener(new View.OnClickListener() {
