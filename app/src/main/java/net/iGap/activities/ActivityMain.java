@@ -162,8 +162,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     FloatingActionButton btnCreateNewChannel;
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
-    public static boolean needUpdateSortList = false;
     ProgressBar progressBar;
+
 
     public static MyAppBarLayout appBarLayout;
 
@@ -1100,7 +1100,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(ActivityMain.this));
 
-        RealmResults<RealmRoom> results = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+        RealmResults<RealmRoom> results = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);
         mRecyclerView.setAdapter(roomAdapter);
 
@@ -1300,33 +1300,33 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             testIsSecure();
         }
 
+        if (G.deletedRoomList.size() > 0) {
+            cleanDeletedRooms();
+        }
+    }
+
+    private void cleanDeletedRooms() {
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
-                        // delete messages and rooms in the deleted room
-                        RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
-                        for (RealmRoom item : deletedRoomsList) {
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
-                            item.deleteFromRealm();
-                        }
+                        for (int i = 0; i < G.deletedRoomList.size(); i++) {
 
-                        if (needUpdateSortList) {
+                            RealmRoom _RealmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).
+                                equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
 
-                            for (RealmRoom Room : realm.where(RealmRoom.class).findAll()) {
-                                if (Room.getLastMessage() != null) {
-                                    if (Room.getLastMessage().getUpdateTime() > 0) {
-                                        Room.setUpdatedTime(Room.getLastMessage().getUpdateOrCreateTime());
-                                    }
-                                }
+                            // delete messages and rooms in the deleted room
+                            if (_RealmRoom != null) {
+                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, _RealmRoom.getId()).findAll().deleteAllFromRealm();
+                                _RealmRoom.deleteFromRealm();
                             }
-
-                            needUpdateSortList = false;
                         }
 
                         swipeRefreshLayout.setRefreshing(false);
@@ -1344,6 +1344,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 });
             }
         });
+
+        G.deletedRoomList.clear();
     }
 
     @Override
@@ -1710,7 +1712,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
-            if (mInfo != null && mInfo.isValid() && !mInfo.isDeleted()) {
+            if (mInfo != null && mInfo.isValid()) {
                 if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (!RealmRoom.isCloudRoom(mInfo.getId()) && mInfo.getActionStateUserId() != userId))))) {
                     //holder.messageStatus.setVisibility(GONE);
                     holder.lastMessageSender.setVisibility(View.GONE);

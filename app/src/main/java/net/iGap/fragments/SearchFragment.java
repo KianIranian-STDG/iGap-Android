@@ -51,6 +51,7 @@ import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 
 public class SearchFragment extends Fragment {
@@ -257,7 +258,7 @@ public class SearchFragment extends Fragment {
 
         int size = list.size();
 
-        for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
             StructSearch item = new StructSearch();
 
             item.roomType = realmRoom.getType();
@@ -322,11 +323,8 @@ public class SearchFragment extends Fragment {
         int size = list.size();
         Realm realm = Realm.getDefaultInstance();
 
-        for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class).findAll()) {
+        for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.EDITED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll()) {
             if (roomMessage != null) {
-
-                if (roomMessage.getMessage() == null) continue;
-                if (roomMessage.getMessage().length() < 1) continue;
 
                 StructSearch item = new StructSearch();
 

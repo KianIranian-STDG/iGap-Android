@@ -1186,15 +1186,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                 joinedRoom.setReadOnly(false);
                                             }
 
-                                            RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).
-                                                    equalTo(RealmRoomMessageFields.DELETED, false).findAll().last();
-                                            if (message != null) {
-                                                joinedRoom.setLastMessage(message);
-
-                                                joinedRoom.setUpdatedTime(joinedRoom.getLastMessage().getUpdateOrCreateTime());
-
-                                                ActivityMain.needUpdateSortList = true;
-                                            }
 
                                         }
                                     });
