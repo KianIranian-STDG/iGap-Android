@@ -105,6 +105,7 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoChannelCheckUsername;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmChannelRoom;
@@ -352,14 +353,14 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         lytListAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showListForCustomRole(ProtoGlobal.ChannelRoom.Role.ADMIN.toString());
+                showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
             }
         });
 
         lytListModerator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showListForCustomRole(ProtoGlobal.ChannelRoom.Role.MODERATOR.toString());
+                showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
             }
         });
 
@@ -474,10 +475,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         txtShowMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userId, "", isNeedGetMemberList);
-                getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, "Show_member").commit();
-
-                isNeedGetMemberList = false;
+                showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
             }
         });
 

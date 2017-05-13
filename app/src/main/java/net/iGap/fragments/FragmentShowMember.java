@@ -99,7 +99,7 @@ public class FragmentShowMember extends Fragment {
 
     private Long userID = 0l;
     private String role;
-    private String selectedRole = "";
+    private String selectedRole = ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString();
     private boolean isNeedGetMemberList = false;
     private int mMemberCount = 0;
     private int mCurrentUpdateCount = 0;
@@ -351,7 +351,7 @@ public class FragmentShowMember extends Fragment {
                                 if (realmRoom.getGroupRoom().getMembers() != null) realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
                             }
                         });
-                        new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit);
+                        new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
                     } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
 
                         mRealm.executeTransaction(new Realm.Transaction() {
@@ -423,9 +423,9 @@ public class FragmentShowMember extends Fragment {
 
         TextView txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_member);
 
-        if (selectedRole.toString().equals(ProtoGlobal.ChannelRoom.Role.MODERATOR.toString())) {
+        if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())) {
             txtNumberOfMember.setText(getResources().getString(R.string.list_modereator));
-        } else if (selectedRole.toString().equals(ProtoGlobal.ChannelRoom.Role.ADMIN.toString())) {
+        } else if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
             txtNumberOfMember.setText(getResources().getString(R.string.list_admin));
         } else {
             txtNumberOfMember.setText(getResources().getString(member));
@@ -460,7 +460,7 @@ public class FragmentShowMember extends Fragment {
             RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
             if (realmRoom != null) {
                 if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                    new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit);
+                    new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
                 } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                     new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit);
                 }
@@ -486,7 +486,7 @@ public class FragmentShowMember extends Fragment {
             if (memberList != null && memberList.size() > 0) {
                 RealmResults<RealmMember> mList;
 
-                if (selectedRole == null || selectedRole.length() == 0) {
+                if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
                     mList = memberList.where().findAll();
                 } else {
                     mList = memberList.where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll();
