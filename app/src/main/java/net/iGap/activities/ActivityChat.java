@@ -373,6 +373,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private TextView txtNumberOfSelected;
     private TextView txtName;
     private TextView txtLastSeen;
+    private TextView txtEmptyMessages;
 
     public String title;
     public String phoneNumber;
@@ -1039,6 +1040,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
+            txtEmptyMessages = (TextView) findViewById(R.id.empty_messages);
 
             avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
             txtName = (TextView) findViewById(R.id.chl_txt_name);
@@ -1376,7 +1378,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             public void run() {
                                 // remove deleted message from adapter
                                 mAdapter.removeMessage(messageId);
-
+                                if (mAdapter.getItemCount() > 0) {
+                                    txtEmptyMessages.setVisibility(View.GONE);
+                                } else {
+                                    txtEmptyMessages.setVisibility(View.VISIBLE);
+                                }
                                 // remove tag from edtChat if the message has deleted
                                 if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
                                     if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
@@ -2006,6 +2012,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                txtEmptyMessages.setVisibility(View.GONE);
 
                 HelperSetAction.setCancel(mRoomId);
 
@@ -3333,6 +3341,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         llScrollNavigate.setVisibility(View.GONE);
         saveMessageIdPositionState(0);
         clearHistoryMessage(chatId);
+        addToView = true;
+        txtEmptyMessages.setVisibility(View.VISIBLE);
+
     }
 
 
@@ -3839,6 +3850,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     if (room != null) {
                         room.setUnreadCount(0);
                         room.setLastMessage(null);
+                        room.setFirstUnreadMessage(null);
                         room.setUpdatedTime(0);
                     }
                     // finally delete whole chat history
@@ -5098,6 +5110,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                                     // remove deleted message from adapter
                                     mAdapter.removeMessage(messageId);
+                                    if (mAdapter.getItemCount() > 0) {
+                                        txtEmptyMessages.setVisibility(View.GONE);
+                                    } else {
+                                        txtEmptyMessages.setVisibility(View.VISIBLE);
+                                    }
+
 
                                     // remove tag from edtChat if the message has deleted
                                     if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
@@ -6016,6 +6034,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
         if (prgWaiting != null && messageInfos.size() > 0) {
             prgWaiting.setVisibility(View.GONE);
+            txtEmptyMessages.setVisibility(View.GONE);
         }
 
         long identifier = SUID.id().get();
@@ -6255,8 +6274,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             Object[] object = MessageLoader.getLocalMessage(mRoomId, results.first().getMessageId(), gapMessageId, 10, true, direction);
             messageInfos = (ArrayList<StructMessageInfo>) object[0];
-
             if (messageInfos.size() > 0) {
+                txtEmptyMessages.setVisibility(View.GONE);
                 if (direction == UP) {
                     topMore = (boolean) object[1];
                     startFutureMessageIdUp = Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID);
@@ -6265,6 +6284,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     startFutureMessageIdDown = Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID);
                 }
             } else {
+                txtEmptyMessages.setVisibility(View.VISIBLE);
                 if (direction == UP) {
                     startFutureMessageIdUp = 0;
                 } else {
@@ -6309,7 +6329,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             /**
              * send request to server for get message
              */
+
             getOnlineMessage(0, direction);
+            if (direction == UP) {
+                txtEmptyMessages.setVisibility(View.VISIBLE);
+            }
         }
 
         if (direction == UP) {
@@ -6540,6 +6564,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     progressItem(HIDE, direction);
 
                     if (majorCode == 617) {
+
+                        if (!isWaitingForHistoryUp && !isWaitingForHistoryDown && mAdapter.getItemCount() == 0) {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    txtEmptyMessages.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
+
                         if (direction.equals(UP.toString())) {
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -6549,6 +6582,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     //recyclerView.removeOnScrollListener(scrollListener); // remove check for up and down
                                 }
                             });
+                            isWaitingForHistoryUp = false;
                             isWaitingForHistoryUp = false;
                             allowGetHistoryUp = false;
                         } else {

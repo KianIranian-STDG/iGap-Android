@@ -471,7 +471,23 @@
             android:layout_weight="1"
             >
 
-            <android.support.v7.widget.RecyclerView
+          <TextView
+              android:id="@+id/empty_messages"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/No_messages_here_yet"
+              android:layout_gravity="center"
+              android:layout_margin="@dimen/dp12"
+              android:background="@drawable/recangle_gray_tranceparent"
+              android:paddingBottom="@dimen/dp4"
+              android:paddingLeft="@dimen/dp24"
+              android:paddingRight="@dimen/dp24"
+              android:paddingTop="@dimen/dp4"
+              android:textColor="@color/white"
+              android:visibility="gone"
+              />
+
+          <android.support.v7.widget.RecyclerView
                 android:id="@+id/chl_recycler_view_chat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
