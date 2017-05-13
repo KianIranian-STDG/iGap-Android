@@ -57,6 +57,7 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -2454,6 +2455,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         // remove deleted message from adapter
 
                         mAdapter.removeMessage(messageId);
+                        mAdapter.removeMessage(messageId);
+                        if (mAdapter.getItemCount() > 0) {
+                            txtEmptyMessages.setVisibility(View.GONE);
+                        } else {
+                            txtEmptyMessages.setVisibility(View.VISIBLE);
+                        }
 
                         // remove tag from edtChat if the message has deleted
                         if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
@@ -3014,6 +3021,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 public void run() {
                                     // remove deleted message from adapter
                                     mAdapter.removeMessage(parseLong(message.messageID));
+
+                                    mAdapter.removeMessage(messageId);
+                                    if (mAdapter.getItemCount() > 0) {
+                                        txtEmptyMessages.setVisibility(View.GONE);
+                                    } else {
+                                        txtEmptyMessages.setVisibility(View.VISIBLE);
+                                    }
+
+                                    Log.i("BBBBBBBBB", "run: " + mAdapter.getItemCount());
+
 
                                     // remove tag from edtChat if the
                                     // message has deleted
@@ -3790,6 +3807,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         mAdapter.removeMessage(position);
+        mAdapter.removeMessage(messageId);
+        if (mAdapter.getItemCount() > 0) {
+            txtEmptyMessages.setVisibility(View.GONE);
+        } else {
+            txtEmptyMessages.setVisibility(View.VISIBLE);
+        }
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
