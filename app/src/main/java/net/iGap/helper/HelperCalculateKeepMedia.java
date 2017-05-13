@@ -17,15 +17,13 @@ import net.iGap.G;
 import net.iGap.realm.RealmRoomMessage;
 
 public class HelperCalculateKeepMedia {
-    private RealmResults<RealmRoomMessage> mRealmList;
 
     public void calculateTime() { // calculate time for delete media in after 7 days
-
-        Realm realm = Realm.getDefaultInstance();
-        mRealmList = realm.where(RealmRoomMessage.class).findAll();
-
         new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                RealmResults<RealmRoomMessage> mRealmList = realm.where(RealmRoomMessage.class).findAll();
                 for (int i = 0; i < mRealmList.size(); i++) {
                     if (mRealmList.get(i).getAttachment() != null) {
                         long timeMedia = mRealmList.get(i).getUpdateTime() / 1000;
@@ -46,6 +44,7 @@ public class HelperCalculateKeepMedia {
                         }
                     }
                 }
+                realm.close();
             }
         }).start();
     }

@@ -1155,26 +1155,28 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         private void updateViewAfterDownload(String cashId) {
             for (int j = mNewList.size() - 1; j >= 0; j--) {
                 try {
-                    String mCashId = mNewList.get(j).item.getForwardMessage() != null ? mNewList.get(j).item.getForwardMessage().getAttachment().getCacheId() : mNewList.get(j).item.getAttachment().getCacheId();
-                    if (mCashId.equals(cashId)) {
+                    if (mNewList.get(j).item.isValid() && !mNewList.get(j).item.isDeleted()) {
+                        String mCashId = mNewList.get(j).item.getForwardMessage() != null ? mNewList.get(j).item.getForwardMessage().getAttachment().getCacheId() : mNewList.get(j).item.getAttachment().getCacheId();
+                        if (mCashId.equals(cashId)) {
+                            needDownloadList.remove(mNewList.get(j).item.getMessageId());
 
-                        needDownloadList.remove(mNewList.get(j).item.getMessageId());
+                            final int finalJ = j;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
 
-                        final int finalJ = j;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                recyclerView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        recyclerView.getAdapter().notifyItemChanged(finalJ);
-                                    }
-                                });
-                            }
-                        });
+                                    recyclerView.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            recyclerView.getAdapter().notifyItemChanged(finalJ);
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 } catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
             }
         }

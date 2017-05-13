@@ -595,7 +595,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         @Override
                         public void run() {
                             for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                                if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                                if (mAdapter.getItem(i).mMessage != null && mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
                                     mAdapter.notifyItemChanged(i);
                                     break;
                                 }
@@ -5366,6 +5366,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         @Override
         protected StructCompress doInBackground(String... params) {
+            if (params[0] == null) { // if data is null
+                StructCompress structCompress = new StructCompress();
+                structCompress.compress = false;
+                return structCompress;
+            }
             File file = new File(params[0]);
             long originalSize = file.length();
 
@@ -5978,7 +5983,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     public void onSuccess() {
 
                         RealmRoomMessage forwardedMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                        if (forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
+                        if (forwardedMessage != null && forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
                             switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
                             scrollToEnd();
 
