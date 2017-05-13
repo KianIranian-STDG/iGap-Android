@@ -194,17 +194,20 @@
             android:background="#34a49f"
             android:layout_alignTop="@+id/menu_layout_addContact"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:paddingBottom="@dimen/dp6"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="false"
-            android:scrollbarThumbVertical="@color/background_progress_color"
-            android:scrollbarSize="5dp"
-            />
+
+      <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
+          android:id="@+id/recycler_view"
+          android:paddingBottom="@dimen/dp6"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          app:rrvLayoutType="LinearLayout"
+          app:layout_behavior="@string/appbar_scrolling_view_behavior"
+          android:scrollbars="vertical"
+          android:fadeScrollbars="false"
+          android:scrollbarThumbVertical="@color/background_progress_color"
+          android:scrollbarSize="5dp"
+
+          />
 
 
     </android.support.design.widget.CoordinatorLayout>
