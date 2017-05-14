@@ -834,4 +834,5 @@
   <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
   <string name="calls">تماس</string>
   <string name="igap_call">iGap Call</string>
+  <string name="No_messages_here_yet">No messages here yet…</string>
 </resources>

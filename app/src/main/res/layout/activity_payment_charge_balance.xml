@@ -47,7 +47,8 @@
             android:paddingRight="@dimen/dp60"
             android:text="@string/charge_balance"
             android:textColor="@color/whit_background"
-            android:textSize="@dimen/sp18"/>
+            android:textSize="@dimen/dp18"
+            />
 
     </LinearLayout>
 
@@ -115,7 +116,8 @@
                     android:paddingTop="@dimen/dp8"
                     android:inputType="number"
                     android:singleLine="true"
-                    android:textSize="@dimen/sp16"/>
+                    android:textSize="@dimen/dp16"
+                    />
 
                 <View
                     android:id="@+id/acb_view_bottom_line_price"
@@ -157,7 +159,8 @@
                 android:paddingTop="@dimen/dp8"
                 android:singleLine="true"
                 android:inputType="textWebEmailAddress"
-                android:textSize="@dimen/sp16"/>
+                android:textSize="@dimen/dp16"
+                />
 
             <View
                 android:id="@+id/acb_view_bottom_line_email"

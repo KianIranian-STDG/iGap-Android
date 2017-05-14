@@ -107,6 +107,7 @@ import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupCheckUsername;
+import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmGroupRoom;
@@ -644,15 +645,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         TextView txtShowMember = (TextView) findViewById(R.id.agp_txt_show_member);
         txtShowMember.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
+                showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
 
-                FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userID, "", isNeedgetContactlist);
-                getSupportFragmentManager().beginTransaction()
-                    .addToBackStack("null")
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.fragmentContainer_group_profile, fragment, "Show_member")
-                    .commit();
-
-                isNeedgetContactlist = false;
             }
         });
 
@@ -667,14 +661,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         txtSetAdmin.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                showListForCustomRole(ProtoGlobal.GroupRoom.Role.ADMIN.toString());
+                showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
             }
         });
 
         TextView txtAddModerator = (TextView) findViewById(R.id.agp_txt_add_modereator);
         txtAddModerator.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                showListForCustomRole(ProtoGlobal.GroupRoom.Role.MODERATOR.toString());
+                showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
             }
         });
 

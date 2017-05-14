@@ -57,6 +57,7 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -373,6 +374,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private TextView txtNumberOfSelected;
     private TextView txtName;
     private TextView txtLastSeen;
+    private TextView txtEmptyMessages;
 
     public String title;
     public String phoneNumber;
@@ -595,7 +597,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         @Override
                         public void run() {
                             for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                                if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                                if (mAdapter.getItem(i).mMessage != null && mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
                                     mAdapter.notifyItemChanged(i);
                                     break;
                                 }
@@ -1039,6 +1041,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
+            txtEmptyMessages = (TextView) findViewById(R.id.empty_messages);
 
             avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
             txtName = (TextView) findViewById(R.id.chl_txt_name);
@@ -1186,15 +1189,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                 joinedRoom.setReadOnly(false);
                                             }
 
-                                            RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).
-                                                    equalTo(RealmRoomMessageFields.DELETED, false).findAll().last();
-                                            if (message != null) {
-                                                joinedRoom.setLastMessage(message);
-
-                                                joinedRoom.setUpdatedTime(joinedRoom.getLastMessage().getUpdateOrCreateTime());
-
-                                                ActivityMain.needUpdateSortList = true;
-                                            }
 
                                         }
                                     });
@@ -1385,7 +1379,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             public void run() {
                                 // remove deleted message from adapter
                                 mAdapter.removeMessage(messageId);
-
+                                if (mAdapter.getItemCount() > 0) {
+                                    txtEmptyMessages.setVisibility(View.GONE);
+                                } else {
+                                    txtEmptyMessages.setVisibility(View.VISIBLE);
+                                }
                                 // remove tag from edtChat if the message has deleted
                                 if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
                                     if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
@@ -1612,7 +1610,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 int dim16 = (int) getResources().getDimension(R.dimen.dp16);
                 final int dim12 = (int) getResources().getDimension(R.dimen.dp12);
                 final int dim8 = (int) getResources().getDimension(R.dimen.dp8);
-                int sp16 = (int) getResources().getDimension(R.dimen.sp12);
+                int sp16 = (int) getResources().getDimension(R.dimen.dp12);
                 int sp14_Popup = 14;
 
                 /**
@@ -2015,6 +2013,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                txtEmptyMessages.setVisibility(View.GONE);
 
                 HelperSetAction.setCancel(mRoomId);
 
@@ -2455,6 +2455,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         // remove deleted message from adapter
 
                         mAdapter.removeMessage(messageId);
+                        mAdapter.removeMessage(messageId);
+                        if (mAdapter.getItemCount() > 0) {
+                            txtEmptyMessages.setVisibility(View.GONE);
+                        } else {
+                            txtEmptyMessages.setVisibility(View.VISIBLE);
+                        }
 
                         // remove tag from edtChat if the message has deleted
                         if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
@@ -3016,6 +3022,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     // remove deleted message from adapter
                                     mAdapter.removeMessage(parseLong(message.messageID));
 
+                                    mAdapter.removeMessage(messageId);
+                                    if (mAdapter.getItemCount() > 0) {
+                                        txtEmptyMessages.setVisibility(View.GONE);
+                                    } else {
+                                        txtEmptyMessages.setVisibility(View.VISIBLE);
+                                    }
+
+                                    Log.i("BBBBBBBBB", "run: " + mAdapter.getItemCount());
+
+
                                     // remove tag from edtChat if the
                                     // message has deleted
                                     if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
@@ -3342,6 +3358,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         llScrollNavigate.setVisibility(View.GONE);
         saveMessageIdPositionState(0);
         clearHistoryMessage(chatId);
+        addToView = true;
+        txtEmptyMessages.setVisibility(View.VISIBLE);
+
     }
 
 
@@ -3788,6 +3807,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         mAdapter.removeMessage(position);
+        mAdapter.removeMessage(messageId);
+        if (mAdapter.getItemCount() > 0) {
+            txtEmptyMessages.setVisibility(View.GONE);
+        } else {
+            txtEmptyMessages.setVisibility(View.VISIBLE);
+        }
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -3824,7 +3849,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirst();
 
-        if (realmClientCondition.isLoaded() && realmClientCondition.isValid()) {
+        if (realmClientCondition != null && realmClientCondition.isLoaded() && realmClientCondition.isValid()) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -3848,6 +3873,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     if (room != null) {
                         room.setUnreadCount(0);
                         room.setLastMessage(null);
+                        room.setFirstUnreadMessage(null);
                         room.setUpdatedTime(0);
                     }
                     // finally delete whole chat history
@@ -5107,6 +5133,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                                     // remove deleted message from adapter
                                     mAdapter.removeMessage(messageId);
+                                    if (mAdapter.getItemCount() > 0) {
+                                        txtEmptyMessages.setVisibility(View.GONE);
+                                    } else {
+                                        txtEmptyMessages.setVisibility(View.VISIBLE);
+                                    }
+
 
                                     // remove tag from edtChat if the message has deleted
                                     if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
@@ -5366,6 +5398,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         @Override
         protected StructCompress doInBackground(String... params) {
+            if (params[0] == null) { // if data is null
+                StructCompress structCompress = new StructCompress();
+                structCompress.compress = false;
+                return structCompress;
+            }
             File file = new File(params[0]);
             long originalSize = file.length();
 
@@ -5978,7 +6015,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     public void onSuccess() {
 
                         RealmRoomMessage forwardedMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                        if (forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
+                        if (forwardedMessage != null && forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
                             switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
                             scrollToEnd();
 
@@ -6020,6 +6057,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
         if (prgWaiting != null && messageInfos.size() > 0) {
             prgWaiting.setVisibility(View.GONE);
+            txtEmptyMessages.setVisibility(View.GONE);
         }
 
         long identifier = SUID.id().get();
@@ -6259,8 +6297,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             Object[] object = MessageLoader.getLocalMessage(mRoomId, results.first().getMessageId(), gapMessageId, 10, true, direction);
             messageInfos = (ArrayList<StructMessageInfo>) object[0];
-
             if (messageInfos.size() > 0) {
+                txtEmptyMessages.setVisibility(View.GONE);
                 if (direction == UP) {
                     topMore = (boolean) object[1];
                     startFutureMessageIdUp = Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID);
@@ -6269,6 +6307,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     startFutureMessageIdDown = Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID);
                 }
             } else {
+                txtEmptyMessages.setVisibility(View.VISIBLE);
                 if (direction == UP) {
                     startFutureMessageIdUp = 0;
                 } else {
@@ -6313,7 +6352,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             /**
              * send request to server for get message
              */
+
             getOnlineMessage(0, direction);
+            if (direction == UP) {
+                txtEmptyMessages.setVisibility(View.VISIBLE);
+            }
         }
 
         if (direction == UP) {
@@ -6544,6 +6587,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     progressItem(HIDE, direction);
 
                     if (majorCode == 617) {
+
+                        if (!isWaitingForHistoryUp && !isWaitingForHistoryDown && mAdapter.getItemCount() == 0) {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    txtEmptyMessages.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
+
                         if (direction.equals(UP.toString())) {
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -6553,6 +6605,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     //recyclerView.removeOnScrollListener(scrollListener); // remove check for up and down
                                 }
                             });
+                            isWaitingForHistoryUp = false;
                             isWaitingForHistoryUp = false;
                             allowGetHistoryUp = false;
                         } else {

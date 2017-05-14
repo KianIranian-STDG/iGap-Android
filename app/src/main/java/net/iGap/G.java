@@ -169,6 +169,7 @@ public class G extends MultiDexApplication {
     public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
     public static HelperCheckInternetConnection.ConnectivityType latestConnectivityType;
     public static ImageLoader imageLoader;
+    public static ArrayList<Long> deletedRoomList = new ArrayList<>();
 
     public static ArrayList<String> unSecure = new ArrayList<>();
     public static ArrayList<String> unLogin = new ArrayList<>();// list of actionId that can be doing without secure

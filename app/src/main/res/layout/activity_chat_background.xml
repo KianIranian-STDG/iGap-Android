@@ -57,7 +57,7 @@
                 android:gravity="center"
                 android:text="@string/st_title_Background"
                 android:textColor="@color/whit_background"
-                android:textSize="@dimen/sp18"
+                android:textSize="@dimen/dp18"
                 android:textStyle="bold"
                 android:visibility="visible"
                 android:layout_alignParentTop="true"

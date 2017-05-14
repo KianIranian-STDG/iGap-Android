@@ -5,4 +5,5 @@
     android:layout_marginLeft="@dimen/dp8"
     android:layout_marginStart="@dimen/dp8"
     android:textColor="@color/primary"
-    android:textSize="@dimen/sp20" />
+    android:textSize="@dimen/dp20"
+    />

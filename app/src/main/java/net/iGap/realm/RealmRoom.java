@@ -241,7 +241,8 @@ public class RealmRoom extends RealmObject {
          */
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
@@ -375,7 +376,7 @@ public class RealmRoom extends RealmObject {
         if (realm.where(RealmUserInfo.class).findFirst().isAuthorMe(authorHash) && messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (realmRoom != null) {
-                //  realmRoom.setUnreadCount(0);
+                realmRoom.setUnreadCount(0);
             }
         }
         realm.close();

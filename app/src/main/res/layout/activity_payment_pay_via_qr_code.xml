@@ -44,7 +44,8 @@
             android:gravity="center"
             android:text="@string/pay_via_qr_code"
             android:textColor="@color/whit_background"
-            android:textSize="@dimen/sp18"/>
+            android:textSize="@dimen/dp18"
+            />
 
 
       <net.iGap.libs.rippleeffect.RippleView
@@ -65,7 +66,7 @@
                 android:gravity="center"
                 android:text="@string/md_add_plus_button"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp32"
+            android:textSize="@dimen/dp32"
                 />
 
       </net.iGap.libs.rippleeffect.RippleView>
@@ -108,7 +109,8 @@
                     android:paddingTop="@dimen/dp8"
                     android:singleLine="true"
                     android:inputType="textWebEmailAddress"
-                    android:textSize="@dimen/sp15"/>
+                    android:textSize="@dimen/dp15"
+                    />
 
                 <View
                     android:id="@+id/apvq_view_bottom_line_code"

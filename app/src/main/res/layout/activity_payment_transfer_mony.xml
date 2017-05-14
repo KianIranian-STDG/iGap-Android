@@ -47,7 +47,8 @@
             android:paddingRight="@dimen/dp60"
             android:text="@string/transfer_mony"
             android:textColor="@color/whit_background"
-            android:textSize="@dimen/sp18"/>
+            android:textSize="@dimen/dp18"
+            />
 
     </LinearLayout>
 
@@ -109,7 +110,8 @@
                 android:paddingTop="@dimen/dp8"
                 android:singleLine="true"
                 android:inputType="textWebEmailAddress"
-                android:textSize="@dimen/sp16"/>
+                android:textSize="@dimen/dp16"
+                />
 
             <View
                 android:id="@+id/atm_view_bottom_line_transfer_to"
@@ -143,7 +145,8 @@
                     android:paddingTop="@dimen/dp8"
                     android:inputType="number"
                     android:singleLine="true"
-                    android:textSize="@dimen/sp16"/>
+                    android:textSize="@dimen/dp16"
+                    />
 
                 <View
                     android:id="@+id/atm_view_bottom_line_amount"
@@ -185,7 +188,8 @@
                 android:paddingTop="@dimen/dp8"
                 android:singleLine="true"
                 android:inputType="textWebEmailAddress"
-                android:textSize="@dimen/sp16"/>
+                android:textSize="@dimen/dp16"
+                />
 
             <View
                 android:id="@+id/atm_view_bottom_line_description"
