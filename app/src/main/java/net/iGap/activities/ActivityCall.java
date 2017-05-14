@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
@@ -18,17 +17,9 @@ import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.interfaces.ISignalingAccept;
-import net.iGap.interfaces.ISignalingCondidate;
-import net.iGap.interfaces.ISignalingLeave;
-import net.iGap.interfaces.ISignalingOffer;
-import net.iGap.interfaces.ISignalingRinging;
-import net.iGap.interfaces.ISignalingSesionHold;
 import net.iGap.libs.call.PeerConnectionParameters;
 import net.iGap.libs.call.WebRtcClient;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.proto.ProtoSignalingLeave;
-import net.iGap.proto.ProtoSignalingOffer;
 import org.json.JSONException;
 import org.webrtc.MediaStream;
 import org.webrtc.VideoRenderer;
@@ -90,7 +81,7 @@ public class ActivityCall extends ActivityEnhanced implements WebRtcClient.RtcLi
     private VideoRenderer.Callbacks remoteRender;
 
     private WebRtcClient client;
-    private String mSocketAddress;
+
     private String callerId;
 
     //************************************************************************
@@ -112,7 +103,7 @@ public class ActivityCall extends ActivityEnhanced implements WebRtcClient.RtcLi
 
         initCall();
 
-        initListener();
+
 
         Toast.makeText(ActivityCall.this, userID + "", Toast.LENGTH_SHORT).show();
     }
@@ -197,8 +188,7 @@ public class ActivityCall extends ActivityEnhanced implements WebRtcClient.RtcLi
 
     private void initCall() {
 
-        mSocketAddress = "http://" + host + (":" + port + "/");
-        //mSocketAddress = "http://localhost:8888/";
+        // TODO: 5/14/2017  go to host
 
         glSurfaceView = (GLSurfaceView) findViewById(R.id.fcr_glview_call);
         glSurfaceView.setPreserveEGLContextOnPause(true);
@@ -227,57 +217,10 @@ public class ActivityCall extends ActivityEnhanced implements WebRtcClient.RtcLi
         getWindowManager().getDefaultDisplay().getSize(displaySize);
         PeerConnectionParameters params = new PeerConnectionParameters(true, false, displaySize.x, displaySize.y, 30, 1, VIDEO_CODEC_VP9, true, 1, AUDIO_CODEC_OPUS, true);
 
-        client = new WebRtcClient(this, mSocketAddress, params, VideoRendererGui.getEGLContext());
+        client = new WebRtcClient(this, params, VideoRendererGui.getEGLContext(), userID);
     }
 
-    private void initListener() {
 
-        G.iSignalingOffer = new ISignalingOffer() {
-            @Override public void onOffer(long called_userId, ProtoSignalingOffer.SignalingOffer.Type type, String callerSdp) {
-
-                Log.e("dddd", " G.iSignalingOffer    " + callerSdp + "   " + called_userId + "     " + type);
-            }
-        };
-
-        G.iSignalingRinging = new ISignalingRinging() {
-            @Override public void onRinging() {
-
-                Log.e("dddd", " G.iSignalingRinging    ");
-            }
-        };
-
-        G.iSignalingAccept = new ISignalingAccept() {
-            @Override public void onAccept(String called_sdp) {
-
-                Log.e("dddd", " G.iSignalingAccept    " + called_sdp);
-            }
-        };
-
-        G.iSignalingCondidate = new ISignalingCondidate() {
-            @Override public void onCondidate(String peer_candidate) {
-                Log.e("dddd", " G.iSignalingCondidate    " + peer_candidate);
-            }
-        };
-
-        G.iSignalingLeave = new ISignalingLeave() {
-            @Override public void onLeave(ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
-
-                Log.e("dddd", " G.iSignalingLeave    " + type.toString());
-
-                //   MISSED = 0;REJECTED = 1;ACCEPTED = 2;NOT_ANSWERED = 3;UNAVAILABLE = 4;DISCONNECTED = 5;FINISHED = 6;
-
-            }
-        };
-
-        G.iSignalingSesionHold = new ISignalingSesionHold() {
-            @Override public void onHold(Boolean hold) {
-
-                Log.e("dddd", " G.iSignalingSesionHold    " + hold.toString());
-            }
-        };
-
-
-    }
 
     // *********************************************************************************************
 
@@ -300,7 +243,6 @@ public class ActivityCall extends ActivityEnhanced implements WebRtcClient.RtcLi
 
     public void call(String callId) {
         Intent msg = new Intent(Intent.ACTION_SEND);
-        msg.putExtra(Intent.EXTRA_TEXT, mSocketAddress + callId);
         msg.setType("text/plain");
         startActivityForResult(Intent.createChooser(msg, "Call someone :"), VIDEO_CALL_SENT);
     }
