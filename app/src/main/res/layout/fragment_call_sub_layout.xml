@@ -39,7 +39,6 @@
           android:layout_height="match_parent"
           android:layout_marginLeft="@dimen/dp6"
           android:layout_weight="1"
-          android:gravity="top|left"
           android:orientation="vertical"
           >
 
@@ -81,6 +80,17 @@
               android:layout_height="wrap_content"
               android:singleLine="true"
               android:text="(4) 9:24 am"
+              android:textColor="@color/gray_5c"
+              android:textSize="@dimen/dp15"
+              android:textStyle="bold"
+              />
+
+          <TextView
+              android:id="@+id/fcsl_txt_type_call"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:singleLine="true"
+              android:text="     voice"
               android:textColor="@color/gray_5c"
               android:textSize="@dimen/dp15"
               android:textStyle="bold"

@@ -14,15 +14,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import io.realm.Realm;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
+import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.proto.ProtoSignalingGetLog;
+import net.iGap.realm.RealmCallConfig;
+import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.request.RequestUserInfo;
 
 /**
  * Created by android3 on 4/18/2017.
@@ -51,7 +61,7 @@ public class FragmentCall extends Fragment {
             }
         });
 
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
+        final RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(new CallAdapter(fillLogListCall()));
 
@@ -93,36 +103,22 @@ public class FragmentCall extends Fragment {
 
     }
 
-    private ArrayList<StructCall> fillLogListCall() {
+    private List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> fillLogListCall() {
 
-        ArrayList<StructCall> list = new ArrayList<>();
+        List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> _list = null;
 
-        StructCall _item1 = new StructCall();
-        _item1.userId = 365;
-        _item1.callMode = CallMode.call_made;
-        _item1.timeAndInfo = "(4) 9.24 am";
+        Realm realm = Realm.getDefaultInstance();
 
-        StructCall _item2 = new StructCall();
-        _item2.userId = 365;
-        _item2.callMode = CallMode.call_missed;
-        _item2.timeAndInfo = "(4) 9.24 am";
+        RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
+        if (realmCallConfig != null) {
+            _list = realmCallConfig.getLogList();
+        }
 
-        StructCall _item3 = new StructCall();
-        _item3.userId = 365;
-        _item3.callMode = CallMode.call_missed_outgoing;
-        _item3.timeAndInfo = "(4) 9.24 am";
+        if (_list == null) {
+            _list = new ArrayList<>();
+        }
 
-        StructCall _item4 = new StructCall();
-        _item4.userId = 365;
-        _item4.callMode = CallMode.call_received;
-        _item4.timeAndInfo = "(4) 9.24 am";
-
-        list.add(_item1);
-        list.add(_item2);
-        list.add(_item3);
-        list.add(_item4);
-
-        return list;
+        return _list;
     }
 
     //*************************************************************************************************************
@@ -131,20 +127,14 @@ public class FragmentCall extends Fragment {
         call_made, call_received, call_missed, call_missed_outgoing
     }
 
-    private class StructCall {
-
-        long userId;
-        String timeAndInfo = "";
-        CallMode callMode = CallMode.call_made;
-    }
 
     //***************************************** adapater call ***************************************************
 
     public class CallAdapter extends RecyclerView.Adapter {
 
-        ArrayList<StructCall> callList;
+        List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> callList;
 
-        public CallAdapter(ArrayList<StructCall> list) {
+        public CallAdapter(List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> list) {
             callList = list;
         }
 
@@ -160,29 +150,59 @@ public class FragmentCall extends Fragment {
             return callList.size();
         }
 
-        @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        @Override public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
-            CallHolder _holder = (CallHolder) holder;
+            final CallHolder _holder = (CallHolder) holder;
+
 
             // set icon and icon color
-            switch (callList.get(position).callMode) {
-                case call_made:
+            switch (callList.get(position).getStatus()) {
+                case OUTGOING:
                     _holder.icon.setText(R.string.md_call_made);
                     _holder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
                     break;
-                case call_missed:
+                case MISSED:
                     _holder.icon.setText(R.string.md_call_missed);
                     _holder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
                     break;
-                case call_missed_outgoing:
+                case CANCELED:
                     _holder.icon.setText(R.string.md_call_missed_outgoing);
                     _holder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
                     break;
-                case call_received:
+                case INCOMING:
                     _holder.icon.setText(R.string.md_call_received);
                     _holder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
                     break;
             }
+
+            _holder.callType.setText(callList.get(position).getType().toString());
+            _holder.timeAndInfo.setText(callList.get(position).getDuration() + "  " + callList.get(position).getOfferTime());
+
+            Realm realm = Realm.getDefaultInstance();
+            RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, callList.get(position).getId()).findFirst();
+
+            if (registeredInfo != null) {
+
+                _holder.name.setText(registeredInfo.getDisplayName());
+
+                HelperAvatar.getAvatar(callList.get(position).getId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+                    @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), _holder.image);
+                    }
+
+                    @Override public void onShowInitials(final String initials, final String color) {
+                        _holder.image.setImageBitmap(
+                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) _holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
+            } else {
+
+                new RequestUserInfo().userInfo(callList.get(position).getId());
+            }
+
+            realm.close();
+
+
         }
 
         //**********************************
@@ -194,6 +214,7 @@ public class FragmentCall extends Fragment {
             protected MaterialDesignTextView icon;
             protected TextView timeAndInfo;
             protected RippleView rippleCall;
+            protected TextView callType;
 
             public CallHolder(View itemView) {
                 super(itemView);
@@ -203,17 +224,19 @@ public class FragmentCall extends Fragment {
                 icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_txt_icon);
                 timeAndInfo = (TextView) itemView.findViewById(R.id.fcsl_txt_time_info);
                 rippleCall = (RippleView) itemView.findViewById(R.id.fcsl_ripple_call);
+                callType = (TextView) itemView.findViewById(R.id.fcsl_txt_type_call);
+
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
 
-                        HelperPublicMethod.goToChatRoom(callList.get(getPosition()).userId, null, null);
+                        HelperPublicMethod.goToChatRoom(callList.get(getPosition()).getId(), null, null);
                     }
                 });
 
                 rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                     @Override public void onComplete(RippleView rippleView) throws IOException {
-                        call(callList.get(getPosition()).userId, getActivity());
+                        call(callList.get(getPosition()).getId(), getActivity());
                     }
                 });
             }
