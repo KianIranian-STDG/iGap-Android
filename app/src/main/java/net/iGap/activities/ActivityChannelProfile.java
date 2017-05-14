@@ -16,7 +16,6 @@ import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -33,7 +32,6 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,6 +96,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
+import net.iGap.module.DialogAnimation;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SUID;
@@ -1462,72 +1461,30 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
     private void showPopUp() {
 
-        LinearLayout layoutDialog = new LinearLayout(ActivityChannelProfile.this);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutDialog.setOrientation(LinearLayout.VERTICAL);
-        layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityChannelProfile.this).customView(R.layout.chat_popup_dialog_custom, true).build();
+        View v = dialog.getCustomView();
 
-        TextView text3 = new TextView(ActivityChannelProfile.this);
-        text3.setTextColor(getResources().getColor(android.R.color.black));
+        DialogAnimation.animationUp(dialog);
+        dialog.show();
+
+        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+
+        TextView txtItem1 = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+
+        TextView iconItem1 = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
 
         if (isPrivate) {
-            text3.setText(getResources().getString(R.string.channel_title_convert_to_public));
+            txtItem1.setText(getResources().getString(R.string.channel_title_convert_to_public));
+            iconItem1.setText(getResources().getString(R.string.md_convert_to_public));
         } else {
-            text3.setText(getResources().getString(R.string.channel_title_convert_to_private));
+            txtItem1.setText(getResources().getString(R.string.channel_title_convert_to_private));
+            iconItem1.setText(getResources().getString(R.string.md_convert_to_private));
+
         }
 
-        int dim20 = (int) getResources().getDimension(R.dimen.dp20);
-        int dim12 = (int) getResources().getDimension(R.dimen.dp12);
-        int sp14_Popup = 14;
-
-        /**
-         * change dpi tp px
-         */
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int width = displayMetrics.widthPixels;
-        int widthDpi = Math.round(width / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-
-        if (widthDpi >= 720) {
-            sp14_Popup = 30;
-        } else if (widthDpi >= 600) {
-            sp14_Popup = 22;
-        } else {
-            sp14_Popup = 15;
-        }
-
-        text3.setTextSize(sp14_Popup);
-        text3.setPadding(dim20, dim12, dim12, dim12);
-        layoutDialog.addView(text3, params);
-
-        int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
-        popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.setOutsideTouchable(true);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityChannelProfile.this.getTheme()));
-        } else {
-            popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
-        }
-        if (popupWindow.isOutsideTouchable()) {
-            popupWindow.dismiss();
-        }
-
-        popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-        popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources()
-
-                .
-
-                        getDimension(R.dimen.dp16), (int) getResources()
-
-                .
-
-                        getDimension(R.dimen.dp32));
-
-        text3.setOnClickListener(new View.OnClickListener() {
+        root1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 isPopup = true;
 
                 if (isPrivate) {
@@ -1535,7 +1492,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                 } else {
                     convertToPrivate();
                 }
-                popupWindow.dismiss();
+                dialog.dismiss();
             }
         });
     }

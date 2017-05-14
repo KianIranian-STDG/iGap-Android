@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,8 +30,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -69,6 +66,7 @@ import net.iGap.interfaces.OnUserUpdateStatus;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.DialogAnimation;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SUID;
@@ -937,89 +935,54 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     }
 
     private void showPopUp() {
-        LinearLayout layoutDialog = new LinearLayout(ActivityContactsProfile.this);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutDialog.setOrientation(LinearLayout.VERTICAL);
-        layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
-        TextView text1 = new TextView(ActivityContactsProfile.this);
-        TextView text2 = new TextView(ActivityContactsProfile.this);
-        TextView text3 = new TextView(ActivityContactsProfile.this);
 
-        text1.setTextColor(getResources().getColor(android.R.color.black));
-        text2.setTextColor(getResources().getColor(android.R.color.black));
-        text3.setTextColor(getResources().getColor(android.R.color.black));
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityContactsProfile.this).customView(R.layout.chat_popup_dialog_custom, true).build();
+        View v = dialog.getCustomView();
+
+        DialogAnimation.animationUp(dialog);
+        dialog.show();
+
+        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+        ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
+        ViewGroup root3 = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
+
+        TextView txtBlockUser = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+        TextView txtClearHistory = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
+        TextView txtDeleteContact = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
+
+        TextView iconBlockUser = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+
+        TextView iconClearHistory = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
+        iconClearHistory.setText(getResources().getString(R.string.md_clearHistory));
+
+        TextView iconDeleteContact = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
+        iconDeleteContact.setText(getResources().getString(R.string.md_rubbish_delete_file));
+
+        root1.setVisibility(View.VISIBLE);
+        root2.setVisibility(View.VISIBLE);
+        root3.setVisibility(View.VISIBLE);
+
         if (isBlockUser) {
-            text1.setText(getString(R.string.un_block_user));
+            txtBlockUser.setText(getString(R.string.un_block_user));
+            iconBlockUser.setText(getResources().getString(R.string.md_unblock));
         } else {
-            text1.setText(getString(R.string.block_user));
+            txtBlockUser.setText(getString(R.string.block_user));
+            iconBlockUser.setText(getResources().getString(R.string.md_block));
         }
-        text2.setText(getResources().getString(R.string.clear_history));
-        text3.setText(getResources().getString(R.string.delete_contact));
+        txtClearHistory.setText(getResources().getString(R.string.clear_history));
+        txtDeleteContact.setText(getResources().getString(R.string.delete_contact));
 
-        int dim20 = (int) getResources().getDimension(R.dimen.dp20);
-        int dim12 = (int) getResources().getDimension(R.dimen.dp12);
-        int sp14_Popup = 14;
-
-        /**
-         * change dpi tp px
-         */
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int width = displayMetrics.widthPixels;
-        int widthDpi = Math.round(width / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-
-        if (widthDpi >= 720) {
-            sp14_Popup = 30;
-        } else if (widthDpi >= 600) {
-            sp14_Popup = 22;
-        } else {
-            sp14_Popup = 15;
-        }
-
-        text1.setTextSize(sp14_Popup);
-        text2.setTextSize(sp14_Popup);
-        text3.setTextSize(sp14_Popup);
-
-        text1.setPadding(dim20, dim12, dim12, 0);
-        text2.setPadding(dim20, dim12, dim20, dim12);
-        text3.setPadding(dim20, 0, dim20, dim12);
-
-        layoutDialog.addView(text1, params);
-        layoutDialog.addView(text2, params);
-        layoutDialog.addView(text3, params);
-
-        popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.setOutsideTouchable(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivityContactsProfile.this.getTheme()));
-        } else {
-            popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
-        }
-        if (popupWindow.isOutsideTouchable()) {
-            popupWindow.dismiss();
-        }
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                //TODO do sth here on dismiss
-            }
-        });
-
-        popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-        popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
-        //                popupWindow.showAsDropDown(v);
-
-        text1.setOnClickListener(new View.OnClickListener() {
+        root1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.dismiss();
                 blockOrUnblockUser();
-                popupWindow.dismiss();
             }
         });
-        text2.setOnClickListener(new View.OnClickListener() {
+        root2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                dialog.dismiss();
                 new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -1027,13 +990,12 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     }
                 }).negativeText(R.string.B_cancel).show();
 
-                popupWindow.dismiss();
             }
         });
-        text3.setOnClickListener(new View.OnClickListener() {
+        root3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                dialog.dismiss();
                 new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -1042,7 +1004,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     }
                 }).negativeText(R.string.B_cancel).show();
 
-                popupWindow.dismiss();
             }
         });
     }

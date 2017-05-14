@@ -18,7 +18,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -33,9 +32,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -91,6 +88,7 @@ import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
+import net.iGap.module.DialogAnimation;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.FileUtils;
 import net.iGap.module.IntentRequests;
@@ -800,71 +798,32 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             @Override public void onComplete(RippleView rippleView) {
 
-                LinearLayout layoutDialog = new LinearLayout(ActivitySetting.this);
-                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutDialog.setOrientation(LinearLayout.VERTICAL);
-                layoutDialog.setBackgroundColor(getResources().getColor(android.R.color.white));
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.chat_popup_dialog_custom, true).build();
+                View v = dialog.getCustomView();
 
-                TextView txtLogOut = new TextView(ActivitySetting.this);
-                TextView txtDeleteAccount = new TextView(ActivitySetting.this);
+                DialogAnimation.animationUp(dialog);
+                dialog.show();
+
+                ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+                ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
+
+                TextView txtLogOut = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+                TextView txtDeleteAccount = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
+
+                TextView iconLogOut = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+                iconLogOut.setText(getResources().getString(R.string.md_log_out));
+                TextView iconDeleteAccount = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
+                iconDeleteAccount.setText(getResources().getString(R.string.md_delete_acc));
+
+                root1.setVisibility(View.VISIBLE);
+                root2.setVisibility(View.VISIBLE);
 
                 txtLogOut.setText(getResources().getString(log_out));
                 txtDeleteAccount.setText(getResources().getString(R.string.delete_account));
 
-                txtLogOut.setTextColor(getResources().getColor(android.R.color.black));
-                txtDeleteAccount.setTextColor(getResources().getColor(android.R.color.black));
-
-                int dim20 = (int) getResources().getDimension(R.dimen.dp20);
-                int dim12 = (int) getResources().getDimension(R.dimen.dp12);
-                int dim16 = (int) getResources().getDimension(R.dimen.dp16);
-                int sp14_Popup = 14;
-
-                /**
-                 * change dpi tp px
-                 */
-                DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-                int width = displayMetrics.widthPixels;
-                int widthDpi = Math.round(width / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-
-                if (widthDpi >= 720) {
-                    sp14_Popup = 30;
-                } else if (widthDpi >= 600) {
-                    sp14_Popup = 22;
-                } else {
-                    sp14_Popup = 15;
-                }
-                txtLogOut.setTextSize(sp14_Popup);
-                txtDeleteAccount.setTextSize(sp14_Popup);
-
-                txtLogOut.setPadding(dim20, dim12, dim12, dim20);
-                txtDeleteAccount.setPadding(dim20, 0, dim12, dim16);
-                layoutDialog.addView(txtLogOut, params);
-                layoutDialog.addView(txtDeleteAccount, params);
-
-                popupWindow = new PopupWindow(layoutDialog, screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
-                popupWindow.setOutsideTouchable(true);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.mipmap.shadow3, ActivitySetting.this.getTheme()));
-                } else {
-                    popupWindow.setBackgroundDrawable((getResources().getDrawable(R.mipmap.shadow3)));
-                }
-                if (popupWindow.isOutsideTouchable()) {
-                    popupWindow.dismiss();
-                }
-                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override public void onDismiss() {
-                        //TODO do sth here on dismiss
-                    }
-                });
-
-                popupWindow.setAnimationStyle(android.R.style.Animation_InputMethod);
-                popupWindow.showAtLocation(layoutDialog, Gravity.RIGHT | Gravity.TOP, (int) getResources().getDimension(R.dimen.dp16), (int) getResources().getDimension(R.dimen.dp32));
-                //                popupWindow.showAsDropDown(v);
-
-                txtLogOut.setOnClickListener(new View.OnClickListener() {
+                root1.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
-
+                        dialog.dismiss();
                         new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.log_out))
                             .content(R.string.content_log_out)
                             .positiveText(getResources().getString(R.string.B_ok))
@@ -873,7 +832,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    popupWindow.dismiss();
                                     showProgressBar();
 
                                     G.onUserSessionLogout = new OnUserSessionLogout() {
@@ -926,9 +884,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     }
                 });
 
-                txtDeleteAccount.setOnClickListener(new View.OnClickListener() {
+                root2.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
-
+                        dialog.dismiss();
                         new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.delete_account))
                             .content(getResources().getString(R.string.delete_account_text))
                             .positiveText(getResources().getString(R.string.B_ok))
@@ -951,7 +909,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 }
                             })
                             .show();
-                        popupWindow.dismiss();
                     }
                 });
             }
