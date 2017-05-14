@@ -50,7 +50,7 @@
         android:text="@string/calls"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/sp18"
+        android:textSize="@dimen/dp18"
         android:visibility="visible"
         />
 

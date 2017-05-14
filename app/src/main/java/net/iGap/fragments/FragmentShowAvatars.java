@@ -119,14 +119,11 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         return fragment;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         if (getIntentData(this.getArguments())) {
@@ -136,8 +133,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         }
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
 
         if (avatarList != null) {
@@ -153,8 +149,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
+    @Override public void onAttach(Context context) {
         if (appBarLayout != null) appBarLayout.setVisibility(View.GONE);
 
         super.onAttach(context);
@@ -191,8 +186,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 getActivity().onBackPressed();
             }
         });
@@ -201,8 +195,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
                 switch (from) {
                     case setting:
@@ -275,8 +268,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
             avatarList = mRealm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING);
             avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
-                @Override
-                public void onChange(RealmResults<RealmAvatar> element) {
+                @Override public void onChange(RealmResults<RealmAvatar> element) {
 
                     if (avatarListSize != element.size()) {
 
@@ -318,20 +310,17 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         //}
 
         viewPager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
             }
         });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
 
-            @Override
-            public void onPageSelected(int position) {
+            @Override public void onPageSelected(int position) {
 
                 txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + avatarList.size());
                 if (HelperCalander.isLanguagePersian) {
@@ -342,15 +331,13 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                 //}
             }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+            @Override public void onPageScrollStateChanged(int state) {
 
             }
         });
 
         viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
-            @Override
-            public void transformPage(View view, float position) {
+            @Override public void transformPage(View view, float position) {
 
                 final float normalizedPosition = Math.abs(Math.abs(position) - 1);
                 view.setScaleX(normalizedPosition / 2 + 0.5f);
@@ -361,8 +348,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
     private void showPopupMenu(int r) {
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(r).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (which == 0) {
                     saveToGallery();
                 } else if (which == 1) {
@@ -431,18 +417,15 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
     private class AdapterViewPager extends PagerAdapter {
 
-        @Override
-        public int getCount() {
+        @Override public int getCount() {
             return avatarList.size();
         }
 
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
+        @Override public boolean isViewFromObject(View view, Object object) {
             return view.equals(object);
         }
 
-        @Override
-        public Object instantiateItem(View container, final int position) {
+        @Override public Object instantiateItem(View container, final int position) {
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
@@ -494,22 +477,19 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
                         if (selector != null && fileSize > 0) {
                             HelperDownloadFile.startDownload(ra.getToken(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(final String path, int progress) {
+                                @Override public void OnProgress(final String path, int progress) {
 
                                     if (progress == 100) {
 
                                         G.currentActivity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
+                                            @Override public void run() {
                                                 G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
                                             }
                                         });
                                     }
                                 }
 
-                                @Override
-                                public void OnError(String token) {
+                                @Override public void OnError(String token) {
 
                                 }
                             });
@@ -519,8 +499,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             }
 
             progress.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
 
                     String _cashId = avatarList.get(position).getFile().getCacheId();
 
@@ -534,8 +513,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             });
 
             touchImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
                     if (isShowToolbar) {
                         toolbarShowImage.animate().setDuration(150).alpha(0F).start();
                         //  ltImageName.setVisibility(View.GONE);
@@ -564,46 +542,42 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
             final String dirPath = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_IMAGE_USER, false);
 
-            HelperDownloadFile.startDownload(ra.getToken(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(final String path, final int progres) {
+            HelperDownloadFile.startDownload(ra.getToken(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4,
+                new HelperDownloadFile.UpdateListener() {
+                    @Override public void OnProgress(final String path, final int progres) {
 
-                    if (progress != null) {
+                        if (progress != null) {
 
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (progres < 100) {
-                                    progress.withProgress(progres);
-                                } else {
-                                    progress.withProgress(0);
-                                    progress.setVisibility(View.GONE);
-                                    contentLoading.setVisibility(View.GONE);
+                            G.currentActivity.runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    if (progres < 100) {
+                                        progress.withProgress(progres);
+                                    } else {
+                                        progress.withProgress(0);
+                                        progress.setVisibility(View.GONE);
+                                        contentLoading.setVisibility(View.GONE);
 
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
+                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
                                 }
                             }
                         });
                     }
-                }
+                    }
 
-                @Override
-                public void OnError(String token) {
+                    @Override public void OnError(String token) {
 
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress.withProgress(0);
-                            progress.withDrawable(R.drawable.ic_download, true);
-                            contentLoading.setVisibility(View.GONE);
-                        }
-                    });
-                }
-            });
+                        G.currentActivity.runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                progress.withProgress(0);
+                                progress.withDrawable(R.drawable.ic_download, true);
+                                contentLoading.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                });
         }
 
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        @Override public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
     }
@@ -613,18 +587,15 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
     private void deletePhotoChannel() {
 
         G.onChannelAvatarDelete = new OnChannelAvatarDelete() {
-            @Override
-            public void onChannelAvatarDelete(long roomId, long avatarId) {
+            @Override public void onChannelAvatarDelete(long roomId, long avatarId) {
                 if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
 
             }
 
-            @Override
-            public void onTimeOut() {
+            @Override public void onTimeOut() {
 
             }
         };
@@ -639,11 +610,9 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
     private void deletePhotoGroup() {
 
         G.onGroupAvatarDelete = new OnGroupAvatarDelete() {
-            @Override
-            public void onDeleteAvatar(long roomId, final long avatarId) {
+            @Override public void onDeleteAvatar(long roomId, final long avatarId) {
                 G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         if (onComplete != null) {
                             onComplete.complete(true, "" + avatarId, "");
                         }
@@ -651,13 +620,11 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                 });
             }
 
-            @Override
-            public void onDeleteAvatarError(int majorCode, int minorCode) {
+            @Override public void onDeleteAvatarError(int majorCode, int minorCode) {
 
             }
 
-            @Override
-            public void onTimeOut() {
+            @Override public void onTimeOut() {
 
             }
         };
@@ -672,13 +639,11 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
     private void deletePhotoSetting() {
 
         G.onUserAvatarDelete = new OnUserAvatarDelete() {
-            @Override
-            public void onUserAvatarDelete(long avatarId, String token) {
+            @Override public void onUserAvatarDelete(long avatarId, String token) {
                 if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
             }
 
-            @Override
-            public void onUserAvatarDeleteError() {
+            @Override public void onUserAvatarDeleteError() {
 
             }
         };

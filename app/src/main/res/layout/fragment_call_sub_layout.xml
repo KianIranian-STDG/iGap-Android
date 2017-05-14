@@ -51,7 +51,7 @@
             android:singleLine="true"
             android:text="Name"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/sp15"
+            android:textSize="@dimen/dp15"
             android:textStyle="bold"
             />
 
@@ -72,7 +72,7 @@
               android:text="@string/md_call_made"
               android:textAppearance="@style/TextIconAppearance_toolbar"
               android:textColor="@color/green"
-              android:textSize="@dimen/sp18"
+              android:textSize="@dimen/dp18"
               />
 
           <TextView
@@ -82,7 +82,7 @@
               android:singleLine="true"
               android:text="(4) 9:24 am"
               android:textColor="@color/gray_5c"
-              android:textSize="@dimen/sp15"
+              android:textSize="@dimen/dp15"
               android:textStyle="bold"
               />
 

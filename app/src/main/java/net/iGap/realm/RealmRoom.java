@@ -241,8 +241,7 @@ public class RealmRoom extends RealmObject {
          */
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {

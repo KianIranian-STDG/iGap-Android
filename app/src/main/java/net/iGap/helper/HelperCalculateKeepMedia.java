@@ -20,8 +20,7 @@ public class HelperCalculateKeepMedia {
 
     public void calculateTime() { // calculate time for delete media in after 7 days
         new Thread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 Realm realm = Realm.getDefaultInstance();
                 RealmResults<RealmRoomMessage> mRealmList = realm.where(RealmRoomMessage.class).findAll();
                 for (int i = 0; i < mRealmList.size(); i++) {

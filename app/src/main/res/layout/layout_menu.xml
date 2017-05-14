@@ -351,7 +351,7 @@
                 android:minWidth="@dimen/dp32"
                 android:text="@string/md_phone"
                 android:textAppearance="@style/TextIconAppearance.menu"
-                android:textSize="@dimen/sp22"
+                android:textSize="@dimen/dp22"
 
                 />
 
@@ -366,7 +366,7 @@
                 android:paddingTop="@dimen/dp12"
                 android:text="@string/calls"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/sp14"
+                android:textSize="@dimen/dp14"
 
                 />
 

@@ -97,20 +97,16 @@ public class FragmentShowImage extends Fragment {
         return new FragmentShowImage();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getIntentData(this.getArguments())) initComponent(view);
     }
 
-    @Override
-    public void onDestroyView() {
+    @Override public void onDestroyView() {
         super.onDestroyView();
 
         if (appBarLayout != null) appBarLayout.setVisibility(View.VISIBLE);
@@ -118,8 +114,7 @@ public class FragmentShowImage extends Fragment {
         if (mRealm != null) mRealm.close();
     }
 
-    @Override
-    public void onAttach(Context context) {
+    @Override public void onAttach(Context context) {
         if (appBarLayout != null) appBarLayout.setVisibility(View.GONE);
 
         super.onAttach(context);
@@ -141,7 +136,10 @@ public class FragmentShowImage extends Fragment {
 
             mRealm = Realm.getDefaultInstance();
 
-            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+            mRealmList = mRealm.where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
+                .equalTo(RealmRoomMessageFields.DELETED, false)
+                .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
 
             if (mRealmList.size() < 1) {
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
@@ -153,10 +151,15 @@ public class FragmentShowImage extends Fragment {
                 boolean isImage = false;
 
                 if (type == null) {
-                    if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                    if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getMessageType()
+                        .toString()
+                        .contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
                         isImage = true;
                     } else if (item.getForwardMessage() != null) {
-                        if (item.getForwardMessage().getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getForwardMessage().getMessageType().toString().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                        if (item.getForwardMessage().getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getForwardMessage()
+                            .getMessageType()
+                            .toString()
+                            .contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
                             isImage = true;
                         }
                     }
@@ -198,8 +201,7 @@ public class FragmentShowImage extends Fragment {
         RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 getActivity().onBackPressed();
             }
         });
@@ -208,8 +210,7 @@ public class FragmentShowImage extends Fragment {
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 popUpMenuShowImage();
             }
         });
@@ -246,15 +247,13 @@ public class FragmentShowImage extends Fragment {
         showImageInfo(mFList.get(selectedFile));
 
         viewPager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
             }
         });
 
         viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
-            @Override
-            public void transformPage(View view, float position) {
+            @Override public void transformPage(View view, float position) {
 
                 final float normalizedPosition = Math.abs(Math.abs(position) - 1);
                 view.setScaleX(normalizedPosition / 2 + 0.5f);
@@ -310,8 +309,7 @@ public class FragmentShowImage extends Fragment {
     public void popUpMenuShowImage() {
 
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (which == 0) {
                     shareImage();
                 } else if (which == 1) {
@@ -382,18 +380,15 @@ public class FragmentShowImage extends Fragment {
         private String videoPath;
         private int lastPosition;
 
-        @Override
-        public int getCount() {
+        @Override public int getCount() {
             return mFList.size();
         }
 
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
+        @Override public boolean isViewFromObject(View view, Object object) {
             return view.equals(object);
         }
 
-        @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
+        @Override public Object instantiateItem(ViewGroup container, final int position) {
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
@@ -436,8 +431,7 @@ public class FragmentShowImage extends Fragment {
                             mTextureView.setVisibility(View.VISIBLE);
 
                             G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                @Override public void run() {
                                     playVideo(position, mTextureView, imgPlay, touchImageView);
                                 }
                             }, 100);
@@ -470,36 +464,34 @@ public class FragmentShowImage extends Fragment {
                         final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(rm.getAttachment().getCacheId(), rm.getAttachment().getName(), G.DIR_TEMP, true);
 
                         if (selector != null && fileSize > 0) {
-                            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(final String path, int progress) {
+                            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), fileSize, selector, "", 4,
+                                new HelperDownloadFile.UpdateListener() {
+                                    @Override public void OnProgress(final String path, int progress) {
 
-                                    if (progress == 100) {
+                                        if (progress == 100) {
 
-                                        G.currentActivity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
-                                            }
-                                        });
+                                            G.currentActivity.runOnUiThread(new Runnable() {
+                                                @Override public void run() {
+                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
+                                                }
+                                            });
                                     }
-                                }
+                                    }
 
-                                @Override
-                                public void OnError(String token) {
+                                    @Override public void OnError(String token) {
 
-                                }
-                            });
+                                    }
+                                });
                         }
                     }
                 }
             }
 
             progress.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
 
-                    String _cashID = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getAttachment().getCacheId() : mFList.get(position).getAttachment().getCacheId();
+                    String _cashID =
+                        mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getAttachment().getCacheId() : mFList.get(position).getAttachment().getCacheId();
 
                     if (HelperDownloadFile.isDownLoading(_cashID)) {
                         HelperDownloadFile.stopDownLoad(_cashID);
@@ -511,8 +503,7 @@ public class FragmentShowImage extends Fragment {
             });
 
             touchImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
                     if (isShowToolbar) {
                         toolbarShowImage.animate().setDuration(150).alpha(0F).start();
                         ltImageName.setVisibility(View.GONE);
@@ -530,8 +521,7 @@ public class FragmentShowImage extends Fragment {
             });
 
             imgPlay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
 
                     mTextureView.setVisibility(View.VISIBLE);
                     playVideo(position, mTextureView, imgPlay, touchImageView);
@@ -539,8 +529,7 @@ public class FragmentShowImage extends Fragment {
             });
 
             mTextureView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     if (mMediaPlayer != null) {
                         if (videoController.isShowing()) {
                             videoController.setVisibility(View.GONE);
@@ -553,8 +542,7 @@ public class FragmentShowImage extends Fragment {
                 }
             });
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) {
+                @Override public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) {
 
                     if (isFirstPlay) {
                         if (mFList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || mFList.get(position).getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
@@ -563,8 +551,7 @@ public class FragmentShowImage extends Fragment {
                     }
                 }
 
-                @Override
-                public void onPageSelected(final int position) {
+                @Override public void onPageSelected(final int position) {
 
                     txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + mFList.size());
                     if (HelperCalander.isLanguagePersian) {
@@ -595,8 +582,7 @@ public class FragmentShowImage extends Fragment {
                     }
                 }
 
-                @Override
-                public void onPageScrollStateChanged(int state) {
+                @Override public void onPageScrollStateChanged(int state) {
                 }
             });
 
@@ -607,7 +593,8 @@ public class FragmentShowImage extends Fragment {
         /**
          * start download
          */
-        private void startDownload(final int position, final MessageProgress progress, final TouchImageView touchImageView, final ContentLoadingProgressBar contentLoading, final ImageView imgPlay, final TextureView mTextureView) {
+        private void startDownload(final int position, final MessageProgress progress, final TouchImageView touchImageView, final ContentLoadingProgressBar contentLoading, final ImageView imgPlay,
+            final TextureView mTextureView) {
 
             contentLoading.setVisibility(View.VISIBLE);
 
@@ -619,50 +606,46 @@ public class FragmentShowImage extends Fragment {
                 downloadedList.add(rm.getAttachment().getCacheId());
             }
 
-            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(final String path, final int progres) {
+            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getAttachment().getSize(),
+                ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
+                    @Override public void OnProgress(final String path, final int progres) {
 
-                    if (progress != null) {
+                        if (progress != null) {
 
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (progres < 100) {
-                                    progress.withProgress(progres);
-                                } else {
-                                    progress.withProgress(0);
-                                    progress.setVisibility(View.GONE);
-                                    contentLoading.setVisibility(View.GONE);
-                                    if (rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
-                                        imgPlay.setVisibility(View.VISIBLE);
-                                        //if (position == viewPager.getCurrentItem()) playVideo(position, mTextureView, imgPlay, touchImageView);
+                            G.currentActivity.runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    if (progres < 100) {
+                                        progress.withProgress(progres);
+                                    } else {
+                                        progress.withProgress(0);
+                                        progress.setVisibility(View.GONE);
+                                        contentLoading.setVisibility(View.GONE);
+                                        if (rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
+                                            imgPlay.setVisibility(View.VISIBLE);
+                                            //if (position == viewPager.getCurrentItem()) playVideo(position, mTextureView, imgPlay, touchImageView);
                                     }
 
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
-                                }
+                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
+                                    }
                             }
                         });
                     }
-                }
+                    }
 
-                @Override
-                public void OnError(String token) {
+                    @Override public void OnError(String token) {
 
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress.withProgress(0);
-                            progress.withDrawable(R.drawable.ic_download, true);
-                            contentLoading.setVisibility(View.GONE);
-                        }
-                    });
-                }
-            });
+                        G.currentActivity.runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                progress.withProgress(0);
+                                progress.withDrawable(R.drawable.ic_download, true);
+                                contentLoading.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                });
         }
 
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        @Override public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
 
@@ -683,8 +666,7 @@ public class FragmentShowImage extends Fragment {
                 mMediaPlayer.setDataSource(getActivity(), Uri.parse(videoPath));
                 if (mTextureView.getSurfaceTexture() == null) {
                     G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, touchImageView);
                         }
                     }, 500);
@@ -696,8 +678,7 @@ public class FragmentShowImage extends Fragment {
             }
 
             mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
+                @Override public void onCompletion(MediaPlayer mp) {
                     mp.seekTo(0);
                     imgPlay.setVisibility(View.VISIBLE);
                 }
@@ -713,8 +694,7 @@ public class FragmentShowImage extends Fragment {
             mMediaPlayer.prepareAsync();
 
             mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
+                @Override public void onPrepared(MediaPlayer mp) {
 
                     getRealSize(mp, mTextureView);
                     imgPlay.setVisibility(View.GONE);
@@ -723,8 +703,7 @@ public class FragmentShowImage extends Fragment {
                     touchImageView.animate().setDuration(700).alpha(0F).start();
 
                     G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             touchImageView.setVisibility(View.GONE);
                             touchImageView.clearAnimation();
                         }
@@ -761,64 +740,53 @@ public class FragmentShowImage extends Fragment {
             mTextureView.setLayoutParams(lp);
         }
 
-        @Override
-        public void start() {
+        @Override public void start() {
             if (mMediaPlayer != null) mMediaPlayer.start();
         }
 
-        @Override
-        public void pause() {
+        @Override public void pause() {
             if (mMediaPlayer != null) mMediaPlayer.pause();
         }
 
-        @Override
-        public int getDuration() {
+        @Override public int getDuration() {
             if (mMediaPlayer != null) {
                 return mMediaPlayer.getDuration();
             }
             return 0;
         }
 
-        @Override
-        public int getCurrentPosition() {
+        @Override public int getCurrentPosition() {
             if (mMediaPlayer != null) {
                 return mMediaPlayer.getCurrentPosition();
             }
             return 0;
         }
 
-        @Override
-        public void seekTo(int pos) {
+        @Override public void seekTo(int pos) {
             if (mMediaPlayer != null) mMediaPlayer.seekTo(pos);
         }
 
-        @Override
-        public boolean isPlaying() {
+        @Override public boolean isPlaying() {
             return mMediaPlayer != null && mMediaPlayer.isPlaying();
         }
 
-        @Override
-        public int getBufferPercentage() {
+        @Override public int getBufferPercentage() {
             return 0;
         }
 
-        @Override
-        public boolean canPause() {
+        @Override public boolean canPause() {
             return true;
         }
 
-        @Override
-        public boolean canSeekBackward() {
+        @Override public boolean canSeekBackward() {
             return true;
         }
 
-        @Override
-        public boolean canSeekForward() {
+        @Override public boolean canSeekForward() {
             return true;
         }
 
-        @Override
-        public int getAudioSessionId() {
+        @Override public int getAudioSessionId() {
             return 0;
         }
     }
@@ -863,8 +831,7 @@ public class FragmentShowImage extends Fragment {
         return result;
     }
 
-    @Override
-    public void onDestroy() {
+    @Override public void onDestroy() {
         super.onDestroy();
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
@@ -877,8 +844,7 @@ public class FragmentShowImage extends Fragment {
         }
     }
 
-    @Override
-    public void onDetach() {
+    @Override public void onDetach() {
         super.onDetach();
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
@@ -891,8 +857,7 @@ public class FragmentShowImage extends Fragment {
         }
     }
 
-    @Override
-    public void onPause() {
+    @Override public void onPause() {
         super.onPause();
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
@@ -900,8 +865,7 @@ public class FragmentShowImage extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
 
         if (isLockScreen) {
