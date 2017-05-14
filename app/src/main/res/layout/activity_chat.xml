@@ -320,7 +320,7 @@
                                     android:layout_height="match_parent"
                                     android:background="@null"
                                     android:gravity="center"
-                                    android:text="@string/md_right_arrow_forward"
+                                android:text="@string/md_right_arrow_button"
                                     android:textAppearance="@style/TextIconAppearance.all"
                                     android:textColor="@color/gray"
                                 android:textSize="@dimen/dp26"

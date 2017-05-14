@@ -79,8 +79,6 @@ import net.iGap.request.RequestChannelGetMemberList;
 import net.iGap.request.RequestGroupGetMemberList;
 import net.iGap.request.RequestUserInfo;
 
-import static net.iGap.R.string.member;
-
 public class FragmentShowMember extends Fragment {
 
     public static final String ROOMIDARGUMENT = "ROOMID_ARGUMENT";
@@ -421,15 +419,15 @@ public class FragmentShowMember extends Fragment {
             }
         });
 
-        TextView txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_member);
+        //TextView txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_member);
 
-        if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())) {
-            txtNumberOfMember.setText(getResources().getString(R.string.list_modereator));
-        } else if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
-            txtNumberOfMember.setText(getResources().getString(R.string.list_admin));
-        } else {
-            txtNumberOfMember.setText(getResources().getString(member));
-        }
+        //if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())) {
+        //    txtNumberOfMember.setText(getResources().getString(R.string.list_modereator));
+        //} else if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
+        //    txtNumberOfMember.setText(getResources().getString(R.string.list_admin));
+        //} else {
+        //    txtNumberOfMember.setText(getResources().getString(member));
+        //}
 
         scrollListener = new EndlessRecyclerViewScrollListener(preCachingLayoutManager) {
             @Override
