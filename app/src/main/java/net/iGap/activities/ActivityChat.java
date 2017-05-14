@@ -2557,8 +2557,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGlobal.RoomMessage roomMessage) {
         // I'm in the room
-        if (roomId == mRoomId) {
-            // update message status in telegram
+        if (roomId == mRoomId && mAdapter != null) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -6298,7 +6297,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             Object[] object = MessageLoader.getLocalMessage(mRoomId, results.first().getMessageId(), gapMessageId, 10, true, direction);
             messageInfos = (ArrayList<StructMessageInfo>) object[0];
             if (messageInfos.size() > 0) {
-                txtEmptyMessages.setVisibility(View.GONE);
                 if (direction == UP) {
                     topMore = (boolean) object[1];
                     startFutureMessageIdUp = Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID);
@@ -6307,7 +6305,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     startFutureMessageIdDown = Long.parseLong(messageInfos.get(messageInfos.size() - 1).messageID);
                 }
             } else {
-                txtEmptyMessages.setVisibility(View.VISIBLE);
                 if (direction == UP) {
                     startFutureMessageIdUp = 0;
                 } else {
@@ -6352,11 +6349,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             /**
              * send request to server for get message
              */
-
             getOnlineMessage(0, direction);
-            if (direction == UP) {
-                txtEmptyMessages.setVisibility(View.VISIBLE);
-            }
         }
 
         if (direction == UP) {
@@ -6590,7 +6583,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         if (!isWaitingForHistoryUp && !isWaitingForHistoryDown && mAdapter.getItemCount() == 0) {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     txtEmptyMessages.setVisibility(View.VISIBLE);
                                 }
                             });
