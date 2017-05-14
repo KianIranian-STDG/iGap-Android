@@ -290,7 +290,9 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         description = realmChannelRoom.getDescription();
 
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (userInfo != null) userId = userInfo.getUserId();
+        if (userInfo != null) {
+            userId = userInfo.getUserId();
+        }
 
         //realm.close();
         //=========Put Extra End
@@ -620,6 +622,8 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         });
 
         ActivityShearedMedia.getCountOfSharedMedia(roomId);
+
+        realm.close();
     }
 
     private void setTextChannelLik() {

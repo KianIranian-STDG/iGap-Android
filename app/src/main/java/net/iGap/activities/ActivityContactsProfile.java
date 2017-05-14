@@ -114,7 +114,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private String enterFrom;
     private String userStatus;
     private boolean isBlockUser = false;
-    private Realm mRealm;
     RealmRegisteredInfo rrg;
     private long sheardId = -2;
 
@@ -150,18 +149,16 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mRealm != null) mRealm.close();
-    }
+
 
     @Override
     protected void onResume() {
 
         super.onResume();
 
-        mRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, sheardId).findFirst();
+        Realm realm = Realm.getDefaultInstance();
+
+        mRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, sheardId).findFirst();
         if (mRoom != null) {
 
             if (changeListener == null) {
@@ -197,6 +194,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         } else {
             txtCountOfShearedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
         }
+
+        realm.close();
     }
 
     @Override
@@ -207,18 +206,14 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             rrg.removeAllChangeListeners();
         }
 
-        if (mRealm != null) {
-            mRealm.close();
-        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_profile);
-        final Realm realm = Realm.getDefaultInstance();
 
-        mRealm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
         G.onUserUpdateStatus = this;
 
@@ -236,7 +231,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             sheardId = roomId;
         }
 
-        rrg = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        rrg = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
         if (rrg != null) {
 
@@ -1078,46 +1073,35 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         final Realm realm = Realm.getDefaultInstance();
 
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
-        realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override
-            public void onChange(final RealmClientCondition element) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
 
-                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                        if (realmRoom != null && realmRoom.getLastMessage() != null) {
-                            element.setClearId(realmRoom.getLastMessage().getMessageId());
-                            G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, realmRoom.getLastMessage().getMessageId());
-                        }
+        if (realmRoom != null && realmRoom.getLastMessage() != null) {
+            realmClientCondition.setClearId(realmRoom.getLastMessage().getMessageId());
+            G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, realmRoom.getLastMessage().getMessageId());
+        }
 
-                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
-                        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-                            if (realmRoomMessage != null) {
-                                // delete chat history message
-                                realmRoomMessage.deleteFromRealm();
-                            }
-                        }
-
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        if (room != null) {
-                            room.setUnreadCount(0);
-                            room.setLastMessage(null);
-                        }
-                        // finally delete whole chat history
-                        realmRoomMessages.deleteAllFromRealm();
-                    }
-                });
-
-                element.removeAllChangeListeners();
-                realm.close();
+        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
+        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+            if (realmRoomMessage != null) {
+                // delete chat history message
+                realmRoomMessage.deleteFromRealm();
             }
-        });
+        }
+
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (room != null) {
+            room.setUnreadCount(0);
+            room.setLastMessage(null);
+        }
+        // finally delete whole chat history
+        realmRoomMessages.deleteAllFromRealm();
 
         if (G.onClearChatHistory != null) {
             G.onClearChatHistory.onClearChatHistory();
         }
+
+        realm.close();
     }
 
     private void deleteContact() {
@@ -1179,35 +1163,26 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         };
         final Realm realm = Realm.getDefaultInstance();
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
-        realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override
-            public void onChange(final RealmClientCondition element) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(final Realm realm) {
-                        if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, roomId).findFirst() == null) {
-                            RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
-                            realmOfflineDelete.setOfflineDelete(userId);
 
-                            element.getOfflineDeleted().add(realmOfflineDelete);
+        if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, roomId).findFirst() == null) {
+            RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
+            realmOfflineDelete.setOfflineDelete(userId);
 
-                            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().deleteFromRealm();
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
+            realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
 
-                            new RequestChatDelete().chatDelete(roomId);
-                        }
-                    }
-                });
+            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().deleteFromRealm();
+            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
 
-                element.removeAllChangeListeners();
-                realm.close();
-                finish();
-                // call this for finish activity chat when delete chat
-                if (G.onDeleteChatFinishActivity != null) {
-                    G.onDeleteChatFinishActivity.onFinish();
-                }
+            new RequestChatDelete().chatDelete(roomId);
+
+            realm.close();
+            finish();
+            // call this for finish activity chat when delete chat
+            if (G.onDeleteChatFinishActivity != null) {
+                G.onDeleteChatFinishActivity.onFinish();
             }
-        });
+        }
+
     }
 
     @Override

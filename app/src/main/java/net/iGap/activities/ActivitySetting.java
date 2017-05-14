@@ -167,7 +167,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private TextView txtEmail;
     TextView txtNickNameTitle;
 
-    private Realm mRealm;
     RealmChangeListener<RealmModel> userInfoListener;
     RealmUserInfo realmUserInfo;
 
@@ -214,21 +213,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
     }
 
-    @Override protected void onDestroy() {
-        super.onDestroy();
-
-        if (mRealm != null) {
-            mRealm.close();
-        }
-    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        mRealm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
-        realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
+        realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         userInfoListener = new RealmChangeListener<RealmModel>() {
             @Override public void onChange(RealmModel element) {
                 updateUserInfoUI((RealmUserInfo) element);
@@ -1904,6 +1896,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         showImage();
+
+        realm.close();
     }
 
     private void updateUserInfoUI(RealmUserInfo userInfo) {

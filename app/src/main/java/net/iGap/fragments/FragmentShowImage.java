@@ -82,7 +82,6 @@ public class FragmentShowImage extends Fragment {
 
     private Long mRoomId;
     private Long selectedFileToken;
-    private Realm mRealm;
     private MediaPlayer mMediaPlayer;
     public static ArrayList<String> downloadedList = new ArrayList<>();
 
@@ -115,7 +114,6 @@ public class FragmentShowImage extends Fragment {
 
         if (appBarLayout != null) appBarLayout.setVisibility(View.VISIBLE);
 
-        if (mRealm != null) mRealm.close();
     }
 
     @Override
@@ -139,9 +137,12 @@ public class FragmentShowImage extends Fragment {
                 return false;
             }
 
-            mRealm = Realm.getDefaultInstance();
+            Realm realm = Realm.getDefaultInstance();
 
-            mRealmList = mRealm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+            mRealmList = realm.where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
+                .equalTo(RealmRoomMessageFields.DELETED, false)
+                .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
 
             if (mRealmList.size() < 1) {
                 getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
@@ -183,11 +184,14 @@ public class FragmentShowImage extends Fragment {
                 }
             }
 
+            realm.close();
+
             return true;
         } else {
             getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
             return false;
         }
+
     }
 
     private void initComponent(View view) {
@@ -281,7 +285,8 @@ public class FragmentShowImage extends Fragment {
             txtImageDesc.setVisibility(View.GONE);
         }
 
-        RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessageFinal.getUserId()).findFirst();
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessageFinal.getUserId()).findFirst();
 
         if (realmRegisteredInfo != null) {
             txtImageName.setText(realmRegisteredInfo.getDisplayName());
@@ -304,6 +309,8 @@ public class FragmentShowImage extends Fragment {
             txtImageTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageTime.getText().toString()));
             txtImageDate.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageDate.getText().toString()));
         }
+
+        realm.close();
 
     }
 

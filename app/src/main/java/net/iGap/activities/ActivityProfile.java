@@ -164,7 +164,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                             setNickName();
                         }
                     });
-                    realm.close();
+
                 } else {
                     runOnUiThread(new Runnable() {
                         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN) @Override public void run() {
@@ -177,6 +177,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                         }
                     });
                 }
+
+                realm.close();
             }
         });
     }
@@ -483,6 +485,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                 });
             }
         });
+
+        realm.close();
     }
 
     @Override public void onAvatarAddTimeOut() {

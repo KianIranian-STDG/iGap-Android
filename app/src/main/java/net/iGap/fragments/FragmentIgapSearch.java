@@ -285,6 +285,9 @@ public class FragmentIgapSearch extends Fragment {
                         }
 
                         itemAdapter.add(items);
+
+                        realm.close();
+
                     }
                 });
             }

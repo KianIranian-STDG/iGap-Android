@@ -368,6 +368,8 @@ public class ContactGroupFragment extends Fragment {
                 }
             }
         }
+
+        realm.close();
     }
 
     private void refreshView() {
