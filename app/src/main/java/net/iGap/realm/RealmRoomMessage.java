@@ -147,7 +147,7 @@ import org.parceler.Parcel;
                         if (realmClientCondition != null) {
                             for (RealmRoomMessage roomMessage : element) {
                                 if (roomMessage != null) {
-                                    if (roomMessage.getUserId() != realm.where(RealmUserInfo.class).findFirst().getUserId() && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
+                                    if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                         if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) != ProtoGlobal.RoomMessageStatus.SEEN) {
                                             roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                                             RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
@@ -196,7 +196,7 @@ import org.parceler.Parcel;
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override public void execute(Realm realm) {
 
-                            long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+
                             RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
                                 .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
                                 .notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString())
@@ -209,7 +209,7 @@ import org.parceler.Parcel;
                                         /**
                                          * don't send seen for own message
                                          */
-                                        if (roomMessage.getUserId() != userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
+                                        if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                             roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                                             RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
                                             realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
@@ -646,9 +646,7 @@ import org.parceler.Parcel;
     }
 
     public boolean isSenderMe() {
-        Realm realm = Realm.getDefaultInstance();
-        boolean output = getUserId() == realm.where(RealmUserInfo.class).findFirst().getUserId();
-        realm.close();
+        boolean output = getUserId() == G.userId;
         return output;
     }
 

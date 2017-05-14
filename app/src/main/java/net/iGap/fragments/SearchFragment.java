@@ -348,7 +348,11 @@ public class SearchFragment extends Fragment {
             }
         }
 
-        if (size == list.size()) list.remove(size - 1);
+        if (size == list.size()) {
+            list.remove(size - 1);
+        }
+
+        realm.close();
     }
 
     private void goToRoom(final long id, SearchType type, long messageId) {

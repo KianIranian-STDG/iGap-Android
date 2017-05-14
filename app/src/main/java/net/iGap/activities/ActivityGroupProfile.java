@@ -117,7 +117,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestGroupAddAdmin;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupAddModerator;
@@ -172,7 +171,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private String participantsCountLabel;
 
     public static OnMenuClick onMenuClick;
-    private Long userID = 0l;
+
     private boolean isPrivate;
     private TextView txtLinkTitle;
     private TextView txtGroupLink;
@@ -292,8 +291,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             e.getStackTrace();
         }
 
-        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (userInfo != null) userID = userInfo.getUserId();
 
         initComponent();
 
@@ -1957,7 +1954,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     private void showListForCustomRole(String SelectedRole) {
-        FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userID, SelectedRole, isNeedgetContactlist);
+        FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), G.userId, SelectedRole, isNeedgetContactlist);
         getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, "Show_member").commit();
 
         isNeedgetContactlist = false;

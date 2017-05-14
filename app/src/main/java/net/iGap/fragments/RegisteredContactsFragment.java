@@ -82,15 +82,7 @@ public class RegisteredContactsFragment extends Fragment {
     RealmResults<RealmContacts> results;
     private FragmentActivity mActivity;
     private EditText edtSearch;
-    private Realm mRealm;
 
-    @Override public void onDestroy() {
-        super.onDestroy();
-
-        if (mRealm != null) {
-            mRealm.close();
-        }
-    }
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -103,7 +95,6 @@ public class RegisteredContactsFragment extends Fragment {
     @Override public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRealm = Realm.getDefaultInstance();
 
         sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
@@ -197,10 +188,12 @@ public class RegisteredContactsFragment extends Fragment {
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                Realm realm = Realm.getDefaultInstance();
+
                 if (s.length() > 0) {
-                    results = mRealm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+                    results = realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAllSorted(RealmContactsFields.DISPLAY_NAME);
                 } else {
-                    results = mRealm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+                    results = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
                 }
                 realmRecyclerView.setAdapter(new ContactListAdapter(getActivity(), results));
 
@@ -208,6 +201,7 @@ public class RegisteredContactsFragment extends Fragment {
                 decoration = new StickyRecyclerHeadersDecoration(new StikyHeader(results));
                 realmRecyclerView.getRecycleView().addItemDecoration(decoration);
 
+                realm.close();
             }
 
             @Override public void afterTextChanged(Editable s) {
@@ -243,15 +237,19 @@ public class RegisteredContactsFragment extends Fragment {
             }
         });
 
+        Realm realm = Realm.getDefaultInstance();
+
         realmRecyclerView = (RealmRecyclerView) view.findViewById(R.id.recycler_view);
         realmRecyclerView.setItemViewCacheSize(100);
         realmRecyclerView.setDrawingCacheEnabled(true);
-        results = mRealm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+        results = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
         realmRecyclerView.setAdapter(new ContactListAdapter(getActivity(), results));
 
         StikyHeader stikyHeader = new StikyHeader(results);
         decoration = new StickyRecyclerHeadersDecoration(stikyHeader);
         realmRecyclerView.getRecycleView().addItemDecoration(decoration);
+
+        realm.close();
 
         ///**
         // * after send contact automatically do get contact list

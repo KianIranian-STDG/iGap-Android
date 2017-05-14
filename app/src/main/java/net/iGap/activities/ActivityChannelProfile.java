@@ -113,7 +113,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelAddMember;
 import net.iGap.request.RequestChannelAddModerator;
@@ -155,7 +154,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
     private String pathSaveImage;
     private ChannelChatRole role;
     private long noLastMessage;
-    private long userId;
+
     private RealmList<RealmMember> members;
     private static ProgressBar prgWait;
     private LinearLayout lytListAdmin;
@@ -289,10 +288,6 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
         description = realmChannelRoom.getDescription();
 
-        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (userInfo != null) {
-            userId = userInfo.getUserId();
-        }
 
         //realm.close();
         //=========Put Extra End
@@ -788,7 +783,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
     //******Add And Moderator List
 
     private void showListForCustomRole(String SelectedRole) {
-        FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userId, SelectedRole, isNeedGetMemberList);
+        FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), G.userId, SelectedRole, isNeedGetMemberList);
         getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, "Show_member").commit();
 
         isNeedGetMemberList = false;
