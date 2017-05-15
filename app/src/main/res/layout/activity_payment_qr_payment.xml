@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layoutDirection="ltr"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layoutDirection="ltr"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:ignore="MissingPrefix"
+    android:orientation="vertical"
+    >
 
     <LinearLayout
         android:id="@+id/apqp_ll_toolbar"
@@ -46,6 +49,7 @@
             android:paddingRight="@dimen/dp60"
             android:text="@string/qr_payment"
             android:textColor="@color/whit_background"
+            fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:textSize="@dimen/dp18"
             />
 

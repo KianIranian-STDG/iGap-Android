@@ -55,7 +55,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1036,7 +1035,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
-            txtEmptyMessages = (TextView) findViewById(R.id.empty_messages);
 
             avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
             txtName = (TextView) findViewById(R.id.chl_txt_name);
@@ -1134,6 +1132,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
         prgWaiting.setVisibility(View.VISIBLE);
+
+        txtEmptyMessages = (TextView) findViewById(R.id.empty_messages);
+        //txtEmptyMessages.setVisibility(View.VISIBLE);
+
         lastDateCalendar.clear();
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -1604,7 +1606,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 TextView txtCleanUp = (TextView) v.findViewById(R.id.dialog_text_item6_notification);
 
                 TextView iconSearch = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-                iconSearch.setText(getResources().getString(R.string.md_back_arrow_reply));
+                iconSearch.setText(getResources().getString(R.string.md_searching_magnifying_glass));
 
                 TextView iconClearHistory = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
                 iconClearHistory.setText(getResources().getString(R.string.md_clearHistory));
@@ -1653,11 +1655,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     if (realmRoom.getMute()) {
                         txtMuteNotification.setText(getResources().getString(R.string.unmute_notification));
-                        iconMuteNotification.setText(getResources().getString(R.string.md_muted));
+                        iconMuteNotification.setText(getResources().getString(R.string.md_unMuted));
+
 
                     } else {
                         txtMuteNotification.setText(getResources().getString(R.string.mute_notification));
-                        iconMuteNotification.setText(getResources().getString(R.string.md_unMuted));
+                        iconMuteNotification.setText(getResources().getString(R.string.md_muted));
                     }
                 } else {
                     root2.setVisibility(View.GONE);
@@ -3083,7 +3086,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
         rootReplay.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
 
                 dialog.dismiss();
                 replay(message);
@@ -3091,7 +3093,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         });
         rootCopy.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
                 dialog.dismiss();
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 String _text = message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText;
@@ -3106,14 +3107,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         });
         rootShare.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
                 dialog.dismiss();
                 shearedDataToOtherProgram(message);
             }
         });
         rootForward.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
                 dialog.dismiss();
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null) {
@@ -3126,7 +3125,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override public void onClick(View v) {
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
-                        Log.i("DDDDDDDD", "rootReplay");
                         dialog.dismiss();
                         // remove deleted message from adapter
                         mAdapter.removeMessage(parseLong(message.messageID));
@@ -3136,7 +3134,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         } else {
                             txtEmptyMessages.setVisibility(View.VISIBLE);
                         }
-                        Log.i("BBBBBBBBB", "run: " + mAdapter.getItemCount());
                         // remove tag from edtChat if the
                         // message has deleted
                         if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
@@ -3150,7 +3147,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, message.roomId).findFirstAsync();
                 realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
                     @Override public void onChange(final RealmClientCondition element) {
-                        Log.i("DDDDDDDD", "rootReplay");
                         realmCondition.executeTransaction(new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
                                 if (element != null) {
@@ -3182,7 +3178,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         });
         rootEdit.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
                 dialog.dismiss();
                 // edit message
                 // put message text to EditText
@@ -3197,7 +3192,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         });
         rootSaveToDownload.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
                 dialog.dismiss();
                 if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
                     String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath
@@ -6169,9 +6163,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
         if (prgWaiting != null && messageInfos.size() > 0) {
             prgWaiting.setVisibility(View.GONE);
-            txtEmptyMessages.setVisibility(View.GONE);
         }
-
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
 
@@ -6463,6 +6455,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
              * send request to server for get message
              */
             getOnlineMessage(0, direction);
+        }
+
+        if (messageInfos.size() > 0) {
+            txtEmptyMessages.setVisibility(View.GONE);
+        } else {
+            txtEmptyMessages.setVisibility(View.VISIBLE);
         }
 
         if (direction == UP) {

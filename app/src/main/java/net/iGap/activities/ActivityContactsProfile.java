@@ -965,6 +965,10 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         root1.setVisibility(View.VISIBLE);
         root2.setVisibility(View.VISIBLE);
         root3.setVisibility(View.VISIBLE);
+        if (G.userId == userId) {
+            root1.setVisibility(View.GONE);
+            root3.setVisibility(View.GONE);
+        }
 
         if (isBlockUser) {
             txtBlockUser.setText(getString(R.string.un_block_user));

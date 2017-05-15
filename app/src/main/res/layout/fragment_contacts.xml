@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/menu_parent_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:elevation="999dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menu_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="999dp"
     android:background="@android:color/white"
     android:layoutDirection="ltr"
+    tools:ignore="MissingPrefix"
     >
 
 
@@ -55,6 +57,7 @@
           android:textAppearance="?android:attr/textAppearanceMedium"
           android:textColor="@android:color/white"
           android:textSize="@dimen/dp18"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           android:visibility="visible"
           />
 
@@ -209,9 +212,9 @@
           app:layout_behavior="@string/appbar_scrolling_view_behavior"
           android:scrollbars="vertical"
           android:fadeScrollbars="false"
-          android:scrollbarThumbVertical="@color/background_progress_color"
-          android:scrollbarSize="5dp"
-
+          android:scrollbarThumbVertical="@color/gray_4c"
+          android:scrollbarSize="@dimen/dp12"
+          android:scrollbarStyle="outsideInset"
           />
 
 

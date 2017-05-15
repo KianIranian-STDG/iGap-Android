@@ -33,7 +33,7 @@
           android:text="@string/new_chanel"
           android:textColor="@color/whit_background"
           android:textSize="@dimen/dp18"
-          android:textStyle="bold"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           android:visibility="visible"
           />
 

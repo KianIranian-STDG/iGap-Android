@@ -60,6 +60,7 @@
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/dp18"
                 android:textStyle="normal"
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
                 android:visibility="gone"
                 />
 

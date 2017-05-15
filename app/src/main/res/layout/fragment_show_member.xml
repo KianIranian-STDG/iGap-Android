@@ -3,8 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical"
+    tools:ignore="MissingPrefix"
     >
 
   <LinearLayout
@@ -53,6 +55,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white"
         android:textSize="@dimen/dp18"
+        fontPath="fonts/IRANSansMobile_Bold.ttf"
         android:visibility="visible"
         />
 

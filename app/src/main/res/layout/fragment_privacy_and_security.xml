@@ -39,7 +39,7 @@
           android:textColor="@color/whit_background"
           android:textSize="@dimen/dp18"
           android:visibility="visible"
-          fontPath="fonts/IRANSansMobile.ttf"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
 
       <net.iGap.libs.rippleeffect.RippleView

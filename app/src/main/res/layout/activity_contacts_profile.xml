@@ -62,7 +62,7 @@
                 android:text="@string/st_titleToolbar"
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/dp16"
-                android:textStyle="bold"
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
                 android:visibility="gone"
                 />
 

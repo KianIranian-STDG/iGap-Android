@@ -181,7 +181,7 @@
   <string name="st_privacy_policy">Privacy Policy</string>
   <string name="st_keepMedia">Store Multimedia Files</string>
   <string name="st_dialog_content_keepMedia">Photos, videos and all other files saved on your cloud storage could be removed from your device in order to free up space. All these removed files and media are stored on cloud storage and could be downloaded and saved again if needed.</string>
-  <string name="st_titleToolbar_page_Notification_and_sounds">Message Notifications</string>
+  <string name="st_titleToolbar_page_Notification_and_sounds">Notification &amp; sounds</string>
   <string name="st_title_messageNotification">Message Notifications</string>
   <string name="st_alert">Alert</string>
   <string name="st_messagePreview">Message Preview</string>
@@ -502,7 +502,7 @@
   <string name="phone_selected_for_send">the selected phone number to send</string>
   <string name="crop_selected_for_send">the selected crop image to send</string>
   <string name="location_message">Location Message</string>
-  <string name="chat_to_group">Convert to group chat</string>
+  <string name="chat_to_group">Convert to Group</string>
   <string name="last_seen_at">last seen at</string>
   <string name="long_time_ago">long time ago</string>
   <string name="last_month">last month</string>
@@ -672,6 +672,7 @@
   <string name="st_data_shams">Shamsi Date</string>
   <string name="do_you_want_left_this">"Are you sure you want to leave the selected item ?"</string>
   <string name="do_you_want_delete_this">Are you sure you want to delete the selected item ?</string>
+  <string name="do_you_want_clear_history_this">Are you sure you want to clear history the selected item ?</string>
   <string name="content_log_out">Are you sure you want to log out of iGap ?</string>
   <string name="st_signature">Signature</string>
   <string name="one_day">Last day</string>

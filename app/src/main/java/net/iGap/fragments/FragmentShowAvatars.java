@@ -17,11 +17,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,6 +41,7 @@ import net.iGap.interfaces.OnUserAvatarDelete;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TouchImageView;
 import net.iGap.module.enums.ChannelChatRole;
@@ -367,13 +366,16 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                     }
                 }
             }
-        }).show();
+        }).build();
 
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
-        layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-        dialog.getWindow().setAttributes(layoutParams);
+        DialogAnimation.animationUp(dialog);
+
+        dialog.show();
+        //WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        //layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        //layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
+        //layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+        //dialog.getWindow().setAttributes(layoutParams);
     }
 
     //private void shareImage() {

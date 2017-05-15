@@ -59,10 +59,11 @@ public class MyDialog {
 
         if (isMute) {
             txtMuteNotification.setText(context.getString(R.string.unmute));
-            iconMuteNotification.setText(context.getString(R.string.md_muted));
+            iconMuteNotification.setText(context.getString(R.string.md_unMuted));
+
         } else {
             txtMuteNotification.setText(context.getString(R.string.mute));
-            iconMuteNotification.setText(context.getString(R.string.md_unMuted));
+            iconMuteNotification.setText(context.getString(R.string.md_muted));
         }
 
         //        txtMuteNotification.setText(isMute ? context.getString(R.string.unmute_notification)
@@ -77,8 +78,28 @@ public class MyDialog {
 
         txtClearHistory.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                if (complete != null) complete.complete(true, "txtClearHistory", "");
                 dialog.dismiss();
+
+                new MaterialDialog.Builder(context).title(G.context.getResources().getString(R.string.igap))
+                    .titleColor(G.context.getResources().getColor(R.color.toolbar_background))
+                    .content(context.getString(R.string.do_you_want_clear_history_this))
+                    .positiveText(G.context.getResources().getString(R.string.B_ok))
+                    .negativeText(G.context.getResources().getString(R.string.B_cancel))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            if (complete != null) complete.complete(true, "txtClearHistory", "");
+                            dialog.dismiss();
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+
             }
         });
 

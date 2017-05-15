@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/fcg_layoutRoot"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:elevation="999dp"
-                android:background="@android:color/white"
-                android:layoutDirection="ltr">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fcg_layoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="999dp"
+    android:background="@android:color/white"
+    tools:ignore="MissingPrefix"
+    android:layoutDirection="ltr"
+    >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/fcg_appbar"
@@ -80,7 +83,8 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/dp18"
-                        android:textStyle="bold"/>
+                        fontPath="fonts/IRANSansMobile_Bold.ttf"
+                        />
 
                 </LinearLayout>
 
