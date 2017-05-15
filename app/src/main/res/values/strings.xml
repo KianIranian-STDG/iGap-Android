@@ -181,7 +181,7 @@
   <string name="st_privacy_policy">Privacy Policy</string>
   <string name="st_keepMedia">Store Multimedia Files</string>
   <string name="st_dialog_content_keepMedia">Photos, videos and all other files saved on your cloud storage could be removed from your device in order to free up space. All these removed files and media are stored on cloud storage and could be downloaded and saved again if needed.</string>
-  <string name="st_titleToolbar_page_Notification_and_sounds">Notification &amp; sounds</string>
+  <string name="st_titleToolbar_page_Notification_and_sounds">Notification &amp; Sounds</string>
   <string name="st_title_messageNotification">Message Notifications</string>
   <string name="st_alert">Alert</string>
   <string name="st_messagePreview">Message Preview</string>
@@ -226,7 +226,7 @@
   <string name="Account_Self_destruction">Account self-destructs</string>
 
   <!-- notification and sound group -->
-  <string name="ntg_title_toolbar">Notifications and Sounds</string>
+  <string name="ntg_title_toolbar">Notifications &amp; Sounds</string>
   <string name="ntg_notifications">Notifications</string>
   <string name="ntg_Sound">Sound</string>
   <string name="ntg_smart_notifications">Smart Notifications</string>
@@ -773,7 +773,7 @@
   <string name="st_privacy_create_ticket">Support Request</string>
   <string name="st_privacy_iGap_home">iGap Official Home</string>
   <string name="you_have_to_get_storage_permision_for_continue">You need the storage permission for going on.</string>
-  <string name="clean_up_chat_rooms">Clean Up Chat Rooms</string>
+  <string name="clean_up_chat_rooms">Clean Up All</string>
   <string name="clean_up">Clean Up</string>
   <string name="do_you_want_to_clean_all_data_in_chat_rooms">Are you sure you want to clean all data in local chat rooms?</string>
   <string name="pm">PM</string>

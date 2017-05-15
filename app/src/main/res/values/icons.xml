@@ -72,6 +72,12 @@
   <string name="md_log_out">\ue890</string>
   <string name="md_clean_up">\ue028</string>
   <string name="md_phone">\ue0cd</string>
+  <string name="md_photo">\ue410</string>
+  <string name="md_video_library">\ue04a</string>
+  <string name="md_file_library">\ue02f</string>
+  <string name="md_perm_camera">\ue8a2</string>
+  <string name="md_gif">\ue8da</string>
+  <string name="md_link">\ue157</string>
 
   <string name="md_call_made">\ue0b2</string>
   <string name="md_call_received">\ue0b5</string>

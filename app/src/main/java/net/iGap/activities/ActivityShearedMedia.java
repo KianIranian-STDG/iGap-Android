@@ -30,12 +30,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -70,6 +68,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.structs.StructMessageInfo;
@@ -465,42 +464,127 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     public void popUpMenuSharedMedai() {
 
-        MaterialDialog dialog = new MaterialDialog.Builder(this).items(R.array.pop_up_shared_media).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
+
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityShearedMedia.this).customView(R.layout.chat_popup_dialog_custom, true).build();
+        View v = dialog.getCustomView();
+
+        DialogAnimation.animationUp(dialog);
+        dialog.show();
+
+        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+        ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
+        ViewGroup root3 = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
+        ViewGroup root4 = (ViewGroup) v.findViewById(R.id.dialog_root_item4_notification);
+        ViewGroup root5 = (ViewGroup) v.findViewById(R.id.dialog_root_item5_notification);
+        ViewGroup root6 = (ViewGroup) v.findViewById(R.id.dialog_root_item6_notification);
+        ViewGroup root7 = (ViewGroup) v.findViewById(R.id.dialog_root_item7_notification);
+
+        TextView txtImage = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+        TextView txtVideo = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
+        TextView txtAudio = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
+        TextView txtVoice = (TextView) v.findViewById(R.id.dialog_text_item4_notification);
+        TextView txtGif = (TextView) v.findViewById(R.id.dialog_text_item5_notification);
+        TextView txtFile = (TextView) v.findViewById(R.id.dialog_text_item6_notification);
+        TextView txtLink = (TextView) v.findViewById(R.id.dialog_text_item7_notification);
+
+        TextView iconImage = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+        iconImage.setText(getResources().getString(R.string.md_photo));
+
+        TextView iconVideo = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
+        iconVideo.setText(getResources().getString(R.string.md_video_library));
+
+        TextView iconAudio = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
+        iconAudio.setText(getResources().getString(R.string.md_library_music));
+
+        TextView iconVoice = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
+        iconVoice.setText(getResources().getString(R.string.md_perm_camera));
+
+        TextView iconGif = (TextView) v.findViewById(R.id.dialog_icon_item5_notification);
+        iconGif.setText(getResources().getString(R.string.md_gif));
+
+        TextView iconFile = (TextView) v.findViewById(R.id.dialog_icon_item6_notification);
+        iconFile.setText(getResources().getString(R.string.md_file_library));
+
+        TextView iconLink = (TextView) v.findViewById(R.id.dialog_icon_item7_notification);
+        iconLink.setText(getResources().getString(R.string.md_link));
+
+        root1.setVisibility(View.VISIBLE);
+        root2.setVisibility(View.VISIBLE);
+        root3.setVisibility(View.VISIBLE);
+        root4.setVisibility(View.VISIBLE);
+        root5.setVisibility(View.VISIBLE);
+        root6.setVisibility(View.VISIBLE);
+        root7.setVisibility(View.VISIBLE);
+
+        txtImage.setText(getResources().getString(R.string.shared_image));
+        txtVideo.setText(getResources().getString(R.string.shared_video));
+        txtAudio.setText(getResources().getString(R.string.shared_audio));
+        txtVoice.setText(getResources().getString(R.string.shared_voice));
+        txtGif.setText(getResources().getString(R.string.shared_gif));
+        txtFile.setText(getResources().getString(R.string.shared_file));
+        txtLink.setText(getResources().getString(R.string.shared_links));
+
+
+        root1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                switch (which) {
-                    case 0:
-                        fillListImage();
-                        break;
-                    case 1:
-                        fillListVideo();
-                        break;
-                    case 2:
-                        fillListAudio();
-                        break;
-                    case 3:
-                        fillListVoice();
-                        break;
-                    case 4:
-                        fillListGif();
-                        break;
-                    case 5:
-                        fillListFile();
-                        break;
-                    case 6:
-                        fillListLink();
-                        break;
-                }
+            public void onClick(View v) {
+                dialog.dismiss();
+                fillListImage();
             }
-        }).show();
+        });
+        root2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                fillListVideo();
+                }
+        });
+        root3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                fillListAudio();
+            }
+        });
+        root4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                fillListVoice();
+            }
+        });
+        root5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                fillListGif();
+            }
+        });
+        root6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                fillListFile();
+            }
+        });
+        root7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                fillListLink();
+            }
+        });
 
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        layoutParams.width = (int) getResources().getDimension(R.dimen.dp260);
-        layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
 
-        dialog.getWindow().setAttributes(layoutParams);
+        //WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        //layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        //layoutParams.width = (int) getResources().getDimension(R.dimen.dp260);
+        //layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+
+        //dialog.getWindow().setAttributes(layoutParams);
+
+        DialogAnimation.animationUp(dialog);
+        dialog.show();
     }
 
     //********************************************************************************************

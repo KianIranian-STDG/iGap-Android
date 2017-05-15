@@ -816,8 +816,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.log_out))
                             .content(R.string.content_log_out)
                             .positiveText(getResources().getString(R.string.B_ok))
-                            .negativeText(getResources().getString(R.string.B_cancel))
-                            .iconRes(R.mipmap.exit_to_app_button)
+                            .negativeText(getResources().getString(R.string.B_cancel)).iconRes(R.drawable.logout)
                             .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -878,8 +877,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         dialog.dismiss();
                         new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.delete_account))
                             .content(getResources().getString(R.string.delete_account_text))
-                            .positiveText(getResources().getString(R.string.B_ok))
-                            .iconRes(R.mipmap.round_delete_button)
+                            .positiveText(getResources().getString(R.string.B_ok)).iconRes(R.drawable.delet_account)
                             .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
                             .negativeText(getResources().getString(R.string.B_cancel))
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1047,7 +1045,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         lyCleanUp.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
 
-                MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(R.string.do_you_want_to_clean_all_data_in_chat_rooms)
+                MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(R.string.clean_up_chat_rooms).content(R.string.do_you_want_to_clean_all_data_in_chat_rooms).icon(getResources().getDrawable(R.drawable.clean_up))
                     .positiveText(R.string.ok)
                     .cancelable(true)
                     .negativeText(android.R.string.cancel)

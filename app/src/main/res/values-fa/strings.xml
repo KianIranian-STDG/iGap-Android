@@ -186,7 +186,7 @@
   <string name="st_keepMedia">"فایل‌های چند رسانه‌ای را نگه دار"</string>
   <string name="st_dialog_content_keepMedia">"‫تصاویر، ویدئوها و دیگر فایل‌های ذخیره شده در فضای ابری که شما به آنها دسترسی داشته اید، به منظور ایجاد فضای خالی از دستگاه پاک می شوند. همه ی رسانه ها در بخش ذخیره سازی فضای ابری نگه داری می شوند و در صورت نیاز می توان آنها را مجدداً دانلود کرد.‬‬‬‬‬‬
 "</string>
-  <string name="st_titleToolbar_page_Notification_and_sounds">"اعلانات پیام"</string>
+  <string name="st_titleToolbar_page_Notification_and_sounds">"اعلانات و صداها"</string>
   <string name="st_title_messageNotification">"اعلانات پیام"</string>
   <string name="st_alert">"هشدار"</string>
   <string name="st_messagePreview">"پیش نمایش پیام"</string>
@@ -772,8 +772,8 @@
   <string name="group_title_set_username">تخصیص نام کاربری</string>
   <string name="permission_storage">محل ذخیره سازی را بدهید</string>
   <string name="you_have_to_get_storage_permision_for_continue">برای ادامه کار نیاز به مجوز ذخیره سازی می باشد</string>
-  <string name="clean_up_chat_rooms">پاک سازی چت روم ها</string>
-  <string name="clean_up">پاک سازی چت روم</string>
+  <string name="clean_up_chat_rooms">پاک سازی کلی</string>
+  <string name="clean_up">پاک سازی</string>
   <string name="do_you_want_to_clean_all_data_in_chat_rooms">آیا مطمئن هستید که میخواهید کلیه اطلاعات چت ها را از دیتابیس داخلی حذف کنید ؟</string>
   <string name="pm">ب ظ</string>
   <string name="am">ق ظ</string>
