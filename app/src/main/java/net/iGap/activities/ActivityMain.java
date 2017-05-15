@@ -165,6 +165,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     MusicPlayer musicPlayer;
     ProgressBar progressBar;
 
+    Realm mRealm;
+
 
     public static MyAppBarLayout appBarLayout;
 
@@ -189,12 +191,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private RealmRecyclerView mRecyclerView;
     private RoomAdapter roomAdapter;
 
+    @Override protected void onDestroy() {
+        super.onDestroy();
 
+        if (mRealm != null) {
+            mRealm.close();
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mRealm = Realm.getDefaultInstance();
 
         progressBar = (ProgressBar) findViewById(R.id.ac_progress_bar_waiting);
         progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
@@ -1120,13 +1130,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(ActivityMain.this));
 
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+        RealmResults<RealmRoom> results = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);
         mRecyclerView.setAdapter(roomAdapter);
-
-        realm.close();
 
         onScrollListener = new RecyclerView.OnScrollListener() {
 

@@ -351,11 +351,13 @@
                 android:minWidth="@dimen/dp32"
                 android:text="@string/md_phone"
                 android:textAppearance="@style/TextIconAppearance.menu"
-                android:textSize="@dimen/dp22"
+                android:textSize="@dimen/dp26"
+                android:textColor="@color/grayNew"
 
                 />
 
             <TextView
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp4"
@@ -365,7 +367,7 @@
                 android:paddingRight="@dimen/dp8"
                 android:paddingTop="@dimen/dp12"
                 android:text="@string/calls"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black90"
                 android:textSize="@dimen/dp14"
 
                 />

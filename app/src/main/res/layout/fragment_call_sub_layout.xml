@@ -14,7 +14,6 @@
         android:id="@+id/fcsl_imv_picture"
         android:layout_width="@dimen/dp48"
         android:layout_height="@dimen/dp48"
-        android:src="@mipmap/find"
         android:layout_gravity="center"
         />
   </FrameLayout>
@@ -74,6 +73,19 @@
               android:textSize="@dimen/dp18"
               />
 
+
+          <TextView
+              android:id="@+id/fcsl_txt_dureation_time"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:singleLine="true"
+              android:text="2.43"
+              android:layout_marginRight="@dimen/dp12"
+              android:textColor="@color/btn_start_page5"
+              android:textSize="@dimen/dp15"
+              android:textStyle="bold"
+              />
+
           <TextView
               android:id="@+id/fcsl_txt_time_info"
               android:layout_width="wrap_content"
@@ -102,6 +114,7 @@
           >
 
         <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/fcsl_call_type_icon"
             android:layout_width="@dimen/dp52"
             android:layout_height="match_parent"
             android:gravity="center"

@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnAvatarGet;
@@ -125,11 +127,7 @@ public class FragmentCall extends Fragment {
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
                         if (lastVisiblePosition + 10 >= mOffset) {
-                            isSendRequestForLoading = true;
-
-                            new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
-
-                            progressBar.setVisibility(View.VISIBLE);
+                            getLogListWithOfset();
                         }
                     }
                 }
@@ -183,6 +181,17 @@ public class FragmentCall extends Fragment {
                 }
             }
         });
+
+        getLogListWithOfset();
+
+    }
+
+    private void getLogListWithOfset() {
+        isSendRequestForLoading = true;
+
+        new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
+
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     //*************************************************************************************************************
@@ -215,12 +224,16 @@ public class FragmentCall extends Fragment {
             protected CircleImageView image;
             protected TextView name;
             protected MaterialDesignTextView icon;
+            protected MaterialDesignTextView call_type_icon;
             protected TextView timeAndInfo;
             protected RippleView rippleCall;
+            protected TextView timeDureation;
 
             public ViewHolder(View view) {
                 super(view);
 
+                timeDureation = (TextView) itemView.findViewById(R.id.fcsl_txt_dureation_time);
+                call_type_icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_call_type_icon);
                 image = (CircleImageView) itemView.findViewById(R.id.fcsl_imv_picture);
                 name = (TextView) itemView.findViewById(R.id.fcsl_txt_name);
                 icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_txt_icon);
@@ -275,21 +288,26 @@ public class FragmentCall extends Fragment {
 
             switch (item.getType()) {
 
-                // TODO: 5/15/2017  set icon call or video
-
                 case SCREEN_SHARING:
-
+                    viewHolder.call_type_icon.setText(R.string.md_stay_current_portrait);
                     break;
                 case VIDEO_CALLING:
-
+                    viewHolder.call_type_icon.setText(R.string.md_video_cam);
                     break;
-
                 case VOICE_CALLING:
-
+                    viewHolder.call_type_icon.setText(R.string.md_phone);
                     break;
             }
 
-            viewHolder.timeAndInfo.setText(item.getDuration() + "  " + item.getOfferTime());
+            viewHolder.timeAndInfo.setText(HelperCalander.checkHijriAndReturnTime(item.getOfferTime()));
+            viewHolder.timeDureation.setText(DateUtils.formatElapsedTime(item.getDuration()));
+
+            if (HelperCalander.isLanguagePersian) {
+                viewHolder.timeAndInfo.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeAndInfo.getText().toString()));
+                viewHolder.timeDureation.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDureation.getText().toString()));
+            }
+
+
             viewHolder.name.setText(item.getPeer().getDisplayName());
 
             HelperAvatar.getAvatar(item.getPeer().getId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {

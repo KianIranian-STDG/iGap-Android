@@ -78,6 +78,9 @@
   <string name="md_call_missed">\ue0b4</string>
   <string name="md_call_missed_outgoing">\ue0e4</string>
   <string name="md_call_end">\ue0b1</string>
+  <string name="md_video_cam">\ue04b</string>
+  <string name="md_stay_current_portrait">\ue0d4</string>
+
 
   <string name="md_mic">\ue029</string>
   <string name="md_mic_off">\ue02b</string>
