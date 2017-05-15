@@ -28,7 +28,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +40,7 @@ import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmList;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 import java.io.IOException;
@@ -317,7 +317,8 @@ public class FragmentShowMember extends Fragment {
             @Override
             public void onError(int majorCode, int minorCode) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         if (progressBar != null) {
                             progressBar.setVisibility(View.GONE);
@@ -329,7 +330,8 @@ public class FragmentShowMember extends Fragment {
             @Override
             public void onTimeOut() {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         if (progressBar != null) {
                             progressBar.setVisibility(View.GONE);
@@ -410,7 +412,8 @@ public class FragmentShowMember extends Fragment {
         final RippleView txtSearch = (RippleView) view.findViewById(R.id.member_edtSearch);
 
         txtSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 txtClose.setVisibility(View.VISIBLE);
                 edtSearch.setVisibility(View.VISIBLE);
                 edtSearch.setFocusable(true);
@@ -420,7 +423,8 @@ public class FragmentShowMember extends Fragment {
         });
 
         txtClose.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (edtSearch.getText().length() > 0) {
                     edtSearch.setText("");
                 } else {
@@ -435,45 +439,35 @@ public class FragmentShowMember extends Fragment {
         });
 
         edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(final Editable s) {
                 Realm realm = Realm.getDefaultInstance();
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
-                RealmResults<RealmRegisteredInfo> r1;
+                RealmResults<RealmRegisteredInfo> findMember;
 
                 if (s.length() > 0) {
-                    r1 = mRealm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAllSorted(RealmRegisteredInfoFields.DISPLAY_NAME);
+                    findMember = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAllSorted(RealmRegisteredInfoFields.DISPLAY_NAME);
                 } else {
-                    r1 = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRoomFields.ID, mRoomID).findAllSorted(RealmRegisteredInfoFields.DISPLAY_NAME);
-                }
-                Log.i("BBBBBBBB", "getDisplayName: " + r1.size());
-
-                RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
-                RealmResults<RealmMember> memberList2;
-                RealmMember m1 = null;
-                RealmResults<RealmMember> m2 = null;
-
-                for (RealmRegisteredInfo r : r1) {
-
-                    if (memberList.where().equalTo(RealmMemberFields.PEER_ID, r.getId()).findAll() != null && memberList.where().equalTo(RealmMemberFields.PEER_ID, r.getId()).findAll().size() > 0) {
-                        m2 = memberList.where().equalTo(RealmMemberFields.PEER_ID, r.getId()).findAll();
-                        if (m2 != null) Log.i("BBBBBBBB", " memberList2.size(): " + m2.size());
-                    }
-
-                    //m1 = memberList.where().equalTo(RealmMemberFields.PEER_ID, r.getId()).findFirst();
-                    //if (m1 !=null) memberList2.add(m1);
+                    findMember = realm.where(RealmRegisteredInfo.class).equalTo(RealmRoomFields.ID, mRoomID).findAllSorted(RealmRegisteredInfoFields.DISPLAY_NAME);
                 }
 
-                //if (m2 !=null)Log.i("BBBBBBBB", " memberList2.size(): " + m2.size());
-                mAdapter = new MemberAdapter(mActivity, m2, realmRoom.getType(), mMainRole, userID);
-
+                RealmQuery<RealmMember> query = realm.where(RealmMember.class);
+                for (int i = 0; i < findMember.size(); i++) {
+                    if (i != 0) query = query.or();
+                    query = query.equalTo(RealmMemberFields.PEER_ID, findMember.get(i).getId());
+                }
+                RealmResults<RealmMember> searchMember = query.findAll();
+                mAdapter = new MemberAdapter(mActivity, searchMember, realmRoom.getType(), mMainRole, userID);
                 mRecyclerView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
 
