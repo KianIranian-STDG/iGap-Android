@@ -117,7 +117,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestGroupAddAdmin;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupAddModerator;
@@ -172,7 +171,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private String participantsCountLabel;
 
     public static OnMenuClick onMenuClick;
-    private Long userID = 0l;
+
     private boolean isPrivate;
     private TextView txtLinkTitle;
     private TextView txtGroupLink;
@@ -186,7 +185,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private boolean isNeedgetContactlist = true;
 
-    private Realm mRealm;
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
 
@@ -199,18 +197,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mRealm != null) mRealm.close();
-    }
+
 
     @Override
     protected void onResume() {
 
         super.onResume();
 
-        mRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        Realm realm = Realm.getDefaultInstance();
+
+        mRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom != null) {
 
             if (changeListener == null) {
@@ -247,6 +243,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
 
         LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
+
+        realm.close();
     }
 
 
@@ -257,10 +255,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         Bundle extras = getIntent().getExtras();
         roomId = extras.getLong("RoomId");
 
-        mRealm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
         //group info
-        RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             //HelperError.showSnackMessage(getClientErrorCode(-2, 0));
             finish();
@@ -293,10 +291,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             e.getStackTrace();
         }
 
-        RealmUserInfo userInfo = mRealm.where(RealmUserInfo.class).findFirst();
-        if (userInfo != null) userID = userInfo.getUserId();
 
-        //realm.close(); // in fillItem when make iterator with members client will be have error . This Realm instance has already been closed, making it unusable.
         initComponent();
 
         attachFile = new AttachFile(this);
@@ -305,6 +300,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         G.onGroupRevokeLink = this;
 
         ActivityShearedMedia.getCountOfSharedMedia(roomId);
+
+        realm.close();
     }
 
     @Override
@@ -1334,9 +1331,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void addMemberToGroup() {
 
+        Realm realm = Realm.getDefaultInstance();
+
         List<StructContactInfo> userList = Contacts.retrieve(null);
 
-        RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
 
         for (int i = 0; i < memberList.size(); i++) {
@@ -1362,6 +1361,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
+
+        realm.close();
     }
 
     @Override
@@ -1953,7 +1954,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     private void showListForCustomRole(String SelectedRole) {
-        FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), userID, SelectedRole, isNeedgetContactlist);
+        FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), G.userId, SelectedRole, isNeedgetContactlist);
         getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, "Show_member").commit();
 
         isNeedgetContactlist = false;

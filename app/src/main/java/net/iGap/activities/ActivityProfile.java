@@ -164,7 +164,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                             setNickName();
                         }
                     });
-                    realm.close();
+
                 } else {
                     runOnUiThread(new Runnable() {
                         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN) @Override public void run() {
@@ -177,6 +177,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                         }
                     });
                 }
+
+                realm.close();
             }
         });
     }
@@ -454,8 +456,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
-            final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-            final RealmResults<RealmAvatar> realmAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll();
+
+            final RealmResults<RealmAvatar> realmAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, G.userId).findAll();
             if (!realmAvatars.isEmpty()) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
@@ -469,9 +471,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
     @Override public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
 
-        Realm realm = Realm.getDefaultInstance();
-        long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
-        HelperAvatar.avatarAdd(userId, pathImageUser, avatar, new OnAvatarAdd() {
+        HelperAvatar.avatarAdd(G.userId, pathImageUser, avatar, new OnAvatarAdd() {
             @Override public void onAvatarAdd(final String avatarPath) {
 
                 runOnUiThread(new Runnable() {
@@ -483,6 +483,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                 });
             }
         });
+
     }
 
     @Override public void onAvatarAddTimeOut() {

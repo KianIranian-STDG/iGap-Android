@@ -102,7 +102,7 @@ public class HelperGetAction {
                             action = realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
                         }
                     }
-
+                    realm.close();
                     return action;
                 } else {
                     realm.close();

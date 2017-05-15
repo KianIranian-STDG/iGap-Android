@@ -96,7 +96,6 @@ public class FragmentShowMember extends Fragment {
     private long mRoomID = 0;
 
     private RealmRecyclerView mRecyclerView;
-    private Realm mRealm;
     private MemberAdapter mAdapter;
     private String mMainRole = "";
     private ProgressBar progressBar;
@@ -140,8 +139,6 @@ public class FragmentShowMember extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
-
-            mRealm = Realm.getDefaultInstance();
 
             mRoomID = getArguments().getLong(ROOMIDARGUMENT);
             mMainRole = getArguments().getString(MAINROOL);
@@ -313,6 +310,8 @@ public class FragmentShowMember extends Fragment {
                         }
                     }
                 }
+
+                realm.close();
             }
 
             @Override
@@ -343,29 +342,36 @@ public class FragmentShowMember extends Fragment {
             @Override
             public void run() {
                 mCurrentUpdateCount = 0;
+                Realm realm = Realm.getDefaultInstance();
 
-                final RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
                 if (realmRoom != null) {
                     if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
 
-                        mRealm.executeTransaction(new Realm.Transaction() {
+                        realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                if (realmRoom.getGroupRoom().getMembers() != null) realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
+                                if (realmRoom.getGroupRoom().getMembers() != null) {
+                                    realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
+                                }
                             }
                         });
                         new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
                     } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
 
-                        mRealm.executeTransaction(new Realm.Transaction() {
+                        realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                if (realmRoom.getChannelRoom().getMembers() != null) realmRoom.getChannelRoom().getMembers().deleteAllFromRealm();
+                                if (realmRoom.getChannelRoom().getMembers() != null) {
+                                    realmRoom.getChannelRoom().getMembers().deleteAllFromRealm();
+                                }
                             }
                         });
                         new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit);
                     }
                 }
+
+                realm.close();
             }
         });
     }
@@ -395,12 +401,6 @@ public class FragmentShowMember extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (mRealm != null) mRealm.close();
-    }
 
     private void initComponent(View view) {
 
@@ -536,8 +536,10 @@ public class FragmentShowMember extends Fragment {
             isOne = false;
             mCurrentUpdateCount = 0;
 
+            Realm realm = Realm.getDefaultInstance();
+
             offset += limit;
-            RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
             if (realmRoom != null) {
                 if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
                     new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
@@ -545,6 +547,8 @@ public class FragmentShowMember extends Fragment {
                     new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit);
                 }
             }
+
+            realm.close();
         }
     }
 
@@ -576,12 +580,10 @@ public class FragmentShowMember extends Fragment {
                     mAdapter = new MemberAdapter(mActivity, mList, realmRoom.getType(), mMainRole, userID);
                     mRecyclerView.setAdapter(mAdapter);
                 }
-            } else {
-                realm.close();
             }
-        } else {
-            realm.close();
         }
+
+        realm.close();
     }
 
     private class MemberAdapter extends RealmBasedRecyclerViewAdapter<RealmMember, FragmentShowMember.MemberAdapter.ViewHolder> {
@@ -631,7 +633,7 @@ public class FragmentShowMember extends Fragment {
         @Override
         public void onBindRealmViewHolder(final MemberAdapter.ViewHolder holder, int i) {
 
-            final StructContactInfo mContact = convertRealmToStruct(mRealm, realmResults.get(i));
+            final StructContactInfo mContact = convertRealmToStruct(realmResults.get(i));
 
             if (mContact == null) {
                 return;
@@ -835,7 +837,8 @@ public class FragmentShowMember extends Fragment {
             }
         }
 
-        StructContactInfo convertRealmToStruct(Realm realm, RealmMember realmMember) {
+        StructContactInfo convertRealmToStruct(RealmMember realmMember) {
+            Realm realm = Realm.getDefaultInstance();
             String role = realmMember.getRole();
             long id = realmMember.getPeerId();
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
@@ -850,6 +853,8 @@ public class FragmentShowMember extends Fragment {
                 s.userID = userid;
                 return s;
             }
+
+            realm.close();
             return null;
         }
     }

@@ -333,7 +333,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private static List<StructBottomSheet> contacts;
     public static OnPathAdapterBottomSheet onPathAdapterBottomSheet;
     private View viewBottomSheet;
-    private Realm mRealm;
+
     private RealmRoom realmRoom;
     private RealmRoomMessage voiceLastMessage = null;
     public static OnComplete hashListener;
@@ -650,9 +650,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
         super.onStop();
 
-        if (mRealm != null) {
-            mRealm.close();
-        }
     }
 
     @Override
@@ -1030,13 +1027,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         attachFile = new AttachFile(this);
         backGroundSeenList.clear();
 
-        mRealm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mRoomId = extras.getLong("RoomId");
             chatPeerId = extras.getLong("peerId");
-            realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
             txtEmptyMessages = (TextView) findViewById(R.id.empty_messages);
@@ -1053,7 +1050,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 chatType = realmRoom.getType();
                 if (chatType == CHAT) {
                     chatPeerId = realmRoom.getChatRoom().getPeerId();
-                    RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                     if (realmRegisteredInfo != null) {
                         title = realmRegisteredInfo.getDisplayName();
                         lastSeen = realmRegisteredInfo.getLastSeen();
@@ -1094,7 +1091,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                  * when user start new chat this block will be called
                  */
                 chatType = CHAT;
-                RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                 title = realmRegisteredInfo.getDisplayName();
                 lastSeen = realmRegisteredInfo.getLastSeen();
                 userStatus = realmRegisteredInfo.getStatus();
@@ -1116,6 +1113,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             setAvatar();
         }
+
+        realm.close();
     }
 
     private void initMain() {
@@ -1210,7 +1209,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             /**
              * get userId . use in chat set action.
              */
-            RealmUserInfo realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
+
+            Realm realm = Realm.getDefaultInstance();
+
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo == null) {
                 finish();
                 return;
@@ -1237,7 +1239,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     //RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
                     //chatPeerId = realmChatRoom.getPeerId();
 
-                    RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                     if (realmRegisteredInfo != null) {
                         //title = realmRegisteredInfo.getDisplayName();
                         initialize = realmRegisteredInfo.getInitials();
@@ -1263,7 +1265,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             } else {
                 chatPeerId = extras.getLong("peerId");
                 chatType = CHAT;
-                RealmRegisteredInfo realmRegisteredInfo = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                 if (realmRegisteredInfo != null) {
                     title = realmRegisteredInfo.getDisplayName();
                     initialize = realmRegisteredInfo.getInitials();
@@ -1272,6 +1274,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     userStatus = realmRegisteredInfo.getStatus();
                 }
             }
+
+            realm.close();
         }
 
         initComponent();
@@ -2078,7 +2082,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 } else { // new message has written
 
                     final Realm realm = Realm.getDefaultInstance();
-                    final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                    final long senderId = G.userId;
 
                     String[] messages = HelperString.splitStringEvery(getWrittenMessage(), Config.MAX_TEXT_LENGTH);
                     if (messages.length == 0) {
@@ -2681,7 +2685,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         Realm realm = Realm.getDefaultInstance();
         final long messageId = SUID.id().get();
         final long updateTime = TimeUtils.currentLocalTime();
-        final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        final long senderID = G.userId;
         final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath) / 1000;
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -2995,7 +2999,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         //items.remove(getString(R.string.replay_item_dialog));
                         //items.remove(getString(R.string.delete_item_dialog));
                     }
-                    final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                    final long senderId = G.userId;
                     ChannelChatRole roleSenderMessage = null;
                     RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                     RealmList<RealmMember> realmMembers = realmChannelRoom.getMembers();
@@ -3025,7 +3029,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 } else if (chatType == GROUP) {
 
-                    final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+                    final long senderId = G.userId;
 
                     GroupChatRole roleSenderMessage = null;
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -3054,7 +3058,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         rootEdit.setVisibility(View.GONE);
                     }
                 } else {
-                    if (!message.senderID.equalsIgnoreCase(Long.toString(realm.where(RealmUserInfo.class).findFirst().getUserId()))) {
+                    if (!message.senderID.equalsIgnoreCase(Long.toString(G.userId))) {
                         //items.remove(getString(R.string.edit_item_dialog));
                         rootEdit.setVisibility(View.GONE);
                     }
@@ -3709,6 +3713,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                             G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
                         }
+                        realm.close();
                     }
                 });
             }
@@ -3982,31 +3987,27 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void deleteChat(final int chatId) {
         final Realm realm = Realm.getDefaultInstance();
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
-        realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-            @Override
-            public void onChange(final RealmClientCondition element) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(final Realm realm) {
-                        if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, chatId).findFirst() == null) {
-                            RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
-                            realmOfflineDelete.setOfflineDelete(chatId);
 
-                            element.getOfflineDeleted().add(realmOfflineDelete);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(final Realm realm) {
+                if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, chatId).findFirst() == null) {
+                    RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
+                    realmOfflineDelete.setOfflineDelete(chatId);
 
-                            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst().deleteFromRealm();
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll().deleteAllFromRealm();
+                    realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
 
-                            new RequestChatDelete().chatDelete(chatId);
-                        }
-                    }
-                });
-                element.removeAllChangeListeners();
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst().deleteFromRealm();
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll().deleteAllFromRealm();
 
-                realm.close();
-                finish();
+                    new RequestChatDelete().chatDelete(chatId);
+
+                    finish();
+                }
             }
         });
+
+        realm.close();
+
     }
 
     private void muteNotification(final int item) {
@@ -4109,8 +4110,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * after load message call this method for go to bottom of chat list
      */
     private void scrollToLastPositionMessageId() {
+
+        Realm realm = Realm.getDefaultInstance();
+
         try {
-            RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             if (realmRoom != null) {
                 String lastScrolledMessageId = realmRoom.getLastScrollPositionMessageId() + "";
                 if (lastScrolledMessageId.length() > 0) {
@@ -4125,6 +4129,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        realm.close();
     }
 
     private void storingLastPosition() {
@@ -4145,10 +4151,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     lastScrolledMessageID = Long.parseLong(mAdapter.getItem(firstVisiblePosition).mMessage.messageID);
                 }
 
-                final RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                Realm realm = Realm.getDefaultInstance();
+
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
                     saveMessageIdPositionState(lastScrolledMessageID);
                 }
+
+                realm.close();
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -4159,7 +4170,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * save latest messageId position that user saw in chat before close it
      */
     private void saveMessageIdPositionState(final long position) {
-        mRealm.executeTransaction(new Realm.Transaction() {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -4168,6 +4182,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
             }
         });
+
+        realm.close();
     }
 
 
@@ -4718,14 +4734,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmRegisteredInfo != null && realmUserInfo != null && realmRegisteredInfo.getId() != realmUserInfo.getUserId()) {
-                    if (phoneNumber == null && realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                    if (phoneNumber == null && realmRegisteredInfo.getId() != G.userId) {
                         if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
                             initSpamBarLayout(realmRegisteredInfo);
                             vgSpamUser.setVisibility(View.VISIBLE);
                         }
                     }
 
-                    if (realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                    if (realmRegisteredInfo.getId() != G.userId) {
                         if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
 
                             if (realmRegisteredInfo.isBlockUser()) {
@@ -4737,7 +4753,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
                     }
 
-                    if (realmContacts != null && realmRegisteredInfo.getId() != realm.where(RealmUserInfo.class).findFirst().getUserId()) {
+                    if (realmContacts != null && realmRegisteredInfo.getId() != G.userId) {
                         if (realmContacts.isBlockUser()) {
                             if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
                                 initSpamBarLayout(realmRegisteredInfo);
@@ -4770,12 +4786,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void onClick(View view) {
                 vgSpamUser.setVisibility(View.GONE);
                 if (registeredInfo != null) {
-                    mRealm.executeTransaction(new Realm.Transaction() {
+
+                    Realm realm = Realm.getDefaultInstance();
+
+                    realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
                             registeredInfo.setDoNotshowSpamBar(true);
                         }
                     });
+
+                    realm.close();
                 }
             }
         });
@@ -5562,7 +5583,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         long duration = 0;
         long fileSize = 0;
         int[] imageDimens = {0, 0};
-        final long senderID = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        final long senderID = G.userId;
 
         /**
          * check if path is uri detect real path from uri
@@ -6081,7 +6102,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
                         if (roomMessage != null) {
-                            long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+
                             RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
                             if (roomMessage.getForwardMessage() != null) {
                                 forwardedMessage.setForwardMessage(roomMessage.getForwardMessage());
@@ -6095,7 +6116,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                             forwardedMessage.setRoomId(mRoomId);
                             forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                            forwardedMessage.setUserId(userId);
+                            forwardedMessage.setUserId(G.userId);
                             forwardedMessage.setShowMessage(true);
 
                             realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setLastMessage(forwardedMessage);
