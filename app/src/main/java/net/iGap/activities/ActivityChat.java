@@ -55,7 +55,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -3087,7 +3086,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
         rootReplay.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
 
                 dialog.dismiss();
                 replay(message);
@@ -3095,7 +3093,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         });
         rootCopy.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
                 dialog.dismiss();
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 String _text = message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText;
@@ -3110,14 +3107,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         });
         rootShare.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
                 dialog.dismiss();
                 shearedDataToOtherProgram(message);
             }
         });
         rootForward.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
                 dialog.dismiss();
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null) {
@@ -3130,7 +3125,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override public void onClick(View v) {
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
-                        Log.i("DDDDDDDD", "rootReplay");
                         dialog.dismiss();
                         // remove deleted message from adapter
                         mAdapter.removeMessage(parseLong(message.messageID));
@@ -3140,7 +3134,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         } else {
                             txtEmptyMessages.setVisibility(View.VISIBLE);
                         }
-                        Log.i("BBBBBBBBB", "run: " + mAdapter.getItemCount());
                         // remove tag from edtChat if the
                         // message has deleted
                         if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
@@ -3154,7 +3147,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, message.roomId).findFirstAsync();
                 realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
                     @Override public void onChange(final RealmClientCondition element) {
-                        Log.i("DDDDDDDD", "rootReplay");
                         realmCondition.executeTransaction(new Realm.Transaction() {
                             @Override public void execute(Realm realm) {
                                 if (element != null) {
@@ -3186,7 +3178,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         });
         rootEdit.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
                 dialog.dismiss();
                 // edit message
                 // put message text to EditText
@@ -3201,7 +3192,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         });
         rootSaveToDownload.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Log.i("DDDDDDDD", "rootReplay");
                 dialog.dismiss();
                 if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
                     String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath
@@ -6472,7 +6462,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         } else {
             txtEmptyMessages.setVisibility(View.VISIBLE);
         }
-        Log.i("XXXXXXXXXX", "2222222switchAddItem: " + messageInfos.size());
 
         if (direction == UP) {
             switchAddItem(messageInfos, true);
@@ -6631,8 +6620,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         return;
                     }
                     hideProgress();
-                    Log.i("XXXXXXXXXX", "hideProgress: ");
-
                     long startFutureMessageId;
                     /**
                      * hide progress received history
