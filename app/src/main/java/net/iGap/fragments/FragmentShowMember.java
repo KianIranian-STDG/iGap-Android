@@ -25,13 +25,19 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmList;
@@ -110,7 +116,6 @@ public class FragmentShowMember extends Fragment {
     public static OnComplete infoUpdateListenerCount;
     private EndlessRecyclerViewScrollListener scrollListener;
     private boolean isDeleteMemberList = true;
-
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
         Bundle bundle = new Bundle();
@@ -398,6 +403,83 @@ public class FragmentShowMember extends Fragment {
 
 
     private void initComponent(View view) {
+
+        final TextView menu_txt_titleToolbar = (TextView) view.findViewById(R.id.member_txt_titleToolbar);
+        final EditText edtSearch = (EditText) view.findViewById(R.id.menu_edt_search);
+        final RippleView txtClose = (RippleView) view.findViewById(R.id.menu_ripple_search);
+        final RippleView txtSearch = (RippleView) view.findViewById(R.id.member_edtSearch);
+
+        txtSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override public void onComplete(RippleView rippleView) {
+                txtClose.setVisibility(View.VISIBLE);
+                edtSearch.setVisibility(View.VISIBLE);
+                edtSearch.setFocusable(true);
+                menu_txt_titleToolbar.setVisibility(View.GONE);
+                txtSearch.setVisibility(View.GONE);
+            }
+        });
+
+        txtClose.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (edtSearch.getText().length() > 0) {
+                    edtSearch.setText("");
+                } else {
+                    txtClose.setVisibility(View.GONE);
+                    edtSearch.setVisibility(View.GONE);
+                    menu_txt_titleToolbar.setVisibility(View.VISIBLE);
+                    txtSearch.setVisibility(View.VISIBLE);
+                    InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        });
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override public void afterTextChanged(Editable s) {
+                Realm realm = Realm.getDefaultInstance();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+                RealmResults<RealmRegisteredInfo> r1;
+
+                if (s.length() > 0) {
+                    r1 = mRealm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAllSorted(RealmRegisteredInfoFields.DISPLAY_NAME);
+                } else {
+                    r1 = mRealm.where(RealmRegisteredInfo.class).equalTo(RealmRoomFields.ID, mRoomID).findAllSorted(RealmRegisteredInfoFields.DISPLAY_NAME);
+                }
+                Log.i("BBBBBBBB", "getDisplayName: " + r1.size());
+
+                RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
+                RealmResults<RealmMember> memberList2;
+                RealmMember m1 = null;
+                RealmResults<RealmMember> m2 = null;
+
+                for (RealmRegisteredInfo r : r1) {
+
+                    if (memberList.where().equalTo(RealmMemberFields.PEER_ID, r.getId()).findAll() != null && memberList.where().equalTo(RealmMemberFields.PEER_ID, r.getId()).findAll().size() > 0) {
+                        m2 = memberList.where().equalTo(RealmMemberFields.PEER_ID, r.getId()).findAll();
+                        if (m2 != null) Log.i("BBBBBBBB", " memberList2.size(): " + m2.size());
+                    }
+
+                    //m1 = memberList.where().equalTo(RealmMemberFields.PEER_ID, r.getId()).findFirst();
+                    //if (m1 !=null) memberList2.add(m1);
+                }
+
+                //if (m2 !=null)Log.i("BBBBBBBB", " memberList2.size(): " + m2.size());
+                mAdapter = new MemberAdapter(mActivity, m2, realmRoom.getType(), mMainRole, userID);
+
+                mRecyclerView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
+
+                realm.close();
+            }
+        });
 
         mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.fcm_recycler_view_show_member);
         mRecyclerView.setItemViewCacheSize(100);

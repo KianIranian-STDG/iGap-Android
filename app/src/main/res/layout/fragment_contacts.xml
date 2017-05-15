@@ -15,7 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="@color/green"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        >
 
       <net.iGap.libs.rippleeffect.RippleView
             android:id="@+id/menu_ripple_txtBack"
