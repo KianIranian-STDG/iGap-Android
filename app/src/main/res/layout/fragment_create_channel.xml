@@ -46,8 +46,8 @@
           android:text="@string/new_chanel"
           android:textColor="@color/whit_background"
           android:textSize="@dimen/dp18"
-          android:textStyle="bold"
           android:visibility="visible"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
 
       <net.iGap.libs.rippleeffect.RippleView
@@ -216,6 +216,7 @@
           android:layout_marginTop="@dimen/dp8"
           android:gravity="right|center_horizontal"
           android:padding="@dimen/dp20"
+          android:layoutDirection="ltr"
           >
 
         <TextView

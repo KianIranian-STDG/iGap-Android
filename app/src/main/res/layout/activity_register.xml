@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/rg_agreement_background"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/rg_agreement_background"
+    tools:ignore="MissingPrefix"
+    android:orientation="vertical"
+    >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/ar_toolbar"
@@ -12,7 +15,8 @@
         android:layout_height="@dimen/dp60"
         android:background="@color/toolbar_background"
         app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp">
+        app:contentInsetStart="0dp"
+        >
 
         <TextView
             android:id="@+id/rg_txt_titleToolbar"
@@ -21,6 +25,7 @@
             android:gravity="center"
             android:text="@string/igap"
             android:textColor="@color/rg_whit_background"
+            fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:textSize="@dimen/dp20"
             />
 

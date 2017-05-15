@@ -1036,7 +1036,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
-            txtEmptyMessages = (TextView) findViewById(R.id.empty_messages);
 
             avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
             txtName = (TextView) findViewById(R.id.chl_txt_name);
@@ -1134,6 +1133,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
         prgWaiting.setVisibility(View.VISIBLE);
+
+        txtEmptyMessages = (TextView) findViewById(R.id.empty_messages);
+        //txtEmptyMessages.setVisibility(View.VISIBLE);
+
         lastDateCalendar.clear();
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -1604,7 +1607,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 TextView txtCleanUp = (TextView) v.findViewById(R.id.dialog_text_item6_notification);
 
                 TextView iconSearch = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-                iconSearch.setText(getResources().getString(R.string.md_back_arrow_reply));
+                iconSearch.setText(getResources().getString(R.string.md_searching_magnifying_glass));
 
                 TextView iconClearHistory = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
                 iconClearHistory.setText(getResources().getString(R.string.md_clearHistory));
@@ -1653,11 +1656,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     if (realmRoom.getMute()) {
                         txtMuteNotification.setText(getResources().getString(R.string.unmute_notification));
-                        iconMuteNotification.setText(getResources().getString(R.string.md_muted));
+                        iconMuteNotification.setText(getResources().getString(R.string.md_unMuted));
+
 
                     } else {
                         txtMuteNotification.setText(getResources().getString(R.string.mute_notification));
-                        iconMuteNotification.setText(getResources().getString(R.string.md_unMuted));
+                        iconMuteNotification.setText(getResources().getString(R.string.md_muted));
                     }
                 } else {
                     root2.setVisibility(View.GONE);
@@ -6169,9 +6173,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
         if (prgWaiting != null && messageInfos.size() > 0) {
             prgWaiting.setVisibility(View.GONE);
-            txtEmptyMessages.setVisibility(View.GONE);
         }
-
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
 
@@ -6465,6 +6467,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             getOnlineMessage(0, direction);
         }
 
+        if (messageInfos.size() > 0) {
+            txtEmptyMessages.setVisibility(View.GONE);
+        } else {
+            txtEmptyMessages.setVisibility(View.VISIBLE);
+        }
+        Log.i("XXXXXXXXXX", "2222222switchAddItem: " + messageInfos.size());
+
         if (direction == UP) {
             switchAddItem(messageInfos, true);
         } else {
@@ -6622,6 +6631,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         return;
                     }
                     hideProgress();
+                    Log.i("XXXXXXXXXX", "hideProgress: ");
+
                     long startFutureMessageId;
                     /**
                      * hide progress received history

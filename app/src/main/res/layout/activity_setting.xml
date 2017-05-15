@@ -56,7 +56,7 @@
               android:textSize="@dimen/dp18"
               android:textStyle="bold"
               android:visibility="gone"
-              fontPath="fonts/IRANSansMobile.ttf"
+              fontPath="fonts/IRANSansMobile_Bold.ttf"
               />
 
           <net.iGap.libs.rippleeffect.RippleView

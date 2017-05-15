@@ -3,8 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    tools:ignore="MissingPrefix"
+    android:orientation="vertical"
+    >
 
 
     <LinearLayout
@@ -162,6 +165,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/dp18"
+                        fontPath="fonts/IRANSansMobile_Bold.ttf"
                         android:textStyle="bold" />
 
                   <net.iGap.libs.rippleeffect.RippleView

@@ -782,9 +782,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         /*
           set layout for popup menu
          */
-
-        final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
-        // button popupMenu in toolbar
         RippleView rippleMore = (RippleView) findViewById(R.id.st_ripple_more);
         rippleMore.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
@@ -803,7 +800,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 TextView txtDeleteAccount = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
 
                 TextView iconLogOut = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-                iconLogOut.setText(getResources().getString(R.string.md_log_out));
+                iconLogOut.setText(getResources().getString(R.string.md_exit_app));
                 TextView iconDeleteAccount = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
                 iconDeleteAccount.setText(getResources().getString(R.string.md_delete_acc));
 

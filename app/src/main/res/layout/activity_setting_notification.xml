@@ -58,7 +58,7 @@
           android:textSize="@dimen/dp18"
           android:textStyle="normal"
           android:visibility="visible"
-          fontPath="fonts/IRANSansMobile.ttf"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
 
     </RelativeLayout>

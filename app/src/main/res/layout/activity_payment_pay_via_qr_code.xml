@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:ignore="MissingPrefix"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
 
     <LinearLayout
@@ -43,6 +46,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/pay_via_qr_code"
+            fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18"
             />

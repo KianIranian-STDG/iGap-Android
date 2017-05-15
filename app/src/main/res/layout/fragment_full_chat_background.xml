@@ -7,6 +7,7 @@
               android:orientation="vertical"
               android:elevation="999dp"
               android:id="@+id/stcbf_root"
+    tools:ignore="MissingPrefix"
     tools:context="net.iGap.fragments.FragmentFullChatBackground"
     >
 
@@ -32,7 +33,7 @@
                 android:text="@string/st_title_Background"
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/dp18"
-                android:textStyle="bold"
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
                 android:visibility="visible"/>
 
 
