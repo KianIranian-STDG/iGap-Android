@@ -14,8 +14,8 @@
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
       android:background="@color/green"
-      android:layoutDirection="ltr"
       android:orientation="horizontal"
+      android:layoutDirection="ltr"
       >
 
     <net.iGap.libs.rippleeffect.RippleView
@@ -89,7 +89,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_call_black_24dp"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         app:backgroundTint="@color/green"
         app:elevation="@dimen/dp6"
         />
