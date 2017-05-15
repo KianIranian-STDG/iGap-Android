@@ -211,4 +211,13 @@
   <style name="NotificationTitle" parent="android:TextAppearance.StatusBar.Title" />
 
 
+  <style name="DialogAnimationUp">
+    <item name="android:windowEnterAnimation">@anim/translate_enter_up</item>
+    <item name="android:windowExitAnimation">@anim/translate_exit_up</item>
+  </style>
+
+  <style name="DialogAnimationDown">
+    <item name="android:windowEnterAnimation">@anim/translate_enter_down</item>
+    <item name="android:windowExitAnimation">@anim/translate_exit_down</item>
+  </style>
 </resources>

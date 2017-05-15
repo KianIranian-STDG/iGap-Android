@@ -112,8 +112,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private int changesize = 0;
     ProgressBar progressBar;
 
-    private Realm mRealm;
-
     private boolean isChangeSelectType = false;
 
     private RecyclerView.OnScrollListener onScrollListener;
@@ -144,14 +142,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private int offset;
 
-    private Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-
-            mRealm = Realm.getDefaultInstance();
-        }
-
-        return mRealm;
-    }
 
     @Override
     protected void onResume() {
@@ -169,10 +159,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         if (mRealmList != null) {
             mRealmList.removeAllChangeListeners();
-        }
-
-        if (mRealm != null) {
-            mRealm.close();
         }
     }
 
@@ -416,7 +402,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                final RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                Realm realm = Realm.getDefaultInstance();
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                 if (realmRoom != null) {
                     ActivityChat.deleteSelectedMessages(roomId, adapter.SelectedList, realmRoom.getType());
@@ -450,7 +437,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                 adapter.resetSelected();
 
-
+                realm.close();
             }
         });
 
@@ -662,7 +649,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             mRealmList.removeAllChangeListeners();
         }
 
-        mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+        Realm realm = Realm.getDefaultInstance();
+        mRealmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                 equalTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.TEXT.toString()).
                 equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
                 findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
@@ -683,6 +671,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         isChangeSelectType = false;
 
+        realm.close();
+
     }
 
     //********************************************************************************************
@@ -693,7 +683,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             mRealmList.removeAllChangeListeners();
         }
 
-        mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+        Realm realm = Realm.getDefaultInstance();
+
+        mRealmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                 contains(RealmRoomMessageFields.MESSAGE_TYPE, type).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         setListener();
@@ -704,6 +696,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mListcount = mRealmList.size();
 
         ArrayList<StructShearedMedia> list = addTimeToList(mRealmList);
+
+        realm.close();
 
         return list;
     }

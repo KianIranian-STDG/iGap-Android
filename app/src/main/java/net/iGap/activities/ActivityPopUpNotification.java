@@ -70,7 +70,6 @@ import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmUserInfo;
 
 import static net.iGap.G.context;
 
@@ -288,7 +287,7 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
     private void sendMessage(final String message, final long mRoomId, ProtoGlobal.Room.Type chatType) {
 
         final Realm realm = Realm.getDefaultInstance();
-        final long senderId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        final long senderId = G.userId;
 
         final String identity = Long.toString(System.currentTimeMillis());
 

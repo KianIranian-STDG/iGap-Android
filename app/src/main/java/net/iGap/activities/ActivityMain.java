@@ -187,17 +187,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     boolean isThereAnyMoreItemToLoad = false;
 
     private RealmRecyclerView mRecyclerView;
-    private Realm mRealm;
     private RoomAdapter roomAdapter;
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mRealm != null) {
-            mRealm.close();
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -318,14 +310,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private Realm getRealm() {
-
-        if (mRealm == null) {
-            mRealm = Realm.getDefaultInstance();
-        }
-
-        return mRealm;
-    }
 
     @Override
     protected void onStart() {
@@ -379,7 +363,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //navigationView.setNavigationItemSelectedListener(this);
 
-        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
             String username = realmUserInfo.getUserInfo().getDisplayName();
             String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
@@ -397,6 +383,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             new RequestUserInfo().userInfo(realmUserInfo.getUserId());
             setImage(realmUserInfo.getUserId());
         }
+
+        realm.close();
+
 
         final ViewGroup navBackGround = (ViewGroup) findViewById(R.id.lm_layout_user_picture);
         navBackGround.setOnClickListener(new View.OnClickListener() {
@@ -1131,9 +1120,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(ActivityMain.this));
 
-        RealmResults<RealmRoom> results = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);
         mRecyclerView.setAdapter(roomAdapter);
+
+        realm.close();
 
         onScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -1239,12 +1232,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void muteNotification(final Long id, final boolean mute) {
 
-        getRealm().executeTransaction(new Realm.Transaction() {
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst().setMute(!mute);
             }
         });
+
+        realm.close();
     }
 
     private void clearHistory(Long id) {
@@ -1793,7 +1790,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
 
-                                RealmRegisteredInfo realmRegisteredInfo = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
+                                Realm realm = Realm.getDefaultInstance();
+
+                                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
                                 if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
 
                                     String _name = realmRegisteredInfo.getDisplayName();
@@ -1814,6 +1813,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         }
                                     }
                                 }
+
+                                realm.close();
                             }
 
                             if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {

@@ -710,6 +710,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
             showInitials();
             imgCircleImageView.setPadding(0, 0, 0, 0);
         }
+
+        realm.close();
     }
 
     private boolean avatarExist = false;
