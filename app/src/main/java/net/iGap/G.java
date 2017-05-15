@@ -36,6 +36,7 @@ import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.interfaces.IClientSearchUserName;
 import net.iGap.interfaces.ISignalingAccept;
 import net.iGap.interfaces.ISignalingCondidate;
+import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.ISignalingLeave;
 import net.iGap.interfaces.ISignalingOffer;
 import net.iGap.interfaces.ISignalingRinging;
@@ -353,6 +354,7 @@ public class G extends MultiDexApplication {
     public static ISignalingCondidate iSignalingCondidate;
     public static ISignalingLeave iSignalingLeave;
     public static ISignalingSesionHold iSignalingSesionHold;
+    public static ISignalingGetCallLog iSignalingGetCallLog;
 
     @Override
     public void onCreate() {

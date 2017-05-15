@@ -483,7 +483,6 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                 });
             }
         });
-
     }
 
     @Override public void onAvatarAddTimeOut() {

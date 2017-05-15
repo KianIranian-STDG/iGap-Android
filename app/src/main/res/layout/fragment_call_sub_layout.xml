@@ -85,17 +85,6 @@
               android:textStyle="bold"
               />
 
-          <TextView
-              android:id="@+id/fcsl_txt_type_call"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:singleLine="true"
-              android:text="     voice"
-              android:textColor="@color/gray_5c"
-              android:textSize="@dimen/dp15"
-              android:textStyle="bold"
-              />
-
 
         </LinearLayout>
 

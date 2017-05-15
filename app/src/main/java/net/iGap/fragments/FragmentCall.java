@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -10,35 +11,52 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
+import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
+import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmResults;
+import io.realm.RealmViewHolder;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoSignalingGetLog;
-import net.iGap.realm.RealmCallConfig;
-import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
-import net.iGap.request.RequestUserInfo;
+import net.iGap.realm.RealmCallLog;
+import net.iGap.realm.RealmCallLogFields;
+import net.iGap.request.RequestSignalingClearLog;
+import net.iGap.request.RequestSignalingGetLog;
 
 /**
  * Created by android3 on 4/18/2017.
  */
 
 public class FragmentCall extends Fragment {
+
+    private int mOffset = 0;
+    private int mLimit = 50;
+    private RecyclerView.OnScrollListener onScrollListener;
+    boolean isSendRequestForLoading = false;
+    boolean isThereAnyMoreItemToLoad = true;
+
+    ProgressBar progressBar;
+
+    private RealmRecyclerView mRecyclerView;
 
     public static FragmentCall newInstance() {
         return new FragmentCall();
@@ -54,6 +72,9 @@ public class FragmentCall extends Fragment {
 
         view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
 
+        progressBar = (ProgressBar) view.findViewById(R.id.fc_progress_bar_waiting);
+        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_call_ripple_txtBack);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
@@ -61,9 +82,82 @@ public class FragmentCall extends Fragment {
             }
         });
 
-        final RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(new CallAdapter(fillLogListCall()));
+        MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.fc_btn_menu);
+
+        txtMenu.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_call_log_menu).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        if (which == 0) {
+
+                            new RequestSignalingClearLog().signalingClearLog(G.userId);
+                        }
+                    }
+                }).show();
+
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.copyFrom(dialog.getWindow().getAttributes());
+                layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
+                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+                dialog.getWindow().setAttributes(layoutParams);
+            }
+        });
+
+        mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.fc_recycler_view_call);
+        mRecyclerView.setItemViewCacheSize(500);
+        mRecyclerView.setDrawingCacheEnabled(true);
+
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmResults<RealmCallLog> results = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.ID);
+        CallAdapter callAdapter = new CallAdapter(getActivity(), results);
+        mRecyclerView.setAdapter(callAdapter);
+
+        onScrollListener = new RecyclerView.OnScrollListener() {
+
+            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (isThereAnyMoreItemToLoad) {
+                    if (!isSendRequestForLoading) {
+
+                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+
+                        if (lastVisiblePosition + 10 >= mOffset) {
+                            isSendRequestForLoading = true;
+
+                            new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
+
+                            progressBar.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            }
+        };
+
+        mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
+
+        G.iSignalingGetCallLog = new ISignalingGetCallLog() {
+            @Override public void onGetList(int size) {
+
+                G.handler.post(new Runnable() {
+                    @Override public void run() {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+
+                if (size == 0) {
+                    isThereAnyMoreItemToLoad = false;
+                    mRecyclerView.getRecycleView().removeOnScrollListener(onScrollListener);
+                } else {
+                    isSendRequestForLoading = false;
+                    mOffset += size;
+                }
+            }
+        };
+
+        realm.close();
 
         FloatingActionButton fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
         fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
@@ -100,25 +194,6 @@ public class FragmentCall extends Fragment {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         activity.startActivity(intent);
-
-    }
-
-    private List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> fillLogListCall() {
-
-        List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> _list = null;
-
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
-        if (realmCallConfig != null) {
-            _list = realmCallConfig.getLogList();
-        }
-
-        if (_list == null) {
-            _list = new ArrayList<>();
-        }
-
-        return _list;
     }
 
     //*************************************************************************************************************
@@ -127,119 +202,106 @@ public class FragmentCall extends Fragment {
         call_made, call_received, call_missed, call_missed_outgoing
     }
 
-
     //***************************************** adapater call ***************************************************
 
-    public class CallAdapter extends RecyclerView.Adapter {
+    public class CallAdapter extends RealmBasedRecyclerViewAdapter<RealmCallLog, CallAdapter.ViewHolder> {
 
-        List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> callList;
-
-        public CallAdapter(List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> list) {
-            callList = list;
+        public CallAdapter(Context context, RealmResults<RealmCallLog> realmResults) {
+            super(context, realmResults, true, false, false, "");
         }
 
-        @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null);
-            CallHolder callHolder = new CallHolder(view);
-
-            return callHolder;
-        }
-
-        @Override public int getItemCount() {
-            return callList.size();
-        }
-
-        @Override public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-
-            final CallHolder _holder = (CallHolder) holder;
-
-
-            // set icon and icon color
-            switch (callList.get(position).getStatus()) {
-                case OUTGOING:
-                    _holder.icon.setText(R.string.md_call_made);
-                    _holder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    break;
-                case MISSED:
-                    _holder.icon.setText(R.string.md_call_missed);
-                    _holder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
-                    break;
-                case CANCELED:
-                    _holder.icon.setText(R.string.md_call_missed_outgoing);
-                    _holder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
-                    break;
-                case INCOMING:
-                    _holder.icon.setText(R.string.md_call_received);
-                    _holder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    break;
-            }
-
-            _holder.callType.setText(callList.get(position).getType().toString());
-            _holder.timeAndInfo.setText(callList.get(position).getDuration() + "  " + callList.get(position).getOfferTime());
-
-            Realm realm = Realm.getDefaultInstance();
-            RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, callList.get(position).getId()).findFirst();
-
-            if (registeredInfo != null) {
-
-                _holder.name.setText(registeredInfo.getDisplayName());
-
-                HelperAvatar.getAvatar(callList.get(position).getId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
-                    @Override public void onAvatarGet(final String avatarPath, long ownerId) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), _holder.image);
-                    }
-
-                    @Override public void onShowInitials(final String initials, final String color) {
-                        _holder.image.setImageBitmap(
-                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) _holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                    }
-                });
-            } else {
-
-                new RequestUserInfo().userInfo(callList.get(position).getId());
-            }
-
-            realm.close();
-
-
-        }
-
-        //**********************************
-
-        public class CallHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RealmViewHolder {
 
             protected CircleImageView image;
             protected TextView name;
             protected MaterialDesignTextView icon;
             protected TextView timeAndInfo;
             protected RippleView rippleCall;
-            protected TextView callType;
 
-            public CallHolder(View itemView) {
-                super(itemView);
+            public ViewHolder(View view) {
+                super(view);
 
                 image = (CircleImageView) itemView.findViewById(R.id.fcsl_imv_picture);
                 name = (TextView) itemView.findViewById(R.id.fcsl_txt_name);
                 icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_txt_icon);
                 timeAndInfo = (TextView) itemView.findViewById(R.id.fcsl_txt_time_info);
                 rippleCall = (RippleView) itemView.findViewById(R.id.fcsl_ripple_call);
-                callType = (TextView) itemView.findViewById(R.id.fcsl_txt_type_call);
-
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
 
-                        HelperPublicMethod.goToChatRoom(callList.get(getPosition()).getId(), null, null);
+                        HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getlogProto().getPeer().getId(), null, null);
                     }
                 });
 
                 rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                     @Override public void onComplete(RippleView rippleView) throws IOException {
-                        call(callList.get(getPosition()).getId(), getActivity());
+                        call(realmResults.get(getPosition()).getlogProto().getPeer().getId(), getActivity());
                     }
                 });
             }
+        }
+
+        @Override public CallAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup parent, int i) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null);
+            ViewHolder callHolder = new ViewHolder(view);
+
+            return callHolder;
+        }
+
+        @Override public void onBindRealmViewHolder(final CallAdapter.ViewHolder viewHolder, int i) {
+
+            ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = realmResults.get(i).getlogProto();
+
+            // set icon and icon color
+            switch (item.getStatus()) {
+                case OUTGOING:
+                    viewHolder.icon.setText(R.string.md_call_made);
+                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
+                    break;
+                case MISSED:
+                    viewHolder.icon.setText(R.string.md_call_missed);
+                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
+                    break;
+                case CANCELED:
+                    viewHolder.icon.setText(R.string.md_call_missed_outgoing);
+                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
+                    break;
+                case INCOMING:
+                    viewHolder.icon.setText(R.string.md_call_received);
+                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
+                    break;
+            }
+
+            switch (item.getType()) {
+
+                // TODO: 5/15/2017  set icon call or video
+
+                case SCREEN_SHARING:
+
+                    break;
+                case VIDEO_CALLING:
+
+                    break;
+
+                case VOICE_CALLING:
+
+                    break;
+            }
+
+            viewHolder.timeAndInfo.setText(item.getDuration() + "  " + item.getOfferTime());
+            viewHolder.name.setText(item.getPeer().getDisplayName());
+
+            HelperAvatar.getAvatar(item.getPeer().getId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+                @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
+                }
+
+                @Override public void onShowInitials(final String initials, final String color) {
+                    viewHolder.image.setImageBitmap(
+                        net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                }
+            });
         }
     }
 }

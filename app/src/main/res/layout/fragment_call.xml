@@ -14,6 +14,7 @@
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
       android:background="@color/green"
+      android:layoutDirection="ltr"
       android:orientation="horizontal"
       >
 
@@ -55,6 +56,17 @@
         />
 
 
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/fc_btn_menu"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/md_show_more_button"
+        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:textColor="@color/whit_background"
+        />
+
+
   </LinearLayout>
 
   <FrameLayout
@@ -62,11 +74,13 @@
       android:layout_height="match_parent"
       >
 
-    <android.support.v7.widget.RecyclerView
+
+    <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
         android:id="@+id/fc_recycler_view_call"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="@dimen/dp6"
+        app:rrvLayoutType="LinearLayout"
         />
 
 
@@ -79,6 +93,17 @@
         android:layout_gravity="bottom|right"
         app:backgroundTint="@color/green"
         app:elevation="@dimen/dp6"
+        />
+
+
+    <ProgressBar
+        android:id="@+id/fc_progress_bar_waiting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:indeterminate="true"
+        android:padding="@dimen/dp4"
+        android:visibility="gone"
         />
 
 

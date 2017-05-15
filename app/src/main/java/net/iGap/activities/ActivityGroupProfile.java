@@ -188,8 +188,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
 
-    @Override
-    protected void onStop() {
+    @Override protected void onStop() {
         super.onStop();
 
         if (mRoom != null) {
@@ -197,10 +196,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
     }
 
-
-
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
 
         super.onResume();
 
@@ -212,12 +208,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             if (changeListener == null) {
 
                 changeListener = new RealmChangeListener<RealmModel>() {
-                    @Override
-                    public void onChange(final RealmModel element) {
+                    @Override public void onChange(final RealmModel element) {
                         if (((RealmRoom) element).isValid() && !((RealmRoom) element).isDeleted()) {
                             runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                                @Override public void run() {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
 
                                     if (countText == null || countText.length() == 0) {
@@ -247,9 +241,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         realm.close();
     }
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_profile);
         Bundle extras = getIntent().getExtras();
@@ -304,16 +296,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         realm.close();
     }
 
-    @Override
-    protected void onPause() {
+    @Override protected void onPause() {
         if (ActivityChat.onComplete != null) {
             if (!txtMemberNumber.getText().toString().equals(participantsCountLabel)) {
                 //ActivityChat.onComplete.complete(true, txtMemberNumber.getText().toString(), "");
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                    @Override public void execute(Realm realm) {
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                         if (realmRoom != null && realmRoom.getGroupRoom() != null) {
                             realmRoom.getGroupRoom().setParticipantsCountLabel(txtMemberNumber.getText().toString());
@@ -334,8 +324,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void setMemberCount(final long roomId, final boolean plus) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null && realmRoom.getGroupRoom() != null) {
                     if (HelperString.isNumeric(realmRoom.getGroupRoom().getParticipantsCountLabel())) {
@@ -348,8 +337,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         }
                         realmRoom.getGroupRoom().setParticipantsCountLabel(memberCount + "");
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 txtMemberNumber.setText(memberCount + "");
                                 if (HelperCalander.isLanguagePersian) {
                                     txtMemberNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMemberNumber.getText().toString()));
@@ -365,8 +353,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private BroadcastReceiver reciverOnGroupChangeName = new BroadcastReceiver() {
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
+        @Override public void onReceive(Context context, Intent intent) {
 
             String name = intent.getExtras().getString("Name");
             String description = intent.getExtras().getString("Description");
@@ -382,8 +369,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         RippleView rippleBack = (RippleView) findViewById(R.id.agp_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -392,8 +378,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         RippleView rippleMenu = (RippleView) findViewById(R.id.agp_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
                 LinearLayout layoutDialog = new LinearLayout(ActivityGroupProfile.this);
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -525,15 +510,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             llGroupDescription.setVisibility(View.VISIBLE);
 
             llGroupName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
                     ChangeGroupName();
                 }
             });
 
             llGroupDescription.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
                     ChangeGroupDescription();
                 }
             });
@@ -551,8 +534,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         LinearLayout llSharedMedia = (LinearLayout) findViewById(R.id.agp_ll_sheared_media);
         llSharedMedia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 Intent intent = new Intent(ActivityGroupProfile.this, ActivityShearedMedia.class);
                 intent.putExtra("RoomID", roomId);
@@ -563,8 +545,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final TextView titleToolbar = (TextView) findViewById(R.id.agp_txt_titleToolbar);
         final ViewGroup viewGroup = (ViewGroup) findViewById(R.id.apg_parentLayoutCircleImage);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            @Override public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 if (verticalOffset < -5) {
 
@@ -604,8 +585,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             fab.setVisibility(View.VISIBLE);
 
             fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                @Override public void onClick(View view) {
 
                     startDialogSelectPicture(R.array.profile);
                 }
@@ -621,8 +601,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         TextView txtShowMember = (TextView) findViewById(R.id.agp_txt_show_member);
         txtShowMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
 
             }
@@ -630,16 +609,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         ViewGroup layoutAddMember = (ViewGroup) findViewById(R.id.agp_layout_add_member);
         layoutAddMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 addMemberToGroup();
             }
         });
 
         TextView txtSetAdmin = (TextView) findViewById(R.id.agp_txt_set_admin);
         txtSetAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
             }
@@ -647,16 +624,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         TextView txtAddModerator = (TextView) findViewById(R.id.agp_txt_add_modereator);
         txtAddModerator.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
             }
         });
 
         final ToggleButton toggleButton = (ToggleButton) findViewById(R.id.agp_toggle_member_can_add_member);
         toggleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (toggleButton.isChecked()) {
 
                 } else {
@@ -667,15 +642,18 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         TextView txtNotification = (TextView) findViewById(R.id.agp_txt_str_notification_and_sound);
         txtNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
                 bundle.putString("PAGE", "GROUP");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer_group_profile, fragmentNotification).commit();
+                getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(fragmentContainer_group_profile, fragmentNotification)
+                    .commit();
             }
         });
 
@@ -686,23 +664,26 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
 
         txtDeleteGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 groupLeft();
             }
         });
 
         RippleView rippleCircleImage = (RippleView) findViewById(R.id.agp_ripple_group_avatar);
         rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+            @Override public void onComplete(RippleView rippleView) {
 
                 Realm realm = Realm.getDefaultInstance();
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
                     FragmentShowAvatars.appBarLayout = fab;
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.group);
-                    ActivityGroupProfile.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, null).commit();
+                    ActivityGroupProfile.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer_group_profile, fragment, null)
+                        .commit();
                 }
                 realm.close();
             }
@@ -718,8 +699,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         setTextGroupLik();
 
         ltLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 isPopup = false;
 
@@ -736,8 +716,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
 
         FragmentShowAvatars.onComplete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override public void complete(boolean result, String messageOne, String MessageTow) {
 
                 long mAvatarId = 0;
                 if (messageOne != null && !messageOne.equals("")) {
@@ -745,22 +724,19 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 }
 
                 HelperAvatar.avatarDelete(roomId, mAvatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
-                    @Override
-                    public void latestAvatarPath(final String avatarPath) {
+                    @Override public void latestAvatarPath(final String avatarPath) {
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
                             }
                         });
                     }
 
-                    @Override
-                    public void showInitials(final String initials, final String color) {
+                    @Override public void showInitials(final String initials, final String color) {
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                imvGroupAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            @Override public void run() {
+                                imvGroupAvatar.setImageBitmap(
+                                    net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                             }
                         });
                     }
@@ -812,17 +788,21 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         layoutGroupLink.addView(inputGroupLink, layoutParams);
         layoutGroupLink.addView(txtLink, layoutParams);
 
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutGroupLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String copy;
-                        copy = txtGroupLink.getText().toString();
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                        clipboard.setPrimaryClip(clip);
-                    }
-                }).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link))
+            .positiveText(getResources().getString(R.string.array_Copy))
+            .customView(layoutGroupLink, true)
+            .widgetColor(getResources().getColor(R.color.toolbar_background))
+            .negativeText(getResources().getString(R.string.B_cancel))
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    String copy;
+                    copy = txtGroupLink.getText().toString();
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                    clipboard.setPrimaryClip(clip);
+                }
+            })
+            .build();
 
         dialog.show();
     }
@@ -858,27 +838,25 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         layoutRevoke.addView(inputRevoke, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link_hint_revoke))
-                .positiveText(getResources().getString(R.string.revoke))
-                .customView(layoutRevoke, true)
-                .widgetColor(getResources().getColor(R.color.toolbar_background))
-                .negativeText(getResources().getString(R.string.B_cancel))
-                .neutralText(R.string.array_Copy)
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String copy;
-                        copy = txtGroupLink.getText().toString();
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                        clipboard.setPrimaryClip(clip);
-                    }
-                })
-                .build();
+            .positiveText(getResources().getString(R.string.revoke))
+            .customView(layoutRevoke, true)
+            .widgetColor(getResources().getColor(R.color.toolbar_background))
+            .negativeText(getResources().getString(R.string.B_cancel))
+            .neutralText(R.string.array_Copy)
+            .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    String copy;
+                    copy = txtGroupLink.getText().toString();
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                    clipboard.setPrimaryClip(clip);
+                }
+            })
+            .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 new RequestGroupRevokeLink().groupRevokeLink(roomId);
                 dialog.dismiss();
             }
@@ -889,18 +867,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void convertToPrivate() {
 
         G.onGroupRemoveUsername = new OnGroupRemoveUsername() {
-            @Override
-            public void onGroupRemoveUsername(final long roomId) {
+            @Override public void onGroupRemoveUsername(final long roomId) {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         isPrivate = true;
                         setTextGroupLik();
                         Realm realm = Realm.getDefaultInstance();
 
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
+                            @Override public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                 realmRoom.getGroupRoom().setPrivate(true);
                             }
@@ -910,19 +885,22 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 });
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
 
             }
         };
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_private)).content(getString(R.string.group_text_convert_to_private)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_private))
+            .content(getString(R.string.group_text_convert_to_private))
+            .positiveText(R.string.B_ok)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                new RequestGroupRemoveUsername().groupRemoveUsername(roomId);
-            }
-        }).negativeText(R.string.B_cancel).show();
+                    new RequestGroupRemoveUsername().groupRemoveUsername(roomId);
+                }
+            })
+            .negativeText(R.string.B_cancel)
+            .show();
     }
 
     private void setTextGroupLik() {
@@ -937,14 +915,18 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     private void convertToPublic() {
-        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_public)).content(getString(R.string.group_text_convert_to_public)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_public))
+            .content(getString(R.string.group_text_convert_to_public))
+            .positiveText(R.string.B_ok)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                dialog.dismiss();
-                setUsername();
-            }
-        }).negativeText(R.string.B_cancel).show();
+                    dialog.dismiss();
+                    setUsername();
+                }
+            })
+            .negativeText(R.string.B_cancel)
+            .show();
     }
 
     private void setUsername() {
@@ -979,17 +961,20 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.st_username))
+            .positiveText(getResources().getString(R.string.save))
+            .customView(layoutUserName, true)
+            .widgetColor(getResources().getColor(R.color.toolbar_background))
+            .negativeText(getResources().getString(R.string.B_cancel))
+            .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
 
         G.onGroupCheckUsername = new OnGroupCheckUsername() {
-            @Override
-            public void onGroupCheckUsername(final ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status status) {
+            @Override public void onGroupCheckUsername(final ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status status) {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         if (status == ProtoGroupCheckUsername.GroupCheckUsernameResponse.Status.AVAILABLE) {
 
                             positive.setEnabled(true);
@@ -1012,24 +997,20 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 });
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
 
             }
         };
 
         edtUserName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+            @Override public void afterTextChanged(Editable editable) {
 
                 if (!editable.toString().contains("iGap.net/")) {
                     edtUserName.setText("iGap.net/");
@@ -1048,11 +1029,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
 
         G.onGroupUpdateUsername = new OnGroupUpdateUsername() {
-            @Override
-            public void onGroupUpdateUsername(final long roomId, final String username) {
+            @Override public void onGroupUpdateUsername(final long roomId, final String username) {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
 
                         isPrivate = false;
                         dialog.dismiss();
@@ -1062,8 +1041,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
+                            @Override public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                                 realmRoom.getGroupRoom().setUsername(edtUserName.getText().toString());
@@ -1075,14 +1053,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 });
             }
 
-            @Override
-            public void onError(final int majorCode, int minorCode, final int time) {
+            @Override public void onError(final int majorCode, int minorCode, final int time) {
 
                 switch (majorCode) {
                     case 368:
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 if (dialog.isShowing()) dialog.dismiss();
                                 dialogWaitTime(R.string.GROUP_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
                             }
@@ -1094,8 +1070,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         };
 
         positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 String userName = edtUserName.getText().toString().replace("iGap.net/", "");
                 new RequestGroupUpdateUsername().groupUpdateUsername(roomId, userName);
@@ -1103,8 +1078,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
 
         edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
+            @Override public void onFocusChange(View view, boolean b) {
                 if (b) {
                     viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                 } else {
@@ -1155,8 +1129,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void initRecycleView() {
 
         onMenuClick = new OnMenuClick() {
-            @Override
-            public void clicked(View view, StructContactInfo info) {
+            @Override public void clicked(View view, StructContactInfo info) {
                 new CreatePopUpMessage().show(view, info);
             }
         };
@@ -1184,8 +1157,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private String filePathAvatar;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
@@ -1216,8 +1188,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
             showProgressBar();
             HelperUploadFile.startUploadTaskAvatar(filePath, avatarId, new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
+                @Override public void OnProgress(int progress, FileUploadStructure struct) {
                     if (progress < 100) {
                         prgWait.setProgress(progress);
                     } else {
@@ -1225,8 +1196,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     }
                 }
 
-                @Override
-                public void OnError() {
+                @Override public void OnError() {
                     hideProgressBar();
                 }
             });
@@ -1237,8 +1207,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void startDialogSelectPicture(int r) {
 
         new MaterialDialog.Builder(this).title(R.string.choose_picture).negativeText(R.string.cansel).items(r).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+            @Override public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
                 if (which == 0) {
                     try {
@@ -1251,24 +1220,20 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                         try {
                             HelperPermision.getStoragePermision(ActivityGroupProfile.this, new OnGetPermission() {
-                                @Override
-                                public void Allow() throws IOException {
+                                @Override public void Allow() throws IOException {
                                     HelperPermision.getCameraPermission(ActivityGroupProfile.this, new OnGetPermission() {
-                                        @Override
-                                        public void Allow() {
+                                        @Override public void Allow() {
                                             dialog.dismiss();
                                             useCamera();
                                         }
 
-                                        @Override
-                                        public void deny() {
+                                        @Override public void deny() {
 
                                         }
                                     });
                                 }
 
-                                @Override
-                                public void deny() {
+                                @Override public void deny() {
 
                                 }
                             });
@@ -1348,8 +1313,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
 
         Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
-            @Override
-            public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
+            @Override public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
                 for (int i = 0; i < list.size(); i++) {
                     new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, startMessageId);
                 }
@@ -1360,13 +1324,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         bundle.putBoolean("DIALOG_SHOWING", true);
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
+        getSupportFragmentManager().beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+            .addToBackStack(null)
+            .replace(fragmentContainer_group_profile, fragment)
+            .commit();
 
         realm.close();
     }
 
-    @Override
-    public void onGroupRevokeLink(long roomId, final String inviteLink, final String inviteToken) {
+    @Override public void onGroupRevokeLink(long roomId, final String inviteLink, final String inviteToken) {
         hideProgressBar();
 
         Realm realm = Realm.getDefaultInstance();
@@ -1374,8 +1341,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
 
                 txtGroupLink.setText("" + inviteLink);
                 realmGroupRoom.setInvite_link(inviteLink);
@@ -1386,17 +1352,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         realm.close();
     }
 
-    @Override
-    public void onError(int majorCode, int minorCode) {
+    @Override public void onError(int majorCode, int minorCode) {
         hideProgressBar();
         G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    @Override public void onClick(View view) {
                         snack.dismiss();
                     }
                 });
@@ -1405,18 +1368,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
     }
 
-    @Override
-    public void onTimeOut() {
+    @Override public void onTimeOut() {
 
         hideProgressBar();
         G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    @Override public void onClick(View view) {
                         snack.dismiss();
                     }
                 });
@@ -1527,11 +1487,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         if (messageCount == 0) {
             startMessageId = 0;
         } else {
-            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            RealmResults<RealmRoomMessage> realmRoomMessages =
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
             if (messageCount >= realmRoomMessages.size()) {
                 // if count is bigger than exist messages get first message id that exist
-                RealmResults<RealmRoomMessage> realmRoomMessageRealmResults = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+                RealmResults<RealmRoomMessage> realmRoomMessageRealmResults =
+                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
                 for (final RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
 
                     if (realmRoomMessage != null) {
@@ -1551,8 +1513,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 final RealmList<RealmMember> members = new RealmList<>();
                 for (int i = 0; i < list.size(); i++) {
                     long peerId = list.get(i).peerId;
@@ -1621,24 +1582,26 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_name)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_name))
+            .positiveText(getResources().getString(R.string.save))
+            .customView(layoutUserName, true)
+            .widgetColor(getResources().getColor(R.color.toolbar_background))
+            .negativeText(getResources().getString(R.string.B_cancel))
+            .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
 
         final String finalUserName = txtGroupNameTitle.getText().toString();
         edtUserName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+            @Override public void afterTextChanged(Editable editable) {
                 if (!edtUserName.getText().toString().equals(finalUserName)) {
                     positive.setEnabled(true);
                 } else {
@@ -1648,27 +1611,22 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
 
         G.onGroupEdit = new OnGroupEdit() {
-            @Override
-            public void onGroupEdit(long roomId, String name, String description) {
+            @Override public void onGroupEdit(long roomId, String name, String description) {
                 hideProgressBar();
                 txtGroupNameTitle.setText(name);
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
 
             }
 
-            @Override
-            public void onTimeOut() {
+            @Override public void onTimeOut() {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+                            @Override public void onClick(View view) {
                                 snack.dismiss();
                             }
                         });
@@ -1679,8 +1637,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         };
 
         positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 new RequestGroupEdit().groupEdit(roomId, edtUserName.getText().toString(), txtGroupDescription.getText().toString());
                 dialog.dismiss();
@@ -1688,8 +1645,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         });
 
         edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
+            @Override public void onFocusChange(View view, boolean b) {
                 if (b) {
                     viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                 } else {
@@ -1701,54 +1657,56 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     private void ChangeGroupDescription() {
-        MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(R.string.group_description).positiveText(getString(R.string.save)).alwaysCallInputCallback().widgetColor(getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(R.string.group_description)
+            .positiveText(getString(R.string.save))
+            .alwaysCallInputCallback()
+            .widgetColor(getResources().getColor(R.color.toolbar_background))
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                G.onGroupEdit = new OnGroupEdit() {
-                    @Override
-                    public void onGroupEdit(final long roomId, final String name, final String descriptions) {
+                    G.onGroupEdit = new OnGroupEdit() {
+                        @Override public void onGroupEdit(final long roomId, final String name, final String descriptions) {
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
 
-                                description = descriptions;
-                                txtGroupDescription.setText(descriptions);
-                            }
-                        });
-                    }
+                                    description = descriptions;
+                                    txtGroupDescription.setText(descriptions);
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onError(int majorCode, int minorCode) {
+                        @Override public void onError(int majorCode, int minorCode) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onTimeOut() {
+                        @Override public void onTimeOut() {
 
-                    }
-                };
+                        }
+                    };
 
-                new RequestGroupEdit().groupEdit(roomId, txtGroupName.getText().toString(), tmp);
-            }
-        }).negativeText(getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(getString(R.string.please_enter_group_description), txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
-            @Override
-            public void onInput(MaterialDialog dialog, CharSequence input) {
-                // Do something
-
-                View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                tmp = input.toString();
-                if (!input.toString().equals(txtGroupDescription.getText().toString())) {
-
-                    positive.setClickable(true);
-                    positive.setAlpha(1.0f);
-                } else {
-                    positive.setClickable(false);
-                    positive.setAlpha(0.5f);
+                    new RequestGroupEdit().groupEdit(roomId, txtGroupName.getText().toString(), tmp);
                 }
-            }
-        }).show();
+            })
+            .negativeText(getString(R.string.cancel))
+            .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT)
+            .input(getString(R.string.please_enter_group_description), txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
+                @Override public void onInput(MaterialDialog dialog, CharSequence input) {
+                    // Do something
+
+                    View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                    tmp = input.toString();
+                    if (!input.toString().equals(txtGroupDescription.getText().toString())) {
+
+                        positive.setClickable(true);
+                        positive.setAlpha(1.0f);
+                    } else {
+                        positive.setClickable(false);
+                        positive.setAlpha(0.5f);
+                }
+                }
+            })
+            .show();
     }
 
     private void groupLeft() {
@@ -1761,16 +1719,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
 
         new MaterialDialog.Builder(ActivityGroupProfile.this).content(text).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 G.onGroupLeft = new OnGroupLeft() {
-                    @Override
-                    public void onGroupLeft(final long roomId, long memberId) {
+                    @Override public void onGroupLeft(final long roomId, long memberId) {
 
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 ActivityGroupProfile.this.finish();
                                 if (ActivityChat.activityChat != null) {
                                     ActivityChat.activityChat.finish();
@@ -1781,23 +1736,19 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         });
                     }
 
-                    @Override
-                    public void onError(int majorCode, int minorCode) {
+                    @Override public void onError(int majorCode, int minorCode) {
 
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 prgWait.setVisibility(View.GONE);
                             }
                         });
                     }
 
-                    @Override
-                    public void onTimeOut() {
+                    @Override public void onTimeOut() {
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 prgWait.setVisibility(View.GONE);
                             }
@@ -1806,11 +1757,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 };
 
                 G.onGroupDelete = new OnGroupDelete() {
-                    @Override
-                    public void onGroupDelete(final long roomId) {
+                    @Override public void onGroupDelete(final long roomId) {
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 ActivityGroupProfile.this.finish();
                                 if (ActivityChat.activityChat != null) {
                                     ActivityChat.activityChat.finish();
@@ -1822,23 +1771,19 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         });
                     }
 
-                    @Override
-                    public void Error(int majorCode, int minorCode) {
+                    @Override public void Error(int majorCode, int minorCode) {
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 prgWait.setVisibility(View.GONE);
                             }
                         });
 
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
                                 snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
+                                    @Override public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });
@@ -1847,11 +1792,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         });
                     }
 
-                    @Override
-                    public void onTimeOut() {
+                    @Override public void onTimeOut() {
                         runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            @Override public void run() {
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 prgWait.setVisibility(View.GONE);
                             }
@@ -1875,13 +1818,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
      */
     public void kickAdmin(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member)
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                new RequestGroupKickAdmin().groupKickAdmin(roomId, memberID);
-            }
-        }).show();
+                    new RequestGroupKickAdmin().groupKickAdmin(roomId, memberID);
+                }
+            })
+            .show();
     }
 
     /**
@@ -1889,18 +1835,20 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
      */
     public void kickMember(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                new RequestGroupKickMember().groupKickMember(roomId, memberID);
-            }
-        }).show();
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_kick_this_member)
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    new RequestGroupKickMember().groupKickMember(roomId, memberID);
+                }
+            })
+            .show();
     }
 
     private void onGroupAddMemberCallback() {
         G.onGroupAddMember = new OnGroupAddMember() {
-            @Override
-            public void onGroupAddMember(final Long roomIdUser, final Long UserId) {
+            @Override public void onGroupAddMember(final Long roomIdUser, final Long UserId) {
 
                 setMemberCount(roomIdUser, true);
 
@@ -1916,8 +1864,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 realm.close();
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
 
             }
         };
@@ -1925,19 +1872,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void onGroupKickMemberCallback() {
         G.onGroupKickMember = new OnGroupKickMember() {
-            @Override
-            public void onGroupKickMember(final long roomId, final long memberId) {
+            @Override public void onGroupKickMember(final long roomId, final long memberId) {
                 Log.i("WWW", "Kick Member memberId : " + memberId);
                 setMemberCount(roomId, false);
             }
 
-            @Override
-            public void onError(int majorCode, int minorCode) {
+            @Override public void onError(int majorCode, int minorCode) {
 
             }
 
-            @Override
-            public void onTimeOut() {
+            @Override public void onTimeOut() {
 
             }
         };
@@ -1945,39 +1889,43 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     public void kickModerator(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                new RequestGroupKickModerator().groupKickModerator(roomId, memberID);
-            }
-        }).show();
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member)
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    new RequestGroupKickModerator().groupKickModerator(roomId, memberID);
+                }
+            })
+            .show();
     }
 
     private void showListForCustomRole(String SelectedRole) {
         FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), G.userId, SelectedRole, isNeedgetContactlist);
-        getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, "Show_member").commit();
+        getSupportFragmentManager().beginTransaction()
+            .addToBackStack("null")
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+            .replace(R.id.fragmentContainer_group_profile, fragment, "Show_member")
+            .commit();
 
         isNeedgetContactlist = false;
     }
 
     private void showAvatar() {
         HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
-            @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
+            @Override public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
                     }
                 });
             }
 
-            @Override
-            public void onShowInitials(final String initials, final String color) {
+            @Override public void onShowInitials(final String initials, final String color) {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        imvGroupAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    @Override public void run() {
+                        imvGroupAvatar.setImageBitmap(
+                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
             }
@@ -1986,8 +1934,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     //***Add Avatar
 
-    @Override
-    public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
+    @Override public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
         hideProgressBar();
         /**
          * if another account do this action we haven't avatar source and have
@@ -1997,11 +1944,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             showAvatar();
         } else {
             HelperAvatar.avatarAdd(roomId, filePathAvatar, avatar, new OnAvatarAdd() {
-                @Override
-                public void onAvatarAdd(final String avatarPath) {
+                @Override public void onAvatarAdd(final String avatarPath) {
                     runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                        @Override public void run() {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
                         }
                     });
@@ -2011,49 +1956,42 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
     }
 
-    @Override
-    public void onAvatarAddError() {
+    @Override public void onAvatarAddError() {
         hideProgressBar();
     }
 
     //***Delete Avatar
 
-    @Override
-    public void onDeleteAvatar(long roomId, long avatarId) {
+    @Override public void onDeleteAvatar(long roomId, long avatarId) {
         hideProgressBar();
         HelperAvatar.avatarDelete(roomId, avatarId, HelperAvatar.AvatarType.ROOM, new OnAvatarDelete() {
-            @Override
-            public void latestAvatarPath(final String avatarPath) {
+            @Override public void latestAvatarPath(final String avatarPath) {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    @Override public void run() {
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvGroupAvatar);
                     }
                 });
             }
 
-            @Override
-            public void showInitials(final String initials, final String color) {
+            @Override public void showInitials(final String initials, final String color) {
                 runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        imvGroupAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    @Override public void run() {
+                        imvGroupAvatar.setImageBitmap(
+                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
             }
         });
     }
 
-    @Override
-    public void onDeleteAvatarError(int majorCode, int minorCode) {
+    @Override public void onDeleteAvatarError(int majorCode, int minorCode) {
 
     }
     //***Show And Hide Progress
 
     private void showProgressBar() {
         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 if (prgWait != null) {
                     prgWait.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -2064,8 +2002,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void hideProgressBar() {
         runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 prgWait.setVisibility(View.GONE);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
@@ -2074,27 +2011,30 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                dialog.dismiss();
-            }
-        }).show();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(title)
+            .customView(R.layout.dialog_remind_time, wrapInScrollView)
+            .positiveText(R.string.B_ok)
+            .autoDismiss(false)
+            .canceledOnTouchOutside(false)
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    dialog.dismiss();
+                }
+            })
+            .show();
 
         View v = dialog.getCustomView();
 
         final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
+            @Override public void onTick(long millisUntilFinished) {
                 int seconds = (int) ((millisUntilFinished) / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
                 remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
             }
 
-            @Override
-            public void onFinish() {
+            @Override public void onFinish() {
                 remindTime.setText("00:00");
             }
         };

@@ -6696,8 +6696,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         if (!isWaitingForHistoryUp && !isWaitingForHistoryDown && mAdapter.getItemCount() == 0) {
                             runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                                @Override public void run() {
                                     txtEmptyMessages.setVisibility(View.VISIBLE);
                                 }
                             });

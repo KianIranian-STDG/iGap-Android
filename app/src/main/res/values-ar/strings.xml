@@ -831,5 +831,6 @@
   <string name="show_sender_name_in_group">Show sender name in group</string>
   <string name="calls">Calls</string>
   <string name="igap_call">iGap Call</string>
+  <string name="clean_log">Clean logs</string>
 
 </resources>

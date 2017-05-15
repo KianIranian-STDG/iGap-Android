@@ -11,7 +11,9 @@
 package net.iGap.response;
 
 import java.util.List;
+import net.iGap.G;
 import net.iGap.proto.ProtoSignalingGetLog;
+import net.iGap.realm.RealmCallLog;
 
 public class SignalingGetLogResponse extends MessageHandler {
 
@@ -32,20 +34,23 @@ public class SignalingGetLogResponse extends MessageHandler {
         super.handler();
 
         ProtoSignalingGetLog.SignalingGetLogResponse.Builder builder = (ProtoSignalingGetLog.SignalingGetLogResponse.Builder) message;
-
         List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> list = builder.getSignalingLogList();
 
-        for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item : list) {
+        RealmCallLog.addLogList(list);
 
-            item.getId();
-            item.getType();
-            item.getStatus();
-            item.getPeer();
-            item.getOfferTime();
-            item.getDuration();
-
-            // TODO: 5/8/2017  nejati  make callLog in dp and add this item on it
+        if (G.iSignalingGetCallLog != null) {
+            G.iSignalingGetCallLog.onGetList(list.size());
         }
+
+        //for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item : list) {
+        //
+        //    item.getId();
+        //    item.getType();
+        //    item.getStatus();
+        //    item.getPeer();
+        //    item.getOfferTime();
+        //    item.getDuration();
+        //}
 
 
     }
@@ -58,6 +63,12 @@ public class SignalingGetLogResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+
+        if (G.iSignalingGetCallLog != null) {
+            G.iSignalingGetCallLog.onGetList(0);
+        }
+
+
     }
 }
 

@@ -64,13 +64,13 @@
     <string name="md_videocam">\ue04b</string>
     <string name="md_library_music">\ue030</string>
     <string name="md_folder">\ue2c7</string>
-    <string name="md_edit">\ue3c9</string>
-    <string name="md_convert_to_public">\ue89e</string>
-    <string name="md_convert_to_private">\ue0b5</string>
-    <string name="md_unblock">\ue8e8</string>
-    <string name="md_block">\ue14b</string>
-    <string name="md_log_out">\ue890</string>
-    <string name="md_clean_up">\ue028</string>
+  <string name="md_edit">\ue3c9</string>
+  <string name="md_convert_to_public">\ue89e</string>
+  <string name="md_convert_to_private">\ue0b5</string>
+  <string name="md_unblock">\ue8e8</string>
+  <string name="md_block">\ue14b</string>
+  <string name="md_log_out">\ue890</string>
+  <string name="md_clean_up">\ue028</string>
   <string name="md_phone">\ue0cd</string>
 
   <string name="md_call_made">\ue0b2</string>
