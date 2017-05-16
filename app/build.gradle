@@ -113,5 +113,5 @@ dependencies {
   }
 
   // compile 'io.pristine:libjingle:11139@aar'
-  compile 'io.pristine:libjingle:8871@aar'
+  //compile 'io.pristine:libjingle:8871@aar'
 }
