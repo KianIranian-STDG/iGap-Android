@@ -169,12 +169,13 @@
           <TextView
               android:id="@+id/cs_txt_contact_time"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:maxLines="1"
               android:singleLine="true"
               android:text="time"
               android:textColor="@color/gray"
               android:textSize="@dimen/dp12"
+              android:gravity="center"
               />
 
 
@@ -183,7 +184,7 @@
             android:id="@+id/cs_txt_unread_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="end|center"
             android:layout_marginTop="@dimen/dp4"
             android:background="@drawable/oval_red"
             android:gravity="center"
