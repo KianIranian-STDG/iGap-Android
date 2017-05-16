@@ -3085,14 +3085,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         }
         rootReplay.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 dialog.dismiss();
                 replay(message);
             }
         });
         rootCopy.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 dialog.dismiss();
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 String _text = message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText;
@@ -3106,13 +3108,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
         rootShare.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 dialog.dismiss();
                 shearedDataToOtherProgram(message);
             }
         });
         rootForward.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 dialog.dismiss();
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null) {
@@ -3122,9 +3126,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
         rootDelete.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         dialog.dismiss();
                         // remove deleted message from adapter
                         mAdapter.removeMessage(parseLong(message.messageID));
@@ -3146,9 +3152,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 final Realm realmCondition = Realm.getDefaultInstance();
                 final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, message.roomId).findFirstAsync();
                 realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-                    @Override public void onChange(final RealmClientCondition element) {
+                    @Override
+                    public void onChange(final RealmClientCondition element) {
                         realmCondition.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 if (element != null) {
                                     if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
                                         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
@@ -3177,7 +3185,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
         rootEdit.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 dialog.dismiss();
                 // edit message
                 // put message text to EditText
@@ -3191,19 +3200,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
         rootSaveToDownload.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 dialog.dismiss();
                 if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
-                    String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath
-                        : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+                    String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
                     HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
                 } else if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
-                    String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath
-                        : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+                    String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
                     HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
                 } else if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
-                    String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath
-                        : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+                    String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
                     if (message.messageType.toString().contains("VIDEO")) {
                         HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
                         //  HelperSaveFile.saveVideoToGallary(_dPath, true);
@@ -3983,7 +3990,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(final Realm realm) {
+            @Override
+            public void execute(final Realm realm) {
                 if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, chatId).findFirst() == null) {
                     RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
                     realmOfflineDelete.setOfflineDelete(chatId);
@@ -6694,7 +6702,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         if (!isWaitingForHistoryUp && !isWaitingForHistoryDown && mAdapter.getItemCount() == 0) {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     txtEmptyMessages.setVisibility(View.VISIBLE);
                                 }
                             });
