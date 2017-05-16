@@ -6653,6 +6653,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, realm);
 
 
+                    if (realmRoomMessages.size() > 0) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                txtEmptyMessages.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+
                     /**
                      * when reached to gap and not jumped over local, set gapMessageIdUp = 0; do this action
                      * means that gap not exist (need this value for future get message) set topMore/bottomMore
