@@ -229,6 +229,7 @@ public class G extends MultiDexApplication {
     public static int ivSize;
     public static int userTextSize = 0;
     public static int COPY_BUFFER_SIZE = 1024;
+    public static boolean isCalculatKeepMedia = true;
 
     public static long currentTime;
     public static long userId;

@@ -1604,7 +1604,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
+                            editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
                             editor.apply();
                             txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
                         }
@@ -1613,7 +1613,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
+                            editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
                             editor.apply();
                             txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
                         }

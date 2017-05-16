@@ -128,6 +128,8 @@ public class SHP_SETTING {
 
     public static final String KEY_GET_CONTACT = "KEY_GET_CONTACT";
     public static final String KEY_GET_CONTACT_IN_FRAGMENT = "KEY_GET_CONTACT_IN_FRAGMENT";
+
+    public static final String KEY_KEEP_MEDIA_TIME = "KEY_KEEP_MEDIA_TIME";
 }
 
 

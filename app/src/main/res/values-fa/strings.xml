@@ -192,7 +192,7 @@
   <string name="st_messagePreview">"پیش نمایش پیام"</string>
   <string name="st_led_color">"رنگ چراغ اِل ای دی"</string>
   <string name="st_vibrate">"ویبره"</string>
-  <string name="st_popupNotification">"اعلانات فرعی"</string>
+  <string name="st_popupNotification">"پنجره اعلان پیام"</string>
   <string name="st_sound">"صدا"</string>
   <string name="st_title_groupNotification">"اعلانات گروهی"</string>
   <string name="st_title_in_app_notification">"اعلانات درون برنامه‌ای"</string>
