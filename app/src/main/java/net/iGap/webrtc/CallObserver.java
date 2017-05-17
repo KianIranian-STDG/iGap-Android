@@ -20,6 +20,7 @@
 package net.iGap.webrtc;
 
 import android.util.Log;
+import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.interfaces.ISignalingAccept;
 import net.iGap.interfaces.ISignalingCandidate;
@@ -69,6 +70,12 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
 
                     @Override
                     public void onSetSuccess() {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(G.context, "You Have A Call ... ", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         Log.i("WWW", "onOffer onSetSuccess");
                     }
 
@@ -107,6 +114,12 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
 
                     @Override
                     public void onSetSuccess() {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(G.context, "Callee Accepted You ! ", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         Log.i("WWW", "onAccept onSetSuccess");
                     }
 
@@ -137,15 +150,16 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
             @Override
             public void run() {
                 Log.i("WWW_Candidate", "onCandidate server : " + iceCandidate);
-                String[] identityParams = iceCandidate.split(":");
-                String sdpMid = identityParams[0];
-                int sdpMLineIndex = Integer.parseInt(identityParams[1]);
-                String sdp1 = identityParams[2];
-                String sdp2 = identityParams[3];
-                Log.i("WWW_Candidate", "onCandidate sdpMid : " + sdpMid);
-                Log.i("WWW_Candidate", "onCandidate sdpMLineIndex : " + sdpMLineIndex);
-                Log.i("WWW_Candidate", "onCandidate sdp : " + sdp1 + ":" + sdp2);
-                new WebRTC().peerConnectionInstance().addIceCandidate(new IceCandidate(sdpMid, sdpMLineIndex, sdp1 + ":" + sdp2));
+                //String[] identityParams = iceCandidate.split(":");
+                //String sdpMid = identityParams[0];
+                //int sdpMLineIndex = Integer.parseInt(identityParams[1]);
+                //String sdp1 = identityParams[2];
+                //String sdp2 = identityParams[3];
+                //Log.i("WWW_Candidate", "onCandidate sdpMid : " + sdpMid);
+                //Log.i("WWW_Candidate", "onCandidate sdpMLineIndex : " + sdpMLineIndex);
+                //Log.i("WWW_Candidate", "onCandidate sdp : " + sdp1 + ":" + sdp2);
+                //new WebRTC().peerConnectionInstance().addIceCandidate(new IceCandidate(sdpMid, sdpMLineIndex, sdp1 + ":" + sdp2));
+                new WebRTC().peerConnectionInstance().addIceCandidate(new IceCandidate("", 0, iceCandidate));
             }
         });
     }
@@ -157,8 +171,13 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
     }
 
     @Override
-    public void onLeave(ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
-
+    public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(G.context, type.toString() + " ... ", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

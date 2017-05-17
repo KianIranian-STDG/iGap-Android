@@ -13,12 +13,12 @@ package net.iGap.webrtc;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,13 +43,11 @@ import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
-import org.webrtc.RendererCommon;
 import org.webrtc.RtpReceiver;
 import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 import org.webrtc.VideoCapturer;
 import org.webrtc.VideoRenderer;
-import org.webrtc.VideoRendererGui;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
 
@@ -77,7 +75,7 @@ public class WebRTC extends ActivityEnhanced implements PeerConnection.Observer,
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createOffer();
+                createOffer(0);
             }
         });
         btnAnswer.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +102,8 @@ public class WebRTC extends ActivityEnhanced implements PeerConnection.Observer,
         //addVideoTrack(mediaStream);
 
         peerConnectionInstance().addStream(mediaStream);
-        //setAudioEnabled(true);
-        //setVideoEnabled(true);
+
+        Toast.makeText(G.context, "WebRtc Connected!", Toast.LENGTH_SHORT).show();
     }
 
     private void addAudioTrack(MediaStream mediaStream) {
@@ -116,56 +114,56 @@ public class WebRTC extends ActivityEnhanced implements PeerConnection.Observer,
     }
 
     private void addVideoTrack(MediaStream mediaStream) {
-        /**
-         * video
-         */
-        videoCapturer = createVideoCapturer(this);
-        if (videoCapturer != null) {
-            this.videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer);
-            this.videoTrack = peerConnectionFactoryInstance().createVideoTrack("ARDAMSv0", videoSource);
-
-            /**
-             * ******************************** VideoRenderer ********************************
-             */
-            try {
-                /**
-                 * To create our VideoRenderer, we can use the
-                 * included VideoRendererGui for simplicity
-                 * First we need to set the GLSurfaceView that it should render to
-                 */
-                GLSurfaceView videoView = (GLSurfaceView) findViewById(R.id.surface_view_web_rtc);
-
-                /**
-                 * Then we set that view, and pass a Runnable
-                 * to run once the surface is ready
-                 */
-                VideoRendererGui.setView(videoView, new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.i("WWW", "setView");
-                    }
-                });
-
-                /**
-                 * Now that VideoRendererGui is ready, we can get our VideoRenderer
-                 */
-                VideoRenderer renderer = VideoRendererGui.createGui(0, 0, 100, 100, RendererCommon.ScalingType.SCALE_ASPECT_FIT, true);
-                /**
-                 * And finally, with our VideoRenderer ready, we
-                 * can add our renderer to the VideoTrack.
-                 */
-                //localVideoTrack.addRenderer(renderer);
-                this.videoTrack.addRenderer(new VideoRenderer(this));
-                this.videoTrack.addRenderer(renderer);
-                this.videoTrack.setEnabled(true);
-                mediaStream.addTrack(videoTrack);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            this.videoSource = null;
-            this.videoTrack = null;
-        }
+        ///**
+        // * video
+        // */
+        //videoCapturer = createVideoCapturer(this);
+        //if (videoCapturer != null) {
+        //    this.videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer);
+        //    this.videoTrack = peerConnectionFactoryInstance().createVideoTrack("ARDAMSv0", videoSource);
+        //
+        //    /**
+        //     * ******************************** VideoRenderer ********************************
+        //     */
+        //    try {
+        //        /**
+        //         * To create our VideoRenderer, we can use the
+        //         * included VideoRendererGui for simplicity
+        //         * First we need to set the GLSurfaceView that it should render to
+        //         */
+        //        GLSurfaceView videoView = (GLSurfaceView) findViewById(R.id.surface_view_web_rtc);
+        //
+        //        /**
+        //         * Then we set that view, and pass a Runnable
+        //         * to run once the surface is ready
+        //         */
+        //        VideoRendererGui.setView(videoView, new Runnable() {
+        //            @Override
+        //            public void run() {
+        //                Log.i("WWW", "setView");
+        //            }
+        //        });
+        //
+        //        /**
+        //         * Now that VideoRendererGui is ready, we can get our VideoRenderer
+        //         */
+        //        VideoRenderer renderer = VideoRendererGui.createGui(0, 0, 100, 100, RendererCommon.ScalingType.SCALE_ASPECT_FIT, true);
+        //        /**
+        //         * And finally, with our VideoRenderer ready, we
+        //         * can add our renderer to the VideoTrack.
+        //         */
+        //        //localVideoTrack.addRenderer(renderer);
+        //        this.videoTrack.addRenderer(new VideoRenderer(this));
+        //        this.videoTrack.addRenderer(renderer);
+        //        this.videoTrack.setEnabled(true);
+        //        mediaStream.addTrack(videoTrack);
+        //    } catch (Exception e) {
+        //        e.printStackTrace();
+        //    }
+        //} else {
+        //    this.videoSource = null;
+        //    this.videoTrack = null;
+        //}
     }
 
 
@@ -204,7 +202,7 @@ public class WebRTC extends ActivityEnhanced implements PeerConnection.Observer,
         return peerConnection;
     }
 
-    public void createOffer() {
+    public void createOffer(long userIdCallee) {
         peerConnectionInstance().createOffer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
@@ -214,6 +212,12 @@ public class WebRTC extends ActivityEnhanced implements PeerConnection.Observer,
                 if (G.userId == 449) {
                     userIdCallee = 510; // Lg Big
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(G.context, "Calling ... ", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 new RequestSignalingOffer().signalingOffer(userIdCallee, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING, sessionDescription.description);
             }
 
@@ -235,11 +239,10 @@ public class WebRTC extends ActivityEnhanced implements PeerConnection.Observer,
     }
 
     public void createAnswer() {
-        Log.i("WWW", "createAnswer 1");
+
         peerConnectionInstance().createAnswer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
-                Log.i("WWW", "createAnswer 2");
                 setLocalDescription(SessionDescription.Type.ANSWER, sessionDescription.description);
                 Log.i("WWW", "onCreateSuccess sessionDescription : " + sessionDescription);
                 Log.i("WWW", "onCreateSuccess sessionDescription.description : " + sessionDescription.description);
@@ -470,7 +473,23 @@ public class WebRTC extends ActivityEnhanced implements PeerConnection.Observer,
     }
 
     @Override
-    public void onIceConnectionChange(PeerConnection.IceConnectionState iceConnectionState) {
+    public void onIceConnectionChange(final PeerConnection.IceConnectionState iceConnectionState) {
+
+        if (iceConnectionState == PeerConnection.IceConnectionState.CONNECTED) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(G.context, "Call is active !!! ", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(G.context, iceConnectionState.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
         Log.i("WWW", "onIceConnectionChange : " + iceConnectionState);
     }
 
@@ -491,7 +510,7 @@ public class WebRTC extends ActivityEnhanced implements PeerConnection.Observer,
         Log.i("WWW", "WebRtc onIceCandidate.sdp : " + iceCandidate.sdp);
         Log.i("WWW", "WebRtc onIceCandidate.sdpMid : " + iceCandidate.sdpMid);
         Log.i("WWW", "WebRtc onIceCandidate.sdpMLineIndex : " + iceCandidate.sdpMLineIndex);
-        new RequestSignalingCandidate().signalingCandidate(iceCandidate.toString());
+        new RequestSignalingCandidate().signalingCandidate(iceCandidate.sdp);
 
     }
 

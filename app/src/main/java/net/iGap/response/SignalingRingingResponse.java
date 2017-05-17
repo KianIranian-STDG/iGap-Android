@@ -10,7 +10,8 @@
 
 package net.iGap.response;
 
-import android.util.Log;
+import android.widget.Toast;
+import net.iGap.G;
 import net.iGap.proto.ProtoSignalingRinging;
 
 public class SignalingRingingResponse extends MessageHandler {
@@ -33,7 +34,12 @@ public class SignalingRingingResponse extends MessageHandler {
 
         ProtoSignalingRinging.SignalingRingingResponse.Builder builder = (ProtoSignalingRinging.SignalingRingingResponse.Builder) message;
         if (builder.getResponse().getId().isEmpty()) {
-            Log.i("WWW", "SignalingRingingResponse Now Will Be Show Ringing In View");
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(G.context, "Ringing ... ", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
     }
