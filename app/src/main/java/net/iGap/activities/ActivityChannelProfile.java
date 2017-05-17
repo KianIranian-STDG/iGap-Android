@@ -93,6 +93,7 @@ import net.iGap.interfaces.OnMenuClick;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
@@ -295,6 +296,8 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);
         txtChannelNameInfo = (TextView) findViewById(R.id.txt_channel_name_info);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting);
+        AppUtils.setProgresColler(prgWait);
+
         LinearLayout lytSharedMedia = (LinearLayout) findViewById(R.id.lyt_shared_media);
         LinearLayout lytChannelName = (LinearLayout) findViewById(R.id.lyt_channel_name);
         LinearLayout lytChannelDescription = (LinearLayout) findViewById(R.id.lyt_description);

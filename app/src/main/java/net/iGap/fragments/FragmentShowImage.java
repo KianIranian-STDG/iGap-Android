@@ -47,6 +47,7 @@ import net.iGap.helper.HelperSaveFile;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TouchImageView;
@@ -402,7 +403,10 @@ public class FragmentShowImage extends Fragment {
             final TextureView mTextureView = (TextureView) layout.findViewById(R.id.textureView);
             final ImageView imgPlay = (ImageView) layout.findViewById(R.id.imgPlay);
             final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
+
             final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
+            AppUtils.setProgresColor(progress.progressBar);
+
 
             final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) layout.findViewById(R.id.ch_progress_loadingContent);
             contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);

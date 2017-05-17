@@ -96,7 +96,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
         setContentView(R.layout.activity_main);
 
         progressBar = (ProgressBar) findViewById(R.id.ac_progress_bar_waiting);
-        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        AppUtils.setProgresColler(progressBar);
 
         mForwardMessages = getIntent().getExtras().getParcelableArrayList(ARG_FORWARD_MESSAGE);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);

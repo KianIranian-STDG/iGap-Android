@@ -64,6 +64,7 @@ import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnGroupCreate;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.FileUploadStructure;
@@ -261,7 +262,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         G.onChannelAvatarAdd = this;
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.ng_prgWaiting);
-        prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        AppUtils.setProgresColler(prgWaiting);
 
         view.findViewById(R.id.ng_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
         view.findViewById(R.id.ang_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));

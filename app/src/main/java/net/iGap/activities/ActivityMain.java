@@ -208,9 +208,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mRealm = Realm.getDefaultInstance();
 
         progressBar = (ProgressBar) findViewById(R.id.ac_progress_bar_waiting);
-        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        AppUtils.setProgresColler(progressBar);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+
         G application = (G) getApplication();
         Tracker mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RoomList");
@@ -1225,7 +1226,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
         });
-        swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
+
+        //   swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
+
+        swipeRefreshLayout.setColorSchemeColors(Color.parseColor(G.progressColor));
 
         mRecyclerView.getRecycleView().addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

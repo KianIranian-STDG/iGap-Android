@@ -45,6 +45,7 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.LastSeenTimeUtil;
@@ -117,7 +118,8 @@ public class RegisteredContactsFragment extends Fragment {
         //set interface for get callback here
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
-        prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        AppUtils.setProgresColler(prgWaiting);
+
         prgWaiting.setVisibility(View.GONE);
         vgAddContact = (ViewGroup) view.findViewById(R.id.menu_layout_addContact);
         vgRoot = (ViewGroup) view.findViewById(R.id.menu_parent_layout);

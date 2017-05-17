@@ -1127,10 +1127,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         viewAttachFile = findViewById(R.id.layout_attach_file);
         viewMicRecorder = findViewById(R.id.layout_mic_recorde);
         prgWaiting = (ProgressBar) findViewById(R.id.chl_prgWaiting);
-
+        AppUtils.setProgresColler(prgWaiting);
         voiceRecord = new VoiceRecord(this, viewMicRecorder, viewAttachFile, this);
 
-        prgWaiting.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
         prgWaiting.setVisibility(View.VISIBLE);
 
         txtEmptyMessages = (TextView) findViewById(R.id.empty_messages);

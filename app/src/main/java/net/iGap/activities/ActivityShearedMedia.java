@@ -263,7 +263,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private void initComponent() {
 
         progressBar = (ProgressBar) findViewById(R.id.asm_progress_bar_waiting);
-        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        AppUtils.setProgresColler(progressBar);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.asm_appbar_shared_media);
 
@@ -1083,6 +1083,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 });
 
                 messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
+                AppUtils.setProgresColor(messageProgress.progressBar);
+
+
+
                 messageProgress.withDrawable(R.drawable.ic_download, true);
 
                 contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);

@@ -205,6 +205,7 @@ public class G extends MultiDexApplication {
     public static String notificationColor;
     public static String toggleButtonColor;
     public static String attachmentColor;
+    public static String progressColor;
     public static String headerTextColor;
     public static String authorHash;
 

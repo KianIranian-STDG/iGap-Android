@@ -35,6 +35,7 @@ import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoSignalingGetLog;
@@ -74,7 +75,7 @@ public class FragmentCall extends Fragment {
         view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
 
         progressBar = (ProgressBar) view.findViewById(R.id.fc_progress_bar_waiting);
-        progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        AppUtils.setProgresColler(progressBar);
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_call_ripple_txtBack);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

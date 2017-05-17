@@ -87,6 +87,7 @@ import net.iGap.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.FileUploadStructure;
@@ -156,6 +157,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private ImageView imgToggleBottomColor;
     private ImageView imgSendAndAttachColor;
     private ImageView imgHeaderTextColor;
+    private ImageView imgHeaderProgressColor;
     private long idAvatar;
     private FloatingActionButton fab;
     private net.iGap.module.CircleImageView circleImageView;
@@ -167,6 +169,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private TextView txtGander;
     private TextView txtEmail;
     TextView txtNickNameTitle;
+
+    Realm mRealm;
 
     RealmChangeListener<RealmModel> userInfoListener;
     RealmUserInfo realmUserInfo;
@@ -212,6 +216,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (realmUserInfo != null) {
             realmUserInfo.removeAllChangeListeners();
         }
+
+        if (mRealm != null) {
+            mRealm.close();
+        }
     }
 
 
@@ -219,16 +227,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        Realm realm = Realm.getDefaultInstance();
+        mRealm = Realm.getDefaultInstance();
 
-        realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
         userInfoListener = new RealmChangeListener<RealmModel>() {
             @Override public void onChange(RealmModel element) {
                 updateUserInfoUI((RealmUserInfo) element);
             }
         };
 
-        RealmPrivacy realmPrivacy = realm.where(RealmPrivacy.class).findFirst();
+        RealmPrivacy realmPrivacy = mRealm.where(RealmPrivacy.class).findFirst();
 
         if (realmPrivacy == null) {
             RealmPrivacy.updatePrivacy("", "", "", "");
@@ -243,7 +251,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtGander = (TextView) findViewById(R.id.st_txt_gander);
         txtEmail = (TextView) findViewById(R.id.st_txt_email);
         prgWait = (ProgressBar) findViewById(R.id.st_prgWaiting_addContact);
-        prgWait.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        AppUtils.setProgresColler(prgWait);
 
         updateUserInfoUI(realmUserInfo);
 
@@ -1526,6 +1534,26 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         //***********************
+
+        imgHeaderProgressColor = (ImageView) findViewById(R.id.asn_img_default_progress_color);
+        GradientDrawable bgShapeProgressColor = (GradientDrawable) imgHeaderProgressColor.getBackground();
+        bgShapeProgressColor.setColor(Color.parseColor(G.progressColor));
+
+        imgHeaderProgressColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                showSelectAppColorDialog(R.string.default_progress_color);
+            }
+        });
+
+        TextView txtProgressColor = (TextView) findViewById(R.id.asn_txt_default_progress_color);
+        txtProgressColor.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                showSelectAppColorDialog(R.string.default_progress_color);
+            }
+        });
+
+
+        //***********************
          /*
           open browser
          */
@@ -1898,8 +1926,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         showImage();
-
-        realm.close();
     }
 
     private void updateUserInfoUI(RealmUserInfo userInfo) {
@@ -2007,6 +2033,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         case R.string.default_header_font_color:
                             headerColorClick(picker.getColor(), true);
                             break;
+                        case R.string.default_progress_color:
+                            progressColorClick(picker.getColor(), true);
+                            break;
+
                     }
                 } catch (IllegalArgumentException e) {
 
@@ -2029,6 +2059,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     //  toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));
                     sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
                     appBarColorClick(Color.parseColor(Config.default_appBarColor));
+                    progressColorClick(Color.parseColor(Config.default_appBarColor), false);
                 }
             })
             .negativeText(R.string.st_dialog_reset_all_notification_no)
@@ -2062,6 +2093,20 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         G.notificationColor = "#" + Integer.toHexString(color);
         bgShape.setColor(color);
         editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
+        editor.apply();
+
+        if (updateUi && G.onRefreshActivity != null) {
+            G.onRefreshActivity.refresh(G.selectedLanguage);
+        }
+    }
+
+    private void progressColorClick(int color, boolean updateUi) {
+
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        GradientDrawable bgShape = (GradientDrawable) imgHeaderProgressColor.getBackground();
+        G.progressColor = "#" + Integer.toHexString(color);
+        bgShape.setColor(color);
+        editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
         editor.apply();
 
         if (updateUi && G.onRefreshActivity != null) {

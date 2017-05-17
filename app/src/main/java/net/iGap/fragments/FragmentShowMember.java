@@ -62,6 +62,7 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupGetMemberList;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.DeviceUtils;
@@ -483,6 +484,7 @@ public class FragmentShowMember extends Fragment {
         preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(getActivity()));
 
         progressBar = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
+        AppUtils.setProgresColler(progressBar);
 
         view.findViewById(R.id.fcg_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 

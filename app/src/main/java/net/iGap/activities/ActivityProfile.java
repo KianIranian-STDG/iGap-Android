@@ -48,6 +48,7 @@ import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.EditTextAdjustPan;
 import net.iGap.module.FileUploadStructure;
@@ -98,7 +99,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
         txtAddPhoto = (TextView) findViewById(R.id.pu_txt_addPhoto);
         prgWait = (ProgressBar) findViewById(R.id.prg);
-
+        AppUtils.setProgresColler(prgWait);
         findViewById(R.id.ap_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         txtTitle = (TextView) findViewById(R.id.pu_titleToolbar);

@@ -67,6 +67,7 @@ import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.interfaces.OnUserVerification;
+import net.iGap.module.AppUtils;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.IncomingSms;
@@ -175,6 +176,8 @@ public class ActivityRegister extends ActivityEnhanced {
         txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
 
         findViewById(R.id.ar_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        findViewById(R.id.ar_view_line).setBackgroundColor(Color.GRAY);
+
 
         int portrait = getResources().getConfiguration().orientation;
         if (portrait == 1) {
@@ -623,34 +626,47 @@ public class ActivityRegister extends ActivityEnhanced {
         int portrait_landscape = getResources().getConfiguration().orientation; //check for portrait & landScape
         if (portrait_landscape == 1) {//portrait
             rg_prg_verify_connect = (ProgressBar) findViewById(R.id.rg_prg_verify_connect);
+            AppUtils.setProgresColler(rg_prg_verify_connect);
+
             rg_txt_verify_connect = (TextView) findViewById(R.id.rg_txt_verify_connect);
             rg_img_verify_connect = (ImageView) findViewById(R.id.rg_img_verify_connect);
 
             rg_prg_verify_sms = (ProgressBar) findViewById(R.id.rg_prg_verify_sms);
+            AppUtils.setProgresColler(rg_prg_verify_sms);
+
             rg_txt_verify_sms = (TextView) findViewById(R.id.rg_txt_verify_sms);
             rg_img_verify_sms = (ImageView) findViewById(R.id.rg_img_verify_sms);
 
             rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key);
+            AppUtils.setProgresColler(rg_prg_verify_generate);
+
             rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key);
             rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key);
 
             rg_prg_verify_register = (ProgressBar) findViewById(R.id.rg_prg_verify_server);
+            AppUtils.setProgresColler(rg_prg_verify_register);
             rg_txt_verify_register = (TextView) findViewById(R.id.rg_txt_verify_server);
             rg_img_verify_register = (ImageView) findViewById(R.id.rg_img_verify_server);
         } else {
             rg_prg_verify_connect = (ProgressBar) dialogVerifyLandScape.findViewById(R.id.rg_prg_verify_connect_DialogLand);
+            AppUtils.setProgresColler(rg_prg_verify_connect);
             rg_txt_verify_connect = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_connect_DialogLand);
             rg_img_verify_connect = (ImageView) dialogVerifyLandScape.findViewById(R.id.rg_img_verify_connect_DialogLand);
 
             rg_prg_verify_sms = (ProgressBar) dialogVerifyLandScape.findViewById(R.id.rg_prg_verify_sms_DialogLand);
+            AppUtils.setProgresColler(rg_prg_verify_sms);
+
             rg_txt_verify_sms = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_sms_DialogLand);
             rg_img_verify_sms = (ImageView) dialogVerifyLandScape.findViewById(R.id.rg_img_verify_sms_DialogLand);
 
             rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key_DialogLand);
+            AppUtils.setProgresColler(rg_prg_verify_generate);
+
             rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key_DialogLand);
             rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key_DialogLand);
 
             rg_prg_verify_register = (ProgressBar) findViewById(R.id.rg_prg_verify_server_DialogLand);
+            AppUtils.setProgresColler(rg_prg_verify_register);
             rg_txt_verify_register = (TextView) findViewById(R.id.rg_txt_verify_server_DialogLand);
             rg_img_verify_register = (ImageView) findViewById(R.id.rg_img_verify_server_DialogLand);
         }
@@ -896,10 +912,13 @@ public class ActivityRegister extends ActivityEnhanced {
             int portrait_landscape = getResources().getConfiguration().orientation;
             if (portrait_landscape == 1) {//portrait
                 rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key);
+                AppUtils.setProgresColler(rg_prg_verify_generate);
+
                 rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key);
                 rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key);
             } else {
                 rg_prg_verify_generate = (ProgressBar) findViewById(R.id.rg_prg_verify_key_DialogLand);
+                AppUtils.setProgresColler(rg_prg_verify_generate);
                 rg_txt_verify_generate = (TextView) findViewById(R.id.rg_txt_verify_key_DialogLand);
                 rg_img_verify_generate = (ImageView) findViewById(R.id.rg_img_verify_key_DialogLand);
             }
