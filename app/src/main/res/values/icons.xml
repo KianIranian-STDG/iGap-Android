@@ -78,6 +78,7 @@
   <string name="md_perm_camera">\ue8a2</string>
   <string name="md_gif">\ue8da</string>
   <string name="md_link">\ue157</string>
+  <string name="md_remove_circle">\ue15d</string>
 
   <string name="md_call_made">\ue0b2</string>
   <string name="md_call_received">\ue0b5</string>

@@ -169,13 +169,14 @@
           <TextView
               android:id="@+id/cs_txt_contact_time"
               android:layout_width="wrap_content"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:maxLines="1"
               android:singleLine="true"
               android:text="time"
               android:textColor="@color/gray"
               android:textSize="@dimen/dp12"
               android:gravity="center"
+              android:layout_gravity="center"
               />
 
 

@@ -4,7 +4,7 @@
   <string name="text_i_introduce_page1">i</string>
   <string name="text_line_1_introduce_page1">GAP</string>
   <string name="text_line_2_introduce_page1">Limitless Connection</string>
-  <string name="text_line_3_introduce_page1">build your own world by iGap right now.</string>
+  <string name="text_line_3_introduce_page1">Build your own world by iGap right now.</string>
 
   <!-- Page 2 introduce app -->
   <string name="text_line_1_introduce_page2">Security &amp; Privacy</string>
@@ -167,12 +167,12 @@
   <string name="st_crop">Crop and Resize Photo</string>
   <string name="st_send_by_enter">Send by Enter Key</string>
   <string name="st_title_Media">Multimedia</string>
-  <string name="st_auto_download_data">Auto download (using Mobile Data)</string>
-  <string name="title_auto_download_data">Auto download\n(using Mobile Data)</string>
-  <string name="st_auto_download_wifi">Auto download (using Wi-Fi)</string>
-  <string name="title_auto_download_wifi">Auto download\n(using Wi-Fi)</string>
-  <string name="st_auto_download_roaming">Auto download (using Data Roaming)</string>
-  <string name="title_auto_download_roaming">Auto download\n(using Data Roaming)</string>
+  <string name="st_auto_download_data">Auto download (Using Mobile Data)</string>
+  <string name="title_auto_download_data">Auto download\n(Using Mobile Data)</string>
+  <string name="st_auto_download_wifi">Auto download (When Connected on Wi-Fi)</string>
+  <string name="title_auto_download_wifi">Auto download\n(Using Wi-Fi)</string>
+  <string name="st_auto_download_roaming">Auto download (When Roaming)</string>
+  <string name="title_auto_download_roaming">Auto download\n(Using Data Roaming)</string>
   <string name="st_auto_gif">Auto Play GIFs</string>
   <string name="st_save_to_gallery">Save to Gallery</string>
   <string name="st_title_support">iGap Support</string>
@@ -673,7 +673,7 @@
   <string name="do_you_want_left_this">"Are you sure you want to leave the selected item ?"</string>
   <string name="do_you_want_delete_this">Are you sure you want to delete the selected item ?</string>
   <string name="do_you_want_clear_history_this">Are you sure you want to clear history the selected item ?</string>
-  <string name="content_log_out">Are you sure you want to log out of iGap ?</string>
+  <string name="content_log_out">Are you sure you want to logout of your iGap account ?</string>
   <string name="st_signature">Signature</string>
   <string name="one_day">Last day</string>
   <string name="two_day">Two days ago</string>
@@ -791,28 +791,27 @@
   <string name="room_not_exist">There is no room with this ID</string>
   <string name="app_theme">iGap Theme Color</string>
   <string name="app_notif_color">Notification Color</string>
-  <string name="theme">Theme Color</string>
+  <string name="theme">Theme Colors</string>
   <string name="is"> is </string>
   <string name="are"> are </string>
   <string name="members_are">Members are </string>
   <string name="toggle_botton_color">Toggle Button Color</string>
   <string name="send_and_attach_botton_color"> Color of Send and Attach Button</string>
   <string name="default_header_font_color">Default Color of Title</string>
-  <string name="default_progress_color">Default Color of Progress</string>
-  <string name="who_can_see_my_avatar">Who can See my Avatar?</string>
-  <string name="who_can_invite_you_to_channel_s">Who Can invite me to Channel?</string>
-  <string name="who_can_invite_you_to_group_s">Who can invite me to Group?</string>
+  <string name="who_can_see_my_avatar">Who can see my Avatar?</string>
+  <string name="who_can_invite_you_to_channel_s">Who can invite me to Channels?</string>
+  <string name="who_can_invite_you_to_group_s">Who can invite me to Groups?</string>
   <string name="no_body">Nobody</string>
   <string name="my_contacts">My Contacts</string>
   <string name="privacy_setting">Privacy Setting</string>
   <string name="igap_search">Look and Find</string>
-  <string name="set_color_to_default">Set Color as Default</string>
-  <string name="empty_message">Nothing Found. Please try to enter the 5 first characters of username </string>
+  <string name="set_color_to_default">Set Colors as Default</string>
+  <string name="empty_message">Nothing Found. Please try to enter the first 5 characters of username </string>
   <string name="there_is_no_any_result">No Result</string>
   <string name="there_is_no_connection_to_server">No Connection to the Server</string>
   <string name="empty_room">No Messages Yet</string>
   <string name="show_member">Show Members List</string>
-  <string name="show_vote_layout_in_channel">Show vote layout channel</string>
+  <string name="show_vote_layout_in_channel">Show Channel Vote Layout</string>
   <string name="close">Close</string>
   <string name="INVALID">INVALID</string>
   <string name="TAKEN">TAKEN</string>
@@ -833,9 +832,11 @@
   <string name="text_limit_chat_to_unknown_contact">Please wait for the process to finish (You are not allowed to send messages to more than 10 Unknown Users regularly at the same time; after getting to number 10, you get stopped until the end of countdown timer)</string>
   <string name="title_limit_Create_Group">Restriction in Number of Rooms</string>
   <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
-  <string name="show_sender_name_in_group">Show sender name in Group</string>
+  <string name="show_sender_name_in_group">Show Sender Name in Group</string>
   <string name="calls">Calls</string>
   <string name="igap_call">iGap Call</string>
   <string name="No_messages_here_yet">No messages here yet…</string>
-
+  <string name="mandatory">(Mandatory)</string>
+  <string name="optional">(Optional)</string>
+  <string name="desc_group_chanel">Description (Optional)</string>
 </resources>

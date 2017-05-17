@@ -2423,7 +2423,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         // remove deleted message from adapter
 
                         mAdapter.removeMessage(messageId);
-                        mAdapter.removeMessage(messageId);
                         if (mAdapter.getItemCount() > 0) {
                             txtEmptyMessages.setVisibility(View.GONE);
                         } else {
@@ -3133,7 +3132,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         dialog.dismiss();
                         // remove deleted message from adapter
                         mAdapter.removeMessage(parseLong(message.messageID));
-                        mAdapter.removeMessage(messageId);
                         if (mAdapter.getItemCount() > 0) {
                             txtEmptyMessages.setVisibility(View.GONE);
                         } else {
@@ -3903,7 +3901,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         mAdapter.removeMessage(position);
-        mAdapter.removeMessage(messageId);
         if (mAdapter.getItemCount() > 0) {
             txtEmptyMessages.setVisibility(View.GONE);
         } else {

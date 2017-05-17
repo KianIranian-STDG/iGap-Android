@@ -148,7 +148,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ng_root_newGroup"
                 android:layout_marginTop="@dimen/dp12"
-                android:hint="@string/desc">
+                android:hint="@string/desc_group_chanel"
+                >
 
               <net.iGap.module.LinedEditText
                     android:id="@+id/ng_edt_description"

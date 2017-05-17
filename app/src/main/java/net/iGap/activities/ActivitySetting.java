@@ -825,92 +825,143 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 txtLogOut.setText(getResources().getString(log_out));
                 txtDeleteAccount.setText(getResources().getString(R.string.delete_account));
 
+
+
                 root1.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
                         dialog.dismiss();
-                        new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.log_out))
-                            .content(R.string.content_log_out)
-                            .positiveText(getResources().getString(R.string.B_ok))
-                            .negativeText(getResources().getString(R.string.B_cancel)).iconRes(R.drawable.logout)
-                            .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    showProgressBar();
 
-                                    G.onUserSessionLogout = new OnUserSessionLogout() {
-                                        @Override public void onUserSessionLogout() {
+                        final MaterialDialog inDialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.dialog_content_custom, true).build();
+                        View v = inDialog.getCustomView();
 
-                                            runOnUiThread(new Runnable() {
-                                                @Override public void run() {
-                                                    HelperLogout.logout();
-                                                    hideProgressBar();
-                                                }
-                                            });
-                                        }
+                        inDialog.show();
 
-                                        @Override public void onError() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override public void run() {
-                                                    hideProgressBar();
-                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
+                        TextView txtTitle = (TextView) v.findViewById(R.id.txtDialogTitle);
+                        txtTitle.setText(getResources().getString(R.string.log_out));
 
-                                        @Override public void onTimeOut() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override public void run() {
-                                                    hideProgressBar();
-                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
-                                    };
+                        TextView iconTitle = (TextView) v.findViewById(R.id.iconDialogTitle);
+                        iconTitle.setText(R.string.md_exit_app);
 
-                                    new RequestUserSessionLogout().userSessionLogout();
-                                }
-                            })
+                        TextView txtContent = (TextView) v.findViewById(R.id.txtDialogContent);
+                        txtContent.setText(R.string.content_log_out);
 
-                            .show();
+                        TextView txtCancel = (TextView) v.findViewById(R.id.txtDialogCancel);
+                        TextView txtOk = (TextView) v.findViewById(R.id.txtDialogOk);
+
+                        txtOk.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                inDialog.dismiss();
+
+                                showProgressBar();
+
+                                G.onUserSessionLogout = new OnUserSessionLogout() {
+                                    @Override
+                                    public void onUserSessionLogout() {
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                HelperLogout.logout();
+                                                hideProgressBar();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                hideProgressBar();
+                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onTimeOut() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                hideProgressBar();
+                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
+                                };
+
+                                new RequestUserSessionLogout().userSessionLogout();
+                            }
+                        });
+
+                        txtCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                inDialog.dismiss();
+                            }
+                        });
+
                     }
                 });
 
                 root2.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View view) {
+
                         dialog.dismiss();
-                        new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.delete_account))
-                            .content(getResources().getString(R.string.delete_account_text))
-                            .positiveText(getResources().getString(R.string.B_ok)).iconRes(R.drawable.delet_account)
-                            .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                            .negativeText(getResources().getString(R.string.B_cancel))
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                    FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
+                        final MaterialDialog inDialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.dialog_content_custom, true).build();
+                        View v = inDialog.getCustomView();
 
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("PHONE", phoneName);
-                                    fragmentDeleteAccount.setArguments(bundle);
-                                    getSupportFragmentManager().beginTransaction()
-                                        .addToBackStack(null)
-                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                        .replace(R.id.st_layoutParent, fragmentDeleteAccount, null)
-                                        .commit();
-                                }
-                            })
-                            .show();
+                        inDialog.show();
+
+                        TextView txtTitle = (TextView) v.findViewById(R.id.txtDialogTitle);
+                        txtTitle.setText(getResources().getString(R.string.delete_account));
+
+                        TextView iconTitle = (TextView) v.findViewById(R.id.iconDialogTitle);
+                        iconTitle.setText(R.string.md_remove_circle);
+
+                        TextView txtContent = (TextView) v.findViewById(R.id.txtDialogContent);
+                        txtContent.setText(R.string.delete_account_text);
+
+                        TextView txtCancel = (TextView) v.findViewById(R.id.txtDialogCancel);
+                        TextView txtOk = (TextView) v.findViewById(R.id.txtDialogOk);
+
+
+                        txtOk.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                inDialog.dismiss();
+                                FragmentDeleteAccount fragmentDeleteAccount = new FragmentDeleteAccount();
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString("PHONE", phoneName);
+                                fragmentDeleteAccount.setArguments(bundle);
+                                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentDeleteAccount, null).commit();
+                            }
+                        });
+
+                        txtCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                inDialog.dismiss();
+                            }
+                        });
                     }
                 });
             }
@@ -1060,19 +1111,38 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         lyCleanUp.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
 
-                MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(R.string.clean_up_chat_rooms).content(R.string.do_you_want_to_clean_all_data_in_chat_rooms).icon(getResources().getDrawable(R.drawable.clean_up))
-                    .positiveText(R.string.ok)
-                    .cancelable(true)
-                    .negativeText(android.R.string.cancel)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                final MaterialDialog inDialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.dialog_content_custom, true).build();
+                View view = inDialog.getCustomView();
 
-                            RealmRoomMessage.ClearAllMessage(true, 0);
-                        }
-                    })
-                    .build();
+                inDialog.show();
 
-                dialog.show();
+                TextView txtTitle = (TextView) view.findViewById(R.id.txtDialogTitle);
+                txtTitle.setText(getResources().getString(R.string.clean_up_chat_rooms));
+
+                TextView iconTitle = (TextView) view.findViewById(R.id.iconDialogTitle);
+                iconTitle.setText(R.string.md_clean_up);
+
+                TextView txtContent = (TextView) view.findViewById(R.id.txtDialogContent);
+                txtContent.setText(R.string.do_you_want_to_clean_all_data_in_chat_rooms);
+
+                TextView txtCancel = (TextView) view.findViewById(R.id.txtDialogCancel);
+                TextView txtOk = (TextView) view.findViewById(R.id.txtDialogOk);
+
+                txtOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        inDialog.dismiss();
+                        RealmRoomMessage.ClearAllMessage(true, 0);
+                    }
+                });
+
+                txtCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        inDialog.dismiss();
+                    }
+                });
+
             }
         });
 

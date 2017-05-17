@@ -64,7 +64,7 @@ dependencies {
   compile project(':emoji')
   compile project(':audioplayerview')
   compile project(':websocket')
-  compile('com.afollestad.material-dialogs:core:0.9.4.4') {
+  compile('com.afollestad.material-dialogs:core:0.9.4.5') {
     transitive = true
   }
   compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {

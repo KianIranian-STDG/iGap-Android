@@ -345,13 +345,13 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
         switch (prefix) {
             case "NewChanel":
-                txtInputNewGroup.setHint(getResources().getString(R.string.new_channel));
+                txtInputNewGroup.setHint(getResources().getString(R.string.channel_name) + " " + getResources().getString(R.string.mandatory));
                 break;
             case "ConvertToGroup":
-                txtInputNewGroup.setHint(getResources().getString(R.string.group_name));
+                txtInputNewGroup.setHint(getResources().getString(R.string.group_name) + " " + getResources().getString(R.string.mandatory));
                 break;
             default:
-                txtInputNewGroup.setHint(getResources().getString(R.string.group_name));
+                txtInputNewGroup.setHint(getResources().getString(R.string.group_name) + " " + getResources().getString(R.string.mandatory));
                 break;
         }
 
