@@ -798,6 +798,7 @@
   <string name="toggle_botton_color">Toggle Button Color</string>
   <string name="send_and_attach_botton_color"> Color of Send and Attach Button</string>
   <string name="default_header_font_color">Default Color of Title</string>
+  <string name="default_progress_color">Default Color of Progress</string>
   <string name="who_can_see_my_avatar">Who can see my Avatar?</string>
   <string name="who_can_invite_you_to_channel_s">Who can invite me to Channels?</string>
   <string name="who_can_invite_you_to_group_s">Who can invite me to Groups?</string>
