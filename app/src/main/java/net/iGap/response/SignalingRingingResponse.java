@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import android.util.Log;
 import net.iGap.proto.ProtoSignalingRinging;
 
 public class SignalingRingingResponse extends MessageHandler {
@@ -31,6 +32,10 @@ public class SignalingRingingResponse extends MessageHandler {
         super.handler();
 
         ProtoSignalingRinging.SignalingRingingResponse.Builder builder = (ProtoSignalingRinging.SignalingRingingResponse.Builder) message;
+        if (builder.getResponse().getId().isEmpty()) {
+            Log.i("WWW", "SignalingRingingResponse Now Will Be Show Ringing In View");
+        }
+
     }
 
     @Override

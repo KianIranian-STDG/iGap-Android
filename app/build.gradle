@@ -111,7 +111,5 @@ dependencies {
   compile(project(':k4l-video-trimmer')) {
     exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
   }
-
-  // compile 'io.pristine:libjingle:11139@aar'
-  //compile 'io.pristine:libjingle:8871@aar'
+  compile 'org.whispersystems:webrtc-android:M57-S2'
 }

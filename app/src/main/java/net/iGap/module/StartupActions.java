@@ -26,6 +26,7 @@ import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.MyService;
 import net.iGap.realm.RealmMigration;
+import net.iGap.webrtc.CallObserver;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -68,6 +69,7 @@ public final class StartupActions {
         makeFolder();
         ConnectionManager.manageConnection();
 
+        new CallObserver();
         /**
          * initialize download and upload listeners
          */

@@ -12,6 +12,7 @@ package net.iGap;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
@@ -26,7 +27,9 @@ import io.fabric.sdk.android.Fabric;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.spec.SecretKeySpec;
@@ -35,12 +38,12 @@ import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.interfaces.IClientSearchUserName;
 import net.iGap.interfaces.ISignalingAccept;
-import net.iGap.interfaces.ISignalingCondidate;
+import net.iGap.interfaces.ISignalingCandidate;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.ISignalingLeave;
 import net.iGap.interfaces.ISignalingOffer;
 import net.iGap.interfaces.ISignalingRinging;
-import net.iGap.interfaces.ISignalingSesionHold;
+import net.iGap.interfaces.ISignalingSessionHold;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChannelAddAdmin;
 import net.iGap.interfaces.OnChannelAddMember;
@@ -154,6 +157,9 @@ import net.iGap.module.StartupActions;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.request.RequestWrapper;
+import org.webrtc.PeerConnectionFactory;
+import org.webrtc.voiceengine.WebRtcAudioManager;
+import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 public class G extends MultiDexApplication {
 
@@ -351,9 +357,9 @@ public class G extends MultiDexApplication {
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
     public static ISignalingAccept iSignalingAccept;
-    public static ISignalingCondidate iSignalingCondidate;
+    public static ISignalingCandidate iSignalingCandidate;
     public static ISignalingLeave iSignalingLeave;
-    public static ISignalingSesionHold iSignalingSesionHold;
+    public static ISignalingSessionHold iSignalingSessionHold;
     public static ISignalingGetCallLog iSignalingGetCallLog;
 
     @Override
@@ -364,7 +370,7 @@ public class G extends MultiDexApplication {
         context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        //initializeWebRtc();
         new StartupActions();
     }
 
@@ -380,5 +386,34 @@ public class G extends MultiDexApplication {
             mTracker = analytics.newTracker(R.xml.global_tracker);
         }
         return mTracker;
+    }
+
+    private void initializeWebRtc() {
+
+        Set<String> HARDWARE_AEC_WHITELIST = new HashSet<String>() {{
+            add("D5803");
+            add("FP1");
+            add("SM-A500FU");
+            add("XT1092");
+        }};
+
+        Set<String> OPEN_SL_ES_WHITELIST = new HashSet<String>() {{
+        }};
+
+        if (Build.VERSION.SDK_INT >= 11) {
+            if (HARDWARE_AEC_WHITELIST.contains(Build.MODEL)) {
+                WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(false);
+            } else {
+                WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+            }
+
+            if (OPEN_SL_ES_WHITELIST.contains(Build.MODEL)) {
+                WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(false);
+            } else {
+                WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(true);
+            }
+
+            PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
+        }
     }
 }
