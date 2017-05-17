@@ -320,7 +320,7 @@ public class RegisteredContactsFragment extends Fragment {
 
                         if (isCallAction) {
                             getActivity().getSupportFragmentManager().popBackStack();
-                            FragmentCall.call(realmResults.get(getPosition()).getId(), getActivity());
+                            FragmentCall.call(realmResults.get(getPosition()).getId(), false);
                         } else {
                             showProgress();
 

@@ -100,6 +100,7 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
+import net.iGap.realm.RealmPrivacy;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
@@ -226,6 +227,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 updateUserInfoUI((RealmUserInfo) element);
             }
         };
+
+        RealmPrivacy realmPrivacy = realm.where(RealmPrivacy.class).findFirst();
+
+        if (realmPrivacy == null) {
+            RealmPrivacy.updatePrivacy("", "", "", "");
+        }
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 

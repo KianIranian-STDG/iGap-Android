@@ -1253,10 +1253,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void OnProgress(final String path, int progress) {
 
                     if (progress == 100) {
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
 
+                        G.handler.post(new Runnable() {
+                            @Override public void run() {
                                 String type;
                                 if (mMessage.forwardedFrom != null) {
                                     type = mMessage.forwardedFrom.getMessageType().toString().toLowerCase();
@@ -1313,9 +1312,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void OnProgress(final String path, final int progress) {
 
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                    G.handler.post(new Runnable() {
+                        @Override public void run() {
                             if (progress == 100) {
                                 progressBar.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
@@ -1328,19 +1326,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             }
                         }
                     });
+
                 }
 
                 @Override
                 public void OnError(String token) {
 
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                    G.handler.post(new Runnable() {
+                        @Override public void run() {
                             progressBar.withProgress(0);
                             progressBar.withDrawable(R.drawable.ic_download, true);
                             contentLoading.setVisibility(View.GONE);
                         }
                     });
+
                 }
             });
         }
@@ -1378,10 +1377,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     @Override
                     public void OnProgress(final int progress, FileUploadStructure struct) {
 
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
+                        G.handler.post(new Runnable() {
+                            @Override public void run() {
                                 ((MessageProgress) holder.itemView.findViewById(R.id.progress)).withProgress(progress);
 
                                 if (progress == 100) {

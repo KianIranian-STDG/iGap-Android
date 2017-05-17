@@ -35,6 +35,7 @@ import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.interfaces.IClientSearchUserName;
 import net.iGap.interfaces.ISignalingAccept;
+import net.iGap.interfaces.ISignalingCallBack;
 import net.iGap.interfaces.ISignalingCondidate;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.ISignalingLeave;
@@ -225,6 +226,7 @@ public class G extends MultiDexApplication {
     public static boolean showVoteChannelLayout = true;
     public static boolean showSenderNameInGroup = false;
     public static boolean needGetSignalingConfiguration = true;
+    public static boolean isInCall = false;
 
     public static int ivSize;
     public static int userTextSize = 0;
@@ -356,6 +358,7 @@ public class G extends MultiDexApplication {
     public static ISignalingLeave iSignalingLeave;
     public static ISignalingSesionHold iSignalingSesionHold;
     public static ISignalingGetCallLog iSignalingGetCallLog;
+    public static ISignalingCallBack iSignalingCallBack;
 
     @Override
     public void onCreate() {

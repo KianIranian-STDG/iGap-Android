@@ -688,7 +688,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
 
-                FragmentCall.call(userId, ActivityContactsProfile.this);
+                FragmentCall.call(userId, false);
             }
         });
 

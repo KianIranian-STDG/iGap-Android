@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -196,13 +195,14 @@ public class FragmentCall extends Fragment {
 
     //*************************************************************************************************************
 
-    public static void call(long userID, FragmentActivity activity) {
+    public static void call(long userID, boolean isIncomingCall) {
 
-        Intent intent = new Intent(activity, ActivityCall.class);
+        Intent intent = new Intent(G.context, ActivityCall.class);
         intent.putExtra(ActivityCall.UserIdStr, userID);
+        intent.putExtra(ActivityCall.INCOMONGCALL_STR, isIncomingCall);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        activity.startActivity(intent);
+        G.context.startActivity(intent);
     }
 
     //*************************************************************************************************************
@@ -249,7 +249,7 @@ public class FragmentCall extends Fragment {
 
                 rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                     @Override public void onComplete(RippleView rippleView) throws IOException {
-                        call(realmResults.get(getPosition()).getlogProto().getPeer().getId(), getActivity());
+                        call(realmResults.get(getPosition()).getlogProto().getPeer().getId(), false);
                     }
                 });
             }

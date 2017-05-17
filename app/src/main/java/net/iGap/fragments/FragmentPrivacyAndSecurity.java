@@ -122,7 +122,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
         view.findViewById(R.id.fpac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        RealmPrivacy.getUpdatePrivacyFromServer();
+
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -136,12 +136,15 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         };
 
         realmPrivacy = realm.where(RealmPrivacy.class).findFirst();
+
         privacyListener = new RealmChangeListener<RealmModel>() {
             @Override
             public void onChange(RealmModel element) {
                 updatePrivacyUI((RealmPrivacy) element);
             }
         };
+
+        RealmPrivacy.getUpdatePrivacyFromServer();
 
         RelativeLayout parentPrivacySecurity = (RelativeLayout) view.findViewById(R.id.parentPrivacySecurity);
         parentPrivacySecurity.setOnClickListener(new View.OnClickListener() {
