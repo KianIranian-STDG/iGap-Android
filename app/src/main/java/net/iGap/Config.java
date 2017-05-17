@@ -53,7 +53,7 @@ public class Config {
     public static String default_headerTextColor = "#31bdb6";
     public static String default_progressColor = "#41c6c4";
 
-    public static final String URL_WEBSOCKET = "wss://secure.igap.net/hybrid/";
+    public static final String URL_WEBSOCKET = "wss://secure.igap.net/test/";
 
     public static final byte[] SALT = new byte[] {
         -46, 65, 30, -128, -103, -57, 74, -64, 51, 88, -95, -45, 77, -117, -36, -113, -11, 32, -64, 89

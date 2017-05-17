@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import android.util.Log;
 import net.iGap.G;
 import net.iGap.proto.ProtoSignalingLeave;
 
@@ -32,11 +33,11 @@ public class SignalingLeaveResponse extends MessageHandler {
         super.handler();
 
         ProtoSignalingLeave.SignalingLeaveResponse.Builder builder = (ProtoSignalingLeave.SignalingLeaveResponse.Builder) message;
-        net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse.Type type = builder.getType();
-
+        Log.i("WWW", "SignalingLeaveResponse type : " + builder.getType());
         if (G.iSignalingLeave != null) {
-            G.iSignalingLeave.onLeave(type);
+            G.iSignalingLeave.onLeave(builder.getType());
         }
+
     }
 
     @Override
