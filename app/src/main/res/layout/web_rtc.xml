@@ -5,10 +5,17 @@
     android:orientation="vertical"
     >
 
+  <EditText
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:inputType="textPersonName"
+      android:ems="10"
+      android:id="@+id/edtUserId"
+      android:hint="Contact UserId"
+      />
   <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_weight="0.9"
+      android:layout_height="50dp"
       android:orientation="horizontal"
       >
     <Button
@@ -33,4 +40,10 @@
         android:text="Cancel"
         />
   </LinearLayout>
+  <Button
+      android:id="@+id/btnUserId"
+      android:layout_width="match_parent"
+      android:layout_height="48dp"
+      android:text="Show My UserId"
+      />
 </LinearLayout>

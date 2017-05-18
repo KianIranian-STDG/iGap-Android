@@ -42,6 +42,8 @@ import static net.iGap.G.iSignalingLeave;
 import static net.iGap.G.iSignalingOffer;
 import static net.iGap.G.iSignalingRinging;
 import static net.iGap.G.iSignalingSessionHold;
+import static net.iGap.webrtc.WebRTC.peerConnection;
+import static net.iGap.webrtc.WebRTC.peerConnectionInstance;
 import static org.webrtc.SessionDescription.Type.ANSWER;
 import static org.webrtc.SessionDescription.Type.OFFER;
 
@@ -63,7 +65,7 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
+                peerConnectionInstance().setRemoteDescription(new SdpObserver() {
                     @Override
                     public void onCreateSuccess(SessionDescription sessionDescription) {
                     }
@@ -76,7 +78,6 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
                                 Toast.makeText(G.context, "You Have A Call ... ", Toast.LENGTH_SHORT).show();
                             }
                         });
-                        Log.i("WWW", "onOffer onSetSuccess");
                     }
 
                     @Override
@@ -90,9 +91,9 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
                     }
                 }, new SessionDescription(OFFER, callerSdp));
 
-                Log.i("WWW", "onOffer WebRtc.peerConnectionInstance().iceConnectionState() : " + new WebRTC().peerConnectionInstance().iceConnectionState());
-                Log.i("WWW", "onOffer WebRtc.peerConnectionInstance().iceGatheringState() : " + new WebRTC().peerConnectionInstance().iceGatheringState());
-                Log.i("WWW", "onOffer WebRtc.peerConnectionInstance().signalingState() : " + new WebRTC().peerConnectionInstance().signalingState());
+                Log.i("WWW", "onOffer WebRtc.peerConnectionInstance().iceConnectionState() : " + peerConnectionInstance().iceConnectionState());
+                Log.i("WWW", "onOffer WebRtc.peerConnectionInstance().iceGatheringState() : " + peerConnectionInstance().iceGatheringState());
+                Log.i("WWW", "onOffer WebRtc.peerConnectionInstance().signalingState() : " + peerConnectionInstance().signalingState());
             }
         });
     }
@@ -104,7 +105,7 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
+                peerConnectionInstance().setRemoteDescription(new SdpObserver() {
                     @Override
                     public void onCreateSuccess(SessionDescription sessionDescription) {
                         Log.i("WWW", "onAccept onCreateSuccess sessionDescription : " + sessionDescription);
@@ -134,9 +135,9 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
                     }
                 }, new SessionDescription(ANSWER, called_sdp));
 
-                Log.i("WWW", "onAccept WebRtc.peerConnectionInstance().iceConnectionState() : " + new WebRTC().peerConnectionInstance().iceConnectionState());
-                Log.i("WWW", "onAccept WebRtc.peerConnectionInstance().iceGatheringState() : " + new WebRTC().peerConnectionInstance().iceGatheringState());
-                Log.i("WWW", "onAccept WebRtc.peerConnectionInstance().signalingState() : " + new WebRTC().peerConnectionInstance().signalingState());
+                Log.i("WWW", "onAccept WebRtc.peerConnectionInstance().iceConnectionState() : " + peerConnectionInstance().iceConnectionState());
+                Log.i("WWW", "onAccept WebRtc.peerConnectionInstance().iceGatheringState() : " + peerConnectionInstance().iceGatheringState());
+                Log.i("WWW", "onAccept WebRtc.peerConnectionInstance().signalingState() : " + peerConnectionInstance().signalingState());
             }
         });
 
@@ -158,8 +159,8 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
                 //Log.i("WWW_Candidate", "onCandidate sdpMid : " + sdpMid);
                 //Log.i("WWW_Candidate", "onCandidate sdpMLineIndex : " + sdpMLineIndex);
                 //Log.i("WWW_Candidate", "onCandidate sdp : " + sdp1 + ":" + sdp2);
-                //new WebRTC().peerConnectionInstance().addIceCandidate(new IceCandidate(sdpMid, sdpMLineIndex, sdp1 + ":" + sdp2));
-                new WebRTC().peerConnectionInstance().addIceCandidate(new IceCandidate("", 0, iceCandidate));
+                //WebRTC.peerConnectionInstance().addIceCandidate(new IceCandidate(sdpMid, sdpMLineIndex, sdp1 + ":" + sdp2));
+                peerConnectionInstance().addIceCandidate(new IceCandidate("", 0, iceCandidate));
             }
         });
     }
@@ -178,6 +179,13 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
                 Toast.makeText(G.context, type.toString() + " ... ", Toast.LENGTH_SHORT).show();
             }
         });
+
+        peerConnectionInstance().close();
+        peerConnectionInstance().dispose();
+        /**
+         * set peer connection null for try again
+         */
+        peerConnection = null;
     }
 
     @Override
