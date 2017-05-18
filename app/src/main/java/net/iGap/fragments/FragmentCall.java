@@ -44,9 +44,6 @@ import net.iGap.realm.RealmCallLogFields;
 import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetLog;
 
-/**
- * Created by android3 on 4/18/2017.
- */
 
 public class FragmentCall extends Fragment {
 

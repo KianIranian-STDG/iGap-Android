@@ -1,3 +1,14 @@
+/*
+* This is the source code of iGap for Android
+* It is licensed under GNU AGPL v3.0
+* You should have received a copy of the license in this archive (see LICENSE).
+* Copyright © 2017 , iGap - www.iGap.net
+* iGap Messenger | Free, Fast and Secure instant messaging application
+* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+* All rights reserved.
+*/
+
+
 package net.iGap.activities;
 
 import android.media.MediaPlayer;
@@ -27,9 +38,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserInfo;
 
-/**
- * Created by android3 on 5/8/2017.
- */
 
 public class ActivityCall extends ActivityEnhanced {
 
@@ -136,6 +144,7 @@ public class ActivityCall extends ActivityEnhanced {
             @Override public void onClick(View v) {
                 if (canClick) {
                     endVoiceAndFinish();
+                    layoutCallEnd.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -155,6 +164,7 @@ public class ActivityCall extends ActivityEnhanced {
             @Override public void onClick(View v) {
                 if (canClick) {
                     btnChat.performClick();
+                    layoutChat.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -174,8 +184,9 @@ public class ActivityCall extends ActivityEnhanced {
             @Override public void onClick(View v) {
                 if (canClick) {
                     layoutOption.setVisibility(View.VISIBLE);
-                    btnCall.setVisibility(View.GONE);
-                    btnCircleChat.setVisibility(View.GONE);
+                    layoutCall.setVisibility(View.GONE);
+                    layoutChat.setVisibility(View.GONE);
+
                     cancelRigtone();
                 }
             }
@@ -228,8 +239,8 @@ public class ActivityCall extends ActivityEnhanced {
         if (isIncomingCall) {
             playRingtone();
         } else {
-            btnCall.setVisibility(View.GONE);
-            btnCircleChat.setVisibility(View.GONE);
+            layoutCall.setVisibility(View.GONE);
+            layoutChat.setVisibility(View.GONE);
             layoutOption.setVisibility(View.VISIBLE);
         }
 
@@ -370,6 +381,7 @@ public class ActivityCall extends ActivityEnhanced {
                 Allmoving += i;
 
                 view.setPadding(0, 0, 0, view.getPaddingBottom() + i);
+
                 lastY = y;
                 if (Allmoving >= DistanceToAccept) {
                     accept = true;
@@ -391,8 +403,6 @@ public class ActivityCall extends ActivityEnhanced {
 
                 accept = false;
             }
-
-            view.setVisibility(View.INVISIBLE);
 
             view = null;
         }

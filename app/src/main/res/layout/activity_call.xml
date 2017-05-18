@@ -88,17 +88,18 @@
             android:layout_height="match_parent"
             >
 
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/fcr_btn_end"
-            android:layout_width="@dimen/dp52"
-            android:layout_height="@dimen/dp52"
-            android:background="@drawable/circle_red"
-            android:gravity="center"
-            android:text="@string/md_call_end"
-            android:textAppearance="@style/TextIconAppearance.all"
-            android:textColor="@color/white"
-            android:layout_gravity="bottom"
-            />
+
+          <net.iGap.module.MaterialDesignTextView
+              android:id="@+id/fcr_btn_end"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
+              android:layout_gravity="bottom"
+              android:background="@drawable/circle_red"
+              android:gravity="center"
+              android:text="@string/md_call_end"
+              android:textAppearance="@style/TextIconAppearance.all"
+              android:textColor="@color/white"
+              />
 
         </FrameLayout>
 
@@ -107,20 +108,29 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             >
+          <net.iGap.module.AvlDirectCall
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_marginBottom="@dimen/dp10"
+              android:layout_gravity="center"
+              ></net.iGap.module.AvlDirectCall>
+
 
           <net.iGap.module.MaterialDesignTextView
               android:id="@+id/fcr_btn_circle_chat"
-            android:layout_width="@dimen/dp52"
-            android:layout_height="@dimen/dp52"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
+              android:layout_gravity="bottom"
               android:layout_marginLeft="@dimen/dp52"
               android:layout_marginRight="@dimen/dp52"
               android:background="@drawable/circle_white"
-            android:gravity="center"
-              android:layout_gravity="bottom"
+              android:gravity="center"
               android:text="@string/md_chat"
-            android:textAppearance="@style/TextIconAppearance.all"
+              android:textAppearance="@style/TextIconAppearance.all"
               android:textColor="@color/gray"
-            />
+              />
+
 
         </FrameLayout>
 
@@ -130,14 +140,6 @@
             android:layout_height="match_parent"
             >
 
-          <com.wang.avi.AVLoadingIndicatorView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              app:indicatorColor="@color/white"
-              app:indicatorName="TriangleSkewSpinIndicator"
-              style="@style/AVLoadingIndicatorView.Small"
-              />
 
           <net.iGap.module.MaterialDesignTextView
               android:id="@+id/fcr_btn_call"
