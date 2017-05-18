@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import android.util.Log;
 import net.iGap.G;
 import net.iGap.proto.ProtoSignalingOffer;
 
@@ -27,26 +28,33 @@ public class SignalingOfferResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
         ProtoSignalingOffer.SignalingOfferResponse.Builder builder = (ProtoSignalingOffer.SignalingOfferResponse.Builder) message;
 
-        String callerSdp = builder.getCallerSdp();
-        Long callerUserID = builder.getCallerUserId();
-        net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type type = builder.getType();
+        /**
+         * if client get response from caller do this actions
+         */
+        if (builder.getResponse().getId().isEmpty()) {
+            Log.i("WWW", "SignalingOfferResponse from callee");
+            String callerSdp = builder.getCallerSdp();
+            Long callerUserID = builder.getCallerUserId();
+            net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type type = builder.getType();
 
-        if (G.iSignalingOffer != null) {
-            G.iSignalingOffer.onOffer(callerUserID, type, callerSdp);
+            if (G.iSignalingOffer != null) {
+                G.iSignalingOffer.onOffer(callerUserID, type, callerSdp);
+            }
         }
-
-
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

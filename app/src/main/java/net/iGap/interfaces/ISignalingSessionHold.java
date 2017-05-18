@@ -11,7 +11,7 @@
 package net.iGap.interfaces;
 
 
-public interface ISignalingSesionHold {
+public interface ISignalingSessionHold {
 
     void onHold(Boolean hold);
 }

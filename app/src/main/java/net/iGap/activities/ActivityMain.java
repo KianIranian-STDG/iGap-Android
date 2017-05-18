@@ -70,7 +70,6 @@ import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.emoji.EmojiTextView;
 import net.iGap.fragments.ContactGroupFragment;
-import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentNewGroup;
@@ -143,6 +142,7 @@ import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
+import net.iGap.webrtc.WebRTC;
 
 import static android.view.View.GONE;
 import static net.iGap.G.clientConditionGlobal;
@@ -615,12 +615,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     @Override
                     public void run() {
 
-                        Fragment fragment = FragmentCall.newInstance();
-                        try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
+                        Intent intent = new Intent(G.context, WebRTC.class);
+                        startActivity(intent);
+                        //Fragment fragment = FragmentCall.newInstance();
+                        //try {
+                        //    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                        //} catch (Exception e) {
+                        //    e.getStackTrace();
+                        //}
                     }
                 }, 256);
             }
@@ -707,64 +709,64 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     public void run() {
 
                         new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                            .content(R.string.content_log_out)
-                            .positiveText(getResources().getString(R.string.B_ok))
-                            .negativeText(getResources().getString(R.string.B_cancel))
-                            .iconRes(R.mipmap.exit_to_app_button)
-                            .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    G.onUserSessionLogout = new OnUserSessionLogout() {
-                                        @Override
-                                        public void onUserSessionLogout() {
+                                .content(R.string.content_log_out)
+                                .positiveText(getResources().getString(R.string.B_ok))
+                                .negativeText(getResources().getString(R.string.B_cancel))
+                                .iconRes(R.mipmap.exit_to_app_button)
+                                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        G.onUserSessionLogout = new OnUserSessionLogout() {
+                                            @Override
+                                            public void onUserSessionLogout() {
 
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    HelperLogout.logout();
-                                                }
-                                            });
-                                        }
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        HelperLogout.logout();
+                                                    }
+                                                });
+                                            }
 
-                                        @Override
-                                        public void onError() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
+                                            @Override
+                                            public void onError() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
 
-                                        @Override
-                                        public void onTimeOut() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
-                                    };
-                                    new RequestUserSessionLogout().userSessionLogout();
-                                }
-                            })
-                            .show();
+                                            @Override
+                                            public void onTimeOut() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
+                                        };
+                                        new RequestUserSessionLogout().userSessionLogout();
+                                    }
+                                })
+                                .show();
                     }
                 }, 256);
             }
@@ -848,7 +850,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     };
 
                     new AlertDialog.Builder(ActivityMain.this).setMessage(R.string.you_have_to_get_storage_permision_for_continue).setCancelable(false).
-                        setPositiveButton(ActivityMain.this.getString(R.string.ok), onOkListener).setNegativeButton(ActivityMain.this.getString(R.string.cancel), onCancelListener).create().show();
+                            setPositiveButton(ActivityMain.this.getString(R.string.ok), onOkListener).setNegativeButton(ActivityMain.this.getString(R.string.cancel), onCancelListener).create().show();
                 }
             });
         } catch (IOException e) {
@@ -1377,7 +1379,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         for (int i = 0; i < G.deletedRoomList.size(); i++) {
 
                             RealmRoom _RealmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                                equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
+                                    equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
 
                             // delete messages and rooms in the deleted room
                             if (_RealmRoom != null) {
@@ -1789,7 +1791,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } else {
                     holder.avi.setVisibility(View.GONE);
                     if (mInfo.getLastMessage() != null) {
-                        String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                        //String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                        String lastMessage = "";
                         if (lastMessage == null) {
                             lastMessage = mInfo.getLastMessage().getMessage();
                         }
