@@ -19,7 +19,6 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.RECORD_AUDIO" />
-  <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
   <uses-permission android:name="android.permission.RECEIVE_SMS" />
   <uses-permission android:name="android.permission.WRITE_CONTACTS" />
   <!-- required for drawer contacts fragment -->
@@ -30,6 +29,8 @@
   <uses-permission android:name="android.permission.READ_LOGS" />
 
   <!-- WebRTC Start hint:other permissions was exist in before codes -->
+  <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
   <uses-feature
       android:glEsVersion="0x00020000"
       android:required="true" />
@@ -107,10 +108,6 @@
 
 
     </activity>
-
-    <activity
-        android:name=".webrtc.WebRTC"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
 
     <activity
         android:name=".activities.Activity_charge_balance"
@@ -245,10 +242,6 @@
 
     <activity android:name=".activities.ActivityNewChanelFinish" />
     <activity android:name=".activities.ActivityChannelProfile" />
-
-    <service
-        android:enabled="true"
-        android:name="net.iGap.web.WebRtcCallService" />
 
     <service android:name=".helper.ServiceContact" />
     <service android:name=".module.UploadService" />

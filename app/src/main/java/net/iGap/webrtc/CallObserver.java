@@ -8,20 +8,13 @@
 * All rights reserved.
 */
 
-
-//public static ISignalingOffer iSignalingOffer;
-//public static ISignalingRinging iSignalingRinging;
-//public static ISignalingAccept iSignalingAccept;
-//public static ISignalingCandidate iSignalingCandidate;
-//public static ISignalingLeave iSignalingLeave;
-//public static ISignalingSessionHold iSignalingSessionHold;
-//public static ISignalingGetCallLog iSignalingGetCallLog;
-
 package net.iGap.webrtc;
 
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 import net.iGap.G;
+import net.iGap.activities.ActivityCall;
 import net.iGap.interfaces.ISignalingAccept;
 import net.iGap.interfaces.ISignalingCandidate;
 import net.iGap.interfaces.ISignalingGetCallLog;
@@ -42,8 +35,6 @@ import static net.iGap.G.iSignalingLeave;
 import static net.iGap.G.iSignalingOffer;
 import static net.iGap.G.iSignalingRinging;
 import static net.iGap.G.iSignalingSessionHold;
-import static net.iGap.webrtc.WebRTC.peerConnection;
-import static net.iGap.webrtc.WebRTC.peerConnectionInstance;
 import static org.webrtc.SessionDescription.Type.ANSWER;
 import static org.webrtc.SessionDescription.Type.OFFER;
 
@@ -65,9 +56,10 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                peerConnectionInstance().setRemoteDescription(new SdpObserver() {
+                new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
                     @Override
                     public void onCreateSuccess(SessionDescription sessionDescription) {
+
                     }
 
                     @Override
@@ -78,6 +70,9 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
                                 Toast.makeText(G.context, "You Have A Call ... ", Toast.LENGTH_SHORT).show();
                             }
                         });
+
+                        Intent intent = new Intent(G.context, ActivityCall.class);
+                        G.context.startActivity(intent);
                     }
 
                     @Override
@@ -90,27 +85,19 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
                         Log.i("WWW", "onOffer onSetFailure : " + s);
                     }
                 }, new SessionDescription(OFFER, callerSdp));
-
-                Log.i("WWW", "onOffer WebRtc.peerConnectionInstance().iceConnectionState() : " + peerConnectionInstance().iceConnectionState());
-                Log.i("WWW", "onOffer WebRtc.peerConnectionInstance().iceGatheringState() : " + peerConnectionInstance().iceGatheringState());
-                Log.i("WWW", "onOffer WebRtc.peerConnectionInstance().signalingState() : " + peerConnectionInstance().signalingState());
             }
         });
     }
 
     @Override
     public void onAccept(final String called_sdp) {
-        Log.i("WWW", "onAccept sdp : " + called_sdp);
-
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                peerConnectionInstance().setRemoteDescription(new SdpObserver() {
+                new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
                     @Override
                     public void onCreateSuccess(SessionDescription sessionDescription) {
-                        Log.i("WWW", "onAccept onCreateSuccess sessionDescription : " + sessionDescription);
-                        Log.i("WWW", "onAccept onCreateSuccess sessionDescription.description : " + sessionDescription.description);
-                        Log.i("WWW", "onAccept onCreateSuccess sessionDescription.type : " + sessionDescription.type);
+
                     }
 
                     @Override
@@ -135,14 +122,8 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
                     }
                 }, new SessionDescription(ANSWER, called_sdp));
 
-                Log.i("WWW", "onAccept WebRtc.peerConnectionInstance().iceConnectionState() : " + peerConnectionInstance().iceConnectionState());
-                Log.i("WWW", "onAccept WebRtc.peerConnectionInstance().iceGatheringState() : " + peerConnectionInstance().iceGatheringState());
-                Log.i("WWW", "onAccept WebRtc.peerConnectionInstance().signalingState() : " + peerConnectionInstance().signalingState());
             }
         });
-
-
-
     }
 
     @Override
@@ -151,16 +132,7 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
             @Override
             public void run() {
                 Log.i("WWW_Candidate", "onCandidate server : " + iceCandidate);
-                //String[] identityParams = iceCandidate.split(":");
-                //String sdpMid = identityParams[0];
-                //int sdpMLineIndex = Integer.parseInt(identityParams[1]);
-                //String sdp1 = identityParams[2];
-                //String sdp2 = identityParams[3];
-                //Log.i("WWW_Candidate", "onCandidate sdpMid : " + sdpMid);
-                //Log.i("WWW_Candidate", "onCandidate sdpMLineIndex : " + sdpMLineIndex);
-                //Log.i("WWW_Candidate", "onCandidate sdp : " + sdp1 + ":" + sdp2);
-                //WebRTC.peerConnectionInstance().addIceCandidate(new IceCandidate(sdpMid, sdpMLineIndex, sdp1 + ":" + sdp2));
-                peerConnectionInstance().addIceCandidate(new IceCandidate("", 0, iceCandidate));
+                new WebRTC().peerConnectionInstance().addIceCandidate(new IceCandidate("", 0, iceCandidate));
             }
         });
     }
@@ -180,12 +152,12 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
             }
         });
 
-        peerConnectionInstance().close();
-        peerConnectionInstance().dispose();
+        new WebRTC().close();
+        new WebRTC().dispose();
         /**
          * set peer connection null for try again
          */
-        peerConnection = null;
+        new WebRTC().clearConnection();
     }
 
     @Override

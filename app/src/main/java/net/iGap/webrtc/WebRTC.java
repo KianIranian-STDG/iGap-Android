@@ -11,24 +11,15 @@
 package net.iGap.webrtc;
 
 
-import android.media.AudioManager;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
-import net.iGap.R;
-import net.iGap.activities.ActivityEnhanced;
-import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallConfig;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestSignalingAccept;
 import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestSignalingOffer;
@@ -41,74 +32,19 @@ import org.webrtc.PeerConnectionFactory;
 import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 
-public class WebRTC extends ActivityEnhanced {
-    public static PeerConnection peerConnection;
-    public static PeerConnectionFactory peerConnectionFactory;
-    public static MediaConstraints mediaConstraints;
-    public static MediaConstraints audioConstraints;
-    private static AudioTrack audioTrack;
-    private static AudioSource audioSource;
+public class WebRTC {
+    private static PeerConnection peerConnection;
+    private static PeerConnectionFactory peerConnectionFactory;
+    private MediaConstraints mediaConstraints;
+    private MediaConstraints audioConstraints;
+    private AudioTrack audioTrack;
+    private AudioSource audioSource;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.web_rtc);
-        setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
-        Button btnCall = (Button) findViewById(R.id.btnCall);
-        Button btnAnswer = (Button) findViewById(R.id.btnAnswer);
-        Button btnCancel = (Button) findViewById(R.id.btnCancel);
-        Button btnUserId = (Button) findViewById(R.id.btnUserId);
-        final EditText editText = (EditText) findViewById(R.id.edtUserId);
-
-        btnCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String userIdString = editText.getText().toString();
-                long userId = 0;
-                if (HelperString.isNumeric(userIdString)) {
-                    userId = Integer.parseInt(userIdString);
-                } else {
-                    Toast.makeText(G.context, "Just Enter Number !", Toast.LENGTH_LONG).show();
-                }
-                if (userId != 0) {
-                    createOffer(userId);
-                } else {
-                    Toast.makeText(G.context, "User Id Is Wrong !", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        btnAnswer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createAnswer();
-            }
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                leaveCall();
-            }
-        });
-
-        btnUserId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Realm realm = Realm.getDefaultInstance();
-                Toast.makeText(G.context, "UserId : " + realm.where(RealmUserInfo.class).findFirst().getUserId(), Toast.LENGTH_LONG).show();
-                realm.close();
-            }
-        });
-
-        start();
-    }
-
-
-    public void start() {
+    public WebRTC() {
         peerConnectionInstance();
     }
 
-    private static void addAudioTrack(MediaStream mediaStream) {
+    private void addAudioTrack(MediaStream mediaStream) {
         audioSource = peerConnectionFactoryInstance().createAudioSource(audioConstraintsGetInstance());
         audioTrack = peerConnectionFactoryInstance().createAudioTrack("ARDAMSa0", audioSource);
         audioTrack.setEnabled(true);
@@ -118,7 +54,7 @@ public class WebRTC extends ActivityEnhanced {
     /**
      * First, we initiate the PeerConnectionFactory with our application context and some options.
      */
-    private static PeerConnectionFactory peerConnectionFactoryInstance() {
+    private PeerConnectionFactory peerConnectionFactoryInstance() {
         if (peerConnectionFactory == null) {
             PeerConnectionFactory.initializeAndroidGlobals(G.context,  // Context
                     true,  // Audio Enabled
@@ -130,7 +66,7 @@ public class WebRTC extends ActivityEnhanced {
         return peerConnectionFactory;
     }
 
-    public static PeerConnection peerConnectionInstance() {
+    PeerConnection peerConnectionInstance() {
         if (peerConnection == null) {
             List<PeerConnection.IceServer> iceServers = new ArrayList<>();
             Realm realm = Realm.getDefaultInstance();
@@ -157,7 +93,7 @@ public class WebRTC extends ActivityEnhanced {
     }
 
     public void createOffer(final long userIdCallee) {
-        runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(G.context, "Dialling ... ", Toast.LENGTH_SHORT).show();
@@ -216,7 +152,7 @@ public class WebRTC extends ActivityEnhanced {
         }, mediaConstraintsGetInstance());
     }
 
-    public void setLocalDescription(final SessionDescription.Type type, String sdp) {
+    private void setLocalDescription(final SessionDescription.Type type, String sdp) {
         peerConnectionInstance().setLocalDescription(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
@@ -239,7 +175,7 @@ public class WebRTC extends ActivityEnhanced {
         }, new SessionDescription(type, sdp));
     }
 
-    public static MediaConstraints mediaConstraintsGetInstance() {
+    private MediaConstraints mediaConstraintsGetInstance() {
         if (mediaConstraints == null) {
             mediaConstraints = new MediaConstraints();
             mediaConstraints.optional.add(new MediaConstraints.KeyValuePair("DtlsSrtpKeyAgreement", "true"));
@@ -247,7 +183,7 @@ public class WebRTC extends ActivityEnhanced {
         return mediaConstraints;
     }
 
-    public static MediaConstraints audioConstraintsGetInstance() {
+    private MediaConstraints audioConstraintsGetInstance() {
         if (audioConstraints == null) {
             audioConstraints = new MediaConstraints();
             audioConstraints.optional.add(new MediaConstraints.KeyValuePair("DtlsSrtpKeyAgreement", "true"));
@@ -255,17 +191,29 @@ public class WebRTC extends ActivityEnhanced {
         return audioConstraints;
     }
 
-    private static void acceptCall(String sdp) {
+    private void acceptCall(String sdp) {
         new RequestSignalingAccept().signalingAccept(sdp);
     }
 
-    public static void leaveCall() {
-        peerConnectionInstance().close();
-        peerConnectionInstance().dispose();
+    public void leaveCall() {
+        close();
+        dispose();
         /**
          * set peer connection null for try again
          */
-        peerConnection = null;
+        clearConnection();
         new RequestSignalingLeave().signalingLeave();
+    }
+
+    public void close() {
+        peerConnectionInstance().close();
+    }
+
+    public void dispose() {
+        peerConnectionInstance().dispose();
+    }
+
+    public void clearConnection() {
+        peerConnection = null;
     }
 }
