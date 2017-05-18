@@ -130,6 +130,7 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
             emojiPopup.dismiss();
         } else {
             super.onBackPressed();
+            finish();
         }
     }
 

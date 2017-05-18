@@ -347,10 +347,10 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
     private void showPopupMenu(int r) {
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(r).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
             @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                if (which == 0) {
-                    saveToGallery();
-                } else if (which == 1) {
 
+                if (text.equals(getResources().getString(R.string.save_to_gallery))) {
+                    saveToGallery();
+                } else if (text.equals(getResources().getString(R.string.array_Delete_photo))) {
                     switch (from) {
                         case setting:
                             deletePhotoSetting();
@@ -366,6 +366,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                             break;
                     }
                 }
+
             }
         }).build();
 

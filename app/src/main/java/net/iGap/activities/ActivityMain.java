@@ -200,12 +200,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    private Realm getRealm() {
+
+        if (mRealm != null && !mRealm.isClosed()) {
+            return mRealm;
+        }
+
+        mRealm = Realm.getDefaultInstance();
+        return mRealm;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mRealm = Realm.getDefaultInstance();
 
         progressBar = (ProgressBar) findViewById(R.id.ac_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);
@@ -394,9 +403,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //navigationView.setNavigationItemSelectedListener(this);
 
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
             String username = realmUserInfo.getUserInfo().getDisplayName();
             String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
@@ -415,7 +422,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setImage(realmUserInfo.getUserId());
         }
 
-        realm.close();
+
 
 
         final ViewGroup navBackGround = (ViewGroup) findViewById(R.id.lm_layout_user_picture);
@@ -1150,7 +1157,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(ActivityMain.this));
 
-        RealmResults<RealmRoom> results = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+        RealmResults<RealmRoom> results = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
+            equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);
         mRecyclerView.setAdapter(roomAdapter);
 
@@ -1435,7 +1443,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } catch (Exception e) {
                 e.getStackTrace();
             }
-            ;
         } else if (fragmentIgapSearch != null && fragmentIgapSearch.isVisible()) {
             try {
                 getSupportFragmentManager().beginTransaction().remove(fragmentIgapSearch).commit();
@@ -1452,6 +1459,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             this.drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            finish();
         }
     }
 

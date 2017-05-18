@@ -1279,6 +1279,7 @@ public class ActivityRegister extends ActivityEnhanced {
             }
         } else {
             super.onBackPressed();
+            finish();
         }
     }
 }

@@ -257,6 +257,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             FragmentShowImage.downloadedList.clear();
         } else if (!adapter.resetSelected()) {
             super.onBackPressed();
+            finish();
         }
     }
 

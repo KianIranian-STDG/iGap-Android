@@ -185,12 +185,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     private void showInitials() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+
+        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
         circleImageView.setImageBitmap(
             HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(),
                 realmUserInfo.getUserInfo().getColor()));
-        realm.close();
+
 
         if (G.onChangeUserPhotoListener != null) {
             G.onChangeUserPhotoListener.onChangePhoto(null);
@@ -216,27 +216,38 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (realmUserInfo != null) {
             realmUserInfo.removeAllChangeListeners();
         }
+    }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
 
         if (mRealm != null) {
             mRealm.close();
         }
     }
 
+    private Realm getRealm() {
+
+        if (mRealm != null && !mRealm.isClosed()) {
+            return mRealm;
+        }
+
+        mRealm = Realm.getDefaultInstance();
+        return mRealm;
+    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        mRealm = Realm.getDefaultInstance();
-
-        realmUserInfo = mRealm.where(RealmUserInfo.class).findFirst();
+        realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
         userInfoListener = new RealmChangeListener<RealmModel>() {
             @Override public void onChange(RealmModel element) {
                 updateUserInfoUI((RealmUserInfo) element);
             }
         };
 
-        RealmPrivacy realmPrivacy = mRealm.where(RealmPrivacy.class).findFirst();
+        RealmPrivacy realmPrivacy = getRealm().where(RealmPrivacy.class).findFirst();
 
         if (realmPrivacy == null) {
             RealmPrivacy.updatePrivacy("", "", "", "");
@@ -427,11 +438,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         layoutGander.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 int position = -1;
-                Realm realm1 = Realm.getDefaultInstance();
+
                 try {
-                    if (realm1.where(RealmUserInfo.class).findFirst().getGender().getNumber() == 1) {
+                    if (getRealm().where(RealmUserInfo.class).findFirst().getGender().getNumber() == 1) {
                         position = 0;
-                    } else if (realm1.where(RealmUserInfo.class).findFirst().getGender().getNumber() == 2) {
+                    } else if (getRealm().where(RealmUserInfo.class).findFirst().getGender().getNumber() == 2) {
                         position = 1;
                     } else {
                         position = -1;
@@ -439,7 +450,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
-                realm1.close();
 
                 G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
                     @Override public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
@@ -1014,8 +1024,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             @Override public void onComplete(RippleView rippleView) {
 
-                Realm realm = Realm.getDefaultInstance();
-                if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
+                if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
                     FragmentShowAvatars.appBarLayout = fab;
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
                     ActivitySetting.this.getSupportFragmentManager()
@@ -1025,7 +1034,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         .replace(R.id.st_layoutParent, fragment, null)
                         .commit();
                 }
-                realm.close();
             }
         });
 

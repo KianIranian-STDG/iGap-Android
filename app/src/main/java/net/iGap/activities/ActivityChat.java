@@ -333,7 +333,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public static OnPathAdapterBottomSheet onPathAdapterBottomSheet;
     private View viewBottomSheet;
 
-    private RealmRoom realmRoom;
+
     private RealmRoomMessage voiceLastMessage = null;
     public static OnComplete hashListener;
     public static OnComplete onComplete;
@@ -705,6 +705,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 startActivity(intent);
             }
             super.onBackPressed();
+            finish();
+
         }
     }
 
@@ -1032,7 +1034,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         if (extras != null) {
             mRoomId = extras.getLong("RoomId");
             chatPeerId = extras.getLong("peerId");
-            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
 
@@ -1219,6 +1221,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 return;
             }
             userId = realmUserInfo.getUserId();
+
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
             if (realmRoom != null) { // room exist
 
