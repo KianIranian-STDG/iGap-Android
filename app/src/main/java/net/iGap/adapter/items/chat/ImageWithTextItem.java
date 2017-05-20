@@ -102,10 +102,6 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     @Override public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }

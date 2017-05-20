@@ -106,10 +106,6 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         }
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ReserveSpaceRoundedImageView image;
         protected TextView duration;

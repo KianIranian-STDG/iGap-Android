@@ -37,10 +37,6 @@ public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat
         super.bindView(holder, payloads);
     }
 
-    @Override protected void voteAction(net.iGap.adapter.items.chat.ProgressWaiting.ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         ProgressBar progressBar;

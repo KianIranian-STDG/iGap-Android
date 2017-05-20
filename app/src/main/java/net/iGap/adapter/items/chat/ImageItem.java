@@ -44,10 +44,6 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     @Override public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 

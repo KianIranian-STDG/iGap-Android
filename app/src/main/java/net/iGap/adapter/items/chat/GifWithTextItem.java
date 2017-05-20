@@ -152,10 +152,6 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         }
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected ReserveSpaceGifImageView image;
