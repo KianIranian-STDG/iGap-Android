@@ -10,9 +10,7 @@
 
 package net.iGap.activities;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -119,7 +117,6 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyAppBarLayout;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.ShouldScrolledBehavior;
-import net.iGap.module.StartupActions;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
@@ -266,7 +263,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 e.printStackTrace();
             }
 
-            checkPermission();
         }
 
         G.helperNotificationAndBadge.cancelNotification();
@@ -810,54 +806,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private void checkPermission() {
-        try {
-            HelperPermision.getStoragePermision(this, new OnGetPermission() {
-                @Override
-                public void Allow() {
-                    StartupActions.makeFolder();
-                }
-
-                @Override
-                public void deny() {
-
-                    DialogInterface.OnClickListener onOkListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            try {
-                                HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
-                                    @Override
-                                    public void Allow() {
-                                        StartupActions.makeFolder();
-                                    }
-
-                                    @Override
-                                    public void deny() {
-                                        finish();
-                                    }
-                                });
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    };
-
-                    DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    };
-
-                    new AlertDialog.Builder(ActivityMain.this).setMessage(R.string.you_have_to_get_storage_permision_for_continue).setCancelable(false).
-                        setPositiveButton(ActivityMain.this.getString(R.string.ok), onOkListener).setNegativeButton(ActivityMain.this.getString(R.string.cancel), onCancelListener).create().show();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void connectionState() {
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
