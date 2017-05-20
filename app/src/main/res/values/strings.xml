@@ -808,8 +808,8 @@
   <string name="privacy_setting">Privacy Setting</string>
   <string name="igap_search">Look and Find</string>
   <string name="set_color_to_default">Set Colors as Default</string>
-  <string name="empty_message">Nothing Found. Please try to enter the first 5 characters of username </string>
-  <string name="empty_message3">Search is required for at least three letters</string>
+  <string name="empty_message">Please try to enter the first 5 characters of username</string>
+  <string name="empty_message3">3 letters at least are required for looking</string>
   <string name="there_is_no_any_result">No Result</string>
   <string name="there_is_no_connection_to_server">No Connection to the Server</string>
   <string name="empty_room">No Messages Yet</string>
