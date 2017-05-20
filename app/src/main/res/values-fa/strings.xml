@@ -65,6 +65,7 @@
 
   <!-- Destruction -->
   <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
+  <string name="delete_account_text_desc">( در صورتیکه اکانت خود را حذف دائم (پاک) کنید، همه فایل هایی که به صورت پیام دریافت کرده اید نیز به طور دائم پاک (حذف) خواهند شد. )</string>
   <string name="Destruction_Code">تخریب</string>
   <string name="Destruction_Des">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
   <string name="iGap_autofill_Destruction_Code">آی گپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست به صورت دستی وارد کنید.</string>

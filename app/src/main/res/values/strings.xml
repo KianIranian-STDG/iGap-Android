@@ -523,6 +523,7 @@
   <string name="text_add_to_list_contact">Do you want to add this phone number to your contacts?</string>
 
   <string name="delete_account_text">Are you sure you want to delete your account?</string>
+  <string name="delete_account_text_desc">( If you delete your account all sort of files received as messages will be deleted permanently! )</string>
   <string name="text_kick_admin">Are you sure to kick this admin out?</string>
   <string name="text_kick_moderator">Are you sure to kick this moderator out?</string>
   <string name="dialog_readonly_chat">Sorry, you are not allowed to send any messages to this chat.</string>
