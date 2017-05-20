@@ -10,9 +10,6 @@
 
 package net.iGap.interfaces;
 
-
-import net.iGap.module.enums.CallState;
-
-public interface ISignalingCallBack {
-    void onStatusChanged(CallState callState);
+public interface OnCallLeaveView {
+    void onLeaveView();
 }

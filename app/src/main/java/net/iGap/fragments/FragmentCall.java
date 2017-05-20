@@ -196,8 +196,8 @@ public class FragmentCall extends Fragment {
     public static void call(long userID, boolean isIncomingCall) {
 
         Intent intent = new Intent(G.context, ActivityCall.class);
-        intent.putExtra(ActivityCall.UserIdStr, userID);
-        intent.putExtra(ActivityCall.INCOMONGCALL_STR, isIncomingCall);
+        intent.putExtra(ActivityCall.USER_ID_STR, userID);
+        intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         G.context.startActivity(intent);

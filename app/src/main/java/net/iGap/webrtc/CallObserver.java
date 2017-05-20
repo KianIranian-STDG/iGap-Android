@@ -12,7 +12,6 @@ package net.iGap.webrtc;
 
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.activities.ActivityCall;
 import net.iGap.interfaces.ISignalingAccept;
@@ -22,6 +21,7 @@ import net.iGap.interfaces.ISignalingLeave;
 import net.iGap.interfaces.ISignalingOffer;
 import net.iGap.interfaces.ISignalingRinging;
 import net.iGap.interfaces.ISignalingSessionHold;
+import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoSignalingLeave;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.request.RequestSignalingRinging;
@@ -29,12 +29,15 @@ import org.webrtc.IceCandidate;
 import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.iSignalingAccept;
 import static net.iGap.G.iSignalingCandidate;
 import static net.iGap.G.iSignalingLeave;
 import static net.iGap.G.iSignalingOffer;
 import static net.iGap.G.iSignalingRinging;
 import static net.iGap.G.iSignalingSessionHold;
+import static net.iGap.activities.ActivityCall.INCOMING_CALL_STR;
+import static net.iGap.activities.ActivityCall.USER_ID_STR;
 import static org.webrtc.SessionDescription.Type.ANSWER;
 import static org.webrtc.SessionDescription.Type.OFFER;
 
@@ -50,7 +53,7 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
     }
 
     @Override
-    public void onOffer(long called_userId, ProtoSignalingOffer.SignalingOffer.Type type, final String callerSdp) {
+    public void onOffer(final long called_userId, ProtoSignalingOffer.SignalingOffer.Type type, final String callerSdp) {
         new RequestSignalingRinging().signalingRinging();
 
         G.handler.post(new Runnable() {
@@ -64,14 +67,10 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
 
                     @Override
                     public void onSetSuccess() {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(G.context, "You Have A Call ... ", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
                         Intent intent = new Intent(G.context, ActivityCall.class);
+                        intent.putExtra(USER_ID_STR, called_userId);
+                        intent.putExtra(INCOMING_CALL_STR, true);
+                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                         G.context.startActivity(intent);
                     }
 
@@ -102,13 +101,7 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
 
                     @Override
                     public void onSetSuccess() {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(G.context, "Callee Accepted You ! ", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        Log.i("WWW", "onAccept onSetSuccess");
+                        Log.i("WWW", "onSetSuccess");
                     }
 
                     @Override
@@ -145,24 +138,23 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
 
     @Override
     public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(G.context, type.toString() + " ... ", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         new WebRTC().close();
         new WebRTC().dispose();
         /**
          * set peer connection null for try again
          */
         new WebRTC().clearConnection();
+
+        if (G.onCallLeaveView != null) {
+            G.onCallLeaveView.onLeaveView();
+        }
     }
 
     @Override
     public void onRinging() {
-
+        if (G.iSignalingCallBack != null) {
+            G.iSignalingCallBack.onStatusChanged(CallState.RINGING);
+        }
     }
 
     @Override

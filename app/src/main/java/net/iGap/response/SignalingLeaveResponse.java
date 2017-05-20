@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.proto.ProtoSignalingLeave;
 
@@ -33,12 +32,6 @@ public class SignalingLeaveResponse extends MessageHandler {
         super.handler();
 
         final ProtoSignalingLeave.SignalingLeaveResponse.Builder builder = (ProtoSignalingLeave.SignalingLeaveResponse.Builder) message;
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(G.context, "Leave : " + builder.getType(), Toast.LENGTH_SHORT).show();
-            }
-        });
         if (G.iSignalingLeave != null) {
             G.iSignalingLeave.onLeave(builder.getType());
         }

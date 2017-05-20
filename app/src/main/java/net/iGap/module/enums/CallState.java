@@ -8,11 +8,8 @@
 * All rights reserved.
 */
 
-package net.iGap.interfaces;
+package net.iGap.module.enums;
 
-
-import net.iGap.module.enums.CallState;
-
-public interface ISignalingCallBack {
-    void onStatusChanged(CallState callState);
+public enum CallState {
+    DIALLING, RINGING, CHECKING, CONNECTED, FINISHED
 }

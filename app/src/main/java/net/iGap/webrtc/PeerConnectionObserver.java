@@ -20,8 +20,8 @@
 package net.iGap.webrtc;
 
 import android.util.Log;
-import android.widget.Toast;
 import net.iGap.G;
+import net.iGap.module.enums.CallState;
 import net.iGap.request.RequestSignalingCandidate;
 import org.webrtc.AudioTrack;
 import org.webrtc.DataChannel;
@@ -31,6 +31,13 @@ import org.webrtc.PeerConnection;
 import org.webrtc.RtpReceiver;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoTrack;
+
+import static org.webrtc.PeerConnection.IceConnectionState.CHECKING;
+import static org.webrtc.PeerConnection.IceConnectionState.CLOSED;
+import static org.webrtc.PeerConnection.IceConnectionState.COMPLETED;
+import static org.webrtc.PeerConnection.IceConnectionState.CONNECTED;
+import static org.webrtc.PeerConnection.IceConnectionState.DISCONNECTED;
+import static org.webrtc.PeerConnection.IceConnectionState.FAILED;
 
 public class PeerConnectionObserver implements PeerConnection.Observer, VideoRenderer.Callbacks {
 
@@ -42,23 +49,16 @@ public class PeerConnectionObserver implements PeerConnection.Observer, VideoRen
 
     @Override
     public void onIceConnectionChange(final PeerConnection.IceConnectionState iceConnectionState) {
-
-        if (iceConnectionState == PeerConnection.IceConnectionState.CONNECTED) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(G.context, "Call is active !!! ", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(G.context, iceConnectionState.toString(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
         Log.i("WWW", "onIceConnectionChange : " + iceConnectionState);
+        if (G.iSignalingCallBack != null) {
+            if (iceConnectionState == CLOSED || iceConnectionState == DISCONNECTED || iceConnectionState == FAILED) {
+                G.iSignalingCallBack.onStatusChanged(CallState.FINISHED);
+            } else if (iceConnectionState == CHECKING) {
+                G.iSignalingCallBack.onStatusChanged(CallState.CHECKING);
+            } else if (iceConnectionState == CONNECTED || iceConnectionState == COMPLETED) {
+                G.iSignalingCallBack.onStatusChanged(CallState.CONNECTED);
+            }
+        }
     }
 
     @Override
@@ -73,11 +73,7 @@ public class PeerConnectionObserver implements PeerConnection.Observer, VideoRen
 
     @Override
     public void onIceCandidate(IceCandidate iceCandidate) {
-        Log.i("WWW", "onIceCandidate");
         Log.i("WWW", "WebRtc onIceCandidate : " + iceCandidate.toString());
-        Log.i("WWW", "WebRtc onIceCandidate.sdp : " + iceCandidate.sdp);
-        Log.i("WWW", "WebRtc onIceCandidate.sdpMid : " + iceCandidate.sdpMid);
-        Log.i("WWW", "WebRtc onIceCandidate.sdpMLineIndex : " + iceCandidate.sdpMLineIndex);
         new RequestSignalingCandidate().signalingCandidate(iceCandidate.sdp);
 
     }
@@ -89,8 +85,6 @@ public class PeerConnectionObserver implements PeerConnection.Observer, VideoRen
 
     @Override
     public void onAddStream(MediaStream stream) {
-        Log.i("WWW", "onAddStream : " + stream);
-
         for (AudioTrack audioTrack : stream.audioTracks) {
             audioTrack.setEnabled(true);
         }

@@ -70,6 +70,7 @@ import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.emoji.EmojiTextView;
 import net.iGap.fragments.ContactGroupFragment;
+import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentNewGroup;
@@ -142,7 +143,6 @@ import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
-import net.iGap.webrtc.WebRTC;
 
 import static android.view.View.GONE;
 import static net.iGap.G.clientConditionGlobal;
@@ -614,15 +614,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
-                        Intent intent = new Intent(G.context, WebRTC.class);
-                        startActivity(intent);
-                        //Fragment fragment = FragmentCall.newInstance();
-                        //try {
-                        //    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-                        //} catch (Exception e) {
-                        //    e.getStackTrace();
-                        //}
+                        Fragment fragment = FragmentCall.newInstance();
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
                     }
                 }, 256);
             }

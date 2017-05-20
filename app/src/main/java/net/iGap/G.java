@@ -42,6 +42,7 @@ import net.iGap.interfaces.ISignalingLeave;
 import net.iGap.interfaces.ISignalingOffer;
 import net.iGap.interfaces.ISignalingRinging;
 import net.iGap.interfaces.ISignalingSessionHold;
+import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChannelAddAdmin;
 import net.iGap.interfaces.OnChannelAddMember;
@@ -350,6 +351,7 @@ public class G extends MultiDexApplication {
     public static OnUserContactsUnBlock onUserContactsUnBlock;
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
+    public static OnCallLeaveView onCallLeaveView;
     public static IClientSearchUserName onClientSearchUserName;
 
     public static ISignalingOffer iSignalingOffer;
