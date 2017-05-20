@@ -24,7 +24,6 @@ import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmRoomMessageLocation;
-import net.iGap.realm.RealmUserInfo;
 import org.parceler.Parcels;
 
 /**
@@ -375,13 +374,12 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public boolean isAuthorMe() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+
         boolean output = false;
-        if (realmUserInfo != null && authorHash != null) {
-            output = authorHash.equals(realmUserInfo.getAuthorHash());
+        if (authorHash != null) {
+            output = authorHash.equals(G.authorHash);
         }
-        realm.close();
+
         return output;
     }
 

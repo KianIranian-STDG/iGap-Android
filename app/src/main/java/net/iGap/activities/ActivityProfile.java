@@ -224,6 +224,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
                             @Override public void execute(Realm realm) {
                                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                                 realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
+                                G.displayName = user.getDisplayName();
+
                                 realmUserInfo.getUserInfo().setInitials(user.getInitials());
                                 realmUserInfo.getUserInfo().setColor(user.getColor());
 
@@ -264,10 +266,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
             }
         };
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        new RequestUserInfo().userInfo(realmUserInfo.getUserId());
-        realm.close();
+        new RequestUserInfo().userInfo(G.userId);
+
     }
 
     public void useCamera() {

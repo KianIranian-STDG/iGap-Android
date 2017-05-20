@@ -35,6 +35,7 @@ public class UserRegisterResponse extends MessageHandler {
 
         G.userId = builder.getUserId();
         G.authorHash = builder.getAuthorHash();
+        G.displayName = builder.getUsername();
     }
 
     @Override

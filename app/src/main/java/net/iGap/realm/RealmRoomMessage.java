@@ -651,13 +651,12 @@ import org.parceler.Parcel;
     }
 
     public boolean isAuthorMe() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+
         boolean output = false;
-        if (realmUserInfo != null && getAuthorHash() != null) {
-            output = getAuthorHash().equals(realmUserInfo.getAuthorHash());
+        if (getAuthorHash() != null) {
+            output = getAuthorHash().equals(G.authorHash);
         }
-        realm.close();
+
         return output;
     }
 

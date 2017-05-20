@@ -435,13 +435,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Realm realm = Realm.getDefaultInstance();
-                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                        if (realmUserInfo != null) {
-                            long username = realmUserInfo.getUserId();
-                            chatGetRoom(username);
-                        }
-                        realm.close();
+
+                        chatGetRoom(G.userId);
+
                     }
                 }, 225);
             }

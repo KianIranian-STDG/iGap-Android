@@ -2154,7 +2154,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                             realmChannelExtra.setThumbsUp("0");
                                             realmChannelExtra.setThumbsDown("0");
                                             if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
-                                                realmChannelExtra.setSignature(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName());
+                                                realmChannelExtra.setSignature(G.displayName);
                                             } else {
                                                 realmChannelExtra.setSignature("");
                                             }
@@ -2756,7 +2756,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
         if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
-            structChannelExtra.signature = realm.where(RealmUserInfo.class).findFirst().getUserInfo().getDisplayName();
+            structChannelExtra.signature = G.displayName;
         } else {
             structChannelExtra.signature = "";
         }
@@ -4734,9 +4734,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 Realm realm = Realm.getDefaultInstance();
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                 RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmRegisteredInfo != null && realmUserInfo != null && realmRegisteredInfo.getId() != realmUserInfo.getUserId()) {
-                    if (phoneNumber == null && realmRegisteredInfo.getId() != G.userId) {
+                if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != G.userId) {
+                    if (phoneNumber == null) {
                         if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
                             initSpamBarLayout(realmRegisteredInfo);
                             vgSpamUser.setVisibility(View.VISIBLE);
