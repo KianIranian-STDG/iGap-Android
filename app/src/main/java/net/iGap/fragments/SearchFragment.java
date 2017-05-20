@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -28,11 +27,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
-import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.util.ArrayList;
@@ -48,6 +48,7 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmContacts;
+import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -63,11 +64,8 @@ public class SearchFragment extends Fragment {
     private ArrayList<StructSearch> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
-    private boolean isFillList = false;
-    private boolean chatHeaderGone = true;
-    private boolean contactHeaderGone = true;
-    private boolean messageHeaderGone = true;
     private ImageView imvNothingFound;
+    private TextView txtEmptyListComment;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -93,6 +91,11 @@ public class SearchFragment extends Fragment {
         imvNothingFound.setImageResource(R.drawable.find1);
         imvNothingFound.setVisibility(View.VISIBLE);
 
+        txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
+        txtEmptyListComment.setVisibility(View.VISIBLE);
+        txtEmptyListComment.setText(R.string.empty_message3);
+
+
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -101,44 +104,23 @@ public class SearchFragment extends Fragment {
 
             @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if (charSequence.length() == 1 && !isFillList) fillList();
+                fillList(charSequence.toString());
 
-                itemAdapter.filter(charSequence);
 
                 if (charSequence.length() > 0) {
                     btnClose.setTextColor(Color.WHITE);
                     ((View) rippleDown).setEnabled(true);
-                    imvNothingFound.setVisibility(View.GONE);
+
                 } else {
                     btnClose.setTextColor(getResources().getColor(R.color.colorChatMessageSelectableItemBg));
                     ((View) rippleDown).setEnabled(false);
-                    imvNothingFound.setVisibility(View.GONE);
+
                 }
             }
 
             @Override public void afterTextChanged(Editable editable) {
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
-
-                        chatHeaderGone = contactHeaderGone = messageHeaderGone = true;
-
-                        for (int i = 0; i < itemAdapter.getAdapterItemCount(); i++) {
-                            if (itemAdapter.getItem(i) instanceof SearchItem) {
-                                SearchItem s = (SearchItem) itemAdapter.getItem(i);
-                                if (s.item.type == SearchType.room) {
-                                    chatHeaderGone = false;
-                                } else if (s.item.type == SearchType.contact) {
-                                    contactHeaderGone = false;
-                                } else if (s.item.type == SearchType.message) {
-                                    messageHeaderGone = false;
-                                }
-                            }
-                        }
-
-                        itemAdapter.filter(edtSearch.getText().toString());
-                    }
-                }, 200);
+                ;
             }
         });
         edtSearch.requestFocus();
@@ -162,7 +144,6 @@ public class SearchFragment extends Fragment {
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
                 edtSearch.setText("");
-                imvNothingFound.setVisibility(View.GONE);
             }
         });
 
@@ -173,35 +154,7 @@ public class SearchFragment extends Fragment {
 
         fastAdapter = new FastAdapter();
         itemAdapter = new ItemAdapter();
-        itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<IItem>() {
-            @Override public boolean filter(IItem currentItem, CharSequence constraint) {
 
-                try {
-                    if (currentItem instanceof SearchItemHeader) {
-                        SearchItemHeader sih = (SearchItemHeader) currentItem;
-                        if (sih.text.equals(getString(R.string.chats)) && chatHeaderGone) {
-                            return true;
-                        } else if (sih.text.equals(getString(R.string.contacts)) && contactHeaderGone) {
-                            return true;
-                        } else if (sih.text.equals(getString(R.string.messages)) && messageHeaderGone) {
-                            return true;
-                        }
-
-                        return false;
-                    } else {
-                        SearchItem si = (SearchItem) currentItem;
-
-                        if (si.item.type == SearchType.message) {
-                            return !si.item.comment.toLowerCase().contains(String.valueOf(constraint).toLowerCase());
-                        } else {
-                            return !si.item.name.toLowerCase().contains(String.valueOf(constraint).toLowerCase());
-                        }
-                    }
-                } catch (Exception e) {
-                    return true;
-                }
-            }
-        });
 
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<IItem>() {
             @Override public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
@@ -225,15 +178,28 @@ public class SearchFragment extends Fragment {
         recyclerView.setAdapter(itemAdapter.wrap(fastAdapter));
     }
 
-    private void fillList() {
+    private void fillList(String text) {
+
+        itemAdapter.clear();
+
+        if (text.length() < 3) {
+            txtEmptyListComment.setVisibility(View.VISIBLE);
+            txtEmptyListComment.setText(R.string.empty_message3);
+            imvNothingFound.setVisibility(View.VISIBLE);
+
+            return;
+        }
+
+        txtEmptyListComment.setVisibility(View.GONE);
+        imvNothingFound.setVisibility(View.GONE);
 
         list.clear();
         addHeader(getString(R.string.chats));
-        fillRoomList();
+        fillRoomList(text);
         addHeader(getString(R.string.contacts));
-        fillContacts();
+        fillContacts(text);
         addHeader(getString(R.string.messages));
-        fillMessages();
+        fillMessages(text);
 
         List<IItem> items = new ArrayList<>();
 
@@ -249,16 +215,23 @@ public class SearchFragment extends Fragment {
 
         itemAdapter.add(items);
 
-        isFillList = true;
+        if (list.size() == 0) {
+
+            txtEmptyListComment.setVisibility(View.VISIBLE);
+            txtEmptyListComment.setText(R.string.there_is_no_any_result);
+            imvNothingFound.setVisibility(View.VISIBLE);
+        }
+
+
     }
 
-    private void fillRoomList() {
+    private void fillRoomList(String text) {
 
         Realm realm = Realm.getDefaultInstance();
 
         int size = list.size();
 
-        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE).findAll()) {
             StructSearch item = new StructSearch();
 
             item.roomType = realmRoom.getType();
@@ -278,11 +251,11 @@ public class SearchFragment extends Fragment {
         realm.close();
     }
 
-    private void fillContacts() {
+    private void fillContacts(String text) {
         int size = list.size();
 
         Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmContacts> results = realm.where(RealmContacts.class).findAll();
+        final RealmResults<RealmContacts> results = realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, text, Case.INSENSITIVE).findAll();
         if (results != null) {
 
             for (RealmContacts contact : results) {
@@ -317,13 +290,17 @@ public class SearchFragment extends Fragment {
         list.add(item);
     }
 
-    private void fillMessages() {
+    private void fillMessages(String text) {
 
         //TODO [Saeed Mozaffari] [2016-10-18 10:19 AM] - now load avatar just from local . shayad avatar download nashode bashe. inja download nemikonim faghat agar vojud dashte bashe neshun midim
         int size = list.size();
         Realm realm = Realm.getDefaultInstance();
 
-        for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.EDITED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll()) {
+        for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class)
+            .contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE)
+            .equalTo(RealmRoomMessageFields.EDITED, false)
+            .isNotEmpty(RealmRoomMessageFields.MESSAGE)
+            .findAll()) {
             if (roomMessage != null) {
 
                 StructSearch item = new StructSearch();
