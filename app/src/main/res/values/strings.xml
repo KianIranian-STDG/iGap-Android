@@ -167,12 +167,12 @@
   <string name="st_crop">Crop and Resize Photo</string>
   <string name="st_send_by_enter">Send by Enter Key</string>
   <string name="st_title_Media">Multimedia</string>
-  <string name="st_auto_download_data">Auto download (Using Mobile Data)</string>
-  <string name="title_auto_download_data">Auto download\n(Using Mobile Data)</string>
-  <string name="st_auto_download_wifi">Auto download (When Connected on Wi-Fi)</string>
-  <string name="title_auto_download_wifi">Auto download\n(Using Wi-Fi)</string>
-  <string name="st_auto_download_roaming">Auto download (When Roaming)</string>
-  <string name="title_auto_download_roaming">Auto download\n(Using Data Roaming)</string>
+  <string name="st_auto_download_data">Auto-download (Using Mobile Data)</string>
+  <string name="title_auto_download_data">Auto-download\n(Using Mobile Data)</string>
+  <string name="st_auto_download_wifi">Auto-download (When Connected on Wi-Fi)</string>
+  <string name="title_auto_download_wifi">Auto-download\n(Using Wi-Fi)</string>
+  <string name="st_auto_download_roaming">Auto-download (When Roaming)</string>
+  <string name="title_auto_download_roaming">Auto-download\n(Using Data Roaming)</string>
   <string name="st_auto_gif">Auto Play GIFs</string>
   <string name="st_save_to_gallery">Save to Gallery</string>
   <string name="st_title_support">iGap Support</string>
@@ -712,7 +712,7 @@
   <string name="saturday">"Saturday"</string>
 
 
-  <string name="USER_JOINED">"Joined to iGap"</string>
+  <string name="USER_JOINED">"Joined iGap"</string>
   <string name="USER_DELETED">"Left from iGap"</string>
   <string name="ROOM_CREATED">"Created Room"</string>
   <string name="MEMBER_ADDED">"Added"</string>
@@ -835,7 +835,7 @@
   <string name="text_limit_chat_to_unknown_contact">Please wait for the process to finish (You are not allowed to send messages to more than 10 Unknown Users regularly at the same time; after getting to number 10, you get stopped until the end of countdown timer)</string>
   <string name="title_limit_Create_Group">Restriction in Number of Rooms</string>
   <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
-  <string name="show_sender_name_in_group">Show Sender Name in Group</string>
+  <string name="show_sender_name_in_group">Show Sender Name in Groups</string>
   <string name="calls">Calls</string>
   <string name="igap_call">iGap Call</string>
   <string name="No_messages_here_yet">No messages here yet…</string>
