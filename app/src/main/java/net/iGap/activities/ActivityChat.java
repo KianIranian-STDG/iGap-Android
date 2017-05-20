@@ -2936,7 +2936,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 txtItemForward.setText(R.string.forward_item_dialog);
                 txtItemDelete.setText(R.string.delete_item_dialog);
                 txtItemEdit.setText(R.string.edit_item_dialog);
-                txtItemSaveToDownload.setText(R.string.saveToDownload_item_dialog);
 
                 rootReplay.setVisibility(View.VISIBLE);
                 rootCopy.setVisibility(View.VISIBLE);
@@ -2957,7 +2956,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 txtItemShare.setText(R.string.share_item_dialog);
                 txtItemForward.setText(R.string.forward_item_dialog);
                 txtItemDelete.setText(R.string.delete_item_dialog);
-                txtItemSaveToDownload.setText(R.string.saveToDownload_item_dialog);
 
                 rootReplay.setVisibility(View.VISIBLE);
                 rootShare.setVisibility(View.VISIBLE);
@@ -3070,22 +3068,19 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
 
                 realm.close();
-
-                String _savedFolderName = "";
-                if (message.messageType.toString().contains("IMAGE") || message.messageType.toString().contains("VIDEO") || message.messageType.toString().contains("GIF")) {
-                    _savedFolderName = getString(R.string.save_to_gallery);
-                } else if (message.messageType.toString().contains("AUDIO") || message.messageType.toString().contains("VOICE")) {
-                    _savedFolderName = getString(R.string.save_to_Music);
-                }
-
-                if (_savedFolderName.length() > 0) {
-                    int index = items.indexOf(getString(R.string.saveToDownload_item_dialog));
-                    if (index >= 0) {
-                        items.set(index, _savedFolderName);
-                    }
-                }
             }
         }
+
+        String _savedFolderName = "";
+        if (message.messageType.toString().contains("IMAGE") || message.messageType.toString().contains("VIDEO") || message.messageType.toString().contains("GIF")) {
+            _savedFolderName = getString(R.string.save_to_gallery);
+        } else if (message.messageType.toString().contains("AUDIO") || message.messageType.toString().contains("VOICE")) {
+            _savedFolderName = getString(R.string.save_to_Music);
+        } else {
+            _savedFolderName = getString(R.string.saveToDownload_item_dialog);
+        }
+
+        txtItemSaveToDownload.setText(_savedFolderName);
         rootReplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -3204,17 +3199,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
+
+                if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
                     String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
                     HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
-                } else if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
+                } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
                     String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
                     HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
-                } else if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
+                } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
                     String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
                     if (message.messageType.toString().contains("VIDEO")) {
                         HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
-                        //  HelperSaveFile.saveVideoToGallary(_dPath, true);
+                        HelperSaveFile.saveVideoToGallary(_dPath, true);
                     } else if (message.messageType.toString().contains("GIF")) {
                         HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
                     } else {
