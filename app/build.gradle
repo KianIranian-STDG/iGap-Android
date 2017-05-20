@@ -14,8 +14,6 @@ repositories {
   maven { url 'https://maven.fabric.io/public' }
 }
 
-
-
 apply plugin: 'realm-android'
 
 android {
@@ -35,12 +33,6 @@ android {
     release {
       minifyEnabled true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-    }
-  }
-
-  sourceSets {
-    main {
-      jniLibs.srcDirs = ['libs']
     }
   }
 
