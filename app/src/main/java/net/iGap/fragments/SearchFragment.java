@@ -120,7 +120,6 @@ public class SearchFragment extends Fragment {
 
             @Override public void afterTextChanged(Editable editable) {
 
-                ;
             }
         });
         edtSearch.requestFocus();
