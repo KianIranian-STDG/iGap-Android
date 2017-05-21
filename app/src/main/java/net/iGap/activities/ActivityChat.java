@@ -705,8 +705,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 startActivity(intent);
             }
             super.onBackPressed();
-            finish();
-
         }
     }
 

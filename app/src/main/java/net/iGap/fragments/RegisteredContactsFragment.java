@@ -137,6 +137,8 @@ public class RegisteredContactsFragment extends Fragment {
                 title = G.context.getString(R.string.New_Chat);
             } else if (title.equals("Contacts")) {
                 title = G.context.getString(R.string.contacts);
+            } else if (title.equals("call")) {
+                title = G.context.getString(R.string.chi_popup_call);
             }
         }
 

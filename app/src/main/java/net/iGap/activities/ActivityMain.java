@@ -1402,7 +1402,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             this.drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-            finish();
         }
     }
 

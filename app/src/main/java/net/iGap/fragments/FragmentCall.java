@@ -162,7 +162,7 @@ public class FragmentCall extends Fragment {
 
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "Contacts");
+                bundle.putString("TITLE", "call");
                 bundle.putBoolean("ACTION", true);
                 fragment.setArguments(bundle);
 

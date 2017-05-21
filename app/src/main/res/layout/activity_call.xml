@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_call_fragment"
     android:clickable="true"
     android:elevation="999dp"
     android:layoutDirection="ltr"
@@ -12,6 +11,7 @@
 
 
   <FrameLayout
+      android:id="@+id/ac_layout_main_call"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       >
@@ -20,6 +20,7 @@
         android:id="@+id/fcr_imv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/black90"
         android:alpha=".5"
         android:scaleType="centerCrop"
         />
@@ -38,7 +39,7 @@
           android:layout_height="wrap_content"
           android:singleLine="true"
           android:text="name"
-          android:textColor="@color/black90"
+          android:textColor="@color/white"
           android:textSize="@dimen/dp22"
           />
       <LinearLayout
@@ -52,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="status"
-            android:textColor="@color/black90"
+            android:textColor="@color/white"
             />
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/fcr_txt_avi"

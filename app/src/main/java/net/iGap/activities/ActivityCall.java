@@ -11,6 +11,7 @@
 
 package net.iGap.activities;
 
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -55,6 +56,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     boolean canTouch = false;
     boolean down = false;
 
+    boolean isSendLeave = false;
+
     long userId;
 
     VerticalSwipe verticalSwipe;
@@ -72,14 +75,22 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     MaterialDesignTextView btnSpeaker;
     MediaPlayer player;
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    @Override protected void onPause() {
+        super.onPause();
+
         G.isInCall = false;
         G.iSignalingCallBack = null;
         cancelRingtone();
 
         new RequestSignalingGetLog().signalingGetLog(0, 1);
+    }
+
+    @Override public void onBackPressed() {
+        super.onBackPressed();
+
+        if (!isSendLeave) {
+            new WebRTC().leaveCall();
+        }
     }
 
     @Override
@@ -143,6 +154,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void initComponent() {
 
+        findViewById(R.id.ac_layout_main_call).setBackgroundColor(Color.parseColor(G.appBarColor));
+
         verticalSwipe = new VerticalSwipe();
         txtName = (TextView) findViewById(R.id.fcr_txt_name);
         txtStatus = (TextView) findViewById(R.id.fcr_txt_status);
@@ -162,7 +175,14 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         layoutCallEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                endCall(layoutCallEnd);
+
+                if (canClick) {
+                    isSendLeave = true;
+                    layoutCallEnd.setVisibility(View.INVISIBLE);
+                    endCall();
+                }
+
+
             }
         });
 
@@ -180,24 +200,32 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
          */
 
         final FrameLayout layoutChat = (FrameLayout) findViewById(R.id.fcr_layout_chat_call);
-        layoutChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (canClick) {
-                    btnChat.performClick();
-                    layoutChat.setVisibility(View.INVISIBLE);
-                }
+        //layoutChat.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        if (canClick) {
+        //            btnChat.performClick();
+        //            layoutChat.setVisibility(View.INVISIBLE);
+        //        }
+        //    }
+        //});
+        //
+        btnCircleChat = (MaterialDesignTextView) findViewById(R.id.fcr_btn_circle_chat);
+        //btnCircleChat.setOnTouchListener(new View.OnTouchListener() {
+        //    @Override
+        //    public boolean onTouch(View v, MotionEvent event) {
+        //        setUpSwap(layoutChat);
+        //        return false;
+        //    }
+        //});
+
+        btnCircleChat.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                btnChat.performClick();
+                layoutChat.setVisibility(View.INVISIBLE);
             }
         });
 
-        btnCircleChat = (MaterialDesignTextView) findViewById(R.id.fcr_btn_circle_chat);
-        btnCircleChat.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                setUpSwap(layoutChat);
-                return false;
-            }
-        });
 
         /**
          * *************** layoutAnswer ***************
@@ -294,6 +322,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         if (registeredInfo != null) {
             try {
+
+                txtName.setText(registeredInfo.getDisplayName());
+
                 RealmAttachment av = registeredInfo.getLastAvatar().getFile();
 
                 ProtoFileDownload.FileDownload.Selector se = ProtoFileDownload.FileDownload.Selector.FILE;
@@ -345,13 +376,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
     }
 
-    private void endCall(FrameLayout layoutCallEnd) {
-        if (canClick) {
-            new WebRTC().leaveCall();
-
-            endVoiceAndFinish();
-            layoutCallEnd.setVisibility(View.INVISIBLE);
-        }
+    private void endCall() {
+        new WebRTC().leaveCall();
+        endVoiceAndFinish();
     }
 
     private void playRingtone() {
@@ -388,7 +415,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         private int AllMoving = 0;
         private int lastY;
-        private int DistanceToAccept = 200;
+        private int DistanceToAccept = (int) G.context.getResources().getDimension(R.dimen.dp120);
         boolean accept = false;
         private View view;
 
