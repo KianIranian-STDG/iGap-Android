@@ -35,7 +35,7 @@ public class SignalingCandidateResponse extends MessageHandler {
 
         if (builder.getResponse().getId().isEmpty()) {
             if (G.iSignalingCandidate != null) {
-                G.iSignalingCandidate.onCandidate(builder.getPeerCandidate());
+                G.iSignalingCandidate.onCandidate(builder.getPeerSdpMId(), builder.getPeerSdpMLineIndex(), builder.getPeerCandidate());
             }
         }
     }

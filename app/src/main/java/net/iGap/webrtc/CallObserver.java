@@ -114,12 +114,12 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
     }
 
     @Override
-    public void onCandidate(final String iceCandidate) {
+    public void onCandidate(final String peerSdpMId, final int peerSdpMLineIndex, final String peerCandidate) {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                Log.i("WWW_Candidate", "onCandidate server : " + iceCandidate);
-                new WebRTC().peerConnectionInstance().addIceCandidate(new IceCandidate("", 0, iceCandidate));
+                Log.i("WWW_Candidate", "onCandidate server : " + peerCandidate);
+                new WebRTC().peerConnectionInstance().addIceCandidate(new IceCandidate(peerSdpMId, peerSdpMLineIndex, peerCandidate));
             }
         });
     }

@@ -6,5 +6,5 @@ package net.iGap.interfaces;
 
 public interface ISignalingCandidate {
 
-    void onCandidate(String peer_candidate);
+    void onCandidate(String peerSdpMId, int peerSdpMLineIndex, String peerCandidate);
 }
