@@ -1740,8 +1740,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } else {
                     holder.avi.setVisibility(View.GONE);
                     if (mInfo.getLastMessage() != null) {
-                        //String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
-                        String lastMessage = "";
+                        String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(),
+                            mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+
                         if (lastMessage == null) {
                             lastMessage = mInfo.getLastMessage().getMessage();
                         }

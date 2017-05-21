@@ -33,17 +33,6 @@ import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestUserInfo;
 
-import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.MEMBER_ADDED;
-import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.MEMBER_JOINED_BY_INVITE_LINK;
-import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.MEMBER_KICKED;
-import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.MEMBER_LEFT;
-import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.ROOM_CONVERTED_TO_PRIVATE;
-import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.ROOM_CONVERTED_TO_PUBLIC;
-import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.ROOM_CREATED;
-import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.ROOM_DELETED;
-import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.USER_DELETED;
-import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.USER_JOINED;
-
 /**
  * return correct log message with author and target
  */
@@ -299,29 +288,51 @@ public class HelperLogMessage {
 
         int message = 0;
 
-        if (type == USER_JOINED) {
-            message = R.string.USER_JOINED;
-        } else if (type == USER_DELETED) {
-            message = R.string.USER_DELETED;
-        } else if (type == ROOM_CREATED) {
-            message = R.string.ROOM_CREATED;
-        } else if (type == MEMBER_ADDED) {
-            //message = "member added";
-            message = R.string.MEMBER_ADDED;
-        } else if (type == MEMBER_KICKED) {
-            //message = "member kicked";
-            message = R.string.MEMBER_KICKED;
-        } else if (type == MEMBER_LEFT) {
-            //message = "member left";
-            message = R.string.MEMBER_LEFT;
-        } else if (type == ROOM_CONVERTED_TO_PUBLIC) {
-            message = R.string.ROOM_CONVERTED_TO_PUBLIC;
-        } else if (type == ROOM_CONVERTED_TO_PRIVATE) {
-            message = R.string.ROOM_CONVERTED_TO_PRIVATE;
-        } else if (type == MEMBER_JOINED_BY_INVITE_LINK) {
-            message = R.string.MEMBER_JOINED_BY_INVITE_LINK;
-        } else if (type == ROOM_DELETED) {
-            message = R.string.Room_Deleted;
+        switch (type) {
+
+            case USER_JOINED:
+                message = R.string.USER_JOINED;
+                break;
+            case USER_DELETED:
+                message = R.string.USER_DELETED;
+                break;
+            case ROOM_CREATED:
+                message = R.string.ROOM_CREATED;
+                break;
+            case MEMBER_ADDED:
+                //message = "member added";
+                message = R.string.MEMBER_ADDED;
+                break;
+            case MEMBER_KICKED:
+                //message = "member kicked";
+                message = R.string.MEMBER_KICKED;
+                break;
+            case MEMBER_LEFT:
+                //message = "member left";
+                message = R.string.MEMBER_LEFT;
+                break;
+            case ROOM_CONVERTED_TO_PUBLIC:
+                message = R.string.ROOM_CONVERTED_TO_PUBLIC;
+                break;
+            case ROOM_CONVERTED_TO_PRIVATE:
+                message = R.string.ROOM_CONVERTED_TO_PRIVATE;
+                break;
+            case MEMBER_JOINED_BY_INVITE_LINK:
+                message = R.string.MEMBER_JOINED_BY_INVITE_LINK;
+                break;
+            case ROOM_DELETED:
+                message = R.string.Room_Deleted;
+                break;
+
+            case MISSED_SCREEN_SHARE:
+                message = R.string.MISSED_SCREEN_SHARE;
+                break;
+            case MISSED_VOICE_CALL:
+                message = R.string.MISSED_VOICE_CALL;
+                break;
+            case MISSED_VIDEO_CALL:
+                message = R.string.MISSED_VIDEO_CALL;
+                break;
         }
 
         return "*" + message + "*";

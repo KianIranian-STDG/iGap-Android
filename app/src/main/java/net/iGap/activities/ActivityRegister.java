@@ -176,7 +176,7 @@ public class ActivityRegister extends ActivityEnhanced {
         txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
 
         findViewById(R.id.ar_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        findViewById(R.id.ar_view_line).setBackgroundColor(Color.GRAY);
+        findViewById(R.id.ar_view_line).setBackgroundColor(Color.parseColor("#999d9d9d"));
 
 
         int portrait = getResources().getConfiguration().orientation;
