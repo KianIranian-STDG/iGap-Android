@@ -10,10 +10,9 @@
 
 package net.iGap.webrtc;
 
-import android.content.Intent;
 import android.util.Log;
 import net.iGap.G;
-import net.iGap.activities.ActivityCall;
+import net.iGap.fragments.FragmentCall;
 import net.iGap.interfaces.ISignalingAccept;
 import net.iGap.interfaces.ISignalingCandidate;
 import net.iGap.interfaces.ISignalingGetCallLog;
@@ -29,15 +28,12 @@ import org.webrtc.IceCandidate;
 import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.iSignalingAccept;
 import static net.iGap.G.iSignalingCandidate;
 import static net.iGap.G.iSignalingLeave;
 import static net.iGap.G.iSignalingOffer;
 import static net.iGap.G.iSignalingRinging;
 import static net.iGap.G.iSignalingSessionHold;
-import static net.iGap.activities.ActivityCall.INCOMING_CALL_STR;
-import static net.iGap.activities.ActivityCall.USER_ID_STR;
 import static org.webrtc.SessionDescription.Type.ANSWER;
 import static org.webrtc.SessionDescription.Type.OFFER;
 
@@ -67,11 +63,9 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
 
                     @Override
                     public void onSetSuccess() {
-                        Intent intent = new Intent(G.context, ActivityCall.class);
-                        intent.putExtra(USER_ID_STR, called_userId);
-                        intent.putExtra(INCOMING_CALL_STR, true);
-                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                        G.context.startActivity(intent);
+
+                        FragmentCall.call(called_userId, true);
+
                     }
 
                     @Override

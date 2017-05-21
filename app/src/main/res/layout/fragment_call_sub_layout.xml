@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
@@ -59,19 +58,18 @@
             android:orientation="horizontal"
             >
 
-          <net.iGap.module.MaterialDesignTextView
-              android:id="@+id/fcsl_txt_icon"
-              android:layout_width="wrap_content"
+          <TextView
+              android:id="@+id/fcsl_txt_time_info"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="wrap_content"
-              android:layout_marginEnd="@dimen/dp4"
-              android:layout_marginLeft="@dimen/dp4"
-              android:layout_marginRight="@dimen/dp4"
-              android:layout_marginStart="@dimen/dp4"
-              android:text="@string/md_call_made"
-              android:textAppearance="@style/TextIconAppearance_toolbar"
-              android:textColor="@color/green"
-              android:textSize="@dimen/dp18"
+              android:singleLine="true"
+              android:text="(4) 9:24 am"
+              android:textColor="@color/gray_5c"
+              android:textSize="@dimen/dp12"
+              android:textStyle="bold"
               />
+
 
 
           <TextView
@@ -82,18 +80,7 @@
               android:text="2.43"
               android:layout_marginRight="@dimen/dp12"
               android:textColor="@color/btn_start_page5"
-              android:textSize="@dimen/dp15"
-              android:textStyle="bold"
-              />
-
-          <TextView
-              android:id="@+id/fcsl_txt_time_info"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:singleLine="true"
-              android:text="(4) 9:24 am"
-              android:textColor="@color/gray_5c"
-              android:textSize="@dimen/dp15"
+              android:textSize="@dimen/dp12"
               android:textStyle="bold"
               />
 
@@ -102,28 +89,22 @@
 
       </LinearLayout>
 
-      <net.iGap.libs.rippleeffect.RippleView
-          android:id="@+id/fcsl_ripple_call"
+
+      <net.iGap.module.MaterialDesignTextView
+          android:id="@+id/fcsl_txt_icon"
+          android:layout_gravity="center"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          app:rv_alpha="200"
-          app:rv_centered="true"
-          app:rv_rippleDuration="150"
-          app:rv_ripplePadding="5dp"
-          rv_centered="true"
-          >
+          android:layout_marginEnd="@dimen/dp4"
+          android:layout_marginLeft="@dimen/dp4"
+          android:layout_marginRight="@dimen/dp4"
+          android:layout_marginStart="@dimen/dp4"
+          android:text="@string/md_call_made"
+          android:textAppearance="@style/TextIconAppearance_toolbar"
+          android:textColor="@color/green"
+          android:textSize="@dimen/dp36"
+          />
 
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/fcsl_call_type_icon"
-            android:layout_width="@dimen/dp52"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/md_phone"
-            android:textAppearance="@style/TextIconAppearance_toolbar"
-            android:textColor="@color/gray_5c"
-            />
-
-      </net.iGap.libs.rippleeffect.RippleView>
 
 
     </LinearLayout>

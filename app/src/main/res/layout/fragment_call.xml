@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingPrefix"
     >
 
 
@@ -51,6 +53,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white"
         android:textSize="@dimen/dp18"
+        fontPath="fonts/IRANSansMobile_Bold.ttf"
         android:visibility="visible"
         />
 

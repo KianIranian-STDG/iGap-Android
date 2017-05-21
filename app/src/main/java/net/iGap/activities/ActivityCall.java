@@ -25,12 +25,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.realm.Realm;
+import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.ISignalingCallBack;
 import net.iGap.interfaces.OnCallLeaveView;
+import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.enums.CallState;
@@ -38,6 +41,7 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.webrtc.WebRTC;
 
@@ -74,10 +78,27 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         G.isInCall = false;
         G.iSignalingCallBack = null;
         cancelRingtone();
+
+        new RequestSignalingGetLog().signalingGetLog(0, 1);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        try {
+            HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
+                @Override public void Allow() throws IOException {
+
+                }
+
+                @Override public void deny() {
+                    finish();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         G.isInCall = true;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
@@ -339,13 +360,18 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     }
 
     private void cancelRingtone() {
-        if (player != null) {
-            if (player.isPlaying()) {
-                player.stop();
-            }
 
-            player.release();
-            player = null;
+        try {
+            if (player != null) {
+                if (player.isPlaying()) {
+                    player.stop();
+                }
+
+                player.release();
+                player = null;
+            }
+        } catch (Exception e) {
+
         }
     }
 
