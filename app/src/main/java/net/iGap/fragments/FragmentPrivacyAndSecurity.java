@@ -162,6 +162,16 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             }
         });
 
+
+        TextView txtSecurity = (TextView) view.findViewById(R.id.stps_twoStepVerification);
+        txtSecurity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentSecurity fragmentSecurity = new FragmentSecurity();
+                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSecurity).commit();
+            }
+        });
+
         TextView txtActiveSessions = (TextView) view.findViewById(R.id.stps_activitySessions);
         txtActiveSessions.setOnClickListener(new View.OnClickListener() {
             @Override

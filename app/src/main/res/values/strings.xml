@@ -841,4 +841,26 @@
   <string name="mandatory">(Mandatory)</string>
   <string name="optional">(Optional)</string>
   <string name="desc_group_chanel">Description (Optional)</string>
+  <string name="set_additional_password">Set Additional Password</string>
+  <string name="two_step_verification_title">Two-Step Verification</string>
+  <string name="two_step_verification_description">You can set a password that will be required when you log in on a new device in addition to the code you get in th SMS.</string>
+  <string name="enter_a_password">Enter a Password</string>
+  <string name="please_enter_your_password">Please enter your Password</string>
+  <string name="your_password">Your Password</string>
+  <string name="please_re_enter_your_password">Please re-enter Your Password</string>
+  <string name="please_create_hint_for_your_password">Please create a hint for your Password</string>
+  <string name="password_hint">Password Hint</string>
+  <string name="password_Question_title_one">Question one (Mandatory)</string>
+  <string name="password_Question_one">eg: Who is your Favorite teacher</string>
+  <string name="password_Question_title_two">Question two (Mandatory)</string>
+  <string name="password_Question_two">eg: Who is your best friend</string>
+  <string name="password_answer">Answer</string>
+  <string name="password_Question_title">Password Question</string>
+  <string name="recovery_email">Recovery E-mail</string>
+  <string name="your_email">Your Email (Optional)</string>
+  <string name="recovery_question">Recovery Question</string>
+  <string name="two_step_verification">Two-Step Verification</string>
+  <string name="forgot_password">Forgot password?</string>
+  <string name="your_email_desc">Please add your valid e-mail it is th only way to recover a forgotten password</string>
+
 </resources>
