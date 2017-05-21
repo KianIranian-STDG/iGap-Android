@@ -613,7 +613,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
                         Fragment fragment = FragmentCall.newInstance();
                         try {
                             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
@@ -706,64 +705,64 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     public void run() {
 
                         new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                            .content(R.string.content_log_out)
-                            .positiveText(getResources().getString(R.string.B_ok))
-                            .negativeText(getResources().getString(R.string.B_cancel))
-                            .iconRes(R.mipmap.exit_to_app_button)
-                            .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    G.onUserSessionLogout = new OnUserSessionLogout() {
-                                        @Override
-                                        public void onUserSessionLogout() {
+                                .content(R.string.content_log_out)
+                                .positiveText(getResources().getString(R.string.B_ok))
+                                .negativeText(getResources().getString(R.string.B_cancel))
+                                .iconRes(R.mipmap.exit_to_app_button)
+                                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        G.onUserSessionLogout = new OnUserSessionLogout() {
+                                            @Override
+                                            public void onUserSessionLogout() {
 
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    HelperLogout.logout();
-                                                }
-                                            });
-                                        }
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        HelperLogout.logout();
+                                                    }
+                                                });
+                                            }
 
-                                        @Override
-                                        public void onError() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
+                                            @Override
+                                            public void onError() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
 
-                                        @Override
-                                        public void onTimeOut() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
-                                    };
-                                    new RequestUserSessionLogout().userSessionLogout();
-                                }
-                            })
-                            .show();
+                                            @Override
+                                            public void onTimeOut() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
+                                        };
+                                        new RequestUserSessionLogout().userSessionLogout();
+                                    }
+                                })
+                                .show();
                     }
                 }, 256);
             }
@@ -1329,7 +1328,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         for (int i = 0; i < G.deletedRoomList.size(); i++) {
 
                             RealmRoom _RealmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                                equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
+                                    equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
 
                             // delete messages and rooms in the deleted room
                             if (_RealmRoom != null) {
@@ -1741,7 +1740,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } else {
                     holder.avi.setVisibility(View.GONE);
                     if (mInfo.getLastMessage() != null) {
-                        String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                        //String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                        String lastMessage = "";
                         if (lastMessage == null) {
                             lastMessage = mInfo.getLastMessage().getMessage();
                         }

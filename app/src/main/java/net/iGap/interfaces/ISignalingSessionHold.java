@@ -11,8 +11,7 @@
 package net.iGap.interfaces;
 
 
-import net.iGap.module.enums.CallState;
+public interface ISignalingSessionHold {
 
-public interface ISignalingCallBack {
-    void onStatusChanged(CallState callState);
+    void onHold(Boolean hold);
 }

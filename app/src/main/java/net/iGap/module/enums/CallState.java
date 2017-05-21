@@ -8,10 +8,8 @@
 * All rights reserved.
 */
 
-package net.iGap.interfaces;
+package net.iGap.module.enums;
 
-
-public interface ISignalingSesionHold {
-
-    void onHold(Boolean hold);
+public enum CallState {
+    DIALLING, RINGING, CHECKING, CONNECTED, FINISHED
 }
