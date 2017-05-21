@@ -4489,6 +4489,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void run() {
                 if (HelperGetDataFromOtherApp.hasSharedData) {
 
+                    if (txtEmptyMessages != null) txtEmptyMessages.setVisibility(View.GONE);
                     HelperGetDataFromOtherApp.hasSharedData = false;
                     if (messageType == HelperGetDataFromOtherApp.FileType.message) {
 
