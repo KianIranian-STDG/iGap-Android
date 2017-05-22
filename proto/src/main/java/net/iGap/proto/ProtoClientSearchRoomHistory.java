@@ -89,11 +89,11 @@ public final class ProtoClientSearchRoomHistory {
               break;
             }
             case 10: {
-                net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
+              net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
               if (request_ != null) {
                 subBuilder = request_.toBuilder();
               }
-                request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
+              request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(request_);
                 request_ = subBuilder.buildPartial();
@@ -129,12 +129,11 @@ public final class ProtoClientSearchRoomHistory {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistory_descriptor;
+      return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistory_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistory_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.class, net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Builder.class);
+      return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistory_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.class, net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Builder.class);
     }
 
     /**
@@ -256,7 +255,7 @@ public final class ProtoClientSearchRoomHistory {
       }
 
       public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
-          return net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.getDescriptor().getEnumTypes().get(0);
+        return net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.getDescriptor().getEnumTypes().get(0);
       }
 
       private static final Filter[] VALUES = values();
@@ -281,7 +280,7 @@ public final class ProtoClientSearchRoomHistory {
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
-      private net.iGap.proto.ProtoRequest.Request request_;
+    private net.iGap.proto.ProtoRequest.Request request_;
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -292,7 +291,7 @@ public final class ProtoClientSearchRoomHistory {
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
-        return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+      return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
     /**
      * <code>optional .proto.Request request = 1;</code>
@@ -331,8 +330,8 @@ public final class ProtoClientSearchRoomHistory {
      * <code>optional .proto.ClientSearchRoomHistory.Filter filter = 4;</code>
      */
     public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter getFilter() {
-        net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter result = net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.valueOf(filter_);
-        return result == null ? net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.UNRECOGNIZED : result;
+      net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter result = net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.valueOf(filter_);
+      return result == null ? net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.UNRECOGNIZED : result;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -355,7 +354,7 @@ public final class ProtoClientSearchRoomHistory {
       if (offset_ != 0) {
         output.writeUInt32(3, offset_);
       }
-        if (filter_ != net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE.getNumber()) {
+      if (filter_ != net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE.getNumber()) {
         output.writeEnum(4, filter_);
       }
     }
@@ -374,7 +373,7 @@ public final class ProtoClientSearchRoomHistory {
       if (offset_ != 0) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3, offset_);
       }
-        if (filter_ != net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE.getNumber()) {
+      if (filter_ != net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE.getNumber()) {
         size += com.google.protobuf.CodedOutputStream.computeEnumSize(4, filter_);
       }
       memoizedSize = size;
@@ -387,10 +386,10 @@ public final class ProtoClientSearchRoomHistory {
       if (obj == this) {
         return true;
       }
-        if (!(obj instanceof net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory)) {
+      if (!(obj instanceof net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory)) {
         return super.equals(obj);
       }
-        net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory other = (net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory) obj;
+      net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory other = (net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory) obj;
 
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
@@ -425,48 +424,43 @@ public final class ProtoClientSearchRoomHistory {
       return hash;
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(java.io.InputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -477,7 +471,7 @@ public final class ProtoClientSearchRoomHistory {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-      public static Builder newBuilder(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory prototype) {
+    public static Builder newBuilder(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -496,15 +490,14 @@ public final class ProtoClientSearchRoomHistory {
             // @@protoc_insertion_point(builder_implements:proto.ClientSearchRoomHistory)
         net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-          return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistory_descriptor;
+        return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistory_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistory_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.class, net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Builder.class);
+        return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistory_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.class, net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Builder.class);
       }
 
-        // Construct using net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.newBuilder()
+      // Construct using net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -536,23 +529,23 @@ public final class ProtoClientSearchRoomHistory {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-          return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistory_descriptor;
+        return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistory_descriptor;
       }
 
-        public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory getDefaultInstanceForType() {
-            return net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.getDefaultInstance();
+      public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory getDefaultInstanceForType() {
+        return net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.getDefaultInstance();
       }
 
-        public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory build() {
-            net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory result = buildPartial();
+      public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory build() {
+        net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-        public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory buildPartial() {
-            net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory result = new net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory(this);
+      public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory buildPartial() {
+        net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory result = new net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory(this);
         if (requestBuilder_ == null) {
           result.request_ = request_;
         } else {
@@ -589,16 +582,16 @@ public final class ProtoClientSearchRoomHistory {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory) {
-              return mergeFrom((net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory) other);
+        if (other instanceof net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory) {
+          return mergeFrom((net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-        public Builder mergeFrom(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory other) {
-            if (other == net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.getDefaultInstance()) return this;
+      public Builder mergeFrom(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory other) {
+        if (other == net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -620,11 +613,11 @@ public final class ProtoClientSearchRoomHistory {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-          net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parsedMessage = null;
+        net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory) e.getUnfinishedMessage();
+          parsedMessage = (net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -634,9 +627,8 @@ public final class ProtoClientSearchRoomHistory {
         return this;
       }
 
-        private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+      private net.iGap.proto.ProtoRequest.Request request_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -648,7 +640,7 @@ public final class ProtoClientSearchRoomHistory {
        */
       public net.iGap.proto.ProtoRequest.Request getRequest() {
         if (requestBuilder_ == null) {
-            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         } else {
           return requestBuilder_.getMessage();
         }
@@ -688,7 +680,7 @@ public final class ProtoClientSearchRoomHistory {
       public Builder mergeRequest(net.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-              request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+            request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -728,7 +720,7 @@ public final class ProtoClientSearchRoomHistory {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
@@ -736,8 +728,7 @@ public final class ProtoClientSearchRoomHistory {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
+          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -817,8 +808,8 @@ public final class ProtoClientSearchRoomHistory {
        * <code>optional .proto.ClientSearchRoomHistory.Filter filter = 4;</code>
        */
       public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter getFilter() {
-          net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter result = net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.valueOf(filter_);
-          return result == null ? net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.UNRECOGNIZED : result;
+        net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter result = net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.valueOf(filter_);
+        return result == null ? net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.UNRECOGNIZED : result;
       }
       /**
        * <code>optional .proto.ClientSearchRoomHistory.Filter filter = 4;</code>
@@ -857,10 +848,10 @@ public final class ProtoClientSearchRoomHistory {
     // @@protoc_insertion_point(class_scope:proto.ClientSearchRoomHistory)
     private static final net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory DEFAULT_INSTANCE;
     static {
-        DEFAULT_INSTANCE = new net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory();
+      DEFAULT_INSTANCE = new net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory();
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory getDefaultInstance() {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -879,7 +870,7 @@ public final class ProtoClientSearchRoomHistory {
       return PARSER;
     }
 
-      public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory getDefaultInstanceForType() {
+    public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistory getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -973,11 +964,11 @@ public final class ProtoClientSearchRoomHistory {
               break;
             }
             case 10: {
-                net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
+              net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
               if (response_ != null) {
                 subBuilder = response_.toBuilder();
               }
-                response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
+              response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(response_);
                 response_ = subBuilder.buildPartial();
@@ -997,10 +988,10 @@ public final class ProtoClientSearchRoomHistory {
             }
             case 34: {
               if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                  result_ = new java.util.ArrayList<net.iGap.proto.ProtoGlobal.RoomMessage>();
+                result_ = new java.util.ArrayList<net.iGap.proto.ProtoGlobal.RoomMessage>();
                 mutable_bitField0_ |= 0x00000008;
               }
-                result_.add(input.readMessage(net.iGap.proto.ProtoGlobal.RoomMessage.parser(), extensionRegistry));
+              result_.add(input.readMessage(net.iGap.proto.ProtoGlobal.RoomMessage.parser(), extensionRegistry));
               break;
             }
           }
@@ -1018,17 +1009,16 @@ public final class ProtoClientSearchRoomHistory {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistoryResponse_descriptor;
+      return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistoryResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistoryResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.class, net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.Builder.class);
+      return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistoryResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.class, net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.Builder.class);
     }
 
     private int bitField0_;
     public static final int RESPONSE_FIELD_NUMBER = 1;
-      private net.iGap.proto.ProtoResponse.Response response_;
+    private net.iGap.proto.ProtoResponse.Response response_;
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1039,7 +1029,7 @@ public final class ProtoClientSearchRoomHistory {
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
-        return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+      return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
     /**
      * <code>optional .proto.Response response = 1;</code>
@@ -1067,7 +1057,7 @@ public final class ProtoClientSearchRoomHistory {
     }
 
     public static final int RESULT_FIELD_NUMBER = 4;
-      private java.util.List<net.iGap.proto.ProtoGlobal.RoomMessage> result_;
+    private java.util.List<net.iGap.proto.ProtoGlobal.RoomMessage> result_;
     /**
      * <code>repeated .proto.RoomMessage result = 4;</code>
      */
@@ -1151,10 +1141,10 @@ public final class ProtoClientSearchRoomHistory {
       if (obj == this) {
         return true;
       }
-        if (!(obj instanceof net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse)) {
+      if (!(obj instanceof net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse)) {
         return super.equals(obj);
       }
-        net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse other = (net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse) obj;
+      net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse other = (net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse) obj;
 
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
@@ -1191,49 +1181,43 @@ public final class ProtoClientSearchRoomHistory {
       return hash;
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(com.google.protobuf.ByteString data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseDelimitedFrom(java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1244,7 +1228,7 @@ public final class ProtoClientSearchRoomHistory {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-      public static Builder newBuilder(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse prototype) {
+    public static Builder newBuilder(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1263,15 +1247,14 @@ public final class ProtoClientSearchRoomHistory {
             // @@protoc_insertion_point(builder_implements:proto.ClientSearchRoomHistoryResponse)
         net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-          return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistoryResponse_descriptor;
+        return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistoryResponse_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistoryResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.class, net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.Builder.class);
+        return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistoryResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.class, net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.Builder.class);
       }
 
-        // Construct using net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.newBuilder()
+      // Construct using net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1308,23 +1291,23 @@ public final class ProtoClientSearchRoomHistory {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-          return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistoryResponse_descriptor;
+        return net.iGap.proto.ProtoClientSearchRoomHistory.internal_static_proto_ClientSearchRoomHistoryResponse_descriptor;
       }
 
-        public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse getDefaultInstanceForType() {
-            return net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.getDefaultInstance();
+      public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse getDefaultInstanceForType() {
+        return net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.getDefaultInstance();
       }
 
-        public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse build() {
-            net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse result = buildPartial();
+      public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse build() {
+        net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-        public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse buildPartial() {
-            net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse result = new net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse(this);
+      public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse buildPartial() {
+        net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse result = new net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (responseBuilder_ == null) {
@@ -1372,16 +1355,16 @@ public final class ProtoClientSearchRoomHistory {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse) {
-              return mergeFrom((net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse) other);
+        if (other instanceof net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse) {
+          return mergeFrom((net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-        public Builder mergeFrom(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse other) {
-            if (other == net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse other) {
+        if (other == net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1424,11 +1407,11 @@ public final class ProtoClientSearchRoomHistory {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-          net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parsedMessage = null;
+        net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse) e.getUnfinishedMessage();
+          parsedMessage = (net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1439,9 +1422,8 @@ public final class ProtoClientSearchRoomHistory {
       }
       private int bitField0_;
 
-        private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+      private net.iGap.proto.ProtoResponse.Response response_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1453,7 +1435,7 @@ public final class ProtoClientSearchRoomHistory {
        */
       public net.iGap.proto.ProtoResponse.Response getResponse() {
         if (responseBuilder_ == null) {
-            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         } else {
           return responseBuilder_.getMessage();
         }
@@ -1493,7 +1475,7 @@ public final class ProtoClientSearchRoomHistory {
       public Builder mergeResponse(net.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-              response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+            response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1533,7 +1515,7 @@ public final class ProtoClientSearchRoomHistory {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
@@ -1541,8 +1523,7 @@ public final class ProtoClientSearchRoomHistory {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1603,16 +1584,15 @@ public final class ProtoClientSearchRoomHistory {
         return this;
       }
 
-        private java.util.List<net.iGap.proto.ProtoGlobal.RoomMessage> result_ = java.util.Collections.emptyList();
+      private java.util.List<net.iGap.proto.ProtoGlobal.RoomMessage> result_ = java.util.Collections.emptyList();
       private void ensureResultIsMutable() {
         if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-            result_ = new java.util.ArrayList<net.iGap.proto.ProtoGlobal.RoomMessage>(result_);
+          result_ = new java.util.ArrayList<net.iGap.proto.ProtoGlobal.RoomMessage>(result_);
           bitField0_ |= 0x00000008;
         }
       }
 
-        private com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessage, net.iGap.proto.ProtoGlobal.RoomMessage.Builder, net.iGap.proto.ProtoGlobal.RoomMessageOrBuilder>
-            resultBuilder_;
+      private com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessage, net.iGap.proto.ProtoGlobal.RoomMessage.Builder, net.iGap.proto.ProtoGlobal.RoomMessageOrBuilder> resultBuilder_;
 
       /**
        * <code>repeated .proto.RoomMessage result = 4;</code>
@@ -1800,13 +1780,13 @@ public final class ProtoClientSearchRoomHistory {
        * <code>repeated .proto.RoomMessage result = 4;</code>
        */
       public net.iGap.proto.ProtoGlobal.RoomMessage.Builder addResultBuilder() {
-          return getResultFieldBuilder().addBuilder(net.iGap.proto.ProtoGlobal.RoomMessage.getDefaultInstance());
+        return getResultFieldBuilder().addBuilder(net.iGap.proto.ProtoGlobal.RoomMessage.getDefaultInstance());
       }
       /**
        * <code>repeated .proto.RoomMessage result = 4;</code>
        */
       public net.iGap.proto.ProtoGlobal.RoomMessage.Builder addResultBuilder(int index) {
-          return getResultFieldBuilder().addBuilder(index, net.iGap.proto.ProtoGlobal.RoomMessage.getDefaultInstance());
+        return getResultFieldBuilder().addBuilder(index, net.iGap.proto.ProtoGlobal.RoomMessage.getDefaultInstance());
       }
       /**
        * <code>repeated .proto.RoomMessage result = 4;</code>
@@ -1815,10 +1795,9 @@ public final class ProtoClientSearchRoomHistory {
         return getResultFieldBuilder().getBuilderList();
       }
 
-        private com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessage, net.iGap.proto.ProtoGlobal.RoomMessage.Builder, net.iGap.proto.ProtoGlobal.RoomMessageOrBuilder> getResultFieldBuilder() {
+      private com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessage, net.iGap.proto.ProtoGlobal.RoomMessage.Builder, net.iGap.proto.ProtoGlobal.RoomMessageOrBuilder> getResultFieldBuilder() {
         if (resultBuilder_ == null) {
-            resultBuilder_ =
-                new com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessage, net.iGap.proto.ProtoGlobal.RoomMessage.Builder, net.iGap.proto.ProtoGlobal.RoomMessageOrBuilder>(
+          resultBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessage, net.iGap.proto.ProtoGlobal.RoomMessage.Builder, net.iGap.proto.ProtoGlobal.RoomMessageOrBuilder>(
                   result_,
                   ((bitField0_ & 0x00000008) == 0x00000008),
                   getParentForChildren(),
@@ -1843,10 +1822,10 @@ public final class ProtoClientSearchRoomHistory {
     // @@protoc_insertion_point(class_scope:proto.ClientSearchRoomHistoryResponse)
     private static final net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse DEFAULT_INSTANCE;
     static {
-        DEFAULT_INSTANCE = new net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse();
+      DEFAULT_INSTANCE = new net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse();
     }
 
-      public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse getDefaultInstance() {
+    public static net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1865,7 +1844,7 @@ public final class ProtoClientSearchRoomHistory {
       return PARSER;
     }
 
-      public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse getDefaultInstanceForType() {
+    public net.iGap.proto.ProtoClientSearchRoomHistory.ClientSearchRoomHistoryResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1892,8 +1871,8 @@ public final class ProtoClientSearchRoomHistory {
                     "er\022\t\n\005IMAGE\020\000\022\t\n\005VIDEO\020\001\022\t\n\005AUDIO\020\002\022\t\n\005V" +
                     "OICE\020\003\022\007\n\003GIF\020\004\022\010\n\004FILE\020\005\022\007\n\003URL\020\006\"\225\001\n\037C" +
                     "lientSearchRoomHistoryResponse\022!\n\010respon" +
-                    "se\030\001 \001(\0132\017.proto.Response\022\022\n\ntotalCount\030", "\002 \001(\r\022\027\n\017notDeletedCount\030\003 \001(\r\022\"\n\006result" + "\030\004 \003(\0132\022.proto.RoomMessageB.\n\016net.iGap.p"
-        +
+                    "se\030\001 \001(\0132\017.proto.Response\022\022\n\ntotalCount\030", "\002 \001(\r\022\027\n\017notDeletedCount\030\003 \001(\r\022\"\n\006result" +
+            "\030\004 \003(\0132\022.proto.RoomMessageB.\n\016net.iGap.p" +
             "rotoB\034ProtoClientSearchRoomHistoryb\006prot" +
             "o3"
     };
@@ -1904,7 +1883,7 @@ public final class ProtoClientSearchRoomHistory {
       }
     };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-        net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(), net.iGap.proto.ProtoGlobal.getDescriptor(),
+            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(), net.iGap.proto.ProtoGlobal.getDescriptor(),
     }, assigner);
     internal_static_proto_ClientSearchRoomHistory_descriptor = getDescriptor().getMessageTypes().get(0);
     internal_static_proto_ClientSearchRoomHistory_fieldAccessorTable = new
@@ -1917,9 +1896,9 @@ public final class ProtoClientSearchRoomHistory {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ClientSearchRoomHistoryResponse_descriptor,
         new java.lang.String[] { "Response", "TotalCount", "NotDeletedCount", "Result", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
-      net.iGap.proto.ProtoGlobal.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

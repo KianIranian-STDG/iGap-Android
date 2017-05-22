@@ -13,7 +13,6 @@ public final class ProtoSignalingCandidate {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface SignalingCandidateOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.SignalingCandidate)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoSignalingCandidate {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     net.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -37,7 +34,6 @@ public final class ProtoSignalingCandidate {
      * <code>optional string candidate = 2;</code>
      */
     java.lang.String getCandidate();
-
     /**
      * <code>optional string candidate = 2;</code>
      */
@@ -47,7 +43,6 @@ public final class ProtoSignalingCandidate {
      * <code>optional string sdp_m_id = 3;</code>
      */
     java.lang.String getSdpMId();
-
     /**
      * <code>optional string sdp_m_id = 3;</code>
      */
@@ -58,7 +53,6 @@ public final class ProtoSignalingCandidate {
      */
     int getSdpMLineIndex();
   }
-
   /**
    * Protobuf type {@code proto.SignalingCandidate}
    */
@@ -69,7 +63,6 @@ public final class ProtoSignalingCandidate {
     private SignalingCandidate(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private SignalingCandidate() {
       candidate_ = "";
       sdpMId_ = "";
@@ -149,21 +142,18 @@ public final class ProtoSignalingCandidate {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private net.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -173,7 +163,6 @@ public final class ProtoSignalingCandidate {
 
     public static final int CANDIDATE_FIELD_NUMBER = 2;
     private volatile java.lang.Object candidate_;
-
     /**
      * <code>optional string candidate = 2;</code>
      */
@@ -188,7 +177,6 @@ public final class ProtoSignalingCandidate {
         return s;
       }
     }
-
     /**
      * <code>optional string candidate = 2;</code>
      */
@@ -205,7 +193,6 @@ public final class ProtoSignalingCandidate {
 
     public static final int SDP_M_ID_FIELD_NUMBER = 3;
     private volatile java.lang.Object sdpMId_;
-
     /**
      * <code>optional string sdp_m_id = 3;</code>
      */
@@ -220,7 +207,6 @@ public final class ProtoSignalingCandidate {
         return s;
       }
     }
-
     /**
      * <code>optional string sdp_m_id = 3;</code>
      */
@@ -237,7 +223,6 @@ public final class ProtoSignalingCandidate {
 
     public static final int SDP_M_LINE_INDEX_FIELD_NUMBER = 4;
     private int sdpMLineIndex_;
-
     /**
      * <code>optional uint32 sdp_m_line_index = 4;</code>
      */
@@ -246,7 +231,6 @@ public final class ProtoSignalingCandidate {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -293,7 +277,6 @@ public final class ProtoSignalingCandidate {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -380,15 +363,12 @@ public final class ProtoSignalingCandidate {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoSignalingCandidate.SignalingCandidate prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -398,7 +378,6 @@ public final class ProtoSignalingCandidate {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.SignalingCandidate}
      */
@@ -422,12 +401,10 @@ public final class ProtoSignalingCandidate {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -498,7 +475,6 @@ public final class ProtoSignalingCandidate {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof net.iGap.proto.ProtoSignalingCandidate.SignalingCandidate) {
           return mergeFrom((net.iGap.proto.ProtoSignalingCandidate.SignalingCandidate) other);
@@ -549,14 +525,12 @@ public final class ProtoSignalingCandidate {
 
       private net.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -567,7 +541,6 @@ public final class ProtoSignalingCandidate {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -584,7 +557,6 @@ public final class ProtoSignalingCandidate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -598,7 +570,6 @@ public final class ProtoSignalingCandidate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -616,7 +587,6 @@ public final class ProtoSignalingCandidate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -631,7 +601,6 @@ public final class ProtoSignalingCandidate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -640,7 +609,6 @@ public final class ProtoSignalingCandidate {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -651,7 +619,6 @@ public final class ProtoSignalingCandidate {
           return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -664,7 +631,6 @@ public final class ProtoSignalingCandidate {
       }
 
       private java.lang.Object candidate_ = "";
-
       /**
        * <code>optional string candidate = 2;</code>
        */
@@ -679,7 +645,6 @@ public final class ProtoSignalingCandidate {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string candidate = 2;</code>
        */
@@ -693,7 +658,6 @@ public final class ProtoSignalingCandidate {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string candidate = 2;</code>
        */
@@ -701,12 +665,11 @@ public final class ProtoSignalingCandidate {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         candidate_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string candidate = 2;</code>
        */
@@ -716,7 +679,6 @@ public final class ProtoSignalingCandidate {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string candidate = 2;</code>
        */
@@ -725,14 +687,13 @@ public final class ProtoSignalingCandidate {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         candidate_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object sdpMId_ = "";
-
       /**
        * <code>optional string sdp_m_id = 3;</code>
        */
@@ -747,7 +708,6 @@ public final class ProtoSignalingCandidate {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string sdp_m_id = 3;</code>
        */
@@ -761,7 +721,6 @@ public final class ProtoSignalingCandidate {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string sdp_m_id = 3;</code>
        */
@@ -769,12 +728,11 @@ public final class ProtoSignalingCandidate {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         sdpMId_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string sdp_m_id = 3;</code>
        */
@@ -784,7 +742,6 @@ public final class ProtoSignalingCandidate {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string sdp_m_id = 3;</code>
        */
@@ -793,21 +750,19 @@ public final class ProtoSignalingCandidate {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         sdpMId_ = value;
         onChanged();
         return this;
       }
 
       private int sdpMLineIndex_;
-
       /**
        * <code>optional uint32 sdp_m_line_index = 4;</code>
        */
       public int getSdpMLineIndex() {
         return sdpMLineIndex_;
       }
-
       /**
        * <code>optional uint32 sdp_m_line_index = 4;</code>
        */
@@ -817,7 +772,6 @@ public final class ProtoSignalingCandidate {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint32 sdp_m_line_index = 4;</code>
        */
@@ -842,7 +796,6 @@ public final class ProtoSignalingCandidate {
 
     // @@protoc_insertion_point(class_scope:proto.SignalingCandidate)
     private static final net.iGap.proto.ProtoSignalingCandidate.SignalingCandidate DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new net.iGap.proto.ProtoSignalingCandidate.SignalingCandidate();
     }
@@ -880,12 +833,10 @@ public final class ProtoSignalingCandidate {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     net.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -895,7 +846,6 @@ public final class ProtoSignalingCandidate {
      * <code>optional string peer_candidate = 2;</code>
      */
     java.lang.String getPeerCandidate();
-
     /**
      * <code>optional string peer_candidate = 2;</code>
      */
@@ -905,7 +855,6 @@ public final class ProtoSignalingCandidate {
      * <code>optional string peer_sdp_m_id = 3;</code>
      */
     java.lang.String getPeerSdpMId();
-
     /**
      * <code>optional string peer_sdp_m_id = 3;</code>
      */
@@ -916,7 +865,6 @@ public final class ProtoSignalingCandidate {
      */
     int getPeerSdpMLineIndex();
   }
-
   /**
    * Protobuf type {@code proto.SignalingCandidateResponse}
    */
@@ -927,7 +875,6 @@ public final class ProtoSignalingCandidate {
     private SignalingCandidateResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private SignalingCandidateResponse() {
       peerCandidate_ = "";
       peerSdpMId_ = "";
@@ -1007,21 +954,18 @@ public final class ProtoSignalingCandidate {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private net.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1031,7 +975,6 @@ public final class ProtoSignalingCandidate {
 
     public static final int PEER_CANDIDATE_FIELD_NUMBER = 2;
     private volatile java.lang.Object peerCandidate_;
-
     /**
      * <code>optional string peer_candidate = 2;</code>
      */
@@ -1046,7 +989,6 @@ public final class ProtoSignalingCandidate {
         return s;
       }
     }
-
     /**
      * <code>optional string peer_candidate = 2;</code>
      */
@@ -1063,7 +1005,6 @@ public final class ProtoSignalingCandidate {
 
     public static final int PEER_SDP_M_ID_FIELD_NUMBER = 3;
     private volatile java.lang.Object peerSdpMId_;
-
     /**
      * <code>optional string peer_sdp_m_id = 3;</code>
      */
@@ -1078,7 +1019,6 @@ public final class ProtoSignalingCandidate {
         return s;
       }
     }
-
     /**
      * <code>optional string peer_sdp_m_id = 3;</code>
      */
@@ -1095,7 +1035,6 @@ public final class ProtoSignalingCandidate {
 
     public static final int PEER_SDP_M_LINE_INDEX_FIELD_NUMBER = 4;
     private int peerSdpMLineIndex_;
-
     /**
      * <code>optional uint32 peer_sdp_m_line_index = 4;</code>
      */
@@ -1104,7 +1043,6 @@ public final class ProtoSignalingCandidate {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1151,7 +1089,6 @@ public final class ProtoSignalingCandidate {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1238,15 +1175,12 @@ public final class ProtoSignalingCandidate {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoSignalingCandidate.SignalingCandidateResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -1256,7 +1190,6 @@ public final class ProtoSignalingCandidate {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.SignalingCandidateResponse}
      */
@@ -1280,12 +1213,10 @@ public final class ProtoSignalingCandidate {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1356,7 +1287,6 @@ public final class ProtoSignalingCandidate {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof net.iGap.proto.ProtoSignalingCandidate.SignalingCandidateResponse) {
           return mergeFrom((net.iGap.proto.ProtoSignalingCandidate.SignalingCandidateResponse) other);
@@ -1407,14 +1337,12 @@ public final class ProtoSignalingCandidate {
 
       private net.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1425,7 +1353,6 @@ public final class ProtoSignalingCandidate {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1442,7 +1369,6 @@ public final class ProtoSignalingCandidate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1456,7 +1382,6 @@ public final class ProtoSignalingCandidate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1474,7 +1399,6 @@ public final class ProtoSignalingCandidate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1489,7 +1413,6 @@ public final class ProtoSignalingCandidate {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1498,7 +1421,6 @@ public final class ProtoSignalingCandidate {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1509,7 +1431,6 @@ public final class ProtoSignalingCandidate {
           return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1522,7 +1443,6 @@ public final class ProtoSignalingCandidate {
       }
 
       private java.lang.Object peerCandidate_ = "";
-
       /**
        * <code>optional string peer_candidate = 2;</code>
        */
@@ -1537,7 +1457,6 @@ public final class ProtoSignalingCandidate {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string peer_candidate = 2;</code>
        */
@@ -1551,7 +1470,6 @@ public final class ProtoSignalingCandidate {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string peer_candidate = 2;</code>
        */
@@ -1559,12 +1477,11 @@ public final class ProtoSignalingCandidate {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         peerCandidate_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string peer_candidate = 2;</code>
        */
@@ -1574,7 +1491,6 @@ public final class ProtoSignalingCandidate {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string peer_candidate = 2;</code>
        */
@@ -1583,14 +1499,13 @@ public final class ProtoSignalingCandidate {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         peerCandidate_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object peerSdpMId_ = "";
-
       /**
        * <code>optional string peer_sdp_m_id = 3;</code>
        */
@@ -1605,7 +1520,6 @@ public final class ProtoSignalingCandidate {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string peer_sdp_m_id = 3;</code>
        */
@@ -1619,7 +1533,6 @@ public final class ProtoSignalingCandidate {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string peer_sdp_m_id = 3;</code>
        */
@@ -1627,12 +1540,11 @@ public final class ProtoSignalingCandidate {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         peerSdpMId_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string peer_sdp_m_id = 3;</code>
        */
@@ -1642,7 +1554,6 @@ public final class ProtoSignalingCandidate {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string peer_sdp_m_id = 3;</code>
        */
@@ -1651,21 +1562,19 @@ public final class ProtoSignalingCandidate {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         peerSdpMId_ = value;
         onChanged();
         return this;
       }
 
       private int peerSdpMLineIndex_;
-
       /**
        * <code>optional uint32 peer_sdp_m_line_index = 4;</code>
        */
       public int getPeerSdpMLineIndex() {
         return peerSdpMLineIndex_;
       }
-
       /**
        * <code>optional uint32 peer_sdp_m_line_index = 4;</code>
        */
@@ -1675,7 +1584,6 @@ public final class ProtoSignalingCandidate {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint32 peer_sdp_m_line_index = 4;</code>
        */
@@ -1700,7 +1608,6 @@ public final class ProtoSignalingCandidate {
 
     // @@protoc_insertion_point(class_scope:proto.SignalingCandidateResponse)
     private static final net.iGap.proto.ProtoSignalingCandidate.SignalingCandidateResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new net.iGap.proto.ProtoSignalingCandidate.SignalingCandidateResponse();
     }
@@ -1740,7 +1647,6 @@ public final class ProtoSignalingCandidate {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\030SignalingCandidate.proto\022\005proto\032\rReque" +
