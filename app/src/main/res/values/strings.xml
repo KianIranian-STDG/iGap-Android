@@ -847,4 +847,6 @@
   <string name="mandatory">(Mandatory)</string>
   <string name="optional">(Optional)</string>
   <string name="desc_group_chanel">Description (Optional)</string>
+  <string name="call_with">Call With</string>
+
 </resources>

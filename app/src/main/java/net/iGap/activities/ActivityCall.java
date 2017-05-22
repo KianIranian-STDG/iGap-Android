@@ -403,7 +403,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         if (canPlay) {
             Uri defaultRintoneUri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
             player = MediaPlayer.create(ActivityCall.this, defaultRintoneUri);
-            player.setLooping(true);
+            //  player.setLooping(true);
             player.start();
         }
     }

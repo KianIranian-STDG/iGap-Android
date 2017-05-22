@@ -685,26 +685,26 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         });
 
-        RippleView rippleCall = (RippleView) findViewById(R.id.chi_ripple_call);
+        if (userId != 134 && G.userId != userId) {
 
-        // gone or visible view call
-        RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
-        if (callConfig != null) {
-            if (callConfig.isVoice_calling()) {
-                rippleCall.setVisibility(View.VISIBLE);
-                rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-                    @Override public void onComplete(RippleView rippleView) {
+            RippleView rippleCall = (RippleView) findViewById(R.id.chi_ripple_call);
 
-                        FragmentCall.call(userId, false);
-                    }
-                });
-            } else {
-                rippleCall.setVisibility(View.GONE);
+            // gone or visible view call
+            RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
+            if (callConfig != null) {
+                if (callConfig.isVoice_calling()) {
+                    rippleCall.setVisibility(View.VISIBLE);
+                    rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+                        @Override public void onComplete(RippleView rippleView) {
+
+                            FragmentCall.call(userId, false);
+                        }
+                    });
+                } else {
+                    rippleCall.setVisibility(View.GONE);
+                }
             }
         }
-
-
-
 
         vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override

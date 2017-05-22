@@ -59,9 +59,11 @@
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/dp18"
                 android:visibility="visible"
-                android:layout_alignParentTop="true"
                 fontPath="fonts/IRANSansMobile_Bold.ttf"
-                android:layout_centerHorizontal="true"/>
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/stcb_ripple_back"
+                android:layout_toEndOf="@+id/stcb_ripple_back"
+                />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 

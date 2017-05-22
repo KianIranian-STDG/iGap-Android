@@ -138,7 +138,7 @@ public class RegisteredContactsFragment extends Fragment {
             } else if (title.equals("Contacts")) {
                 title = G.context.getString(R.string.contacts);
             } else if (title.equals("call")) {
-                title = G.context.getString(R.string.chi_popup_call);
+                title = G.context.getString(R.string.call_with);
             }
         }
 
@@ -324,7 +324,13 @@ public class RegisteredContactsFragment extends Fragment {
 
                         if (isCallAction) {
                             getActivity().getSupportFragmentManager().popBackStack();
-                            FragmentCall.call(realmResults.get(getPosition()).getId(), false);
+
+                            long userId = realmResults.get(getPosition()).getId();
+                            if (userId != 134 && G.userId != userId) {
+                                FragmentCall.call(userId, false);
+                            }
+
+
                         } else {
                             showProgress();
 

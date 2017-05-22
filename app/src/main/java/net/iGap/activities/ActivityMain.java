@@ -419,8 +419,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setImage(realmUserInfo.getUserId());
         }
 
-
-
+        findViewById(R.id.lm_layout_header).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         final ViewGroup navBackGround = (ViewGroup) findViewById(R.id.lm_layout_user_picture);
         navBackGround.setOnClickListener(new View.OnClickListener() {
@@ -441,7 +440,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         TextView txtCloud = (TextView) findViewById(R.id.lm_txt_cloud);
-        txtCloud.setTextColor(Color.parseColor(G.appBarColor));
         txtCloud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

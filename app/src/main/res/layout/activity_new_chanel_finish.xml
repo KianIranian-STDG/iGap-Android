@@ -28,13 +28,15 @@
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:layout_centerInParent="true"
           android:gravity="center"
           android:text="@string/new_chanel"
           android:textColor="@color/whit_background"
           android:textSize="@dimen/dp18"
           fontPath="fonts/IRANSansMobile_Bold.ttf"
           android:visibility="visible"
+          android:layout_alignParentTop="true"
+          android:layout_toRightOf="@+id/nclf_ripple_back"
+          android:layout_toEndOf="@+id/nclf_ripple_back"
           />
 
       <net.iGap.libs.rippleeffect.RippleView

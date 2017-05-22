@@ -265,7 +265,13 @@ public class FragmentCall extends Fragment {
 
                         // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getlogProto().getPeer().getId(), null, null);
 
-                        call(realmResults.get(getPosition()).getlogProto().getPeer().getId(), false);
+                        long userId = realmResults.get(getPosition()).getlogProto().getPeer().getId();
+
+                        if (userId != 134 && G.userId != userId) {
+                            call(userId, false);
+                        }
+
+
                     }
                 });
             }

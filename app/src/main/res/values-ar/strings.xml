@@ -837,5 +837,6 @@
   <string name="calls">Calls</string>
   <string name="igap_call">iGap Call</string>
   <string name="clean_log">Clean logs</string>
+  <string name="call_with">تماس با</string>
 
 </resources>

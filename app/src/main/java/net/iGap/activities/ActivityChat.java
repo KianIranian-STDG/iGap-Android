@@ -124,6 +124,7 @@ import net.iGap.emoji.listeners.OnEmojiPopupDismissListener;
 import net.iGap.emoji.listeners.OnEmojiPopupShownListener;
 import net.iGap.emoji.listeners.OnSoftKeyboardCloseListener;
 import net.iGap.emoji.listeners.OnSoftKeyboardOpenListener;
+import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperAvatar;
@@ -210,6 +211,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
+import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmClientCondition;
@@ -1540,6 +1542,34 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             isMuteNotification = realmRoom.getMute();
         }
         realm.close();
+
+        if (chatType == CHAT && chatPeerId != 134) {
+
+            if (G.userId != chatPeerId) {
+
+                RippleView rippleCall = (RippleView) findViewById(R.id.acp_ripple_call);
+                // gone or visible view call
+                RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
+                if (callConfig != null) {
+                    if (callConfig.isVoice_calling()) {
+                        rippleCall.setVisibility(View.VISIBLE);
+                        rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+                            @Override public void onComplete(RippleView rippleView) {
+
+                                FragmentCall.call(chatPeerId, false);
+                            }
+                        });
+                    } else {
+                        rippleCall.setVisibility(View.GONE);
+                    }
+                }
+            }
+        }
+
+
+
+
+
 
         ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);
         txtFileNameForSend = (TextView) findViewById(R.id.ac_txt_file_neme_for_sending);

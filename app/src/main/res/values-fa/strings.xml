@@ -846,4 +846,5 @@
   <string name="mandatory">(اجباری)</string>
   <string name="optional">اختیاری</string>
   <string name="desc_group_chanel">توضیحات (اختیاری)</string>
+  <string name="call_with">تماس با</string>
 </resources>
