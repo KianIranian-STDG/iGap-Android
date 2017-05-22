@@ -11,10 +11,13 @@
 package net.iGap.webrtc;
 
 
+import android.os.Build;
 import android.util.Log;
 import io.realm.Realm;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import net.iGap.G;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -30,6 +33,8 @@ import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
+import org.webrtc.voiceengine.WebRtcAudioManager;
+import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 public class WebRTC {
     private static PeerConnection peerConnection;
@@ -56,10 +61,35 @@ public class WebRTC {
      */
     private PeerConnectionFactory peerConnectionFactoryInstance() {
         if (peerConnectionFactory == null) {
+
+            Set<String> HARDWARE_AEC_WHITELIST = new HashSet<String>() {{
+                add("D5803");
+                add("FP1");
+                add("SM-A500FU");
+                add("XT1092");
+            }};
+
+            Set<String> OPEN_SL_ES_WHITELIST = new HashSet<String>() {{
+            }};
+
+            if (Build.VERSION.SDK_INT >= 11) {
+                if (HARDWARE_AEC_WHITELIST.contains(Build.MODEL)) {
+                    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(false);
+                } else {
+                    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+                }
+
+                if (OPEN_SL_ES_WHITELIST.contains(Build.MODEL)) {
+                    WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(false);
+                } else {
+                    WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(true);
+                }
+            }
+
             PeerConnectionFactory.initializeAndroidGlobals(G.context,  // Context
                     true,  // Audio Enabled
-                    true,  // Video Enabled
-                    true, null); // Hardware Acceleration Enabled
+                    false,  // Video Enabled
+                    true); // Hardware Acceleration Enabled
 
             peerConnectionFactory = new PeerConnectionFactory();
         }
