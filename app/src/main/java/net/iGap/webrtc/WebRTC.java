@@ -38,6 +38,7 @@ public class WebRTC {
     private MediaConstraints audioConstraints;
     private AudioTrack audioTrack;
     private AudioSource audioSource;
+    private static String offerSdp;
 
     public WebRTC() {
         peerConnectionInstance();
@@ -93,7 +94,7 @@ public class WebRTC {
         peerConnectionInstance().createOffer(new SdpObserver() {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
-                setLocalDescription(SessionDescription.Type.OFFER, sessionDescription.description);
+                offerSdp = sessionDescription.description;
                 new RequestSignalingOffer().signalingOffer(userIdCallee, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING, sessionDescription.description);
             }
 
@@ -112,6 +113,10 @@ public class WebRTC {
 
             }
         }, mediaConstraintsGetInstance());
+    }
+
+    public void setOfferLocalDescription() {
+        setLocalDescription(SessionDescription.Type.OFFER, offerSdp);
     }
 
     public void createAnswer() {

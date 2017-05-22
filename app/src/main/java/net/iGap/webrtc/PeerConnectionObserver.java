@@ -73,7 +73,7 @@ public class PeerConnectionObserver implements PeerConnection.Observer, VideoRen
     @Override
     public void onIceCandidate(IceCandidate iceCandidate) {
         Log.i("WWW", "WebRtc onIceCandidate : " + iceCandidate.toString());
-        new RequestSignalingCandidate().signalingCandidate(iceCandidate.sdp);
+        new RequestSignalingCandidate().signalingCandidate(iceCandidate.sdpMid, iceCandidate.sdpMLineIndex, iceCandidate.sdp);
 
     }
 

@@ -87,6 +87,8 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
         G.handler.post(new Runnable() {
             @Override
             public void run() {
+                new WebRTC().setOfferLocalDescription();
+
                 new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
                     @Override
                     public void onCreateSuccess(SessionDescription sessionDescription) {
