@@ -728,9 +728,9 @@
   <string name="revoke">ابطال</string>
   <string name="conversation">صفحه</string>
 
-  <string name="MISSED_SCREEN_SHARE">"اشتراک صفحه نمایش"</string>
-  <string name="MISSED_VOICE_CALL">"تماس صوتی"</string>
-  <string name="MISSED_VIDEO_CALL">"تماس تصویری"</string>
+  <string name="MISSED_SCREEN_SHARE">"تماس از دست رفته"</string>
+  <string name="MISSED_VOICE_CALL">"تماس صوتی از دست رفته"</string>
+  <string name="MISSED_VIDEO_CALL">"تماس تصویری از دست رفته"</string>
 
 
   <string name="send_position">ارسال موقعیت</string>

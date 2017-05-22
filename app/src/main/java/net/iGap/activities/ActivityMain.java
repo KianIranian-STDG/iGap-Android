@@ -123,6 +123,7 @@ import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
+import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
@@ -600,29 +601,51 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         ViewGroup itemNavCall = (ViewGroup) findViewById(R.id.lm_ll_call);
-        itemNavCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        drawer.closeDrawer(GravityCompat.START);
+
+        // gone or visible view call
+        RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
+        if (callConfig != null) {
+            if (callConfig.isVoice_calling()) {
+                itemNavCall.setVisibility(View.VISIBLE);
+
+                itemNavCall.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        G.handler.post(new Runnable() {
+                            @Override public void run() {
+                                drawer.closeDrawer(GravityCompat.START);
+                            }
+                        });
+
+                        G.handler.postDelayed(new Runnable() {
+                            @Override public void run() {
+                                Fragment fragment = FragmentCall.newInstance();
+                                try {
+                                    getSupportFragmentManager().beginTransaction()
+                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                        .addToBackStack(null)
+                                        .replace(R.id.fragmentContainer, fragment)
+                                        .commit();
+                                } catch (Exception e) {
+                                    e.getStackTrace();
+                                }
+                            }
+                        }, 256);
                     }
                 });
-
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Fragment fragment = FragmentCall.newInstance();
-                        try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                    }
-                }, 256);
+            } else {
+                itemNavCall.setVisibility(View.GONE);
             }
-        });
+        }
+
+
+
+
+
+
+
+
+
+
 
 
 

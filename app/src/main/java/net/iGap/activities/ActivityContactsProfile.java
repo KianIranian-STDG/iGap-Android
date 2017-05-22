@@ -77,6 +77,7 @@ import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
+import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmContacts;
@@ -685,12 +686,25 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         });
 
         RippleView rippleCall = (RippleView) findViewById(R.id.chi_ripple_call);
-        rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
 
-                FragmentCall.call(userId, false);
+        // gone or visible view call
+        RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
+        if (callConfig != null) {
+            if (callConfig.isVoice_calling()) {
+                rippleCall.setVisibility(View.VISIBLE);
+                rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+                    @Override public void onComplete(RippleView rippleView) {
+
+                        FragmentCall.call(userId, false);
+                    }
+                });
+            } else {
+                rippleCall.setVisibility(View.GONE);
             }
-        });
+        }
+
+
+
 
         vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override

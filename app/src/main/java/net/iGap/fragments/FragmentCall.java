@@ -30,6 +30,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -43,7 +44,6 @@ import net.iGap.realm.RealmCallLog;
 import net.iGap.realm.RealmCallLogFields;
 import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetLog;
-
 
 public class FragmentCall extends Fragment {
 
@@ -90,7 +90,16 @@ public class FragmentCall extends Fragment {
                     @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         if (which == 0) {
 
-                            new RequestSignalingClearLog().signalingClearLog(G.userId);
+                            Realm realm = Realm.getDefaultInstance();
+
+                            try {
+                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
+                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                            } catch (Exception e) {
+
+                            } finally {
+                                realm.close();
+                            }
                         }
                     }
                 }).show();
@@ -180,7 +189,6 @@ public class FragmentCall extends Fragment {
         });
 
         getLogListWithOfset();
-
     }
 
     private void getLogListWithOfset() {
@@ -195,12 +203,18 @@ public class FragmentCall extends Fragment {
 
     public static void call(long userID, boolean isIncomingCall) {
 
-        Intent intent = new Intent(G.context, ActivityCall.class);
-        intent.putExtra(ActivityCall.USER_ID_STR, userID);
-        intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (G.userLogin) {
 
-        G.context.startActivity(intent);
+            Intent intent = new Intent(G.context, ActivityCall.class);
+            intent.putExtra(ActivityCall.USER_ID_STR, userID);
+            intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            G.context.startActivity(intent);
+        } else {
+
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+        }
     }
 
     //*************************************************************************************************************
@@ -246,8 +260,6 @@ public class FragmentCall extends Fragment {
                         call(realmResults.get(getPosition()).getlogProto().getPeer().getId(), false);
                     }
                 });
-
-
             }
         }
 
@@ -297,8 +309,13 @@ public class FragmentCall extends Fragment {
             //        break;
             //}
 
-            viewHolder.timeAndInfo.setText(
-                HelperCalander.checkHijriAndReturnTime(item.getOfferTime()) + " " + TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME));
+            if (HelperCalander.isLanguagePersian) {
+                viewHolder.timeAndInfo.setText(
+                    TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME + " " + HelperCalander.checkHijriAndReturnTime(item.getOfferTime())));
+            } else {
+                viewHolder.timeAndInfo.setText(
+                    HelperCalander.checkHijriAndReturnTime(item.getOfferTime()) + " " + TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME));
+            }
 
             if (item.getDuration() > 0) {
                 viewHolder.timeDureation.setVisibility(View.VISIBLE);
@@ -311,7 +328,6 @@ public class FragmentCall extends Fragment {
                 viewHolder.timeAndInfo.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeAndInfo.getText().toString()));
                 viewHolder.timeDureation.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDureation.getText().toString()));
             }
-
 
             viewHolder.name.setText(item.getPeer().getDisplayName());
 

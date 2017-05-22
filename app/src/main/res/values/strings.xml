@@ -726,9 +726,9 @@
   <string name="Room_Deleted">"Deleted Room"</string>
   <string name="conversation">""</string>
 
-  <string name="MISSED_SCREEN_SHARE">"Screen Share"</string>
-  <string name="MISSED_VOICE_CALL">"Voice Call"</string>
-  <string name="MISSED_VIDEO_CALL">"Video Call"</string>
+  <string name="MISSED_SCREEN_SHARE">"Missed Screen Share"</string>
+  <string name="MISSED_VOICE_CALL">"Missed Voice Call"</string>
+  <string name="MISSED_VIDEO_CALL">"Missed Video Call"</string>
 
 
   <string name="delete_account_text1">other</string>

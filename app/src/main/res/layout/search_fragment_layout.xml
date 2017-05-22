@@ -111,7 +111,6 @@
       android:id="@+id/sfl_view_line"
       android:layout_width="match_parent"
       android:layout_height="1dp"
-      android:background="#34a49f"
       />
 
   <FrameLayout
