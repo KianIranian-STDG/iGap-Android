@@ -11,11 +11,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
@@ -37,6 +35,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
@@ -84,31 +83,40 @@ public class FragmentCall extends Fragment {
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.fc_btn_menu);
 
         txtMenu.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View view) {
 
-                MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_call_log_menu).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (which == 0) {
+                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.chat_popup_dialog_custom, true).build();
+                View v = dialog.getCustomView();
 
-                            Realm realm = Realm.getDefaultInstance();
+                DialogAnimation.animationUp(dialog);
+                dialog.show();
 
-                            try {
-                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
-                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                            } catch (Exception e) {
+                ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
 
-                            } finally {
-                                realm.close();
-                            }
+                final TextView txtClear = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+                TextView iconClear = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+                txtClear.setText(getResources().getString(R.string.clean_log));
+                iconClear.setText(getResources().getString(R.string.md_rubbish_delete_file));
+
+                root1.setVisibility(View.VISIBLE);
+
+                root1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+
+                        Realm realm = Realm.getDefaultInstance();
+                        try {
+                            RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
+                            new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                        } catch (Exception e) {
+
+                        } finally {
+                            realm.close();
                         }
                     }
-                }).show();
-
-                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                layoutParams.copyFrom(dialog.getWindow().getAttributes());
-                layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
-                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-                dialog.getWindow().setAttributes(layoutParams);
+                });
             }
         });
 

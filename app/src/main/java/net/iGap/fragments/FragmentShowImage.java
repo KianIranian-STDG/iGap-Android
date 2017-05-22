@@ -313,24 +313,46 @@ public class FragmentShowImage extends Fragment {
 
     public void popUpMenuShowImage() {
 
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_menu_show_image).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                if (which == 0) {
-                    shareImage();
-                } else if (which == 1) {
-                    saveToGalary();
-                }
-            }
-        }).build();
-
+        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.chat_popup_dialog_custom, true).build();
+        View v = dialog.getCustomView();
 
         DialogAnimation.animationUp(dialog);
         dialog.show();
-        //WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        //layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        //layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
-        //layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-        //dialog.getWindow().setAttributes(layoutParams);
+
+        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+        ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
+
+        final TextView txtShare = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+        TextView txtSaveToGallery = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
+
+        TextView iconSaveToGallery = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+        iconSaveToGallery.setText(getResources().getString(R.string.md_save));
+
+        root1.setVisibility(View.VISIBLE);
+        root2.setVisibility(View.VISIBLE);
+
+        txtShare.setText(getResources().getString(R.string.save_to_gallery));
+        txtSaveToGallery.setText(getResources().getString(R.string.share_image));
+
+        TextView iconShare = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
+        iconShare.setText(getResources().getString(R.string.md_share_button));
+
+        root1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                saveToGalary();
+            }
+        });
+
+        root2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                shareImage();
+            }
+        });
+
     }
 
     /**
