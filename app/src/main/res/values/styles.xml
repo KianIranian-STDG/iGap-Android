@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/green</item>
         <item name="android:buttonStyle">@style/Button</item>
         <item name="drawerArrowStyle">@style/MaterialDrawer.DrawerArrowStyle</item>
+      <item name="md_medium_font">IRANSansMobile.ttf</item>
     </style>
 
     <style name="MaterialDrawer.DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">

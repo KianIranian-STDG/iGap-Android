@@ -44,14 +44,14 @@
         <!--page 1-->
         <ImageView
             android:id="@+id/int_img_logo_introduce"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp80"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:src="@mipmap/logo"
+            app:srcCompat="@drawable/icon_asli"
             android:visibility="invisible"/>
 
         <!--page 1-->
