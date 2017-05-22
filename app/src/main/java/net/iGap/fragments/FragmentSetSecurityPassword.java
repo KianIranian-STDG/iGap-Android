@@ -76,7 +76,7 @@ public class FragmentSetSecurityPassword extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (edtSetPassword.length() > 0 && page == 1) {
+                if (edtSetPassword.length() > 1 && page == 1) {
                     page = 2;
 
                     txtToolbar.setText(getResources().getString(R.string.your_password));
@@ -86,7 +86,7 @@ public class FragmentSetSecurityPassword extends Fragment {
 
 
                 } else if (page == 2) {
-                    if (edtSetRePassword.length() > 0 && txtPassword.contains(edtSetRePassword.getText().toString())) {
+                    if (edtSetRePassword.length() > 1 && txtPassword.contains(edtSetRePassword.getText().toString())) {
                         page = 3;
                         txtToolbar.setText(getResources().getString(R.string.password_hint));
                         rootReEnterPassword.setVisibility(View.GONE);

@@ -861,6 +861,15 @@
   <string name="recovery_question">Recovery Question</string>
   <string name="two_step_verification">Two-Step Verification</string>
   <string name="forgot_password">Forgot password?</string>
+  <string name="Recovery_with_email">Recovery with E-mail</string>
+  <string name="recent_code">Recent code</string>
+  <string name="enter_code">Enter your code</string>
+  <string name="Change_password">Change Password</string>
+  <string name="turn_Password_off">Turn Password Off</string>
+  <string name="set_recovery_email">Set Recovery E-Mail</string>
+  <string name="set_recovery_question">Set Recovery Question</string>
+  <string name="set_unconfirmed_email">Set confirmed E-Mail</string>
+  <string name="Recovery_with_question">Recovery with question</string>
   <string name="your_email_desc">Please add your valid e-mail it is th only way to recover a forgotten password</string>
 
 </resources>

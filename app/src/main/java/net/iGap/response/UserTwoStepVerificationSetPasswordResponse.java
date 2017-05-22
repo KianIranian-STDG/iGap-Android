@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import android.util.Log;
 import net.iGap.proto.ProtoUserTwoStepVerificationSetPassword;
 
 public class UserTwoStepVerificationSetPasswordResponse extends MessageHandler {
@@ -32,14 +33,19 @@ public class UserTwoStepVerificationSetPasswordResponse extends MessageHandler {
         ProtoUserTwoStepVerificationSetPassword.UserTwoStepVerificationSetPasswordResponse.Builder builder =
             (ProtoUserTwoStepVerificationSetPassword.UserTwoStepVerificationSetPasswordResponse.Builder) message;
         builder.getUnconfirmedEmailPattern();
+        Log.i("CCCCCCC", " 000 builder.getUnconfirmedEmailPattern(): " + builder.getUnconfirmedEmailPattern());
     }
 
     @Override public void timeOut() {
         super.timeOut();
+        Log.i("CCCCCCC", " 222 builder.timeOut(): ");
+
     }
 
     @Override public void error() {
         super.error();
+        Log.i("CCCCCCC", " 333 builder.error(): ");
+
     }
 }
 

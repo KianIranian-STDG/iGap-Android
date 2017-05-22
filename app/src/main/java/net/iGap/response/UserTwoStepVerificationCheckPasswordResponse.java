@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoUserTwoStepVerificationCheckPassword;
 
 public class UserTwoStepVerificationCheckPasswordResponse extends MessageHandler {
@@ -31,6 +32,12 @@ public class UserTwoStepVerificationCheckPasswordResponse extends MessageHandler
 
         ProtoUserTwoStepVerificationCheckPassword.UserTwoStepVerificationCheckPasswordResponse.Builder builder =
             (ProtoUserTwoStepVerificationCheckPassword.UserTwoStepVerificationCheckPasswordResponse.Builder) message;
+
+        if (G.onTwoStepPassword != null) {
+
+            G.onTwoStepPassword.checkPassword();
+        }
+
     }
 
     @Override public void timeOut() {

@@ -117,6 +117,7 @@ import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnSecuring;
 import net.iGap.interfaces.OnSetAction;
 import net.iGap.interfaces.OnSetActionInRoom;
+import net.iGap.interfaces.OnTwoStepPassword;
 import net.iGap.interfaces.OnUpdateAvatar;
 import net.iGap.interfaces.OnUpdateUserStatusInChangePage;
 import net.iGap.interfaces.OnUpdating;
@@ -351,6 +352,7 @@ public class G extends MultiDexApplication {
     public static OnUserContactsUnBlock onUserContactsUnBlock;
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
+    public static OnTwoStepPassword onTwoStepPassword;
     public static IClientSearchUserName onClientSearchUserName;
 
     public static ISignalingOffer iSignalingOffer;

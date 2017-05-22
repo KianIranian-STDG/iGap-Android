@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+import net.iGap.G;
 import net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail;
 
 public class UserTwoStepVerificationGetPasswordDetailResponse extends MessageHandler {
@@ -36,14 +38,23 @@ public class UserTwoStepVerificationGetPasswordDetailResponse extends MessageHan
         builder.getHint();
         builder.getHasConfirmedRecoveryEmail();
         builder.getUnconfirmedEmailPattern();
+
+        if (G.onTwoStepPassword != null) {
+            Log.i("CCCCCCC", "AA22: ");
+            G.onTwoStepPassword.getPasswordDetail(builder.getQuestionOne(), builder.getQuestionTwo(), builder.getHint(), builder.getHasConfirmedRecoveryEmail(), builder.getUnconfirmedEmailPattern());
+
+        }
+
     }
 
     @Override public void timeOut() {
         super.timeOut();
+        Log.i("CCCCCCC", "AA33: ");
     }
 
     @Override public void error() {
         super.error();
+        Log.i("CCCCCCC", "AA44: ");
     }
 }
 
