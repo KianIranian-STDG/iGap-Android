@@ -84,21 +84,21 @@ public class FragmentCall extends Fragment {
 
         txtMenu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
 
                 final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.chat_popup_dialog_custom, true).build();
-                View v = dialog.getCustomView();
+                View view = dialog.getCustomView();
 
                 DialogAnimation.animationUp(dialog);
                 dialog.show();
 
-                ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-
-                final TextView txtClear = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-                TextView iconClear = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+                final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
                 txtClear.setText(getResources().getString(R.string.clean_log));
+
+                TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
                 iconClear.setText(getResources().getString(R.string.md_rubbish_delete_file));
 
+                ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
                 root1.setVisibility(View.VISIBLE);
 
                 root1.setOnClickListener(new View.OnClickListener() {
