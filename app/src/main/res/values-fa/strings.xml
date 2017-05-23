@@ -107,6 +107,7 @@
 
   <!-- Public String -->
   <string name="app_name">"آی گپ"</string>
+  <string name="call_name">تماس صوتی آی گپ</string>
   <string name="chat">"گفتگو"</string>
   <string name="group">"گروه"</string>
   <string name="channel">"کانال"</string>
@@ -846,5 +847,5 @@
   <string name="mandatory">(اجباری)</string>
   <string name="optional">اختیاری</string>
   <string name="desc_group_chanel">توضیحات (اختیاری)</string>
-  <string name="call_with">تماس با</string>
+  <string name="call_with">انتخاب مخاطب</string>
 </resources>

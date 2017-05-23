@@ -144,6 +144,21 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
         if (G.onCallLeaveView != null) {
             G.onCallLeaveView.onLeaveView();
         }
+
+        if (G.iSignalingCallBack != null) {
+
+            switch (type) {
+                case DISCONNECTED:
+                case MISSED:
+                case REJECTED:
+                case NOT_ANSWERED:
+                case UNAVAILABLE:
+                    G.iSignalingCallBack.onStatusChanged(CallState.REJECT);
+                    break;
+            }
+        }
+
+
     }
 
     @Override

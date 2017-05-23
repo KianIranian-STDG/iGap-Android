@@ -109,6 +109,8 @@
   <string formatted="false" name="d_of_d">%d of %d</string>
   <string name="add_to_contact">Add to Contact</string>
   <string name="app_name">iGap</string>
+  <string name="call_name">iGap Voice Call</string>
+
 
   <string name="chat">Chat</string>
   <string name="group">Group</string>
@@ -847,6 +849,6 @@
   <string name="mandatory">(Mandatory)</string>
   <string name="optional">(Optional)</string>
   <string name="desc_group_chanel">Description (Optional)</string>
-  <string name="call_with">Call With</string>
+  <string name="call_with">Select Contact</string>
 
 </resources>

@@ -40,16 +40,39 @@
           app:layout_collapseMode="pin"
           >
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
 
-          <LinearLayout
+          <net.iGap.libs.rippleeffect.RippleView
+              android:id="@+id/chi_ripple_back"
               android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              app:rv_alpha="200"
+              app:rv_centered="true"
+              app:rv_rippleDuration="0"
+              app:rv_ripplePadding="5dp"
+              rv_centered="true"
+              >
+
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/chi_txt_back"
+                android:layout_width="@dimen/dp52"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:gravity="center"
+                android:text="@string/md_back_arrow"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
+                android:textColor="@color/whit_background"
+                />
+          </net.iGap.libs.rippleeffect.RippleView>
+
+          <LinearLayout
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="match_parent"
-              android:layout_centerInParent="true"
-              android:gravity="center"
+              android:gravity="center|left"
               android:orientation="vertical"
               >
 
@@ -82,37 +105,13 @@
           </LinearLayout>
 
 
-          <net.iGap.libs.rippleeffect.RippleView
-              android:id="@+id/chi_ripple_back"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              app:rv_alpha="200"
-              app:rv_centered="true"
-              app:rv_rippleDuration="0"
-              app:rv_ripplePadding="5dp"
-              rv_centered="true"
-              >
 
-            <net.iGap.module.MaterialDesignTextView
-                android:id="@+id/chi_txt_back"
-                android:layout_width="@dimen/dp52"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:gravity="center"
-                android:text="@string/md_back_arrow"
-                android:textAppearance="@style/TextIconAppearance_toolbar"
-                android:textColor="@color/whit_background"
-                />
-          </net.iGap.libs.rippleeffect.RippleView>
 
 
           <net.iGap.libs.rippleeffect.RippleView
               android:id="@+id/chi_ripple_call"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_marginRight="@dimen/dp52"
               android:visibility="gone"
               app:rv_alpha="200"
               app:rv_centered="true"
@@ -159,7 +158,7 @@
                 />
 
           </net.iGap.libs.rippleeffect.RippleView>
-        </RelativeLayout>
+        </LinearLayout>
       </android.support.v7.widget.Toolbar>
 
       <LinearLayout

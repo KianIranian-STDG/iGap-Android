@@ -11,5 +11,5 @@
 package net.iGap.module.enums;
 
 public enum CallState {
-    DIALLING, RINGING, CHECKING, CONNECTED, FINISHED
+    DIALLING, RINGING, CHECKING, CONNECTED, FINISHED, REJECT, BUSY
 }

@@ -42,12 +42,12 @@
 
         <TextView
             android:id="@+id/fcsl_txt_name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="1dp"
             android:singleLine="true"
+            android:layout_gravity="start"
             android:text="Name"
-            android:gravity="start"
             android:textColor="@android:color/black"
             android:textSize="@dimen/dp15"
             android:textStyle="bold"

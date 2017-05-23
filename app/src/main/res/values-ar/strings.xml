@@ -106,6 +106,7 @@
 
   <!-- Public String -->
   <string name="app_name">"آی گپ"</string>
+  <string name="call_name">تماس صوتی آی گپ</string>
   <string name="chat">"گفتگو"</string>
   <string name="group">"گروه"</string>
   <string name="channel">"کانال"</string>
@@ -837,6 +838,6 @@
   <string name="calls">Calls</string>
   <string name="igap_call">iGap Call</string>
   <string name="clean_log">Clean logs</string>
-  <string name="call_with">تماس با</string>
+  <string name="call_with">انتخاب مخاطب</string>
 
 </resources>

@@ -14,10 +14,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -31,6 +33,8 @@ import android.widget.TextView;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.realm.Realm;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperDownloadFile;
@@ -62,8 +66,17 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     boolean canTouch = false;
     boolean down = false;
     boolean isSendLeave = false;
+    boolean isConnected = false;
 
     Vibrator vibrator;
+    int musicVolum = 0;
+    Ringtone ringtone;
+    boolean isMuteAllMusic = false;
+
+    private Timer secendTimer;
+    private int secend = 0;
+    private int minute = 0;
+
 
     VerticalSwipe verticalSwipe;
     TextView txtName;
@@ -78,6 +91,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     MaterialDesignTextView btnMic;
     MaterialDesignTextView btnChat;
     MaterialDesignTextView btnSpeaker;
+    TextView txtTimer;
     MediaPlayer player;
 
     @Override protected void onStop() {
@@ -146,14 +160,114 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
                         txtStatus.setText(callState.toString());
-                        if (callState == CallState.FINISHED) {
-                            endVoiceAndFinish();
+
+                        Log.e("dddd", callState.toString());
+
+                        switch (callState) {
+
+                            case RINGING:
+                                playSound(R.raw.igap_ringing);
+                                break;
+                            case DIALLING:
+                                break;
+                            case CHECKING:
+                                break;
+                            case CONNECTED:
+
+                                if (!isConnected) {
+                                    isConnected = true;
+
+                                    playSound(R.raw.igap_connect);
+
+                                    G.handler.postDelayed(new Runnable() {
+                                        @Override public void run() {
+                                            cancelRingtone();
+                                            startTimer();
+                                        }
+                                    }, 500);
+                                }
+
+                                break;
+                            case FINISHED:
+
+                                playSound(R.raw.igap_discounect);
+
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override public void run() {
+                                        stopTimer();
+                                        endVoiceAndFinish();
+                                    }
+                                }, 500);
+
+                                isConnected = false;
+                                break;
+                            case BUSY:
+                                playSound(R.raw.igap_busy);
+                                break;
+                            case REJECT:
+                                playSound(R.raw.igap_discounect);
+                                break;
+
                         }
                     }
                 });
             }
         };
     }
+
+    private void startTimer() {
+
+        txtTimer.setVisibility(View.VISIBLE);
+        secend = 0;
+        minute = 0;
+
+        secendTimer = new Timer();
+        secendTimer.schedule(new TimerTask() {
+
+            @Override public void run() {
+
+                secend++;
+                if (secend >= 60) {
+                    minute++;
+                    secend %= 60;
+                }
+                if (minute >= 60) {
+                    minute %= 60;
+                }
+
+                txtTimer.post(new Runnable() {
+
+                    @Override public void run() {
+                        String s = "";
+                        if (minute < 10) {
+                            s += "0" + minute;
+                        } else {
+                            s += minute;
+                        }
+                        s += ":";
+                        if (secend < 10) {
+                            s += "0" + secend;
+                        } else {
+                            s += secend;
+                        }
+
+                        txtTimer.setText(s);
+                    }
+                });
+            }
+        }, 1000, 1000);
+    }
+
+    private void stopTimer() {
+
+        txtTimer.setVisibility(View.GONE);
+
+        if (secendTimer != null) {
+            secendTimer.cancel();
+            secendTimer = null;
+        }
+    }
+
 
     private void initComponent() {
 
@@ -166,6 +280,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         userCallerPicture = (ImageView) findViewById(R.id.fcr_imv_background);
         layoutCaller = (LinearLayout) findViewById(R.id.fcr_layout_caller);
         layoutOption = (LinearLayout) findViewById(R.id.fcr_layout_option);
+
+        txtTimer = (TextView) findViewById(R.id.fcr_txt_timer);
+
 
         txtStatus.setText(CallState.DIALLING.toString());
 
@@ -281,6 +398,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         if (isIncomingCall) {
             playRingtone();
         } else {
+
+            playSound(R.raw.igap_signaling);
+
             layoutAnswer.setVisibility(View.GONE);
             layoutChat.setVisibility(View.GONE);
             layoutOption.setVisibility(View.VISIBLE);
@@ -366,15 +486,37 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void endCall() {
         new WebRTC().leaveCall();
-
         isSendLeave = true;
-
         endVoiceAndFinish();
+    }
+
+    private void muteMusic() {
+
+        if (!isMuteAllMusic) {
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            musicVolum = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+            am.setStreamMute(AudioManager.STREAM_MUSIC, true);
+            am.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+            isMuteAllMusic = true;
+        }
+    }
+
+    private void unMuteMusic() {
+
+        if (isMuteAllMusic) {
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            am.setStreamVolume(AudioManager.STREAM_MUSIC, musicVolum, 0);
+            am.setStreamMute(AudioManager.STREAM_MUSIC, false);
+            isMuteAllMusic = false;
+        }
     }
 
     private void playRingtone() {
         boolean canPlay = false;
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        muteMusic();
+
 
         switch (am.getRingerMode()) {
             case AudioManager.RINGER_MODE_SILENT:
@@ -399,13 +541,50 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         if (canPlay) {
             Uri defaultRintoneUri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
-            player = MediaPlayer.create(ActivityCall.this, defaultRintoneUri);
-            //  player.setLooping(true);
+            ringtone = RingtoneManager.getRingtone(getApplicationContext(), defaultRintoneUri);
+
+            if (ringtone != null) {
+                ringtone.play();
+            }
+
+
+
+        }
+    }
+
+    private void playSound(final int resSound) {
+
+        if (player == null) {
+            player = MediaPlayer.create(ActivityCall.this, resSound);
+            player.setLooping(true);
             player.start();
+        } else {
+
+            try {
+                player.reset();
+
+                player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
+                player.prepare();
+                player.setLooping(true);
+                player.start();
+            } catch (Exception e) {
+                Log.e("dddd", "playSound   " + e.toString() + "     " + resSound);
+            }
         }
     }
 
     private void cancelRingtone() {
+
+        unMuteMusic();
+
+        try {
+            if (ringtone != null) {
+                ringtone.stop();
+                ringtone = null;
+            }
+        } catch (Exception e) {
+
+        }
 
         try {
 

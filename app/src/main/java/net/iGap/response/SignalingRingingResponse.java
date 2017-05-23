@@ -34,6 +34,11 @@ public class SignalingRingingResponse extends MessageHandler {
 
         ProtoSignalingRinging.SignalingRingingResponse.Builder builder = (ProtoSignalingRinging.SignalingRingingResponse.Builder) message;
         if (builder.getResponse().getId().isEmpty()) {
+
+            if (G.iSignalingRinging != null) {
+                G.iSignalingRinging.onRinging();
+            }
+
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {

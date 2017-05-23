@@ -839,7 +839,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             txtIgap.setText(updating);
             txtIgap.setTypeface(null, Typeface.BOLD);
         } else {
-            txtIgap.setText(R.string.igap);
+            txtIgap.setText(R.string.app_name);
             txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
         }
 
@@ -860,7 +860,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             txtIgap.setText(R.string.updating);
                             txtIgap.setTypeface(null, Typeface.BOLD);
                         } else {
-                            txtIgap.setText(R.string.igap);
+                            txtIgap.setText(R.string.app_name);
                             txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
                         }
                     }
