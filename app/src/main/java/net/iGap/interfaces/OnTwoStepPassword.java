@@ -16,4 +16,8 @@ public interface OnTwoStepPassword {
     void checkPassword();
 
     void unSetPassword();
+
+    void changeRecoveryQuestion();
+
+    void changeHint();
 }

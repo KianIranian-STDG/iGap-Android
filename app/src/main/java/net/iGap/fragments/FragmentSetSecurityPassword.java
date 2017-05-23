@@ -30,6 +30,7 @@ public class FragmentSetSecurityPassword extends Fragment {
     private EditText edtSetAnswerPassTwo;
     private EditText edtSetEmail;
     private String txtPassword;
+    private String oldPassword = "";
 
     public FragmentSetSecurityPassword() {
         // Required empty public constructor
@@ -45,6 +46,12 @@ public class FragmentSetSecurityPassword extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+
+            oldPassword = bundle.getString("OLD_PASSWORD");
+        }
 
 
         view.findViewById(R.id.rootSetPasswordSecurity).setOnClickListener(new View.OnClickListener() {
@@ -78,7 +85,6 @@ public class FragmentSetSecurityPassword extends Fragment {
 
                 if (edtSetPassword.length() > 1 && page == 1) {
                     page = 2;
-
                     txtToolbar.setText(getResources().getString(R.string.your_password));
                     txtPassword = edtSetPassword.getText().toString();
                     rootEnterPassword.setVisibility(View.GONE);
@@ -118,7 +124,7 @@ public class FragmentSetSecurityPassword extends Fragment {
                     }
                 } else if (page == 5) {
 
-                    new RequestUserTwoStepVerificationSetPassword().setPassword("", txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
+                    new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
                     getActivity().getSupportFragmentManager().popBackStack();
                 }
 
