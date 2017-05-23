@@ -394,10 +394,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
 
         if (am.isWiredHeadsetOn()) {
-            am.setSpeakerphoneOn(false);
             canPlay = true;
-        } else {
-            am.setSpeakerphoneOn(true);
         }
 
         if (canPlay) {
