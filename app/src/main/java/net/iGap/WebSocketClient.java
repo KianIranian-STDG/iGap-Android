@@ -324,7 +324,6 @@ public class WebSocketClient {
                         if (webSocket != null) {
                             webSocket.disconnect();
                         }
-                        //TODO [Saeed Mozaffari] [2016-09-06 12:31 PM] - go to upgrade page
                     }
                 }
             }

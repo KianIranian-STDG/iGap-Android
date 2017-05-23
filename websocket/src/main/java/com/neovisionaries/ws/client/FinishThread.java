@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2017 Neo Visionaries Inc.
+ * Copyright (C) 2017 Neo Visionaries Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,14 @@
 package com.neovisionaries.ws.client;
 
 
-class ConnectThread extends WebSocketThread {
-    public ConnectThread(WebSocket ws) {
-        super("ConnectThread", ws, ThreadType.CONNECT_THREAD);
+class FinishThread extends WebSocketThread {
+    public FinishThread(WebSocket ws) {
+        super("FinishThread", ws, ThreadType.FINISH_THREAD);
     }
 
 
     @Override
     public void runMain() {
-        try {
-            mWebSocket.connect();
-        } catch (WebSocketException e) {
-            handleError(e);
-        }
-    }
-
-
-    private void handleError(WebSocketException cause) {
-        ListenerManager manager = mWebSocket.getListenerManager();
-
-        manager.callOnError(cause);
-        manager.callOnConnectError(cause);
+        mWebSocket.finish();
     }
 }

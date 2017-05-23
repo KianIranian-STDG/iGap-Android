@@ -16,6 +16,12 @@
 package com.neovisionaries.ws.client;
 
 
+import static com.neovisionaries.ws.client.WebSocketOpcode.BINARY;
+import static com.neovisionaries.ws.client.WebSocketOpcode.CLOSE;
+import static com.neovisionaries.ws.client.WebSocketOpcode.CONTINUATION;
+import static com.neovisionaries.ws.client.WebSocketOpcode.PING;
+import static com.neovisionaries.ws.client.WebSocketOpcode.PONG;
+import static com.neovisionaries.ws.client.WebSocketOpcode.TEXT;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,13 +31,6 @@ import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.neovisionaries.ws.client.WebSocketOpcode.BINARY;
-import static com.neovisionaries.ws.client.WebSocketOpcode.CLOSE;
-import static com.neovisionaries.ws.client.WebSocketOpcode.CONTINUATION;
-import static com.neovisionaries.ws.client.WebSocketOpcode.PING;
-import static com.neovisionaries.ws.client.WebSocketOpcode.PONG;
-import static com.neovisionaries.ws.client.WebSocketOpcode.TEXT;
 
 
 class Misc {
