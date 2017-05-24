@@ -13,7 +13,6 @@ public final class ProtoSignalingLeave {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface SignalingLeaveOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.SignalingLeave)
           com.google.protobuf.MessageOrBuilder {
@@ -22,18 +21,15 @@ public final class ProtoSignalingLeave {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     net.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     net.iGap.proto.ProtoRequest.RequestOrBuilder getRequestOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.SignalingLeave}
    */
@@ -44,7 +40,6 @@ public final class ProtoSignalingLeave {
     private SignalingLeave(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private SignalingLeave() {
     }
 
@@ -104,21 +99,18 @@ public final class ProtoSignalingLeave {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private net.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -127,7 +119,6 @@ public final class ProtoSignalingLeave {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -156,7 +147,6 @@ public final class ProtoSignalingLeave {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -234,15 +224,12 @@ public final class ProtoSignalingLeave {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoSignalingLeave.SignalingLeave prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -252,7 +239,6 @@ public final class ProtoSignalingLeave {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.SignalingLeave}
      */
@@ -276,12 +262,10 @@ public final class ProtoSignalingLeave {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -343,7 +327,6 @@ public final class ProtoSignalingLeave {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof net.iGap.proto.ProtoSignalingLeave.SignalingLeave) {
           return mergeFrom((net.iGap.proto.ProtoSignalingLeave.SignalingLeave) other);
@@ -383,14 +366,12 @@ public final class ProtoSignalingLeave {
 
       private net.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -401,7 +382,6 @@ public final class ProtoSignalingLeave {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -418,7 +398,6 @@ public final class ProtoSignalingLeave {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -432,7 +411,6 @@ public final class ProtoSignalingLeave {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -450,7 +428,6 @@ public final class ProtoSignalingLeave {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -465,7 +442,6 @@ public final class ProtoSignalingLeave {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -474,7 +450,6 @@ public final class ProtoSignalingLeave {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -485,7 +460,6 @@ public final class ProtoSignalingLeave {
           return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -511,7 +485,6 @@ public final class ProtoSignalingLeave {
 
     // @@protoc_insertion_point(class_scope:proto.SignalingLeave)
     private static final net.iGap.proto.ProtoSignalingLeave.SignalingLeave DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new net.iGap.proto.ProtoSignalingLeave.SignalingLeave();
     }
@@ -549,12 +522,10 @@ public final class ProtoSignalingLeave {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     net.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -564,13 +535,11 @@ public final class ProtoSignalingLeave {
      * <code>optional .proto.SignalingLeaveResponse.Type type = 2;</code>
      */
     int getTypeValue();
-
     /**
      * <code>optional .proto.SignalingLeaveResponse.Type type = 2;</code>
      */
     net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse.Type getType();
   }
-
   /**
    * Protobuf type {@code proto.SignalingLeaveResponse}
    */
@@ -581,7 +550,6 @@ public final class ProtoSignalingLeave {
     private SignalingLeaveResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private SignalingLeaveResponse() {
       type_ = 0;
     }
@@ -678,6 +646,10 @@ public final class ProtoSignalingLeave {
        * <code>FINISHED = 6;</code>
        */
       FINISHED(6),
+      /**
+       * <code>TOO_LONG = 7;</code>
+       */
+      TOO_LONG(7),
       UNRECOGNIZED(-1),;
 
       /**
@@ -708,6 +680,10 @@ public final class ProtoSignalingLeave {
        * <code>FINISHED = 6;</code>
        */
       public static final int FINISHED_VALUE = 6;
+      /**
+       * <code>TOO_LONG = 7;</code>
+       */
+      public static final int TOO_LONG_VALUE = 7;
 
 
       public final int getNumber() {
@@ -741,8 +717,9 @@ public final class ProtoSignalingLeave {
             return DISCONNECTED;
           case 6:
             return FINISHED;
-          default:
-            return null;
+          case 7:
+            return TOO_LONG;
+          default: return null;
         }
       }
 
@@ -791,21 +768,18 @@ public final class ProtoSignalingLeave {
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private net.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -815,14 +789,12 @@ public final class ProtoSignalingLeave {
 
     public static final int TYPE_FIELD_NUMBER = 2;
     private int type_;
-
     /**
      * <code>optional .proto.SignalingLeaveResponse.Type type = 2;</code>
      */
     public int getTypeValue() {
       return type_;
     }
-
     /**
      * <code>optional .proto.SignalingLeaveResponse.Type type = 2;</code>
      */
@@ -832,7 +804,6 @@ public final class ProtoSignalingLeave {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -867,11 +838,10 @@ public final class ProtoSignalingLeave {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-        return true;
+       return true;
       }
       if (!(obj instanceof net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse)) {
         return super.equals(obj);
@@ -945,18 +915,13 @@ public final class ProtoSignalingLeave {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public Builder newBuilderForType() {
-      return newBuilder();
-    }
-
+    public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -966,7 +931,6 @@ public final class ProtoSignalingLeave {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.SignalingLeaveResponse}
      */
@@ -990,12 +954,10 @@ public final class ProtoSignalingLeave {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1060,10 +1022,9 @@ public final class ProtoSignalingLeave {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse) {
-          return mergeFrom((net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse) other);
+          return mergeFrom((net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1103,14 +1064,12 @@ public final class ProtoSignalingLeave {
 
       private net.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1121,7 +1080,6 @@ public final class ProtoSignalingLeave {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1151,7 +1109,6 @@ public final class ProtoSignalingLeave {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1169,7 +1126,6 @@ public final class ProtoSignalingLeave {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1184,16 +1140,14 @@ public final class ProtoSignalingLeave {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public net.iGap.proto.ProtoResponse.Response.Builder getResponseBuilder() {
-
+        
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1204,7 +1158,6 @@ public final class ProtoSignalingLeave {
           return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1217,14 +1170,12 @@ public final class ProtoSignalingLeave {
       }
 
       private int type_ = 0;
-
       /**
        * <code>optional .proto.SignalingLeaveResponse.Type type = 2;</code>
        */
       public int getTypeValue() {
         return type_;
       }
-
       /**
        * <code>optional .proto.SignalingLeaveResponse.Type type = 2;</code>
        */
@@ -1233,7 +1184,6 @@ public final class ProtoSignalingLeave {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.SignalingLeaveResponse.Type type = 2;</code>
        */
@@ -1241,7 +1191,6 @@ public final class ProtoSignalingLeave {
         net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse.Type result = net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse.Type.valueOf(type_);
         return result == null ? net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse.Type.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.SignalingLeaveResponse.Type type = 2;</code>
        */
@@ -1249,17 +1198,16 @@ public final class ProtoSignalingLeave {
         if (value == null) {
           throw new NullPointerException();
         }
-
+        
         type_ = value.getNumber();
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.SignalingLeaveResponse.Type type = 2;</code>
        */
       public Builder clearType() {
-
+        
         type_ = 0;
         onChanged();
         return this;
@@ -1279,7 +1227,6 @@ public final class ProtoSignalingLeave {
 
     // @@protoc_insertion_point(class_scope:proto.SignalingLeaveResponse)
     private static final net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponse();
     }
@@ -1314,24 +1261,25 @@ public final class ProtoSignalingLeave {
   private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_SignalingLeaveResponse_descriptor;
   private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_proto_SignalingLeaveResponse_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
+  public static com.google.protobuf.Descriptors.FileDescriptor
+      getDescriptor() {
     return descriptor;
   }
 
-  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
+  private static com.google.protobuf.Descriptors.FileDescriptor
+      descriptor;
   static {
     java.lang.String[] descriptorData = {
             "\n\024SignalingLeave.proto\022\005proto\032\rRequest.p" +
                     "roto\032\016Response.proto\"1\n\016SignalingLeave\022\037" +
-                    "\n\007request\030\001 \001(\0132\016.proto.Request\"\340\001\n\026Sign" +
+                    "\n\007request\030\001 \001(\0132\016.proto.Request\"\356\001\n\026Sign" +
                     "alingLeaveResponse\022!\n\010response\030\001 \001(\0132\017.p" +
                     "roto.Response\0220\n\004type\030\002 \001(\0162\".proto.Sign" +
-                    "alingLeaveResponse.Type\"q\n\004Type\022\n\n\006MISSE" +
+                    "alingLeaveResponse.Type\"\177\n\004Type\022\n\n\006MISSE" +
                     "D\020\000\022\014\n\010REJECTED\020\001\022\014\n\010ACCEPTED\020\002\022\020\n\014NOT_A" +
                     "NSWERED\020\003\022\017\n\013UNAVAILABLE\020\004\022\020\n\014DISCONNECT" +
-                    "ED\020\005\022\014\n\010FINISHED\020\006B%\n\016net.iGap.protoB\023Pr" +
-                    "otoSignalingLeaveb\006proto3"
+                    "ED\020\005\022\014\n\010FINISHED\020\006\022\014\n\010TOO_LONG\020\007B%\n\016net." +
+                    "iGap.protoB\023ProtoSignalingLeaveb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1343,7 +1291,7 @@ public final class ProtoSignalingLeave {
             net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
     }, assigner);
     internal_static_proto_SignalingLeave_descriptor = getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_SignalingLeave_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingLeave_descriptor, new java.lang.String[]{"Request",});
+    internal_static_proto_SignalingLeave_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingLeave_descriptor, new java.lang.String[] { "Request", });
     internal_static_proto_SignalingLeaveResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_SignalingLeaveResponse_fieldAccessorTable = new
