@@ -1,12 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootSetPasswordSecurity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical"
-    tools:context="net.iGap.fragments.FragmentSetSecurityPassword"
+    tools:context="net.iGap.fragments.FragmentSecurityRecovery"
+    android:background="@color/white"
+    android:id="@+id/rootRecoveryPassword"
     >
 
   <android.support.v7.widget.Toolbar
@@ -27,9 +27,10 @@
         >
 
       <net.iGap.libs.rippleeffect.RippleView
-          android:id="@+id/setPassword_rippleOk"
+          android:id="@+id/verifyPassword_rippleOk"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:visibility="visible"
           app:rv_alpha="200"
           app:rv_centered="true"
           app:rv_rippleDuration="0"
@@ -51,25 +52,14 @@
 
       </net.iGap.libs.rippleeffect.RippleView>
 
-      <net.iGap.module.MaterialDesignTextView
-          android:layout_width="@dimen/dp52"
+      <TextView
+          android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_alignParentLeft="true"
           android:layout_alignParentStart="true"
           android:layout_alignParentTop="true"
           android:gravity="center"
-          android:text="@string/md_back_arrow"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/whit_background"
-          />
-
-      <TextView
-          android:id="@+id/setPassword_toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_centerInParent="true"
-          android:gravity="center"
-          android:text="@string/your_password"
+          android:text="@string/recovery_Password"
           android:textColor="@color/whit_background"
           android:textSize="@dimen/dp18"
           android:visibility="visible"
@@ -77,7 +67,7 @@
           />
 
       <net.iGap.libs.rippleeffect.RippleView
-          android:id="@+id/setPassword_ripple_back"
+          android:id="@+id/ripple_back"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           app:rv_alpha="200"
@@ -91,8 +81,6 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:gravity="center"
             android:text="@string/md_back_arrow"
             android:textAppearance="@style/TextIconAppearance_toolbar"
@@ -103,113 +91,18 @@
     </RelativeLayout>
   </android.support.v7.widget.Toolbar>
 
-
   <View
       android:id="@+id/fpac_view_line"
       android:layout_width="match_parent"
       android:layout_height="1dp"
-      android:layout_below="@+id/stps_backgroundToolbar"
+      android:layout_below="@+id/background_editText"
       android:background="#34a49f"
       />
 
 
+  <!-- recovery QuestionPassword-->
   <LinearLayout
-      android:id="@+id/rootEnterPassword"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical"
-      android:visibility="visible"
-      >
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp32"
-        android:gravity="center"
-        android:text="@string/enter_a_password"
-        android:textColor="@color/gray_4c"
-        android:textSize="@dimen/dp20"
-        />
-
-
-    <EditText
-        android:id="@+id/setPassword_edtSetPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp32"
-        android:gravity="center"
-        android:textSize="@dimen/dp13"
-        />
-
-  </LinearLayout>
-
-  <LinearLayout
-      android:id="@+id/rootReEnterPassword"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical"
-      android:visibility="gone"
-      >
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp32"
-        android:gravity="center"
-        android:text="@string/please_re_enter_your_password"
-        android:textColor="@color/gray_4c"
-        android:textSize="@dimen/dp20"
-
-        />
-
-
-    <EditText
-        android:id="@+id/setPassword_edtSetRePassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp32"
-        android:textColor="@color/black90"
-        android:textSize="@dimen/dp13"
-        android:gravity="center"
-        />
-
-  </LinearLayout>
-
-  <LinearLayout
-      android:id="@+id/rootHintPassword"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical"
-      android:visibility="gone"
-      >
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp32"
-        android:gravity="center"
-        android:text="@string/please_create_hint_for_your_password"
-        android:textColor="@color/gray_4c"
-        android:textSize="@dimen/dp20"
-        />
-
-
-    <EditText
-        android:id="@+id/edtSetHintPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp32"
-        android:gravity="center"
-        android:textSize="@dimen/dp13"
-        />
-
-  </LinearLayout>
-
-  <LinearLayout
-      android:id="@+id/rootQuestionPassword"
+      android:id="@+id/rootRecoveryQuestionPassword"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
@@ -226,25 +119,27 @@
         android:textSize="@dimen/dp18"
         />
 
-    <EditText
-        android:id="@+id/edtSetQuestionPassOne"
+    <TextView
+        android:id="@+id/txtSetRecoveryQuestionPassOne"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32"
-        android:hint="@string/password_Question_one"
+        android:layout_marginTop="@dimen/dp12"
+        android:text="@string/password_Question_one"
+        android:singleLine="true"
         android:textSize="@dimen/dp13"
-        android:gravity="center"
+
         />
     <EditText
-        android:id="@+id/edtSetAnswerPassOne"
+        android:id="@+id/edtSetRecoveryAnswerPassOne"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32"
         android:hint="@string/password_answer"
+        android:singleLine="true"
         android:textSize="@dimen/dp13"
-        android:gravity="center"
         />
 
     <TextView
@@ -257,49 +152,64 @@
         android:textSize="@dimen/dp18"
         />
 
-    <EditText
-        android:id="@+id/edtSetQuestionPassTwo"
+    <TextView
+        android:id="@+id/txtSetRecoveryQuestionPassTwo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32"
-        android:hint="@string/password_Question_two"
+        android:layout_marginTop="@dimen/dp12"
+        android:text="@string/password_Question_two"
+        android:singleLine="true"
         android:textSize="@dimen/dp13"
-        android:gravity="center"
         />
     <EditText
-        android:id="@+id/edtSetAnswerPassTwo"
+        android:id="@+id/edtSetRecoveryAnswerPassTwo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32"
         android:hint="@string/password_answer"
+        android:singleLine="true"
         android:textSize="@dimen/dp13"
-        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/txtSetRecoveryByEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp48"
+        android:text="@string/recovery_by_email"
+        android:singleLine="true"
+        android:textColor="@color/green"
+        android:textSize="@dimen/dp13"
         />
 
   </LinearLayout>
 
+  <!--email-->
   <LinearLayout
-      android:id="@+id/rootEmail"
+      android:id="@+id/rootRecoveryEmailPassword"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
-      android:visibility="gone"
+      android:visibility="visible"
       >
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp32"
         android:gravity="center"
-        android:text="@string/your_email"
+        android:text="@string/enter_code"
         android:textColor="@color/gray_4c"
         android:textSize="@dimen/dp20"
         />
 
+
     <EditText
-        android:id="@+id/edtSetEmail"
+        android:id="@+id/edtSetRecoveryEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp32"
@@ -307,22 +217,21 @@
         android:layout_marginRight="@dimen/dp32"
         android:layout_marginStart="@dimen/dp32"
         android:layout_marginTop="@dimen/dp32"
-        android:gravity="center"
         android:textSize="@dimen/dp13"
+        android:gravity="center"
         />
 
     <TextView
+        android:id="@+id/txtSetRecoveryByQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp32"
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32"
-        android:layout_marginStart="@dimen/dp32"
-        android:layout_marginTop="@dimen/dp18"
-        android:gravity="left|start"
-        android:text="@string/your_email_desc"
-        android:textColor="@color/gray_4c"
-        android:textSize="@dimen/dp14"
+        android:layout_marginTop="@dimen/dp48"
+        android:text="@string/recovery_by_question"
+        android:singleLine="true"
+        android:textColor="@color/green"
+        android:textSize="@dimen/dp13"
         />
 
   </LinearLayout>

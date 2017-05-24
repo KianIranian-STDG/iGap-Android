@@ -2,15 +2,19 @@ package net.iGap.fragments;
 
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.request.RequestUserTwoStepVerificationSetPassword;
@@ -28,9 +32,9 @@ public class FragmentSetSecurityPassword extends Fragment {
     private EditText edtSetAnswerPassOne;
     private EditText edtSetQuestionPassTwo;
     private EditText edtSetAnswerPassTwo;
-    private EditText edtSetEmail;
-    private String txtPassword;
-    private String oldPassword = "";
+    private static EditText edtSetEmail;
+    private static String txtPassword;
+    private static String oldPassword = "";
 
     public FragmentSetSecurityPassword() {
         // Required empty public constructor
@@ -66,6 +70,7 @@ public class FragmentSetSecurityPassword extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().popBackStack();
+                closeKeyboard(v);
             }
         });
 
@@ -84,6 +89,7 @@ public class FragmentSetSecurityPassword extends Fragment {
             public void onClick(View v) {
 
                 if (edtSetPassword.length() > 1 && page == 1) {
+                    closeKeyboard(v);
                     page = 2;
                     txtToolbar.setText(getResources().getString(R.string.your_password));
                     txtPassword = edtSetPassword.getText().toString();
@@ -92,40 +98,55 @@ public class FragmentSetSecurityPassword extends Fragment {
 
 
                 } else if (page == 2) {
-                    if (edtSetRePassword.length() > 1 && txtPassword.contains(edtSetRePassword.getText().toString())) {
+
+                    if (edtSetRePassword.length() > 1 && txtPassword.equals(edtSetRePassword.getText().toString())) {
+                        closeKeyboard(v);
                         page = 3;
                         txtToolbar.setText(getResources().getString(R.string.password_hint));
                         rootReEnterPassword.setVisibility(View.GONE);
                         rootHintPassword.setVisibility(View.VISIBLE);
+
                     } else {
-                        Toast.makeText(getActivity(), "Password do not match", Toast.LENGTH_SHORT).show();
+                        error("Password do not match");
                     }
 
                 } else if (page == 3) {
 
-                    if (edtSetHintPassword.length() > 0 && !txtPassword.contains(edtSetHintPassword.getText().toString())) {
+                    if (edtSetHintPassword.length() > 0 && !txtPassword.equals(edtSetHintPassword.getText().toString())) {
+                        closeKeyboard(v);
                         page = 4;
                         txtToolbar.setText(getResources().getString(R.string.recovery_question));
                         rootHintPassword.setVisibility(View.GONE);
                         rootQuestionPassword.setVisibility(View.VISIBLE);
 
+
                     } else {
-                        Toast.makeText(getActivity(), "Hint cant the same password", Toast.LENGTH_SHORT).show();
+                        error("Hint cant the same password");
                     }
 
                 } else if (page == 4) {
+                    closeKeyboard(v);
                     if (edtSetQuestionPassOne.length() > 0 && edtSetQuestionPassTwo.length() > 0 && edtSetAnswerPassOne.length() > 0 && edtSetAnswerPassTwo.length() > 0) {
                         page = 5;
                         txtToolbar.setText(getResources().getString(R.string.recovery_email));
                         rootQuestionPassword.setVisibility(View.GONE);
                         rootEmail.setVisibility(View.VISIBLE);
+
                     } else {
-                        Toast.makeText(getActivity(), "Please complete all item ", Toast.LENGTH_SHORT).show();
+                        error("Please complete all item ");
                     }
                 } else if (page == 5) {
 
-                    new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
+                    closeKeyboard(v);
                     getActivity().getSupportFragmentManager().popBackStack();
+                    new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
+                    edtSetPassword.setText("");
+                    edtSetRePassword.setText("");
+                    edtSetHintPassword.setText("");
+                    edtSetQuestionPassOne.setText("");
+                    edtSetQuestionPassTwo.setText("");
+                    edtSetAnswerPassOne.setText("");
+                    edtSetAnswerPassTwo.setText("");
                 }
 
             }
@@ -142,5 +163,16 @@ public class FragmentSetSecurityPassword extends Fragment {
 
 
 
+    }
+
+    private void closeKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    private void error(String error) {
+        Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+        vShort.vibrate(200);
+        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
     }
 }

@@ -34,7 +34,7 @@ public class UserTwoStepVerificationChangeHintResponse extends MessageHandler {
             (ProtoUserTwoStepVerificationChangeHint.UserTwoStepVerificationChangeHintResponse.Builder) message;
 
         if (G.onTwoStepPassword != null) {
-            G.onTwoStepPassword.changeRecoveryQuestion();
+            G.onTwoStepPassword.changeHint();
         }
 
     }

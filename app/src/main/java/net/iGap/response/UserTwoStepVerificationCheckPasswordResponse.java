@@ -34,7 +34,6 @@ public class UserTwoStepVerificationCheckPasswordResponse extends MessageHandler
             (ProtoUserTwoStepVerificationCheckPassword.UserTwoStepVerificationCheckPasswordResponse.Builder) message;
 
         if (G.onTwoStepPassword != null) {
-
             G.onTwoStepPassword.checkPassword();
         }
 

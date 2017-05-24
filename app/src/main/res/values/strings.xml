@@ -867,11 +867,15 @@
   <string name="Change_password">Change Password</string>
   <string name="Change_hint">Change Hint</string>
   <string name="turn_Password_off">Turn Password Off</string>
+  <string name="turn_Password_off_desc">Do you want rally remove this password?</string>
   <string name="set_recovery_email">Set Recovery E-Mail</string>
   <string name="set_recovery_question">Set Recovery Question</string>
   <string name="set_unconfirmed_email">Set confirmed E-Mail</string>
   <string name="Recovery_with_question">Recovery with question</string>
   <string name="please_enter_confirm_code">Please enter confirm code</string>
+  <string name="recovery_by_email">Recovery By E-mail</string>
+  <string name="recovery_by_question">Recovery By Question</string>
+  <string name="recovery_Password">Recovery Password</string>
   <string name="your_email_desc">Please add your valid e-mail it is th only way to recover a forgotten password</string>
 
 </resources>

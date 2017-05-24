@@ -40,21 +40,25 @@ public class UserTwoStepVerificationGetPasswordDetailResponse extends MessageHan
         builder.getUnconfirmedEmailPattern();
 
         if (G.onTwoStepPassword != null) {
-            Log.i("CCCCCCC", "AA22: ");
             G.onTwoStepPassword.getPasswordDetail(builder.getQuestionOne(), builder.getQuestionTwo(), builder.getHint(), builder.getHasConfirmedRecoveryEmail(), builder.getUnconfirmedEmailPattern());
 
         }
+        Log.i("VVVVVVVVV", "handler PasswordDetailResponse: ");
 
+        if (G.onSecurityCheckPassword != null) {
+            G.onSecurityCheckPassword.getDetailPassword(builder.getQuestionOne(), builder.getQuestionTwo(), builder.getHint(), builder.getHasConfirmedRecoveryEmail(), builder.getUnconfirmedEmailPattern());
+        }
     }
 
     @Override public void timeOut() {
         super.timeOut();
-        Log.i("CCCCCCC", "AA33: ");
+        Log.i("VVVVVVVVV", "timeOut PasswordDetailResponse: ");
     }
+
 
     @Override public void error() {
         super.error();
-        Log.i("CCCCCCC", "AA44: ");
+        Log.i("VVVVVVVVV", "error PasswordDetailResponse: ");
     }
 }
 

@@ -9,19 +9,10 @@ package net.iGap.interfaces;
  * All rights reserved.
 */
 
-public interface OnTwoStepPassword {
+public interface OnRecoverySecurityPassword {
 
-    void getPasswordDetail(String questionOne, String questionTwo, String hint, boolean hasConfirmedRecoveryEmail, String unconfirmedEmailPattern);
+    void recoveryByEmail(String tokenR);
 
-    void checkPassword();
+    void recoveryByQuestion(String tokenR);
 
-    void unSetPassword();
-
-    void changeRecoveryQuestion();
-
-    void changeHint();
-
-    void changeEmail();
-
-    void confirmEmail();
 }

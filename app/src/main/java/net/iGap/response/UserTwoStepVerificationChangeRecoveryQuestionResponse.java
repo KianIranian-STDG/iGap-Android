@@ -34,7 +34,7 @@ public class UserTwoStepVerificationChangeRecoveryQuestionResponse extends Messa
             (ProtoUserTwoStepVerificationChangeRecoveryQuestion.UserTwoStepVerificationChangeRecoveryQuestionResponse.Builder) message;
 
         if (G.onTwoStepPassword != null) {
-            G.onTwoStepPassword.changeHint();
+            G.onTwoStepPassword.changeRecoveryQuestion();
         }
     }
 

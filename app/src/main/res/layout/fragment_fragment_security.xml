@@ -302,6 +302,8 @@
 
         />
   </LinearLayout>
+
+  <!--CheckPassword-->
   <LinearLayout
       android:id="@+id/rootCheckPassword"
       android:layout_width="match_parent"
@@ -325,11 +327,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp32"
+        android:textSize="@dimen/dp13"
+        android:gravity="center"
         />
 
 
     <TextView
-        android:id="@+id/txtSkip"
+        android:id="@+id/txtForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp32"
@@ -345,6 +349,7 @@
 
   </LinearLayout>
 
+  <!--ChangeHint-->
   <LinearLayout
       android:id="@+id/tsv_rootChangeHint"
       android:layout_width="match_parent"
@@ -368,10 +373,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp32"
+        android:textSize="@dimen/dp13"
+        android:gravity="center"
         />
 
   </LinearLayout>
 
+  <!--QuestionPassword-->
   <LinearLayout
       android:id="@+id/tsv_rootQuestionPassword"
       android:layout_width="match_parent"
@@ -447,7 +455,7 @@
 
   <!--email-->
   <LinearLayout
-      android:id="@+id/tsv_rootEmail"
+      android:id="@+id/tsv_rootChangeEmail"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
@@ -473,6 +481,8 @@
         android:layout_marginRight="@dimen/dp32"
         android:layout_marginStart="@dimen/dp32"
         android:layout_marginTop="@dimen/dp32"
+        android:textSize="@dimen/dp13"
+        android:gravity="center"
         />
 
     <TextView
@@ -518,6 +528,8 @@
         android:layout_marginRight="@dimen/dp32"
         android:layout_marginStart="@dimen/dp32"
         android:layout_marginTop="@dimen/dp32"
+        android:textSize="@dimen/dp13"
+        android:gravity="center"
         />
   </LinearLayout>
 </LinearLayout>

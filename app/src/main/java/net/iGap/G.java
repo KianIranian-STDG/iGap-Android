@@ -113,8 +113,10 @@ import net.iGap.interfaces.OnInfoTime;
 import net.iGap.interfaces.OnLastSeenUpdateTiming;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnReceivePageInfoTOS;
+import net.iGap.interfaces.OnRecoverySecurityPassword;
 import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnSecuring;
+import net.iGap.interfaces.OnSecurityCheckPassword;
 import net.iGap.interfaces.OnSetAction;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnTwoStepPassword;
@@ -353,6 +355,8 @@ public class G extends MultiDexApplication {
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
     public static OnTwoStepPassword onTwoStepPassword;
+    public static OnSecurityCheckPassword onSecurityCheckPassword;
+    public static OnRecoverySecurityPassword onRecoverySecurityPassword;
     public static IClientSearchUserName onClientSearchUserName;
 
     public static ISignalingOffer iSignalingOffer;

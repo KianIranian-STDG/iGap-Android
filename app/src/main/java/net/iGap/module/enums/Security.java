@@ -1,4 +1,4 @@
-package net.iGap.interfaces;
+package net.iGap.module.enums;
 /*
  * This is the source code of iGap for Android
  * It is licensed under GNU AGPL v3.0
@@ -9,19 +9,8 @@ package net.iGap.interfaces;
  * All rights reserved.
 */
 
-public interface OnTwoStepPassword {
+public enum Security {
 
-    void getPasswordDetail(String questionOne, String questionTwo, String hint, boolean hasConfirmedRecoveryEmail, String unconfirmedEmailPattern);
+    SETTING, REGISTER
 
-    void checkPassword();
-
-    void unSetPassword();
-
-    void changeRecoveryQuestion();
-
-    void changeHint();
-
-    void changeEmail();
-
-    void confirmEmail();
 }
