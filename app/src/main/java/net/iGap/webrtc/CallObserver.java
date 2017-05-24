@@ -12,9 +12,12 @@ package net.iGap.webrtc;
 
 import android.util.Log;
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.fragments.FragmentCall;
+import net.iGap.helper.HelperError;
 import net.iGap.interfaces.ISignalingAccept;
 import net.iGap.interfaces.ISignalingCandidate;
+import net.iGap.interfaces.ISignalingErrore;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.ISignalingLeave;
 import net.iGap.interfaces.ISignalingOffer;
@@ -37,7 +40,7 @@ import static net.iGap.G.iSignalingSessionHold;
 import static org.webrtc.SessionDescription.Type.ANSWER;
 import static org.webrtc.SessionDescription.Type.OFFER;
 
-public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignalingAccept, ISignalingCandidate, ISignalingLeave, ISignalingSessionHold, ISignalingGetCallLog {
+public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignalingRinging, ISignalingAccept, ISignalingCandidate, ISignalingLeave, ISignalingSessionHold, ISignalingGetCallLog {
 
     public CallObserver() {
         iSignalingOffer = this;
@@ -46,35 +49,29 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
         iSignalingCandidate = this;
         iSignalingLeave = this;
         iSignalingSessionHold = this;
+        G.iSignalingErrore = this;
     }
 
-    @Override
-    public void onOffer(final long called_userId, ProtoSignalingOffer.SignalingOffer.Type type, final String callerSdp) {
+    @Override public void onOffer(final long called_userId, ProtoSignalingOffer.SignalingOffer.Type type, final String callerSdp) {
         new RequestSignalingRinging().signalingRinging();
 
         G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
-                    @Override
-                    public void onCreateSuccess(SessionDescription sessionDescription) {
+                    @Override public void onCreateSuccess(SessionDescription sessionDescription) {
 
                     }
 
-                    @Override
-                    public void onSetSuccess() {
+                    @Override public void onSetSuccess() {
 
                         FragmentCall.call(called_userId, true);
-
                     }
 
-                    @Override
-                    public void onCreateFailure(String s) {
+                    @Override public void onCreateFailure(String s) {
                         Log.i("WWW", "onOffer onCreateFailure : " + s);
                     }
 
-                    @Override
-                    public void onSetFailure(String s) {
+                    @Override public void onSetFailure(String s) {
                         Log.i("WWW", "onOffer onSetFailure : " + s);
                     }
                 }, new SessionDescription(OFFER, callerSdp));
@@ -82,58 +79,46 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
         });
     }
 
-    @Override
-    public void onAccept(final String called_sdp) {
+    @Override public void onAccept(final String called_sdp) {
         G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 new WebRTC().setOfferLocalDescription();
 
                 new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
-                    @Override
-                    public void onCreateSuccess(SessionDescription sessionDescription) {
+                    @Override public void onCreateSuccess(SessionDescription sessionDescription) {
 
                     }
 
-                    @Override
-                    public void onSetSuccess() {
+                    @Override public void onSetSuccess() {
                         Log.i("WWW", "onSetSuccess");
                     }
 
-                    @Override
-                    public void onCreateFailure(String s) {
+                    @Override public void onCreateFailure(String s) {
                         Log.i("WWW", "onAccept onCreateFailure : " + s);
                     }
 
-                    @Override
-                    public void onSetFailure(String s) {
+                    @Override public void onSetFailure(String s) {
                         Log.i("WWW", "onAccept onSetFailure : " + s);
                     }
                 }, new SessionDescription(ANSWER, called_sdp));
-
             }
         });
     }
 
-    @Override
-    public void onCandidate(final String peerSdpMId, final int peerSdpMLineIndex, final String peerCandidate) {
+    @Override public void onCandidate(final String peerSdpMId, final int peerSdpMLineIndex, final String peerCandidate) {
         G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 Log.i("WWW_Candidate", "onCandidate server : " + peerCandidate);
                 new WebRTC().peerConnectionInstance().addIceCandidate(new IceCandidate(peerSdpMId, peerSdpMLineIndex, peerCandidate));
             }
         });
     }
 
-
-    @Override
-    public void onGetList(int size) {
+    @Override public void onGetList(int size) {
 
     }
 
-    @Override
-    public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
+    @Override public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
         new WebRTC().close();
         new WebRTC().dispose();
         /**
@@ -141,35 +126,81 @@ public class CallObserver implements ISignalingOffer, ISignalingRinging, ISignal
          */
         new WebRTC().clearConnection();
 
-        if (G.onCallLeaveView != null) {
-            G.onCallLeaveView.onLeaveView();
-        }
-
         if (G.iSignalingCallBack != null) {
 
             switch (type) {
-                case DISCONNECTED:
-                case MISSED:
+
                 case REJECTED:
-                case NOT_ANSWERED:
-                case UNAVAILABLE:
                     G.iSignalingCallBack.onStatusChanged(CallState.REJECT);
+                    break;
+                case NOT_ANSWERED:
+                    G.iSignalingCallBack.onStatusChanged(CallState.NOT_ANSWERED);
+                    break;
+                case UNAVAILABLE:
+                    G.iSignalingCallBack.onStatusChanged(CallState.UNAVAILABLE);
+                    break;
+                case TOO_LONG:
+                    G.iSignalingCallBack.onStatusChanged(CallState.TOO_LONG);
                     break;
             }
         }
 
-
+        if (G.onCallLeaveView != null) {
+            G.onCallLeaveView.onLeaveView();
+        }
     }
 
-    @Override
-    public void onRinging() {
+    @Override public void onRinging() {
         if (G.iSignalingCallBack != null) {
             G.iSignalingCallBack.onStatusChanged(CallState.RINGING);
         }
     }
 
-    @Override
-    public void onHold(Boolean hold) {
+    @Override public void onHold(Boolean hold) {
+
+    }
+
+    @Override public void onErrore(int major, int minor) {
+
+        String message = G.context.getString(R.string.e_call_permision);
+
+        switch (major) {
+
+            case 904:
+
+                if (minor == 6) {
+                    message = G.context.getString(R.string.e_904_6);
+                    if (G.iSignalingCallBack != null) {
+                        G.iSignalingCallBack.onStatusChanged(CallState.UNAVAILABLE);
+                    }
+                } else if (minor == 7) {
+                    message = G.context.getString(R.string.e_904_7);
+                    if (G.iSignalingCallBack != null) {
+                        G.iSignalingCallBack.onStatusChanged(CallState.UNAVAILABLE);
+                    }
+                } else if (minor == 8) {
+                    message = G.context.getString(R.string.e_904_8);
+                    if (G.iSignalingCallBack != null) {
+                        G.iSignalingCallBack.onStatusChanged(CallState.UNAVAILABLE);
+                    }
+                } else if (minor == 9) {
+                    message = G.context.getString(R.string.e_904_9);
+                    if (G.iSignalingCallBack != null) {
+                        G.iSignalingCallBack.onStatusChanged(CallState.BUSY);
+                    }
+                } else {
+                    if (G.iSignalingCallBack != null) {
+                        G.iSignalingCallBack.onStatusChanged(CallState.UNAVAILABLE);
+                    }
+                }
+                break;
+        }
+
+        if (G.onCallLeaveView != null) {
+            G.onCallLeaveView.onLeaveView();
+        }
+
+        HelperError.showSnackMessage(message);
 
     }
 }

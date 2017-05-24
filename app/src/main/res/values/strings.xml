@@ -851,4 +851,10 @@
   <string name="desc_group_chanel">Description (Optional)</string>
   <string name="call_with">Select Contact</string>
 
+  <string name="e_call_permision">Is not allowed to communicate </string>
+  <string name="e_904_6">User is blocked </string>
+  <string name="e_904_7">Dialed number is not active</string>
+  <string name="e_904_8">You are talking with your other devices</string>
+  <string name="e_904_9">The user is in conversation</string>
+
 </resources>

@@ -28,6 +28,14 @@ public class HelperConnectionState {
     public static Snackbar snack = null;
 
     public static void connectionState(final ConnectionState connectionState) {
+
+        if (connectionState != ConnectionState.IGAP) {
+            if (G.onCallLeaveView != null) {
+                G.onCallLeaveView.onLeaveView();
+            }
+        }
+
+
         if (HelperCheckInternetConnection.hasNetwork()) {
             if (G.onConnectionChangeState != null) {
                 G.onConnectionChangeState.onChangeState(connectionState);

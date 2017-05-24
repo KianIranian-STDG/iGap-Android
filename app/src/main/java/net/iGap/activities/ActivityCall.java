@@ -51,6 +51,7 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestSignalingGetLog;
+import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.webrtc.WebRTC;
 
@@ -94,8 +95,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     TextView txtTimer;
     MediaPlayer player;
 
-    @Override protected void onStop() {
-        super.onStop();
+    @Override protected void onDestroy() {
+        super.onDestroy();
 
         G.isInCall = false;
         G.iSignalingCallBack = null;
@@ -138,13 +139,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         userId = getIntent().getExtras().getLong(USER_ID_STR);
         isIncomingCall = getIntent().getExtras().getBoolean(INCOMING_CALL_STR);
-        if (!isIncomingCall) {
-            new WebRTC().createOffer(userId);
-        }
+
         initComponent();
         initCallBack();
 
         G.onCallLeaveView = this;
+
+        if (!isIncomingCall) {
+            new WebRTC().createOffer(userId);
+        }
     }
 
     @Override public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -153,6 +156,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     }
 
     //***************************************************************************************
+
+    @Override public void onLeaveView() {
+
+        G.handler.postDelayed(new Runnable() {
+            @Override public void run() {
+                endVoiceAndFinish();
+            }
+        }, 1000);
+    }
 
     private void initCallBack() {
         G.iSignalingCallBack = new ISignalingCallBack() {
@@ -167,12 +179,16 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
                             case RINGING:
                                 playSound(R.raw.igap_ringing);
+                                avLoadingIndicatorView.setVisibility(View.VISIBLE);
                                 break;
-                            case DIALLING:
+                            case SIGNALING:
+                                avLoadingIndicatorView.setVisibility(View.VISIBLE);
                                 break;
-                            case CHECKING:
+                            case CONNECTING:
+                                avLoadingIndicatorView.setVisibility(View.VISIBLE);
                                 break;
                             case CONNECTED:
+                                avLoadingIndicatorView.setVisibility(View.GONE);
 
                                 if (!isConnected) {
                                     isConnected = true;
@@ -188,24 +204,42 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                 }
 
                                 break;
-                            case FINISHED:
-
+                            case DISCONNECTED:
+                                avLoadingIndicatorView.setVisibility(View.GONE);
                                 playSound(R.raw.igap_discounect);
-
                                 G.handler.postDelayed(new Runnable() {
                                     @Override public void run() {
                                         stopTimer();
                                         endVoiceAndFinish();
                                     }
                                 }, 500);
-
+                                new RequestSignalingLeave().signalingLeave();
                                 isConnected = false;
                                 break;
                             case BUSY:
                                 playSound(R.raw.igap_busy);
+                                avLoadingIndicatorView.setVisibility(View.GONE);
                                 break;
                             case REJECT:
                                 playSound(R.raw.igap_discounect);
+                                avLoadingIndicatorView.setVisibility(View.GONE);
+                                break;
+                            case FAILD:
+                                playSound(R.raw.igap_noresponse);
+                                avLoadingIndicatorView.setVisibility(View.GONE);
+                                new RequestSignalingLeave().signalingLeave();
+                                break;
+                            case NOT_ANSWERED:
+                                playSound(R.raw.igap_noresponse);
+                                avLoadingIndicatorView.setVisibility(View.GONE);
+                                break;
+                            case UNAVAILABLE:
+                                playSound(R.raw.igap_noresponse);
+                                avLoadingIndicatorView.setVisibility(View.GONE);
+                                break;
+                            case TOO_LONG:
+                                playSound(R.raw.igap_discounect);
+                                avLoadingIndicatorView.setVisibility(View.GONE);
                                 break;
 
                         }
@@ -215,58 +249,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         };
     }
 
-    private void startTimer() {
-
-        txtTimer.setVisibility(View.VISIBLE);
-        secend = 0;
-        minute = 0;
-
-        secendTimer = new Timer();
-        secendTimer.schedule(new TimerTask() {
-
-            @Override public void run() {
-
-                secend++;
-                if (secend >= 60) {
-                    minute++;
-                    secend %= 60;
-                }
-                if (minute >= 60) {
-                    minute %= 60;
-                }
-
-                txtTimer.post(new Runnable() {
-
-                    @Override public void run() {
-                        String s = "";
-                        if (minute < 10) {
-                            s += "0" + minute;
-                        } else {
-                            s += minute;
-                        }
-                        s += ":";
-                        if (secend < 10) {
-                            s += "0" + secend;
-                        } else {
-                            s += secend;
-                        }
-
-                        txtTimer.setText(s);
-                    }
-                });
-            }
-        }, 1000, 1000);
-    }
-
-    private void stopTimer() {
-
-        txtTimer.setVisibility(View.GONE);
-
-        if (secendTimer != null) {
-            secendTimer.cancel();
-            secendTimer = null;
-        }
-    }
+    //***************************************************************************************
 
 
     private void initComponent() {
@@ -283,31 +266,38 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         txtTimer = (TextView) findViewById(R.id.fcr_txt_timer);
 
-
-        txtStatus.setText(CallState.DIALLING.toString());
+        txtStatus.setText(CallState.SIGNALING.toString());
 
         /**
          * *************** layoutCallEnd ***************
          */
 
         final FrameLayout layoutCallEnd = (FrameLayout) findViewById(R.id.fcr_layout_chat_call_end);
-        layoutCallEnd.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-
-                if (canClick) {
-                    layoutCallEnd.setVisibility(View.INVISIBLE);
-                    endCall();
-                }
-            }
-        });
+        //layoutCallEnd.setOnClickListener(new View.OnClickListener() {
+        //    @Override public void onClick(View v) {
+        //
+        //        if (canClick) {
+        //            layoutCallEnd.setVisibility(View.INVISIBLE);
+        //            endCall();
+        //        }
+        //    }
+        //});
 
         btnEndCall = (MaterialDesignTextView) findViewById(R.id.fcr_btn_end);
-        btnEndCall.setOnTouchListener(new View.OnTouchListener() {
-            @Override public boolean onTouch(View v, MotionEvent event) {
-                setUpSwap(layoutCallEnd);
-                return false;
+        //btnEndCall.setOnTouchListener(new View.OnTouchListener() {
+        //    @Override public boolean onTouch(View v, MotionEvent event) {
+        //        setUpSwap(layoutCallEnd);
+        //        return false;
+        //    }
+        //});
+
+        btnEndCall.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                layoutCallEnd.setVisibility(View.INVISIBLE);
+                endCall();
             }
         });
+
 
         /**
          * *************** layoutChat ***************
@@ -367,7 +357,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 HelperPublicMethod.goToChatRoom(userId, null, null);
-                endVoiceAndFinish();
+
+                endCall();
             }
         });
 
@@ -414,11 +405,85 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
      * *************** common methods ***************
      */
 
-    private void setUpSwap(View view) {
-        if (!down) {
-            verticalSwipe.setView(view);
-            canTouch = true;
-            down = true;
+    private void endCall() {
+
+        new WebRTC().leaveCall();
+        isSendLeave = true;
+
+        G.handler.postDelayed(new Runnable() {
+            @Override public void run() {
+
+                endVoiceAndFinish();
+            }
+        }, 1000);
+    }
+
+    private void endVoiceAndFinish() {
+        cancelRingtone();
+        finish();
+    }
+
+    private void answer(FrameLayout layoutAnswer, FrameLayout layoutChat) {
+        if (canClick) {
+            layoutOption.setVisibility(View.VISIBLE);
+            layoutAnswer.setVisibility(View.GONE);
+            layoutChat.setVisibility(View.GONE);
+
+            new WebRTC().createAnswer();
+            cancelRingtone();
+        }
+    }
+
+    private void startTimer() {
+
+        txtTimer.setVisibility(View.VISIBLE);
+        secend = 0;
+        minute = 0;
+
+        secendTimer = new Timer();
+        secendTimer.schedule(new TimerTask() {
+
+            @Override public void run() {
+
+                secend++;
+                if (secend >= 60) {
+                    minute++;
+                    secend %= 60;
+                }
+                if (minute >= 60) {
+                    minute %= 60;
+                }
+
+                txtTimer.post(new Runnable() {
+
+                    @Override public void run() {
+                        String s = "";
+                        if (minute < 10) {
+                            s += "0" + minute;
+                        } else {
+                            s += minute;
+                        }
+                        s += ":";
+                        if (secend < 10) {
+                            s += "0" + secend;
+                        } else {
+                            s += secend;
+                        }
+
+                        txtTimer.setText(s);
+                    }
+                });
+            }
+        }, 1000, 1000);
+    }
+
+    private void stopTimer() {
+
+        txtTimer.setVisibility(View.GONE);
+
+        if (secendTimer != null) {
+            secendTimer.cancel();
+            secendTimer = null;
         }
     }
 
@@ -466,28 +531,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
 
         realm.close();
-    }
-
-    private void endVoiceAndFinish() {
-        cancelRingtone();
-        finish();
-    }
-
-    private void answer(FrameLayout layoutAnswer, FrameLayout layoutChat) {
-        if (canClick) {
-            layoutOption.setVisibility(View.VISIBLE);
-            layoutAnswer.setVisibility(View.GONE);
-            layoutChat.setVisibility(View.GONE);
-
-            new WebRTC().createAnswer();
-            cancelRingtone();
-        }
-    }
-
-    private void endCall() {
-        new WebRTC().leaveCall();
-        isSendLeave = true;
-        endVoiceAndFinish();
     }
 
     private void muteMusic() {
@@ -610,13 +653,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
     }
 
-    @Override public void onLeaveView() {
-        endVoiceAndFinish();
-    }
+    //***************************************************************************************
 
-    /**
-     * ****************************** VerticalSwipe Class ******************************
-     */
+    private void setUpSwap(View view) {
+        if (!down) {
+            verticalSwipe.setView(view);
+            canTouch = true;
+            down = true;
+        }
+    }
 
     class VerticalSwipe {
 

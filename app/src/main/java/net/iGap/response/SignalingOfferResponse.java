@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import android.util.Log;
 import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingOffer;
 
 public class SignalingOfferResponse extends MessageHandler {
@@ -56,6 +57,16 @@ public class SignalingOfferResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+
+        if (G.iSignalingErrore != null) {
+
+            ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+            int majorCode = errorResponse.getMajorCode();
+            int minorCode = errorResponse.getMinorCode();
+
+            G.iSignalingErrore.onErrore(majorCode, minorCode);
+        }
+
     }
 }
 

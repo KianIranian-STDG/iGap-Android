@@ -13,8 +13,6 @@ package net.iGap.response;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
 import net.iGap.realm.RealmCallConfig;
 
-import static net.iGap.G.needGetSignalingConfiguration;
-
 public class SignalingGetConfigurationResponse extends MessageHandler {
 
     public int actionId;
@@ -33,7 +31,6 @@ public class SignalingGetConfigurationResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        needGetSignalingConfiguration = false;
         ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder builder = (ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder) message;
         RealmCallConfig.updateSignalingConfiguration(builder);
     }

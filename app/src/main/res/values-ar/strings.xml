@@ -840,4 +840,10 @@
   <string name="clean_log">Clean logs</string>
   <string name="call_with">انتخاب مخاطب</string>
 
+  <string name="e_call_permision">اجازه برقراری ارتباط نیست </string>
+  <string name="e_904_6">یوزر بلاک شده است</string>
+  <string name="e_904_7">شماره گرفته شده فعال نیست</string>
+  <string name="e_904_8">شما با دستگاه دیگرتان در حال مکالمه هستید</string>
+  <string name="e_904_9">یوزر در حال مکالمه است</string>
+
 </resources>

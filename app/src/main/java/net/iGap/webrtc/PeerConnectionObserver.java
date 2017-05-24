@@ -50,10 +50,12 @@ public class PeerConnectionObserver implements PeerConnection.Observer, VideoRen
     public void onIceConnectionChange(final PeerConnection.IceConnectionState iceConnectionState) {
         Log.i("WWW", "onIceConnectionChange : " + iceConnectionState);
         if (G.iSignalingCallBack != null) {
-            if (iceConnectionState == CLOSED || iceConnectionState == DISCONNECTED || iceConnectionState == FAILED) {
-                G.iSignalingCallBack.onStatusChanged(CallState.FINISHED);
+            if (iceConnectionState == CLOSED || iceConnectionState == DISCONNECTED) {
+                G.iSignalingCallBack.onStatusChanged(CallState.DISCONNECTED);
+            } else if (iceConnectionState == FAILED) {
+                G.iSignalingCallBack.onStatusChanged(CallState.FAILD);
             } else if (iceConnectionState == CHECKING) {
-                G.iSignalingCallBack.onStatusChanged(CallState.CHECKING);
+                G.iSignalingCallBack.onStatusChanged(CallState.CONNECTING);
             } else if (iceConnectionState == CONNECTED || iceConnectionState == COMPLETED) {
                 G.iSignalingCallBack.onStatusChanged(CallState.CONNECTED);
             }
