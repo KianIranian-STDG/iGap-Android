@@ -2628,7 +2628,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                             room.setUnreadCount(0);
                                                         }
 
-                                                        if (realmRoomMessage != null) {
+                                                        if (realmClientCondition != null) {
                                                             if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
                                                                 realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
