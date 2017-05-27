@@ -195,16 +195,25 @@ public class RealmRoom extends RealmObject {
          * set setFirstUnreadMessage
          */
         if (room.hasFirstUnreadMessage()) {
-            RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(room.getFirstUnreadMessage(), room.getId());
+            RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdateGetRoom(room.getFirstUnreadMessage(), room.getId());
             //realmRoomMessage.setPreviousMessageId(room.getFirstUnreadMessage().getMessageId());
             realmRoomMessage.setFutureMessageId(room.getFirstUnreadMessage().getMessageId());
             realmRoom.setFirstUnreadMessage(realmRoomMessage);
         }
 
         if (room.hasLastMessage()) {
-            RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId());
-            realmRoomMessage.setPreviousMessageId(room.getLastMessage().getMessageId());
-            realmRoomMessage.setFutureMessageId(room.getLastMessage().getMessageId());
+            /**
+             * if this message not exist set gap otherwise don't change in gap state
+             */
+            boolean setGap = false;
+            if (!RealmRoomMessage.existMessage(room.getLastMessage().getMessageId())) {
+                setGap = true;
+            }
+            RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdateGetRoom(room.getLastMessage(), room.getId());
+            if (setGap) {
+                realmRoomMessage.setPreviousMessageId(room.getLastMessage().getMessageId());
+                realmRoomMessage.setFutureMessageId(room.getLastMessage().getMessageId());
+            }
             realmRoom.setLastMessage(realmRoomMessage);
             if (room.getLastMessage().getUpdateTime() == 0) {
                 realmRoom.setUpdatedTime(room.getLastMessage().getCreateTime());
@@ -241,7 +250,8 @@ public class RealmRoom extends RealmObject {
          */
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Realm realm = Realm.getDefaultInstance();
 
                 realm.executeTransactionAsync(new Realm.Transaction() {
@@ -354,8 +364,8 @@ public class RealmRoom extends RealmObject {
 
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == G.userId) {
-                return true;
-            }
+            return true;
+        }
 
         realm.close();
         return false;

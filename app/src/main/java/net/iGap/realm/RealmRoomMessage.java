@@ -39,7 +39,7 @@ import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 import org.parceler.Parcel;
 
-@Parcel(implementations = { RealmRoomMessageRealmProxy.class }, value = Parcel.Serialization.BEAN, analyze = { RealmRoomMessage.class }) public class RealmRoomMessage extends RealmObject {
+@Parcel(implementations = {RealmRoomMessageRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessage.class}) public class RealmRoomMessage extends RealmObject {
     @PrimaryKey private long messageId;
     @Index private long roomId;
     private long messageVersion;
@@ -105,12 +105,10 @@ import org.parceler.Parcel;
 
     public static void fetchNotDeliveredMessages(final OnActivityMainStart callback) {
         final Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> sentMessages = realm.where(RealmRoomMessage.class)
-            .notEqualTo(RealmRoomMessageFields.USER_ID, G.userId)
-            .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
-            .findAllSortedAsync(new String[] { RealmRoomMessageFields.ROOM_ID, RealmRoomMessageFields.MESSAGE_ID }, new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
+        RealmResults<RealmRoomMessage> sentMessages = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.USER_ID, G.userId).equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString()).findAllSortedAsync(new String[]{RealmRoomMessageFields.ROOM_ID, RealmRoomMessageFields.MESSAGE_ID}, new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
         sentMessages.addChangeListener(new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
-            @Override public void onChange(RealmResults<RealmRoomMessage> element) {
+            @Override
+            public void onChange(RealmResults<RealmRoomMessage> element) {
                 for (RealmRoomMessage roomMessage : element) {
                     if (roomMessage == null) {
                         return;
@@ -135,13 +133,14 @@ import org.parceler.Parcel;
         // when came back to the room with new messages, I make new update status request as SEEN to
         // the message sender
         final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmRoomMessage> realmRoomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSortedAsync(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSortedAsync(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         realmRoomMessages.addChangeListener(new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
-            @Override public void onChange(final RealmResults<RealmRoomMessage> element) {
+            @Override
+            public void onChange(final RealmResults<RealmRoomMessage> element) {
                 //Start ClientCondition OfflineSeen
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
                         if (realmClientCondition != null) {
@@ -190,17 +189,16 @@ import org.parceler.Parcel;
         if (G.userLogin) {
 
             new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Realm realm = Realm.getDefaultInstance();
 
                     realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
 
 
-                            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
-                                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                                .notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString())
-                                .findAll();
+                            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findAll();
                             RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
                             if (realmClientCondition != null) {
@@ -238,12 +236,14 @@ import org.parceler.Parcel;
                             }
                         }
                     }, new Realm.Transaction.OnSuccess() {
-                        @Override public void onSuccess() {
+                        @Override
+                        public void onSuccess() {
 
                             realm.close();
                         }
                     }, new Realm.Transaction.OnError() {
-                        @Override public void onError(Throwable error) {
+                        @Override
+                        public void onError(Throwable error) {
                             realm.close();
                         }
                     });
@@ -260,10 +260,22 @@ import org.parceler.Parcel;
         this.showTime = showTime;
     }
 
+    public static RealmRoomMessage putOrUpdateGetRoom(ProtoGlobal.RoomMessage input, long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmRoomMessage message = putOrUpdate(input, roomId, true, false, false, realm);
+
+        message.setShowMessage(true);
+
+        realm.close();
+
+        return message;
+    }
+
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
 
-        RealmRoomMessage message = putOrUpdate(input, roomId, true, false, realm);
+        RealmRoomMessage message = putOrUpdate(input, roomId, true, false, true, realm);
 
         message.setShowMessage(true);
 
@@ -275,7 +287,7 @@ import org.parceler.Parcel;
     public static RealmRoomMessage putOrUpdateForwardOrReply(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
 
-        RealmRoomMessage message = putOrUpdate(input, roomId, true, true, realm);
+        RealmRoomMessage message = putOrUpdate(input, roomId, true, true, true, realm);
 
         message.setShowMessage(true);
 
@@ -284,7 +296,7 @@ import org.parceler.Parcel;
         return message;
     }
 
-    public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId, boolean showMessage, boolean forwardOrReply, Realm realm) {
+    public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId, boolean showMessage, boolean forwardOrReply, boolean setGap, Realm realm) {
         long messageId;
         if (forwardOrReply) {
             /**
@@ -378,7 +390,9 @@ import org.parceler.Parcel;
         }
         message.setCreateTime(input.getCreateTime() * DateUtils.SECOND_IN_MILLIS);
 
-        message.setPreviousMessageId(input.getPreviousMessageId());
+        if (setGap) {
+            message.setPreviousMessageId(input.getPreviousMessageId());
+        }
 
         if (input.hasChannelExtra()) {
             RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
@@ -782,7 +796,8 @@ import org.parceler.Parcel;
         if (deleteAllMessage) {
 
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     realm.where(RealmRoomMessage.class).findAll().deleteAllFromRealm();
                     RealmResults<RealmRoom> rooms = realm.where(RealmRoom.class).findAll();
 
@@ -794,7 +809,8 @@ import org.parceler.Parcel;
         } else {
 
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                     if (realmRoom != null) {
@@ -809,23 +825,11 @@ import org.parceler.Parcel;
 
     public static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
 
-        RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId())
-            .equalTo(RealmRoomMessageFields.SHOW_TIME, true)
-            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-            .equalTo(RealmRoomMessageFields.DELETED, false)
-            .greaterThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId())
-            .findFirst();
+        RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId()).equalTo(RealmRoomMessageFields.SHOW_TIME, true).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
 
         RealmRoomMessage lastMessage = null;
 
-        RealmResults<RealmRoomMessage> list = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId())
-            .equalTo(RealmRoomMessageFields.SHOW_TIME, true)
-            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-            .equalTo(RealmRoomMessageFields.DELETED, false)
-            .lessThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId())
-            .findAll();
+        RealmResults<RealmRoomMessage> list = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId()).equalTo(RealmRoomMessageFields.SHOW_TIME, true).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).lessThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findAll();
 
         if (list.size() > 0) {
             lastMessage = list.last();
@@ -888,17 +892,20 @@ import org.parceler.Parcel;
      */
     public static void makeFailed(final long messageId) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                         if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
+                    @Override
+                    public void onSuccess() {
                         final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                         if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                             G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
@@ -909,5 +916,22 @@ import org.parceler.Parcel;
                 });
             }
         });
+    }
+
+
+    /**
+     * detect that message is exist in realm or no
+     *
+     * @param messageId messageId for checking
+     */
+    public static boolean existMessage(long messageId) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        if (realmRoomMessage != null) {
+            realm.close();
+            return true;
+        }
+        realm.close();
+        return false;
     }
 }
