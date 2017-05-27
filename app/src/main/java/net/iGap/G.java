@@ -14,7 +14,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.view.LayoutInflater;
 import com.crashlytics.android.Crashlytics;
@@ -388,7 +387,8 @@ public class G extends MultiDexApplication {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        MultiDex.install(this);
+        //MultiDex.install(this);
+        new MultiDexUtils().getLoadedExternalDexClasses(this);
     }
 
     synchronized public Tracker getDefaultTracker() {
