@@ -28,13 +28,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_centerInParent="true"
                 android:gravity="center"
                 android:text="@string/fac_Add_Contact"
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/dp18"
                 android:textStyle="bold"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/ac_ripple_back"
+                android:layout_toEndOf="@+id/ac_ripple_back"
+                />
 
           <net.iGap.libs.rippleeffect.RippleView
                 android:id="@+id/ac_ripple_back"

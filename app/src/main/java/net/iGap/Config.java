@@ -46,12 +46,12 @@ public class Config {
     public static final int LOW_START_PAGE_TIME = (int) 25;
     public static final int FETCH_CONTACT_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);
 
-    public static String default_appBarColor = "#3dbcb3";
+    public static String default_appBarColor = "#00B0BF";
     public static String default_notificationColor = "#f23131";
-    public static String default_toggleButtonColor = "#31bdb6";
-    public static String default_attachmentColor = "#31bdb6";
-    public static String default_headerTextColor = "#31bdb6";
-    public static String default_progressColor = "#41c6c4";
+    public static String default_toggleButtonColor = "#00B0BF";
+    public static String default_attachmentColor = "#00B0BF";
+    public static String default_headerTextColor = "#00B0BF";
+    public static String default_progressColor = "#00B0BF";
 
     public static final String URL_WEBSOCKET = "wss://secure.igap.net/hybrid/";
 

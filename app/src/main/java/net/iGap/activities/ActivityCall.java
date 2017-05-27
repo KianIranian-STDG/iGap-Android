@@ -8,11 +8,18 @@
 * All rights reserved.
 */
 
-
 package net.iGap.activities;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -25,35 +32,53 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.realm.Realm;
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.ISignalingCallBack;
+import net.iGap.interfaces.OnCallLeaveView;
+import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.webrtc.WebRTC;
 
+public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
-public class ActivityCall extends ActivityEnhanced {
+    public static final String USER_ID_STR = "USER_ID";
+    public static final String INCOMING_CALL_STR = "INCOMING_CALL_STR";
 
-    public static final String UserIdStr = "USERID";
-    public static final String INCOMONGCALL_STR = "INCOMONGCALL_STR";
-
-    long userID;
     boolean isIncomingCall = false;
+    long userId;
 
     boolean canClick = false;
-    boolean canTuch = false;
-
+    boolean canTouch = false;
     boolean down = false;
+    boolean isSendLeave = false;
+    boolean isConnected = false;
 
-    VerticalSwip verticalSwip;
+    Vibrator vibrator;
+    int musicVolum = 0;
+    Ringtone ringtone;
+    boolean isMuteAllMusic = false;
 
+    private Timer secendTimer;
+    private int secend = 0;
+    private int minute = 0;
+
+
+    VerticalSwipe verticalSwipe;
     TextView txtName;
     TextView txtStatus;
     AVLoadingIndicatorView avLoadingIndicatorView;
@@ -62,63 +87,127 @@ public class ActivityCall extends ActivityEnhanced {
     LinearLayout layoutOption;
     MaterialDesignTextView btnCircleChat;
     MaterialDesignTextView btnEndCall;
-    MaterialDesignTextView btnCall;
+    MaterialDesignTextView btnAnswer;
     MaterialDesignTextView btnMic;
     MaterialDesignTextView btnChat;
     MaterialDesignTextView btnSpeaker;
-
+    TextView txtTimer;
     MediaPlayer player;
 
-    //************************************************************************
+    @Override protected void onStop() {
+        super.onStop();
 
-    @Override protected void onDestroy() {
-        super.onDestroy();
         G.isInCall = false;
         G.iSignalingCallBack = null;
-        cancelRigtone();
+        cancelRingtone();
+
+        new RequestSignalingGetLog().signalingGetLog(0, 1);
+    }
+
+    @Override public void onBackPressed() {
+        super.onBackPressed();
+
+        if (!isSendLeave) {
+            new WebRTC().leaveCall();
+        }
     }
 
     @Override public void onCreate(Bundle savedInstanceState) {
 
-        G.isInCall = true;
+        try {
+            HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
+                @Override public void Allow() throws IOException {
 
+                }
+
+                @Override public void deny() {
+                    finish();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        G.isInCall = true;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(
             LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_call);
 
-        userID = getIntent().getExtras().getLong(UserIdStr);
-        isIncomingCall = getIntent().getExtras().getBoolean(INCOMONGCALL_STR);
-
+        userId = getIntent().getExtras().getLong(USER_ID_STR);
+        isIncomingCall = getIntent().getExtras().getBoolean(INCOMING_CALL_STR);
+        if (!isIncomingCall) {
+            new WebRTC().createOffer(userId);
+        }
         initComponent();
-
         initCallBack();
+
+        G.onCallLeaveView = this;
     }
 
     @Override public boolean dispatchTouchEvent(MotionEvent ev) {
-
-        verticalSwip.dispatchTouchEvent(ev);
-
+        verticalSwipe.dispatchTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }
 
     //***************************************************************************************
 
     private void initCallBack() {
-
         G.iSignalingCallBack = new ISignalingCallBack() {
-
-            @Override public void onStatusChanged(final String status) {
-
+            @Override public void onStatusChanged(final CallState callState) {
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
-                        txtStatus.setText(status);
+                        txtStatus.setText(callState.toString());
 
-                        if (status.contains("end")) {
-                            endVoiceAndFinish();
+                        Log.e("dddd", callState.toString());
+
+                        switch (callState) {
+
+                            case RINGING:
+                                playSound(R.raw.igap_ringing);
+                                break;
+                            case DIALLING:
+                                break;
+                            case CHECKING:
+                                break;
+                            case CONNECTED:
+
+                                if (!isConnected) {
+                                    isConnected = true;
+
+                                    playSound(R.raw.igap_connect);
+
+                                    G.handler.postDelayed(new Runnable() {
+                                        @Override public void run() {
+                                            cancelRingtone();
+                                            startTimer();
+                                        }
+                                    }, 500);
+                                }
+
+                                break;
+                            case FINISHED:
+
+                                playSound(R.raw.igap_discounect);
+
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override public void run() {
+                                        stopTimer();
+                                        endVoiceAndFinish();
+                                    }
+                                }, 500);
+
+                                isConnected = false;
+                                break;
+                            case BUSY:
+                                playSound(R.raw.igap_busy);
+                                break;
+                            case REJECT:
+                                playSound(R.raw.igap_discounect);
+                                break;
+
                         }
                     }
                 });
@@ -126,10 +215,65 @@ public class ActivityCall extends ActivityEnhanced {
         };
     }
 
+    private void startTimer() {
+
+        txtTimer.setVisibility(View.VISIBLE);
+        secend = 0;
+        minute = 0;
+
+        secendTimer = new Timer();
+        secendTimer.schedule(new TimerTask() {
+
+            @Override public void run() {
+
+                secend++;
+                if (secend >= 60) {
+                    minute++;
+                    secend %= 60;
+                }
+                if (minute >= 60) {
+                    minute %= 60;
+                }
+
+                txtTimer.post(new Runnable() {
+
+                    @Override public void run() {
+                        String s = "";
+                        if (minute < 10) {
+                            s += "0" + minute;
+                        } else {
+                            s += minute;
+                        }
+                        s += ":";
+                        if (secend < 10) {
+                            s += "0" + secend;
+                        } else {
+                            s += secend;
+                        }
+
+                        txtTimer.setText(s);
+                    }
+                });
+            }
+        }, 1000, 1000);
+    }
+
+    private void stopTimer() {
+
+        txtTimer.setVisibility(View.GONE);
+
+        if (secendTimer != null) {
+            secendTimer.cancel();
+            secendTimer = null;
+        }
+    }
+
+
     private void initComponent() {
 
-        verticalSwip = new VerticalSwip();
+        findViewById(R.id.ac_layout_main_call).setBackgroundColor(Color.parseColor(G.appBarColor));
 
+        verticalSwipe = new VerticalSwipe();
         txtName = (TextView) findViewById(R.id.fcr_txt_name);
         txtStatus = (TextView) findViewById(R.id.fcr_txt_status);
         avLoadingIndicatorView = (AVLoadingIndicatorView) findViewById(R.id.fcr_txt_avi);
@@ -137,14 +281,22 @@ public class ActivityCall extends ActivityEnhanced {
         layoutCaller = (LinearLayout) findViewById(R.id.fcr_layout_caller);
         layoutOption = (LinearLayout) findViewById(R.id.fcr_layout_option);
 
-        //************************************
+        txtTimer = (TextView) findViewById(R.id.fcr_txt_timer);
+
+
+        txtStatus.setText(CallState.DIALLING.toString());
+
+        /**
+         * *************** layoutCallEnd ***************
+         */
 
         final FrameLayout layoutCallEnd = (FrameLayout) findViewById(R.id.fcr_layout_chat_call_end);
         layoutCallEnd.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
+
                 if (canClick) {
-                    endVoiceAndFinish();
                     layoutCallEnd.setVisibility(View.INVISIBLE);
+                    endCall();
                 }
             }
         });
@@ -157,55 +309,64 @@ public class ActivityCall extends ActivityEnhanced {
             }
         });
 
-        //************************************
+        /**
+         * *************** layoutChat ***************
+         */
 
         final FrameLayout layoutChat = (FrameLayout) findViewById(R.id.fcr_layout_chat_call);
-        layoutChat.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                if (canClick) {
-                    btnChat.performClick();
-                    layoutChat.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-
+        //layoutChat.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        if (canClick) {
+        //            btnChat.performClick();
+        //            layoutChat.setVisibility(View.INVISIBLE);
+        //        }
+        //    }
+        //});
+        //
         btnCircleChat = (MaterialDesignTextView) findViewById(R.id.fcr_btn_circle_chat);
-        btnCircleChat.setOnTouchListener(new View.OnTouchListener() {
-            @Override public boolean onTouch(View v, MotionEvent event) {
-                setUpSwap(layoutChat);
-                return false;
-            }
-        });
+        //btnCircleChat.setOnTouchListener(new View.OnTouchListener() {
+        //    @Override
+        //    public boolean onTouch(View v, MotionEvent event) {
+        //        setUpSwap(layoutChat);
+        //        return false;
+        //    }
+        //});
 
-        //************************************
-
-        final FrameLayout layoutCall = (FrameLayout) findViewById(R.id.fcr_layout_answer_call);
-        layoutCall.setOnClickListener(new View.OnClickListener() {
+        btnCircleChat.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                if (canClick) {
-                    layoutOption.setVisibility(View.VISIBLE);
-                    layoutCall.setVisibility(View.GONE);
-                    layoutChat.setVisibility(View.GONE);
-
-                    cancelRigtone();
-                }
+                btnChat.performClick();
+                layoutChat.setVisibility(View.INVISIBLE);
             }
         });
 
-        btnCall = (MaterialDesignTextView) findViewById(R.id.fcr_btn_call);
-        btnCall.setOnTouchListener(new View.OnTouchListener() {
+        /**
+         * *************** layoutAnswer ***************
+         */
+
+        final FrameLayout layoutAnswer = (FrameLayout) findViewById(R.id.fcr_layout_answer_call);
+        layoutAnswer.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                answer(layoutAnswer, layoutChat);
+            }
+        });
+
+        btnAnswer = (MaterialDesignTextView) findViewById(R.id.fcr_btn_call);
+        btnAnswer.setOnTouchListener(new View.OnTouchListener() {
             @Override public boolean onTouch(View v, MotionEvent event) {
-                setUpSwap(layoutCall);
+                setUpSwap(layoutAnswer);
                 return false;
             }
         });
 
-        //************************************
+        /**
+         * *********************************************
+         */
 
         btnChat = (MaterialDesignTextView) findViewById(R.id.fcr_btn_chat);
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                HelperPublicMethod.goToChatRoom(userID, null, null);
+                HelperPublicMethod.goToChatRoom(userId, null, null);
                 endVoiceAndFinish();
             }
         });
@@ -234,12 +395,13 @@ public class ActivityCall extends ActivityEnhanced {
             }
         });
 
-        //************************************
-
         if (isIncomingCall) {
             playRingtone();
         } else {
-            layoutCall.setVisibility(View.GONE);
+
+            playSound(R.raw.igap_signaling);
+
+            layoutAnswer.setVisibility(View.GONE);
             layoutChat.setVisibility(View.GONE);
             layoutOption.setVisibility(View.VISIBLE);
         }
@@ -248,31 +410,32 @@ public class ActivityCall extends ActivityEnhanced {
         setPicture();
     }
 
-    //***************************************************************************************
+    /**
+     * *************** common methods ***************
+     */
 
     private void setUpSwap(View view) {
-
         if (!down) {
-            verticalSwip.setView(view);
-            canTuch = true;
+            verticalSwipe.setView(view);
+            canTouch = true;
             down = true;
         }
     }
 
     private void setAnimation() {
-
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_enter_down_circke_button);
-
         layoutCaller.startAnimation(animation);
     }
 
     private void setPicture() {
         Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userID).findFirst();
+        RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
         if (registeredInfo != null) {
-
             try {
+
+                txtName.setText(registeredInfo.getDisplayName());
+
                 RealmAttachment av = registeredInfo.getLastAvatar().getFile();
 
                 ProtoFileDownload.FileDownload.Selector se = ProtoFileDownload.FileDownload.Selector.FILE;
@@ -296,80 +459,199 @@ public class ActivityCall extends ActivityEnhanced {
                     }
                 });
             } catch (NullPointerException e) {
-
+                e.printStackTrace();
             }
         } else {
-            new RequestUserInfo().userInfo(userID);
+            new RequestUserInfo().userInfo(userId);
         }
 
         realm.close();
     }
 
     private void endVoiceAndFinish() {
-
-        cancelRigtone();
-
+        cancelRingtone();
         finish();
     }
 
-    private void playRingtone() {
-        player = MediaPlayer.create(ActivityCall.this, R.raw.iphone_5_original);
-        player.start();
-    }
+    private void answer(FrameLayout layoutAnswer, FrameLayout layoutChat) {
+        if (canClick) {
+            layoutOption.setVisibility(View.VISIBLE);
+            layoutAnswer.setVisibility(View.GONE);
+            layoutChat.setVisibility(View.GONE);
 
-    private void cancelRigtone() {
-        if (player != null) {
-            if (player.isPlaying()) {
-                player.stop();
-            }
-
-            player.release();
-
-            player = null;
+            new WebRTC().createAnswer();
+            cancelRingtone();
         }
     }
 
-    //***************************************************************************************
+    private void endCall() {
+        new WebRTC().leaveCall();
+        isSendLeave = true;
+        endVoiceAndFinish();
+    }
 
-    class VerticalSwip {
+    private void muteMusic() {
 
-        private int Allmoving = 0;
+        if (!isMuteAllMusic) {
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            musicVolum = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+            am.setStreamMute(AudioManager.STREAM_MUSIC, true);
+            am.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+            isMuteAllMusic = true;
+        }
+    }
+
+    private void unMuteMusic() {
+
+        if (isMuteAllMusic) {
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            am.setStreamVolume(AudioManager.STREAM_MUSIC, musicVolum, 0);
+            am.setStreamMute(AudioManager.STREAM_MUSIC, false);
+            isMuteAllMusic = false;
+        }
+    }
+
+    private void playRingtone() {
+        boolean canPlay = false;
+        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        muteMusic();
+
+
+        switch (am.getRingerMode()) {
+            case AudioManager.RINGER_MODE_SILENT:
+                canPlay = false;
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                canPlay = false;
+
+                vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                long[] pattern = { 0, 100, 1000 };
+                vibrator.vibrate(pattern, 0);
+
+                break;
+            case AudioManager.RINGER_MODE_NORMAL:
+                canPlay = true;
+                break;
+        }
+
+        if (am.isWiredHeadsetOn()) {
+            canPlay = true;
+        }
+
+        if (canPlay) {
+            Uri defaultRintoneUri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
+            ringtone = RingtoneManager.getRingtone(getApplicationContext(), defaultRintoneUri);
+
+            if (ringtone != null) {
+                ringtone.play();
+            }
+
+
+
+        }
+    }
+
+    private void playSound(final int resSound) {
+
+        if (player == null) {
+            player = MediaPlayer.create(ActivityCall.this, resSound);
+            player.setLooping(true);
+            player.start();
+        } else {
+
+            try {
+                player.reset();
+
+                player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
+                player.prepare();
+                player.setLooping(true);
+                player.start();
+            } catch (Exception e) {
+                Log.e("dddd", "playSound   " + e.toString() + "     " + resSound);
+            }
+        }
+    }
+
+    private void cancelRingtone() {
+
+        unMuteMusic();
+
+        try {
+            if (ringtone != null) {
+                ringtone.stop();
+                ringtone = null;
+            }
+        } catch (Exception e) {
+
+        }
+
+        try {
+
+            if (vibrator != null) {
+                vibrator.cancel();
+                vibrator = null;
+            }
+        } catch (Exception e) {
+
+        }
+
+        try {
+            if (player != null) {
+                if (player.isPlaying()) {
+                    player.stop();
+                }
+
+                player.release();
+                player = null;
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    @Override public void onLeaveView() {
+        endVoiceAndFinish();
+    }
+
+    /**
+     * ****************************** VerticalSwipe Class ******************************
+     */
+
+    class VerticalSwipe {
+
+        private int AllMoving = 0;
         private int lastY;
-        private int DistanceToAccept = 200;
+        private int DistanceToAccept = (int) G.context.getResources().getDimension(R.dimen.dp120);
         boolean accept = false;
-
         private View view;
 
         public void setView(View view) {
-
             this.view = view;
         }
 
-        public void dispatchTouchEvent(MotionEvent event) {
-
+        void dispatchTouchEvent(MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     startMoving((int) event.getY());
 
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (canTuch) {
+                    if (canTouch) {
                         moving((int) event.getY());
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (canTuch) {
+                    if (canTouch) {
                         reset();
                     }
 
                     down = false;
-
                     break;
             }
         }
 
         private void startMoving(int y) {
-
             lastY = y;
             accept = false;
         }
@@ -377,13 +659,13 @@ public class ActivityCall extends ActivityEnhanced {
         private void moving(int y) {
             int i = lastY - y;
 
-            if (i > 0 || Allmoving > 0) {
-                Allmoving += i;
+            if (i > 0 || AllMoving > 0) {
+                AllMoving += i;
 
                 view.setPadding(0, 0, 0, view.getPaddingBottom() + i);
 
                 lastY = y;
-                if (Allmoving >= DistanceToAccept) {
+                if (AllMoving >= DistanceToAccept) {
                     accept = true;
                     reset();
                 }
@@ -392,11 +674,10 @@ public class ActivityCall extends ActivityEnhanced {
 
         private void reset() {
             view.setPadding(0, 0, 0, 0);
-            canTuch = false;
-            Allmoving = 0;
+            canTouch = false;
+            AllMoving = 0;
 
             if (accept) {
-
                 canClick = true;
                 view.performClick();
                 canClick = false;

@@ -123,8 +123,7 @@ public final class ProtoUserRegister {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserRegister.UserRegister.class,
-            net.iGap.proto.ProtoUserRegister.UserRegister.Builder.class);
+        return net.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserRegister.UserRegister.class, net.iGap.proto.ProtoUserRegister.UserRegister.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -313,8 +312,7 @@ public final class ProtoUserRegister {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserRegister.UserRegister parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserRegister.UserRegister parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -348,8 +346,7 @@ public final class ProtoUserRegister {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserRegister.UserRegister.class,
-              net.iGap.proto.ProtoUserRegister.UserRegister.Builder.class);
+          return net.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegister_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserRegister.UserRegister.class, net.iGap.proto.ProtoUserRegister.UserRegister.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoUserRegister.UserRegister.newBuilder()
@@ -478,8 +475,7 @@ public final class ProtoUserRegister {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -579,8 +575,7 @@ public final class ProtoUserRegister {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -941,8 +936,7 @@ public final class ProtoUserRegister {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, net.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
+        return net.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, net.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
     }
 
     /**
@@ -1425,8 +1419,7 @@ public final class ProtoUserRegister {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserRegister.UserRegisterResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1460,8 +1453,7 @@ public final class ProtoUserRegister {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, net.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
+          return net.iGap.proto.ProtoUserRegister.internal_static_proto_UserRegisterResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserRegister.UserRegisterResponse.class, net.iGap.proto.ProtoUserRegister.UserRegisterResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoUserRegister.UserRegisterResponse.newBuilder()
@@ -1646,8 +1638,7 @@ public final class ProtoUserRegister {
       private int bitField0_;
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1747,8 +1738,7 @@ public final class ProtoUserRegister {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -2207,8 +2197,7 @@ public final class ProtoUserRegister {
                     "\030\003 \001(\004\022\023\n\013author_hash\030\004 \001(\t\0222\n\006method\030\005 " +
                     "\001(\0162\".proto.UserRegisterResponse.Method\022" +
                     "\024\n\014resend_delay\030\006 \001(\r\022\022\n\nsms_number\030\007 \003(" +
-                    "\004\022\031\n\021verify_code_regex\030\010 \001(\t\022\037\n\027verify_c", "ode_digit_count\030\t \001(\r\"Q\n\006Method\022\023\n\017VERIF" +
-            "Y_CODE_SMS\020\000\022\026\n\022VERIFY_CODE_SOCKET\020\001\022\032\n\026" + "VERIFY_CODE_SMS_SOCKET\020\002B#\n\016net.iGap.pro" +
+                    "\004\022\031\n\021verify_code_regex\030\010 \001(\t\022\037\n\027verify_c", "ode_digit_count\030\t \001(\r\"Q\n\006Method\022\023\n\017VERIF" + "Y_CODE_SMS\020\000\022\026\n\022VERIFY_CODE_SOCKET\020\001\022\032\n\026" + "VERIFY_CODE_SMS_SOCKET\020\002B#\n\016net.iGap.pro" +
       "toB\021ProtoUserRegisterb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:orientation="vertical"
+    tools:ignore="MissingPrefix"
     >
 
   <RelativeLayout
@@ -34,13 +36,13 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:paddingStart="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
+        android:paddingLeft="@dimen/dp32"
         android:paddingRight="@dimen/dp40"
         android:paddingEnd="@dimen/dp40"
         android:paddingTop="@dimen/dp8"
         android:text="@string/mute_notification"
-        android:textColor="@color/green"
-        android:textSize="@dimen/dp14"
+        android:textColor="@color/black90"
+        android:textSize="@dimen/dp20"
         />
   </RelativeLayout>
 

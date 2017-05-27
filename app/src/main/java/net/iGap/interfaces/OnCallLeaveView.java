@@ -10,8 +10,6 @@
 
 package net.iGap.interfaces;
 
-
-public interface ISignalingSesionHold {
-
-    void onHold(Boolean hold);
+public interface OnCallLeaveView {
+    void onLeaveView();
 }

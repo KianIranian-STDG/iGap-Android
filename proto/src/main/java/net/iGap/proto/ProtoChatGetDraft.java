@@ -106,8 +106,7 @@ public final class ProtoChatGetDraft {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChatGetDraft.internal_static_proto_ChatGetDraft_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatGetDraft.ChatGetDraft.class,
-            net.iGap.proto.ProtoChatGetDraft.ChatGetDraft.Builder.class);
+        return net.iGap.proto.ProtoChatGetDraft.internal_static_proto_ChatGetDraft_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatGetDraft.ChatGetDraft.class, net.iGap.proto.ProtoChatGetDraft.ChatGetDraft.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -216,8 +215,7 @@ public final class ProtoChatGetDraft {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraft parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraft parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -225,8 +223,7 @@ public final class ProtoChatGetDraft {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraft parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraft parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -242,8 +239,7 @@ public final class ProtoChatGetDraft {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraft parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraft parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -251,8 +247,7 @@ public final class ProtoChatGetDraft {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraft parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraft parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -286,8 +281,7 @@ public final class ProtoChatGetDraft {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChatGetDraft.internal_static_proto_ChatGetDraft_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatGetDraft.ChatGetDraft.class,
-              net.iGap.proto.ProtoChatGetDraft.ChatGetDraft.Builder.class);
+          return net.iGap.proto.ProtoChatGetDraft.internal_static_proto_ChatGetDraft_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatGetDraft.ChatGetDraft.class, net.iGap.proto.ProtoChatGetDraft.ChatGetDraft.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChatGetDraft.ChatGetDraft.newBuilder()
@@ -409,8 +403,7 @@ public final class ProtoChatGetDraft {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -510,8 +503,7 @@ public final class ProtoChatGetDraft {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -697,8 +689,7 @@ public final class ProtoChatGetDraft {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChatGetDraft.internal_static_proto_ChatGetDraftResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse.class, net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse.Builder.class);
+        return net.iGap.proto.ProtoChatGetDraft.internal_static_proto_ChatGetDraftResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse.class, net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -824,8 +815,7 @@ public final class ProtoChatGetDraft {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -833,8 +823,7 @@ public final class ProtoChatGetDraft {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -850,8 +839,7 @@ public final class ProtoChatGetDraft {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -859,8 +847,7 @@ public final class ProtoChatGetDraft {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -895,8 +882,7 @@ public final class ProtoChatGetDraft {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChatGetDraft.internal_static_proto_ChatGetDraftResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse.class, net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse.Builder.class);
+          return net.iGap.proto.ProtoChatGetDraft.internal_static_proto_ChatGetDraftResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse.class, net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChatGetDraft.ChatGetDraftResponse.newBuilder()
@@ -1026,8 +1012,7 @@ public final class ProtoChatGetDraft {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1127,8 +1112,7 @@ public final class ProtoChatGetDraft {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1138,8 +1122,7 @@ public final class ProtoChatGetDraft {
       }
 
         private net.iGap.proto.ProtoGlobal.RoomDraft draft_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomDraft, net.iGap.proto.ProtoGlobal.RoomDraft.Builder, net.iGap.proto.ProtoGlobal.RoomDraftOrBuilder>
-            draftBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomDraft, net.iGap.proto.ProtoGlobal.RoomDraft.Builder, net.iGap.proto.ProtoGlobal.RoomDraftOrBuilder> draftBuilder_;
       /**
        * <code>optional .proto.RoomDraft draft = 2;</code>
        */
@@ -1239,8 +1222,7 @@ public final class ProtoChatGetDraft {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomDraft, net.iGap.proto.ProtoGlobal.RoomDraft.Builder, net.iGap.proto.ProtoGlobal.RoomDraftOrBuilder> getDraftFieldBuilder() {
         if (draftBuilder_ == null) {
-            draftBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomDraft, net.iGap.proto.ProtoGlobal.RoomDraft.Builder, net.iGap.proto.ProtoGlobal.RoomDraftOrBuilder>(
+            draftBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomDraft, net.iGap.proto.ProtoGlobal.RoomDraft.Builder, net.iGap.proto.ProtoGlobal.RoomDraftOrBuilder>(
                   getDraft(),
                   getParentForChildren(),
                   isClean());
@@ -1307,9 +1289,7 @@ public final class ProtoChatGetDraft {
             "\n\022ChatGetDraft.proto\022\005proto\032\rRequest.pro" +
                     "to\032\016Response.proto\032\014Global.proto\"@\n\014Chat" +
                     "GetDraft\022\037\n\007request\030\001 \001(\0132\016.proto.Reques" +
-                    "t\022\017\n\007room_id\030\002 \001(\004\"Z\n\024ChatGetDraftRespon" +
-                    "se\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\037\n" +
-                    "\005draft\030\002 \001(\0132\020.proto.RoomDraftB#\n\016com.iG" +
+                    "t\022\017\n\007room_id\030\002 \001(\004\"Z\n\024ChatGetDraftRespon" + "se\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\037\n" + "\005draft\030\002 \001(\0132\020.proto.RoomDraftB#\n\016net.iG" +
                     "ap.protoB\021ProtoChatGetDraftb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

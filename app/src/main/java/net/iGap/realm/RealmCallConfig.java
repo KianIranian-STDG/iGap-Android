@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import android.util.Log;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import java.util.List;
@@ -64,16 +65,20 @@ public class RealmCallConfig extends RealmObject {
         final RealmCallConfig realmCall = realm.where(RealmCallConfig.class).findFirst();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 RealmCallConfig item;
 
                 if (realmCall == null) {
+                    Log.i("EEE", "builder 1");
                     RealmCallConfig _rc = new RealmCallConfig();
                     item = realm.copyToRealm(_rc);
                 } else {
+                    Log.i("EEE", "builder 2");
                     item = realmCall;
                 }
+                Log.i("EEE", "builder 3");
 
                 item.setVoice_calling(builder.getVoiceCalling());
                 item.setVideo_calling(builder.getVideoCalling());

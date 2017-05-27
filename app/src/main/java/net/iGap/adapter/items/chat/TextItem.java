@@ -78,10 +78,6 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         }
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected EmojiTextView messageText;
         protected LinearLayout llTime;

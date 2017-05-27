@@ -139,8 +139,7 @@ public final class ProtoChannelSetAction {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelSetAction.internal_static_proto_ChannelSetAction_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSetAction.ChannelSetAction.class, net.iGap.proto.ProtoChannelSetAction.ChannelSetAction.Builder.class);
+        return net.iGap.proto.ProtoChannelSetAction.internal_static_proto_ChannelSetAction_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSetAction.ChannelSetAction.class, net.iGap.proto.ProtoChannelSetAction.ChannelSetAction.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -398,8 +397,7 @@ public final class ProtoChannelSetAction {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelSetAction.internal_static_proto_ChannelSetAction_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSetAction.ChannelSetAction.class, net.iGap.proto.ProtoChannelSetAction.ChannelSetAction.Builder.class);
+          return net.iGap.proto.ProtoChannelSetAction.internal_static_proto_ChannelSetAction_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSetAction.ChannelSetAction.class, net.iGap.proto.ProtoChannelSetAction.ChannelSetAction.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelSetAction.ChannelSetAction.newBuilder()
@@ -920,8 +918,7 @@ public final class ProtoChannelSetAction {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelSetAction.internal_static_proto_ChannelSetActionResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSetAction.ChannelSetActionResponse.class, net.iGap.proto.ProtoChannelSetAction.ChannelSetActionResponse.Builder.class);
+        return net.iGap.proto.ProtoChannelSetAction.internal_static_proto_ChannelSetActionResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSetAction.ChannelSetActionResponse.class, net.iGap.proto.ProtoChannelSetAction.ChannelSetActionResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -1180,8 +1177,7 @@ public final class ProtoChannelSetAction {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelSetAction.internal_static_proto_ChannelSetActionResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSetAction.ChannelSetActionResponse.class, net.iGap.proto.ProtoChannelSetAction.ChannelSetActionResponse.Builder.class);
+          return net.iGap.proto.ProtoChannelSetAction.internal_static_proto_ChannelSetActionResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSetAction.ChannelSetActionResponse.class, net.iGap.proto.ProtoChannelSetAction.ChannelSetActionResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelSetAction.ChannelSetActionResponse.newBuilder()
@@ -1323,8 +1319,7 @@ public final class ProtoChannelSetAction {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-          responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1603,8 +1598,7 @@ public final class ProtoChannelSetAction {
       "o.Request\022\017\n\007room_id\030\002 \001(\004\022#\n\006action\030\003 \001" +
       "(\0162\023.proto.ClientAction\022\021\n\taction_id\030\004 \001" +
       "(\r\"\204\001\n\030ChannelSetActionResponse\022!\n\010respo" +
-      "nse\030\001 \001(\0132\017.proto.Response\022\017\n\007room_id\030\002 " +
-      "\001(\004\022#\n\006action\030\003 \001(\0162\023.proto.ClientAction" + "\022\017\n\007user_id\030\004 \001(\004B\'\n\016net.iGap.protoB\025Pro" +
+      "nse\030\001 \001(\0132\017.proto.Response\022\017\n\007room_id\030\002 " + "\001(\004\022#\n\006action\030\003 \001(\0162\023.proto.ClientAction" + "\022\017\n\007user_id\030\004 \001(\004B\'\n\016net.iGap.protoB\025Pro" +
       "toChannelSetActionb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =

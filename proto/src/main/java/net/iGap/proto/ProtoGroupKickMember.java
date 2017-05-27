@@ -117,8 +117,7 @@ public final class ProtoGroupKickMember {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoGroupKickMember.internal_static_proto_GroupKickMember_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupKickMember.GroupKickMember.class,
-            net.iGap.proto.ProtoGroupKickMember.GroupKickMember.Builder.class);
+        return net.iGap.proto.ProtoGroupKickMember.internal_static_proto_GroupKickMember_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupKickMember.GroupKickMember.class, net.iGap.proto.ProtoGroupKickMember.GroupKickMember.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -245,8 +244,7 @@ public final class ProtoGroupKickMember {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMember parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMember parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -254,8 +252,7 @@ public final class ProtoGroupKickMember {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMember parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMember parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -271,8 +268,7 @@ public final class ProtoGroupKickMember {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMember parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMember parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -280,8 +276,7 @@ public final class ProtoGroupKickMember {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMember parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMember parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -315,8 +310,7 @@ public final class ProtoGroupKickMember {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoGroupKickMember.internal_static_proto_GroupKickMember_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupKickMember.GroupKickMember.class,
-              net.iGap.proto.ProtoGroupKickMember.GroupKickMember.Builder.class);
+          return net.iGap.proto.ProtoGroupKickMember.internal_static_proto_GroupKickMember_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupKickMember.GroupKickMember.class, net.iGap.proto.ProtoGroupKickMember.GroupKickMember.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoGroupKickMember.GroupKickMember.newBuilder()
@@ -444,8 +438,7 @@ public final class ProtoGroupKickMember {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -545,8 +538,7 @@ public final class ProtoGroupKickMember {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -754,8 +746,7 @@ public final class ProtoGroupKickMember {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoGroupKickMember.internal_static_proto_GroupKickMemberResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse.class, net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse.Builder.class);
+        return net.iGap.proto.ProtoGroupKickMember.internal_static_proto_GroupKickMemberResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse.class, net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -882,8 +873,7 @@ public final class ProtoGroupKickMember {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -891,8 +881,7 @@ public final class ProtoGroupKickMember {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -900,8 +889,7 @@ public final class ProtoGroupKickMember {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -909,8 +897,7 @@ public final class ProtoGroupKickMember {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -918,8 +905,7 @@ public final class ProtoGroupKickMember {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -954,8 +940,7 @@ public final class ProtoGroupKickMember {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoGroupKickMember.internal_static_proto_GroupKickMemberResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse.class, net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse.Builder.class);
+          return net.iGap.proto.ProtoGroupKickMember.internal_static_proto_GroupKickMemberResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse.class, net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoGroupKickMember.GroupKickMemberResponse.newBuilder()
@@ -1083,8 +1068,7 @@ public final class ProtoGroupKickMember {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1184,8 +1168,7 @@ public final class ProtoGroupKickMember {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1304,9 +1287,7 @@ public final class ProtoGroupKickMember {
             "\n\025GroupKickMember.proto\022\005proto\032\rRequest." +
                     "proto\032\016Response.proto\"V\n\017GroupKickMember" +
                     "\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\017\n\007roo" +
-                    "m_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"`\n\027GroupKi" +
-                    "ckMemberResponse\022!\n\010response\030\001 \001(\0132\017.pro" +
-                    "to.Response\022\017\n\007room_id\030\002 \001(\004\022\021\n\tmember_i" + "d\030\003 \001(\004B&\n\016net.iGap.protoB\024ProtoGroupKic" +
+                    "m_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"`\n\027GroupKi" + "ckMemberResponse\022!\n\010response\030\001 \001(\0132\017.pro" + "to.Response\022\017\n\007room_id\030\002 \001(\004\022\021\n\tmember_i" + "d\030\003 \001(\004B&\n\016net.iGap.protoB\024ProtoGroupKic" +
                     "kMemberb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

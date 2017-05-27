@@ -105,8 +105,7 @@ public final class ProtoGroupRevokeLink {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoGroupRevokeLink.internal_static_proto_GroupRevokeLink_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink.class,
-            net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink.Builder.class);
+        return net.iGap.proto.ProtoGroupRevokeLink.internal_static_proto_GroupRevokeLink_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink.class, net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -215,8 +214,7 @@ public final class ProtoGroupRevokeLink {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -224,8 +222,7 @@ public final class ProtoGroupRevokeLink {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -241,8 +238,7 @@ public final class ProtoGroupRevokeLink {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -250,8 +246,7 @@ public final class ProtoGroupRevokeLink {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -285,8 +280,7 @@ public final class ProtoGroupRevokeLink {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoGroupRevokeLink.internal_static_proto_GroupRevokeLink_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink.class,
-              net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink.Builder.class);
+          return net.iGap.proto.ProtoGroupRevokeLink.internal_static_proto_GroupRevokeLink_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink.class, net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLink.newBuilder()
@@ -407,8 +401,7 @@ public final class ProtoGroupRevokeLink {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -508,9 +501,7 @@ public final class ProtoGroupRevokeLink {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
-                    getRequest(), getParentForChildren(), isClean());
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
           request_ = null;
         }
         return requestBuilder_;
@@ -709,8 +700,7 @@ public final class ProtoGroupRevokeLink {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoGroupRevokeLink.internal_static_proto_GroupRevokeLinkResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse.class, net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse.Builder.class);
+        return net.iGap.proto.ProtoGroupRevokeLink.internal_static_proto_GroupRevokeLinkResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse.class, net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -897,8 +887,7 @@ public final class ProtoGroupRevokeLink {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -906,8 +895,7 @@ public final class ProtoGroupRevokeLink {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -915,8 +903,7 @@ public final class ProtoGroupRevokeLink {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -924,8 +911,7 @@ public final class ProtoGroupRevokeLink {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -933,8 +919,7 @@ public final class ProtoGroupRevokeLink {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -969,8 +954,7 @@ public final class ProtoGroupRevokeLink {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoGroupRevokeLink.internal_static_proto_GroupRevokeLinkResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse.class, net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse.Builder.class);
+          return net.iGap.proto.ProtoGroupRevokeLink.internal_static_proto_GroupRevokeLinkResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse.class, net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoGroupRevokeLink.GroupRevokeLinkResponse.newBuilder()
@@ -1105,8 +1089,7 @@ public final class ProtoGroupRevokeLink {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1206,9 +1189,7 @@ public final class ProtoGroupRevokeLink {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
-                    getResponse(), getParentForChildren(), isClean());
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
@@ -1424,9 +1405,7 @@ public final class ProtoGroupRevokeLink {
             "\n\025GroupRevokeLink.proto\022\005proto\032\rRequest." +
                     "proto\032\016Response.proto\"C\n\017GroupRevokeLink" +
                     "\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\017\n\007roo" +
-                    "m_id\030\002 \001(\004\"x\n\027GroupRevokeLinkResponse\022!\n" +
-                    "\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007room" +
-                    "_id\030\002 \001(\004\022\023\n\013invite_link\030\003 \001(\t\022\024\n\014invite" + "_token\030\004 \001(\tB&\n\016net.iGap.protoB\024ProtoGro" +
+                    "m_id\030\002 \001(\004\"x\n\027GroupRevokeLinkResponse\022!\n" + "\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007room" + "_id\030\002 \001(\004\022\023\n\013invite_link\030\003 \001(\t\022\024\n\014invite" + "_token\030\004 \001(\tB&\n\016net.iGap.protoB\024ProtoGro" +
                     "upRevokeLinkb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

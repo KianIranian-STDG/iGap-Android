@@ -109,6 +109,8 @@
   <string formatted="false" name="d_of_d">%d of %d</string>
   <string name="add_to_contact">Add to Contact</string>
   <string name="app_name">iGap</string>
+  <string name="call_name">iGap Voice Call</string>
+
 
   <string name="chat">Chat</string>
   <string name="group">Group</string>
@@ -167,12 +169,12 @@
   <string name="st_crop">Crop and Resize Photo</string>
   <string name="st_send_by_enter">Send by Enter Key</string>
   <string name="st_title_Media">Multimedia</string>
-  <string name="st_auto_download_data">Auto download (Using Mobile Data)</string>
-  <string name="title_auto_download_data">Auto download\n(Using Mobile Data)</string>
-  <string name="st_auto_download_wifi">Auto download (When Connected on Wi-Fi)</string>
-  <string name="title_auto_download_wifi">Auto download\n(Using Wi-Fi)</string>
-  <string name="st_auto_download_roaming">Auto download (When Roaming)</string>
-  <string name="title_auto_download_roaming">Auto download\n(Using Data Roaming)</string>
+  <string name="st_auto_download_data">Auto-download (Using Mobile Data)</string>
+  <string name="title_auto_download_data">Auto-download\n(Using Mobile Data)</string>
+  <string name="st_auto_download_wifi">Auto-download (When Connected on Wi-Fi)</string>
+  <string name="title_auto_download_wifi">Auto-download\n(Using Wi-Fi)</string>
+  <string name="st_auto_download_roaming">Auto-download (When Roaming)</string>
+  <string name="title_auto_download_roaming">Auto-download\n(Using Data Roaming)</string>
   <string name="st_auto_gif">Auto Play GIFs</string>
   <string name="st_save_to_gallery">Save to Gallery</string>
   <string name="st_title_support">iGap Support</string>
@@ -262,7 +264,7 @@
   <string name="edited">Edited</string>
   <string name="today">Today</string>
   <string name="yesterday">Yesterday</string>
-  <string name="clean_log">Clean logs</string>
+  <string name="clean_log">Clear Call logs</string>
 
 
   <!-- array -->
@@ -712,7 +714,7 @@
   <string name="saturday">"Saturday"</string>
 
 
-  <string name="USER_JOINED">"Joined to iGap"</string>
+  <string name="USER_JOINED">"Joined iGap"</string>
   <string name="USER_DELETED">"Left from iGap"</string>
   <string name="ROOM_CREATED">"Created Room"</string>
   <string name="MEMBER_ADDED">"Added"</string>
@@ -725,6 +727,11 @@
   <string name="MEMBER_JOINED_BY_INVITE_LINK_2">"اضافه شد"</string>
   <string name="Room_Deleted">"Deleted Room"</string>
   <string name="conversation">""</string>
+
+  <string name="MISSED_SCREEN_SHARE">"Missed Screen Share"</string>
+  <string name="MISSED_VOICE_CALL">"Missed Voice Call"</string>
+  <string name="MISSED_VIDEO_CALL">"Missed Video Call"</string>
+
 
   <string name="delete_account_text1">other</string>
   <string name="delete_account_text2">other</string>
@@ -808,7 +815,8 @@
   <string name="privacy_setting">Privacy Setting</string>
   <string name="igap_search">Look and Find</string>
   <string name="set_color_to_default">Set Colors as Default</string>
-  <string name="empty_message">Nothing Found. Please try to enter the first 5 characters of username </string>
+  <string name="empty_message">Please try to enter the first 5 characters of username</string>
+  <string name="empty_message3">Entering 3 characters at least is required for searching</string>
   <string name="there_is_no_any_result">No Result</string>
   <string name="there_is_no_connection_to_server">No Connection to the Server</string>
   <string name="empty_room">No Messages Yet</string>
@@ -834,7 +842,7 @@
   <string name="text_limit_chat_to_unknown_contact">Please wait for the process to finish (You are not allowed to send messages to more than 10 Unknown Users regularly at the same time; after getting to number 10, you get stopped until the end of countdown timer)</string>
   <string name="title_limit_Create_Group">Restriction in Number of Rooms</string>
   <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
-  <string name="show_sender_name_in_group">Show Sender Name in Group</string>
+  <string name="show_sender_name_in_group">Show Sender Name in Groups</string>
   <string name="calls">Calls</string>
   <string name="igap_call">iGap Call</string>
   <string name="No_messages_here_yet">No messages here yet…</string>
@@ -877,5 +885,5 @@
   <string name="recovery_by_question">Recovery By Question</string>
   <string name="recovery_Password">Recovery Password</string>
   <string name="your_email_desc">Please add your valid e-mail it is th only way to recover a forgotten password</string>
-
+  <string name="call_with">Select Contact</string>
 </resources>

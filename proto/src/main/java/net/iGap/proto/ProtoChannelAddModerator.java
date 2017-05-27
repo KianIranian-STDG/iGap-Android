@@ -123,8 +123,7 @@ public final class ProtoChannelAddModerator {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelAddModerator.internal_static_proto_ChannelAddModerator_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAddModerator.ChannelAddModerator.class, net.iGap.proto.ProtoChannelAddModerator.ChannelAddModerator.Builder.class);
+        return net.iGap.proto.ProtoChannelAddModerator.internal_static_proto_ChannelAddModerator_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAddModerator.ChannelAddModerator.class, net.iGap.proto.ProtoChannelAddModerator.ChannelAddModerator.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -357,8 +356,7 @@ public final class ProtoChannelAddModerator {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelAddModerator.internal_static_proto_ChannelAddModerator_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAddModerator.ChannelAddModerator.class, net.iGap.proto.ProtoChannelAddModerator.ChannelAddModerator.Builder.class);
+          return net.iGap.proto.ProtoChannelAddModerator.internal_static_proto_ChannelAddModerator_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAddModerator.ChannelAddModerator.class, net.iGap.proto.ProtoChannelAddModerator.ChannelAddModerator.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelAddModerator.ChannelAddModerator.newBuilder()
@@ -813,9 +811,7 @@ public final class ProtoChannelAddModerator {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelAddModerator.internal_static_proto_ChannelAddModeratorResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAddModerator.ChannelAddModeratorResponse.class,
-              net.iGap.proto.ProtoChannelAddModerator.ChannelAddModeratorResponse.Builder.class);
+        return net.iGap.proto.ProtoChannelAddModerator.internal_static_proto_ChannelAddModeratorResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAddModerator.ChannelAddModeratorResponse.class, net.iGap.proto.ProtoChannelAddModerator.ChannelAddModeratorResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -1048,9 +1044,7 @@ public final class ProtoChannelAddModerator {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelAddModerator.internal_static_proto_ChannelAddModeratorResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAddModerator.ChannelAddModeratorResponse.class,
-                net.iGap.proto.ProtoChannelAddModerator.ChannelAddModeratorResponse.Builder.class);
+          return net.iGap.proto.ProtoChannelAddModerator.internal_static_proto_ChannelAddModeratorResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAddModerator.ChannelAddModeratorResponse.class, net.iGap.proto.ProtoChannelAddModerator.ChannelAddModeratorResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelAddModerator.ChannelAddModeratorResponse.newBuilder()
@@ -1186,8 +1180,7 @@ public final class ProtoChannelAddModerator {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-          responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1419,9 +1412,7 @@ public final class ProtoChannelAddModerator {
       "\n\031ChannelAddModerator.proto\022\005proto\032\rRequ" +
       "est.proto\032\016Response.proto\"Z\n\023ChannelAddM" +
       "oderator\022\037\n\007request\030\001 \001(\0132\016.proto.Reques" +
-      "t\022\017\n\007room_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"d\n" +
-      "\033ChannelAddModeratorResponse\022!\n\010response" +
-      "\030\001 \001(\0132\017.proto.Response\022\017\n\007room_id\030\002 \001(\004" + "\022\021\n\tmember_id\030\003 \001(\004B*\n\016net.iGap.protoB\030P" +
+      "t\022\017\n\007room_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"d\n" + "\033ChannelAddModeratorResponse\022!\n\010response" + "\030\001 \001(\0132\017.proto.Response\022\017\n\007room_id\030\002 \001(\004" + "\022\021\n\tmember_id\030\003 \001(\004B*\n\016net.iGap.protoB\030P" +
       "rotoChannelAddModeratorb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =

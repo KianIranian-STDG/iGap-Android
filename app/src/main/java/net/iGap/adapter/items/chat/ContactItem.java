@@ -39,10 +39,6 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         holder.image.setImageResource(R.drawable.green_contact);
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     @Override public int getType() {
         return R.id.chatSubLayoutContact;
     }

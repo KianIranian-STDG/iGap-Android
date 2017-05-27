@@ -15,8 +15,8 @@ public final class ProtoSignalingGetConfiguration {
     }
 
     public interface SignalingGetConfigurationOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingGetConfiguration)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingGetConfiguration)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Request request = 1;</code>
@@ -38,8 +38,8 @@ public final class ProtoSignalingGetConfiguration {
      * Protobuf type {@code proto.SignalingGetConfiguration}
      */
     public static final class SignalingGetConfiguration extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingGetConfiguration)
-            SignalingGetConfigurationOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingGetConfiguration)
+        SignalingGetConfigurationOrBuilder {
         // Use SignalingGetConfiguration.newBuilder() to construct.
         private SignalingGetConfiguration(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -257,8 +257,8 @@ public final class ProtoSignalingGetConfiguration {
          * Protobuf type {@code proto.SignalingGetConfiguration}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingGetConfiguration)
-                net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingGetConfiguration)
+            net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingGetConfiguration.internal_static_proto_SignalingGetConfiguration_descriptor;
             }
@@ -542,8 +542,8 @@ public final class ProtoSignalingGetConfiguration {
     }
 
     public interface SignalingGetConfigurationResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingGetConfigurationResponse)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingGetConfigurationResponse)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Response response = 1;</code>
@@ -605,8 +605,8 @@ public final class ProtoSignalingGetConfiguration {
      * Protobuf type {@code proto.SignalingGetConfigurationResponse}
      */
     public static final class SignalingGetConfigurationResponse extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingGetConfigurationResponse)
-            SignalingGetConfigurationResponseOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingGetConfigurationResponse)
+        SignalingGetConfigurationResponseOrBuilder {
         // Use SignalingGetConfigurationResponse.newBuilder() to construct.
         private SignalingGetConfigurationResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -700,8 +700,8 @@ public final class ProtoSignalingGetConfiguration {
         }
 
         public interface IceServerOrBuilder extends
-                // @@protoc_insertion_point(interface_extends:proto.SignalingGetConfigurationResponse.IceServer)
-                com.google.protobuf.MessageOrBuilder {
+            // @@protoc_insertion_point(interface_extends:proto.SignalingGetConfigurationResponse.IceServer)
+            com.google.protobuf.MessageOrBuilder {
 
             /**
              * <code>optional string url = 1;</code>
@@ -738,8 +738,8 @@ public final class ProtoSignalingGetConfiguration {
          * Protobuf type {@code proto.SignalingGetConfigurationResponse.IceServer}
          */
         public static final class IceServer extends com.google.protobuf.GeneratedMessageV3 implements
-                // @@protoc_insertion_point(message_implements:proto.SignalingGetConfigurationResponse.IceServer)
-                IceServerOrBuilder {
+            // @@protoc_insertion_point(message_implements:proto.SignalingGetConfigurationResponse.IceServer)
+            IceServerOrBuilder {
             // Use IceServer.newBuilder() to construct.
             private IceServer(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
                 super(builder);
@@ -1050,8 +1050,8 @@ public final class ProtoSignalingGetConfiguration {
              * Protobuf type {@code proto.SignalingGetConfigurationResponse.IceServer}
              */
             public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                    // @@protoc_insertion_point(builder_implements:proto.SignalingGetConfigurationResponse.IceServer)
-                    net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServerOrBuilder {
+                // @@protoc_insertion_point(builder_implements:proto.SignalingGetConfigurationResponse.IceServer)
+                net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServerOrBuilder {
                 public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                     return net.iGap.proto.ProtoSignalingGetConfiguration.internal_static_proto_SignalingGetConfigurationResponse_IceServer_descriptor;
                 }
@@ -1691,8 +1691,8 @@ public final class ProtoSignalingGetConfiguration {
          * Protobuf type {@code proto.SignalingGetConfigurationResponse}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingGetConfigurationResponse)
-                net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationResponseOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingGetConfigurationResponse)
+            net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingGetConfiguration.internal_static_proto_SignalingGetConfigurationResponse_descriptor;
             }
@@ -2226,7 +2226,7 @@ public final class ProtoSignalingGetConfiguration {
             private com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer, net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer.Builder, net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServerOrBuilder> getIceServerFieldBuilder() {
                 if (iceServerBuilder_ == null) {
                     iceServerBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer, net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer.Builder, net.iGap.proto.ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServerOrBuilder>(iceServer_,
-                            ((bitField0_ & 0x00000002) == 0x00000002), getParentForChildren(), isClean());
+                        ((bitField0_ & 0x00000002) == 0x00000002), getParentForChildren(), isClean());
                     iceServer_ = null;
                 }
                 return iceServerBuilder_;
@@ -2378,16 +2378,16 @@ public final class ProtoSignalingGetConfiguration {
 
     static {
         java.lang.String[] descriptorData = {
-                "\n\037SignalingGetConfiguration.proto\022\005proto" +
-                        "\032\rRequest.proto\032\016Response.proto\"<\n\031Signa" +
-                        "lingGetConfiguration\022\037\n\007request\030\001 \001(\0132\016." +
-                        "proto.Request\"\224\002\n!SignalingGetConfigurat" +
-                        "ionResponse\022!\n\010response\030\001 \001(\0132\017.proto.Re" +
-                        "sponse\022F\n\nice_server\030\002 \003(\01322.proto.Signa" +
-                        "lingGetConfigurationResponse.IceServer\022\025" +
-                        "\n\rvoice_calling\030\003 \001(\010\022\025\n\rvideo_calling\030\004" +
-                        " \001(\010\022\026\n\016screen_sharing\030\005 \001(\010\032>\n\tIceServe" +
-                        "r\022\013\n\003url\030\001 \001(\t\022\022\n\ncredential\030\002 \001(\t\022\020\n\010us", "ername\030\003 \001(\tB0\n\016net.iGap.protoB\036ProtoSig" + "nalingGetConfigurationb\006proto3"
+            "\n\037SignalingGetConfiguration.proto\022\005proto"
+                + "\032\rRequest.proto\032\016Response.proto\"<\n\031Signa"
+                + "lingGetConfiguration\022\037\n\007request\030\001 \001(\0132\016."
+                + "proto.Request\"\224\002\n!SignalingGetConfigurat"
+                + "ionResponse\022!\n\010response\030\001 \001(\0132\017.proto.Re"
+                + "sponse\022F\n\nice_server\030\002 \003(\01322.proto.Signa"
+                + "lingGetConfigurationResponse.IceServer\022\025"
+                + "\n\rvoice_calling\030\003 \001(\010\022\025\n\rvideo_calling\030\004"
+                + " \001(\010\022\026\n\016screen_sharing\030\005 \001(\010\032>\n\tIceServe"
+                + "r\022\013\n\003url\030\001 \001(\t\022\022\n\ncredential\030\002 \001(\t\022\020\n\010us", "ername\030\003 \001(\tB0\n\016net.iGap.protoB\036ProtoSig" + "nalingGetConfigurationb\006proto3"
         };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -2396,7 +2396,7 @@ public final class ProtoSignalingGetConfiguration {
             }
         };
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-                net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
         }, assigner);
         internal_static_proto_SignalingGetConfiguration_descriptor = getDescriptor().getMessageTypes().get(0);
         internal_static_proto_SignalingGetConfiguration_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingGetConfiguration_descriptor, new java.lang.String[]{"Request",});

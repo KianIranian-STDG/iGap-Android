@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center|left"
             android:text="@string/d_of_d"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/white"

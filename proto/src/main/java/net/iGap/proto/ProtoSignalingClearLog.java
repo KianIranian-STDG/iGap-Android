@@ -15,8 +15,8 @@ public final class ProtoSignalingClearLog {
     }
 
     public interface SignalingClearLogOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingClearLog)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingClearLog)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Request request = 1;</code>
@@ -43,8 +43,8 @@ public final class ProtoSignalingClearLog {
      * Protobuf type {@code proto.SignalingClearLog}
      */
     public static final class SignalingClearLog extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingClearLog)
-            SignalingClearLogOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingClearLog)
+        SignalingClearLogOrBuilder {
         // Use SignalingClearLog.newBuilder() to construct.
         private SignalingClearLog(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -287,8 +287,8 @@ public final class ProtoSignalingClearLog {
          * Protobuf type {@code proto.SignalingClearLog}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingClearLog)
-                net.iGap.proto.ProtoSignalingClearLog.SignalingClearLogOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingClearLog)
+            net.iGap.proto.ProtoSignalingClearLog.SignalingClearLogOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingClearLog.internal_static_proto_SignalingClearLog_descriptor;
             }
@@ -607,8 +607,8 @@ public final class ProtoSignalingClearLog {
     }
 
     public interface SignalingClearLogResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingClearLogResponse)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingClearLogResponse)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Response response = 1;</code>
@@ -635,8 +635,8 @@ public final class ProtoSignalingClearLog {
      * Protobuf type {@code proto.SignalingClearLogResponse}
      */
     public static final class SignalingClearLogResponse extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingClearLogResponse)
-            SignalingClearLogResponseOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingClearLogResponse)
+        SignalingClearLogResponseOrBuilder {
         // Use SignalingClearLogResponse.newBuilder() to construct.
         private SignalingClearLogResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -879,8 +879,8 @@ public final class ProtoSignalingClearLog {
          * Protobuf type {@code proto.SignalingClearLogResponse}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingClearLogResponse)
-                net.iGap.proto.ProtoSignalingClearLog.SignalingClearLogResponseOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingClearLogResponse)
+            net.iGap.proto.ProtoSignalingClearLog.SignalingClearLogResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingClearLog.internal_static_proto_SignalingClearLogResponse_descriptor;
             }
@@ -1211,13 +1211,13 @@ public final class ProtoSignalingClearLog {
 
     static {
         java.lang.String[] descriptorData = {
-                "\n\027SignalingClearLog.proto\022\005proto\032\rReques" +
-                        "t.proto\032\016Response.proto\"F\n\021SignalingClea" +
-                        "rLog\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\020\n" +
-                        "\010clear_id\030\002 \001(\004\"P\n\031SignalingClearLogResp" +
-                        "onse\022!\n\010response\030\001 \001(\0132\017.proto.Response\022" +
-                        "\020\n\010clear_id\030\002 \001(\004B(\n\016net.iGap.protoB\026Pro" +
-                        "toSignalingClearLogb\006proto3"
+            "\n\027SignalingClearLog.proto\022\005proto\032\rReques"
+                + "t.proto\032\016Response.proto\"F\n\021SignalingClea"
+                + "rLog\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\020\n"
+                + "\010clear_id\030\002 \001(\004\"P\n\031SignalingClearLogResp"
+                + "onse\022!\n\010response\030\001 \001(\0132\017.proto.Response\022"
+                + "\020\n\010clear_id\030\002 \001(\004B(\n\016net.iGap.protoB\026Pro"
+                + "toSignalingClearLogb\006proto3"
         };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1226,7 +1226,7 @@ public final class ProtoSignalingClearLog {
             }
         };
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-                net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
         }, assigner);
         internal_static_proto_SignalingClearLog_descriptor = getDescriptor().getMessageTypes().get(0);
         internal_static_proto_SignalingClearLog_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingClearLog_descriptor, new java.lang.String[]{"Request", "ClearId",});

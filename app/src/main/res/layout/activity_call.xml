@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_call_fragment"
     android:clickable="true"
     android:elevation="999dp"
     android:layoutDirection="ltr"
     android:orientation="vertical"
+    tools:ignore="MissingPrefix"
     >
 
 
   <FrameLayout
+      android:id="@+id/ac_layout_main_call"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       >
@@ -20,6 +22,7 @@
         android:id="@+id/fcr_imv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/black90"
         android:alpha=".5"
         android:scaleType="centerCrop"
         />
@@ -33,12 +36,26 @@
         >
 
       <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:singleLine="true"
+          android:text="@string/call_name"
+          android:textColor="#f8f4df"
+          android:textSize="@dimen/dp22"
+
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
+
+          />
+
+      <TextView
           android:id="@+id/fcr_txt_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:singleLine="true"
-          android:text="name"
-          android:textColor="@color/black90"
+          android:text="Name"
+          android:textColor="#f8f4df"
+          android:textStyle="bold"
           android:textSize="@dimen/dp22"
           />
       <LinearLayout
@@ -51,19 +68,30 @@
             android:id="@+id/fcr_txt_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="status"
-            android:textColor="@color/black90"
+            android:text="Status"
+            android:textColor="#f8f4df"
             />
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/fcr_txt_avi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp12"
-            app:indicatorColor="@color/gray"
+            app:indicatorColor="#f8f4df"
             app:indicatorName="BallPulseIndicator"
             style="@style/AVLoadingIndicatorView.Small"
             />
+
+
       </LinearLayout>
+
+      <TextView
+          android:id="@+id/fcr_txt_timer"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="00:00"
+          android:visibility="gone"
+          android:textColor="#f8f4df"
+          />
 
       <View
           android:layout_width="wrap_content"

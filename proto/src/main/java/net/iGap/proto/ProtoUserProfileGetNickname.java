@@ -95,8 +95,7 @@ public final class ProtoUserProfileGetNickname {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoUserProfileGetNickname.internal_static_proto_UserProfileGetNickname_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname.class, net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname.Builder.class);
+        return net.iGap.proto.ProtoUserProfileGetNickname.internal_static_proto_UserProfileGetNickname_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname.class, net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -187,8 +186,7 @@ public final class ProtoUserProfileGetNickname {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -196,8 +194,7 @@ public final class ProtoUserProfileGetNickname {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -205,8 +202,7 @@ public final class ProtoUserProfileGetNickname {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -214,8 +210,7 @@ public final class ProtoUserProfileGetNickname {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -223,8 +218,7 @@ public final class ProtoUserProfileGetNickname {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -258,8 +252,7 @@ public final class ProtoUserProfileGetNickname {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoUserProfileGetNickname.internal_static_proto_UserProfileGetNickname_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname.class, net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname.Builder.class);
+          return net.iGap.proto.ProtoUserProfileGetNickname.internal_static_proto_UserProfileGetNickname_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname.class, net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNickname.newBuilder()
@@ -375,8 +368,7 @@ public final class ProtoUserProfileGetNickname {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -476,8 +468,7 @@ public final class ProtoUserProfileGetNickname {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -627,8 +618,7 @@ public final class ProtoUserProfileGetNickname {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoUserProfileGetNickname.internal_static_proto_UserProfileGetNicknameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.class, net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.Builder.class);
+        return net.iGap.proto.ProtoUserProfileGetNickname.internal_static_proto_UserProfileGetNicknameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.class, net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -758,8 +748,7 @@ public final class ProtoUserProfileGetNickname {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse parseFrom(com.google.protobuf.ByteString data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -767,8 +756,7 @@ public final class ProtoUserProfileGetNickname {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -776,8 +764,7 @@ public final class ProtoUserProfileGetNickname {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -785,8 +772,7 @@ public final class ProtoUserProfileGetNickname {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -794,8 +780,7 @@ public final class ProtoUserProfileGetNickname {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse parseFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -829,8 +814,7 @@ public final class ProtoUserProfileGetNickname {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoUserProfileGetNickname.internal_static_proto_UserProfileGetNicknameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.class, net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.Builder.class);
+          return net.iGap.proto.ProtoUserProfileGetNickname.internal_static_proto_UserProfileGetNicknameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.class, net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoUserProfileGetNickname.UserProfileGetNicknameResponse.newBuilder()
@@ -953,8 +937,7 @@ public final class ProtoUserProfileGetNickname {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1054,8 +1037,7 @@ public final class ProtoUserProfileGetNickname {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1184,9 +1166,7 @@ public final class ProtoUserProfileGetNickname {
     java.lang.String[] descriptorData = {
             "\n\034UserProfileGetNickname.proto\022\005proto\032\rR" +
                     "equest.proto\032\016Response.proto\"9\n\026UserProf" +
-                    "ileGetNickname\022\037\n\007request\030\001 \001(\0132\016.proto." +
-                    "Request\"U\n\036UserProfileGetNicknameRespons" +
-                    "e\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\020\n\010" + "nickname\030\002 \001(\tB-\n\016net.iGap.protoB\033ProtoU" +
+                    "ileGetNickname\022\037\n\007request\030\001 \001(\0132\016.proto." + "Request\"U\n\036UserProfileGetNicknameRespons" + "e\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\020\n\010" + "nickname\030\002 \001(\tB-\n\016net.iGap.protoB\033ProtoU" +
                     "serProfileGetNicknameb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

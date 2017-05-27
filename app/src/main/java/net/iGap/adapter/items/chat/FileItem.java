@@ -113,10 +113,6 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         holder.cslf_txt_file_size.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView cslf_txt_file_name;

@@ -124,6 +124,7 @@ import net.iGap.emoji.listeners.OnEmojiPopupDismissListener;
 import net.iGap.emoji.listeners.OnEmojiPopupShownListener;
 import net.iGap.emoji.listeners.OnSoftKeyboardCloseListener;
 import net.iGap.emoji.listeners.OnSoftKeyboardOpenListener;
+import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperAvatar;
@@ -210,6 +211,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
+import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmClientCondition;
@@ -705,8 +707,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 startActivity(intent);
             }
             super.onBackPressed();
-            finish();
-
         }
     }
 
@@ -1542,6 +1542,34 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             isMuteNotification = realmRoom.getMute();
         }
         realm.close();
+
+        if (chatType == CHAT && chatPeerId != 134) {
+
+            if (G.userId != chatPeerId) {
+
+                RippleView rippleCall = (RippleView) findViewById(R.id.acp_ripple_call);
+                // gone or visible view call
+                RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
+                if (callConfig != null) {
+                    if (callConfig.isVoice_calling()) {
+                        rippleCall.setVisibility(View.VISIBLE);
+                        rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+                            @Override public void onComplete(RippleView rippleView) {
+
+                                FragmentCall.call(chatPeerId, false);
+                            }
+                        });
+                    } else {
+                        rippleCall.setVisibility(View.GONE);
+                    }
+                }
+            }
+        }
+
+
+
+
+
 
         ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);
         txtFileNameForSend = (TextView) findViewById(R.id.ac_txt_file_neme_for_sending);
@@ -2936,7 +2964,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 txtItemForward.setText(R.string.forward_item_dialog);
                 txtItemDelete.setText(R.string.delete_item_dialog);
                 txtItemEdit.setText(R.string.edit_item_dialog);
-                txtItemSaveToDownload.setText(R.string.saveToDownload_item_dialog);
 
                 rootReplay.setVisibility(View.VISIBLE);
                 rootCopy.setVisibility(View.VISIBLE);
@@ -2957,7 +2984,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 txtItemShare.setText(R.string.share_item_dialog);
                 txtItemForward.setText(R.string.forward_item_dialog);
                 txtItemDelete.setText(R.string.delete_item_dialog);
-                txtItemSaveToDownload.setText(R.string.saveToDownload_item_dialog);
 
                 rootReplay.setVisibility(View.VISIBLE);
                 rootShare.setVisibility(View.VISIBLE);
@@ -3070,22 +3096,19 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
 
                 realm.close();
-
-                String _savedFolderName = "";
-                if (message.messageType.toString().contains("IMAGE") || message.messageType.toString().contains("VIDEO") || message.messageType.toString().contains("GIF")) {
-                    _savedFolderName = getString(R.string.save_to_gallery);
-                } else if (message.messageType.toString().contains("AUDIO") || message.messageType.toString().contains("VOICE")) {
-                    _savedFolderName = getString(R.string.save_to_Music);
-                }
-
-                if (_savedFolderName.length() > 0) {
-                    int index = items.indexOf(getString(R.string.saveToDownload_item_dialog));
-                    if (index >= 0) {
-                        items.set(index, _savedFolderName);
-                    }
-                }
             }
         }
+
+        String _savedFolderName = "";
+        if (message.messageType.toString().contains("IMAGE") || message.messageType.toString().contains("VIDEO") || message.messageType.toString().contains("GIF")) {
+            _savedFolderName = getString(R.string.save_to_gallery);
+        } else if (message.messageType.toString().contains("AUDIO") || message.messageType.toString().contains("VOICE")) {
+            _savedFolderName = getString(R.string.save_to_Music);
+        } else {
+            _savedFolderName = getString(R.string.saveToDownload_item_dialog);
+        }
+
+        txtItemSaveToDownload.setText(_savedFolderName);
         rootReplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -3204,17 +3227,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
+
+                if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
                     String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
                     HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
-                } else if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
+                } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
                     String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
                     HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
-                } else if (txtItemSaveToDownload.toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
+                } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
                     String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
                     if (message.messageType.toString().contains("VIDEO")) {
                         HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
-                        //  HelperSaveFile.saveVideoToGallary(_dPath, true);
+                        HelperSaveFile.saveVideoToGallary(_dPath, true);
                     } else if (message.messageType.toString().contains("GIF")) {
                         HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
                     } else {
@@ -4493,6 +4517,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void run() {
                 if (HelperGetDataFromOtherApp.hasSharedData) {
 
+                    if (txtEmptyMessages != null) txtEmptyMessages.setVisibility(View.GONE);
                     HelperGetDataFromOtherApp.hasSharedData = false;
                     if (messageType == HelperGetDataFromOtherApp.FileType.message) {
 

@@ -49,7 +49,6 @@ public final class ProtoError {
      * <code>optional string message = 5;</code>
      */
     java.lang.String getMessage();
-
     /**
      * <code>optional string message = 5;</code>
      */
@@ -145,8 +144,7 @@ public final class ProtoError {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoError.internal_static_proto_ErrorResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoError.ErrorResponse.class,
-            net.iGap.proto.ProtoError.ErrorResponse.Builder.class);
+        return net.iGap.proto.ProtoError.internal_static_proto_ErrorResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoError.ErrorResponse.class, net.iGap.proto.ProtoError.ErrorResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -199,7 +197,6 @@ public final class ProtoError {
 
     public static final int MESSAGE_FIELD_NUMBER = 5;
     private volatile java.lang.Object message_;
-
     /**
      * <code>optional string message = 5;</code>
      */
@@ -214,7 +211,6 @@ public final class ProtoError {
         return s;
       }
     }
-
     /**
      * <code>optional string message = 5;</code>
      */
@@ -332,8 +328,7 @@ public final class ProtoError {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoError.ErrorResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoError.ErrorResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -341,8 +336,7 @@ public final class ProtoError {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoError.ErrorResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoError.ErrorResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -366,8 +360,7 @@ public final class ProtoError {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoError.ErrorResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoError.ErrorResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -379,7 +372,6 @@ public final class ProtoError {
       public static Builder newBuilder(net.iGap.proto.ProtoError.ErrorResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -401,8 +393,7 @@ public final class ProtoError {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoError.internal_static_proto_ErrorResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoError.ErrorResponse.class,
-              net.iGap.proto.ProtoError.ErrorResponse.Builder.class);
+          return net.iGap.proto.ProtoError.internal_static_proto_ErrorResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoError.ErrorResponse.class, net.iGap.proto.ProtoError.ErrorResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoError.ErrorResponse.newBuilder()
@@ -545,8 +536,7 @@ public final class ProtoError {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -646,8 +636,7 @@ public final class ProtoError {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -735,7 +724,6 @@ public final class ProtoError {
       }
 
       private java.lang.Object message_ = "";
-
       /**
        * <code>optional string message = 5;</code>
        */
@@ -750,7 +738,6 @@ public final class ProtoError {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string message = 5;</code>
        */
@@ -764,7 +751,6 @@ public final class ProtoError {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string message = 5;</code>
        */
@@ -773,11 +759,10 @@ public final class ProtoError {
           throw new NullPointerException();
         }
 
-        message_ = value;
+          message_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string message = 5;</code>
        */
@@ -787,7 +772,6 @@ public final class ProtoError {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string message = 5;</code>
        */
@@ -797,7 +781,7 @@ public final class ProtoError {
         }
         checkByteStringIsUtf8(value);
 
-        message_ = value;
+          message_ = value;
         onChanged();
         return this;
       }
@@ -852,14 +836,13 @@ public final class ProtoError {
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor descriptor;
 
+    private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
             "\n\013Error.proto\022\005proto\032\016Response.proto\"y\n\r" +
                     "ErrorResponse\022!\n\010response\030\001 \001(\0132\017.proto." +
-                    "Response\022\022\n\nmajor_code\030\002 \001(\r\022\022\n\nminor_co" +
-                    "de\030\003 \001(\r\022\014\n\004wait\030\004 \001(\r\022\017\n\007message\030\005 \001(\tB" + "\034\n\016net.iGap.protoB\nProtoErrorb\006proto3"
+                    "Response\022\022\n\nmajor_code\030\002 \001(\r\022\022\n\nminor_co" + "de\030\003 \001(\r\022\014\n\004wait\030\004 \001(\r\022\017\n\007message\030\005 \001(\tB" + "\034\n\016net.iGap.protoB\nProtoErrorb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -871,8 +854,7 @@ public final class ProtoError {
         net.iGap.proto.ProtoResponse.getDescriptor(),
     }, assigner);
     internal_static_proto_ErrorResponse_descriptor = getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_ErrorResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ErrorResponse_descriptor, new java.lang.String[] { "Response", "MajorCode", "MinorCode", "Wait", "Message", });
+      internal_static_proto_ErrorResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ErrorResponse_descriptor, new java.lang.String[]{"Response", "MajorCode", "MinorCode", "Wait", "Message",});
       net.iGap.proto.ProtoResponse.getDescriptor();
   }
 

@@ -13,7 +13,6 @@ public final class ProtoInfoWallpaper {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface InfoWallpaperOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.InfoWallpaper)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoInfoWallpaper {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     net.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -37,13 +34,11 @@ public final class ProtoInfoWallpaper {
      * <code>optional .proto.InfoWallpaper.Fit fit = 2;</code>
      */
     int getFitValue();
-
     /**
      * <code>optional .proto.InfoWallpaper.Fit fit = 2;</code>
      */
     net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.Fit getFit();
   }
-
   /**
    * Protobuf type {@code proto.InfoWallpaper}
    */
@@ -54,7 +49,6 @@ public final class ProtoInfoWallpaper {
     private InfoWallpaper(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private InfoWallpaper() {
       fit_ = 0;
     }
@@ -116,8 +110,7 @@ public final class ProtoInfoWallpaper {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoInfoWallpaper.internal_static_proto_InfoWallpaper_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.class,
-            net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.Builder.class);
+        return net.iGap.proto.ProtoInfoWallpaper.internal_static_proto_InfoWallpaper_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.class, net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.Builder.class);
     }
 
     /**
@@ -224,21 +217,18 @@ public final class ProtoInfoWallpaper {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
       private net.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
         return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -248,14 +238,12 @@ public final class ProtoInfoWallpaper {
 
     public static final int FIT_FIELD_NUMBER = 2;
     private int fit_;
-
     /**
      * <code>optional .proto.InfoWallpaper.Fit fit = 2;</code>
      */
     public int getFitValue() {
       return fit_;
     }
-
     /**
      * <code>optional .proto.InfoWallpaper.Fit fit = 2;</code>
      */
@@ -265,7 +253,6 @@ public final class ProtoInfoWallpaper {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -300,7 +287,6 @@ public final class ProtoInfoWallpaper {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -342,8 +328,7 @@ public final class ProtoInfoWallpaper {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -351,8 +336,7 @@ public final class ProtoInfoWallpaper {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -368,8 +352,7 @@ public final class ProtoInfoWallpaper {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -377,15 +360,13 @@ public final class ProtoInfoWallpaper {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -393,7 +374,6 @@ public final class ProtoInfoWallpaper {
       public static Builder newBuilder(net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -403,7 +383,6 @@ public final class ProtoInfoWallpaper {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.InfoWallpaper}
      */
@@ -415,8 +394,7 @@ public final class ProtoInfoWallpaper {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoInfoWallpaper.internal_static_proto_InfoWallpaper_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.class,
-              net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.Builder.class);
+          return net.iGap.proto.ProtoInfoWallpaper.internal_static_proto_InfoWallpaper_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.class, net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.newBuilder()
@@ -428,12 +406,10 @@ public final class ProtoInfoWallpaper {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -498,7 +474,6 @@ public final class ProtoInfoWallpaper {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper) {
               return mergeFrom((net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper) other);
@@ -540,16 +515,13 @@ public final class ProtoInfoWallpaper {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
-
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -560,7 +532,6 @@ public final class ProtoInfoWallpaper {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -577,7 +548,6 @@ public final class ProtoInfoWallpaper {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -591,7 +561,6 @@ public final class ProtoInfoWallpaper {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -609,7 +578,6 @@ public final class ProtoInfoWallpaper {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -624,7 +592,6 @@ public final class ProtoInfoWallpaper {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -633,7 +600,6 @@ public final class ProtoInfoWallpaper {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -644,29 +610,24 @@ public final class ProtoInfoWallpaper {
             return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
-                    getRequest(), getParentForChildren(), isClean());
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
           request_ = null;
         }
         return requestBuilder_;
       }
 
       private int fit_ = 0;
-
       /**
        * <code>optional .proto.InfoWallpaper.Fit fit = 2;</code>
        */
       public int getFitValue() {
         return fit_;
       }
-
       /**
        * <code>optional .proto.InfoWallpaper.Fit fit = 2;</code>
        */
@@ -675,7 +636,6 @@ public final class ProtoInfoWallpaper {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.InfoWallpaper.Fit fit = 2;</code>
        */
@@ -683,7 +643,6 @@ public final class ProtoInfoWallpaper {
           net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.Fit result = net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.Fit.valueOf(fit_);
           return result == null ? net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.Fit.UNRECOGNIZED : result;
       }
-
       /**
        * <code>optional .proto.InfoWallpaper.Fit fit = 2;</code>
        */
@@ -696,7 +655,6 @@ public final class ProtoInfoWallpaper {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional .proto.InfoWallpaper.Fit fit = 2;</code>
        */
@@ -721,7 +679,6 @@ public final class ProtoInfoWallpaper {
 
     // @@protoc_insertion_point(class_scope:proto.InfoWallpaper)
     private static final net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper DEFAULT_INSTANCE;
-
     static {
         DEFAULT_INSTANCE = new net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper();
     }
@@ -759,12 +716,10 @@ public final class ProtoInfoWallpaper {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     net.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -774,28 +729,23 @@ public final class ProtoInfoWallpaper {
      * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
      */
     java.util.List<net.iGap.proto.ProtoGlobal.Wallpaper> getWallpaperList();
-
     /**
      * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
      */
     net.iGap.proto.ProtoGlobal.Wallpaper getWallpaper(int index);
-
     /**
      * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
      */
     int getWallpaperCount();
-
     /**
      * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
      */
     java.util.List<? extends net.iGap.proto.ProtoGlobal.WallpaperOrBuilder> getWallpaperOrBuilderList();
-
     /**
      * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
      */
     net.iGap.proto.ProtoGlobal.WallpaperOrBuilder getWallpaperOrBuilder(int index);
   }
-
   /**
    * Protobuf type {@code proto.InfoWallpaperResponse}
    */
@@ -806,7 +756,6 @@ public final class ProtoInfoWallpaper {
     private InfoWallpaperResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private InfoWallpaperResponse() {
       wallpaper_ = java.util.Collections.emptyList();
     }
@@ -873,28 +822,24 @@ public final class ProtoInfoWallpaper {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoInfoWallpaper.internal_static_proto_InfoWallpaperResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse.class, net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse.Builder.class);
+        return net.iGap.proto.ProtoInfoWallpaper.internal_static_proto_InfoWallpaperResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse.class, net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse.Builder.class);
     }
 
     private int bitField0_;
     public static final int RESPONSE_FIELD_NUMBER = 1;
       private net.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
         return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -904,35 +849,30 @@ public final class ProtoInfoWallpaper {
 
     public static final int WALLPAPER_FIELD_NUMBER = 2;
       private java.util.List<net.iGap.proto.ProtoGlobal.Wallpaper> wallpaper_;
-
     /**
      * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
      */
     public java.util.List<net.iGap.proto.ProtoGlobal.Wallpaper> getWallpaperList() {
       return wallpaper_;
     }
-
     /**
      * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
      */
     public java.util.List<? extends net.iGap.proto.ProtoGlobal.WallpaperOrBuilder> getWallpaperOrBuilderList() {
       return wallpaper_;
     }
-
     /**
      * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
      */
     public int getWallpaperCount() {
       return wallpaper_.size();
     }
-
     /**
      * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
      */
     public net.iGap.proto.ProtoGlobal.Wallpaper getWallpaper(int index) {
       return wallpaper_.get(index);
     }
-
     /**
      * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
      */
@@ -941,7 +881,6 @@ public final class ProtoInfoWallpaper {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -976,7 +915,6 @@ public final class ProtoInfoWallpaper {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1020,8 +958,7 @@ public final class ProtoInfoWallpaper {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1029,8 +966,7 @@ public final class ProtoInfoWallpaper {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1038,8 +974,7 @@ public final class ProtoInfoWallpaper {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1047,8 +982,7 @@ public final class ProtoInfoWallpaper {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1056,15 +990,13 @@ public final class ProtoInfoWallpaper {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -1072,7 +1004,6 @@ public final class ProtoInfoWallpaper {
       public static Builder newBuilder(net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -1082,7 +1013,6 @@ public final class ProtoInfoWallpaper {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.InfoWallpaperResponse}
      */
@@ -1094,8 +1024,7 @@ public final class ProtoInfoWallpaper {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoInfoWallpaper.internal_static_proto_InfoWallpaperResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse.class, net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse.Builder.class);
+          return net.iGap.proto.ProtoInfoWallpaper.internal_static_proto_InfoWallpaperResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse.class, net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse.newBuilder()
@@ -1107,13 +1036,11 @@ public final class ProtoInfoWallpaper {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
           getWallpaperFieldBuilder();
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1193,7 +1120,6 @@ public final class ProtoInfoWallpaper {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse) {
               return mergeFrom((net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse) other);
@@ -1254,20 +1180,16 @@ public final class ProtoInfoWallpaper {
         }
         return this;
       }
-
       private int bitField0_;
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
-
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1278,7 +1200,6 @@ public final class ProtoInfoWallpaper {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1295,7 +1216,6 @@ public final class ProtoInfoWallpaper {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1309,7 +1229,6 @@ public final class ProtoInfoWallpaper {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1327,7 +1246,6 @@ public final class ProtoInfoWallpaper {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1342,7 +1260,6 @@ public final class ProtoInfoWallpaper {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1351,7 +1268,6 @@ public final class ProtoInfoWallpaper {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1362,22 +1278,18 @@ public final class ProtoInfoWallpaper {
             return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
-                    getResponse(), getParentForChildren(), isClean());
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
       }
 
         private java.util.List<net.iGap.proto.ProtoGlobal.Wallpaper> wallpaper_ = java.util.Collections.emptyList();
-
       private void ensureWallpaperIsMutable() {
         if (!((bitField0_ & 0x00000002) == 0x00000002)) {
             wallpaper_ = new java.util.ArrayList<net.iGap.proto.ProtoGlobal.Wallpaper>(wallpaper_);
@@ -1385,8 +1297,7 @@ public final class ProtoInfoWallpaper {
         }
       }
 
-        private com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.Wallpaper, net.iGap.proto.ProtoGlobal.Wallpaper.Builder, net.iGap.proto.ProtoGlobal.WallpaperOrBuilder>
-            wallpaperBuilder_;
+        private com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.Wallpaper, net.iGap.proto.ProtoGlobal.Wallpaper.Builder, net.iGap.proto.ProtoGlobal.WallpaperOrBuilder> wallpaperBuilder_;
 
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
@@ -1398,7 +1309,6 @@ public final class ProtoInfoWallpaper {
           return wallpaperBuilder_.getMessageList();
         }
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1409,7 +1319,6 @@ public final class ProtoInfoWallpaper {
           return wallpaperBuilder_.getCount();
         }
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1420,7 +1329,6 @@ public final class ProtoInfoWallpaper {
           return wallpaperBuilder_.getMessage(index);
         }
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1437,7 +1345,6 @@ public final class ProtoInfoWallpaper {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1451,7 +1358,6 @@ public final class ProtoInfoWallpaper {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1468,7 +1374,6 @@ public final class ProtoInfoWallpaper {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1485,7 +1390,6 @@ public final class ProtoInfoWallpaper {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1499,7 +1403,6 @@ public final class ProtoInfoWallpaper {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1513,7 +1416,6 @@ public final class ProtoInfoWallpaper {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1527,7 +1429,6 @@ public final class ProtoInfoWallpaper {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1541,7 +1442,6 @@ public final class ProtoInfoWallpaper {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1555,14 +1455,12 @@ public final class ProtoInfoWallpaper {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
       public net.iGap.proto.ProtoGlobal.Wallpaper.Builder getWallpaperBuilder(int index) {
         return getWallpaperFieldBuilder().getBuilder(index);
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1573,7 +1471,6 @@ public final class ProtoInfoWallpaper {
           return wallpaperBuilder_.getMessageOrBuilder(index);
         }
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1584,21 +1481,18 @@ public final class ProtoInfoWallpaper {
           return java.util.Collections.unmodifiableList(wallpaper_);
         }
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
       public net.iGap.proto.ProtoGlobal.Wallpaper.Builder addWallpaperBuilder() {
           return getWallpaperFieldBuilder().addBuilder(net.iGap.proto.ProtoGlobal.Wallpaper.getDefaultInstance());
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
       public net.iGap.proto.ProtoGlobal.Wallpaper.Builder addWallpaperBuilder(int index) {
           return getWallpaperFieldBuilder().addBuilder(index, net.iGap.proto.ProtoGlobal.Wallpaper.getDefaultInstance());
       }
-
       /**
        * <code>repeated .proto.Wallpaper wallpaper = 2;</code>
        */
@@ -1608,9 +1502,7 @@ public final class ProtoInfoWallpaper {
 
         private com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.Wallpaper, net.iGap.proto.ProtoGlobal.Wallpaper.Builder, net.iGap.proto.ProtoGlobal.WallpaperOrBuilder> getWallpaperFieldBuilder() {
         if (wallpaperBuilder_ == null) {
-            wallpaperBuilder_ =
-                new com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.Wallpaper, net.iGap.proto.ProtoGlobal.Wallpaper.Builder, net.iGap.proto.ProtoGlobal.WallpaperOrBuilder>(
-                    wallpaper_, ((bitField0_ & 0x00000002) == 0x00000002), getParentForChildren(), isClean());
+            wallpaperBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.Wallpaper, net.iGap.proto.ProtoGlobal.Wallpaper.Builder, net.iGap.proto.ProtoGlobal.WallpaperOrBuilder>(wallpaper_, ((bitField0_ & 0x00000002) == 0x00000002), getParentForChildren(), isClean());
           wallpaper_ = null;
         }
         return wallpaperBuilder_;
@@ -1630,7 +1522,6 @@ public final class ProtoInfoWallpaper {
 
     // @@protoc_insertion_point(class_scope:proto.InfoWallpaperResponse)
     private static final net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse DEFAULT_INSTANCE;
-
     static {
         DEFAULT_INSTANCE = new net.iGap.proto.ProtoInfoWallpaper.InfoWallpaperResponse();
     }
@@ -1670,7 +1561,6 @@ public final class ProtoInfoWallpaper {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\023InfoWallpaper.proto\022\005proto\032\rRequest.pr" +
@@ -1678,8 +1568,7 @@ public final class ProtoInfoWallpaper {
                     "foWallpaper\022\037\n\007request\030\001 \001(\0132\016.proto.Req" +
                     "uest\022%\n\003fit\030\002 \001(\0162\030.proto.InfoWallpaper." +
                     "Fit\")\n\003Fit\022\t\n\005PHONE\020\000\022\n\n\006TABLET\020\001\022\013\n\007DES" +
-                    "KTOP\020\002\"_\n\025InfoWallpaperResponse\022!\n\010respo" +
-                    "nse\030\001 \001(\0132\017.proto.Response\022#\n\twallpaper\030" + "\002 \003(\0132\020.proto.WallpaperB$\n\016net.iGap.prot" +
+                    "KTOP\020\002\"_\n\025InfoWallpaperResponse\022!\n\010respo" + "nse\030\001 \001(\0132\017.proto.Response\022#\n\twallpaper\030" + "\002 \003(\0132\020.proto.WallpaperB$\n\016net.iGap.prot" +
                     "oB\022ProtoInfoWallpaperb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

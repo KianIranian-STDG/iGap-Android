@@ -14,8 +14,6 @@ repositories {
   maven { url 'https://maven.fabric.io/public' }
 }
 
-
-
 apply plugin: 'realm-android'
 
 android {
@@ -26,8 +24,8 @@ android {
     applicationId "net.iGap"
     minSdkVersion 15
     targetSdkVersion 25
-    versionCode 24
-    versionName "0.0.24"
+    versionCode 26
+    versionName "0.1.0"
     multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
   }
@@ -56,6 +54,9 @@ dependencies {
   compile('com.mikepenz:fastadapter:2.5.2@aar') {
     transitive = true
   }
+  compile 'com.mikepenz:fastadapter-commons:2.5.2@aar'
+  compile 'com.mikepenz:fastadapter-extensions:2.5.2@aar'
+  compile 'com.mikepenz:materialize:1.0.1@aar'
   compile project(':messageprogress')
   compile project(':proto')
   compile project(':emoji')
@@ -67,16 +68,6 @@ dependencies {
   compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
     transitive = true;
   }
-  compile project(path: ':lvl')
-  compile(project(':compress')) {
-    exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
-  }
-  compile(project(':k4l-video-trimmer')) {
-    exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
-  }
-  compile 'com.mikepenz:fastadapter-commons:2.5.2@aar'
-  compile 'com.mikepenz:fastadapter-extensions:2.5.2@aar'
-  compile 'com.mikepenz:materialize:1.0.1@aar'
   compile 'com.android.support:multidex:1.0.1'
   compile 'com.android.support:appcompat-v7:25.3.1'
   compile 'com.nineoldandroids:library:2.4.0'
@@ -97,6 +88,9 @@ dependencies {
   compile 'dk.ilios:realmfieldnameshelper:1.1.1'
   compile 'com.hanks.animatecheckbox:library:0.1'
   compile 'org.parceler:parceler-api:1.1.6'
+  testCompile 'junit:junit:4.12'
+  annotationProcessor 'org.parceler:parceler:1.1.6'
+  provided 'com.android.support:support-annotations:25.3.1'
   compile 'com.android.support:gridlayout-v7:25.3.1'
   compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.2'
   compile 'com.google.zxing:core:3.3.0'
@@ -106,9 +100,15 @@ dependencies {
   compile 'com.github.thorbenprimke:realm-recyclerview:0.9.25'
   compile 'com.google.android.gms:play-services-analytics:10.2.1'
   compile 'com.google.android.gms:play-services-maps:10.2.1'
+  compile project(path: ':lvl')
   compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
   compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
-  testCompile 'junit:junit:4.12'
-  annotationProcessor 'org.parceler:parceler:1.1.6'
-  provided 'com.android.support:support-annotations:25.3.1'
+  compile(project(':compress')) {
+    exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
+  }
+  compile(project(':k4l-video-trimmer')) {
+    exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
+  }
+
+  compile 'io.pristine:libjingle:11139@aar'
 }

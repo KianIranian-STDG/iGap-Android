@@ -133,8 +133,7 @@ public final class ProtoChatUpdateStatus {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChatUpdateStatus.internal_static_proto_ChatUpdateStatus_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus.class, net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus.Builder.class);
+        return net.iGap.proto.ProtoChatUpdateStatus.internal_static_proto_ChatUpdateStatus_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus.class, net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -239,7 +238,6 @@ public final class ProtoChatUpdateStatus {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -287,8 +285,7 @@ public final class ProtoChatUpdateStatus {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -296,8 +293,7 @@ public final class ProtoChatUpdateStatus {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -313,8 +309,7 @@ public final class ProtoChatUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -322,8 +317,7 @@ public final class ProtoChatUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -357,8 +351,7 @@ public final class ProtoChatUpdateStatus {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChatUpdateStatus.internal_static_proto_ChatUpdateStatus_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus.class, net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus.Builder.class);
+          return net.iGap.proto.ProtoChatUpdateStatus.internal_static_proto_ChatUpdateStatus_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus.class, net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatus.newBuilder()
@@ -492,8 +485,7 @@ public final class ProtoChatUpdateStatus {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -593,8 +585,7 @@ public final class ProtoChatUpdateStatus {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -889,8 +880,7 @@ public final class ProtoChatUpdateStatus {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChatUpdateStatus.internal_static_proto_ChatUpdateStatusResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse.class, net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder.class);
+        return net.iGap.proto.ProtoChatUpdateStatus.internal_static_proto_ChatUpdateStatusResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse.class, net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -1046,7 +1036,6 @@ public final class ProtoChatUpdateStatus {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1102,8 +1091,7 @@ public final class ProtoChatUpdateStatus {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1111,8 +1099,7 @@ public final class ProtoChatUpdateStatus {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1120,8 +1107,7 @@ public final class ProtoChatUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1129,8 +1115,7 @@ public final class ProtoChatUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1138,8 +1123,7 @@ public final class ProtoChatUpdateStatus {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1171,8 +1155,7 @@ public final class ProtoChatUpdateStatus {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChatUpdateStatus.internal_static_proto_ChatUpdateStatusResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse.class, net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder.class);
+          return net.iGap.proto.ProtoChatUpdateStatus.internal_static_proto_ChatUpdateStatusResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse.class, net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChatUpdateStatus.ChatUpdateStatusResponse.newBuilder()
@@ -1321,8 +1304,7 @@ public final class ProtoChatUpdateStatus {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1422,8 +1404,7 @@ public final class ProtoChatUpdateStatus {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1679,10 +1660,7 @@ public final class ProtoChatUpdateStatus {
                     "to.Request\022\017\n\007room_id\030\002 \001(\004\022\022\n\nmessage_i" +
                     "d\030\003 \001(\004\022(\n\006status\030\004 \001(\0162\030.proto.RoomMess" +
                     "ageStatus\"\301\001\n\030ChatUpdateStatusResponse\022!" +
-                    "\n\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007roo" +
-                    "m_id\030\002 \001(\004\022\022\n\nmessage_id\030\003 \001(\004\022(\n\006status" +
-                    "\030\004 \001(\0162\030.proto.RoomMessageStatus\022\026\n\016stat" + "us_version\030\005 \001(\004\022\033\n\023updater_author_hash\030",
-        "\006 \001(\tB\'\n\016net.iGap.protoB\025ProtoChatUpdate" + "Statusb\006proto3"
+                    "\n\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007roo" + "m_id\030\002 \001(\004\022\022\n\nmessage_id\030\003 \001(\004\022(\n\006status" + "\030\004 \001(\0162\030.proto.RoomMessageStatus\022\026\n\016stat" + "us_version\030\005 \001(\004\022\033\n\023updater_author_hash\030", "\006 \001(\tB\'\n\016net.iGap.protoB\025ProtoChatUpdate" + "Statusb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {

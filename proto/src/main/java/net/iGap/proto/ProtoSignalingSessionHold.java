@@ -15,8 +15,8 @@ public final class ProtoSignalingSessionHold {
     }
 
     public interface SignalingSessionHoldOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingSessionHold)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingSessionHold)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Request request = 1;</code>
@@ -43,8 +43,8 @@ public final class ProtoSignalingSessionHold {
      * Protobuf type {@code proto.SignalingSessionHold}
      */
     public static final class SignalingSessionHold extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingSessionHold)
-            SignalingSessionHoldOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingSessionHold)
+        SignalingSessionHoldOrBuilder {
         // Use SignalingSessionHold.newBuilder() to construct.
         private SignalingSessionHold(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -287,8 +287,8 @@ public final class ProtoSignalingSessionHold {
          * Protobuf type {@code proto.SignalingSessionHold}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingSessionHold)
-                net.iGap.proto.ProtoSignalingSessionHold.SignalingSessionHoldOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingSessionHold)
+            net.iGap.proto.ProtoSignalingSessionHold.SignalingSessionHoldOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingSessionHold.internal_static_proto_SignalingSessionHold_descriptor;
             }
@@ -607,8 +607,8 @@ public final class ProtoSignalingSessionHold {
     }
 
     public interface SignalingSessionHoldResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingSessionHoldResponse)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingSessionHoldResponse)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Response response = 1;</code>
@@ -621,7 +621,7 @@ public final class ProtoSignalingSessionHold {
         net.iGap.proto.ProtoResponse.Response getResponse();
 
         /**
-         * <code>optional .proto.Response response = 1;</code>
+     * <code>optional .proto.Response response = 1;</code>
          */
         net.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
 
@@ -635,8 +635,8 @@ public final class ProtoSignalingSessionHold {
      * Protobuf type {@code proto.SignalingSessionHoldResponse}
      */
     public static final class SignalingSessionHoldResponse extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingSessionHoldResponse)
-            SignalingSessionHoldResponseOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingSessionHoldResponse)
+        SignalingSessionHoldResponseOrBuilder {
         // Use SignalingSessionHoldResponse.newBuilder() to construct.
         private SignalingSessionHoldResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -879,8 +879,8 @@ public final class ProtoSignalingSessionHold {
          * Protobuf type {@code proto.SignalingSessionHoldResponse}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingSessionHoldResponse)
-                net.iGap.proto.ProtoSignalingSessionHold.SignalingSessionHoldResponseOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingSessionHoldResponse)
+            net.iGap.proto.ProtoSignalingSessionHold.SignalingSessionHoldResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingSessionHold.internal_static_proto_SignalingSessionHoldResponse_descriptor;
             }
@@ -1211,13 +1211,13 @@ public final class ProtoSignalingSessionHold {
 
     static {
         java.lang.String[] descriptorData = {
-                "\n\032SignalingSessionHold.proto\022\005proto\032\rReq" +
-                        "uest.proto\032\016Response.proto\"E\n\024SignalingS" +
-                        "essionHold\022\037\n\007request\030\001 \001(\0132\016.proto.Requ" +
-                        "est\022\014\n\004hold\030\002 \001(\010\"O\n\034SignalingSessionHol" +
-                        "dResponse\022!\n\010response\030\001 \001(\0132\017.proto.Resp" +
-                        "onse\022\014\n\004hold\030\002 \001(\010B+\n\016net.iGap.protoB\031Pr" +
-                        "otoSignalingSessionHoldb\006proto3"
+            "\n\032SignalingSessionHold.proto\022\005proto\032\rReq"
+                + "uest.proto\032\016Response.proto\"E\n\024SignalingS"
+                + "essionHold\022\037\n\007request\030\001 \001(\0132\016.proto.Requ"
+                + "est\022\014\n\004hold\030\002 \001(\010\"O\n\034SignalingSessionHol"
+                + "dResponse\022!\n\010response\030\001 \001(\0132\017.proto.Resp"
+                + "onse\022\014\n\004hold\030\002 \001(\010B+\n\016net.iGap.protoB\031Pr"
+                + "otoSignalingSessionHoldb\006proto3"
         };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1226,15 +1226,18 @@ public final class ProtoSignalingSessionHold {
             }
         };
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-                net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
         }, assigner);
         internal_static_proto_SignalingSessionHold_descriptor = getDescriptor().getMessageTypes().get(0);
         internal_static_proto_SignalingSessionHold_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingSessionHold_descriptor, new java.lang.String[]{"Request", "Hold",});
         internal_static_proto_SignalingSessionHoldResponse_descriptor = getDescriptor().getMessageTypes().get(1);
-        internal_static_proto_SignalingSessionHoldResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingSessionHoldResponse_descriptor, new java.lang.String[]{"Response", "Hold",});
-        net.iGap.proto.ProtoRequest.getDescriptor();
-        net.iGap.proto.ProtoResponse.getDescriptor();
-    }
+        internal_static_proto_SignalingSessionHoldResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_SignalingSessionHoldResponse_descriptor,
+        new java.lang.String[] { "Response", "Hold", });
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
+  }
 
-    // @@protoc_insertion_point(outer_class_scope)
+  // @@protoc_insertion_point(outer_class_scope)
 }

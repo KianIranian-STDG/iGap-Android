@@ -106,6 +106,7 @@
 
   <!-- Public String -->
   <string name="app_name">"آی گپ"</string>
+  <string name="call_name">تماس صوتی آی گپ</string>
   <string name="chat">"گفتگو"</string>
   <string name="group">"گروه"</string>
   <string name="channel">"کانال"</string>
@@ -723,6 +724,10 @@
   <string name="revoke">ابطال</string>
   <string name="conversation">صفحه</string>
 
+  <string name="MISSED_SCREEN_SHARE">"تماس از دست رفته"</string>
+  <string name="MISSED_VOICE_CALL">"تماس صوتی از دست رفته"</string>
+  <string name="MISSED_VIDEO_CALL">"تماس تصویری از دست رفته"</string>
+
 
   <string name="send_position">ارسال موقعیت</string>
   <string name="deleted_message">پیام حذف شده</string>
@@ -803,6 +808,7 @@
   <string name="igap_search">‫بگرد و کشف کن</string>‬‬‬‬‬‬
   <string name="set_color_to_default">انتخاب رنگ پیش فرض برنامه</string>
   <string name="empty_message">‫چیزی پیدا نشد، لطفا 5 کاراکتر ابتدایی نام کاربری را وارد کنید</string>‬‬‬‬‬‬
+  <string name="empty_message3">برای جستجو حداقل سه حرف نیاز است</string>‬‬‬‬‬‬
   <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
   <string name="there_is_no_connection_to_server">ارتباط با سرور برقرار نیست</string>
   <string name="empty_room">هنوز پیامی ندارید</string>
@@ -832,5 +838,6 @@
   <string name="calls">Calls</string>
   <string name="igap_call">iGap Call</string>
   <string name="clean_log">Clean logs</string>
+  <string name="call_with">انتخاب مخاطب</string>
 
 </resources>

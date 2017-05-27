@@ -62,6 +62,7 @@ import net.iGap.request.RequestGroupAvatarGetList;
 import net.iGap.request.RequestUserAvatarDelete;
 import net.iGap.request.RequestUserAvatarGetList;
 
+import static net.iGap.R.string.array_Delete_photo;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentShowAvatars extends android.support.v4.app.Fragment {
@@ -191,28 +192,84 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
             @Override public void onComplete(RippleView rippleView) {
 
+
+                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.chat_popup_dialog_custom, true).build();
+                View v = dialog.getCustomView();
+
+                DialogAnimation.animationUp(dialog);
+                dialog.show();
+
+                ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+
+
+                final TextView txtSearch = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+
+
+                TextView iconSearch = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+
+
+                root1.setVisibility(View.VISIBLE);
+
+                txtSearch.setText(getResources().getString(R.string.Search));
+
                 switch (from) {
                     case setting:
-                        showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                        //showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                        txtSearch.setText(getResources().getString(R.string.array_Delete_photo));
+                        iconSearch.setText(getResources().getString(R.string.md_rubbish_delete_file));
                         break;
                     case group:
                         if (roleGroup == GroupChatRole.OWNER || roleGroup == GroupChatRole.ADMIN) {
-                            showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                            //showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                            txtSearch.setText(getResources().getString(R.string.array_Delete_photo));
+                            iconSearch.setText(getResources().getString(R.string.md_rubbish_delete_file));
                         } else {
-                            showPopupMenu(R.array.pop_up_menu_show_avatar);
+                            //showPopupMenu(R.array.pop_up_menu_show_avatar);
+                            txtSearch.setText(getResources().getString(R.string.save_to_gallery));
+                            iconSearch.setText(getResources().getString(R.string.md_save));
                         }
                         break;
                     case channel:
                         if (roleChannel == ChannelChatRole.OWNER || roleChannel == ChannelChatRole.ADMIN) {
-                            showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                            //showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
+                            txtSearch.setText(getResources().getString(R.string.array_Delete_photo));
+                            iconSearch.setText(getResources().getString(R.string.md_rubbish_delete_file));
                         } else {
-                            showPopupMenu(R.array.pop_up_menu_show_avatar);
+                            //showPopupMenu(R.array.pop_up_menu_show_avatar);
+                            txtSearch.setText(getResources().getString(R.string.save_to_gallery));
+                            iconSearch.setText(getResources().getString(R.string.md_save));
                         }
                         break;
                     case chat:
-                        showPopupMenu(R.array.pop_up_menu_show_avatar);
+                        //showPopupMenu(R.array.pop_up_menu_show_avatar);
+                        txtSearch.setText(getResources().getString(R.string.save_to_gallery));
+                        iconSearch.setText(getResources().getString(R.string.md_save));
                         break;
                 }
+                root1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        if (txtSearch.getText().equals(getResources().getString(R.string.save_to_gallery))) {
+                            saveToGallery();
+                        } else if (txtSearch.getText().equals(getResources().getString(array_Delete_photo))) {
+                            switch (from) {
+                                case setting:
+                                    deletePhotoSetting();
+                                    break;
+                                case group:
+                                    deletePhotoGroup();
+                                    break;
+                                case channel:
+                                    deletePhotoChannel();
+                                    break;
+                                case chat:
+                                    deletePhotoChat();
+                                    break;
+                            }
+                        }
+                    }
+                });
             }
         });
         viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
@@ -350,7 +407,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
                 if (text.equals(getResources().getString(R.string.save_to_gallery))) {
                     saveToGallery();
-                } else if (text.equals(getResources().getString(R.string.array_Delete_photo))) {
+                } else if (text.equals(getResources().getString(array_Delete_photo))) {
                     switch (from) {
                         case setting:
                             deletePhotoSetting();

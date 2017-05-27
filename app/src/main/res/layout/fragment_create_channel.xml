@@ -41,13 +41,15 @@
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:layout_centerInParent="true"
           android:gravity="center"
           android:text="@string/new_chanel"
           android:textColor="@color/whit_background"
           android:textSize="@dimen/dp18"
           android:visibility="visible"
           fontPath="fonts/IRANSansMobile_Bold.ttf"
+          android:layout_alignParentTop="true"
+          android:layout_toRightOf="@+id/rippleView"
+          android:layout_toEndOf="@+id/rippleView"
           />
 
       <net.iGap.libs.rippleeffect.RippleView
@@ -58,6 +60,7 @@
           app:rv_rippleDuration="0"
           app:rv_ripplePadding="5dp"
           rv_centered="true"
+          android:id="@+id/rippleView"
           >
 
         <net.iGap.module.MaterialDesignTextView

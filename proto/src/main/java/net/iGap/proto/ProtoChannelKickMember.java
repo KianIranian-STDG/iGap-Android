@@ -123,8 +123,7 @@ public final class ProtoChannelKickMember {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.Builder.class);
+        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -357,8 +356,7 @@ public final class ProtoChannelKickMember {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.Builder.class);
+          return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.newBuilder()
@@ -813,8 +811,7 @@ public final class ProtoChannelKickMember {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.Builder.class);
+        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -1047,8 +1044,7 @@ public final class ProtoChannelKickMember {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.Builder.class);
+          return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.newBuilder()
@@ -1184,8 +1180,7 @@ public final class ProtoChannelKickMember {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-          responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1417,9 +1412,7 @@ public final class ProtoChannelKickMember {
       "\n\027ChannelKickMember.proto\022\005proto\032\rReques" +
       "t.proto\032\016Response.proto\"X\n\021ChannelKickMe" +
       "mber\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\017\n" +
-      "\007room_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"b\n\031Cha" +
-      "nnelKickMemberResponse\022!\n\010response\030\001 \001(\013" +
-      "2\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022\021\n\tme" + "mber_id\030\003 \001(\004B(\n\016net.iGap.protoB\026ProtoCh" +
+      "\007room_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"b\n\031Cha" + "nnelKickMemberResponse\022!\n\010response\030\001 \001(\013" + "2\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022\021\n\tme" + "mber_id\030\003 \001(\004B(\n\016net.iGap.protoB\026ProtoCh" +
       "annelKickMemberb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =

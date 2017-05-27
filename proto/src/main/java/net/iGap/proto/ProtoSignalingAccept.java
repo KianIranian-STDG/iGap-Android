@@ -15,8 +15,8 @@ public final class ProtoSignalingAccept {
     }
 
     public interface SignalingAcceptOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingAccept)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingAccept)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Request request = 1;</code>
@@ -48,8 +48,8 @@ public final class ProtoSignalingAccept {
      * Protobuf type {@code proto.SignalingAccept}
      */
     public static final class SignalingAccept extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingAccept)
-            SignalingAcceptOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingAccept)
+        SignalingAcceptOrBuilder {
         // Use SignalingAccept.newBuilder() to construct.
         private SignalingAccept(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -315,8 +315,8 @@ public final class ProtoSignalingAccept {
          * Protobuf type {@code proto.SignalingAccept}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingAccept)
-                net.iGap.proto.ProtoSignalingAccept.SignalingAcceptOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingAccept)
+            net.iGap.proto.ProtoSignalingAccept.SignalingAcceptOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingAccept.internal_static_proto_SignalingAccept_descriptor;
             }
@@ -675,8 +675,8 @@ public final class ProtoSignalingAccept {
     }
 
     public interface SignalingAcceptResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingAcceptResponse)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingAcceptResponse)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Response response = 1;</code>
@@ -708,8 +708,8 @@ public final class ProtoSignalingAccept {
      * Protobuf type {@code proto.SignalingAcceptResponse}
      */
     public static final class SignalingAcceptResponse extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingAcceptResponse)
-            SignalingAcceptResponseOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingAcceptResponse)
+        SignalingAcceptResponseOrBuilder {
         // Use SignalingAcceptResponse.newBuilder() to construct.
         private SignalingAcceptResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -975,8 +975,8 @@ public final class ProtoSignalingAccept {
          * Protobuf type {@code proto.SignalingAcceptResponse}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingAcceptResponse)
-                net.iGap.proto.ProtoSignalingAccept.SignalingAcceptResponseOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingAcceptResponse)
+            net.iGap.proto.ProtoSignalingAccept.SignalingAcceptResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingAccept.internal_static_proto_SignalingAcceptResponse_descriptor;
             }
@@ -1347,13 +1347,13 @@ public final class ProtoSignalingAccept {
 
     static {
         java.lang.String[] descriptorData = {
-                "\n\025SignalingAccept.proto\022\005proto\032\rRequest." +
-                        "proto\032\016Response.proto\"F\n\017SignalingAccept" +
-                        "\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\022\n\ncal" +
-                        "led_sdp\030\002 \001(\t\"P\n\027SignalingAcceptResponse" +
-                        "\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\022\n\nc" +
-                        "alled_sdp\030\002 \001(\tB&\n\016net.iGap.protoB\024Proto" +
-                        "SignalingAcceptb\006proto3"
+            "\n\025SignalingAccept.proto\022\005proto\032\rRequest."
+                + "proto\032\016Response.proto\"F\n\017SignalingAccept"
+                + "\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\022\n\ncal"
+                + "led_sdp\030\002 \001(\t\"P\n\027SignalingAcceptResponse"
+                + "\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\022\n\nc"
+                + "alled_sdp\030\002 \001(\tB&\n\016net.iGap.protoB\024Proto"
+                + "SignalingAcceptb\006proto3"
         };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1362,7 +1362,7 @@ public final class ProtoSignalingAccept {
             }
         };
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-                net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
         }, assigner);
         internal_static_proto_SignalingAccept_descriptor = getDescriptor().getMessageTypes().get(0);
         internal_static_proto_SignalingAccept_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingAccept_descriptor, new java.lang.String[]{"Request", "CalledSdp",});

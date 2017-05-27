@@ -15,8 +15,8 @@ public final class ProtoSignalingRinging {
     }
 
     public interface SignalingRingingOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingRinging)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingRinging)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Request request = 1;</code>
@@ -38,8 +38,8 @@ public final class ProtoSignalingRinging {
      * Protobuf type {@code proto.SignalingRinging}
      */
     public static final class SignalingRinging extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingRinging)
-            SignalingRingingOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingRinging)
+        SignalingRingingOrBuilder {
         // Use SignalingRinging.newBuilder() to construct.
         private SignalingRinging(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -257,8 +257,8 @@ public final class ProtoSignalingRinging {
          * Protobuf type {@code proto.SignalingRinging}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingRinging)
-                net.iGap.proto.ProtoSignalingRinging.SignalingRingingOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingRinging)
+            net.iGap.proto.ProtoSignalingRinging.SignalingRingingOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingRinging.internal_static_proto_SignalingRinging_descriptor;
             }
@@ -542,8 +542,8 @@ public final class ProtoSignalingRinging {
     }
 
     public interface SignalingRingingResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingRingingResponse)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingRingingResponse)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Response response = 1;</code>
@@ -565,8 +565,8 @@ public final class ProtoSignalingRinging {
      * Protobuf type {@code proto.SignalingRingingResponse}
      */
     public static final class SignalingRingingResponse extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingRingingResponse)
-            SignalingRingingResponseOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingRingingResponse)
+        SignalingRingingResponseOrBuilder {
         // Use SignalingRingingResponse.newBuilder() to construct.
         private SignalingRingingResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -784,8 +784,8 @@ public final class ProtoSignalingRinging {
          * Protobuf type {@code proto.SignalingRingingResponse}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingRingingResponse)
-                net.iGap.proto.ProtoSignalingRinging.SignalingRingingResponseOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingRingingResponse)
+            net.iGap.proto.ProtoSignalingRinging.SignalingRingingResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingRinging.internal_static_proto_SignalingRingingResponse_descriptor;
             }
@@ -1081,12 +1081,7 @@ public final class ProtoSignalingRinging {
 
     static {
         java.lang.String[] descriptorData = {
-                "\n\026SignalingRinging.proto\022\005proto\032\rRequest" +
-                        ".proto\032\016Response.proto\"3\n\020SignalingRingi" +
-                        "ng\022\037\n\007request\030\001 \001(\0132\016.proto.Request\"=\n\030S" +
-                        "ignalingRingingResponse\022!\n\010response\030\001 \001(" +
-                        "\0132\017.proto.ResponseB\'\n\016net.iGap.protoB\025Pr" +
-                        "otoSignalingRingingb\006proto3"
+            "\n\026SignalingRinging.proto\022\005proto\032\rRequest" + ".proto\032\016Response.proto\"3\n\020SignalingRingi" + "ng\022\037\n\007request\030\001 \001(\0132\016.proto.Request\"=\n\030S" + "ignalingRingingResponse\022!\n\010response\030\001 \001(" + "\0132\017.proto.ResponseB\'\n\016net.iGap.protoB\025Pr" + "otoSignalingRingingb\006proto3"
         };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1095,7 +1090,7 @@ public final class ProtoSignalingRinging {
             }
         };
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-                net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
         }, assigner);
         internal_static_proto_SignalingRinging_descriptor = getDescriptor().getMessageTypes().get(0);
         internal_static_proto_SignalingRinging_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingRinging_descriptor, new java.lang.String[]{"Request",});

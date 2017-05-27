@@ -61,10 +61,6 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
         }
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     @Override public FastAdapter.OnClickListener<VideoItem> getOnItemClickListener() {
         return super.getOnItemClickListener();
     }

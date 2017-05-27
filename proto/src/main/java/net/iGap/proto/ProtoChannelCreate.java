@@ -135,8 +135,7 @@ public final class ProtoChannelCreate {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelCreate.internal_static_proto_ChannelCreate_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelCreate.ChannelCreate.class, net.iGap.proto.ProtoChannelCreate.ChannelCreate.Builder.class);
+        return net.iGap.proto.ProtoChannelCreate.internal_static_proto_ChannelCreate_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelCreate.ChannelCreate.class, net.iGap.proto.ProtoChannelCreate.ChannelCreate.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -415,8 +414,7 @@ public final class ProtoChannelCreate {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelCreate.internal_static_proto_ChannelCreate_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelCreate.ChannelCreate.class, net.iGap.proto.ProtoChannelCreate.ChannelCreate.Builder.class);
+          return net.iGap.proto.ProtoChannelCreate.internal_static_proto_ChannelCreate_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelCreate.ChannelCreate.class, net.iGap.proto.ProtoChannelCreate.ChannelCreate.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelCreate.ChannelCreate.newBuilder()
@@ -965,8 +963,7 @@ public final class ProtoChannelCreate {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelCreate.internal_static_proto_ChannelCreateResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelCreate.ChannelCreateResponse.class, net.iGap.proto.ProtoChannelCreate.ChannelCreateResponse.Builder.class);
+        return net.iGap.proto.ProtoChannelCreate.internal_static_proto_ChannelCreateResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelCreate.ChannelCreateResponse.class, net.iGap.proto.ProtoChannelCreate.ChannelCreateResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -1222,8 +1219,7 @@ public final class ProtoChannelCreate {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelCreate.internal_static_proto_ChannelCreateResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelCreate.ChannelCreateResponse.class, net.iGap.proto.ProtoChannelCreate.ChannelCreateResponse.Builder.class);
+          return net.iGap.proto.ProtoChannelCreate.internal_static_proto_ChannelCreateResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelCreate.ChannelCreateResponse.class, net.iGap.proto.ProtoChannelCreate.ChannelCreateResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelCreate.ChannelCreateResponse.newBuilder()
@@ -1360,8 +1356,7 @@ public final class ProtoChannelCreate {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-          responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1637,8 +1632,7 @@ public final class ProtoChannelCreate {
       "oto\032\016Response.proto\"S\n\rChannelCreate\022\037\n\007" +
       "request\030\001 \001(\0132\016.proto.Request\022\014\n\004name\030\002 " +
       "\001(\t\022\023\n\013description\030\003 \001(\t\"`\n\025ChannelCreat" +
-      "eResponse\022!\n\010response\030\001 \001(\0132\017.proto.Resp" +
-      "onse\022\017\n\007room_id\030\002 \001(\004\022\023\n\013invite_link\030\003 \001" + "(\tB$\n\016net.iGap.protoB\022ProtoChannelCreate" +
+      "eResponse\022!\n\010response\030\001 \001(\0132\017.proto.Resp" + "onse\022\017\n\007room_id\030\002 \001(\004\022\023\n\013invite_link\030\003 \001" + "(\tB$\n\016net.iGap.protoB\022ProtoChannelCreate" +
       "b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =

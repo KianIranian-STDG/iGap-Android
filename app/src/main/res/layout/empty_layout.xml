@@ -12,6 +12,7 @@
       android:layout_height="@dimen/dp160"
       android:layout_gravity="center"
       app:srcCompat="@drawable/empty_chat"
+      android:adjustViewBounds="true"
       android:id="@+id/imageView3"
       />
   <TextView

@@ -112,8 +112,7 @@ public final class ProtoChannelAvatarGetList {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelAvatarGetList.internal_static_proto_ChannelAvatarGetList_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetList.class, net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetList.Builder.class);
+        return net.iGap.proto.ProtoChannelAvatarGetList.internal_static_proto_ChannelAvatarGetList_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetList.class, net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetList.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -325,8 +324,7 @@ public final class ProtoChannelAvatarGetList {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelAvatarGetList.internal_static_proto_ChannelAvatarGetList_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetList.class, net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetList.Builder.class);
+          return net.iGap.proto.ProtoChannelAvatarGetList.internal_static_proto_ChannelAvatarGetList_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetList.class, net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetList.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetList.newBuilder()
@@ -660,7 +658,7 @@ public final class ProtoChannelAvatarGetList {
     /**
      * <code>repeated .proto.Avatar avatar = 2;</code>
      */
-    java.util.List<net.iGap.proto.ProtoGlobal.Avatar>
+    java.util.List<net.iGap.proto.ProtoGlobal.Avatar> 
         getAvatarList();
     /**
      * <code>repeated .proto.Avatar avatar = 2;</code>
@@ -673,7 +671,7 @@ public final class ProtoChannelAvatarGetList {
     /**
      * <code>repeated .proto.Avatar avatar = 2;</code>
      */
-    java.util.List<? extends net.iGap.proto.ProtoGlobal.AvatarOrBuilder>
+    java.util.List<? extends net.iGap.proto.ProtoGlobal.AvatarOrBuilder> 
         getAvatarOrBuilderList();
     /**
      * <code>repeated .proto.Avatar avatar = 2;</code>
@@ -763,9 +761,7 @@ public final class ProtoChannelAvatarGetList {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelAvatarGetList.internal_static_proto_ChannelAvatarGetListResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.class,
-              net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder.class);
+        return net.iGap.proto.ProtoChannelAvatarGetList.internal_static_proto_ChannelAvatarGetListResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.class, net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder.class);
     }
 
     private int bitField0_;
@@ -801,7 +797,7 @@ public final class ProtoChannelAvatarGetList {
     /**
      * <code>repeated .proto.Avatar avatar = 2;</code>
      */
-    public java.util.List<? extends net.iGap.proto.ProtoGlobal.AvatarOrBuilder>
+    public java.util.List<? extends net.iGap.proto.ProtoGlobal.AvatarOrBuilder> 
         getAvatarOrBuilderList() {
       return avatar_;
     }
@@ -1005,9 +1001,7 @@ public final class ProtoChannelAvatarGetList {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelAvatarGetList.internal_static_proto_ChannelAvatarGetListResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.class,
-                net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder.class);
+          return net.iGap.proto.ProtoChannelAvatarGetList.internal_static_proto_ChannelAvatarGetListResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.class, net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.newBuilder()
@@ -1177,8 +1171,7 @@ public final class ProtoChannelAvatarGetList {
       private int bitField0_;
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-          responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1476,7 +1469,7 @@ public final class ProtoChannelAvatarGetList {
       /**
        * <code>repeated .proto.Avatar avatar = 2;</code>
        */
-      public java.util.List<? extends net.iGap.proto.ProtoGlobal.AvatarOrBuilder>
+      public java.util.List<? extends net.iGap.proto.ProtoGlobal.AvatarOrBuilder> 
            getAvatarOrBuilderList() {
         if (avatarBuilder_ != null) {
           return avatarBuilder_.getMessageOrBuilderList();
@@ -1500,10 +1493,11 @@ public final class ProtoChannelAvatarGetList {
       /**
        * <code>repeated .proto.Avatar avatar = 2;</code>
        */
-      public java.util.List<net.iGap.proto.ProtoGlobal.Avatar.Builder>
+      public java.util.List<net.iGap.proto.ProtoGlobal.Avatar.Builder> 
            getAvatarBuilderList() {
         return getAvatarFieldBuilder().getBuilderList();
       }
+
       private com.google.protobuf.RepeatedFieldBuilderV3<net.iGap.proto.ProtoGlobal.Avatar, net.iGap.proto.ProtoGlobal.Avatar.Builder, net.iGap.proto.ProtoGlobal.AvatarOrBuilder>
           getAvatarFieldBuilder() {
         if (avatarBuilder_ == null) {
@@ -1587,9 +1581,7 @@ public final class ProtoChannelAvatarGetList {
       "\n\032ChannelAvatarGetList.proto\022\005proto\032\rReq" +
       "uest.proto\032\016Response.proto\032\014Global.proto" +
       "\"H\n\024ChannelAvatarGetList\022\037\n\007request\030\001 \001(" +
-      "\0132\016.proto.Request\022\017\n\007room_id\030\002 \001(\004\"`\n\034Ch" +
-      "annelAvatarGetListResponse\022!\n\010response\030\001" +
-      " \001(\0132\017.proto.Response\022\035\n\006avatar\030\002 \003(\0132\r." + "proto.AvatarB+\n\016net.iGap.protoB\031ProtoCha" +
+      "\0132\016.proto.Request\022\017\n\007room_id\030\002 \001(\004\"`\n\034Ch" + "annelAvatarGetListResponse\022!\n\010response\030\001" + " \001(\0132\017.proto.Response\022\035\n\006avatar\030\002 \003(\0132\r." + "proto.AvatarB+\n\016net.iGap.protoB\031ProtoCha" +
       "nnelAvatarGetListb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =

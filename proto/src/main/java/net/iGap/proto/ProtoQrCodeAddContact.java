@@ -13,7 +13,6 @@ public final class ProtoQrCodeAddContact {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface QrCodeAddContactOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.QrCodeAddContact)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoQrCodeAddContact {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     net.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -37,7 +34,6 @@ public final class ProtoQrCodeAddContact {
      * <code>optional string phone = 2;</code>
      */
     java.lang.String getPhone();
-
     /**
      * <code>optional string phone = 2;</code>
      */
@@ -47,7 +43,6 @@ public final class ProtoQrCodeAddContact {
      * <code>optional string first_name = 3;</code>
      */
     java.lang.String getFirstName();
-
     /**
      * <code>optional string first_name = 3;</code>
      */
@@ -57,13 +52,11 @@ public final class ProtoQrCodeAddContact {
      * <code>optional string last_name = 4;</code>
      */
     java.lang.String getLastName();
-
     /**
      * <code>optional string last_name = 4;</code>
      */
     com.google.protobuf.ByteString getLastNameBytes();
   }
-
   /**
    * Protobuf type {@code proto.QrCodeAddContact}
    */
@@ -74,7 +67,6 @@ public final class ProtoQrCodeAddContact {
     private QrCodeAddContact(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private QrCodeAddContact() {
       phone_ = "";
       firstName_ = "";
@@ -150,27 +142,23 @@ public final class ProtoQrCodeAddContact {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoQrCodeAddContact.internal_static_proto_QrCodeAddContact_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact.class, net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact.Builder.class);
+        return net.iGap.proto.ProtoQrCodeAddContact.internal_static_proto_QrCodeAddContact_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact.class, net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
       private net.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
         return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -180,7 +168,6 @@ public final class ProtoQrCodeAddContact {
 
     public static final int PHONE_FIELD_NUMBER = 2;
     private volatile java.lang.Object phone_;
-
     /**
      * <code>optional string phone = 2;</code>
      */
@@ -195,7 +182,6 @@ public final class ProtoQrCodeAddContact {
         return s;
       }
     }
-
     /**
      * <code>optional string phone = 2;</code>
      */
@@ -212,7 +198,6 @@ public final class ProtoQrCodeAddContact {
 
     public static final int FIRST_NAME_FIELD_NUMBER = 3;
     private volatile java.lang.Object firstName_;
-
     /**
      * <code>optional string first_name = 3;</code>
      */
@@ -227,7 +212,6 @@ public final class ProtoQrCodeAddContact {
         return s;
       }
     }
-
     /**
      * <code>optional string first_name = 3;</code>
      */
@@ -244,7 +228,6 @@ public final class ProtoQrCodeAddContact {
 
     public static final int LAST_NAME_FIELD_NUMBER = 4;
     private volatile java.lang.Object lastName_;
-
     /**
      * <code>optional string last_name = 4;</code>
      */
@@ -259,7 +242,6 @@ public final class ProtoQrCodeAddContact {
         return s;
       }
     }
-
     /**
      * <code>optional string last_name = 4;</code>
      */
@@ -275,7 +257,6 @@ public final class ProtoQrCodeAddContact {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -322,7 +303,6 @@ public final class ProtoQrCodeAddContact {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -370,8 +350,7 @@ public final class ProtoQrCodeAddContact {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -379,8 +358,7 @@ public final class ProtoQrCodeAddContact {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -396,8 +374,7 @@ public final class ProtoQrCodeAddContact {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -405,15 +382,13 @@ public final class ProtoQrCodeAddContact {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -421,7 +396,6 @@ public final class ProtoQrCodeAddContact {
       public static Builder newBuilder(net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -431,7 +405,6 @@ public final class ProtoQrCodeAddContact {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.QrCodeAddContact}
      */
@@ -443,8 +416,7 @@ public final class ProtoQrCodeAddContact {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoQrCodeAddContact.internal_static_proto_QrCodeAddContact_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact.class, net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact.Builder.class);
+          return net.iGap.proto.ProtoQrCodeAddContact.internal_static_proto_QrCodeAddContact_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact.class, net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact.newBuilder()
@@ -456,12 +428,10 @@ public final class ProtoQrCodeAddContact {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -532,7 +502,6 @@ public final class ProtoQrCodeAddContact {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact) {
               return mergeFrom((net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact) other);
@@ -583,16 +552,13 @@ public final class ProtoQrCodeAddContact {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
-
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -603,7 +569,6 @@ public final class ProtoQrCodeAddContact {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -620,7 +585,6 @@ public final class ProtoQrCodeAddContact {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -634,7 +598,6 @@ public final class ProtoQrCodeAddContact {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -652,7 +615,6 @@ public final class ProtoQrCodeAddContact {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -667,7 +629,6 @@ public final class ProtoQrCodeAddContact {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -676,7 +637,6 @@ public final class ProtoQrCodeAddContact {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -687,22 +647,18 @@ public final class ProtoQrCodeAddContact {
             return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
-                    getRequest(), getParentForChildren(), isClean());
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
           request_ = null;
         }
         return requestBuilder_;
       }
 
       private java.lang.Object phone_ = "";
-
       /**
        * <code>optional string phone = 2;</code>
        */
@@ -717,7 +673,6 @@ public final class ProtoQrCodeAddContact {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string phone = 2;</code>
        */
@@ -731,7 +686,6 @@ public final class ProtoQrCodeAddContact {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string phone = 2;</code>
        */
@@ -740,11 +694,10 @@ public final class ProtoQrCodeAddContact {
           throw new NullPointerException();
         }
 
-        phone_ = value;
+          phone_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string phone = 2;</code>
        */
@@ -754,7 +707,6 @@ public final class ProtoQrCodeAddContact {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string phone = 2;</code>
        */
@@ -764,13 +716,12 @@ public final class ProtoQrCodeAddContact {
         }
         checkByteStringIsUtf8(value);
 
-        phone_ = value;
+          phone_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object firstName_ = "";
-
       /**
        * <code>optional string first_name = 3;</code>
        */
@@ -785,7 +736,6 @@ public final class ProtoQrCodeAddContact {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string first_name = 3;</code>
        */
@@ -799,7 +749,6 @@ public final class ProtoQrCodeAddContact {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string first_name = 3;</code>
        */
@@ -808,11 +757,10 @@ public final class ProtoQrCodeAddContact {
           throw new NullPointerException();
         }
 
-        firstName_ = value;
+          firstName_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string first_name = 3;</code>
        */
@@ -822,7 +770,6 @@ public final class ProtoQrCodeAddContact {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string first_name = 3;</code>
        */
@@ -832,13 +779,12 @@ public final class ProtoQrCodeAddContact {
         }
         checkByteStringIsUtf8(value);
 
-        firstName_ = value;
+          firstName_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object lastName_ = "";
-
       /**
        * <code>optional string last_name = 4;</code>
        */
@@ -853,7 +799,6 @@ public final class ProtoQrCodeAddContact {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string last_name = 4;</code>
        */
@@ -867,7 +812,6 @@ public final class ProtoQrCodeAddContact {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string last_name = 4;</code>
        */
@@ -876,11 +820,10 @@ public final class ProtoQrCodeAddContact {
           throw new NullPointerException();
         }
 
-        lastName_ = value;
+          lastName_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string last_name = 4;</code>
        */
@@ -890,7 +833,6 @@ public final class ProtoQrCodeAddContact {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string last_name = 4;</code>
        */
@@ -900,7 +842,7 @@ public final class ProtoQrCodeAddContact {
         }
         checkByteStringIsUtf8(value);
 
-        lastName_ = value;
+          lastName_ = value;
         onChanged();
         return this;
       }
@@ -919,7 +861,6 @@ public final class ProtoQrCodeAddContact {
 
     // @@protoc_insertion_point(class_scope:proto.QrCodeAddContact)
     private static final net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact DEFAULT_INSTANCE;
-
     static {
         DEFAULT_INSTANCE = new net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContact();
     }
@@ -957,12 +898,10 @@ public final class ProtoQrCodeAddContact {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     net.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -973,7 +912,6 @@ public final class ProtoQrCodeAddContact {
      */
     com.google.protobuf.ByteString getQrCodeImage();
   }
-
   /**
    * Protobuf type {@code proto.QrCodeAddContactResponse}
    */
@@ -984,7 +922,6 @@ public final class ProtoQrCodeAddContact {
     private QrCodeAddContactResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private QrCodeAddContactResponse() {
       qrCodeImage_ = com.google.protobuf.ByteString.EMPTY;
     }
@@ -1045,27 +982,23 @@ public final class ProtoQrCodeAddContact {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoQrCodeAddContact.internal_static_proto_QrCodeAddContactResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse.class, net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse.Builder.class);
+        return net.iGap.proto.ProtoQrCodeAddContact.internal_static_proto_QrCodeAddContactResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse.class, net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
       private net.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
         return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1075,7 +1008,6 @@ public final class ProtoQrCodeAddContact {
 
     public static final int QR_CODE_IMAGE_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString qrCodeImage_;
-
     /**
      * <code>optional bytes qr_code_image = 2;</code>
      */
@@ -1084,7 +1016,6 @@ public final class ProtoQrCodeAddContact {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1119,7 +1050,6 @@ public final class ProtoQrCodeAddContact {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1161,8 +1091,7 @@ public final class ProtoQrCodeAddContact {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1170,8 +1099,7 @@ public final class ProtoQrCodeAddContact {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1179,8 +1107,7 @@ public final class ProtoQrCodeAddContact {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1188,8 +1115,7 @@ public final class ProtoQrCodeAddContact {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1197,15 +1123,13 @@ public final class ProtoQrCodeAddContact {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -1213,7 +1137,6 @@ public final class ProtoQrCodeAddContact {
       public static Builder newBuilder(net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -1223,7 +1146,6 @@ public final class ProtoQrCodeAddContact {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.QrCodeAddContactResponse}
      */
@@ -1235,8 +1157,7 @@ public final class ProtoQrCodeAddContact {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoQrCodeAddContact.internal_static_proto_QrCodeAddContactResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse.class, net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse.Builder.class);
+          return net.iGap.proto.ProtoQrCodeAddContact.internal_static_proto_QrCodeAddContactResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse.class, net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse.newBuilder()
@@ -1248,12 +1169,10 @@ public final class ProtoQrCodeAddContact {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1318,7 +1237,6 @@ public final class ProtoQrCodeAddContact {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse) {
               return mergeFrom((net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse) other);
@@ -1360,16 +1278,13 @@ public final class ProtoQrCodeAddContact {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
-
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1380,7 +1295,6 @@ public final class ProtoQrCodeAddContact {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1397,7 +1311,6 @@ public final class ProtoQrCodeAddContact {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1411,7 +1324,6 @@ public final class ProtoQrCodeAddContact {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1429,7 +1341,6 @@ public final class ProtoQrCodeAddContact {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1444,7 +1355,6 @@ public final class ProtoQrCodeAddContact {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1453,7 +1363,6 @@ public final class ProtoQrCodeAddContact {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1464,29 +1373,24 @@ public final class ProtoQrCodeAddContact {
             return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
-                    getResponse(), getParentForChildren(), isClean());
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
       }
 
       private com.google.protobuf.ByteString qrCodeImage_ = com.google.protobuf.ByteString.EMPTY;
-
       /**
        * <code>optional bytes qr_code_image = 2;</code>
        */
       public com.google.protobuf.ByteString getQrCodeImage() {
         return qrCodeImage_;
       }
-
       /**
        * <code>optional bytes qr_code_image = 2;</code>
        */
@@ -1495,11 +1399,10 @@ public final class ProtoQrCodeAddContact {
           throw new NullPointerException();
         }
 
-        qrCodeImage_ = value;
+          qrCodeImage_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional bytes qr_code_image = 2;</code>
        */
@@ -1524,7 +1427,6 @@ public final class ProtoQrCodeAddContact {
 
     // @@protoc_insertion_point(class_scope:proto.QrCodeAddContactResponse)
     private static final net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse DEFAULT_INSTANCE;
-
     static {
         DEFAULT_INSTANCE = new net.iGap.proto.ProtoQrCodeAddContact.QrCodeAddContactResponse();
     }
@@ -1564,15 +1466,12 @@ public final class ProtoQrCodeAddContact {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\026QrCodeAddContact.proto\022\005proto\032\rRequest" +
                     ".proto\032\016Response.proto\"i\n\020QrCodeAddConta" +
                     "ct\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\r\n\005p" +
-                    "hone\030\002 \001(\t\022\022\n\nfirst_name\030\003 \001(\t\022\021\n\tlast_n" +
-                    "ame\030\004 \001(\t\"T\n\030QrCodeAddContactResponse\022!\n" +
-                    "\010response\030\001 \001(\0132\017.proto.Response\022\025\n\rqr_c" + "ode_image\030\002 \001(\014B\'\n\016net.iGap.protoB\025Proto" +
+                    "hone\030\002 \001(\t\022\022\n\nfirst_name\030\003 \001(\t\022\021\n\tlast_n" + "ame\030\004 \001(\t\"T\n\030QrCodeAddContactResponse\022!\n" + "\010response\030\001 \001(\0132\017.proto.Response\022\025\n\rqr_c" + "ode_image\030\002 \001(\014B\'\n\016net.iGap.protoB\025Proto" +
                     "QrCodeAddContactb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

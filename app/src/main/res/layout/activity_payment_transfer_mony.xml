@@ -46,7 +46,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center|left"
             android:paddingRight="@dimen/dp60"
             android:text="@string/transfer_mony"
             android:textColor="@color/whit_background"

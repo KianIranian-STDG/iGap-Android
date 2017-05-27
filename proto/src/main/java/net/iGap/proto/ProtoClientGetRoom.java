@@ -106,8 +106,7 @@ public final class ProtoClientGetRoom {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoClientGetRoom.internal_static_proto_ClientGetRoom_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientGetRoom.ClientGetRoom.class,
-            net.iGap.proto.ProtoClientGetRoom.ClientGetRoom.Builder.class);
+        return net.iGap.proto.ProtoClientGetRoom.internal_static_proto_ClientGetRoom_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientGetRoom.ClientGetRoom.class, net.iGap.proto.ProtoClientGetRoom.ClientGetRoom.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -216,8 +215,7 @@ public final class ProtoClientGetRoom {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoom parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoom parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -225,8 +223,7 @@ public final class ProtoClientGetRoom {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoom parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoom parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -242,8 +239,7 @@ public final class ProtoClientGetRoom {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoom parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoom parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -251,8 +247,7 @@ public final class ProtoClientGetRoom {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoom parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoom parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -286,8 +281,7 @@ public final class ProtoClientGetRoom {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoClientGetRoom.internal_static_proto_ClientGetRoom_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientGetRoom.ClientGetRoom.class,
-              net.iGap.proto.ProtoClientGetRoom.ClientGetRoom.Builder.class);
+          return net.iGap.proto.ProtoClientGetRoom.internal_static_proto_ClientGetRoom_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientGetRoom.ClientGetRoom.class, net.iGap.proto.ProtoClientGetRoom.ClientGetRoom.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoClientGetRoom.ClientGetRoom.newBuilder()
@@ -409,8 +403,7 @@ public final class ProtoClientGetRoom {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -510,8 +503,7 @@ public final class ProtoClientGetRoom {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -697,8 +689,7 @@ public final class ProtoClientGetRoom {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoClientGetRoom.internal_static_proto_ClientGetRoomResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse.class, net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse.Builder.class);
+        return net.iGap.proto.ProtoClientGetRoom.internal_static_proto_ClientGetRoomResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse.class, net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -824,8 +815,7 @@ public final class ProtoClientGetRoom {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -833,8 +823,7 @@ public final class ProtoClientGetRoom {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -842,8 +831,7 @@ public final class ProtoClientGetRoom {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -851,8 +839,7 @@ public final class ProtoClientGetRoom {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -860,8 +847,7 @@ public final class ProtoClientGetRoom {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -896,8 +882,7 @@ public final class ProtoClientGetRoom {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoClientGetRoom.internal_static_proto_ClientGetRoomResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse.class, net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse.Builder.class);
+          return net.iGap.proto.ProtoClientGetRoom.internal_static_proto_ClientGetRoomResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse.class, net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoClientGetRoom.ClientGetRoomResponse.newBuilder()
@@ -1027,8 +1012,7 @@ public final class ProtoClientGetRoom {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1128,8 +1112,7 @@ public final class ProtoClientGetRoom {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1305,9 +1288,7 @@ public final class ProtoClientGetRoom {
     java.lang.String[] descriptorData = {
             "\n\023ClientGetRoom.proto\022\005proto\032\rRequest.pr" +
                     "oto\032\016Response.proto\032\014Global.proto\"A\n\rCli" +
-                    "entGetRoom\022\037\n\007request\030\001 \001(\0132\016.proto.Requ" +
-                    "est\022\017\n\007room_id\030\002 \001(\004\"U\n\025ClientGetRoomRes" +
-                    "ponse\022!\n\010response\030\001 \001(\0132\017.proto.Response" + "\022\031\n\004room\030\002 \001(\0132\013.proto.RoomB$\n\016net.iGap." +
+                    "entGetRoom\022\037\n\007request\030\001 \001(\0132\016.proto.Requ" + "est\022\017\n\007room_id\030\002 \001(\004\"U\n\025ClientGetRoomRes" + "ponse\022!\n\010response\030\001 \001(\0132\017.proto.Response" + "\022\031\n\004room\030\002 \001(\0132\013.proto.RoomB$\n\016net.iGap." +
                     "protoB\022ProtoClientGetRoomb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

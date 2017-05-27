@@ -57,6 +57,16 @@
     *;
 }
 
+# call
+-keep class org.codehaus.** { *; }
+-dontwarn org.codehaus.**
+-keep class org.whispersystems.** { *; }
+-dontwarn org.whispersystems.**
+
+-keep class org.webrtc.** { *; }
+-dontwarn org.webrtc.**
+
+
 # protobuf
 -keep class com.google.protobuf.** { *; }
 -dontwarn com.google.protobuf.**

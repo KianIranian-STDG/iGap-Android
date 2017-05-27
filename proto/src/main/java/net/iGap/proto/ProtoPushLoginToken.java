@@ -13,7 +13,6 @@ public final class ProtoPushLoginToken {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface PushLoginTokenResponseOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.PushLoginTokenResponse)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoPushLoginToken {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     net.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -37,7 +34,6 @@ public final class ProtoPushLoginToken {
      * <code>optional string username = 2;</code>
      */
     java.lang.String getUsername();
-
     /**
      * <code>optional string username = 2;</code>
      */
@@ -52,7 +48,6 @@ public final class ProtoPushLoginToken {
      * <code>optional string author_hash = 4;</code>
      */
     java.lang.String getAuthorHash();
-
     /**
      * <code>optional string author_hash = 4;</code>
      */
@@ -62,13 +57,11 @@ public final class ProtoPushLoginToken {
      * <code>optional string token = 5;</code>
      */
     java.lang.String getToken();
-
     /**
      * <code>optional string token = 5;</code>
      */
     com.google.protobuf.ByteString getTokenBytes();
   }
-
   /**
    * Protobuf type {@code proto.PushLoginTokenResponse}
    */
@@ -79,7 +72,6 @@ public final class ProtoPushLoginToken {
     private PushLoginTokenResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private PushLoginTokenResponse() {
       username_ = "";
       userId_ = 0L;
@@ -161,27 +153,23 @@ public final class ProtoPushLoginToken {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoPushLoginToken.internal_static_proto_PushLoginTokenResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse.class, net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse.Builder.class);
+        return net.iGap.proto.ProtoPushLoginToken.internal_static_proto_PushLoginTokenResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse.class, net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
       private net.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
         return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -191,7 +179,6 @@ public final class ProtoPushLoginToken {
 
     public static final int USERNAME_FIELD_NUMBER = 2;
     private volatile java.lang.Object username_;
-
     /**
      * <code>optional string username = 2;</code>
      */
@@ -206,7 +193,6 @@ public final class ProtoPushLoginToken {
         return s;
       }
     }
-
     /**
      * <code>optional string username = 2;</code>
      */
@@ -223,7 +209,6 @@ public final class ProtoPushLoginToken {
 
     public static final int USER_ID_FIELD_NUMBER = 3;
     private long userId_;
-
     /**
      * <code>optional uint64 user_id = 3;</code>
      */
@@ -233,7 +218,6 @@ public final class ProtoPushLoginToken {
 
     public static final int AUTHOR_HASH_FIELD_NUMBER = 4;
     private volatile java.lang.Object authorHash_;
-
     /**
      * <code>optional string author_hash = 4;</code>
      */
@@ -248,7 +232,6 @@ public final class ProtoPushLoginToken {
         return s;
       }
     }
-
     /**
      * <code>optional string author_hash = 4;</code>
      */
@@ -265,7 +248,6 @@ public final class ProtoPushLoginToken {
 
     public static final int TOKEN_FIELD_NUMBER = 5;
     private volatile java.lang.Object token_;
-
     /**
      * <code>optional string token = 5;</code>
      */
@@ -280,7 +262,6 @@ public final class ProtoPushLoginToken {
         return s;
       }
     }
-
     /**
      * <code>optional string token = 5;</code>
      */
@@ -296,7 +277,6 @@ public final class ProtoPushLoginToken {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -349,7 +329,6 @@ public final class ProtoPushLoginToken {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -400,8 +379,7 @@ public final class ProtoPushLoginToken {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -409,8 +387,7 @@ public final class ProtoPushLoginToken {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -418,8 +395,7 @@ public final class ProtoPushLoginToken {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -427,8 +403,7 @@ public final class ProtoPushLoginToken {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -436,15 +411,13 @@ public final class ProtoPushLoginToken {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -452,7 +425,6 @@ public final class ProtoPushLoginToken {
       public static Builder newBuilder(net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -462,7 +434,6 @@ public final class ProtoPushLoginToken {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.PushLoginTokenResponse}
      */
@@ -474,8 +445,7 @@ public final class ProtoPushLoginToken {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoPushLoginToken.internal_static_proto_PushLoginTokenResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse.class, net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse.Builder.class);
+          return net.iGap.proto.ProtoPushLoginToken.internal_static_proto_PushLoginTokenResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse.class, net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse.newBuilder()
@@ -487,12 +457,10 @@ public final class ProtoPushLoginToken {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -566,7 +534,6 @@ public final class ProtoPushLoginToken {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse) {
               return mergeFrom((net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse) other);
@@ -620,16 +587,13 @@ public final class ProtoPushLoginToken {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
-
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -640,7 +604,6 @@ public final class ProtoPushLoginToken {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -657,7 +620,6 @@ public final class ProtoPushLoginToken {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -671,7 +633,6 @@ public final class ProtoPushLoginToken {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -689,7 +650,6 @@ public final class ProtoPushLoginToken {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -704,7 +664,6 @@ public final class ProtoPushLoginToken {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -713,7 +672,6 @@ public final class ProtoPushLoginToken {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -724,22 +682,18 @@ public final class ProtoPushLoginToken {
             return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
-                    getResponse(), getParentForChildren(), isClean());
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
       }
 
       private java.lang.Object username_ = "";
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -754,7 +708,6 @@ public final class ProtoPushLoginToken {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -768,7 +721,6 @@ public final class ProtoPushLoginToken {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -777,11 +729,10 @@ public final class ProtoPushLoginToken {
           throw new NullPointerException();
         }
 
-        username_ = value;
+          username_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -791,7 +742,6 @@ public final class ProtoPushLoginToken {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string username = 2;</code>
        */
@@ -801,20 +751,18 @@ public final class ProtoPushLoginToken {
         }
         checkByteStringIsUtf8(value);
 
-        username_ = value;
+          username_ = value;
         onChanged();
         return this;
       }
 
       private long userId_;
-
       /**
        * <code>optional uint64 user_id = 3;</code>
        */
       public long getUserId() {
         return userId_;
       }
-
       /**
        * <code>optional uint64 user_id = 3;</code>
        */
@@ -824,7 +772,6 @@ public final class ProtoPushLoginToken {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional uint64 user_id = 3;</code>
        */
@@ -836,7 +783,6 @@ public final class ProtoPushLoginToken {
       }
 
       private java.lang.Object authorHash_ = "";
-
       /**
        * <code>optional string author_hash = 4;</code>
        */
@@ -851,7 +797,6 @@ public final class ProtoPushLoginToken {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string author_hash = 4;</code>
        */
@@ -865,7 +810,6 @@ public final class ProtoPushLoginToken {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string author_hash = 4;</code>
        */
@@ -874,11 +818,10 @@ public final class ProtoPushLoginToken {
           throw new NullPointerException();
         }
 
-        authorHash_ = value;
+          authorHash_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string author_hash = 4;</code>
        */
@@ -888,7 +831,6 @@ public final class ProtoPushLoginToken {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string author_hash = 4;</code>
        */
@@ -898,13 +840,12 @@ public final class ProtoPushLoginToken {
         }
         checkByteStringIsUtf8(value);
 
-        authorHash_ = value;
+          authorHash_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object token_ = "";
-
       /**
        * <code>optional string token = 5;</code>
        */
@@ -919,7 +860,6 @@ public final class ProtoPushLoginToken {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string token = 5;</code>
        */
@@ -933,7 +873,6 @@ public final class ProtoPushLoginToken {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string token = 5;</code>
        */
@@ -942,11 +881,10 @@ public final class ProtoPushLoginToken {
           throw new NullPointerException();
         }
 
-        token_ = value;
+          token_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string token = 5;</code>
        */
@@ -956,7 +894,6 @@ public final class ProtoPushLoginToken {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string token = 5;</code>
        */
@@ -966,7 +903,7 @@ public final class ProtoPushLoginToken {
         }
         checkByteStringIsUtf8(value);
 
-        token_ = value;
+          token_ = value;
         onChanged();
         return this;
       }
@@ -985,7 +922,6 @@ public final class ProtoPushLoginToken {
 
     // @@protoc_insertion_point(class_scope:proto.PushLoginTokenResponse)
     private static final net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse DEFAULT_INSTANCE;
-
     static {
         DEFAULT_INSTANCE = new net.iGap.proto.ProtoPushLoginToken.PushLoginTokenResponse();
     }
@@ -1023,17 +959,14 @@ public final class ProtoPushLoginToken {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\024PushLoginToken.proto\022\005proto\032\016Response." +
-                    "proto\"\202\001\n\026PushLoginTokenResponse\022!\n\010resp" +
-                    "onse\030\001 \001(\0132\017.proto.Response\022\020\n\010username\030" +
-                    "\002 \001(\t\022\017\n\007user_id\030\003 \001(\004\022\023\n\013author_hash\030\004 " + "\001(\t\022\r\n\005token\030\005 \001(\tB%\n\016net.iGap.protoB\023Pr" +
+                    "proto\"\202\001\n\026PushLoginTokenResponse\022!\n\010resp" + "onse\030\001 \001(\0132\017.proto.Response\022\020\n\010username\030" + "\002 \001(\t\022\017\n\007user_id\030\003 \001(\004\022\023\n\013author_hash\030\004 " + "\001(\t\022\r\n\005token\030\005 \001(\tB%\n\016net.iGap.protoB\023Pr" +
                     "otoPushLoginTokenb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
+        public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
             descriptor = root;
             return null;
           }

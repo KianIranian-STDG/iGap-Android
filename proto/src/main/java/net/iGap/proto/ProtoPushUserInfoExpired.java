@@ -26,12 +26,12 @@ public final class ProtoPushUserInfoExpired {
         /**
          * <code>optional .proto.Response response = 1;</code>
          */
-        ProtoResponse.Response getResponse();
+        net.iGap.proto.ProtoResponse.Response getResponse();
 
         /**
          * <code>optional .proto.Response response = 1;</code>
          */
-        ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
+        net.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder();
 
         /**
          * <code>optional uint64 user_id = 2;</code>
@@ -54,12 +54,12 @@ public final class ProtoPushUserInfoExpired {
             userId_ = 0L;
         }
 
-        @Override public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
             return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
 
-        private PushUserInfoExpiredResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        private PushUserInfoExpiredResponse(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
             this();
             int mutable_bitField0_ = 0;
             try {
@@ -77,11 +77,11 @@ public final class ProtoPushUserInfoExpired {
                             break;
                         }
                         case 10: {
-                            ProtoResponse.Response.Builder subBuilder = null;
+                            net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
                             if (response_ != null) {
                                 subBuilder = response_.toBuilder();
                             }
-                            response_ = input.readMessage(ProtoResponse.Response.parser(), extensionRegistry);
+                            response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
                             if (subBuilder != null) {
                                 subBuilder.mergeFrom(response_);
                                 response_ = subBuilder.buildPartial();
@@ -106,15 +106,15 @@ public final class ProtoPushUserInfoExpired {
         }
 
         public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-            return ProtoPushUserInfoExpired.internal_static_proto_PushUserInfoExpiredResponse_descriptor;
+            return net.iGap.proto.ProtoPushUserInfoExpired.internal_static_proto_PushUserInfoExpiredResponse_descriptor;
         }
 
-        protected FieldAccessorTable internalGetFieldAccessorTable() {
-            return ProtoPushUserInfoExpired.internal_static_proto_PushUserInfoExpiredResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(PushUserInfoExpiredResponse.class, Builder.class);
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+            return net.iGap.proto.ProtoPushUserInfoExpired.internal_static_proto_PushUserInfoExpiredResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.class, net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.Builder.class);
         }
 
         public static final int RESPONSE_FIELD_NUMBER = 1;
-        private ProtoResponse.Response response_;
+        private net.iGap.proto.ProtoResponse.Response response_;
 
         /**
          * <code>optional .proto.Response response = 1;</code>
@@ -126,14 +126,14 @@ public final class ProtoPushUserInfoExpired {
         /**
          * <code>optional .proto.Response response = 1;</code>
          */
-        public ProtoResponse.Response getResponse() {
-            return response_ == null ? ProtoResponse.Response.getDefaultInstance() : response_;
+        public net.iGap.proto.ProtoResponse.Response getResponse() {
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
 
         /**
          * <code>optional .proto.Response response = 1;</code>
          */
-        public ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
+        public net.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
             return getResponse();
         }
 
@@ -184,14 +184,15 @@ public final class ProtoPushUserInfoExpired {
 
         private static final long serialVersionUID = 0L;
 
-        @Override public boolean equals(final Object obj) {
+        @java.lang.Override
+        public boolean equals(final java.lang.Object obj) {
             if (obj == this) {
                 return true;
             }
-            if (!(obj instanceof PushUserInfoExpiredResponse)) {
+            if (!(obj instanceof net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse)) {
                 return super.equals(obj);
             }
-            PushUserInfoExpiredResponse other = (PushUserInfoExpiredResponse) obj;
+            net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse other = (net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse) obj;
 
             boolean result = true;
             result = result && (hasResponse() == other.hasResponse());
@@ -202,7 +203,8 @@ public final class ProtoPushUserInfoExpired {
             return result;
         }
 
-        @Override public int hashCode() {
+        @java.lang.Override
+        public int hashCode() {
             if (memoizedHashCode != 0) {
                 return memoizedHashCode;
             }
@@ -219,44 +221,43 @@ public final class ProtoPushUserInfoExpired {
             return hash;
         }
 
-        public static PushUserInfoExpiredResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
-        public static PushUserInfoExpiredResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws com.google.protobuf.InvalidProtocolBufferException {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
-        public static PushUserInfoExpiredResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
-        public static PushUserInfoExpiredResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
-        public static PushUserInfoExpiredResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
         }
 
-        public static PushUserInfoExpiredResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
         }
 
-        public static PushUserInfoExpiredResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
         }
 
-        public static PushUserInfoExpiredResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
         }
 
-        public static PushUserInfoExpiredResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
         }
 
-        public static PushUserInfoExpiredResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
         }
 
@@ -268,7 +269,7 @@ public final class ProtoPushUserInfoExpired {
             return DEFAULT_INSTANCE.toBuilder();
         }
 
-        public static Builder newBuilder(PushUserInfoExpiredResponse prototype) {
+        public static Builder newBuilder(net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse prototype) {
             return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
         }
 
@@ -276,7 +277,8 @@ public final class ProtoPushUserInfoExpired {
             return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
         }
 
-        @Override protected Builder newBuilderForType(BuilderParent parent) {
+        @java.lang.Override
+        protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
             Builder builder = new Builder(parent);
             return builder;
         }
@@ -286,13 +288,13 @@ public final class ProtoPushUserInfoExpired {
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.PushUserInfoExpiredResponse)
-            PushUserInfoExpiredResponseOrBuilder {
+            net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-                return ProtoPushUserInfoExpired.internal_static_proto_PushUserInfoExpiredResponse_descriptor;
+                return net.iGap.proto.ProtoPushUserInfoExpired.internal_static_proto_PushUserInfoExpiredResponse_descriptor;
             }
 
-            protected FieldAccessorTable internalGetFieldAccessorTable() {
-                return ProtoPushUserInfoExpired.internal_static_proto_PushUserInfoExpiredResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(PushUserInfoExpiredResponse.class, Builder.class);
+            protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
+                return net.iGap.proto.ProtoPushUserInfoExpired.internal_static_proto_PushUserInfoExpiredResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.class, net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.Builder.class);
             }
 
             // Construct using net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.newBuilder()
@@ -300,7 +302,7 @@ public final class ProtoPushUserInfoExpired {
                 maybeForceBuilderInitialization();
             }
 
-            private Builder(BuilderParent parent) {
+            private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
                 super(parent);
                 maybeForceBuilderInitialization();
             }
@@ -324,23 +326,23 @@ public final class ProtoPushUserInfoExpired {
             }
 
             public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-                return ProtoPushUserInfoExpired.internal_static_proto_PushUserInfoExpiredResponse_descriptor;
+                return net.iGap.proto.ProtoPushUserInfoExpired.internal_static_proto_PushUserInfoExpiredResponse_descriptor;
             }
 
-            public PushUserInfoExpiredResponse getDefaultInstanceForType() {
-                return PushUserInfoExpiredResponse.getDefaultInstance();
+            public net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse getDefaultInstanceForType() {
+                return net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.getDefaultInstance();
             }
 
-            public PushUserInfoExpiredResponse build() {
-                PushUserInfoExpiredResponse result = buildPartial();
+            public net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse build() {
+                net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse result = buildPartial();
                 if (!result.isInitialized()) {
                     throw newUninitializedMessageException(result);
                 }
                 return result;
             }
 
-            public PushUserInfoExpiredResponse buildPartial() {
-                PushUserInfoExpiredResponse result = new PushUserInfoExpiredResponse(this);
+            public net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse buildPartial() {
+                net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse result = new net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse(this);
                 if (responseBuilder_ == null) {
                     result.response_ = response_;
                 } else {
@@ -376,16 +378,16 @@ public final class ProtoPushUserInfoExpired {
             }
 
             public Builder mergeFrom(com.google.protobuf.Message other) {
-                if (other instanceof PushUserInfoExpiredResponse) {
-                    return mergeFrom((PushUserInfoExpiredResponse) other);
+                if (other instanceof net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse) {
+                    return mergeFrom((net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
                 }
             }
 
-            public Builder mergeFrom(PushUserInfoExpiredResponse other) {
-                if (other == PushUserInfoExpiredResponse.getDefaultInstance()) return this;
+            public Builder mergeFrom(net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse other) {
+                if (other == net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse.getDefaultInstance()) return this;
                 if (other.hasResponse()) {
                     mergeResponse(other.getResponse());
                 }
@@ -401,11 +403,11 @@ public final class ProtoPushUserInfoExpired {
             }
 
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-                PushUserInfoExpiredResponse parsedMessage = null;
+                net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse parsedMessage = null;
                 try {
                     parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
                 } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                    parsedMessage = (PushUserInfoExpiredResponse) e.getUnfinishedMessage();
+                    parsedMessage = (net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse) e.getUnfinishedMessage();
                     throw e.unwrapIOException();
                 } finally {
                     if (parsedMessage != null) {
@@ -415,8 +417,8 @@ public final class ProtoPushUserInfoExpired {
                 return this;
             }
 
-            private ProtoResponse.Response response_ = null;
-            private com.google.protobuf.SingleFieldBuilderV3<ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder> responseBuilder_;
+            private net.iGap.proto.ProtoResponse.Response response_ = null;
+            private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
 
             /**
              * <code>optional .proto.Response response = 1;</code>
@@ -428,9 +430,9 @@ public final class ProtoPushUserInfoExpired {
             /**
              * <code>optional .proto.Response response = 1;</code>
              */
-            public ProtoResponse.Response getResponse() {
+            public net.iGap.proto.ProtoResponse.Response getResponse() {
                 if (responseBuilder_ == null) {
-                    return response_ == null ? ProtoResponse.Response.getDefaultInstance() : response_;
+                    return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
                 } else {
                     return responseBuilder_.getMessage();
                 }
@@ -439,7 +441,7 @@ public final class ProtoPushUserInfoExpired {
             /**
              * <code>optional .proto.Response response = 1;</code>
              */
-            public Builder setResponse(ProtoResponse.Response value) {
+            public Builder setResponse(net.iGap.proto.ProtoResponse.Response value) {
                 if (responseBuilder_ == null) {
                     if (value == null) {
                         throw new NullPointerException();
@@ -456,7 +458,7 @@ public final class ProtoPushUserInfoExpired {
             /**
              * <code>optional .proto.Response response = 1;</code>
              */
-            public Builder setResponse(ProtoResponse.Response.Builder builderForValue) {
+            public Builder setResponse(net.iGap.proto.ProtoResponse.Response.Builder builderForValue) {
                 if (responseBuilder_ == null) {
                     response_ = builderForValue.build();
                     onChanged();
@@ -470,10 +472,10 @@ public final class ProtoPushUserInfoExpired {
             /**
              * <code>optional .proto.Response response = 1;</code>
              */
-            public Builder mergeResponse(ProtoResponse.Response value) {
+            public Builder mergeResponse(net.iGap.proto.ProtoResponse.Response value) {
                 if (responseBuilder_ == null) {
                     if (response_ != null) {
-                        response_ = ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+                        response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
                     } else {
                         response_ = value;
                     }
@@ -503,7 +505,7 @@ public final class ProtoPushUserInfoExpired {
             /**
              * <code>optional .proto.Response response = 1;</code>
              */
-            public ProtoResponse.Response.Builder getResponseBuilder() {
+            public net.iGap.proto.ProtoResponse.Response.Builder getResponseBuilder() {
 
                 onChanged();
                 return getResponseFieldBuilder().getBuilder();
@@ -512,22 +514,20 @@ public final class ProtoPushUserInfoExpired {
             /**
              * <code>optional .proto.Response response = 1;</code>
              */
-            public ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
+            public net.iGap.proto.ProtoResponse.ResponseOrBuilder getResponseOrBuilder() {
                 if (responseBuilder_ != null) {
                     return responseBuilder_.getMessageOrBuilder();
                 } else {
-                    return response_ == null ? ProtoResponse.Response.getDefaultInstance() : response_;
+                    return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
                 }
             }
 
             /**
              * <code>optional .proto.Response response = 1;</code>
              */
-            private com.google.protobuf.SingleFieldBuilderV3<ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
+            private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
                 if (responseBuilder_ == null) {
-                    responseBuilder_ =
-                        new com.google.protobuf.SingleFieldBuilderV3<ProtoResponse.Response, ProtoResponse.Response.Builder, ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(),
-                            isClean());
+                    responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
                     response_ = null;
                 }
                 return responseBuilder_;
@@ -570,23 +570,23 @@ public final class ProtoPushUserInfoExpired {
                 return this;
             }
 
+
             // @@protoc_insertion_point(builder_scope:proto.PushUserInfoExpiredResponse)
         }
 
         // @@protoc_insertion_point(class_scope:proto.PushUserInfoExpiredResponse)
-        private static final PushUserInfoExpiredResponse DEFAULT_INSTANCE;
+        private static final net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse DEFAULT_INSTANCE;
 
         static {
-            DEFAULT_INSTANCE = new PushUserInfoExpiredResponse();
+            DEFAULT_INSTANCE = new net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse();
         }
 
-        public static PushUserInfoExpiredResponse getDefaultInstance() {
+        public static net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse getDefaultInstance() {
             return DEFAULT_INSTANCE;
         }
 
         private static final com.google.protobuf.Parser<PushUserInfoExpiredResponse> PARSER = new com.google.protobuf.AbstractParser<PushUserInfoExpiredResponse>() {
-            public PushUserInfoExpiredResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+            public PushUserInfoExpiredResponse parsePartialFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
                 return new PushUserInfoExpiredResponse(input, extensionRegistry);
             }
         };
@@ -595,13 +595,15 @@ public final class ProtoPushUserInfoExpired {
             return PARSER;
         }
 
-        @Override public com.google.protobuf.Parser<PushUserInfoExpiredResponse> getParserForType() {
+        @java.lang.Override
+        public com.google.protobuf.Parser<PushUserInfoExpiredResponse> getParserForType() {
             return PARSER;
         }
 
-        public PushUserInfoExpiredResponse getDefaultInstanceForType() {
+        public net.iGap.proto.ProtoPushUserInfoExpired.PushUserInfoExpiredResponse getDefaultInstanceForType() {
             return DEFAULT_INSTANCE;
         }
+
     }
 
     private static final com.google.protobuf.Descriptors.Descriptor internal_static_proto_PushUserInfoExpiredResponse_descriptor;
@@ -614,12 +616,8 @@ public final class ProtoPushUserInfoExpired {
     private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
 
     static {
-        String[] descriptorData = {
-            "\n\031PushUserInfoExpired.proto\022\005proto\032\016Resp"
-                + "onse.proto\"Q\n\033PushUserInfoExpiredRespons"
-                + "e\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007"
-                + "user_id\030\002 \001(\004B*\n\016net.iGap.protoB\030ProtoPu"
-                + "shUserInfoExpiredb\006proto3"
+        java.lang.String[] descriptorData = {
+            "\n\031PushUserInfoExpired.proto\022\005proto\032\016Resp" + "onse.proto\"Q\n\033PushUserInfoExpiredRespons" + "e\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007" + "user_id\030\002 \001(\004B*\n\016net.iGap.protoB\030ProtoPu" + "shUserInfoExpiredb\006proto3"
         };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -627,13 +625,12 @@ public final class ProtoPushUserInfoExpired {
                 return null;
             }
         };
-        com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[] {
-            ProtoResponse.getDescriptor(),
+        com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
+            net.iGap.proto.ProtoResponse.getDescriptor(),
         }, assigner);
         internal_static_proto_PushUserInfoExpiredResponse_descriptor = getDescriptor().getMessageTypes().get(0);
-        internal_static_proto_PushUserInfoExpiredResponse_fieldAccessorTable =
-            new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_PushUserInfoExpiredResponse_descriptor, new String[] { "Response", "UserId", });
-        ProtoResponse.getDescriptor();
+        internal_static_proto_PushUserInfoExpiredResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_PushUserInfoExpiredResponse_descriptor, new java.lang.String[]{"Response", "UserId",});
+        net.iGap.proto.ProtoResponse.getDescriptor();
     }
 
     // @@protoc_insertion_point(outer_class_scope)

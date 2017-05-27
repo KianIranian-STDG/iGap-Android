@@ -148,10 +148,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         }
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected ImageView thumbnail;

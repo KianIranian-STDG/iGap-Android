@@ -69,7 +69,7 @@ public class AvlDirectCall extends LinearLayout {
     private View makeHeaderTextView(Context context) {
 
         TextView textView = new TextView(context);
-        textView.setTextColor(Color.parseColor("#312B30"));
+        textView.setTextColor(Color.parseColor("#ffffff"));
         textView.setTextSize(context.getResources().getDimension(R.dimen.dp14));
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setText(R.string.md_expand_arrow);
@@ -80,9 +80,9 @@ public class AvlDirectCall extends LinearLayout {
 
     private void addAnimation(View view, int start) {
 
-        Animation fadeIn = new AlphaAnimation(.4f, 1);
+        Animation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setStartOffset(start);
-        fadeIn.setDuration(750);
+        fadeIn.setDuration(250);
         fadeIn.setRepeatCount(Animation.REVERSE);
         fadeIn.setRepeatCount(Animation.INFINITE);
 

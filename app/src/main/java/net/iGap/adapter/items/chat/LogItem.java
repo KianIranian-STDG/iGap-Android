@@ -51,10 +51,6 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
         // setTextIfNeeded(holder.text, mMessage.messageText);
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView text;

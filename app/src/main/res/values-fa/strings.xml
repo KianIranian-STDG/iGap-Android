@@ -107,6 +107,7 @@
 
   <!-- Public String -->
   <string name="app_name">"آی گپ"</string>
+  <string name="call_name">تماس صوتی آی گپ</string>
   <string name="chat">"گفتگو"</string>
   <string name="group">"گروه"</string>
   <string name="channel">"کانال"</string>
@@ -728,6 +729,10 @@
   <string name="revoke">ابطال</string>
   <string name="conversation">صفحه</string>
 
+  <string name="MISSED_SCREEN_SHARE">"تماس از دست رفته"</string>
+  <string name="MISSED_VOICE_CALL">"تماس صوتی از دست رفته"</string>
+  <string name="MISSED_VIDEO_CALL">"تماس تصویری از دست رفته"</string>
+
 
   <string name="send_position">ارسال موقعیت</string>
   <string name="deleted_message">پیام حذف شده</string>
@@ -798,7 +803,7 @@
   <string name="toggle_botton_color">رنگ دکمه های ضامنی</string>
   <string name="send_and_attach_botton_color">رنگ آیکن ارسال و پیوست ها</string>
   <string name="default_header_font_color">رنگ تیتر نوشته ها</string>
-  <string name="default_progress_color">رنگ تیتر پروگرس بار</string>
+  <string name="default_progress_color">رنگ پروگرس بار</string>
   <string name="who_can_see_my_avatar">چه کسی آواتارهای من را ببیند؟</string>
   <string name="who_can_invite_you_to_channel_s">چه کسی من را به کانال دعوت کند ؟</string>
   <string name="who_can_invite_you_to_group_s">چه کسی من را به گروه دعوت کند ؟</string>
@@ -807,7 +812,8 @@
   <string name="privacy_setting">تنظیمات خصوصی </string>
   <string name="igap_search">‫بگرد و کشف کن</string>‬‬‬‬‬‬
   <string name="set_color_to_default">انتخاب رنگ پیش فرض برنامه</string>
-  <string name="empty_message">‫چیزی پیدا نشد، لطفا 5 کاراکتر ابتدایی نام کاربری را وارد کنید</string>‬‬‬‬‬‬
+  <string name="empty_message"> لطفا 5 کاراکتر ابتدایی نام کاربری را وارد کنید</string>‬‬‬‬‬‬
+  <string name="empty_message3"> برای جستجو حداقل 3 کاراکتر وارد کنید</string>‬‬‬‬‬‬
   <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
   <string name="there_is_no_connection_to_server">ارتباط با سرور برقرار نیست</string>
   <string name="empty_room">هنوز پیامی ندارید</string>
@@ -837,8 +843,9 @@
   <string name="calls">تماس</string>
   <string name="igap_call">تماس آی گپ</string>
   <string name="No_messages_here_yet">در حال حاضر پیامی وجود ندارد</string>
-  <string name="clean_log">حذف گزارشات</string>
+  <string name="clean_log">پاک کردن تاریخچه تماس</string>
   <string name="mandatory">(اجباری)</string>
   <string name="optional">اختیاری</string>
   <string name="desc_group_chanel">توضیحات (اختیاری)</string>
+  <string name="call_with">انتخاب مخاطب</string>
 </resources>

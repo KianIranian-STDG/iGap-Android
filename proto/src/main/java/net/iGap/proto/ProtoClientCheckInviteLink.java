@@ -76,11 +76,11 @@ public final class ProtoClientCheckInviteLink {
               break;
             }
             case 10: {
-                net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
+              net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
               if (request_ != null) {
                 subBuilder = request_.toBuilder();
               }
-                request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
+              request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(request_);
                 request_ = subBuilder.buildPartial();
@@ -106,16 +106,15 @@ public final class ProtoClientCheckInviteLink {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLink_descriptor;
+      return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLink_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLink_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.class, net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.Builder.class);
+      return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLink_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.class, net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
-      private net.iGap.proto.ProtoRequest.Request request_;
+    private net.iGap.proto.ProtoRequest.Request request_;
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -126,7 +125,7 @@ public final class ProtoClientCheckInviteLink {
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
-        return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+      return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
     /**
      * <code>optional .proto.Request request = 1;</code>
@@ -205,10 +204,10 @@ public final class ProtoClientCheckInviteLink {
       if (obj == this) {
         return true;
       }
-        if (!(obj instanceof net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink)) {
+      if (!(obj instanceof net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink)) {
         return super.equals(obj);
       }
-        net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink other = (net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink) obj;
+      net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink other = (net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink) obj;
 
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
@@ -237,48 +236,43 @@ public final class ProtoClientCheckInviteLink {
       return hash;
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(java.io.InputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -289,7 +283,7 @@ public final class ProtoClientCheckInviteLink {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-      public static Builder newBuilder(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink prototype) {
+    public static Builder newBuilder(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -308,15 +302,14 @@ public final class ProtoClientCheckInviteLink {
             // @@protoc_insertion_point(builder_implements:proto.ClientCheckInviteLink)
         net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-          return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLink_descriptor;
+        return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLink_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLink_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.class, net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.Builder.class);
+        return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLink_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.class, net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.Builder.class);
       }
 
-        // Construct using net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.newBuilder()
+      // Construct using net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -343,23 +336,23 @@ public final class ProtoClientCheckInviteLink {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-          return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLink_descriptor;
+        return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLink_descriptor;
       }
 
-        public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink getDefaultInstanceForType() {
-            return net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.getDefaultInstance();
+      public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink getDefaultInstanceForType() {
+        return net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.getDefaultInstance();
       }
 
-        public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink build() {
-            net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink result = buildPartial();
+      public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink build() {
+        net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-        public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink buildPartial() {
-            net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink result = new net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink(this);
+      public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink buildPartial() {
+        net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink result = new net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink(this);
         if (requestBuilder_ == null) {
           result.request_ = request_;
         } else {
@@ -394,16 +387,16 @@ public final class ProtoClientCheckInviteLink {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink) {
-              return mergeFrom((net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink) other);
+        if (other instanceof net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink) {
+          return mergeFrom((net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-        public Builder mergeFrom(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink other) {
-            if (other == net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.getDefaultInstance()) return this;
+      public Builder mergeFrom(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink other) {
+        if (other == net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -420,11 +413,11 @@ public final class ProtoClientCheckInviteLink {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-          net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parsedMessage = null;
+        net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink) e.getUnfinishedMessage();
+          parsedMessage = (net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -434,9 +427,8 @@ public final class ProtoClientCheckInviteLink {
         return this;
       }
 
-        private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+      private net.iGap.proto.ProtoRequest.Request request_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -448,7 +440,7 @@ public final class ProtoClientCheckInviteLink {
        */
       public net.iGap.proto.ProtoRequest.Request getRequest() {
         if (requestBuilder_ == null) {
-            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         } else {
           return requestBuilder_.getMessage();
         }
@@ -488,7 +480,7 @@ public final class ProtoClientCheckInviteLink {
       public Builder mergeRequest(net.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-              request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+            request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -528,7 +520,7 @@ public final class ProtoClientCheckInviteLink {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
@@ -536,9 +528,7 @@ public final class ProtoClientCheckInviteLink {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
-                    getRequest(), getParentForChildren(), isClean());
+          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
           request_ = null;
         }
         return requestBuilder_;
@@ -622,10 +612,10 @@ public final class ProtoClientCheckInviteLink {
     // @@protoc_insertion_point(class_scope:proto.ClientCheckInviteLink)
     private static final net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink DEFAULT_INSTANCE;
     static {
-        DEFAULT_INSTANCE = new net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink();
+      DEFAULT_INSTANCE = new net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink();
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink getDefaultInstance() {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -644,7 +634,7 @@ public final class ProtoClientCheckInviteLink {
       return PARSER;
     }
 
-      public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink getDefaultInstanceForType() {
+    public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLink getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -716,11 +706,11 @@ public final class ProtoClientCheckInviteLink {
               break;
             }
             case 10: {
-                net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
+              net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
               if (response_ != null) {
                 subBuilder = response_.toBuilder();
               }
-                response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
+              response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(response_);
                 response_ = subBuilder.buildPartial();
@@ -729,11 +719,11 @@ public final class ProtoClientCheckInviteLink {
               break;
             }
             case 18: {
-                net.iGap.proto.ProtoGlobal.Room.Builder subBuilder = null;
+              net.iGap.proto.ProtoGlobal.Room.Builder subBuilder = null;
               if (room_ != null) {
                 subBuilder = room_.toBuilder();
               }
-                room_ = input.readMessage(net.iGap.proto.ProtoGlobal.Room.parser(), extensionRegistry);
+              room_ = input.readMessage(net.iGap.proto.ProtoGlobal.Room.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(room_);
                 room_ = subBuilder.buildPartial();
@@ -753,16 +743,15 @@ public final class ProtoClientCheckInviteLink {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLinkResponse_descriptor;
+      return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLinkResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLinkResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.class, net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.Builder.class);
+      return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLinkResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.class, net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
-      private net.iGap.proto.ProtoResponse.Response response_;
+    private net.iGap.proto.ProtoResponse.Response response_;
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -773,7 +762,7 @@ public final class ProtoClientCheckInviteLink {
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
-        return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+      return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
     /**
      * <code>optional .proto.Response response = 1;</code>
@@ -783,7 +772,7 @@ public final class ProtoClientCheckInviteLink {
     }
 
     public static final int ROOM_FIELD_NUMBER = 2;
-      private net.iGap.proto.ProtoGlobal.Room room_;
+    private net.iGap.proto.ProtoGlobal.Room room_;
     /**
      * <code>optional .proto.Room room = 2;</code>
      */
@@ -794,7 +783,7 @@ public final class ProtoClientCheckInviteLink {
      * <code>optional .proto.Room room = 2;</code>
      */
     public net.iGap.proto.ProtoGlobal.Room getRoom() {
-        return room_ == null ? net.iGap.proto.ProtoGlobal.Room.getDefaultInstance() : room_;
+      return room_ == null ? net.iGap.proto.ProtoGlobal.Room.getDefaultInstance() : room_;
     }
     /**
      * <code>optional .proto.Room room = 2;</code>
@@ -843,10 +832,10 @@ public final class ProtoClientCheckInviteLink {
       if (obj == this) {
         return true;
       }
-        if (!(obj instanceof net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse)) {
+      if (!(obj instanceof net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse)) {
         return super.equals(obj);
       }
-        net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse other = (net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse) obj;
+      net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse other = (net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse) obj;
 
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
@@ -880,48 +869,43 @@ public final class ProtoClientCheckInviteLink {
       return hash;
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -932,7 +916,7 @@ public final class ProtoClientCheckInviteLink {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-      public static Builder newBuilder(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse prototype) {
+    public static Builder newBuilder(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -952,15 +936,14 @@ public final class ProtoClientCheckInviteLink {
             // @@protoc_insertion_point(builder_implements:proto.ClientCheckInviteLinkResponse)
         net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-          return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLinkResponse_descriptor;
+        return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLinkResponse_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLinkResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.class, net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.Builder.class);
+        return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLinkResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.class, net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.Builder.class);
       }
 
-        // Construct using net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.newBuilder()
+      // Construct using net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -991,23 +974,23 @@ public final class ProtoClientCheckInviteLink {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-          return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLinkResponse_descriptor;
+        return net.iGap.proto.ProtoClientCheckInviteLink.internal_static_proto_ClientCheckInviteLinkResponse_descriptor;
       }
 
-        public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse getDefaultInstanceForType() {
-            return net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.getDefaultInstance();
+      public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse getDefaultInstanceForType() {
+        return net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.getDefaultInstance();
       }
 
-        public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse build() {
-            net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse result = buildPartial();
+      public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse build() {
+        net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-        public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse buildPartial() {
-            net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse result = new net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse(this);
+      public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse buildPartial() {
+        net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse result = new net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse(this);
         if (responseBuilder_ == null) {
           result.response_ = response_;
         } else {
@@ -1046,16 +1029,16 @@ public final class ProtoClientCheckInviteLink {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse) {
-              return mergeFrom((net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse) other);
+        if (other instanceof net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse) {
+          return mergeFrom((net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-        public Builder mergeFrom(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse other) {
-            if (other == net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse other) {
+        if (other == net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1071,11 +1054,11 @@ public final class ProtoClientCheckInviteLink {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-          net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parsedMessage = null;
+        net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse) e.getUnfinishedMessage();
+          parsedMessage = (net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1085,9 +1068,8 @@ public final class ProtoClientCheckInviteLink {
         return this;
       }
 
-        private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+      private net.iGap.proto.ProtoResponse.Response response_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1099,7 +1081,7 @@ public final class ProtoClientCheckInviteLink {
        */
       public net.iGap.proto.ProtoResponse.Response getResponse() {
         if (responseBuilder_ == null) {
-            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         } else {
           return responseBuilder_.getMessage();
         }
@@ -1139,7 +1121,7 @@ public final class ProtoClientCheckInviteLink {
       public Builder mergeResponse(net.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-              response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+            response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1179,7 +1161,7 @@ public final class ProtoClientCheckInviteLink {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
@@ -1187,16 +1169,14 @@ public final class ProtoClientCheckInviteLink {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
-                    getResponse(), getParentForChildren(), isClean());
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
       }
 
-        private net.iGap.proto.ProtoGlobal.Room room_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.Room, net.iGap.proto.ProtoGlobal.Room.Builder, net.iGap.proto.ProtoGlobal.RoomOrBuilder> roomBuilder_;
+      private net.iGap.proto.ProtoGlobal.Room room_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.Room, net.iGap.proto.ProtoGlobal.Room.Builder, net.iGap.proto.ProtoGlobal.RoomOrBuilder> roomBuilder_;
       /**
        * <code>optional .proto.Room room = 2;</code>
        */
@@ -1208,7 +1188,7 @@ public final class ProtoClientCheckInviteLink {
        */
       public net.iGap.proto.ProtoGlobal.Room getRoom() {
         if (roomBuilder_ == null) {
-            return room_ == null ? net.iGap.proto.ProtoGlobal.Room.getDefaultInstance() : room_;
+          return room_ == null ? net.iGap.proto.ProtoGlobal.Room.getDefaultInstance() : room_;
         } else {
           return roomBuilder_.getMessage();
         }
@@ -1248,7 +1228,7 @@ public final class ProtoClientCheckInviteLink {
       public Builder mergeRoom(net.iGap.proto.ProtoGlobal.Room value) {
         if (roomBuilder_ == null) {
           if (room_ != null) {
-              room_ = net.iGap.proto.ProtoGlobal.Room.newBuilder(room_).mergeFrom(value).buildPartial();
+            room_ = net.iGap.proto.ProtoGlobal.Room.newBuilder(room_).mergeFrom(value).buildPartial();
           } else {
             room_ = value;
           }
@@ -1288,7 +1268,7 @@ public final class ProtoClientCheckInviteLink {
         if (roomBuilder_ != null) {
           return roomBuilder_.getMessageOrBuilder();
         } else {
-            return room_ == null ? net.iGap.proto.ProtoGlobal.Room.getDefaultInstance() : room_;
+          return room_ == null ? net.iGap.proto.ProtoGlobal.Room.getDefaultInstance() : room_;
         }
       }
       /**
@@ -1296,8 +1276,7 @@ public final class ProtoClientCheckInviteLink {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.Room, net.iGap.proto.ProtoGlobal.Room.Builder, net.iGap.proto.ProtoGlobal.RoomOrBuilder> getRoomFieldBuilder() {
         if (roomBuilder_ == null) {
-            roomBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.Room, net.iGap.proto.ProtoGlobal.Room.Builder, net.iGap.proto.ProtoGlobal.RoomOrBuilder>(getRoom(),
-                getParentForChildren(), isClean());
+          roomBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.Room, net.iGap.proto.ProtoGlobal.Room.Builder, net.iGap.proto.ProtoGlobal.RoomOrBuilder>(getRoom(), getParentForChildren(), isClean());
           room_ = null;
         }
         return roomBuilder_;
@@ -1318,10 +1297,10 @@ public final class ProtoClientCheckInviteLink {
     // @@protoc_insertion_point(class_scope:proto.ClientCheckInviteLinkResponse)
     private static final net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse DEFAULT_INSTANCE;
     static {
-        DEFAULT_INSTANCE = new net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse();
+      DEFAULT_INSTANCE = new net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse();
     }
 
-      public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse getDefaultInstance() {
+    public static net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1340,7 +1319,7 @@ public final class ProtoClientCheckInviteLink {
       return PARSER;
     }
 
-      public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse getDefaultInstanceForType() {
+    public net.iGap.proto.ProtoClientCheckInviteLink.ClientCheckInviteLinkResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1363,7 +1342,8 @@ public final class ProtoClientCheckInviteLink {
                     "o\"N\n\025ClientCheckInviteLink\022\037\n\007request\030\001 " +
                     "\001(\0132\016.proto.Request\022\024\n\014invite_token\030\002 \001(" +
                     "\t\"]\n\035ClientCheckInviteLinkResponse\022!\n\010re" +
-                    "sponse\030\001 \001(\0132\017.proto.Response\022\031\n\004room\030\002 " + "\001(\0132\013.proto.RoomB,\n\016net.iGap.protoB\032Prot" +
+                    "sponse\030\001 \001(\0132\017.proto.Response\022\031\n\004room\030\002 " +
+                    "\001(\0132\013.proto.RoomB,\n\016net.iGap.protoB\032Prot" +
                     "oClientCheckInviteLinkb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1373,7 +1353,7 @@ public final class ProtoClientCheckInviteLink {
       }
     };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-        net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(), net.iGap.proto.ProtoGlobal.getDescriptor(),
+            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(), net.iGap.proto.ProtoGlobal.getDescriptor(),
     }, assigner);
     internal_static_proto_ClientCheckInviteLink_descriptor = getDescriptor().getMessageTypes().get(0);
     internal_static_proto_ClientCheckInviteLink_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ClientCheckInviteLink_descriptor, new java.lang.String[]{"Request", "InviteToken",});
@@ -1382,9 +1362,9 @@ public final class ProtoClientCheckInviteLink {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ClientCheckInviteLinkResponse_descriptor,
         new java.lang.String[] { "Response", "Room", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
-      net.iGap.proto.ProtoGlobal.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

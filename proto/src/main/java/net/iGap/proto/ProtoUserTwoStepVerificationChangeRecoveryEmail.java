@@ -13,7 +13,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface UserTwoStepVerificationChangeRecoveryEmailOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.UserTwoStepVerificationChangeRecoveryEmail)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     net.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -37,7 +34,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
      * <code>optional string password = 2;</code>
      */
     java.lang.String getPassword();
-
     /**
      * <code>optional string password = 2;</code>
      */
@@ -47,13 +43,11 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
      * <code>optional string email = 3;</code>
      */
     java.lang.String getEmail();
-
     /**
      * <code>optional string email = 3;</code>
      */
     com.google.protobuf.ByteString getEmailBytes();
   }
-
   /**
    * Protobuf type {@code proto.UserTwoStepVerificationChangeRecoveryEmail}
    */
@@ -64,7 +58,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
     private UserTwoStepVerificationChangeRecoveryEmail(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserTwoStepVerificationChangeRecoveryEmail() {
       password_ = "";
       email_ = "";
@@ -133,28 +126,24 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.internal_static_proto_UserTwoStepVerificationChangeRecoveryEmail_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail.class,
+        return net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.internal_static_proto_UserTwoStepVerificationChangeRecoveryEmail_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail.class,
             net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
       private net.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
         return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -164,7 +153,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
     public static final int PASSWORD_FIELD_NUMBER = 2;
     private volatile java.lang.Object password_;
-
     /**
      * <code>optional string password = 2;</code>
      */
@@ -179,7 +167,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         return s;
       }
     }
-
     /**
      * <code>optional string password = 2;</code>
      */
@@ -196,7 +183,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
     public static final int EMAIL_FIELD_NUMBER = 3;
     private volatile java.lang.Object email_;
-
     /**
      * <code>optional string email = 3;</code>
      */
@@ -211,7 +197,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         return s;
       }
     }
-
     /**
      * <code>optional string email = 3;</code>
      */
@@ -227,7 +212,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -268,7 +252,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -277,8 +260,7 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         if (!(obj instanceof net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail)) {
         return super.equals(obj);
       }
-        net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail other =
-            (net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail) obj;
+        net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail other = (net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail) obj;
 
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
@@ -310,23 +292,19 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       return hash;
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(com.google.protobuf.ByteString data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(byte[] data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(byte[] data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -334,8 +312,7 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -343,25 +320,21 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseDelimitedFrom(java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(com.google.protobuf.CodedInputStream input)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -369,7 +342,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       public static Builder newBuilder(net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -379,7 +351,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserTwoStepVerificationChangeRecoveryEmail}
      */
@@ -391,8 +362,7 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.internal_static_proto_UserTwoStepVerificationChangeRecoveryEmail_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail.class,
+          return net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.internal_static_proto_UserTwoStepVerificationChangeRecoveryEmail_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail.class,
               net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail.Builder.class);
       }
 
@@ -405,12 +375,10 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -443,8 +411,7 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       }
 
         public net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail buildPartial() {
-            net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail result =
-                new net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail(this);
+            net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail result = new net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail(this);
         if (requestBuilder_ == null) {
           result.request_ = request_;
         } else {
@@ -479,7 +446,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail) {
               return mergeFrom((net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail) other);
@@ -526,16 +492,13 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
-
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -546,7 +509,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -563,7 +525,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -577,7 +538,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -595,7 +555,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -610,7 +569,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -619,7 +577,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -630,22 +587,18 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
             return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
-                    getRequest(), getParentForChildren(), isClean());
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
           request_ = null;
         }
         return requestBuilder_;
       }
 
       private java.lang.Object password_ = "";
-
       /**
        * <code>optional string password = 2;</code>
        */
@@ -660,7 +613,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string password = 2;</code>
        */
@@ -674,7 +626,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string password = 2;</code>
        */
@@ -683,11 +634,10 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           throw new NullPointerException();
         }
 
-        password_ = value;
+          password_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string password = 2;</code>
        */
@@ -697,7 +647,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string password = 2;</code>
        */
@@ -707,13 +656,12 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         }
         checkByteStringIsUtf8(value);
 
-        password_ = value;
+          password_ = value;
         onChanged();
         return this;
       }
 
       private java.lang.Object email_ = "";
-
       /**
        * <code>optional string email = 3;</code>
        */
@@ -728,7 +676,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string email = 3;</code>
        */
@@ -742,7 +689,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string email = 3;</code>
        */
@@ -751,11 +697,10 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           throw new NullPointerException();
         }
 
-        email_ = value;
+          email_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string email = 3;</code>
        */
@@ -765,7 +710,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string email = 3;</code>
        */
@@ -775,7 +719,7 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         }
         checkByteStringIsUtf8(value);
 
-        email_ = value;
+          email_ = value;
         onChanged();
         return this;
       }
@@ -794,7 +738,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
     // @@protoc_insertion_point(class_scope:proto.UserTwoStepVerificationChangeRecoveryEmail)
     private static final net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail DEFAULT_INSTANCE;
-
     static {
         DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmail();
     }
@@ -832,12 +775,10 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     net.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -847,13 +788,11 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
      * <code>optional string unconfirmed_email_pattern = 2;</code>
      */
     java.lang.String getUnconfirmedEmailPattern();
-
     /**
      * <code>optional string unconfirmed_email_pattern = 2;</code>
      */
     com.google.protobuf.ByteString getUnconfirmedEmailPatternBytes();
   }
-
   /**
    * Protobuf type {@code proto.UserTwoStepVerificationChangeRecoveryEmailResponse}
    */
@@ -864,7 +803,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
     private UserTwoStepVerificationChangeRecoveryEmailResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private UserTwoStepVerificationChangeRecoveryEmailResponse() {
       unconfirmedEmailPattern_ = "";
     }
@@ -926,28 +864,24 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.internal_static_proto_UserTwoStepVerificationChangeRecoveryEmailResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse.class,
+        return net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.internal_static_proto_UserTwoStepVerificationChangeRecoveryEmailResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse.class,
             net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
       private net.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
         return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -957,7 +891,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
     public static final int UNCONFIRMED_EMAIL_PATTERN_FIELD_NUMBER = 2;
     private volatile java.lang.Object unconfirmedEmailPattern_;
-
     /**
      * <code>optional string unconfirmed_email_pattern = 2;</code>
      */
@@ -972,7 +905,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         return s;
       }
     }
-
     /**
      * <code>optional string unconfirmed_email_pattern = 2;</code>
      */
@@ -988,7 +920,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1023,7 +954,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -1032,8 +962,7 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         if (!(obj instanceof net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse)) {
         return super.equals(obj);
       }
-        net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse other =
-            (net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse) obj;
+        net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse other = (net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse) obj;
 
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
@@ -1062,23 +991,19 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       return hash;
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(com.google.protobuf.ByteString data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(com.google.protobuf.ByteString data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(byte[] data)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(byte[] data,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1086,35 +1011,29 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseDelimitedFrom(java.io.InputStream input)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseDelimitedFrom(java.io.InputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(com.google.protobuf.CodedInputStream input)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
@@ -1131,7 +1050,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.UserTwoStepVerificationChangeRecoveryEmailResponse}
      */
@@ -1143,8 +1061,7 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.internal_static_proto_UserTwoStepVerificationChangeRecoveryEmailResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse.class,
+          return net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.internal_static_proto_UserTwoStepVerificationChangeRecoveryEmailResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse.class,
               net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse.Builder.class);
       }
 
@@ -1157,12 +1074,10 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -1193,8 +1108,7 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       }
 
         public net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse buildPartial() {
-            net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse result =
-                new net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse(this);
+            net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse result = new net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse(this);
         if (responseBuilder_ == null) {
           result.response_ = response_;
         } else {
@@ -1228,7 +1142,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse) {
               return mergeFrom((net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse) other);
@@ -1271,16 +1184,13 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
-
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1291,7 +1201,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1308,7 +1217,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1322,7 +1230,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1340,7 +1247,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1355,7 +1261,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1364,7 +1269,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1375,15 +1279,12 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
             return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
-                    getResponse(), getParentForChildren(), isClean());
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
@@ -1404,7 +1305,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string unconfirmed_email_pattern = 2;</code>
        */
@@ -1418,7 +1318,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string unconfirmed_email_pattern = 2;</code>
        */
@@ -1427,11 +1326,10 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
           throw new NullPointerException();
         }
 
-        unconfirmedEmailPattern_ = value;
+          unconfirmedEmailPattern_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string unconfirmed_email_pattern = 2;</code>
        */
@@ -1441,7 +1339,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string unconfirmed_email_pattern = 2;</code>
        */
@@ -1451,7 +1348,7 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
         }
         checkByteStringIsUtf8(value);
 
-        unconfirmedEmailPattern_ = value;
+          unconfirmedEmailPattern_ = value;
         onChanged();
         return this;
       }
@@ -1470,7 +1367,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
 
     // @@protoc_insertion_point(class_scope:proto.UserTwoStepVerificationChangeRecoveryEmailResponse)
     private static final net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse DEFAULT_INSTANCE;
-
     static {
         DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserTwoStepVerificationChangeRecoveryEmail.UserTwoStepVerificationChangeRecoveryEmailResponse();
     }
@@ -1510,7 +1406,6 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n0UserTwoStepVerificationChangeRecoveryE" +
@@ -1519,8 +1414,7 @@ public final class ProtoUserTwoStepVerificationChangeRecoveryEmail {
                     "eRecoveryEmail\022\037\n\007request\030\001 \001(\0132\016.proto." +
                     "Request\022\020\n\010password\030\002 \001(\t\022\r\n\005email\030\003 \001(\t" +
                     "\"z\n2UserTwoStepVerificationChangeRecover" +
-                    "yEmailResponse\022!\n\010response\030\001 \001(\0132\017.proto" +
-                    ".Response\022!\n\031unconfirmed_email_pattern\030\002" + " \001(\tBA\n\016net.iGap.protoB/ProtoUserTwoStep" +
+                    "yEmailResponse\022!\n\010response\030\001 \001(\0132\017.proto" + ".Response\022!\n\031unconfirmed_email_pattern\030\002" + " \001(\tBA\n\016net.iGap.protoB/ProtoUserTwoStep" +
                     "VerificationChangeRecoveryEmailb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

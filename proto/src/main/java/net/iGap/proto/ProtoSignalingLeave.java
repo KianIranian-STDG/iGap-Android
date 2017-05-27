@@ -15,8 +15,8 @@ public final class ProtoSignalingLeave {
     }
 
     public interface SignalingLeaveOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingLeave)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingLeave)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Request request = 1;</code>
@@ -38,8 +38,8 @@ public final class ProtoSignalingLeave {
      * Protobuf type {@code proto.SignalingLeave}
      */
     public static final class SignalingLeave extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingLeave)
-            SignalingLeaveOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingLeave)
+        SignalingLeaveOrBuilder {
         // Use SignalingLeave.newBuilder() to construct.
         private SignalingLeave(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -257,8 +257,8 @@ public final class ProtoSignalingLeave {
          * Protobuf type {@code proto.SignalingLeave}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingLeave)
-                net.iGap.proto.ProtoSignalingLeave.SignalingLeaveOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingLeave)
+            net.iGap.proto.ProtoSignalingLeave.SignalingLeaveOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingLeave.internal_static_proto_SignalingLeave_descriptor;
             }
@@ -542,8 +542,8 @@ public final class ProtoSignalingLeave {
     }
 
     public interface SignalingLeaveResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingLeaveResponse)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingLeaveResponse)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Response response = 1;</code>
@@ -575,8 +575,8 @@ public final class ProtoSignalingLeave {
      * Protobuf type {@code proto.SignalingLeaveResponse}
      */
     public static final class SignalingLeaveResponse extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingLeaveResponse)
-            SignalingLeaveResponseOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingLeaveResponse)
+        SignalingLeaveResponseOrBuilder {
         // Use SignalingLeaveResponse.newBuilder() to construct.
         private SignalingLeaveResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -653,32 +653,28 @@ public final class ProtoSignalingLeave {
             /**
              * <code>MISSED = 0;</code>
              */
-            MISSED(0),
-            /**
+            MISSED(0), /**
              * <code>REJECTED = 1;</code>
              */
-            REJECTED(1),
-            /**
+            REJECTED(1), /**
              * <code>ACCEPTED = 2;</code>
              */
-            ACCEPTED(2),
-            /**
+            ACCEPTED(2), /**
              * <code>NOT_ANSWERED = 3;</code>
              */
-            NOT_ANSWERED(3),
-            /**
+            NOT_ANSWERED(3), /**
              * <code>UNAVAILABLE = 4;</code>
              */
-            UNAVAILABLE(4),
-            /**
+            UNAVAILABLE(4), /**
              * <code>DISCONNECTED = 5;</code>
              */
-            DISCONNECTED(5),
-            /**
+            DISCONNECTED(5), /**
              * <code>FINISHED = 6;</code>
              */
-            FINISHED(6),
-            UNRECOGNIZED(-1),;
+            FINISHED(6), /**
+             * <code>TOO_LONG = 7;</code>
+             */
+            TOO_LONG(7), UNRECOGNIZED(-1),;
 
             /**
              * <code>MISSED = 0;</code>
@@ -708,6 +704,10 @@ public final class ProtoSignalingLeave {
              * <code>FINISHED = 6;</code>
              */
             public static final int FINISHED_VALUE = 6;
+            /**
+             * <code>TOO_LONG = 7;</code>
+             */
+            public static final int TOO_LONG_VALUE = 7;
 
 
             public final int getNumber() {
@@ -741,6 +741,8 @@ public final class ProtoSignalingLeave {
                         return DISCONNECTED;
                     case 6:
                         return FINISHED;
+                    case 7:
+                        return TOO_LONG;
                     default:
                         return null;
                 }
@@ -971,8 +973,8 @@ public final class ProtoSignalingLeave {
          * Protobuf type {@code proto.SignalingLeaveResponse}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingLeaveResponse)
-                net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponseOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingLeaveResponse)
+            net.iGap.proto.ProtoSignalingLeave.SignalingLeaveResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingLeave.internal_static_proto_SignalingLeaveResponse_descriptor;
             }
@@ -989,7 +991,7 @@ public final class ProtoSignalingLeave {
             private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
                 super(parent);
                 maybeForceBuilderInitialization();
-            }
+      }
 
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
@@ -1323,16 +1325,16 @@ public final class ProtoSignalingLeave {
 
     static {
         java.lang.String[] descriptorData = {
-                "\n\024SignalingLeave.proto\022\005proto\032\rRequest.p" +
-                        "roto\032\016Response.proto\"1\n\016SignalingLeave\022\037" +
-                        "\n\007request\030\001 \001(\0132\016.proto.Request\"\340\001\n\026Sign" +
-                        "alingLeaveResponse\022!\n\010response\030\001 \001(\0132\017.p" +
-                        "roto.Response\0220\n\004type\030\002 \001(\0162\".proto.Sign" +
-                        "alingLeaveResponse.Type\"q\n\004Type\022\n\n\006MISSE" +
-                        "D\020\000\022\014\n\010REJECTED\020\001\022\014\n\010ACCEPTED\020\002\022\020\n\014NOT_A" +
-                        "NSWERED\020\003\022\017\n\013UNAVAILABLE\020\004\022\020\n\014DISCONNECT" +
-                        "ED\020\005\022\014\n\010FINISHED\020\006B%\n\016net.iGap.protoB\023Pr" +
-                        "otoSignalingLeaveb\006proto3"
+            "\n\024SignalingLeave.proto\022\005proto\032\rRequest.p"
+                + "roto\032\016Response.proto\"1\n\016SignalingLeave\022\037"
+                + "\n\007request\030\001 \001(\0132\016.proto.Request\"\356\001\n\026Sign"
+                + "alingLeaveResponse\022!\n\010response\030\001 \001(\0132\017.p"
+                + "roto.Response\0220\n\004type\030\002 \001(\0162\".proto.Sign"
+                + "alingLeaveResponse.Type\"\177\n\004Type\022\n\n\006MISSE"
+                + "D\020\000\022\014\n\010REJECTED\020\001\022\014\n\010ACCEPTED\020\002\022\020\n\014NOT_A"
+                + "NSWERED\020\003\022\017\n\013UNAVAILABLE\020\004\022\020\n\014DISCONNECT"
+                + "ED\020\005\022\014\n\010FINISHED\020\006\022\014\n\010TOO_LONG\020\007B%\n\016net."
+                + "iGap.protoB\023ProtoSignalingLeaveb\006proto3"
         };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1341,15 +1343,19 @@ public final class ProtoSignalingLeave {
             }
         };
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-                net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
         }, assigner);
         internal_static_proto_SignalingLeave_descriptor = getDescriptor().getMessageTypes().get(0);
         internal_static_proto_SignalingLeave_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingLeave_descriptor, new java.lang.String[]{"Request",});
-        internal_static_proto_SignalingLeaveResponse_descriptor = getDescriptor().getMessageTypes().get(1);
-        internal_static_proto_SignalingLeaveResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingLeaveResponse_descriptor, new java.lang.String[]{"Response", "Type",});
-        net.iGap.proto.ProtoRequest.getDescriptor();
-        net.iGap.proto.ProtoResponse.getDescriptor();
-    }
+        internal_static_proto_SignalingLeaveResponse_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_proto_SignalingLeaveResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_proto_SignalingLeaveResponse_descriptor,
+        new java.lang.String[] { "Response", "Type", });
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
+  }
 
-    // @@protoc_insertion_point(outer_class_scope)
+  // @@protoc_insertion_point(outer_class_scope)
 }

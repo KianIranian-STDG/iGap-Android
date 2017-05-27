@@ -38,10 +38,6 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
         setTextIfNeeded(holder.text, mMessage.messageText);
     }
 
-    @Override protected void voteAction(ViewHolder holder) {
-        super.voteAction(holder);
-    }
-
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView text;

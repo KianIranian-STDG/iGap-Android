@@ -251,8 +251,7 @@ public final class ProtoChannelSendMessage {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelSendMessage.internal_static_proto_ChannelSendMessage_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessage.class, net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessage.Builder.class);
+        return net.iGap.proto.ProtoChannelSendMessage.internal_static_proto_ChannelSendMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessage.class, net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessage.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -707,8 +706,7 @@ public final class ProtoChannelSendMessage {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelSendMessage.internal_static_proto_ChannelSendMessage_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessage.class, net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessage.Builder.class);
+          return net.iGap.proto.ProtoChannelSendMessage.internal_static_proto_ChannelSendMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessage.class, net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessage.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessage.newBuilder()
@@ -1225,8 +1223,7 @@ public final class ProtoChannelSendMessage {
       }
 
         private net.iGap.proto.ProtoGlobal.RoomMessageLocation location_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessageLocation, net.iGap.proto.ProtoGlobal.RoomMessageLocation.Builder, net.iGap.proto.ProtoGlobal.RoomMessageLocationOrBuilder>
-          locationBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessageLocation, net.iGap.proto.ProtoGlobal.RoomMessageLocation.Builder, net.iGap.proto.ProtoGlobal.RoomMessageLocationOrBuilder> locationBuilder_;
       /**
        * <code>optional .proto.RoomMessageLocation location = 6;</code>
        */
@@ -1337,8 +1334,7 @@ public final class ProtoChannelSendMessage {
       }
 
         private net.iGap.proto.ProtoGlobal.RoomMessageContact contact_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessageContact, net.iGap.proto.ProtoGlobal.RoomMessageContact.Builder, net.iGap.proto.ProtoGlobal.RoomMessageContactOrBuilder>
-          contactBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessageContact, net.iGap.proto.ProtoGlobal.RoomMessageContact.Builder, net.iGap.proto.ProtoGlobal.RoomMessageContactOrBuilder> contactBuilder_;
       /**
        * <code>optional .proto.RoomMessageContact contact = 7;</code>
        */
@@ -1475,8 +1471,7 @@ public final class ProtoChannelSendMessage {
       }
 
         private net.iGap.proto.ProtoGlobal.RoomMessageForwardFrom forwardFrom_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessageForwardFrom, net.iGap.proto.ProtoGlobal.RoomMessageForwardFrom.Builder, net.iGap.proto.ProtoGlobal.RoomMessageForwardFromOrBuilder>
-          forwardFromBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessageForwardFrom, net.iGap.proto.ProtoGlobal.RoomMessageForwardFrom.Builder, net.iGap.proto.ProtoGlobal.RoomMessageForwardFromOrBuilder> forwardFromBuilder_;
       /**
        * <code>optional .proto.RoomMessageForwardFrom forward_from = 9;</code>
        */
@@ -1758,8 +1753,7 @@ public final class ProtoChannelSendMessage {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelSendMessage.internal_static_proto_ChannelSendMessageResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessageResponse.class, net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessageResponse.Builder.class);
+        return net.iGap.proto.ProtoChannelSendMessage.internal_static_proto_ChannelSendMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessageResponse.class, net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessageResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -2008,8 +2002,7 @@ public final class ProtoChannelSendMessage {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelSendMessage.internal_static_proto_ChannelSendMessageResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessageResponse.class, net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessageResponse.Builder.class);
+          return net.iGap.proto.ProtoChannelSendMessage.internal_static_proto_ChannelSendMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessageResponse.class, net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessageResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelSendMessage.ChannelSendMessageResponse.newBuilder()
@@ -2153,8 +2146,7 @@ public final class ProtoChannelSendMessage {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-          responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2291,8 +2283,7 @@ public final class ProtoChannelSendMessage {
       }
 
         private net.iGap.proto.ProtoGlobal.RoomMessage roomMessage_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessage, net.iGap.proto.ProtoGlobal.RoomMessage.Builder, net.iGap.proto.ProtoGlobal.RoomMessageOrBuilder>
-          roomMessageBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RoomMessage, net.iGap.proto.ProtoGlobal.RoomMessage.Builder, net.iGap.proto.ProtoGlobal.RoomMessageOrBuilder> roomMessageBuilder_;
       /**
        * <code>optional .proto.RoomMessage room_message = 3;</code>
        */
@@ -2479,8 +2470,7 @@ public final class ProtoChannelSendMessage {
               "\022*\n\007contact\030\007 \001(\0132\031.proto.RoomMessageCon" +
               "tact\022\020\n\010reply_to\030\010 \001(\004\0223\n\014forward_from\030\t" +
               " \001(\0132\035.proto.RoomMessageForwardFrom\"z\n\032C", "hannelSendMessageResponse\022!\n\010response\030\001 " +
-            "\001(\0132\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022(\n" +
-            "\014room_message\030\003 \001(\0132\022.proto.RoomMessageB" + ")\n\016net.iGap.protoB\027ProtoChannelSendMessa" +
+            "\001(\0132\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022(\n" + "\014room_message\030\003 \001(\0132\022.proto.RoomMessageB" + ")\n\016net.iGap.protoB\027ProtoChannelSendMessa" +
             "geb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
@@ -2498,8 +2488,7 @@ public final class ProtoChannelSendMessage {
         }, assigner);
     internal_static_proto_ChannelSendMessage_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_ChannelSendMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChannelSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
+      internal_static_proto_ChannelSendMessage_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChannelSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
     internal_static_proto_ChannelSendMessageResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChannelSendMessageResponse_fieldAccessorTable = new

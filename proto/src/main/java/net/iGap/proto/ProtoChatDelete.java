@@ -106,8 +106,7 @@ public final class ProtoChatDelete {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChatDelete.internal_static_proto_ChatDelete_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatDelete.ChatDelete.class,
-            net.iGap.proto.ProtoChatDelete.ChatDelete.Builder.class);
+        return net.iGap.proto.ProtoChatDelete.internal_static_proto_ChatDelete_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatDelete.ChatDelete.class, net.iGap.proto.ProtoChatDelete.ChatDelete.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -216,8 +215,7 @@ public final class ProtoChatDelete {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatDelete.ChatDelete parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatDelete.ChatDelete parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -225,8 +223,7 @@ public final class ProtoChatDelete {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatDelete.ChatDelete parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatDelete.ChatDelete parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -250,8 +247,7 @@ public final class ProtoChatDelete {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatDelete.ChatDelete parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatDelete.ChatDelete parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -285,8 +281,7 @@ public final class ProtoChatDelete {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChatDelete.internal_static_proto_ChatDelete_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatDelete.ChatDelete.class,
-              net.iGap.proto.ProtoChatDelete.ChatDelete.Builder.class);
+          return net.iGap.proto.ProtoChatDelete.internal_static_proto_ChatDelete_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatDelete.ChatDelete.class, net.iGap.proto.ProtoChatDelete.ChatDelete.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChatDelete.ChatDelete.newBuilder()
@@ -408,8 +403,7 @@ public final class ProtoChatDelete {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -509,8 +503,7 @@ public final class ProtoChatDelete {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -681,8 +674,7 @@ public final class ProtoChatDelete {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChatDelete.internal_static_proto_ChatDeleteResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatDelete.ChatDeleteResponse.class,
-            net.iGap.proto.ProtoChatDelete.ChatDeleteResponse.Builder.class);
+        return net.iGap.proto.ProtoChatDelete.internal_static_proto_ChatDeleteResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatDelete.ChatDeleteResponse.class, net.iGap.proto.ProtoChatDelete.ChatDeleteResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -791,8 +783,7 @@ public final class ProtoChatDelete {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatDelete.ChatDeleteResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatDelete.ChatDeleteResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -800,8 +791,7 @@ public final class ProtoChatDelete {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChatDelete.ChatDeleteResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChatDelete.ChatDeleteResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -817,8 +807,7 @@ public final class ProtoChatDelete {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatDelete.ChatDeleteResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatDelete.ChatDeleteResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -826,8 +815,7 @@ public final class ProtoChatDelete {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChatDelete.ChatDeleteResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChatDelete.ChatDeleteResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -861,8 +849,7 @@ public final class ProtoChatDelete {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChatDelete.internal_static_proto_ChatDeleteResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatDelete.ChatDeleteResponse.class,
-              net.iGap.proto.ProtoChatDelete.ChatDeleteResponse.Builder.class);
+          return net.iGap.proto.ProtoChatDelete.internal_static_proto_ChatDeleteResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChatDelete.ChatDeleteResponse.class, net.iGap.proto.ProtoChatDelete.ChatDeleteResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChatDelete.ChatDeleteResponse.newBuilder()
@@ -984,8 +971,7 @@ public final class ProtoChatDelete {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1085,8 +1071,7 @@ public final class ProtoChatDelete {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1179,9 +1164,7 @@ public final class ProtoChatDelete {
             "\n\020ChatDelete.proto\022\005proto\032\rRequest.proto" +
                     "\032\016Response.proto\">\n\nChatDelete\022\037\n\007reques" +
                     "t\030\001 \001(\0132\016.proto.Request\022\017\n\007room_id\030\002 \001(\004" +
-                    "\"H\n\022ChatDeleteResponse\022!\n\010response\030\001 \001(\013" +
-                    "2\017.proto.Response\022\017\n\007room_id\030\002 \001(\004B!\n\016co" +
-                    "m.iGap.protoB\017ProtoChatDeleteb\006proto3"
+                    "\"H\n\022ChatDeleteResponse\022!\n\010response\030\001 \001(\013" + "2\017.proto.Response\022\017\n\007room_id\030\002 \001(\004B!\n\016ne" + "t.iGap.protoB\017ProtoChatDeleteb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {

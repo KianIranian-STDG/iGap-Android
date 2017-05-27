@@ -26,6 +26,7 @@
         >
 
       <LinearLayout
+          android:id="@+id/lm_layout_header"
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp180"
           android:orientation="horizontal"
@@ -56,7 +57,7 @@
               android:layout_marginStart="@dimen/dp16"
               android:singleLine="true"
               android:text="iGap User"
-              android:textColor="@color/black90"
+              android:textColor="#f8f4df"
               android:textSize="@dimen/dp22"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               />
@@ -69,7 +70,7 @@
               android:layout_marginStart="@dimen/dp16"
               android:singleLine="true"
               android:text="+98 9125544669"
-              android:textColor="@color/gray"
+              android:textColor="#efe8be"
               android:textSize="@dimen/dp12"
               />
         </LinearLayout>
@@ -83,20 +84,14 @@
             android:singleLine="true"
             android:text="@string/md_cloud"
             android:textAppearance="@style/TextIconAppearance_toolbar"
-            android:textColor="@color/green"
+            android:textColor="#f8f4df"
             android:textSize="45sp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/dp8"
             />
       </LinearLayout>
 
-      <View
-          android:layout_width="match_parent"
-          android:layout_height="1px"
-          android:layout_marginLeft="@dimen/dp8"
-          android:layout_marginRight="@dimen/dp8"
-          android:background="@color/gray"
-          />
+
       <FrameLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -340,7 +335,7 @@
               android:layout_height="wrap_content"
               android:layout_marginBottom="@dimen/dp6"
               android:layout_marginTop="@dimen/dp4"
-              android:visibility="gone"
+              android:visibility="visible"
               android:orientation="horizontal"
               style="@style/NavigationDrawer.Item"
               >

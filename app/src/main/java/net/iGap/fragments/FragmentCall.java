@@ -11,11 +11,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
@@ -24,26 +22,27 @@ import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
-import java.io.IOException;
+import io.realm.Sort;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperError;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.realm.RealmCallLog;
 import net.iGap.realm.RealmCallLogFields;
 import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetLog;
-
 
 public class FragmentCall extends Fragment {
 
@@ -84,22 +83,40 @@ public class FragmentCall extends Fragment {
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.fc_btn_menu);
 
         txtMenu.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
-                MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(R.array.pop_up_call_log_menu).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        if (which == 0) {
+                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.chat_popup_dialog_custom, true).build();
+                View view = dialog.getCustomView();
 
-                            new RequestSignalingClearLog().signalingClearLog(G.userId);
+                DialogAnimation.animationUp(dialog);
+                dialog.show();
+
+                final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
+                txtClear.setText(getResources().getString(R.string.clean_log));
+
+                TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
+                iconClear.setText(getResources().getString(R.string.md_rubbish_delete_file));
+
+                ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
+                root1.setVisibility(View.VISIBLE);
+
+                root1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+
+                        Realm realm = Realm.getDefaultInstance();
+                        try {
+                            RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
+                            new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                        } catch (Exception e) {
+
+                        } finally {
+                            realm.close();
                         }
                     }
-                }).show();
-
-                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                layoutParams.copyFrom(dialog.getWindow().getAttributes());
-                layoutParams.width = (int) getResources().getDimension(R.dimen.dp200);
-                layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-                dialog.getWindow().setAttributes(layoutParams);
+                });
             }
         });
 
@@ -109,7 +126,7 @@ public class FragmentCall extends Fragment {
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmCallLog> results = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.ID);
+        RealmResults<RealmCallLog> results = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING);
         CallAdapter callAdapter = new CallAdapter(getActivity(), results);
         mRecyclerView.setAdapter(callAdapter);
 
@@ -162,7 +179,7 @@ public class FragmentCall extends Fragment {
 
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "Contacts");
+                bundle.putString("TITLE", "call");
                 bundle.putBoolean("ACTION", true);
                 fragment.setArguments(bundle);
 
@@ -180,7 +197,6 @@ public class FragmentCall extends Fragment {
         });
 
         getLogListWithOfset();
-
     }
 
     private void getLogListWithOfset() {
@@ -195,12 +211,18 @@ public class FragmentCall extends Fragment {
 
     public static void call(long userID, boolean isIncomingCall) {
 
-        Intent intent = new Intent(G.context, ActivityCall.class);
-        intent.putExtra(ActivityCall.UserIdStr, userID);
-        intent.putExtra(ActivityCall.INCOMONGCALL_STR, isIncomingCall);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (G.userLogin) {
 
-        G.context.startActivity(intent);
+            Intent intent = new Intent(G.context, ActivityCall.class);
+            intent.putExtra(ActivityCall.USER_ID_STR, userID);
+            intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            G.context.startActivity(intent);
+        } else {
+
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+        }
     }
 
     //*************************************************************************************************************
@@ -222,32 +244,34 @@ public class FragmentCall extends Fragment {
             protected CircleImageView image;
             protected TextView name;
             protected MaterialDesignTextView icon;
-            protected MaterialDesignTextView call_type_icon;
+            //  protected MaterialDesignTextView call_type_icon;
             protected TextView timeAndInfo;
-            protected RippleView rippleCall;
+            // protected RippleView rippleCall;
             protected TextView timeDureation;
 
             public ViewHolder(View view) {
                 super(view);
 
                 timeDureation = (TextView) itemView.findViewById(R.id.fcsl_txt_dureation_time);
-                call_type_icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_call_type_icon);
+                // call_type_icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_call_type_icon);
                 image = (CircleImageView) itemView.findViewById(R.id.fcsl_imv_picture);
                 name = (TextView) itemView.findViewById(R.id.fcsl_txt_name);
                 icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_txt_icon);
                 timeAndInfo = (TextView) itemView.findViewById(R.id.fcsl_txt_time_info);
-                rippleCall = (RippleView) itemView.findViewById(R.id.fcsl_ripple_call);
+                // rippleCall = (RippleView) itemView.findViewById(R.id.fcsl_ripple_call);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
 
-                        HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getlogProto().getPeer().getId(), null, null);
-                    }
-                });
+                        // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getlogProto().getPeer().getId(), null, null);
 
-                rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-                    @Override public void onComplete(RippleView rippleView) throws IOException {
-                        call(realmResults.get(getPosition()).getlogProto().getPeer().getId(), false);
+                        long userId = realmResults.get(getPosition()).getlogProto().getPeer().getId();
+
+                        if (userId != 134 && G.userId != userId) {
+                            call(userId, false);
+                        }
+
+
                     }
                 });
             }
@@ -268,7 +292,8 @@ public class FragmentCall extends Fragment {
             switch (item.getStatus()) {
                 case OUTGOING:
                     viewHolder.icon.setText(R.string.md_call_made);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
+                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
                     break;
                 case MISSED:
                     viewHolder.icon.setText(R.string.md_call_missed);
@@ -281,30 +306,42 @@ public class FragmentCall extends Fragment {
                 case INCOMING:
                     viewHolder.icon.setText(R.string.md_call_received);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.green));
                     break;
             }
 
-            switch (item.getType()) {
+            //switch (item.getType()) {
+            //
+            //    case SCREEN_SHARING:
+            //        viewHolder.call_type_icon.setText(R.string.md_stay_current_portrait);
+            //        break;
+            //    case VIDEO_CALLING:
+            //        viewHolder.call_type_icon.setText(R.string.md_video_cam);
+            //        break;
+            //    case VOICE_CALLING:
+            //        viewHolder.call_type_icon.setText(R.string.md_phone);
+            //        break;
+            //}
 
-                case SCREEN_SHARING:
-                    viewHolder.call_type_icon.setText(R.string.md_stay_current_portrait);
-                    break;
-                case VIDEO_CALLING:
-                    viewHolder.call_type_icon.setText(R.string.md_video_cam);
-                    break;
-                case VOICE_CALLING:
-                    viewHolder.call_type_icon.setText(R.string.md_phone);
-                    break;
+            if (HelperCalander.isLanguagePersian) {
+                viewHolder.timeAndInfo.setText(
+                    TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME + " " + HelperCalander.checkHijriAndReturnTime(item.getOfferTime())));
+            } else {
+                viewHolder.timeAndInfo.setText(
+                    HelperCalander.checkHijriAndReturnTime(item.getOfferTime()) + " " + TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME));
             }
 
-            viewHolder.timeAndInfo.setText(HelperCalander.checkHijriAndReturnTime(item.getOfferTime()));
-            viewHolder.timeDureation.setText(DateUtils.formatElapsedTime(item.getDuration()));
+            if (item.getDuration() > 0) {
+                viewHolder.timeDureation.setVisibility(View.VISIBLE);
+                viewHolder.timeDureation.setText(DateUtils.formatElapsedTime(item.getDuration()));
+            } else {
+                viewHolder.timeDureation.setVisibility(View.GONE);
+            }
 
             if (HelperCalander.isLanguagePersian) {
                 viewHolder.timeAndInfo.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeAndInfo.getText().toString()));
                 viewHolder.timeDureation.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDureation.getText().toString()));
             }
-
 
             viewHolder.name.setText(item.getPeer().getDisplayName());
 

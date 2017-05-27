@@ -112,8 +112,7 @@ public final class ProtoChannelDelete {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelDelete.internal_static_proto_ChannelDelete_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelDelete.ChannelDelete.class, net.iGap.proto.ProtoChannelDelete.ChannelDelete.Builder.class);
+        return net.iGap.proto.ProtoChannelDelete.internal_static_proto_ChannelDelete_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelDelete.ChannelDelete.class, net.iGap.proto.ProtoChannelDelete.ChannelDelete.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -325,8 +324,7 @@ public final class ProtoChannelDelete {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelDelete.internal_static_proto_ChannelDelete_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelDelete.ChannelDelete.class, net.iGap.proto.ProtoChannelDelete.ChannelDelete.Builder.class);
+          return net.iGap.proto.ProtoChannelDelete.internal_static_proto_ChannelDelete_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelDelete.ChannelDelete.class, net.iGap.proto.ProtoChannelDelete.ChannelDelete.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelDelete.ChannelDelete.newBuilder()
@@ -738,8 +736,7 @@ public final class ProtoChannelDelete {
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelDelete.internal_static_proto_ChannelDeleteResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelDelete.ChannelDeleteResponse.class, net.iGap.proto.ProtoChannelDelete.ChannelDeleteResponse.Builder.class);
+        return net.iGap.proto.ProtoChannelDelete.internal_static_proto_ChannelDeleteResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelDelete.ChannelDeleteResponse.class, net.iGap.proto.ProtoChannelDelete.ChannelDeleteResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -951,8 +948,7 @@ public final class ProtoChannelDelete {
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelDelete.internal_static_proto_ChannelDeleteResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelDelete.ChannelDeleteResponse.class, net.iGap.proto.ProtoChannelDelete.ChannelDeleteResponse.Builder.class);
+          return net.iGap.proto.ProtoChannelDelete.internal_static_proto_ChannelDeleteResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelDelete.ChannelDeleteResponse.class, net.iGap.proto.ProtoChannelDelete.ChannelDeleteResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelDelete.ChannelDeleteResponse.newBuilder()
@@ -1082,8 +1078,7 @@ public final class ProtoChannelDelete {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-          responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1289,8 +1284,7 @@ public final class ProtoChannelDelete {
       "\n\023ChannelDelete.proto\022\005proto\032\rRequest.pr" +
       "oto\032\016Response.proto\"A\n\rChannelDelete\022\037\n\007" +
       "request\030\001 \001(\0132\016.proto.Request\022\017\n\007room_id" +
-      "\030\002 \001(\004\"K\n\025ChannelDeleteResponse\022!\n\010respo" +
-      "nse\030\001 \001(\0132\017.proto.Response\022\017\n\007room_id\030\002 " + "\001(\004B$\n\016net.iGap.protoB\022ProtoChannelDelet" +
+      "\030\002 \001(\004\"K\n\025ChannelDeleteResponse\022!\n\010respo" + "nse\030\001 \001(\0132\017.proto.Response\022\017\n\007room_id\030\002 " + "\001(\004B$\n\016net.iGap.protoB\022ProtoChannelDelet" +
       "eb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =

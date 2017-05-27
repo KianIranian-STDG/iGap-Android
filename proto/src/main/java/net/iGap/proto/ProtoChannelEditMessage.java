@@ -132,8 +132,7 @@ public final class ProtoChannelEditMessage {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelEditMessage.internal_static_proto_ChannelEditMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage.class, net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage.Builder.class);
+        return net.iGap.proto.ProtoChannelEditMessage.internal_static_proto_ChannelEditMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage.class, net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -299,8 +298,7 @@ public final class ProtoChannelEditMessage {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -308,8 +306,7 @@ public final class ProtoChannelEditMessage {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -317,8 +314,7 @@ public final class ProtoChannelEditMessage {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -326,8 +322,7 @@ public final class ProtoChannelEditMessage {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -335,8 +330,7 @@ public final class ProtoChannelEditMessage {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -370,8 +364,7 @@ public final class ProtoChannelEditMessage {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelEditMessage.internal_static_proto_ChannelEditMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage.class, net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage.Builder.class);
+          return net.iGap.proto.ProtoChannelEditMessage.internal_static_proto_ChannelEditMessage_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage.class, net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessage.newBuilder()
@@ -505,8 +498,7 @@ public final class ProtoChannelEditMessage {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -606,9 +598,7 @@ public final class ProtoChannelEditMessage {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
-                    getRequest(), getParentForChildren(), isClean());
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
           request_ = null;
         }
         return requestBuilder_;
@@ -918,8 +908,7 @@ public final class ProtoChannelEditMessage {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelEditMessage.internal_static_proto_ChannelEditMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse.class, net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse.Builder.class);
+        return net.iGap.proto.ProtoChannelEditMessage.internal_static_proto_ChannelEditMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse.class, net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -1128,8 +1117,7 @@ public final class ProtoChannelEditMessage {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1137,8 +1125,7 @@ public final class ProtoChannelEditMessage {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1146,8 +1133,7 @@ public final class ProtoChannelEditMessage {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1155,8 +1141,7 @@ public final class ProtoChannelEditMessage {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1164,8 +1149,7 @@ public final class ProtoChannelEditMessage {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1199,8 +1183,7 @@ public final class ProtoChannelEditMessage {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelEditMessage.internal_static_proto_ChannelEditMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse.class, net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse.Builder.class);
+          return net.iGap.proto.ProtoChannelEditMessage.internal_static_proto_ChannelEditMessageResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse.class, net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoChannelEditMessage.ChannelEditMessageResponse.newBuilder()
@@ -1346,8 +1329,7 @@ public final class ProtoChannelEditMessage {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1447,9 +1429,7 @@ public final class ProtoChannelEditMessage {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
-                    getResponse(), getParentForChildren(), isClean());
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
@@ -1701,9 +1681,7 @@ public final class ProtoChannelEditMessage {
                     "proto.Request\022\017\n\007room_id\030\002 \001(\004\022\022\n\nmessag" +
                     "e_id\030\003 \001(\004\022\017\n\007message\030\004 \001(\t\"\274\001\n\032ChannelE" +
                     "ditMessageResponse\022!\n\010response\030\001 \001(\0132\017.p" +
-                    "roto.Response\022\017\n\007room_id\030\002 \001(\004\022\022\n\nmessag" +
-                    "e_id\030\003 \001(\004\022\027\n\017message_version\030\004 \001(\004\022\017\n\007m" +
-                    "essage\030\005 \001(\t\022,\n\014message_type\030\006 \001(\0162\026.pro" + "to.RoomMessageTypeB)\n\016net.iGap.protoB\027Pr", "otoChannelEditMessageb\006proto3"
+                    "roto.Response\022\017\n\007room_id\030\002 \001(\004\022\022\n\nmessag" + "e_id\030\003 \001(\004\022\027\n\017message_version\030\004 \001(\004\022\017\n\007m" + "essage\030\005 \001(\t\022,\n\014message_type\030\006 \001(\0162\026.pro" + "to.RoomMessageTypeB)\n\016net.iGap.protoB\027Pr", "otoChannelEditMessageb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {

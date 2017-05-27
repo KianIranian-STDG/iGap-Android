@@ -121,8 +121,7 @@ public final class ProtoGroupCheckUsername {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoGroupCheckUsername.internal_static_proto_GroupCheckUsername_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername.class, net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername.Builder.class);
+        return net.iGap.proto.ProtoGroupCheckUsername.internal_static_proto_GroupCheckUsername_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername.class, net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
@@ -270,8 +269,7 @@ public final class ProtoGroupCheckUsername {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -279,8 +277,7 @@ public final class ProtoGroupCheckUsername {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -288,8 +285,7 @@ public final class ProtoGroupCheckUsername {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -297,8 +293,7 @@ public final class ProtoGroupCheckUsername {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -306,8 +301,7 @@ public final class ProtoGroupCheckUsername {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -341,8 +335,7 @@ public final class ProtoGroupCheckUsername {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoGroupCheckUsername.internal_static_proto_GroupCheckUsername_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername.class, net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername.Builder.class);
+          return net.iGap.proto.ProtoGroupCheckUsername.internal_static_proto_GroupCheckUsername_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername.class, net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsername.newBuilder()
@@ -470,8 +463,7 @@ public final class ProtoGroupCheckUsername {
       }
 
         private net.iGap.proto.ProtoRequest.Request request_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>
-            requestBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -571,9 +563,7 @@ public final class ProtoGroupCheckUsername {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-            requestBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
-                    getRequest(), getParentForChildren(), isClean());
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
           request_ = null;
         }
         return requestBuilder_;
@@ -808,8 +798,7 @@ public final class ProtoGroupCheckUsername {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoGroupCheckUsername.internal_static_proto_GroupCheckUsernameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-            net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.class, net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.Builder.class);
+        return net.iGap.proto.ProtoGroupCheckUsername.internal_static_proto_GroupCheckUsernameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.class, net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.Builder.class);
     }
 
     /**
@@ -1038,8 +1027,7 @@ public final class ProtoGroupCheckUsername {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1047,8 +1035,7 @@ public final class ProtoGroupCheckUsername {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
@@ -1056,8 +1043,7 @@ public final class ProtoGroupCheckUsername {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1065,8 +1051,7 @@ public final class ProtoGroupCheckUsername {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1074,8 +1059,7 @@ public final class ProtoGroupCheckUsername {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1109,8 +1093,7 @@ public final class ProtoGroupCheckUsername {
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoGroupCheckUsername.internal_static_proto_GroupCheckUsernameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(
-              net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.class, net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.Builder.class);
+          return net.iGap.proto.ProtoGroupCheckUsername.internal_static_proto_GroupCheckUsernameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.class, net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.Builder.class);
       }
 
         // Construct using net.iGap.proto.ProtoGroupCheckUsername.GroupCheckUsernameResponse.newBuilder()
@@ -1231,8 +1214,7 @@ public final class ProtoGroupCheckUsername {
       }
 
         private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>
-            responseBuilder_;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1332,9 +1314,7 @@ public final class ProtoGroupCheckUsername {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-            responseBuilder_ =
-                new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
-                    getResponse(), getParentForChildren(), isClean());
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
@@ -1445,9 +1425,7 @@ public final class ProtoGroupCheckUsername {
                     "\020\n\010username\030\002 \001(\t\022\017\n\007room_id\030\003 \001(\004\"\310\001\n\032G" +
                     "roupCheckUsernameResponse\022!\n\010response\030\001 " +
                     "\001(\0132\017.proto.Response\0228\n\006status\030\002 \001(\0162(.p" +
-                    "roto.GroupCheckUsernameResponse.Status\"M" +
-                    "\n\006Status\022\013\n\007INVALID\020\000\022\t\n\005TAKEN\020\001\022\r\n\tAVAI" +
-                    "LABLE\020\002\022\034\n\030OCCUPYING_LIMIT_EXCEEDED\020\003B)\n" + "\016net.iGap.protoB\027ProtoGroupCheckUsername", "b\006proto3"
+                    "roto.GroupCheckUsernameResponse.Status\"M" + "\n\006Status\022\013\n\007INVALID\020\000\022\t\n\005TAKEN\020\001\022\r\n\tAVAI" + "LABLE\020\002\022\034\n\030OCCUPYING_LIMIT_EXCEEDED\020\003B)\n" + "\016net.iGap.protoB\027ProtoGroupCheckUsername", "b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
