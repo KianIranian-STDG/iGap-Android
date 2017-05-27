@@ -1517,10 +1517,7 @@ public final class ProtoChatUpdateDraft {
                     "proto\032\016Response.proto\032\014Global.proto\"d\n\017C" +
                     "hatUpdateDraft\022\037\n\007request\030\001 \001(\0132\016.proto." +
                     "Request\022\017\n\007room_id\030\002 \001(\004\022\037\n\005draft\030\003 \001(\0132" +
-                    "\020.proto.RoomDraft\"n\n\027ChatUpdateDraftResp" +
-                    "onse\022!\n\010response\030\001 \001(\0132\017.proto.Response\022" +
-                    "\017\n\007room_id\030\002 \001(\004\022\037\n\005draft\030\003 \001(\0132\020.proto." +
-                    "RoomDraftB&\n\016net.iGap.protoB\024ProtoChatUp" +
+                    "\020.proto.RoomDraft\"n\n\027ChatUpdateDraftResp" + "onse\022!\n\010response\030\001 \001(\0132\017.proto.Response\022" + "\017\n\007room_id\030\002 \001(\004\022\037\n\005draft\030\003 \001(\0132\020.proto." + "RoomDraftB&\n\016net.iGap.protoB\024ProtoChatUp" +
                     "dateDraftb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1536,10 +1533,10 @@ public final class ProtoChatUpdateDraft {
     internal_static_proto_ChatUpdateDraft_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChatUpdateDraft_descriptor, new java.lang.String[]{"Request", "RoomId", "Draft",});
     internal_static_proto_ChatUpdateDraftResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_proto_ChatUpdateDraftResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChatUpdateDraftResponse_descriptor, new java.lang.String[]{"Response", "RoomId", "Draft",});
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
-    net.iGap.proto.ProtoGlobal.getDescriptor();
+      internal_static_proto_ChatUpdateDraftResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChatUpdateDraftResponse_descriptor, new java.lang.String[]{"Response", "RoomId", "Draft",});
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

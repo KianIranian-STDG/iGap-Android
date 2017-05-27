@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoUserTwoStepVerificationVerifyRecoveryEmail;
 
 public class UserTwoStepVerificationVerifyRecoveryEmailResponse extends MessageHandler {
@@ -31,6 +32,11 @@ public class UserTwoStepVerificationVerifyRecoveryEmailResponse extends MessageH
 
         ProtoUserTwoStepVerificationVerifyRecoveryEmail.UserTwoStepVerificationVerifyRecoveryEmailResponse.Builder builder =
             (ProtoUserTwoStepVerificationVerifyRecoveryEmail.UserTwoStepVerificationVerifyRecoveryEmailResponse.Builder) message;
+
+        if (G.onTwoStepPassword != null) {
+            G.onTwoStepPassword.confirmEmail();
+        }
+
     }
 
     @Override public void timeOut() {

@@ -630,8 +630,8 @@ public final class ProtoUserTwoStepVerificationChangeHint {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        password_ = value;
+
+          password_ = value;
         onChanged();
         return this;
       }
@@ -652,8 +652,8 @@ public final class ProtoUserTwoStepVerificationChangeHint {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        password_ = value;
+
+          password_ = value;
         onChanged();
         return this;
       }
@@ -693,8 +693,8 @@ public final class ProtoUserTwoStepVerificationChangeHint {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        hint_ = value;
+
+          hint_ = value;
         onChanged();
         return this;
       }
@@ -715,8 +715,8 @@ public final class ProtoUserTwoStepVerificationChangeHint {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        hint_ = value;
+
+          hint_ = value;
         onChanged();
         return this;
       }
@@ -1280,10 +1280,7 @@ public final class ProtoUserTwoStepVerificationChangeHint {
             "\n\'UserTwoStepVerificationChangeHint.prot" +
                     "o\022\005proto\032\rRequest.proto\032\016Response.proto\"" +
                     "d\n!UserTwoStepVerificationChangeHint\022\037\n\007" +
-                    "request\030\001 \001(\0132\016.proto.Request\022\020\n\010passwor" +
-                    "d\030\002 \001(\t\022\014\n\004hint\030\003 \001(\t\"N\n)UserTwoStepVeri" +
-                    "ficationChangeHintResponse\022!\n\010response\030\001" +
-                    " \001(\0132\017.proto.ResponseB8\n\016net.iGap.protoB" +
+                    "request\030\001 \001(\0132\016.proto.Request\022\020\n\010passwor" + "d\030\002 \001(\t\022\014\n\004hint\030\003 \001(\t\"N\n)UserTwoStepVeri" + "ficationChangeHintResponse\022!\n\010response\030\001" + " \001(\0132\017.proto.ResponseB8\n\016net.iGap.protoB" +
                     "&ProtoUserTwoStepVerificationChangeHintb" +
                     "\006proto3"
     };
@@ -1303,8 +1300,8 @@ public final class ProtoUserTwoStepVerificationChangeHint {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserTwoStepVerificationChangeHintResponse_descriptor,
         new java.lang.String[] { "Response", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

@@ -1213,10 +1213,7 @@ public final class ProtoUserProfileGender {
             "\n\032UserProfileSetGender.proto\022\005proto\032\rReq" +
                     "uest.proto\032\016Response.proto\032\014Global.proto" +
                     "\"V\n\024UserProfileSetGender\022\037\n\007request\030\001 \001(" +
-                    "\0132\016.proto.Request\022\035\n\006gender\030\002 \001(\0162\r.prot" +
-                    "o.Gender\"`\n\034UserProfileSetGenderResponse" +
-                    "\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\035\n\006g" +
-                    "ender\030\002 \001(\0162\r.proto.GenderB(\n\016net.iGap.p" +
+                    "\0132\016.proto.Request\022\035\n\006gender\030\002 \001(\0162\r.prot" + "o.Gender\"`\n\034UserProfileSetGenderResponse" + "\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\035\n\006g" + "ender\030\002 \001(\0162\r.proto.GenderB(\n\016net.iGap.p" +
                     "rotoB\026ProtoUserProfileGenderb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1235,9 +1232,9 @@ public final class ProtoUserProfileGender {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserProfileSetGenderResponse_descriptor,
         new java.lang.String[] { "Response", "Gender", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
-    net.iGap.proto.ProtoGlobal.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

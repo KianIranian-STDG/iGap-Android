@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rg_rootActivityRegister"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/rg_agreement_background"
     tools:ignore="MissingPrefix"
-    android:orientation="vertical"
     >
+
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/rg_agreement_background"
+      android:orientation="vertical"
+      tools:ignore="MissingPrefix"
+      >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/ar_toolbar"
@@ -18,32 +28,71 @@
         app:contentInsetStart="0dp"
         >
 
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          >
         <TextView
             android:id="@+id/rg_txt_titleToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/igap"
             android:textColor="@color/rg_whit_background"
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:textSize="@dimen/dp20"
+            android:visibility="visible"
+            fontPath="fonts/IRANSansMobile_Bold.ttf"
             />
+        <net.iGap.libs.rippleeffect.RippleView
+            android:id="@+id/setPassword_rippleOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rv_alpha="200"
+            app:rv_centered="true"
+            app:rv_rippleDuration="0"
+            app:rv_ripplePadding="5dp"
+            rv_centered="true"
+            >
 
+          <net.iGap.module.MaterialDesignTextView
+              android:id="@+id/rg_txtOk"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="match_parent"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_alignParentTop="true"
+              android:gravity="center"
+              android:text="@string/md_check_symbol"
+              android:textAppearance="@style/TextIconAppearance_toolbar"
+              android:textColor="@color/whit_background"
+              android:visibility="gone"
+              />
+        </net.iGap.libs.rippleeffect.RippleView>
+      </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
     <View
         android:id="@+id/ar_view_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/rg_line1_background"/>
+        android:background="@color/rg_line1_background"
+        />
 
-
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/rg_rootMainLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/dp16"
-        android:textColor="@color/toolbar_title_register">
+        >
+
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:paddingBottom="@dimen/dp16"
+          android:textColor="@color/toolbar_title_register"
+          >
 
         <TextView
             android:id="@+id/rg_txt_title_register"
@@ -64,7 +113,8 @@
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginRight="@dimen/dp32"
             android:layout_marginTop="@dimen/dp8"
-            android:background="@color/rg_line2_background"/>
+            android:background="@color/rg_line2_background"
+            />
 
         <TextView
             android:id="@+id/rg_txt_text_descRegister"
@@ -81,14 +131,15 @@
             android:textSize="@dimen/dp14"
 
             />
-    </RelativeLayout>
+      </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:textColor="@color/toolbar_title_register">
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+          android:orientation="vertical"
+          android:textColor="@color/toolbar_title_register"
+          >
 
         <Button
             android:id="@+id/rg_btn_choseCountry"
@@ -117,38 +168,40 @@
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginRight="@dimen/dp32"
             android:layoutDirection="ltr"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
-            <EditText
-                android:id="@+id/rg_edt_CodeNumber"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp40"
-                android:layout_marginRight="@dimen/dp8"
-                android:layout_weight=".3"
-                android:background="@drawable/rg_background_agreement"
-                android:enabled="false"
-                android:gravity="center"
-                android:inputType="phone"
-                android:maxLength="5"
-                android:singleLine="true"
-                android:text="+98"
-                android:textColor="@color/rg_black_register"
-                android:textIsSelectable="false"
-                android:textSize="@dimen/dp14"
-                />
+          <EditText
+              android:id="@+id/rg_edt_CodeNumber"
+              android:layout_width="0dp"
+              android:layout_height="@dimen/dp40"
+              android:layout_marginRight="@dimen/dp8"
+              android:layout_weight=".3"
+              android:background="@drawable/rg_background_agreement"
+              android:enabled="false"
+              android:gravity="center"
+              android:inputType="phone"
+              android:maxLength="5"
+              android:singleLine="true"
+              android:text="+98"
+              android:textColor="@color/rg_black_register"
+              android:textIsSelectable="false"
+              android:textSize="@dimen/dp14"
+              />
 
-            <com.vicmikhailau.maskededittext.MaskedEditText
-                android:id="@+id/rg_edt_PhoneNumber"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp40"
-                android:layout_weight=".7"
-                android:background="@drawable/rg_background_agreement"
-                android:gravity="start|center_vertical"
-                android:inputType="phone"
-                android:padding="@dimen/dp4"
-                android:textColor="@color/rg_black_register"
-                android:textSize="@dimen/dp14"
-                app:mask="###-###-####"/>
+          <com.vicmikhailau.maskededittext.MaskedEditText
+              android:id="@+id/rg_edt_PhoneNumber"
+              android:layout_width="0dp"
+              android:layout_height="@dimen/dp40"
+              android:layout_weight=".7"
+              android:background="@drawable/rg_background_agreement"
+              android:gravity="start|center_vertical"
+              android:inputType="phone"
+              android:padding="@dimen/dp4"
+              android:textColor="@color/rg_black_register"
+              android:textSize="@dimen/dp14"
+              app:mask="###-###-####"
+              />
 
         </LinearLayout>
 
@@ -162,27 +215,29 @@
             android:layout_marginTop="@dimen/dp12"
             android:background="@drawable/rg_background_button_start_register"
             android:gravity="center"
-            android:textAllCaps="false"
             android:paddingBottom="@dimen/dp4"
             android:paddingTop="@dimen/dp4"
             android:text="@string/rg_Start"
+            android:textAllCaps="false"
+            android:textColor="@color/rg_whit_background"
             android:textSize="@dimen/dp14"
-            android:textColor="@color/rg_whit_background"/>
+            />
 
-    </RelativeLayout>
+      </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/dp8"
-        android:layout_marginLeft="@dimen/dp32"
-        android:layout_marginRight="@dimen/dp32"
-        android:layout_marginTop="@dimen/dp4"
-        android:layout_weight=".9"
-        android:background="@drawable/rg_background_agreement2"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        android:visibility="visible">
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_marginBottom="@dimen/dp8"
+          android:layout_marginLeft="@dimen/dp32"
+          android:layout_marginRight="@dimen/dp32"
+          android:layout_marginTop="@dimen/dp4"
+          android:layout_weight=".9"
+          android:background="@drawable/rg_background_agreement2"
+          android:fitsSystemWindows="true"
+          android:orientation="vertical"
+          android:visibility="visible"
+          >
 
         <!--1-->
 
@@ -198,173 +253,187 @@
             android:layout_marginTop="@dimen/dp4"
             android:background="@drawable/rg_background_agreement2"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            >
 
-            <LinearLayout
-                android:layout_width="match_parent"
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp20"
+              android:layout_marginTop="@dimen/dp4"
+              android:orientation="horizontal"
+              >
+
+            <ProgressBar
+                android:id="@+id/rg_prg_verify_connect"
+                android:layout_width="@dimen/dp28"
                 android:layout_height="@dimen/dp20"
-                android:layout_marginTop="@dimen/dp4"
-                android:orientation="horizontal">
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:visibility="invisible"
+                style="?android:attr/progressBarStyleSmall"
+                />
 
-                <ProgressBar
-                    android:id="@+id/rg_prg_verify_connect"
-                    style="?android:attr/progressBarStyleSmall"
-                    android:layout_width="@dimen/dp28"
-                    android:layout_height="@dimen/dp20"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:visibility="invisible"/>
-
-                <ImageView
-                    android:id="@+id/rg_img_verify_connect"
-                    android:layout_width="@dimen/dp28"
-                    android:layout_height="@dimen/dp20"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:src="@mipmap/check"
-                    android:tint="@color/rg_text_verify"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/rg_txt_verify_connect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/rg_verify_register1"
-                    android:textColor="@color/rg_text_dark_verify"
-                    android:textSize="@dimen/dp13"
-                    />
-
-            </LinearLayout>
-            <!--2-->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/rg_img_verify_connect"
+                android:layout_width="@dimen/dp28"
                 android:layout_height="@dimen/dp20"
-                android:layout_marginTop="@dimen/dp4"
-                android:orientation="horizontal">
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:src="@mipmap/check"
+                android:tint="@color/rg_text_verify"
+                android:visibility="gone"
+                />
 
-                <ProgressBar
-                    android:id="@+id/rg_prg_verify_sms"
-                    style="?android:attr/progressBarStyleSmall"
-                    android:layout_width="@dimen/dp28"
-                    android:layout_height="@dimen/dp20"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:visibility="invisible"/>
+            <TextView
+                android:id="@+id/rg_txt_verify_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/rg_verify_register1"
+                android:textColor="@color/rg_text_dark_verify"
+                android:textSize="@dimen/dp13"
+                />
 
-                <ImageView
-                    android:id="@+id/rg_img_verify_sms"
-                    android:layout_width="28dp"
-                    android:layout_height="@dimen/dp20"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:src="@mipmap/check"
-                    android:tint="@color/rg_text_verify"
-                    android:visibility="gone"/>
+          </LinearLayout>
+          <!--2-->
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp20"
+              android:layout_marginTop="@dimen/dp4"
+              android:orientation="horizontal"
+              >
 
-                <TextView
-                    android:id="@+id/rg_txt_verify_sms"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:singleLine="true"
-                    android:text="@string/rg_verify_register2"
-                    android:textColor="@color/rg_text_verify"
-                    android:textSize="@dimen/dp13"
-                    />
-
-                <TextView
-                    android:id="@+id/rg_txt_verify_timer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginStart="@dimen/dp4"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="05:00"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/dp14"
-                    android:visibility="invisible"/>
-
-            </LinearLayout>
-
-            <!--3-->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ProgressBar
+                android:id="@+id/rg_prg_verify_sms"
+                android:layout_width="@dimen/dp28"
                 android:layout_height="@dimen/dp20"
-                android:layout_marginTop="@dimen/dp4"
-                android:orientation="horizontal">
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:visibility="invisible"
+                style="?android:attr/progressBarStyleSmall"
+                />
 
-                <ProgressBar
-                    android:id="@+id/rg_prg_verify_key"
-                    style="?android:attr/progressBarStyleSmall"
-                    android:layout_width="@dimen/dp28"
-                    android:layout_height="@dimen/dp20"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:visibility="invisible"/>
-
-                <ImageView
-                    android:id="@+id/rg_img_verify_key"
-                    android:layout_width="@dimen/dp28"
-                    android:layout_height="@dimen/dp20"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:src="@mipmap/check"
-                    android:tint="@color/rg_text_verify"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/rg_txt_verify_key"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/rg_verify_register3"
-                    android:textColor="@color/rg_text_verify"
-                    android:textSize="@dimen/dp13"
-                    />
-
-            </LinearLayout>
-
-            <!--4-->
-            <LinearLayout
-
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/rg_img_verify_sms"
+                android:layout_width="28dp"
                 android:layout_height="@dimen/dp20"
-                android:layout_marginTop="@dimen/dp4"
-                android:orientation="horizontal">
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:src="@mipmap/check"
+                android:tint="@color/rg_text_verify"
+                android:visibility="gone"
+                />
 
-                <ProgressBar
-                    android:id="@+id/rg_prg_verify_server"
-                    style="?android:attr/progressBarStyleSmall"
-                    android:layout_width="@dimen/dp28"
-                    android:layout_height="@dimen/dp20"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:visibility="invisible"/>
+            <TextView
+                android:id="@+id/rg_txt_verify_sms"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/rg_verify_register2"
+                android:textColor="@color/rg_text_verify"
+                android:textSize="@dimen/dp13"
+                />
 
-                <ImageView
-                    android:id="@+id/rg_img_verify_server"
-                    android:layout_width="@dimen/dp28"
-                    android:layout_height="@dimen/dp20"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:src="@mipmap/check"
-                    android:tint="@color/rg_text_verify"
-                    android:visibility="gone"/>
+            <TextView
+                android:id="@+id/rg_txt_verify_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginStart="@dimen/dp4"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="05:00"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/dp14"
+                android:visibility="invisible"
+                />
 
-                <TextView
-                    android:id="@+id/rg_txt_verify_server"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/rg_verify_register4"
-                    android:textColor="@color/rg_text_verify"
-                    android:textSize="@dimen/dp13"
-                    />
+          </LinearLayout>
 
-            </LinearLayout>
+          <!--3-->
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp20"
+              android:layout_marginTop="@dimen/dp4"
+              android:orientation="horizontal"
+              >
+
+            <ProgressBar
+                android:id="@+id/rg_prg_verify_key"
+                android:layout_width="@dimen/dp28"
+                android:layout_height="@dimen/dp20"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:visibility="invisible"
+                style="?android:attr/progressBarStyleSmall"
+                />
+
+            <ImageView
+                android:id="@+id/rg_img_verify_key"
+                android:layout_width="@dimen/dp28"
+                android:layout_height="@dimen/dp20"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:src="@mipmap/check"
+                android:tint="@color/rg_text_verify"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/rg_txt_verify_key"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/rg_verify_register3"
+                android:textColor="@color/rg_text_verify"
+                android:textSize="@dimen/dp13"
+                />
+
+          </LinearLayout>
+
+          <!--4-->
+          <LinearLayout
+
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp20"
+              android:layout_marginTop="@dimen/dp4"
+              android:orientation="horizontal"
+              >
+
+            <ProgressBar
+                android:id="@+id/rg_prg_verify_server"
+                android:layout_width="@dimen/dp28"
+                android:layout_height="@dimen/dp20"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:visibility="invisible"
+                style="?android:attr/progressBarStyleSmall"
+                />
+
+            <ImageView
+                android:id="@+id/rg_img_verify_server"
+                android:layout_width="@dimen/dp28"
+                android:layout_height="@dimen/dp20"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:src="@mipmap/check"
+                android:tint="@color/rg_text_verify"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/rg_txt_verify_server"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/rg_verify_register4"
+                android:textColor="@color/rg_text_verify"
+                android:textSize="@dimen/dp13"
+                />
+
+          </LinearLayout>
         </LinearLayout>
 
         <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -389,8 +458,54 @@
             android:text="@string/rg_agreement_text_register"
             android:textSize="@dimen/dp14"
             />
+      </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+    <!--CheckPassword-->
+    <LinearLayout
+        android:id="@+id/rg_rootCheckPassword"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/dp32"
+          android:gravity="center"
+          android:text="@string/please_enter_your_password"
+          android:textColor="@color/gray_4c"
+          android:textSize="@dimen/dp20"
+          />
 
 
+      <EditText
+          android:id="@+id/rg_edtCheckPassword"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/dp32"
+          android:gravity="center"
+          android:textSize="@dimen/dp13"
+          />
+
+
+      <TextView
+          android:id="@+id/rg_txtForgotPassword"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="@dimen/dp32"
+          android:layout_marginLeft="@dimen/dp32"
+          android:layout_marginRight="@dimen/dp32"
+          android:layout_marginStart="@dimen/dp32"
+          android:layout_marginTop="@dimen/dp60"
+          android:gravity="left|start"
+          android:text="@string/forgot_password"
+          android:textColor="@color/green"
+          android:textSize="@dimen/dp14"
+          />
+
+    </LinearLayout>
+
+  </LinearLayout>
+</FrameLayout>
 

@@ -16,14 +16,7 @@
 package com.neovisionaries.ws.client;
 
 
-import static com.neovisionaries.ws.client.WebSocketOpcode.BINARY;
-import static com.neovisionaries.ws.client.WebSocketOpcode.CLOSE;
-import static com.neovisionaries.ws.client.WebSocketOpcode.CONTINUATION;
-import static com.neovisionaries.ws.client.WebSocketOpcode.PING;
-import static com.neovisionaries.ws.client.WebSocketOpcode.PONG;
-import static com.neovisionaries.ws.client.WebSocketOpcode.TEXT;
-import static com.neovisionaries.ws.client.WebSocketState.CLOSED;
-import static com.neovisionaries.ws.client.WebSocketState.CLOSING;
+import com.neovisionaries.ws.client.StateManager.CloseInitiator;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -32,7 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import com.neovisionaries.ws.client.StateManager.CloseInitiator;
+
+import static com.neovisionaries.ws.client.WebSocketOpcode.BINARY;
+import static com.neovisionaries.ws.client.WebSocketOpcode.CLOSE;
+import static com.neovisionaries.ws.client.WebSocketOpcode.CONTINUATION;
+import static com.neovisionaries.ws.client.WebSocketOpcode.PING;
+import static com.neovisionaries.ws.client.WebSocketOpcode.PONG;
+import static com.neovisionaries.ws.client.WebSocketOpcode.TEXT;
+import static com.neovisionaries.ws.client.WebSocketState.CLOSED;
+import static com.neovisionaries.ws.client.WebSocketState.CLOSING;
 
 
 class ReadingThread extends WebSocketThread {

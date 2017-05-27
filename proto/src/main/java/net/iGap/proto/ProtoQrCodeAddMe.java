@@ -66,11 +66,11 @@ public final class ProtoQrCodeAddMe {
               break;
             }
             case 10: {
-              net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
+                net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
               if (request_ != null) {
                 subBuilder = request_.toBuilder();
               }
-              request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
+                request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(request_);
                 request_ = subBuilder.buildPartial();
@@ -90,15 +90,15 @@ public final class ProtoQrCodeAddMe {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMe_descriptor;
+        return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMe_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMe_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.class, net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.Builder.class);
+        return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMe_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.class, net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
-    private net.iGap.proto.ProtoRequest.Request request_;
+      private net.iGap.proto.ProtoRequest.Request request_;
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -109,7 +109,7 @@ public final class ProtoQrCodeAddMe {
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
-      return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+        return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
     /**
      * <code>optional .proto.Request request = 1;</code>
@@ -152,10 +152,10 @@ public final class ProtoQrCodeAddMe {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe)) {
+        if (!(obj instanceof net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe other = (net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe) obj;
+        net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe other = (net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe) obj;
 
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
@@ -181,43 +181,43 @@ public final class ProtoQrCodeAddMe {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -228,7 +228,7 @@ public final class ProtoQrCodeAddMe {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe prototype) {
+      public static Builder newBuilder(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -247,14 +247,14 @@ public final class ProtoQrCodeAddMe {
             // @@protoc_insertion_point(builder_implements:proto.QrCodeAddMe)
         net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMe_descriptor;
+          return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMe_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMe_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.class, net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.Builder.class);
+          return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMe_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.class, net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.Builder.class);
       }
 
-      // Construct using net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.newBuilder()
+        // Construct using net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -279,23 +279,23 @@ public final class ProtoQrCodeAddMe {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMe_descriptor;
+          return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMe_descriptor;
       }
 
-      public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.getDefaultInstance();
+        public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe getDefaultInstanceForType() {
+            return net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe build() {
-        net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe result = buildPartial();
+        public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe build() {
+            net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe buildPartial() {
-        net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe result = new net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe(this);
+        public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe buildPartial() {
+            net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe result = new net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe(this);
         if (requestBuilder_ == null) {
           result.request_ = request_;
         } else {
@@ -329,16 +329,16 @@ public final class ProtoQrCodeAddMe {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe) {
-          return mergeFrom((net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe) other);
+          if (other instanceof net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe) {
+              return mergeFrom((net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe other) {
-        if (other == net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.getDefaultInstance()) return this;
+        public Builder mergeFrom(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe other) {
+            if (other == net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -351,11 +351,11 @@ public final class ProtoQrCodeAddMe {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parsedMessage = null;
+          net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe) e.getUnfinishedMessage();
+            parsedMessage = (net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -365,8 +365,8 @@ public final class ProtoQrCodeAddMe {
         return this;
       }
 
-      private net.iGap.proto.ProtoRequest.Request request_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
+        private net.iGap.proto.ProtoRequest.Request request_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -378,7 +378,7 @@ public final class ProtoQrCodeAddMe {
        */
       public net.iGap.proto.ProtoRequest.Request getRequest() {
         if (requestBuilder_ == null) {
-          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         } else {
           return requestBuilder_.getMessage();
         }
@@ -418,7 +418,7 @@ public final class ProtoQrCodeAddMe {
       public Builder mergeRequest(net.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-            request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+              request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -458,7 +458,7 @@ public final class ProtoQrCodeAddMe {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
@@ -466,7 +466,7 @@ public final class ProtoQrCodeAddMe {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
           request_ = null;
         }
         return requestBuilder_;
@@ -487,10 +487,10 @@ public final class ProtoQrCodeAddMe {
     // @@protoc_insertion_point(class_scope:proto.QrCodeAddMe)
     private static final net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe();
+        DEFAULT_INSTANCE = new net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe();
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe getDefaultInstance() {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -509,7 +509,7 @@ public final class ProtoQrCodeAddMe {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe getDefaultInstanceForType() {
+      public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMe getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -574,11 +574,11 @@ public final class ProtoQrCodeAddMe {
               break;
             }
             case 10: {
-              net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
+                net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
               if (response_ != null) {
                 subBuilder = response_.toBuilder();
               }
-              response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
+                response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(response_);
                 response_ = subBuilder.buildPartial();
@@ -603,15 +603,15 @@ public final class ProtoQrCodeAddMe {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMeResponse_descriptor;
+        return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMeResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMeResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.class, net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.Builder.class);
+        return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMeResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.class, net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
-    private net.iGap.proto.ProtoResponse.Response response_;
+      private net.iGap.proto.ProtoResponse.Response response_;
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -622,7 +622,7 @@ public final class ProtoQrCodeAddMe {
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
-      return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+        return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
     /**
      * <code>optional .proto.Response response = 1;</code>
@@ -680,10 +680,10 @@ public final class ProtoQrCodeAddMe {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse)) {
+        if (!(obj instanceof net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse other = (net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse) obj;
+        net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse other = (net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse) obj;
 
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
@@ -712,43 +712,43 @@ public final class ProtoQrCodeAddMe {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -759,7 +759,7 @@ public final class ProtoQrCodeAddMe {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse prototype) {
+      public static Builder newBuilder(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -778,14 +778,14 @@ public final class ProtoQrCodeAddMe {
             // @@protoc_insertion_point(builder_implements:proto.QrCodeAddMeResponse)
         net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMeResponse_descriptor;
+          return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMeResponse_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMeResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.class, net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.Builder.class);
+          return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMeResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.class, net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.Builder.class);
       }
 
-      // Construct using net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.newBuilder()
+        // Construct using net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -812,23 +812,23 @@ public final class ProtoQrCodeAddMe {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMeResponse_descriptor;
+          return net.iGap.proto.ProtoQrCodeAddMe.internal_static_proto_QrCodeAddMeResponse_descriptor;
       }
 
-      public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.getDefaultInstance();
+        public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse getDefaultInstanceForType() {
+            return net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse build() {
-        net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse result = buildPartial();
+        public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse build() {
+            net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse buildPartial() {
-        net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse result = new net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse(this);
+        public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse buildPartial() {
+            net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse result = new net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse(this);
         if (responseBuilder_ == null) {
           result.response_ = response_;
         } else {
@@ -863,16 +863,16 @@ public final class ProtoQrCodeAddMe {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse) {
-          return mergeFrom((net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse) other);
+          if (other instanceof net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse) {
+              return mergeFrom((net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse other) {
-        if (other == net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.getDefaultInstance()) return this;
+        public Builder mergeFrom(net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse other) {
+            if (other == net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -888,11 +888,11 @@ public final class ProtoQrCodeAddMe {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parsedMessage = null;
+          net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse) e.getUnfinishedMessage();
+            parsedMessage = (net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -902,8 +902,8 @@ public final class ProtoQrCodeAddMe {
         return this;
       }
 
-      private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
+        private net.iGap.proto.ProtoResponse.Response response_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -915,7 +915,7 @@ public final class ProtoQrCodeAddMe {
        */
       public net.iGap.proto.ProtoResponse.Response getResponse() {
         if (responseBuilder_ == null) {
-          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         } else {
           return responseBuilder_.getMessage();
         }
@@ -955,7 +955,7 @@ public final class ProtoQrCodeAddMe {
       public Builder mergeResponse(net.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-            response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+              response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -995,7 +995,7 @@ public final class ProtoQrCodeAddMe {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
@@ -1003,7 +1003,7 @@ public final class ProtoQrCodeAddMe {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
@@ -1023,8 +1023,8 @@ public final class ProtoQrCodeAddMe {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        qrCodeImage_ = value;
+
+          qrCodeImage_ = value;
         onChanged();
         return this;
       }
@@ -1053,10 +1053,10 @@ public final class ProtoQrCodeAddMe {
     // @@protoc_insertion_point(class_scope:proto.QrCodeAddMeResponse)
     private static final net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse();
+        DEFAULT_INSTANCE = new net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse();
     }
 
-    public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse getDefaultInstance() {
+      public static net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1075,7 +1075,7 @@ public final class ProtoQrCodeAddMe {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse getDefaultInstanceForType() {
+      public net.iGap.proto.ProtoQrCodeAddMe.QrCodeAddMeResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1094,10 +1094,7 @@ public final class ProtoQrCodeAddMe {
   static {
     java.lang.String[] descriptorData = {
             "\n\021QrCodeAddMe.proto\022\005proto\032\rRequest.prot" +
-                    "o\032\016Response.proto\".\n\013QrCodeAddMe\022\037\n\007requ" +
-                    "est\030\001 \001(\0132\016.proto.Request\"O\n\023QrCodeAddMe" +
-                    "Response\022!\n\010response\030\001 \001(\0132\017.proto.Respo" +
-                    "nse\022\025\n\rqr_code_image\030\002 \001(\014B\"\n\016net.iGap.p" +
+                    "o\032\016Response.proto\".\n\013QrCodeAddMe\022\037\n\007requ" + "est\030\001 \001(\0132\016.proto.Request\"O\n\023QrCodeAddMe" + "Response\022!\n\010response\030\001 \001(\0132\017.proto.Respo" + "nse\022\025\n\rqr_code_image\030\002 \001(\014B\"\n\016net.iGap.p" +
                     "rotoB\020ProtoQrCodeAddMeb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1107,7 +1104,7 @@ public final class ProtoQrCodeAddMe {
       }
     };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+        net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
     }, assigner);
     internal_static_proto_QrCodeAddMe_descriptor = getDescriptor().getMessageTypes().get(0);
     internal_static_proto_QrCodeAddMe_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_QrCodeAddMe_descriptor, new java.lang.String[]{"Request",});
@@ -1116,8 +1113,8 @@ public final class ProtoQrCodeAddMe {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_QrCodeAddMeResponse_descriptor,
         new java.lang.String[] { "Response", "QrCodeImage", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

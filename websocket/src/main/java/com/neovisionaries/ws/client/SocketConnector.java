@@ -45,9 +45,7 @@ class SocketConnector {
     }
 
 
-    SocketConnector(
-            Socket socket, Address address, int timeout,
-            ProxyHandshaker handshaker, SSLSocketFactory sslSocketFactory, String host, int port) {
+    SocketConnector(Socket socket, Address address, int timeout, ProxyHandshaker handshaker, SSLSocketFactory sslSocketFactory, String host, int port) {
         mSocket = socket;
         mAddress = address;
         mConnectionTimeout = timeout;

@@ -16,10 +16,10 @@
 package com.neovisionaries.ws.client;
 
 
-import static org.junit.Assert.assertEquals;
-
 import java.net.URI;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
 public class MiscTest {

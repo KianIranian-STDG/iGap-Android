@@ -1372,10 +1372,7 @@ public final class ProtoUserContactsGetList {
             "\n\031UserContactsGetList.proto\022\005proto\032\rRequ" +
                     "est.proto\032\016Response.proto\032\014Global.proto\"" +
                     "6\n\023UserContactsGetList\022\037\n\007request\030\001 \001(\0132" +
-                    "\016.proto.Request\"p\n\033UserContactsGetListRe" +
-                    "sponse\022!\n\010response\030\001 \001(\0132\017.proto.Respons" +
-                    "e\022.\n\017registered_user\030\002 \003(\0132\025.proto.Regis" +
-                    "teredUserB*\n\016net.iGap.protoB\030ProtoUserCo" +
+                    "\016.proto.Request\"p\n\033UserContactsGetListRe" + "sponse\022!\n\010response\030\001 \001(\0132\017.proto.Respons" + "e\022.\n\017registered_user\030\002 \003(\0132\025.proto.Regis" + "teredUserB*\n\016net.iGap.protoB\030ProtoUserCo" +
                     "ntactsGetListb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1394,9 +1391,9 @@ public final class ProtoUserContactsGetList {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserContactsGetListResponse_descriptor,
         new java.lang.String[] { "Response", "RegisteredUser", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
-    net.iGap.proto.ProtoGlobal.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

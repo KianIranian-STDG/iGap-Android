@@ -1276,13 +1276,11 @@ public final class ProtoChannelKickAdmin {
                     ".proto\032\016Response.proto\"W\n\020ChannelKickAdm" +
                     "in\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\017\n\007r" +
                     "oom_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"a\n\030Chann" +
-                    "elKickAdminResponse\022!\n\010response\030\001 \001(\0132\017." +
-                    "proto.Response\022\017\n\007room_id\030\002 \001(\004\022\021\n\tmembe" +
-                    "r_id\030\003 \001(\004B\'\n\016net.iGap.protoB\025ProtoChann" +
+                    "elKickAdminResponse\022!\n\010response\030\001 \001(\0132\017." + "proto.Response\022\017\n\007room_id\030\002 \001(\004\022\021\n\tmembe" + "r_id\030\003 \001(\004B\'\n\016net.iGap.protoB\025ProtoChann" +
                     "elKickAdminb\006proto3"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-      public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
+      com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
             descriptor = root;
             return null;
           }
@@ -1297,8 +1295,8 @@ public final class ProtoChannelKickAdmin {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChannelKickAdminResponse_descriptor,
         new java.lang.String[] { "Response", "RoomId", "MemberId", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

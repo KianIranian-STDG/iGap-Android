@@ -15,8 +15,8 @@ public final class ProtoPushRateSignaling {
     }
 
     public interface PushRateSignalingResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.PushRateSignalingResponse)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.PushRateSignalingResponse)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Response response = 1;</code>
@@ -43,8 +43,8 @@ public final class ProtoPushRateSignaling {
      * Protobuf type {@code proto.PushRateSignalingResponse}
      */
     public static final class PushRateSignalingResponse extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.PushRateSignalingResponse)
-            PushRateSignalingResponseOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.PushRateSignalingResponse)
+        PushRateSignalingResponseOrBuilder {
         // Use PushRateSignalingResponse.newBuilder() to construct.
         private PushRateSignalingResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -287,8 +287,8 @@ public final class ProtoPushRateSignaling {
          * Protobuf type {@code proto.PushRateSignalingResponse}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.PushRateSignalingResponse)
-                net.iGap.proto.ProtoPushRateSignaling.PushRateSignalingResponseOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.PushRateSignalingResponse)
+            net.iGap.proto.ProtoPushRateSignaling.PushRateSignalingResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoPushRateSignaling.internal_static_proto_PushRateSignalingResponse_descriptor;
             }
@@ -617,11 +617,7 @@ public final class ProtoPushRateSignaling {
 
     static {
         java.lang.String[] descriptorData = {
-                "\n\027PushRateSignaling.proto\022\005proto\032\016Respon" +
-                        "se.proto\"J\n\031PushRateSignalingResponse\022!\n" +
-                        "\010response\030\001 \001(\0132\017.proto.Response\022\n\n\002id\030\002" +
-                        " \001(\004B(\n\016net.iGap.protoB\026ProtoPushRateSig" +
-                        "nalingb\006proto3"
+            "\n\027PushRateSignaling.proto\022\005proto\032\016Respon" + "se.proto\"J\n\031PushRateSignalingResponse\022!\n" + "\010response\030\001 \001(\0132\017.proto.Response\022\n\n\002id\030\002" + " \001(\004B(\n\016net.iGap.protoB\026ProtoPushRateSig" + "nalingb\006proto3"
         };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -630,7 +626,7 @@ public final class ProtoPushRateSignaling {
             }
         };
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-                net.iGap.proto.ProtoResponse.getDescriptor(),
+            net.iGap.proto.ProtoResponse.getDescriptor(),
         }, assigner);
         internal_static_proto_PushRateSignalingResponse_descriptor = getDescriptor().getMessageTypes().get(0);
         internal_static_proto_PushRateSignalingResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_PushRateSignalingResponse_descriptor, new java.lang.String[]{"Response", "Id",});

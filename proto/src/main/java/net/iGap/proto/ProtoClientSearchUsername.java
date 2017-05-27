@@ -568,8 +568,8 @@ public final class ProtoClientSearchUsername {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        query_ = value;
+
+          query_ = value;
         onChanged();
         return this;
       }
@@ -590,8 +590,8 @@ public final class ProtoClientSearchUsername {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        query_ = value;
+
+          query_ = value;
         onChanged();
         return this;
       }
@@ -2432,9 +2432,7 @@ public final class ProtoClientSearchUsername {
                     "\001(\0132\017.proto.Response\022:\n\006result\030\002 \003(\0132*.p" +
                     "roto.ClientSearchUsernameResponse.Result" +
                     "\032\270\001\n\006Result\022=\n\004type\030\001 \001(\0162/.proto.Client" +
-                    "SearchUsernameResponse.Result.Type\022\023\n\013ex" +
-                    "act_match\030\002 \001(\010\022#\n\004user\030\003 \001(\0132\025.proto.Re", "gisteredUser\022\031\n\004room\030\004 \001(\0132\013.proto.Room\"" +
-            "\032\n\004Type\022\010\n\004USER\020\000\022\010\n\004ROOM\020\001B+\n\016net.iGap." +
+                    "SearchUsernameResponse.Result.Type\022\023\n\013ex" + "act_match\030\002 \001(\010\022#\n\004user\030\003 \001(\0132\025.proto.Re", "gisteredUser\022\031\n\004room\030\004 \001(\0132\013.proto.Room\"" + "\032\n\004Type\022\010\n\004USER\020\000\022\010\n\004ROOM\020\001B+\n\016net.iGap." +
             "protoB\031ProtoClientSearchUsernameb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2460,9 +2458,9 @@ public final class ProtoClientSearchUsername {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ClientSearchUsernameResponse_Result_descriptor,
         new java.lang.String[] { "Type", "ExactMatch", "User", "Room", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
-    net.iGap.proto.ProtoGlobal.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

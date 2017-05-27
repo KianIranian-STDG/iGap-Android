@@ -16,11 +16,12 @@
 package com.neovisionaries.ws.client;
 
 
-import static com.neovisionaries.ws.client.WebSocketState.CLOSED;
-import static com.neovisionaries.ws.client.WebSocketState.CLOSING;
+import com.neovisionaries.ws.client.StateManager.CloseInitiator;
 import java.io.IOException;
 import java.util.LinkedList;
-import com.neovisionaries.ws.client.StateManager.CloseInitiator;
+
+import static com.neovisionaries.ws.client.WebSocketState.CLOSED;
+import static com.neovisionaries.ws.client.WebSocketState.CLOSING;
 
 
 class WritingThread extends WebSocketThread {

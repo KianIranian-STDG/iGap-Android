@@ -93,11 +93,11 @@ public final class ProtoUserContactsEdit {
               break;
             }
             case 10: {
-              net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
+                net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
               if (request_ != null) {
                 subBuilder = request_.toBuilder();
               }
-              request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
+                request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(request_);
                 request_ = subBuilder.buildPartial();
@@ -134,15 +134,15 @@ public final class ProtoUserContactsEdit {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEdit_descriptor;
+        return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEdit_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEdit_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.class, net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.Builder.class);
+        return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEdit_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.class, net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
-    private net.iGap.proto.ProtoRequest.Request request_;
+      private net.iGap.proto.ProtoRequest.Request request_;
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -153,7 +153,7 @@ public final class ProtoUserContactsEdit {
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
-      return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+        return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
     /**
      * <code>optional .proto.Request request = 1;</code>
@@ -283,10 +283,10 @@ public final class ProtoUserContactsEdit {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit)) {
+        if (!(obj instanceof net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit other = (net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit) obj;
+        net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit other = (net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit) obj;
 
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
@@ -321,43 +321,43 @@ public final class ProtoUserContactsEdit {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -368,7 +368,7 @@ public final class ProtoUserContactsEdit {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit prototype) {
+      public static Builder newBuilder(net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -387,14 +387,14 @@ public final class ProtoUserContactsEdit {
             // @@protoc_insertion_point(builder_implements:proto.UserContactsEdit)
         net.iGap.proto.ProtoUserContactsEdit.UserContactsEditOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEdit_descriptor;
+          return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEdit_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEdit_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.class, net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.Builder.class);
+          return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEdit_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.class, net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.Builder.class);
       }
 
-      // Construct using net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.newBuilder()
+        // Construct using net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -426,23 +426,23 @@ public final class ProtoUserContactsEdit {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEdit_descriptor;
+          return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEdit_descriptor;
       }
 
-      public net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.getDefaultInstance();
+        public net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit getDefaultInstanceForType() {
+            return net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit build() {
-        net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit result = buildPartial();
+        public net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit build() {
+            net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit buildPartial() {
-        net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit result = new net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit(this);
+        public net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit buildPartial() {
+            net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit result = new net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit(this);
         if (requestBuilder_ == null) {
           result.request_ = request_;
         } else {
@@ -479,16 +479,16 @@ public final class ProtoUserContactsEdit {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit) {
-          return mergeFrom((net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit) other);
+          if (other instanceof net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit) {
+              return mergeFrom((net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit other) {
-        if (other == net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.getDefaultInstance()) return this;
+        public Builder mergeFrom(net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit other) {
+            if (other == net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -512,11 +512,11 @@ public final class ProtoUserContactsEdit {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parsedMessage = null;
+          net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit) e.getUnfinishedMessage();
+            parsedMessage = (net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -526,8 +526,8 @@ public final class ProtoUserContactsEdit {
         return this;
       }
 
-      private net.iGap.proto.ProtoRequest.Request request_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
+        private net.iGap.proto.ProtoRequest.Request request_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -539,7 +539,7 @@ public final class ProtoUserContactsEdit {
        */
       public net.iGap.proto.ProtoRequest.Request getRequest() {
         if (requestBuilder_ == null) {
-          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         } else {
           return requestBuilder_.getMessage();
         }
@@ -579,7 +579,7 @@ public final class ProtoUserContactsEdit {
       public Builder mergeRequest(net.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-            request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+              request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -619,7 +619,7 @@ public final class ProtoUserContactsEdit {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
@@ -627,7 +627,7 @@ public final class ProtoUserContactsEdit {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -803,10 +803,10 @@ public final class ProtoUserContactsEdit {
     // @@protoc_insertion_point(class_scope:proto.UserContactsEdit)
     private static final net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit();
+        DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit();
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit getDefaultInstance() {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -825,7 +825,7 @@ public final class ProtoUserContactsEdit {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit getDefaultInstanceForType() {
+      public net.iGap.proto.ProtoUserContactsEdit.UserContactsEdit getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -911,11 +911,11 @@ public final class ProtoUserContactsEdit {
               break;
             }
             case 10: {
-              net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
+                net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
               if (response_ != null) {
                 subBuilder = response_.toBuilder();
               }
-              response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
+                response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(response_);
                 response_ = subBuilder.buildPartial();
@@ -952,15 +952,15 @@ public final class ProtoUserContactsEdit {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEditResponse_descriptor;
+        return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEditResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEditResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.class, net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.Builder.class);
+        return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEditResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.class, net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
-    private net.iGap.proto.ProtoResponse.Response response_;
+      private net.iGap.proto.ProtoResponse.Response response_;
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -971,7 +971,7 @@ public final class ProtoUserContactsEdit {
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
-      return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+        return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
     /**
      * <code>optional .proto.Response response = 1;</code>
@@ -1101,10 +1101,10 @@ public final class ProtoUserContactsEdit {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse)) {
+        if (!(obj instanceof net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse other = (net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse) obj;
+        net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse other = (net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse) obj;
 
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
@@ -1139,43 +1139,43 @@ public final class ProtoUserContactsEdit {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1186,7 +1186,7 @@ public final class ProtoUserContactsEdit {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse prototype) {
+      public static Builder newBuilder(net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1205,14 +1205,14 @@ public final class ProtoUserContactsEdit {
             // @@protoc_insertion_point(builder_implements:proto.UserContactsEditResponse)
         net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEditResponse_descriptor;
+          return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEditResponse_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEditResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.class, net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.Builder.class);
+          return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEditResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.class, net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.Builder.class);
       }
 
-      // Construct using net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.newBuilder()
+        // Construct using net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1244,23 +1244,23 @@ public final class ProtoUserContactsEdit {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEditResponse_descriptor;
+          return net.iGap.proto.ProtoUserContactsEdit.internal_static_proto_UserContactsEditResponse_descriptor;
       }
 
-      public net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.getDefaultInstance();
+        public net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse getDefaultInstanceForType() {
+            return net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse build() {
-        net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse result = buildPartial();
+        public net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse build() {
+            net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse buildPartial() {
-        net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse result = new net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse(this);
+        public net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse buildPartial() {
+            net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse result = new net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse(this);
         if (responseBuilder_ == null) {
           result.response_ = response_;
         } else {
@@ -1297,16 +1297,16 @@ public final class ProtoUserContactsEdit {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse) {
-          return mergeFrom((net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse) other);
+          if (other instanceof net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse) {
+              return mergeFrom((net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse other) {
-        if (other == net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.getDefaultInstance()) return this;
+        public Builder mergeFrom(net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse other) {
+            if (other == net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1330,11 +1330,11 @@ public final class ProtoUserContactsEdit {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parsedMessage = null;
+          net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse) e.getUnfinishedMessage();
+            parsedMessage = (net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1344,8 +1344,8 @@ public final class ProtoUserContactsEdit {
         return this;
       }
 
-      private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
+        private net.iGap.proto.ProtoResponse.Response response_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1357,7 +1357,7 @@ public final class ProtoUserContactsEdit {
        */
       public net.iGap.proto.ProtoResponse.Response getResponse() {
         if (responseBuilder_ == null) {
-          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         } else {
           return responseBuilder_.getMessage();
         }
@@ -1397,7 +1397,7 @@ public final class ProtoUserContactsEdit {
       public Builder mergeResponse(net.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-            response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+              response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1437,7 +1437,7 @@ public final class ProtoUserContactsEdit {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
@@ -1445,7 +1445,7 @@ public final class ProtoUserContactsEdit {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1621,10 +1621,10 @@ public final class ProtoUserContactsEdit {
     // @@protoc_insertion_point(class_scope:proto.UserContactsEditResponse)
     private static final net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse();
+        DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse();
     }
 
-    public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse getDefaultInstance() {
+      public static net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1643,7 +1643,7 @@ public final class ProtoUserContactsEdit {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse getDefaultInstanceForType() {
+      public net.iGap.proto.ProtoUserContactsEdit.UserContactsEditResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1665,10 +1665,7 @@ public final class ProtoUserContactsEdit {
                     ".proto\032\016Response.proto\"i\n\020UserContactsEd" +
                     "it\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\r\n\005p" +
                     "hone\030\002 \001(\004\022\022\n\nfirst_name\030\003 \001(\t\022\021\n\tlast_n" +
-                    "ame\030\004 \001(\t\"s\n\030UserContactsEditResponse\022!\n" +
-                    "\010response\030\001 \001(\0132\017.proto.Response\022\r\n\005phon" +
-                    "e\030\002 \001(\004\022\022\n\nfirst_name\030\003 \001(\t\022\021\n\tlast_name" +
-                    "\030\004 \001(\tB\'\n\016net.iGap.protoB\025ProtoUserConta" +
+                    "ame\030\004 \001(\t\"s\n\030UserContactsEditResponse\022!\n" + "\010response\030\001 \001(\0132\017.proto.Response\022\r\n\005phon" + "e\030\002 \001(\004\022\022\n\nfirst_name\030\003 \001(\t\022\021\n\tlast_name" + "\030\004 \001(\tB\'\n\016net.iGap.protoB\025ProtoUserConta" +
                     "ctsEditb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1678,7 +1675,7 @@ public final class ProtoUserContactsEdit {
       }
     };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+        net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
     }, assigner);
     internal_static_proto_UserContactsEdit_descriptor = getDescriptor().getMessageTypes().get(0);
     internal_static_proto_UserContactsEdit_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
@@ -1690,8 +1687,8 @@ public final class ProtoUserContactsEdit {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserContactsEditResponse_descriptor,
         new java.lang.String[] { "Response", "Phone", "FirstName", "LastName", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

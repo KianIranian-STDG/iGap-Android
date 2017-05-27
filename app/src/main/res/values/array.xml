@@ -264,4 +264,9 @@
         <item>@string/capture_video</item>
     </string-array>
 
+  <string-array name="securityRecoveryPassword">
+    <item>@string/recovery_by_email</item>
+    <item>@string/recovery_by_question</item>
+  </string-array>
+
 </resources>

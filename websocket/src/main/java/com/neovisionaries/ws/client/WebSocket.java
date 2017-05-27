@@ -16,12 +16,7 @@
 package com.neovisionaries.ws.client;
 
 
-import static com.neovisionaries.ws.client.WebSocketState.CLOSED;
-import static com.neovisionaries.ws.client.WebSocketState.CLOSING;
-import static com.neovisionaries.ws.client.WebSocketState.CONNECTING;
-import static com.neovisionaries.ws.client.WebSocketState.CREATED;
-import static com.neovisionaries.ws.client.WebSocketState.OPEN;
-
+import com.neovisionaries.ws.client.StateManager.CloseInitiator;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -33,7 +28,12 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
-import com.neovisionaries.ws.client.StateManager.CloseInitiator;
+
+import static com.neovisionaries.ws.client.WebSocketState.CLOSED;
+import static com.neovisionaries.ws.client.WebSocketState.CLOSING;
+import static com.neovisionaries.ws.client.WebSocketState.CONNECTING;
+import static com.neovisionaries.ws.client.WebSocketState.CREATED;
+import static com.neovisionaries.ws.client.WebSocketState.OPEN;
 
 
 /**

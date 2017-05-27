@@ -35,14 +35,12 @@ public class OpeningHandshakeException extends WebSocketException {
     private final byte[] mBody;
 
 
-    OpeningHandshakeException(
-            WebSocketError error, String message, StatusLine statusLine, Map<String, List<String>> headers) {
+    OpeningHandshakeException(WebSocketError error, String message, StatusLine statusLine, Map<String, List<String>> headers) {
         this(error, message, statusLine, headers, null);
     }
 
 
-    OpeningHandshakeException(
-            WebSocketError error, String message, StatusLine statusLine, Map<String, List<String>> headers, byte[] body) {
+    OpeningHandshakeException(WebSocketError error, String message, StatusLine statusLine, Map<String, List<String>> headers, byte[] body) {
         super(error, message);
 
         mStatusLine = statusLine;

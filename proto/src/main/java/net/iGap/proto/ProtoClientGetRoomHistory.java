@@ -1680,10 +1680,7 @@ public final class ProtoClientGetRoomHistory {
                     "(\0132\016.proto.Request\022\017\n\007room_id\030\002 \001(\004\022\030\n\020f" +
                     "irst_message_id\030\003 \001(\004\0228\n\tdirection\030\004 \001(\016" +
                     "2%.proto.ClientGetRoomHistory.Direction\"" +
-                    "\035\n\tDirection\022\006\n\002UP\020\000\022\010\n\004DOWN\020\001\"f\n\034Client" +
-                    "GetRoomHistoryResponse\022!\n\010response\030\001 \001(\013" +
-                    "2\017.proto.Response\022#\n\007message\030\002 \003(\0132\022.pro" +
-                    "to.RoomMessageB+\n\016net.iGap.protoB\031ProtoC", "lientGetRoomHistoryb\006proto3"
+                    "\035\n\tDirection\022\006\n\002UP\020\000\022\010\n\004DOWN\020\001\"f\n\034Client" + "GetRoomHistoryResponse\022!\n\010response\030\001 \001(\013" + "2\017.proto.Response\022#\n\007message\030\002 \003(\0132\022.pro" + "to.RoomMessageB+\n\016net.iGap.protoB\031ProtoC", "lientGetRoomHistoryb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1703,9 +1700,9 @@ public final class ProtoClientGetRoomHistory {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ClientGetRoomHistoryResponse_descriptor,
         new java.lang.String[] { "Response", "Message", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
-    net.iGap.proto.ProtoGlobal.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

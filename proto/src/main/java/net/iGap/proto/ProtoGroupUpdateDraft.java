@@ -1517,10 +1517,7 @@ public final class ProtoGroupUpdateDraft {
                     ".proto\032\016Response.proto\032\014Global.proto\"e\n\020" +
                     "GroupUpdateDraft\022\037\n\007request\030\001 \001(\0132\016.prot" +
                     "o.Request\022\017\n\007room_id\030\002 \001(\004\022\037\n\005draft\030\003 \001(" +
-                    "\0132\020.proto.RoomDraft\"o\n\030GroupUpdateDraftR" +
-                    "esponse\022!\n\010response\030\001 \001(\0132\017.proto.Respon" +
-                    "se\022\017\n\007room_id\030\002 \001(\004\022\037\n\005draft\030\003 \001(\0132\020.pro" +
-                    "to.RoomDraftB\'\n\016net.iGap.protoB\025ProtoGro" +
+                    "\0132\020.proto.RoomDraft\"o\n\030GroupUpdateDraftR" + "esponse\022!\n\010response\030\001 \001(\0132\017.proto.Respon" + "se\022\017\n\007room_id\030\002 \001(\004\022\037\n\005draft\030\003 \001(\0132\020.pro" + "to.RoomDraftB\'\n\016net.iGap.protoB\025ProtoGro" +
                     "upUpdateDraftb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1541,9 +1538,9 @@ public final class ProtoGroupUpdateDraft {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_GroupUpdateDraftResponse_descriptor,
         new java.lang.String[] { "Response", "RoomId", "Draft", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
-    net.iGap.proto.ProtoGlobal.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

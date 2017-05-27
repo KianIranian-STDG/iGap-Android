@@ -2299,8 +2299,7 @@ public final class ProtoChannelGetMemberList {
                     "\n\006MEMBER\020\001\022\r\n\tMODERATOR\020\002\022\t\n\005ADMIN\020\003\"\276\001\n" +
                     "\034ChannelGetMemberListResponse\022!\n\010respons" +
                     "e\030\001 \001(\0132\017.proto.Response\022:\n\006member\030\002 \003(\013", "2*.proto.ChannelGetMemberListResponse.Me" +
-            "mber\032?\n\006Member\022\016\n\006userId\030\001 \001(\004\022%\n\004role\030\002" +
-            " \001(\0162\027.proto.ChannelRoom.RoleB+\n\016net.iGa" +
+            "mber\032?\n\006Member\022\016\n\006userId\030\001 \001(\004\022%\n\004role\030\002" + " \001(\0162\027.proto.ChannelRoom.RoleB+\n\016net.iGa" +
             "p.protoB\031ProtoChannelGetMemberListb\006prot" +
             "o3"
     };
@@ -2327,9 +2326,9 @@ public final class ProtoChannelGetMemberList {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChannelGetMemberListResponse_Member_descriptor,
         new java.lang.String[] { "UserId", "Role", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
-    net.iGap.proto.ProtoGlobal.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

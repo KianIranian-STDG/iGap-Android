@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail;
 
 public class UserTwoStepVerificationGetPasswordDetailResponse extends MessageHandler {
@@ -36,11 +37,21 @@ public class UserTwoStepVerificationGetPasswordDetailResponse extends MessageHan
         builder.getHint();
         builder.getHasConfirmedRecoveryEmail();
         builder.getUnconfirmedEmailPattern();
+
+        if (G.onTwoStepPassword != null) {
+            G.onTwoStepPassword.getPasswordDetail(builder.getQuestionOne(), builder.getQuestionTwo(), builder.getHint(), builder.getHasConfirmedRecoveryEmail(), builder.getUnconfirmedEmailPattern());
+
+        }
+
+        if (G.onSecurityCheckPassword != null) {
+            G.onSecurityCheckPassword.getDetailPassword(builder.getQuestionOne(), builder.getQuestionTwo(), builder.getHint(), builder.getHasConfirmedRecoveryEmail(), builder.getUnconfirmedEmailPattern());
+        }
     }
 
     @Override public void timeOut() {
         super.timeOut();
     }
+
 
     @Override public void error() {
         super.error();

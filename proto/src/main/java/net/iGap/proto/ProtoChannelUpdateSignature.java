@@ -971,13 +971,13 @@ public final class ProtoChannelUpdateSignature {
         return net.iGap.proto.ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse build() {
-        net.iGap.proto.ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
+        public net.iGap.proto.ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse build() {
+            net.iGap.proto.ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse result = buildPartial();
+            if (!result.isInitialized()) {
+                throw newUninitializedMessageException(result);
         }
-        return result;
-      }
+            return result;
+        }
 
       public net.iGap.proto.ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse buildPartial() {
         net.iGap.proto.ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse result = new net.iGap.proto.ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse(this);
@@ -1275,10 +1275,7 @@ public final class ProtoChannelUpdateSignature {
             "\n\034ChannelUpdateSignature.proto\022\005proto\032\rR" +
                     "equest.proto\032\016Response.proto\"]\n\026ChannelU" +
                     "pdateSignature\022\037\n\007request\030\001 \001(\0132\016.proto." +
-                    "Request\022\017\n\007room_id\030\002 \001(\004\022\021\n\tsignature\030\003 " +
-                    "\001(\010\"g\n\036ChannelUpdateSignatureResponse\022!\n" +
-                    "\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007room" +
-                    "_id\030\002 \001(\004\022\021\n\tsignature\030\003 \001(\010B-\n\016net.iGap" +
+                    "Request\022\017\n\007room_id\030\002 \001(\004\022\021\n\tsignature\030\003 " + "\001(\010\"g\n\036ChannelUpdateSignatureResponse\022!\n" + "\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007room" + "_id\030\002 \001(\004\022\021\n\tsignature\030\003 \001(\010B-\n\016net.iGap" +
                     ".protoB\033ProtoChannelUpdateSignatureb\006pro" +
                     "to3"
     };
@@ -1298,8 +1295,8 @@ public final class ProtoChannelUpdateSignature {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChannelUpdateSignatureResponse_descriptor,
         new java.lang.String[] { "Response", "RoomId", "Signature", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

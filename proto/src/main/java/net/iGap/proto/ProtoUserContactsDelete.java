@@ -1151,10 +1151,7 @@ public final class ProtoUserContactsDelete {
     java.lang.String[] descriptorData = {
             "\n\030UserContactsDelete.proto\022\005proto\032\rReque" +
                     "st.proto\032\016Response.proto\"D\n\022UserContacts" +
-                    "Delete\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022" +
-                    "\r\n\005phone\030\002 \001(\004\"N\n\032UserContactsDeleteResp" +
-                    "onse\022!\n\010response\030\001 \001(\0132\017.proto.Response\022" +
-                    "\r\n\005phone\030\002 \001(\004B)\n\016net.iGap.protoB\027ProtoU" +
+                    "Delete\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022" + "\r\n\005phone\030\002 \001(\004\"N\n\032UserContactsDeleteResp" + "onse\022!\n\010response\030\001 \001(\0132\017.proto.Response\022" + "\r\n\005phone\030\002 \001(\004B)\n\016net.iGap.protoB\027ProtoU" +
                     "serContactsDeleteb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1173,8 +1170,8 @@ public final class ProtoUserContactsDelete {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserContactsDeleteResponse_descriptor,
         new java.lang.String[] { "Response", "Phone", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

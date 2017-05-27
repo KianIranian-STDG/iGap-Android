@@ -655,7 +655,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(_time) : _time;
     }
 
-    @CallSuper protected void replyMessageIfNeeded(VH holder, Realm realm) {
+    @CallSuper
+    protected void replyMessageIfNeeded(VH holder, Realm realm) {
         /**
          * set replay container visible if message was replayed, otherwise, gone it
          */
@@ -728,7 +729,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    @CallSuper protected void forwardMessageIfNeeded(VH holder, Realm realm) {
+    @CallSuper
+    protected void forwardMessageIfNeeded(VH holder, Realm realm) {
         /**
          * set forward container visible if message was forwarded, otherwise, gone it
          */

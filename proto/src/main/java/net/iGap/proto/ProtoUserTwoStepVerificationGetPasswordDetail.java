@@ -66,11 +66,11 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
               break;
             }
             case 10: {
-              net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
+                net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
               if (request_ != null) {
                 subBuilder = request_.toBuilder();
               }
-              request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
+                request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(request_);
                 request_ = subBuilder.buildPartial();
@@ -90,16 +90,16 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetail_descriptor;
+        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetail_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetail_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.class,
-              net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.Builder.class);
+        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetail_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.class,
+            net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
-    private net.iGap.proto.ProtoRequest.Request request_;
+      private net.iGap.proto.ProtoRequest.Request request_;
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -110,7 +110,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
-      return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+        return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
     /**
      * <code>optional .proto.Request request = 1;</code>
@@ -153,10 +153,10 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail)) {
+        if (!(obj instanceof net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail other = (net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail) obj;
+        net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail other = (net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail) obj;
 
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
@@ -182,43 +182,43 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -229,7 +229,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail prototype) {
+      public static Builder newBuilder(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -248,15 +248,15 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
             // @@protoc_insertion_point(builder_implements:proto.UserTwoStepVerificationGetPasswordDetail)
         net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetail_descriptor;
+          return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetail_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetail_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.class,
-                net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.Builder.class);
+          return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetail_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.class,
+              net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.Builder.class);
       }
 
-      // Construct using net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.newBuilder()
+        // Construct using net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -281,23 +281,23 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetail_descriptor;
+          return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetail_descriptor;
       }
 
-      public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.getDefaultInstance();
+        public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail getDefaultInstanceForType() {
+            return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail build() {
-        net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail result = buildPartial();
+        public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail build() {
+            net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail buildPartial() {
-        net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail result = new net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail(this);
+        public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail buildPartial() {
+            net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail result = new net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail(this);
         if (requestBuilder_ == null) {
           result.request_ = request_;
         } else {
@@ -331,16 +331,16 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail) {
-          return mergeFrom((net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail) other);
+          if (other instanceof net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail) {
+              return mergeFrom((net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail other) {
-        if (other == net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.getDefaultInstance()) return this;
+        public Builder mergeFrom(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail other) {
+            if (other == net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -353,11 +353,11 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parsedMessage = null;
+          net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail) e.getUnfinishedMessage();
+            parsedMessage = (net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -367,8 +367,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
         return this;
       }
 
-      private net.iGap.proto.ProtoRequest.Request request_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
+        private net.iGap.proto.ProtoRequest.Request request_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -380,7 +380,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
        */
       public net.iGap.proto.ProtoRequest.Request getRequest() {
         if (requestBuilder_ == null) {
-          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         } else {
           return requestBuilder_.getMessage();
         }
@@ -420,7 +420,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       public Builder mergeRequest(net.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-            request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+              request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -460,7 +460,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
@@ -468,7 +468,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
           request_ = null;
         }
         return requestBuilder_;
@@ -489,10 +489,10 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
     // @@protoc_insertion_point(class_scope:proto.UserTwoStepVerificationGetPasswordDetail)
     private static final net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail();
+        DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail();
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail getDefaultInstance() {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -511,7 +511,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail getDefaultInstanceForType() {
+      public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetail getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -616,11 +616,11 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
               break;
             }
             case 10: {
-              net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
+                net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
               if (response_ != null) {
                 subBuilder = response_.toBuilder();
               }
-              response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
+                response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(response_);
                 response_ = subBuilder.buildPartial();
@@ -669,16 +669,16 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_descriptor;
+        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.class,
-              net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.Builder.class);
+        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.class,
+            net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
-    private net.iGap.proto.ProtoResponse.Response response_;
+      private net.iGap.proto.ProtoResponse.Response response_;
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -689,7 +689,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
-      return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+        return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
     /**
      * <code>optional .proto.Response response = 1;</code>
@@ -891,10 +891,10 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse)) {
+        if (!(obj instanceof net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse other = (net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse) obj;
+        net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse other = (net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse) obj;
 
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
@@ -935,43 +935,43 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -982,7 +982,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse prototype) {
+      public static Builder newBuilder(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1002,15 +1002,15 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
             // @@protoc_insertion_point(builder_implements:proto.UserTwoStepVerificationGetPasswordDetailResponse)
         net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_descriptor;
+          return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.class,
-                net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.Builder.class);
+          return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.class,
+              net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.Builder.class);
       }
 
-      // Construct using net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.newBuilder()
+        // Construct using net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1045,23 +1045,23 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_descriptor;
+          return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_descriptor;
       }
 
-      public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.getDefaultInstance();
+        public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse getDefaultInstanceForType() {
+            return net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse build() {
-        net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse result = buildPartial();
+        public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse build() {
+            net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse buildPartial() {
-        net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse result = new net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse(this);
+        public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse buildPartial() {
+            net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse result = new net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse(this);
         if (responseBuilder_ == null) {
           result.response_ = response_;
         } else {
@@ -1100,16 +1100,16 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse) {
-          return mergeFrom((net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse) other);
+          if (other instanceof net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse) {
+              return mergeFrom((net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse other) {
-        if (other == net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.getDefaultInstance()) return this;
+        public Builder mergeFrom(net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse other) {
+            if (other == net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1141,11 +1141,11 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parsedMessage = null;
+          net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse) e.getUnfinishedMessage();
+            parsedMessage = (net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1155,8 +1155,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
         return this;
       }
 
-      private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
+        private net.iGap.proto.ProtoResponse.Response response_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1168,7 +1168,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
        */
       public net.iGap.proto.ProtoResponse.Response getResponse() {
         if (responseBuilder_ == null) {
-          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         } else {
           return responseBuilder_.getMessage();
         }
@@ -1208,7 +1208,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       public Builder mergeResponse(net.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-            response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+              response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1248,7 +1248,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
@@ -1256,7 +1256,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
@@ -1297,8 +1297,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        questionOne_ = value;
+
+          questionOne_ = value;
         onChanged();
         return this;
       }
@@ -1319,8 +1319,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        questionOne_ = value;
+
+          questionOne_ = value;
         onChanged();
         return this;
       }
@@ -1360,8 +1360,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        questionTwo_ = value;
+
+          questionTwo_ = value;
         onChanged();
         return this;
       }
@@ -1382,8 +1382,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        questionTwo_ = value;
+
+          questionTwo_ = value;
         onChanged();
         return this;
       }
@@ -1423,8 +1423,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        hint_ = value;
+
+          hint_ = value;
         onChanged();
         return this;
       }
@@ -1445,8 +1445,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        hint_ = value;
+
+          hint_ = value;
         onChanged();
         return this;
       }
@@ -1512,8 +1512,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        unconfirmedEmailPattern_ = value;
+
+          unconfirmedEmailPattern_ = value;
         onChanged();
         return this;
       }
@@ -1534,8 +1534,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        unconfirmedEmailPattern_ = value;
+
+          unconfirmedEmailPattern_ = value;
         onChanged();
         return this;
       }
@@ -1555,10 +1555,10 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
     // @@protoc_insertion_point(class_scope:proto.UserTwoStepVerificationGetPasswordDetailResponse)
     private static final net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse();
+        DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse();
     }
 
-    public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse getDefaultInstance() {
+      public static net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1577,7 +1577,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse getDefaultInstanceForType() {
+      public net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail.UserTwoStepVerificationGetPasswordDetailResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1601,10 +1601,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
                     "wordDetail\022\037\n\007request\030\001 \001(\0132\016.proto.Requ" +
                     "est\"\330\001\n0UserTwoStepVerificationGetPasswo" +
                     "rdDetailResponse\022!\n\010response\030\001 \001(\0132\017.pro" +
-                    "to.Response\022\024\n\014question_one\030\002 \001(\t\022\024\n\014que" +
-                    "stion_two\030\003 \001(\t\022\014\n\004hint\030\004 \001(\t\022$\n\034has_con" +
-                    "firmed_recovery_email\030\005 \001(\010\022!\n\031unconfirm" +
-                    "ed_email_pattern\030\006 \001(\tB?\n\016net.iGap.proto", "B-ProtoUserTwoStepVerificationGetPasswor" + "dDetailb\006proto3"
+                    "to.Response\022\024\n\014question_one\030\002 \001(\t\022\024\n\014que" + "stion_two\030\003 \001(\t\022\014\n\004hint\030\004 \001(\t\022$\n\034has_con" + "firmed_recovery_email\030\005 \001(\010\022!\n\031unconfirm" + "ed_email_pattern\030\006 \001(\tB?\n\016net.iGap.proto", "B-ProtoUserTwoStepVerificationGetPasswor" + "dDetailb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1613,7 +1610,7 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       }
     };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+        net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
     }, assigner);
     internal_static_proto_UserTwoStepVerificationGetPasswordDetail_descriptor = getDescriptor().getMessageTypes().get(0);
     internal_static_proto_UserTwoStepVerificationGetPasswordDetail_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserTwoStepVerificationGetPasswordDetail_descriptor, new java.lang.String[]{"Request",});
@@ -1623,8 +1620,8 @@ public final class ProtoUserTwoStepVerificationGetPasswordDetail {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserTwoStepVerificationGetPasswordDetailResponse_descriptor,
         new java.lang.String[] { "Response", "QuestionOne", "QuestionTwo", "Hint", "HasConfirmedRecoveryEmail", "UnconfirmedEmailPattern", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

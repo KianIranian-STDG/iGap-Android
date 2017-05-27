@@ -339,19 +339,11 @@ public interface WebSocketListener {
      * Called between after a thread is created and before the thread's
      * {@code start()} method is called.
      *
-     * @param websocket
-     *         The WebSocket.
-     *
-     * @param threadType
-     *         The thread type.
-     *
-     * @param thread
-     *         The newly created thread instance.
-     *
-     * @throws Exception
-     *         An exception thrown by an implementation of this method.
-     *         The exception is passed to {@link #handleCallbackError(WebSocket, Throwable)}.
-     *
+     * @param websocket The WebSocket.
+     * @param threadType The thread type.
+     * @param thread The newly created thread instance.
+     * @throws Exception An exception thrown by an implementation of this method.
+     * The exception is passed to {@link #handleCallbackError(WebSocket, Throwable)}.
      * @since 2.0
      */
     void onThreadCreated(WebSocket websocket, ThreadType threadType, Thread thread) throws Exception;
@@ -387,15 +379,10 @@ public interface WebSocketListener {
      * Call when an error occurred. This method is called before
      * an <code>on<i>Xxx</i>Error</code> method is called.
      *
-     * @param websocket
-     *         The WebSocket.
-     *
-     * @param cause
-     *         An exception that represents the error.
-     *
-     * @throws Exception
-     *         An exception thrown by an implementation of this method.
-     *         The exception is passed to {@link #handleCallbackError(WebSocket, Throwable)}.
+     * @param websocket The WebSocket.
+     * @param cause An exception that represents the error.
+     * @throws Exception An exception thrown by an implementation of this method.
+     * The exception is passed to {@link #handleCallbackError(WebSocket, Throwable)}.
      */
     void onError(WebSocket websocket, WebSocketException cause) throws Exception;
 

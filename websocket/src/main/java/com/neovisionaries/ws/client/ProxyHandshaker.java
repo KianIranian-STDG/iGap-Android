@@ -149,14 +149,12 @@ class ProxyHandshaker {
         String[] elements = statusLine.split(" +", 3);
 
         if (elements.length < 2) {
-            throw new IOException("The status line in the response from the proxy server is badly formatted. " +
-                    "The status line is: " + statusLine);
+            throw new IOException("The status line in the response from the proxy server is badly formatted. " + "The status line is: " + statusLine);
         }
 
         // If the status code is not "200".
         if ("200".equals(elements[1]) == false) {
-            throw new IOException("The status code in the response from the proxy server is not '200 Connection established'. " +
-                    "The status line is: " + statusLine);
+            throw new IOException("The status code in the response from the proxy server is not '200 Connection established'. " + "The status line is: " + statusLine);
         }
 
         // OK. A connection was established.

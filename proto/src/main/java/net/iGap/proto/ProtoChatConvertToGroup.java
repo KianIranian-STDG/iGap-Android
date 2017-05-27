@@ -691,8 +691,8 @@ public final class ProtoChatConvertToGroup {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        name_ = value;
+
+          name_ = value;
         onChanged();
         return this;
       }
@@ -713,8 +713,8 @@ public final class ProtoChatConvertToGroup {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        name_ = value;
+
+          name_ = value;
         onChanged();
         return this;
       }
@@ -754,8 +754,8 @@ public final class ProtoChatConvertToGroup {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        description_ = value;
+
+          description_ = value;
         onChanged();
         return this;
       }
@@ -776,8 +776,8 @@ public final class ProtoChatConvertToGroup {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        description_ = value;
+
+          description_ = value;
         onChanged();
         return this;
       }
@@ -1550,8 +1550,8 @@ public final class ProtoChatConvertToGroup {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        name_ = value;
+
+          name_ = value;
         onChanged();
         return this;
       }
@@ -1572,8 +1572,8 @@ public final class ProtoChatConvertToGroup {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        name_ = value;
+
+          name_ = value;
         onChanged();
         return this;
       }
@@ -1613,8 +1613,8 @@ public final class ProtoChatConvertToGroup {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        description_ = value;
+
+          description_ = value;
         onChanged();
         return this;
       }
@@ -1635,8 +1635,8 @@ public final class ProtoChatConvertToGroup {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        description_ = value;
+
+          description_ = value;
         onChanged();
         return this;
       }
@@ -1745,10 +1745,7 @@ public final class ProtoChatConvertToGroup {
                     "\n\022ChatConvertToGroup\022\037\n\007request\030\001 \001(\0132\016." +
                     "proto.Request\022\017\n\007room_id\030\002 \001(\004\022\014\n\004name\030\003" +
                     " \001(\t\022\023\n\013description\030\004 \001(\t\"\230\001\n\032ChatConver" +
-                    "tToGroupResponse\022!\n\010response\030\001 \001(\0132\017.pro" +
-                    "to.Response\022\017\n\007room_id\030\002 \001(\004\022\014\n\004name\030\003 \001" +
-                    "(\t\022\023\n\013description\030\004 \001(\t\022#\n\004role\030\005 \001(\0162\025." +
-                    "proto.GroupRoom.RoleB)\n\016net.iGap.protoB\027" +
+                    "tToGroupResponse\022!\n\010response\030\001 \001(\0132\017.pro" + "to.Response\022\017\n\007room_id\030\002 \001(\004\022\014\n\004name\030\003 \001" + "(\t\022\023\n\013description\030\004 \001(\t\022#\n\004role\030\005 \001(\0162\025." + "proto.GroupRoom.RoleB)\n\016net.iGap.protoB\027" +
                     "ProtoChatConvertToGroupb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1769,9 +1766,9 @@ public final class ProtoChatConvertToGroup {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChatConvertToGroupResponse_descriptor,
         new java.lang.String[] { "Response", "RoomId", "Name", "Description", "Role", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
-    net.iGap.proto.ProtoGlobal.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

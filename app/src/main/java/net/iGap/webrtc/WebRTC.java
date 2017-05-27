@@ -87,9 +87,9 @@ public class WebRTC {
             }
 
             PeerConnectionFactory.initializeAndroidGlobals(G.context,  // Context
-                    true,  // Audio Enabled
-                    false,  // Video Enabled
-                    true); // Hardware Acceleration Enabled
+                true,  // Audio Enabled
+                false,  // Video Enabled
+                true); // Hardware Acceleration Enabled
 
             peerConnectionFactory = new PeerConnectionFactory();
         }

@@ -56,12 +56,15 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterDialog;
+import net.iGap.fragments.FragmentSecurityRecovery;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnInfoCountryResponse;
+import net.iGap.interfaces.OnRecoverySecurityPassword;
+import net.iGap.interfaces.OnSecurityCheckPassword;
 import net.iGap.interfaces.OnSmsReceive;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
@@ -72,6 +75,7 @@ import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.IncomingSms;
 import net.iGap.module.SoftKeyboard;
+import net.iGap.module.enums.Security;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoRequest;
@@ -83,9 +87,11 @@ import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
+import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
+import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
 
-public class ActivityRegister extends ActivityEnhanced {
+public class ActivityRegister extends ActivityEnhanced implements OnSecurityCheckPassword, OnRecoverySecurityPassword {
 
     static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
     static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
@@ -129,6 +135,18 @@ public class ActivityRegister extends ActivityEnhanced {
     private Typeface titleTypeface;
     private TextView txtTimerLand;
     private String verifyCode;
+    private boolean isRecoveryByEmail = false;
+    private EditText editCheckPassword;
+    private TextView txtRecovery;
+    private TextView txtOk;
+    private ViewGroup vgMainLayout;
+    private ViewGroup vgCheckPassword;
+    private String securityPasswordQuestionOne = "";
+    private String securityPasswordQuestionTwo = "";
+    private String securityPasswordHint = "";
+    private boolean hasConfirmedRecoveryEmail;
+    private String unconfirmedEmailPattern;
+
 
     public enum Reason {
         SOCKET, TIME_OUT, INVALID_CODE
@@ -169,6 +187,9 @@ public class ActivityRegister extends ActivityEnhanced {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        G.onSecurityCheckPassword = this;
+        G.onRecoverySecurityPassword = this;
 
         edtCodeNumber = (EditText) findViewById(R.id.rg_edt_CodeNumber);
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
@@ -983,7 +1004,11 @@ public class ActivityRegister extends ActivityEnhanced {
 
             @Override public void onUserVerifyError(final int majorCode, int minorCode, final int time) {
 
-                if (majorCode == 102 && minorCode == 1) {
+                if (majorCode == 184 && minorCode == 1) {
+
+                    checkPassword(verificationCode);
+
+                } else if (majorCode == 102 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
                             errorVerifySms(Reason.INVALID_CODE);
@@ -1056,6 +1081,77 @@ public class ActivityRegister extends ActivityEnhanced {
                 }
             }
         };
+    }
+
+    private void checkPassword(final String verificationCode) {
+        new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail();
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+
+                rg_txt_verify_sms.setText((getResources().getString(R.string.your_login_code_is)) + "" + verificationCode);
+                rg_prg_verify_sms.setVisibility(View.GONE);
+                rg_img_verify_sms.setVisibility(View.VISIBLE);
+                rg_img_verify_sms.setImageResource(R.mipmap.check);
+                rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
+                rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
+
+                //newUser = newUserR;
+                //token = tokenR;
+                if (rg_prg_verify_generate != null) {
+                    rg_prg_verify_generate.setVisibility(View.GONE);
+                    rg_img_verify_generate.setVisibility(View.VISIBLE);
+                    rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                }
+                //userLogin(token);
+
+                vgMainLayout = (ViewGroup) findViewById(R.id.rg_rootMainLayout);
+                vgMainLayout.setVisibility(View.GONE);
+                vgCheckPassword = (ViewGroup) findViewById(R.id.rg_rootCheckPassword);
+                vgCheckPassword.setVisibility(View.VISIBLE);
+                editCheckPassword = (EditText) findViewById(R.id.rg_edtCheckPassword);
+                txtRecovery = (TextView) findViewById(R.id.rg_txtForgotPassword);
+                txtOk = (TextView) findViewById(R.id.rg_txtOk);
+                txtOk.setVisibility(View.VISIBLE);
+                txtRecovery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new MaterialDialog.Builder(ActivityRegister.this).title(R.string.set_recovery_question).items(R.array.securityRecoveryPassword).itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                switch (which) {
+                                    case 0:
+                                        isRecoveryByEmail = true;
+                                        break;
+                                    case 1:
+                                        isRecoveryByEmail = false;
+                                        break;
+                                }
+
+                                FragmentSecurityRecovery fragmentSecurityRecovery = new FragmentSecurityRecovery();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("PAGE", Security.REGISTER);
+                                bundle.putString("QUESTION_ONE", securityPasswordQuestionOne);
+                                bundle.putString("QUESTION_TWO", securityPasswordQuestionTwo);
+                                bundle.putBoolean("IS_EMAIL", isRecoveryByEmail);
+                                fragmentSecurityRecovery.setArguments(bundle);
+                                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.rg_rootActivityRegister, fragmentSecurityRecovery).commit();
+                            }
+                        }).show();
+                    }
+                });
+                txtOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (editCheckPassword.length() > 0) {
+                            new RequestUserTwoStepVerificationVerifyPassword().verifyPassword(editCheckPassword.getText().toString());
+                            Toast.makeText(ActivityRegister.this, "Test", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void userLogin(final String token) {
@@ -1283,4 +1379,70 @@ public class ActivityRegister extends ActivityEnhanced {
             super.onBackPressed();
         }
     }
+
+
+    @Override
+    public void getDetailPassword(final String questionOne, final String questionTwo, final String hint, boolean hasConfirmedRecoveryEmail, String unconfirmedEmailPattern) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (editCheckPassword != null) editCheckPassword.setHint(hint);
+            }
+        });
+
+        securityPasswordQuestionOne = questionOne;
+        securityPasswordQuestionTwo = questionTwo;
+        securityPasswordHint = hint;
+        this.hasConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
+        this.unconfirmedEmailPattern = unconfirmedEmailPattern;
+    }
+
+    @Override
+    public void verifyPassword(final String tokenR) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                token = tokenR;
+                vgCheckPassword.setVisibility(View.GONE);
+                txtOk.setVisibility(View.GONE);
+                vgMainLayout.setVisibility(View.VISIBLE);
+                userLogin(token);
+            }
+        });
+    }
+
+    @Override
+    public void recoveryByEmail(final String tokenR) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                token = tokenR;
+                vgCheckPassword.setVisibility(View.GONE);
+                txtOk.setVisibility(View.GONE);
+                vgMainLayout.setVisibility(View.VISIBLE);
+                userLogin(token);
+            }
+        });
+
+    }
+
+    @Override
+    public void recoveryByQuestion(final String tokenR) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                token = tokenR;
+                vgCheckPassword.setVisibility(View.GONE);
+                txtOk.setVisibility(View.GONE);
+                vgMainLayout.setVisibility(View.VISIBLE);
+                userLogin(token);
+            }
+        });
+    }
+
 }

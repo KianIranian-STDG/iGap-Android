@@ -568,8 +568,8 @@ public final class ProtoClientJoinByInviteLink {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        inviteToken_ = value;
+
+          inviteToken_ = value;
         onChanged();
         return this;
       }
@@ -590,8 +590,8 @@ public final class ProtoClientJoinByInviteLink {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        inviteToken_ = value;
+
+          inviteToken_ = value;
         onChanged();
         return this;
       }
@@ -1156,9 +1156,7 @@ public final class ProtoClientJoinByInviteLink {
             "\n\034ClientJoinByInviteLink.proto\022\005proto\032\rR" +
                     "equest.proto\032\016Response.proto\"O\n\026ClientJo" +
                     "inByInviteLink\022\037\n\007request\030\001 \001(\0132\016.proto." +
-                    "Request\022\024\n\014invite_token\030\002 \001(\t\"C\n\036ClientJ" +
-                    "oinByInviteLinkResponse\022!\n\010response\030\001 \001(" +
-                    "\0132\017.proto.ResponseB-\n\016net.iGap.protoB\033Pr" +
+                    "Request\022\024\n\014invite_token\030\002 \001(\t\"C\n\036ClientJ" + "oinByInviteLinkResponse\022!\n\010response\030\001 \001(" + "\0132\017.proto.ResponseB-\n\016net.iGap.protoB\033Pr" +
                     "otoClientJoinByInviteLinkb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1177,8 +1175,8 @@ public final class ProtoClientJoinByInviteLink {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ClientJoinByInviteLinkResponse_descriptor,
         new java.lang.String[] { "Response", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

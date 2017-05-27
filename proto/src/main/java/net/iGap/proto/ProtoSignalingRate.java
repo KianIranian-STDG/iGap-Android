@@ -15,8 +15,8 @@ public final class ProtoSignalingRate {
     }
 
     public interface SignalingRateOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingRate)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingRate)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Request request = 1;</code>
@@ -58,8 +58,8 @@ public final class ProtoSignalingRate {
      * Protobuf type {@code proto.SignalingRate}
      */
     public static final class SignalingRate extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingRate)
-            SignalingRateOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingRate)
+        SignalingRateOrBuilder {
         // Use SignalingRate.newBuilder() to construct.
         private SignalingRate(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -375,8 +375,8 @@ public final class ProtoSignalingRate {
          * Protobuf type {@code proto.SignalingRate}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingRate)
-                net.iGap.proto.ProtoSignalingRate.SignalingRateOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingRate)
+            net.iGap.proto.ProtoSignalingRate.SignalingRateOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingRate.internal_static_proto_SignalingRate_descriptor;
             }
@@ -805,8 +805,8 @@ public final class ProtoSignalingRate {
     }
 
     public interface SignalingRateResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:proto.SignalingRateResponse)
-            com.google.protobuf.MessageOrBuilder {
+        // @@protoc_insertion_point(interface_extends:proto.SignalingRateResponse)
+        com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional .proto.Response response = 1;</code>
@@ -828,8 +828,8 @@ public final class ProtoSignalingRate {
      * Protobuf type {@code proto.SignalingRateResponse}
      */
     public static final class SignalingRateResponse extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:proto.SignalingRateResponse)
-            SignalingRateResponseOrBuilder {
+        // @@protoc_insertion_point(message_implements:proto.SignalingRateResponse)
+        SignalingRateResponseOrBuilder {
         // Use SignalingRateResponse.newBuilder() to construct.
         private SignalingRateResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -1047,8 +1047,8 @@ public final class ProtoSignalingRate {
          * Protobuf type {@code proto.SignalingRateResponse}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:proto.SignalingRateResponse)
-                net.iGap.proto.ProtoSignalingRate.SignalingRateResponseOrBuilder {
+            // @@protoc_insertion_point(builder_implements:proto.SignalingRateResponse)
+            net.iGap.proto.ProtoSignalingRate.SignalingRateResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return net.iGap.proto.ProtoSignalingRate.internal_static_proto_SignalingRateResponse_descriptor;
             }
@@ -1344,13 +1344,13 @@ public final class ProtoSignalingRate {
 
     static {
         java.lang.String[] descriptorData = {
-                "\n\023SignalingRate.proto\022\005proto\032\rRequest.pr" +
-                        "oto\032\016Response.proto\"Z\n\rSignalingRate\022\037\n\007" +
-                        "request\030\001 \001(\0132\016.proto.Request\022\n\n\002id\030\002 \001(" +
-                        "\004\022\014\n\004rate\030\003 \001(\r\022\016\n\006reason\030\004 \001(\t\":\n\025Signa" +
-                        "lingRateResponse\022!\n\010response\030\001 \001(\0132\017.pro" +
-                        "to.ResponseB$\n\016net.iGap.protoB\022ProtoSign" +
-                        "alingRateb\006proto3"
+            "\n\023SignalingRate.proto\022\005proto\032\rRequest.pr"
+                + "oto\032\016Response.proto\"Z\n\rSignalingRate\022\037\n\007"
+                + "request\030\001 \001(\0132\016.proto.Request\022\n\n\002id\030\002 \001("
+                + "\004\022\014\n\004rate\030\003 \001(\r\022\016\n\006reason\030\004 \001(\t\":\n\025Signa"
+                + "lingRateResponse\022!\n\010response\030\001 \001(\0132\017.pro"
+                + "to.ResponseB$\n\016net.iGap.protoB\022ProtoSign"
+                + "alingRateb\006proto3"
         };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1359,7 +1359,7 @@ public final class ProtoSignalingRate {
             }
         };
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-                net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
         }, assigner);
         internal_static_proto_SignalingRate_descriptor = getDescriptor().getMessageTypes().get(0);
         internal_static_proto_SignalingRate_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_SignalingRate_descriptor, new java.lang.String[]{"Request", "Id", "Rate", "Reason",});

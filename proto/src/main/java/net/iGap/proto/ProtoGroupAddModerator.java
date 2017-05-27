@@ -79,11 +79,11 @@ public final class ProtoGroupAddModerator {
               break;
             }
             case 10: {
-              net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
+                net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
               if (request_ != null) {
                 subBuilder = request_.toBuilder();
               }
-              request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
+                request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(request_);
                 request_ = subBuilder.buildPartial();
@@ -113,15 +113,15 @@ public final class ProtoGroupAddModerator {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModerator_descriptor;
+        return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModerator_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModerator_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.class, net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.Builder.class);
+        return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModerator_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.class, net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
-    private net.iGap.proto.ProtoRequest.Request request_;
+      private net.iGap.proto.ProtoRequest.Request request_;
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -132,7 +132,7 @@ public final class ProtoGroupAddModerator {
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
-      return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+        return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
     /**
      * <code>optional .proto.Request request = 1;</code>
@@ -205,10 +205,10 @@ public final class ProtoGroupAddModerator {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator)) {
+        if (!(obj instanceof net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator other = (net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator) obj;
+        net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator other = (net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator) obj;
 
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
@@ -240,43 +240,43 @@ public final class ProtoGroupAddModerator {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -287,7 +287,7 @@ public final class ProtoGroupAddModerator {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator prototype) {
+      public static Builder newBuilder(net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -306,14 +306,14 @@ public final class ProtoGroupAddModerator {
             // @@protoc_insertion_point(builder_implements:proto.GroupAddModerator)
         net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModerator_descriptor;
+          return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModerator_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModerator_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.class, net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.Builder.class);
+          return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModerator_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.class, net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.Builder.class);
       }
 
-      // Construct using net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.newBuilder()
+        // Construct using net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -343,23 +343,23 @@ public final class ProtoGroupAddModerator {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModerator_descriptor;
+          return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModerator_descriptor;
       }
 
-      public net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.getDefaultInstance();
+        public net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator getDefaultInstanceForType() {
+            return net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator build() {
-        net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator result = buildPartial();
+        public net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator build() {
+            net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator buildPartial() {
-        net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator result = new net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator(this);
+        public net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator buildPartial() {
+            net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator result = new net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator(this);
         if (requestBuilder_ == null) {
           result.request_ = request_;
         } else {
@@ -395,16 +395,16 @@ public final class ProtoGroupAddModerator {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator) {
-          return mergeFrom((net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator) other);
+          if (other instanceof net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator) {
+              return mergeFrom((net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator other) {
-        if (other == net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.getDefaultInstance()) return this;
+        public Builder mergeFrom(net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator other) {
+            if (other == net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -423,11 +423,11 @@ public final class ProtoGroupAddModerator {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parsedMessage = null;
+          net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator) e.getUnfinishedMessage();
+            parsedMessage = (net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -437,8 +437,8 @@ public final class ProtoGroupAddModerator {
         return this;
       }
 
-      private net.iGap.proto.ProtoRequest.Request request_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
+        private net.iGap.proto.ProtoRequest.Request request_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -450,7 +450,7 @@ public final class ProtoGroupAddModerator {
        */
       public net.iGap.proto.ProtoRequest.Request getRequest() {
         if (requestBuilder_ == null) {
-          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         } else {
           return requestBuilder_.getMessage();
         }
@@ -490,7 +490,7 @@ public final class ProtoGroupAddModerator {
       public Builder mergeRequest(net.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-            request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+              request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -530,7 +530,7 @@ public final class ProtoGroupAddModerator {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
@@ -538,7 +538,7 @@ public final class ProtoGroupAddModerator {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(
                   getRequest(),
                   getParentForChildren(),
                   isClean());
@@ -614,10 +614,10 @@ public final class ProtoGroupAddModerator {
     // @@protoc_insertion_point(class_scope:proto.GroupAddModerator)
     private static final net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator();
+        DEFAULT_INSTANCE = new net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator();
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator getDefaultInstance() {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -636,7 +636,7 @@ public final class ProtoGroupAddModerator {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator getDefaultInstanceForType() {
+      public net.iGap.proto.ProtoGroupAddModerator.GroupAddModerator getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -708,11 +708,11 @@ public final class ProtoGroupAddModerator {
               break;
             }
             case 10: {
-              net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
+                net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
               if (response_ != null) {
                 subBuilder = response_.toBuilder();
               }
-              response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
+                response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(response_);
                 response_ = subBuilder.buildPartial();
@@ -742,15 +742,15 @@ public final class ProtoGroupAddModerator {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModeratorResponse_descriptor;
+        return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModeratorResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModeratorResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.class, net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.Builder.class);
+        return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModeratorResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.class, net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
-    private net.iGap.proto.ProtoResponse.Response response_;
+      private net.iGap.proto.ProtoResponse.Response response_;
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -761,7 +761,7 @@ public final class ProtoGroupAddModerator {
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
-      return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+        return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
     /**
      * <code>optional .proto.Response response = 1;</code>
@@ -834,10 +834,10 @@ public final class ProtoGroupAddModerator {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse)) {
+        if (!(obj instanceof net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse other = (net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse) obj;
+        net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse other = (net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse) obj;
 
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
@@ -869,43 +869,43 @@ public final class ProtoGroupAddModerator {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -916,7 +916,7 @@ public final class ProtoGroupAddModerator {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse prototype) {
+      public static Builder newBuilder(net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -936,14 +936,14 @@ public final class ProtoGroupAddModerator {
             // @@protoc_insertion_point(builder_implements:proto.GroupAddModeratorResponse)
         net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModeratorResponse_descriptor;
+          return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModeratorResponse_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModeratorResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.class, net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.Builder.class);
+          return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModeratorResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.class, net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.Builder.class);
       }
 
-      // Construct using net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.newBuilder()
+        // Construct using net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -973,23 +973,23 @@ public final class ProtoGroupAddModerator {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModeratorResponse_descriptor;
+          return net.iGap.proto.ProtoGroupAddModerator.internal_static_proto_GroupAddModeratorResponse_descriptor;
       }
 
-      public net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.getDefaultInstance();
+        public net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse getDefaultInstanceForType() {
+            return net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse build() {
-        net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse result = buildPartial();
+        public net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse build() {
+            net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse buildPartial() {
-        net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse result = new net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse(this);
+        public net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse buildPartial() {
+            net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse result = new net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse(this);
         if (responseBuilder_ == null) {
           result.response_ = response_;
         } else {
@@ -1025,16 +1025,16 @@ public final class ProtoGroupAddModerator {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse) {
-          return mergeFrom((net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse) other);
+          if (other instanceof net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse) {
+              return mergeFrom((net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse other) {
-        if (other == net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.getDefaultInstance()) return this;
+        public Builder mergeFrom(net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse other) {
+            if (other == net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1053,11 +1053,11 @@ public final class ProtoGroupAddModerator {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parsedMessage = null;
+          net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse) e.getUnfinishedMessage();
+            parsedMessage = (net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1067,8 +1067,8 @@ public final class ProtoGroupAddModerator {
         return this;
       }
 
-      private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
+        private net.iGap.proto.ProtoResponse.Response response_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1080,7 +1080,7 @@ public final class ProtoGroupAddModerator {
        */
       public net.iGap.proto.ProtoResponse.Response getResponse() {
         if (responseBuilder_ == null) {
-          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         } else {
           return responseBuilder_.getMessage();
         }
@@ -1120,7 +1120,7 @@ public final class ProtoGroupAddModerator {
       public Builder mergeResponse(net.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-            response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+              response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1160,7 +1160,7 @@ public final class ProtoGroupAddModerator {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
@@ -1168,7 +1168,7 @@ public final class ProtoGroupAddModerator {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(
                   getResponse(),
                   getParentForChildren(),
                   isClean());
@@ -1244,10 +1244,10 @@ public final class ProtoGroupAddModerator {
     // @@protoc_insertion_point(class_scope:proto.GroupAddModeratorResponse)
     private static final net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse();
+        DEFAULT_INSTANCE = new net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse();
     }
 
-    public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse getDefaultInstance() {
+      public static net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1266,7 +1266,7 @@ public final class ProtoGroupAddModerator {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse getDefaultInstanceForType() {
+      public net.iGap.proto.ProtoGroupAddModerator.GroupAddModeratorResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1287,10 +1287,7 @@ public final class ProtoGroupAddModerator {
             "\n\027GroupAddModerator.proto\022\005proto\032\rReques" +
                     "t.proto\032\016Response.proto\"X\n\021GroupAddModer" +
                     "ator\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\017\n" +
-                    "\007room_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"b\n\031Gro" +
-                    "upAddModeratorResponse\022!\n\010response\030\001 \001(\013" +
-                    "2\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022\021\n\tme" +
-                    "mber_id\030\003 \001(\004B(\n\016net.iGap.protoB\026ProtoGr" +
+                    "\007room_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"b\n\031Gro" + "upAddModeratorResponse\022!\n\010response\030\001 \001(\013" + "2\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022\021\n\tme" + "mber_id\030\003 \001(\004B(\n\016net.iGap.protoB\026ProtoGr" +
                     "oupAddModeratorb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1300,7 +1297,7 @@ public final class ProtoGroupAddModerator {
       }
     };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+        net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
     }, assigner);
     internal_static_proto_GroupAddModerator_descriptor = getDescriptor().getMessageTypes().get(0);
     internal_static_proto_GroupAddModerator_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_GroupAddModerator_descriptor, new java.lang.String[]{"Request", "RoomId", "MemberId",});
@@ -1309,8 +1306,8 @@ public final class ProtoGroupAddModerator {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_GroupAddModeratorResponse_descriptor,
         new java.lang.String[] { "Response", "RoomId", "MemberId", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

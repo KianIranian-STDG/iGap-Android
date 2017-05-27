@@ -72,11 +72,11 @@ public final class ProtoChannelRemoveUsername {
               break;
             }
             case 10: {
-              net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
+                net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
               if (request_ != null) {
                 subBuilder = request_.toBuilder();
               }
-              request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
+                request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(request_);
                 request_ = subBuilder.buildPartial();
@@ -101,15 +101,15 @@ public final class ProtoChannelRemoveUsername {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsername_descriptor;
+        return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsername_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsername_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.class, net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.Builder.class);
+        return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsername_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.class, net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
-    private net.iGap.proto.ProtoRequest.Request request_;
+      private net.iGap.proto.ProtoRequest.Request request_;
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -120,7 +120,7 @@ public final class ProtoChannelRemoveUsername {
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
-      return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+        return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
     /**
      * <code>optional .proto.Request request = 1;</code>
@@ -178,10 +178,10 @@ public final class ProtoChannelRemoveUsername {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername)) {
+        if (!(obj instanceof net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername other = (net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername) obj;
+        net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername other = (net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername) obj;
 
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
@@ -210,43 +210,43 @@ public final class ProtoChannelRemoveUsername {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -257,7 +257,7 @@ public final class ProtoChannelRemoveUsername {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername prototype) {
+      public static Builder newBuilder(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -276,14 +276,14 @@ public final class ProtoChannelRemoveUsername {
             // @@protoc_insertion_point(builder_implements:proto.ChannelRemoveUsername)
         net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsername_descriptor;
+          return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsername_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsername_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.class, net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.Builder.class);
+          return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsername_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.class, net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.Builder.class);
       }
 
-      // Construct using net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.newBuilder()
+        // Construct using net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -310,23 +310,23 @@ public final class ProtoChannelRemoveUsername {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsername_descriptor;
+          return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsername_descriptor;
       }
 
-      public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.getDefaultInstance();
+        public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername getDefaultInstanceForType() {
+            return net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername build() {
-        net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername result = buildPartial();
+        public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername build() {
+            net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername buildPartial() {
-        net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername result = new net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername(this);
+        public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername buildPartial() {
+            net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername result = new net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername(this);
         if (requestBuilder_ == null) {
           result.request_ = request_;
         } else {
@@ -361,16 +361,16 @@ public final class ProtoChannelRemoveUsername {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername) {
-          return mergeFrom((net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername) other);
+          if (other instanceof net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername) {
+              return mergeFrom((net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername other) {
-        if (other == net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.getDefaultInstance()) return this;
+        public Builder mergeFrom(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername other) {
+            if (other == net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -386,11 +386,11 @@ public final class ProtoChannelRemoveUsername {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parsedMessage = null;
+          net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername) e.getUnfinishedMessage();
+            parsedMessage = (net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -400,8 +400,8 @@ public final class ProtoChannelRemoveUsername {
         return this;
       }
 
-      private net.iGap.proto.ProtoRequest.Request request_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
+        private net.iGap.proto.ProtoRequest.Request request_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -413,7 +413,7 @@ public final class ProtoChannelRemoveUsername {
        */
       public net.iGap.proto.ProtoRequest.Request getRequest() {
         if (requestBuilder_ == null) {
-          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         } else {
           return requestBuilder_.getMessage();
         }
@@ -453,7 +453,7 @@ public final class ProtoChannelRemoveUsername {
       public Builder mergeRequest(net.iGap.proto.ProtoRequest.Request value) {
         if (requestBuilder_ == null) {
           if (request_ != null) {
-            request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
+              request_ = net.iGap.proto.ProtoRequest.Request.newBuilder(request_).mergeFrom(value).buildPartial();
           } else {
             request_ = value;
           }
@@ -493,7 +493,7 @@ public final class ProtoChannelRemoveUsername {
         if (requestBuilder_ != null) {
           return requestBuilder_.getMessageOrBuilder();
         } else {
-          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
       /**
@@ -501,7 +501,7 @@ public final class ProtoChannelRemoveUsername {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> getRequestFieldBuilder() {
         if (requestBuilder_ == null) {
-          requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
+            requestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder>(getRequest(), getParentForChildren(), isClean());
           request_ = null;
         }
         return requestBuilder_;
@@ -548,10 +548,10 @@ public final class ProtoChannelRemoveUsername {
     // @@protoc_insertion_point(class_scope:proto.ChannelRemoveUsername)
     private static final net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername();
+        DEFAULT_INSTANCE = new net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername();
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername getDefaultInstance() {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -570,7 +570,7 @@ public final class ProtoChannelRemoveUsername {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername getDefaultInstanceForType() {
+      public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsername getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -635,11 +635,11 @@ public final class ProtoChannelRemoveUsername {
               break;
             }
             case 10: {
-              net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
+                net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
               if (response_ != null) {
                 subBuilder = response_.toBuilder();
               }
-              response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
+                response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(response_);
                 response_ = subBuilder.buildPartial();
@@ -664,15 +664,15 @@ public final class ProtoChannelRemoveUsername {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsernameResponse_descriptor;
+        return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsernameResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsernameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.class, net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.Builder.class);
+        return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsernameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.class, net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
-    private net.iGap.proto.ProtoResponse.Response response_;
+      private net.iGap.proto.ProtoResponse.Response response_;
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -683,7 +683,7 @@ public final class ProtoChannelRemoveUsername {
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
-      return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+        return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
     /**
      * <code>optional .proto.Response response = 1;</code>
@@ -741,10 +741,10 @@ public final class ProtoChannelRemoveUsername {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse)) {
+        if (!(obj instanceof net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse other = (net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse) obj;
+        net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse other = (net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse) obj;
 
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
@@ -773,43 +773,43 @@ public final class ProtoChannelRemoveUsername {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -820,7 +820,7 @@ public final class ProtoChannelRemoveUsername {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse prototype) {
+      public static Builder newBuilder(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -839,14 +839,14 @@ public final class ProtoChannelRemoveUsername {
             // @@protoc_insertion_point(builder_implements:proto.ChannelRemoveUsernameResponse)
         net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsernameResponse_descriptor;
+          return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsernameResponse_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsernameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.class, net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.Builder.class);
+          return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsernameResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.class, net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.Builder.class);
       }
 
-      // Construct using net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.newBuilder()
+        // Construct using net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -873,23 +873,23 @@ public final class ProtoChannelRemoveUsername {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsernameResponse_descriptor;
+          return net.iGap.proto.ProtoChannelRemoveUsername.internal_static_proto_ChannelRemoveUsernameResponse_descriptor;
       }
 
-      public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.getDefaultInstance();
+        public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse getDefaultInstanceForType() {
+            return net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse build() {
-        net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse result = buildPartial();
+        public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse build() {
+            net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse buildPartial() {
-        net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse result = new net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse(this);
+        public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse buildPartial() {
+            net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse result = new net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse(this);
         if (responseBuilder_ == null) {
           result.response_ = response_;
         } else {
@@ -924,16 +924,16 @@ public final class ProtoChannelRemoveUsername {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse) {
-          return mergeFrom((net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse) other);
+          if (other instanceof net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse) {
+              return mergeFrom((net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse other) {
-        if (other == net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.getDefaultInstance()) return this;
+        public Builder mergeFrom(net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse other) {
+            if (other == net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -949,11 +949,11 @@ public final class ProtoChannelRemoveUsername {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parsedMessage = null;
+          net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse) e.getUnfinishedMessage();
+            parsedMessage = (net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -963,8 +963,8 @@ public final class ProtoChannelRemoveUsername {
         return this;
       }
 
-      private net.iGap.proto.ProtoResponse.Response response_ = null;
-      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
+        private net.iGap.proto.ProtoResponse.Response response_ = null;
+        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -976,7 +976,7 @@ public final class ProtoChannelRemoveUsername {
        */
       public net.iGap.proto.ProtoResponse.Response getResponse() {
         if (responseBuilder_ == null) {
-          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         } else {
           return responseBuilder_.getMessage();
         }
@@ -1016,7 +1016,7 @@ public final class ProtoChannelRemoveUsername {
       public Builder mergeResponse(net.iGap.proto.ProtoResponse.Response value) {
         if (responseBuilder_ == null) {
           if (response_ != null) {
-            response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
+              response_ = net.iGap.proto.ProtoResponse.Response.newBuilder(response_).mergeFrom(value).buildPartial();
           } else {
             response_ = value;
           }
@@ -1056,7 +1056,7 @@ public final class ProtoChannelRemoveUsername {
         if (responseBuilder_ != null) {
           return responseBuilder_.getMessageOrBuilder();
         } else {
-          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
       /**
@@ -1064,7 +1064,7 @@ public final class ProtoChannelRemoveUsername {
        */
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> getResponseFieldBuilder() {
         if (responseBuilder_ == null) {
-          responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
+            responseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder>(getResponse(), getParentForChildren(), isClean());
           response_ = null;
         }
         return responseBuilder_;
@@ -1111,10 +1111,10 @@ public final class ProtoChannelRemoveUsername {
     // @@protoc_insertion_point(class_scope:proto.ChannelRemoveUsernameResponse)
     private static final net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse();
+        DEFAULT_INSTANCE = new net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse();
     }
 
-    public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse getDefaultInstance() {
+      public static net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1133,7 +1133,7 @@ public final class ProtoChannelRemoveUsername {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse getDefaultInstanceForType() {
+      public net.iGap.proto.ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1155,9 +1155,7 @@ public final class ProtoChannelRemoveUsername {
             "\n\033ChannelRemoveUsername.proto\022\005proto\032\rRe" +
                     "quest.proto\032\016Response.proto\"I\n\025ChannelRe" +
                     "moveUsername\022\037\n\007request\030\001 \001(\0132\016.proto.Re" +
-                    "quest\022\017\n\007room_id\030\002 \001(\004\"S\n\035ChannelRemoveU" +
-                    "sernameResponse\022!\n\010response\030\001 \001(\0132\017.prot" +
-                    "o.Response\022\017\n\007room_id\030\002 \001(\004B,\n\016net.iGap." +
+                    "quest\022\017\n\007room_id\030\002 \001(\004\"S\n\035ChannelRemoveU" + "sernameResponse\022!\n\010response\030\001 \001(\0132\017.prot" + "o.Response\022\017\n\007room_id\030\002 \001(\004B,\n\016net.iGap." +
                     "protoB\032ProtoChannelRemoveUsernameb\006proto" +
                     "3"
     };
@@ -1168,7 +1166,7 @@ public final class ProtoChannelRemoveUsername {
       }
     };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
-            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+        net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
     }, assigner);
     internal_static_proto_ChannelRemoveUsername_descriptor = getDescriptor().getMessageTypes().get(0);
     internal_static_proto_ChannelRemoveUsername_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChannelRemoveUsername_descriptor, new java.lang.String[]{"Request", "RoomId",});
@@ -1177,8 +1175,8 @@ public final class ProtoChannelRemoveUsername {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChannelRemoveUsernameResponse_descriptor,
         new java.lang.String[] { "Response", "RoomId", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

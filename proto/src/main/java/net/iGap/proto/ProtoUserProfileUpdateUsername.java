@@ -568,8 +568,8 @@ public final class ProtoUserProfileUpdateUsername {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        username_ = value;
+
+          username_ = value;
         onChanged();
         return this;
       }
@@ -590,8 +590,8 @@ public final class ProtoUserProfileUpdateUsername {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        username_ = value;
+
+          username_ = value;
         onChanged();
         return this;
       }
@@ -1021,18 +1021,18 @@ public final class ProtoUserProfileUpdateUsername {
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse other) {
-        if (other == net.iGap.proto.ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.getDefaultInstance()) return this;
-        if (other.hasResponse()) {
-          mergeResponse(other.getResponse());
-        }
-        if (!other.getUsername().isEmpty()) {
-          username_ = other.username_;
+        public Builder mergeFrom(net.iGap.proto.ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse other) {
+            if (other == net.iGap.proto.ProtoUserProfileUpdateUsername.UserProfileUpdateUsernameResponse.getDefaultInstance()) return this;
+            if (other.hasResponse()) {
+                mergeResponse(other.getResponse());
+            }
+            if (!other.getUsername().isEmpty()) {
+                username_ = other.username_;
           onChanged();
         }
-        onChanged();
-        return this;
-      }
+            onChanged();
+            return this;
+        }
 
       public final boolean isInitialized() {
         return true;
@@ -1195,8 +1195,8 @@ public final class ProtoUserProfileUpdateUsername {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        username_ = value;
+
+          username_ = value;
         onChanged();
         return this;
       }
@@ -1217,8 +1217,8 @@ public final class ProtoUserProfileUpdateUsername {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        username_ = value;
+
+          username_ = value;
         onChanged();
         return this;
       }
@@ -1281,10 +1281,7 @@ public final class ProtoUserProfileUpdateUsername {
             "\n\037UserProfileUpdateUsername.proto\022\005proto" +
                     "\032\rRequest.proto\032\016Response.proto\"N\n\031UserP" +
                     "rofileUpdateUsername\022\037\n\007request\030\001 \001(\0132\016." +
-                    "proto.Request\022\020\n\010username\030\002 \001(\t\"X\n!UserP" +
-                    "rofileUpdateUsernameResponse\022!\n\010response" +
-                    "\030\001 \001(\0132\017.proto.Response\022\020\n\010username\030\002 \001(" +
-                    "\tB0\n\016net.iGap.protoB\036ProtoUserProfileUpd" +
+                    "proto.Request\022\020\n\010username\030\002 \001(\t\"X\n!UserP" + "rofileUpdateUsernameResponse\022!\n\010response" + "\030\001 \001(\0132\017.proto.Response\022\020\n\010username\030\002 \001(" + "\tB0\n\016net.iGap.protoB\036ProtoUserProfileUpd" +
                     "ateUsernameb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1303,8 +1300,8 @@ public final class ProtoUserProfileUpdateUsername {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserProfileUpdateUsernameResponse_descriptor,
         new java.lang.String[] { "Response", "Username", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

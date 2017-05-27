@@ -1554,7 +1554,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     if (callConfig.isVoice_calling()) {
                         rippleCall.setVisibility(View.VISIBLE);
                         rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-                            @Override public void onComplete(RippleView rippleView) {
+                            @Override
+                            public void onComplete(RippleView rippleView) {
 
                                 FragmentCall.call(chatPeerId, false);
                             }

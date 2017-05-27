@@ -153,8 +153,7 @@ class DeflateDecompressor {
     }
 
 
-    private static void inflateData(
-            ByteArray input, int[] bitIndex, ByteArray output, Huffman literalLengthHuffman, Huffman distanceHuffman) throws FormatException {
+    private static void inflateData(ByteArray input, int[] bitIndex, ByteArray output, Huffman literalLengthHuffman, Huffman distanceHuffman) throws FormatException {
         // 3.2.5 Compressed blocks (length and distance codes)
 
         while (true) {

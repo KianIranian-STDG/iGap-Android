@@ -1090,10 +1090,7 @@ public final class ProtoClientSubscribeToRoom {
     java.lang.String[] descriptorData = {
             "\n\033ClientSubscribeToRoom.proto\022\005proto\032\rRe" +
                     "quest.proto\032\016Response.proto\"I\n\025ClientSub" +
-                    "scribeToRoom\022\037\n\007request\030\001 \001(\0132\016.proto.Re" +
-                    "quest\022\017\n\007room_id\030\002 \001(\004\"B\n\035ClientSubscrib" +
-                    "eToRoomResponse\022!\n\010response\030\001 \001(\0132\017.prot" +
-                    "o.ResponseB,\n\016net.iGap.protoB\032ProtoClien" +
+                    "scribeToRoom\022\037\n\007request\030\001 \001(\0132\016.proto.Re" + "quest\022\017\n\007room_id\030\002 \001(\004\"B\n\035ClientSubscrib" + "eToRoomResponse\022!\n\010response\030\001 \001(\0132\017.prot" + "o.ResponseB,\n\016net.iGap.protoB\032ProtoClien" +
                     "tSubscribeToRoomb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1112,8 +1109,8 @@ public final class ProtoClientSubscribeToRoom {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ClientSubscribeToRoomResponse_descriptor,
         new java.lang.String[] { "Response", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

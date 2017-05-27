@@ -629,8 +629,8 @@ public final class ProtoUserVerify {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        username_ = value;
+
+          username_ = value;
         onChanged();
         return this;
       }
@@ -651,8 +651,8 @@ public final class ProtoUserVerify {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        username_ = value;
+
+          username_ = value;
         onChanged();
         return this;
       }
@@ -1290,8 +1290,8 @@ public final class ProtoUserVerify {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        token_ = value;
+
+          token_ = value;
         onChanged();
         return this;
       }
@@ -1312,8 +1312,8 @@ public final class ProtoUserVerify {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        token_ = value;
+
+          token_ = value;
         onChanged();
         return this;
       }
@@ -1401,10 +1401,7 @@ public final class ProtoUserVerify {
     java.lang.String[] descriptorData = {
             "\n\020UserVerify.proto\022\005proto\032\rRequest.proto" +
                     "\032\016Response.proto\"M\n\nUserVerify\022\037\n\007reques" +
-                    "t\030\001 \001(\0132\016.proto.Request\022\014\n\004code\030\002 \001(\r\022\020\n" +
-                    "\010username\030\003 \001(\t\"X\n\022UserVerifyResponse\022!\n" +
-                    "\010response\030\001 \001(\0132\017.proto.Response\022\r\n\005toke" +
-                    "n\030\002 \001(\t\022\020\n\010new_user\030\003 \001(\010B!\n\016net.iGap.pr" +
+                    "t\030\001 \001(\0132\016.proto.Request\022\014\n\004code\030\002 \001(\r\022\020\n" + "\010username\030\003 \001(\t\"X\n\022UserVerifyResponse\022!\n" + "\010response\030\001 \001(\0132\017.proto.Response\022\r\n\005toke" + "n\030\002 \001(\t\022\020\n\010new_user\030\003 \001(\010B!\n\016net.iGap.pr" +
                     "otoB\017ProtoUserVerifyb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1420,9 +1417,9 @@ public final class ProtoUserVerify {
     internal_static_proto_UserVerify_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserVerify_descriptor, new java.lang.String[]{"Request", "Code", "Username",});
     internal_static_proto_UserVerifyResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_proto_UserVerifyResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserVerifyResponse_descriptor, new java.lang.String[]{"Response", "Token", "NewUser",});
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      internal_static_proto_UserVerifyResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserVerifyResponse_descriptor, new java.lang.String[]{"Response", "Token", "NewUser",});
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

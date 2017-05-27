@@ -1459,9 +1459,7 @@ public final class ProtoGroupSetAction {
                     "quest\022\017\n\007room_id\030\002 \001(\004\022#\n\006action\030\003 \001(\0162\023" +
                     ".proto.ClientAction\022\021\n\taction_id\030\004 \001(\r\"\202" +
                     "\001\n\026GroupSetActionResponse\022!\n\010response\030\001 " +
-                    "\001(\0132\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022#\n" +
-                    "\006action\030\003 \001(\0162\023.proto.ClientAction\022\017\n\007us" +
-                    "er_id\030\004 \001(\004B%\n\016net.iGap.protoB\023ProtoGrou" +
+                    "\001(\0132\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022#\n" + "\006action\030\003 \001(\0162\023.proto.ClientAction\022\017\n\007us" + "er_id\030\004 \001(\004B%\n\016net.iGap.protoB\023ProtoGrou" +
                     "pSetActionb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1481,9 +1479,9 @@ public final class ProtoGroupSetAction {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_GroupSetActionResponse_descriptor,
         new java.lang.String[] { "Response", "RoomId", "Action", "UserId", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
-    net.iGap.proto.ProtoGlobal.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

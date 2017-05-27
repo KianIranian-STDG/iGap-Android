@@ -687,8 +687,8 @@ public final class ProtoFileUploadInit {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        firstBytes_ = value;
+
+          firstBytes_ = value;
         onChanged();
         return this;
       }
@@ -716,8 +716,8 @@ public final class ProtoFileUploadInit {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        lastBytes_ = value;
+
+          lastBytes_ = value;
         onChanged();
         return this;
       }
@@ -771,8 +771,8 @@ public final class ProtoFileUploadInit {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        fileHash_ = value;
+
+          fileHash_ = value;
         onChanged();
         return this;
       }
@@ -821,8 +821,8 @@ public final class ProtoFileUploadInit {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        fileName_ = value;
+
+          fileName_ = value;
         onChanged();
         return this;
       }
@@ -843,8 +843,8 @@ public final class ProtoFileUploadInit {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        fileName_ = value;
+
+          fileName_ = value;
         onChanged();
         return this;
       }
@@ -1249,9 +1249,9 @@ public final class ProtoFileUploadInit {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-    public static Builder newBuilder(net.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
+      public static Builder newBuilder(net.iGap.proto.ProtoFileUploadInit.FileUploadInitResponse prototype) {
+          return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -1553,8 +1553,8 @@ public final class ProtoFileUploadInit {
         if (value == null) {
           throw new NullPointerException();
         }
-  
-        token_ = value;
+
+          token_ = value;
         onChanged();
         return this;
       }
@@ -1575,8 +1575,8 @@ public final class ProtoFileUploadInit {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-        
-        token_ = value;
+
+          token_ = value;
         onChanged();
         return this;
       }
@@ -1719,10 +1719,7 @@ public final class ProtoFileUploadInit {
                     "\037\n\007request\030\001 \001(\0132\016.proto.Request\022\023\n\013firs" +
                     "t_bytes\030\002 \001(\014\022\022\n\nlast_bytes\030\003 \001(\014\022\014\n\004siz" +
                     "e\030\004 \001(\003\022\021\n\tfile_hash\030\005 \001(\014\022\021\n\tfile_name\030" +
-                    "\006 \001(\t\"{\n\026FileUploadInitResponse\022!\n\010respo" +
-                    "nse\030\001 \001(\0132\017.proto.Response\022\r\n\005token\030\002 \001(" +
-                    "\t\022\020\n\010progress\030\003 \001(\001\022\016\n\006offset\030\004 \001(\003\022\r\n\005l" +
-                    "imit\030\005 \001(\005B%\n\016net.iGap.protoB\023ProtoFileU" +
+                    "\006 \001(\t\"{\n\026FileUploadInitResponse\022!\n\010respo" + "nse\030\001 \001(\0132\017.proto.Response\022\r\n\005token\030\002 \001(" + "\t\022\020\n\010progress\030\003 \001(\001\022\016\n\006offset\030\004 \001(\003\022\r\n\005l" + "imit\030\005 \001(\005B%\n\016net.iGap.protoB\023ProtoFileU" +
                     "ploadInitb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1744,8 +1741,8 @@ public final class ProtoFileUploadInit {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_FileUploadInitResponse_descriptor,
         new java.lang.String[] { "Response", "Token", "Progress", "Offset", "Limit", });
-    net.iGap.proto.ProtoRequest.getDescriptor();
-    net.iGap.proto.ProtoResponse.getDescriptor();
+      net.iGap.proto.ProtoRequest.getDescriptor();
+      net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
