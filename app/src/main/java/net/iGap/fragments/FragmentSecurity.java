@@ -362,10 +362,9 @@ public class FragmentSecurity extends Fragment {
             @Override
             public void onClick(View v) {
 
-                password = edtCheckPassword.getText().toString();
-
                 if (rootCheckPassword.getVisibility() == View.VISIBLE) {
-                    if (password.length() > 1) {
+                    if (edtCheckPassword.length() > 1) {
+                        password = edtCheckPassword.getText().toString();
                         new RequestUserTwoStepVerificationCheckPassword().checkPassword(password);
                         closeKeyboard(v);
                         edtCheckPassword.setText("");
@@ -434,31 +433,53 @@ public class FragmentSecurity extends Fragment {
     }
 
     private void viewConfirmEmail() {
-        page = 0;
-        rootSetPassword.setVisibility(View.VISIBLE);
-        rootConfirmedEmail.setVisibility(View.GONE);
-        rippleOk.setVisibility(View.GONE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                page = 0;
+                rootSetPassword.setVisibility(View.VISIBLE);
+                rootConfirmedEmail.setVisibility(View.GONE);
+                rippleOk.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void viewChangeEmail() {
-        page = 0;
-        rootSetPassword.setVisibility(View.VISIBLE);
-        rootChangeEmail.setVisibility(View.GONE);
-        rippleOk.setVisibility(View.GONE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                page = 0;
+                rootSetPassword.setVisibility(View.VISIBLE);
+                rootChangeEmail.setVisibility(View.GONE);
+                rippleOk.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void viewChangeHint() {
-        page = 0;
-        rootSetPassword.setVisibility(View.VISIBLE);
-        rootChangeHint.setVisibility(View.GONE);
-        rippleOk.setVisibility(View.GONE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                page = 0;
+                rootSetPassword.setVisibility(View.VISIBLE);
+                rootChangeHint.setVisibility(View.GONE);
+                rippleOk.setVisibility(View.GONE);
+            }
+        });
+
     }
 
     private void viewChangeRecoveryQuestion() {
-        page = 0;
-        rootSetPassword.setVisibility(View.VISIBLE);
-        rootQuestionPassword.setVisibility(View.GONE);
-        rippleOk.setVisibility(View.GONE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                page = 0;
+                rootSetPassword.setVisibility(View.VISIBLE);
+                rootQuestionPassword.setVisibility(View.GONE);
+                rippleOk.setVisibility(View.GONE);
+            }
+        });
+
     }
 
     private void closeKeyboard(View v) {
