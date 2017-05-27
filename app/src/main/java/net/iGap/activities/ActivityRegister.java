@@ -1146,7 +1146,6 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                     public void onClick(View v) {
                         if (editCheckPassword.length() > 0) {
                             new RequestUserTwoStepVerificationVerifyPassword().verifyPassword(editCheckPassword.getText().toString());
-                            Toast.makeText(ActivityRegister.this, "Test", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
