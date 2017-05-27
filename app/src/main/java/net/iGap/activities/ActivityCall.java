@@ -11,10 +11,8 @@
 package net.iGap.activities;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -67,11 +65,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     boolean canTouch = false;
     boolean down = false;
     boolean isSendLeave = false;
-    boolean isConnected = false;
+    public static boolean isConnected = false;
 
     Vibrator vibrator;
     int musicVolum = 0;
-    Ringtone ringtone;
+
     boolean isMuteAllMusic = false;
 
     private Timer secendTimer;
@@ -94,15 +92,21 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     MaterialDesignTextView btnSpeaker;
     TextView txtTimer;
     MediaPlayer player;
+    MediaPlayer ringtonePlayer;
 
     @Override protected void onDestroy() {
         super.onDestroy();
 
         G.isInCall = false;
         G.iSignalingCallBack = null;
+        G.onCallLeaveView = null;
+
         cancelRingtone();
 
+        unMuteMusic();
+
         new RequestSignalingGetLog().signalingGetLog(0, 1);
+
     }
 
     @Override public void onBackPressed() {
@@ -115,39 +119,48 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     @Override public void onCreate(Bundle savedInstanceState) {
 
-        try {
-            HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
-                @Override public void Allow() throws IOException {
-
-                }
-
-                @Override public void deny() {
-                    finish();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         G.isInCall = true;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(
             LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_call);
 
-        userId = getIntent().getExtras().getLong(USER_ID_STR);
-        isIncomingCall = getIntent().getExtras().getBoolean(INCOMING_CALL_STR);
-
-        initComponent();
-        initCallBack();
-
-        G.onCallLeaveView = this;
-
-        if (!isIncomingCall) {
-            new WebRTC().createOffer(userId);
+        if (getIntent().getExtras().getBoolean("FINISH_OTHER")) {
+            return;
         }
+
+
+        try {
+            HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
+                @Override public void Allow() throws IOException {
+
+                    setContentView(R.layout.activity_call);
+
+                    userId = getIntent().getExtras().getLong(USER_ID_STR);
+                    isIncomingCall = getIntent().getExtras().getBoolean(INCOMING_CALL_STR);
+
+                    initComponent();
+                    initCallBack();
+
+                    G.onCallLeaveView = ActivityCall.this;
+
+                    if (!isIncomingCall) {
+                        new WebRTC().createOffer(userId);
+                    }
+
+                }
+
+                @Override public void deny() {
+                    finish();
+                    new WebRTC().leaveCall();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -181,7 +194,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                 playSound(R.raw.igap_ringing);
                                 avLoadingIndicatorView.setVisibility(View.VISIBLE);
                                 break;
-                            case SIGNALING:
+                            case INCAMING_CALL:
                                 avLoadingIndicatorView.setVisibility(View.VISIBLE);
                                 break;
                             case CONNECTING:
@@ -254,7 +267,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void initComponent() {
 
-        findViewById(R.id.ac_layout_main_call).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         verticalSwipe = new VerticalSwipe();
         txtName = (TextView) findViewById(R.id.fcr_txt_name);
@@ -266,37 +278,44 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         txtTimer = (TextView) findViewById(R.id.fcr_txt_timer);
 
-        txtStatus.setText(CallState.SIGNALING.toString());
+        txtStatus.setText(CallState.INCAMING_CALL.toString());
 
         /**
          * *************** layoutCallEnd ***************
          */
 
         final FrameLayout layoutCallEnd = (FrameLayout) findViewById(R.id.fcr_layout_chat_call_end);
-        //layoutCallEnd.setOnClickListener(new View.OnClickListener() {
-        //    @Override public void onClick(View v) {
-        //
-        //        if (canClick) {
-        //            layoutCallEnd.setVisibility(View.INVISIBLE);
-        //            endCall();
-        //        }
-        //    }
-        //});
-
         btnEndCall = (MaterialDesignTextView) findViewById(R.id.fcr_btn_end);
-        //btnEndCall.setOnTouchListener(new View.OnTouchListener() {
-        //    @Override public boolean onTouch(View v, MotionEvent event) {
-        //        setUpSwap(layoutCallEnd);
-        //        return false;
-        //    }
-        //});
 
-        btnEndCall.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                layoutCallEnd.setVisibility(View.INVISIBLE);
-                endCall();
-            }
-        });
+        if (isIncomingCall) {
+            layoutCallEnd.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+
+                    if (canClick) {
+                        layoutCallEnd.setVisibility(View.INVISIBLE);
+                        endCall();
+                    }
+                }
+            });
+
+            btnEndCall.setOnTouchListener(new View.OnTouchListener() {
+                @Override public boolean onTouch(View v, MotionEvent event) {
+                    setUpSwap(layoutCallEnd);
+                    return false;
+                }
+            });
+        } else {
+
+            btnEndCall.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    endCall();
+                    btnEndCall.setVisibility(View.GONE);
+                }
+            });
+        }
+
+
+
 
 
         /**
@@ -304,50 +323,52 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
          */
 
         final FrameLayout layoutChat = (FrameLayout) findViewById(R.id.fcr_layout_chat_call);
-        //layoutChat.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        if (canClick) {
-        //            btnChat.performClick();
-        //            layoutChat.setVisibility(View.INVISIBLE);
-        //        }
-        //    }
-        //});
-        //
         btnCircleChat = (MaterialDesignTextView) findViewById(R.id.fcr_btn_circle_chat);
-        //btnCircleChat.setOnTouchListener(new View.OnTouchListener() {
-        //    @Override
-        //    public boolean onTouch(View v, MotionEvent event) {
-        //        setUpSwap(layoutChat);
-        //        return false;
-        //    }
-        //});
 
-        btnCircleChat.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                btnChat.performClick();
-                layoutChat.setVisibility(View.INVISIBLE);
-            }
-        });
+        if (isIncomingCall) {
+            layoutChat.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (canClick) {
+                        btnChat.performClick();
+                        layoutChat.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+
+            btnCircleChat.setOnTouchListener(new View.OnTouchListener() {
+                @Override public boolean onTouch(View v, MotionEvent event) {
+                    setUpSwap(layoutChat);
+                    return false;
+                }
+            });
+        }
+
+
 
         /**
          * *************** layoutAnswer ***************
          */
 
         final FrameLayout layoutAnswer = (FrameLayout) findViewById(R.id.fcr_layout_answer_call);
-        layoutAnswer.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                answer(layoutAnswer, layoutChat);
-            }
-        });
-
         btnAnswer = (MaterialDesignTextView) findViewById(R.id.fcr_btn_call);
-        btnAnswer.setOnTouchListener(new View.OnTouchListener() {
-            @Override public boolean onTouch(View v, MotionEvent event) {
-                setUpSwap(layoutAnswer);
-                return false;
-            }
-        });
+
+        if (isIncomingCall) {
+            layoutAnswer.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    answer(layoutAnswer, layoutChat);
+                }
+            });
+
+            btnAnswer.setOnTouchListener(new View.OnTouchListener() {
+                @Override public boolean onTouch(View v, MotionEvent event) {
+                    setUpSwap(layoutAnswer);
+                    return false;
+                }
+            });
+        }
+
+
+
 
         /**
          * *********************************************
@@ -358,7 +379,10 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             @Override public void onClick(View v) {
                 HelperPublicMethod.goToChatRoom(userId, null, null);
 
-                endCall();
+                if (!isConnected) {
+                    endCall();
+                }
+
             }
         });
 
@@ -366,10 +390,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         btnSpeaker.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
 
-                if (btnSpeaker.getText().toString().equals(G.context.getResources().getString(R.string.md_muted))) {
+                if (btnSpeaker.getText().toString().equals(G.context.getResources().getString(R.string.md_Mute))) {
                     btnSpeaker.setText(R.string.md_unMuted);
+                    setSpeakerphoneOn(true);
                 } else {
-                    btnSpeaker.setText(R.string.md_muted);
+                    btnSpeaker.setText(R.string.md_Mute);
+                    setSpeakerphoneOn(false);
                 }
             }
         });
@@ -380,8 +406,10 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
                 if (btnMic.getText().toString().equals(G.context.getResources().getString(R.string.md_mic))) {
                     btnMic.setText(R.string.md_mic_off);
+                    WebRTC.muteSound();
                 } else {
                     btnMic.setText(R.string.md_mic);
+                    WebRTC.unMuteSound();
                 }
             }
         });
@@ -397,13 +425,30 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             layoutOption.setVisibility(View.VISIBLE);
         }
 
+        muteMusic();
+
         setAnimation();
+
         setPicture();
+
+        setSpeakerphoneOn(false);
     }
 
     /**
      * *************** common methods ***************
      */
+
+    /** Sets the speaker phone mode. */
+    private void setSpeakerphoneOn(boolean on) {
+
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        boolean wasOn = audioManager.isSpeakerphoneOn();
+        if (wasOn == on) {
+            return;
+        }
+        audioManager.setSpeakerphoneOn(on);
+    }
 
     private void endCall() {
 
@@ -431,6 +476,16 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
             new WebRTC().createAnswer();
             cancelRingtone();
+
+            btnEndCall.setOnTouchListener(null);
+
+            btnEndCall.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    endCall();
+                    btnEndCall.setVisibility(View.GONE);
+                }
+            });
+
         }
     }
 
@@ -497,40 +552,57 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
         if (registeredInfo != null) {
-            try {
-
-                txtName.setText(registeredInfo.getDisplayName());
-
-                RealmAttachment av = registeredInfo.getLastAvatar().getFile();
-
-                ProtoFileDownload.FileDownload.Selector se = ProtoFileDownload.FileDownload.Selector.FILE;
-                String dirPath = AndroidUtils.getFilePathWithCashId(av.getCacheId(), av.getName(), G.DIR_IMAGE_USER, false);
-
-                HelperDownloadFile.startDownload(av.getToken(), av.getCacheId(), av.getName(), av.getSize(), se, dirPath, 4, new HelperDownloadFile.UpdateListener() {
-                    @Override public void OnProgress(final String path, int progress) {
-
-                        if (progress == 100) {
-
-                            runOnUiThread(new Runnable() {
-                                @Override public void run() {
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), userCallerPicture);
-                                }
-                            });
-                        }
-                    }
-
-                    @Override public void OnError(String token) {
-
-                    }
-                });
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
+            loadOrDownloadPicture(registeredInfo);
         } else {
             new RequestUserInfo().userInfo(userId);
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    Realm realm = Realm.getDefaultInstance();
+                    RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+
+                    if (registeredInfo != null) {
+                        loadOrDownloadPicture(registeredInfo);
+                    }
+                    realm.close();
+                }
+            }, 3000);
         }
 
         realm.close();
+    }
+
+    private void loadOrDownloadPicture(RealmRegisteredInfo registeredInfo) {
+
+        try {
+
+            txtName.setText(registeredInfo.getDisplayName());
+
+            RealmAttachment av = registeredInfo.getLastAvatar().getFile();
+
+            ProtoFileDownload.FileDownload.Selector se = ProtoFileDownload.FileDownload.Selector.FILE;
+            String dirPath = AndroidUtils.getFilePathWithCashId(av.getCacheId(), av.getName(), G.DIR_IMAGE_USER, false);
+
+            HelperDownloadFile.startDownload(av.getToken(), av.getCacheId(), av.getName(), av.getSize(), se, dirPath, 4, new HelperDownloadFile.UpdateListener() {
+                @Override public void OnProgress(final String path, int progress) {
+
+                    if (progress == 100) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), userCallerPicture);
+                            }
+                        });
+                    }
+                }
+
+                @Override public void OnError(String token) {
+
+                }
+            });
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void muteMusic() {
@@ -558,9 +630,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         boolean canPlay = false;
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        muteMusic();
-
-
         switch (am.getRingerMode()) {
             case AudioManager.RINGER_MODE_SILENT:
                 canPlay = false;
@@ -583,47 +652,61 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
 
         if (canPlay) {
-            Uri defaultRintoneUri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
-            ringtone = RingtoneManager.getRingtone(getApplicationContext(), defaultRintoneUri);
 
-            if (ringtone != null) {
-                ringtone.play();
+            try {
+                Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+                ringtonePlayer = new MediaPlayer();
+                ringtonePlayer.setDataSource(ActivityCall.this, alert);
+                final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                if (audioManager.getStreamVolume(AudioManager.STREAM_RING) != 0) {
+                    ringtonePlayer.setAudioStreamType(AudioManager.STREAM_RING);
+                    ringtonePlayer.setLooping(true);
+                    ringtonePlayer.prepare();
+                    ringtonePlayer.start();
+                }
+            } catch (Exception e) {
             }
-
-
 
         }
     }
 
     private void playSound(final int resSound) {
 
-        if (player == null) {
-            player = MediaPlayer.create(ActivityCall.this, resSound);
-            player.setLooping(true);
-            player.start();
-        } else {
+        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager.getStreamVolume(AudioManager.STREAM_RING) != 0) {
 
-            try {
-                player.reset();
+            if (player == null) {
+                try {
+                    player = new MediaPlayer();
+                    player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
+                    player.setAudioStreamType(AudioManager.STREAM_RING);
+                    player.setLooping(true);
+                    player.prepare();
+                    player.start();
+                } catch (Exception e) {
+                }
+            } else {
 
-                player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
-                player.prepare();
-                player.setLooping(true);
-                player.start();
-            } catch (Exception e) {
-                Log.e("dddd", "playSound   " + e.toString() + "     " + resSound);
+                try {
+                    player.reset();
+                    player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
+                    player.prepare();
+                    player.setLooping(true);
+                    player.start();
+                } catch (Exception e) {
+                }
             }
         }
     }
 
     private void cancelRingtone() {
 
-        unMuteMusic();
-
         try {
-            if (ringtone != null) {
-                ringtone.stop();
-                ringtone = null;
+            if (ringtonePlayer != null) {
+                ringtonePlayer.stop();
+                ringtonePlayer.release();
+                ringtonePlayer = null;
+
             }
         } catch (Exception e) {
 

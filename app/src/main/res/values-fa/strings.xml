@@ -895,10 +895,11 @@
   <string name="hint_can_same_password">"hint can\'t same by password</string>
   <string name="Please_enter_your_hint">"Please enter your hint</string>
   <string name="Please_enter_your_email">"Please enter your email</string>
-  <string name="e_call_permision">Is not allowed to communicate </string>
-  <string name="e_904_6">User is blocked </string>
-  <string name="e_904_7">Dialed number is not active</string>
-  <string name="e_904_8">You are talking with your other devices</string>
-  <string name="e_904_9">The user is in conversation</string>
 
+  <string name="e_call_permision">اجازه برقراری ارتباط نیست </string>
+  <string name="e_904_6">یوزر بلاک شده است</string>
+  <string name="e_904_7">شماره گرفته شده فعال نیست</string>
+  <string name="e_904_8">شما با دستگاه دیگرتان در حال مکالمه هستید</string>
+  <string name="e_904_9">یوزر در حال مکالمه است</string>
+  <string name="tab_to_return_to_call">برای برگشت به صفحه تماس کلیک کنید</string>
 </resources>

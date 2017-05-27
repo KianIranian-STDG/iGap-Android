@@ -22,7 +22,7 @@
         android:id="@+id/fcr_imv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black90"
+        android:background="#00B0BF"
         android:alpha=".5"
         android:scaleType="centerCrop"
         />
@@ -228,7 +228,7 @@
             android:id="@+id/fcr_btn_speaker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/md_muted"
+            android:text="@string/md_Mute"
             android:textAppearance="@style/TextIconAppearance.all"
             android:textColor="@color/white"
             android:textSize="@dimen/dp28"

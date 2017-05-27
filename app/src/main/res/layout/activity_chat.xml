@@ -478,6 +478,15 @@
                 android:visibility="gone"
                 />
 
+
+        <include
+            layout="@layout/chat_sub_layout_strip_call"
+            android:id="@+id/ac_ll_strip_call"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
+
       </net.iGap.module.MyAppBarLayout>
 
         <include

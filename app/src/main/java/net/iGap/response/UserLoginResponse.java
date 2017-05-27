@@ -10,11 +10,14 @@
 
 package net.iGap.response;
 
+import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperConnectionState;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoError;
+import net.iGap.realm.RealmCallConfig;
+import net.iGap.request.RequestSignalingGetConfiguration;
 
 public class UserLoginResponse extends MessageHandler {
 
@@ -39,6 +42,17 @@ public class UserLoginResponse extends MessageHandler {
         builder.getSecondaryNodeName();
         builder.getUpdateAvailable();*/
         G.userLogin = true;
+
+        /**
+         * get Signaling Configuration
+         * (( hint : call following request after set G.userLogin=true ))
+         */
+
+        Realm realm = Realm.getDefaultInstance();
+        if (G.needGetSignalingConfiguration || realm.where(RealmCallConfig.class).findFirst() == null) {
+            new RequestSignalingGetConfiguration().signalingGetConfiguration();
+        }
+        realm.close();
 
         WebSocketClient.waitingForReconnecting = false;
         WebSocketClient.allowForReconnecting = true;

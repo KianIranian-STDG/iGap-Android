@@ -39,9 +39,11 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
+import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmCallLog;
 import net.iGap.realm.RealmCallLogFields;
 import net.iGap.request.RequestSignalingClearLog;
+import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
 
 public class FragmentCall extends Fragment {
@@ -213,12 +215,25 @@ public class FragmentCall extends Fragment {
 
         if (G.userLogin) {
 
-            Intent intent = new Intent(G.context, ActivityCall.class);
-            intent.putExtra(ActivityCall.USER_ID_STR, userID);
-            intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (!G.isInCall) {
+                Realm realm = Realm.getDefaultInstance();
+                RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
 
-            G.context.startActivity(intent);
+                if (realmCallConfig == null) {
+                    new RequestSignalingGetConfiguration().signalingGetConfiguration();
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+                } else {
+                    Intent intent = new Intent(G.context, ActivityCall.class);
+                    intent.putExtra(ActivityCall.USER_ID_STR, userID);
+                    intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    G.context.startActivity(intent);
+                }
+
+                realm.close();
+            }
+
+
         } else {
 
             HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));

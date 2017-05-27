@@ -845,5 +845,6 @@
   <string name="e_904_7">شماره گرفته شده فعال نیست</string>
   <string name="e_904_8">شما با دستگاه دیگرتان در حال مکالمه هستید</string>
   <string name="e_904_9">یوزر در حال مکالمه است</string>
+  <string name="tab_to_return_to_call">tab to return to call</string>
 
 </resources>

@@ -43,6 +43,7 @@
     <string name="md_rate_star">\ue838</string>
     <string name="md_muted">\ue04f</string>
     <string name="md_unMuted">\ue050</string>
+  <string name="md_Mute">\ue04e</string>
     <string name="md_clearHistory">\ue889</string>
     <string name="md_rubbish_bin">\ue872</string>
     <string name="md_exit_app">\ue879</string>

@@ -901,5 +901,6 @@
   <string name="e_904_7">Dialed number is not active</string>
   <string name="e_904_8">You are talking with your other devices</string>
   <string name="e_904_9">The user is in conversation</string>
+  <string name="tab_to_return_to_call">tab to return to call</string>
 
 </resources>

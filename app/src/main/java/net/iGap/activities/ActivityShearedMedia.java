@@ -338,6 +338,20 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         openLayout();
 
         initAppbarSelected();
+
+        if (ActivityCall.isConnected) {
+
+            findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
+            TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
+            txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    finish();
+                    ActivityContactsProfile.activityContactsProfile.finish();
+                    ActivityChat.activityChat.finish();
+                }
+            });
+        }
+
     }
 
     private void openLayout() {

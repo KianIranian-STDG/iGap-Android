@@ -82,10 +82,10 @@ public class RealmCallConfig extends RealmObject {
                 item.setScreen_sharing(builder.getScreenSharing());
 
                 item.setIceServer(builder.getIceServerList());
+
+                G.needGetSignalingConfiguration = false;
             }
         });
-
-        G.needGetSignalingConfiguration = false;
 
         realm.close();
     }

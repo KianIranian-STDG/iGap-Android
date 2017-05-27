@@ -1541,7 +1541,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
             isMuteNotification = realmRoom.getMute();
         }
-        realm.close();
+
 
         if (chatType == CHAT && chatPeerId != 134) {
 
@@ -1567,7 +1567,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         }
 
+        if (ActivityCall.isConnected) {
 
+            findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
+            TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
+            txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
 
 
 
@@ -1681,7 +1690,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 }
 
-                final Realm realm = Realm.getDefaultInstance();
+
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
 
@@ -1701,7 +1710,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     root5.setVisibility(View.GONE);
                     root6.setVisibility(View.GONE);
                 }
-                realm.close();
+
 
                 root1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -2055,13 +2064,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     final String message = getWrittenMessage();
                     if (!message.equals(messageInfo.messageText)) {
 
-                        final Realm realm1 = Realm.getDefaultInstance();
-                        realm1.executeTransaction(new Realm.Transaction() {
+                        realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
+                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
-                                RealmClientCondition realmClientCondition = realm1.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
                                 RealmOfflineEdited realmOfflineEdited = realm.createObject(RealmOfflineEdited.class, SUID.id().get());
                                 realmOfflineEdited.setMessageId(parseLong(messageInfo.messageID));
@@ -2084,7 +2092,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             }
                         });
 
-                        realm1.close();
                         //End
 
                         // I'm in the room
@@ -2116,7 +2123,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 } else { // new message has written
 
-                    final Realm realm = Realm.getDefaultInstance();
                     final long senderId = G.userId;
 
                     String[] messages = HelperString.splitStringEvery(getWrittenMessage(), Config.MAX_TEXT_LENGTH);
@@ -2193,7 +2199,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 }
                                 mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(SUID.id().get()));
 
-                                realm.close();
 
                                 scrollToEnd();
 
@@ -2364,6 +2369,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
             }
         });
+
+        realm.close();
     }
 
     private void putExtra(Intent intent, StructMessageInfo messageInfo) {
