@@ -6366,6 +6366,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         long fetchMessageId = 0; // with this value realm will be queried for get message
         if (hasUnread() || hasSavedState()) {
 
+            firstUnreadMessage = getFirstUnreadMessage(realm);
+
             /**
              * show unread layout and also set firstUnreadMessageId in startFutureMessageIdUp
              * for try load top message and also topMore default value is true for this target
@@ -6829,6 +6831,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             mAdapter.add(0, new UnreadMessage(ActivityChat.this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
             //}
         }
+    }
+
+    /**
+     * return first unread message for current room
+     * (reason : use from this method for avoid from closed realm error)
+     */
+    private RealmRoomMessage getFirstUnreadMessage(Realm realm) {
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) {
+            return realmRoom.getFirstUnreadMessage();
+        }
+        return null;
     }
 
     /**

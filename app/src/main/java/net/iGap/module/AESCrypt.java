@@ -8,7 +8,7 @@
 * All rights reserved.
 */
 
-package net.iGap;
+package net.iGap.module;
 
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
@@ -21,6 +21,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import net.iGap.G;
 import net.iGap.helper.HelperNumerical;
 
 /**

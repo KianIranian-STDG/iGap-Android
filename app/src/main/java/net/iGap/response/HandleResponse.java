@@ -11,10 +11,10 @@
 package net.iGap.response;
 
 import java.security.GeneralSecurityException;
-import net.iGap.AESCrypt;
 import net.iGap.G;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperUnpackMessage;
+import net.iGap.module.AESCrypt;
 
 public class HandleResponse extends Thread {
 

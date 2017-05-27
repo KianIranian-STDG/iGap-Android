@@ -1,4 +1,4 @@
-package net.iGap;
+package net.iGap.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -155,6 +155,7 @@ import net.iGap.interfaces.UpdateListAfterKick;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.ClearMessagesUtil;
+import net.iGap.module.MultiDexUtils;
 import net.iGap.module.StartupActions;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
