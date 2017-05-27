@@ -167,7 +167,7 @@ public class FragmentSecurityRecovery extends Fragment {
                         closeKeyboard(v);
                         edtSetRecoveryEmail.setText("");
                     } else {
-                        error("Please enter code");
+                        error(getString(R.string.please_enter_code));
                     }
                 } else {
                     if (edtSetRecoveryAnswerPassOne.length() > 0 && edtSetRecoveryAnswerPassTwo.length() > 0) {
@@ -177,7 +177,8 @@ public class FragmentSecurityRecovery extends Fragment {
                         closeKeyboard(v);
 
                     } else {
-                        error("Please enter all item");
+
+                        error(getString(R.string.please_complete_all_item));
                     }
                 }
             }

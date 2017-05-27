@@ -150,11 +150,13 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         try {
             HelperPermision.getStoragePermision(this, new OnGetPermission() {
-                @Override public void Allow() throws IOException {
+                @Override
+                public void Allow() throws IOException {
                     checkIsDirectoryExist();
                 }
 
-                @Override public void deny() {
+                @Override
+                public void deny() {
                     finish();
                 }
             });
@@ -167,8 +169,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         isOnGetPermistion = false;
 
-        if (new File(G.DIR_APP).exists() && new File(G.DIR_IMAGES).exists() && new File(G.DIR_VIDEOS).exists() && new File(G.DIR_AUDIOS).exists() && new File(G.DIR_DOCUMENT).exists() && new File(
-            G.DIR_CHAT_BACKGROUND).exists() && new File(G.DIR_IMAGE_USER).exists() && new File(G.DIR_TEMP).exists()) {
+        if (new File(G.DIR_APP).exists() && new File(G.DIR_IMAGES).exists() && new File(G.DIR_VIDEOS).exists() && new File(G.DIR_AUDIOS).exists() && new File(G.DIR_DOCUMENT).exists() && new File(G.DIR_CHAT_BACKGROUND).exists() && new File(G.DIR_IMAGE_USER).exists() && new File(G.DIR_TEMP).exists()) {
             return;
         } else {
             StartupActions.makeFolder();

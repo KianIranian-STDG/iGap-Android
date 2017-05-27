@@ -94,7 +94,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     TextView txtTimer;
     MediaPlayer player;
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
 
         G.isInCall = false;
@@ -104,7 +105,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         new RequestSignalingGetLog().signalingGetLog(0, 1);
     }
 
-    @Override public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
         super.onBackPressed();
 
         if (!isSendLeave) {
@@ -116,11 +118,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         try {
             HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
-                @Override public void Allow() throws IOException {
+                @Override
+                public void Allow() throws IOException {
 
                 }
 
-                @Override public void deny() {
+                @Override
+                public void deny() {
                     finish();
                 }
             });
@@ -156,7 +160,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void initCallBack() {
         G.iSignalingCallBack = new ISignalingCallBack() {
-            @Override public void onStatusChanged(final CallState callState) {
+            @Override
+            public void onStatusChanged(final CallState callState) {
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
                         txtStatus.setText(callState.toString());
@@ -180,7 +185,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                     playSound(R.raw.igap_connect);
 
                                     G.handler.postDelayed(new Runnable() {
-                                        @Override public void run() {
+                                        @Override
+                                        public void run() {
                                             cancelRingtone();
                                             startTimer();
                                         }
@@ -193,7 +199,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                 playSound(R.raw.igap_discounect);
 
                                 G.handler.postDelayed(new Runnable() {
-                                    @Override public void run() {
+                                    @Override
+                                    public void run() {
                                         stopTimer();
                                         endVoiceAndFinish();
                                     }
@@ -224,7 +231,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         secendTimer = new Timer();
         secendTimer.schedule(new TimerTask() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 secend++;
                 if (secend >= 60) {
@@ -237,7 +245,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
                 txtTimer.post(new Runnable() {
 
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         String s = "";
                         if (minute < 10) {
                             s += "0" + minute;
@@ -526,7 +535,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 canPlay = false;
 
                 vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                long[] pattern = { 0, 100, 1000 };
+                long[] pattern = {0, 100, 1000};
                 vibrator.vibrate(pattern, 0);
 
                 break;
@@ -610,7 +619,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
     }
 
-    @Override public void onLeaveView() {
+    @Override
+    public void onLeaveView() {
         endVoiceAndFinish();
     }
 

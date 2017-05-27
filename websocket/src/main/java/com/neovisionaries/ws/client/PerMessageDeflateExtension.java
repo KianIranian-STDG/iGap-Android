@@ -495,8 +495,7 @@ class PerMessageDeflateExtension extends PerMessageCompressionExtension {
     }
 
 
-    private static void skipData(
-            ByteArray input, int[] bitIndex, Huffman literalLengthHuffman, Huffman distanceHuffman) throws FormatException {
+    private static void skipData(ByteArray input, int[] bitIndex, Huffman literalLengthHuffman, Huffman distanceHuffman) throws FormatException {
         // 3.2.5 Compressed blocks (length and distance codes)
 
         while (true) {

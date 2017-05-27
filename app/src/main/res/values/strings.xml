@@ -886,4 +886,14 @@
   <string name="recovery_Password">Recovery Password</string>
   <string name="your_email_desc">Please add your valid e-mail it is th only way to recover a forgotten password</string>
   <string name="call_with">Select Contact</string>
+  <string name="please_enter_code">Please enter code</string>
+  <string name="please_enter_all_item">Please enter code</string>
+  <string name="Hint_cant_the_same_password">Hint can\'t the same password</string>
+  <string name="please_complete_all_item">"Please complete all item</string>
+  <string name="Password_dose_not_match">"Password dose not match</string>
+  <string name="Password_has_to_mor_than_character">"Password has to mor than 2 character</string>
+  <string name="Please_complete_all_Item">"Please complete all Item</string>
+  <string name="hint_can_same_password">"hint can\'t same by password</string>
+  <string name="Please_enter_your_hint">"Please enter your hint</string>
+  <string name="Please_enter_your_email">"Please enter your email</string>
 </resources>

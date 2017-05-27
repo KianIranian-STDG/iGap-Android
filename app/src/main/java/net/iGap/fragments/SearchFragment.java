@@ -295,11 +295,7 @@ public class SearchFragment extends Fragment {
         int size = list.size();
         Realm realm = Realm.getDefaultInstance();
 
-        for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class)
-            .contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE)
-            .equalTo(RealmRoomMessageFields.EDITED, false)
-            .isNotEmpty(RealmRoomMessageFields.MESSAGE)
-            .findAll()) {
+        for (RealmRoomMessage roomMessage : realm.where(RealmRoomMessage.class).contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE).equalTo(RealmRoomMessageFields.EDITED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll()) {
             if (roomMessage != null) {
 
                 StructSearch item = new StructSearch();

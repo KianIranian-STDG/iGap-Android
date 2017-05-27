@@ -107,7 +107,8 @@ public class FragmentSetSecurityPassword extends Fragment {
                         rootHintPassword.setVisibility(View.VISIBLE);
 
                     } else {
-                        error("Password do not match");
+
+                        error(getString(R.string.Password_dose_not_match));
                     }
 
                 } else if (page == 3) {
@@ -121,7 +122,8 @@ public class FragmentSetSecurityPassword extends Fragment {
 
 
                     } else {
-                        error("Hint cant the same password");
+
+                        error(getString(R.string.Hint_cant_the_same_password));
                     }
 
                 } else if (page == 4) {
@@ -133,7 +135,8 @@ public class FragmentSetSecurityPassword extends Fragment {
                         rootEmail.setVisibility(View.VISIBLE);
 
                     } else {
-                        error("Please complete all item ");
+
+                        error(getString(R.string.please_complete_all_item));
                     }
                 } else if (page == 5) {
 

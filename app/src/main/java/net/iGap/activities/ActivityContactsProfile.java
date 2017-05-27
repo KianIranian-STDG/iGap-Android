@@ -695,7 +695,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 if (callConfig.isVoice_calling()) {
                     rippleCall.setVisibility(View.VISIBLE);
                     rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-                        @Override public void onComplete(RippleView rippleView) {
+                        @Override
+                        public void onComplete(RippleView rippleView) {
 
                             FragmentCall.call(userId, false);
                         }

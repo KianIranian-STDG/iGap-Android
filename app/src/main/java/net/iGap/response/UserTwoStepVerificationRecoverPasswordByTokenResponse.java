@@ -33,7 +33,7 @@ public class UserTwoStepVerificationRecoverPasswordByTokenResponse extends Messa
         ProtoUserTwoStepVerificationRecoverPasswordByToken.UserTwoStepVerificationRecoverPasswordByTokenResponse.Builder builder =
             (ProtoUserTwoStepVerificationRecoverPasswordByToken.UserTwoStepVerificationRecoverPasswordByTokenResponse.Builder) message;
         if (G.onRecoverySecurityPassword != null) {
-            G.onRecoverySecurityPassword.recoveryByEmail(builder.toString());
+            G.onRecoverySecurityPassword.recoveryByEmail(builder.getToken());
         }
 
     }

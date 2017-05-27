@@ -35,7 +35,7 @@ public class UserTwoStepVerificationRecoverPasswordByAnswersResponse extends Mes
 
 
         if (G.onRecoverySecurityPassword != null) {
-            G.onRecoverySecurityPassword.recoveryByQuestion(builder.toString());
+            G.onRecoverySecurityPassword.recoveryByQuestion(builder.getToken());
         }
 
     }

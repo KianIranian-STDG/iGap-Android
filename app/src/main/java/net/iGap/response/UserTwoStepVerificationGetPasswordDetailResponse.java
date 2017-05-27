@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import android.util.Log;
 import net.iGap.G;
 import net.iGap.proto.ProtoUserTwoStepVerificationGetPasswordDetail;
 
@@ -43,7 +42,6 @@ public class UserTwoStepVerificationGetPasswordDetailResponse extends MessageHan
             G.onTwoStepPassword.getPasswordDetail(builder.getQuestionOne(), builder.getQuestionTwo(), builder.getHint(), builder.getHasConfirmedRecoveryEmail(), builder.getUnconfirmedEmailPattern());
 
         }
-        Log.i("VVVVVVVVV", "handler PasswordDetailResponse: ");
 
         if (G.onSecurityCheckPassword != null) {
             G.onSecurityCheckPassword.getDetailPassword(builder.getQuestionOne(), builder.getQuestionTwo(), builder.getHint(), builder.getHasConfirmedRecoveryEmail(), builder.getUnconfirmedEmailPattern());
@@ -52,13 +50,11 @@ public class UserTwoStepVerificationGetPasswordDetailResponse extends MessageHan
 
     @Override public void timeOut() {
         super.timeOut();
-        Log.i("VVVVVVVVV", "timeOut PasswordDetailResponse: ");
     }
 
 
     @Override public void error() {
         super.error();
-        Log.i("VVVVVVVVV", "error PasswordDetailResponse: ");
     }
 }
 

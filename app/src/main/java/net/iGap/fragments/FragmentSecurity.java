@@ -370,7 +370,7 @@ public class FragmentSecurity extends Fragment {
                         closeKeyboard(v);
                         edtCheckPassword.setText("");
                     } else {
-                        error("Password has to mor than 2 character");
+                        error(getString(R.string.Password_has_to_mor_than_character));
                     }
                 }
 
@@ -385,7 +385,8 @@ public class FragmentSecurity extends Fragment {
                         edtSetQuestionPassTwo.setText("");
                         edtSetAnswerPassTwo.setText("");
                     } else {
-                        error("Please complete all Item");
+
+                        error(getString(R.string.Please_complete_all_Item));
                     }
                 }
 
@@ -396,7 +397,7 @@ public class FragmentSecurity extends Fragment {
                         closeKeyboard(v);
                         edtSetEmail.setText("");
                     } else {
-                        error("Please enter your email");
+                        error(getString(R.string.Please_enter_your_email));
                     }
                 }
 
@@ -409,10 +410,10 @@ public class FragmentSecurity extends Fragment {
                             closeKeyboard(v);
                             edtChangeHint.setText("");
                         } else {
-                            error("hint can't same password");
+                            error(getString(R.string.hint_can_same_password));
                         }
                     } else {
-                        error("Please enter your hint");
+                        error(getString(R.string.Please_enter_your_hint));
                     }
                 }
 
@@ -424,7 +425,7 @@ public class FragmentSecurity extends Fragment {
                         edtConfirmedEmail.setText("");
                         closeKeyboard(v);
                     } else {
-                        error("Please enter your code");
+                        error(getString(R.string.please_enter_code));
                     }
                 }
             }

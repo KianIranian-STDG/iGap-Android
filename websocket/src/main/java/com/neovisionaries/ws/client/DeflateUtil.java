@@ -77,8 +77,7 @@ class DeflateUtil {
     }
 
 
-    private static void readCodeLengths(
-            ByteArray input, int bitIndex[], int[] codeLengths, Huffman codeLengthHuffman) throws FormatException {
+    private static void readCodeLengths(ByteArray input, int bitIndex[], int[] codeLengths, Huffman codeLengthHuffman) throws FormatException {
         // 3.2.7 Compression with dynamic Huffman codes (BTYPE=10)
 
         for (int i = 0; i < codeLengths.length; ++i) {
