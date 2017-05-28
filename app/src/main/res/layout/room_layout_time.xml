@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lyt_time_room"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+  <TextView
+      android:id="@+id/cs_txt_contact_time"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:gravity="center"
+      android:maxLines="1"
+      android:singleLine="true"
+      android:text="time"
+      android:textColor="@color/gray"
+      android:textSize="@dimen/dp12"
+      />
+
+</LinearLayout>

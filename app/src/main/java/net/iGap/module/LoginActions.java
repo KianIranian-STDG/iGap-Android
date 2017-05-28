@@ -22,14 +22,11 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestWrapper;
 
-import static net.iGap.G.authorHash;
 import static net.iGap.G.context;
-import static net.iGap.G.displayName;
 import static net.iGap.G.firstEnter;
 import static net.iGap.G.firstTimeEnterToApp;
 import static net.iGap.G.isAppInFg;
 import static net.iGap.G.isSendContact;
-import static net.iGap.G.userId;
 
 /**
  * all actions that need doing after login
@@ -108,21 +105,6 @@ public class LoginActions extends Application {
                 if (G.isSecure) {
                     Realm realm = Realm.getDefaultInstance();
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-
-                    if (userInfo != null) {
-
-                        userId = userInfo.getUserId();
-
-                        if (userInfo.getAuthorHash() != null) {
-                            authorHash = userInfo.getAuthorHash();
-                        }
-
-                        if (userInfo.getUserInfo().getDisplayName() != null) {
-                            displayName = userInfo.getUserInfo().getDisplayName();
-                        }
-
-                    }
-
                     if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
                         new RequestUserLogin().userLogin(userInfo.getToken());
                     }

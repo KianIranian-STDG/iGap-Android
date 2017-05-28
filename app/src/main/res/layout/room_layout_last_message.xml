@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lyt_last_message_room"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+  <net.iGap.emoji.EmojiTextView
+      android:id="@+id/cs_txt_last_message"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="start"
+      android:gravity="start"
+      android:maxLines="1"
+      android:paddingBottom="1dp"
+      android:singleLine="true"
+      android:text="LAST MESSAGE"
+      android:textColor="#FF616161"
+      android:textSize="@dimen/dp13"
+      />
+
+
+</LinearLayout>

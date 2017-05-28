@@ -28,24 +28,31 @@ public class GroupCreateResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
 
         super.handler();
         ProtoGroupCreate.GroupCreateResponse.Builder builder = (ProtoGroupCreate.GroupCreateResponse.Builder) message;
         G.onGroupCreate.onGroupCreate(builder.getRoomId());
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        G.onGroupCreate.onError(majorCode, minorCode);
+        if (G.onGroupCreate != null) {
+            G.onGroupCreate.onError(majorCode, minorCode);
+        }
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
-        G.onGroupCreate.onTimeOut();
+        if (G.onGroupCreate != null) {
+            G.onGroupCreate.onTimeOut();
+        }
     }
 }
