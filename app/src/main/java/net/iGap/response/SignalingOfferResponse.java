@@ -11,9 +11,12 @@
 package net.iGap.response;
 
 import android.util.Log;
+import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingOffer;
+import net.iGap.realm.RealmCallConfig;
+import net.iGap.request.RequestSignalingGetConfiguration;
 
 public class SignalingOfferResponse extends MessageHandler {
 
@@ -43,9 +46,22 @@ public class SignalingOfferResponse extends MessageHandler {
             Long callerUserID = builder.getCallerUserId();
             net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type type = builder.getType();
 
-            if (G.iSignalingOffer != null) {
-                G.iSignalingOffer.onOffer(callerUserID, type, callerSdp);
+            Realm realm = Realm.getDefaultInstance();
+            RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
+
+            if (realmCallConfig == null) {
+                new RequestSignalingGetConfiguration().signalingGetConfiguration();
+            } else {
+                if (G.iSignalingOffer != null) {
+                    G.iSignalingOffer.onOffer(callerUserID, type, callerSdp);
+                }
             }
+
+            realm.close();
+
+
+
+
         }
     }
 
