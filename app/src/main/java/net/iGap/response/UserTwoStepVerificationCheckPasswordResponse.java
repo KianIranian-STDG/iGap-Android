@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserTwoStepVerificationCheckPassword;
 
 public class UserTwoStepVerificationCheckPasswordResponse extends MessageHandler {
@@ -45,6 +46,16 @@ public class UserTwoStepVerificationCheckPasswordResponse extends MessageHandler
 
     @Override public void error() {
         super.error();
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        final int getWait = errorResponse.getWait();
+        if (majorCode == 10106) {
+            if (G.onTwoStepPassword != null) {
+                G.onTwoStepPassword.errorCheckPassword(getWait);
+            }
+        }
     }
 }
 

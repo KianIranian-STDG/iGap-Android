@@ -5,6 +5,7 @@ package net.iGap.fragments;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -317,6 +318,16 @@ public class FragmentSecurity extends Fragment {
             }
 
             @Override
+            public void errorCheckPassword(final int getWait) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialogWaitTime(getWait);
+                    }
+                });
+            }
+
+            @Override
             public void unSetPassword() {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -495,6 +506,36 @@ public class FragmentSecurity extends Fragment {
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
         Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    private void dialogWaitTime(long time) {
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialogWait = new MaterialDialog.Builder(getActivity()).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                dialog.dismiss();
+            }
+        }).show();
+
+        View v = dialogWait.getCustomView();
+
+        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) ((millisUntilFinished) / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+            }
+
+            @Override
+            public void onFinish() {
+                remindTime.setText("00:00");
+            }
+        };
+        countWaitTimer.start();
     }
 
 

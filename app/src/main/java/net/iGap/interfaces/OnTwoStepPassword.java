@@ -15,6 +15,8 @@ public interface OnTwoStepPassword {
 
     void checkPassword();
 
+    void errorCheckPassword(int getWait);
+
     void unSetPassword();
 
     void changeRecoveryQuestion();
