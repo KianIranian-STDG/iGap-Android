@@ -53,20 +53,6 @@
 
       </net.iGap.libs.rippleeffect.RippleView>
 
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true"
-          android:layout_alignParentTop="true"
-          android:gravity="center"
-          android:text="@string/two_step_verification_title"
-          android:textColor="@color/whit_background"
-          android:textSize="@dimen/dp18"
-          android:visibility="visible"
-          fontPath="fonts/IRANSansMobile_Bold.ttf"
-          />
-
       <net.iGap.libs.rippleeffect.RippleView
           android:id="@+id/tsv_ripple_back"
           android:layout_width="wrap_content"
@@ -89,6 +75,18 @@
             />
 
       </net.iGap.libs.rippleeffect.RippleView>
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_alignParentTop="true"
+          android:layout_toRightOf="@+id/tsv_ripple_back"
+          android:gravity="center"
+          android:text="@string/two_step_verification_title"
+          android:textColor="@color/whit_background"
+          android:textSize="@dimen/dp18"
+          android:visibility="visible"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
+          />
     </RelativeLayout>
   </android.support.v7.widget.Toolbar>
 

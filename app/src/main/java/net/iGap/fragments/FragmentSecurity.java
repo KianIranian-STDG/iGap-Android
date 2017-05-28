@@ -3,6 +3,7 @@ package net.iGap.fragments;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -73,6 +74,9 @@ public class FragmentSecurity extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail();
+
+        view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.fpac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         rootSetPassword = (ViewGroup) view.findViewById(R.id.rootSetPassword);
         rootCheckPassword = (ViewGroup) view.findViewById(R.id.rootCheckPassword);

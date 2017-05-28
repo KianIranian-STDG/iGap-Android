@@ -52,19 +52,6 @@
 
       </net.iGap.libs.rippleeffect.RippleView>
 
-      <TextView
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true"
-          android:layout_alignParentTop="true"
-          android:gravity="center"
-          android:text="@string/recovery_Password"
-          android:textColor="@color/whit_background"
-          android:textSize="@dimen/dp18"
-          android:visibility="visible"
-          fontPath="fonts/IRANSansMobile_Bold.ttf"
-          />
 
       <net.iGap.libs.rippleeffect.RippleView
           android:id="@+id/ripple_back"
@@ -88,6 +75,18 @@
             />
 
       </net.iGap.libs.rippleeffect.RippleView>
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_toRightOf="@+id/ripple_back"
+          android:layout_alignParentTop="true"
+          android:gravity="center"
+          android:text="@string/recovery_Password"
+          android:textColor="@color/whit_background"
+          android:textSize="@dimen/dp18"
+          android:visibility="visible"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
+          />
     </RelativeLayout>
   </android.support.v7.widget.Toolbar>
 
