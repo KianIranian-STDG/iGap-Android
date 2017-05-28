@@ -28,6 +28,7 @@ import org.webrtc.DataChannel;
 import org.webrtc.IceCandidate;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
+import org.webrtc.RtpReceiver;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoTrack;
 
@@ -79,6 +80,11 @@ public class PeerConnectionObserver implements PeerConnection.Observer, VideoRen
 
     }
 
+    @Override
+    public void onIceCandidatesRemoved(IceCandidate[] iceCandidates) {
+
+    }
+
 
     @Override
     public void onAddStream(MediaStream stream) {
@@ -108,7 +114,10 @@ public class PeerConnectionObserver implements PeerConnection.Observer, VideoRen
         Log.i("WWW", "onRenegotiationNeeded");
     }
 
+    @Override
+    public void onAddTrack(RtpReceiver rtpReceiver, MediaStream[] mediaStreams) {
 
+    }
 
     @Override
     public void renderFrame(VideoRenderer.I420Frame i420Frame) {

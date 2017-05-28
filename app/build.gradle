@@ -62,6 +62,7 @@ dependencies {
   compile project(':emoji')
   compile project(':audioplayerview')
   compile project(':websocket')
+  compile project(':libwebrtc')
   compile('com.afollestad.material-dialogs:core:0.9.4.5') {
     transitive = true
   }
@@ -110,5 +111,5 @@ dependencies {
     exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
   }
 
-  compile 'io.pristine:libjingle:11139@aar'
+  //compile 'io.pristine:libjingle:11139@aar'
 }
