@@ -1106,7 +1106,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void initRecycleView() {
 
         mRecyclerView = (RealmRecyclerView) findViewById(R.id.cl_recycler_view_contact);
-        mRecyclerView.setItemViewCacheSize(50);
+        //mRecyclerView.setItemViewCacheSize(50);
         mRecyclerView.setDrawingCacheEnabled(true);
 
         PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(this);
@@ -1813,14 +1813,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             removeView(lytContainer5, R.id.lyt_message_sender_room); //holder.lastMessageSender.setVisibility(GONE);
                             removeView(lytContainer5, R.id.lyt_last_message_room); //holder.lastMessage.setVisibility(GONE);
                         } else {
-                            if (mInfo.getLastMessage().isSenderMe()) {
-                                if (holder.itemView.findViewById(R.id.lyt_tic_room) == null) {
-                                    View ticView = LayoutInflater.from(G.context).inflate(R.layout.room_layout_tic, null);
-                                    lytContainer7.addView(ticView, 0);
-
-                                    AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isSenderMe());
-                                }
-                                //holder.messageStatus.setVisibility(View.VISIBLE);
+                            if (mInfo.getLastMessage().isAuthorMe()) {
+                                addView(holder, lytContainer7, R.layout.room_layout_tic, R.id.lyt_tic_room, 0);
+                                AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isAuthorMe());
                             } else {
                                 removeView(lytContainer7, R.id.lyt_tic_room); //holder.messageStatus.setVisibility(GONE);
                             }
@@ -1834,7 +1829,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                              */
 
                             String lastMessageSender = "";
-                            if (mInfo.getLastMessage().isSenderMe()) {
+                            if (mInfo.getLastMessage().isAuthorMe()) {
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
 
@@ -2040,10 +2035,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
              */
             if (HelperCalander.isLanguagePersian) {
                 TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
-                txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastMessage.getText().toString()));
+                if (txtLastMessage != null) {
+                    txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastMessage.getText().toString()));
+                }
 
                 TextView txtUnread = (TextView) holder.itemView.findViewById(R.id.cs_txt_unread_message);
-                txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(txtUnread.getText().toString()));
+                if (txtUnread != null) {
+                    txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(txtUnread.getText().toString()));
+                }
 
                 holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
             }
