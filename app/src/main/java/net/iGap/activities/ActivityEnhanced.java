@@ -13,6 +13,8 @@ package net.iGap.activities;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -25,10 +27,10 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperPermision;
-import net.iGap.helper.HelperSetStatusBarColor;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AttachFile;
 import net.iGap.module.StartupActions;
+import net.iGap.module.StatusBarUtil;
 import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.request.RequestUserUpdateStatus;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -53,9 +55,11 @@ public class ActivityEnhanced extends AppCompatActivity {
         checkLanguage(this);
         super.onCreate(savedInstanceState);
 
-        makeDirectoriesIfNotExist();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 70);
+        }
 
-        HelperSetStatusBarColor.setColor(this);
+        makeDirectoriesIfNotExist();
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
