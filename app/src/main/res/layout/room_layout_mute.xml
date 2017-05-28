@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/lyt_mute_room"
+    >
+
+  <net.iGap.module.MaterialDesignTextView
+      android:id="@+id/cs_txt_mute"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/dp4"
+      android:layout_marginLeft="@dimen/dp4"
+      android:layout_marginRight="@dimen/dp4"
+      android:layout_marginStart="@dimen/dp4"
+      android:text="@string/md_muted"
+      android:textAppearance="@style/TextIconAppearance_toolbar"
+      android:textColor="@color/grayNew"
+      android:textSize="@dimen/dp16"
+      />
+
+</LinearLayout>

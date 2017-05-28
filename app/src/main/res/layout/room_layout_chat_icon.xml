@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lyt_chat_icon_room"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+  <TextView
+      android:id="@+id/cs_txt_chat_icon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_marginEnd="@dimen/dp8"
+      android:layout_marginRight="@dimen/dp8"
+      android:paddingBottom="2dp"
+      android:textColor="@android:color/black"
+      android:textSize="@dimen/dp18"
+      />
+
+
+</LinearLayout>

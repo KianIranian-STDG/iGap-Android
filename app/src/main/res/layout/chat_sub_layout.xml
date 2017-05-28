@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp68"
     >
@@ -18,21 +17,15 @@
         />
   </FrameLayout>
 
-  <View
-      android:id="@+id/cs_view_distance_color"
-      android:layout_width="@dimen/dp4"
-      android:layout_height="match_parent"
-      android:background="#f1f265"
-      android:visibility="gone"
-      />
-
   <LinearLayout
+      android:id="@+id/lytContainer1"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
       >
 
     <LinearLayout
+        android:id="@+id/lytContainer2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -40,6 +33,7 @@
         android:paddingTop="@dimen/dp12"
         >
       <LinearLayout
+          android:id="@+id/lytContainer3"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_marginLeft="@dimen/dp12"
@@ -49,23 +43,12 @@
           >
 
         <LinearLayout
+            android:id="@+id/lytContainer4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             >
-
-          <TextView
-              android:id="@+id/cs_txt_contact_icon"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_marginEnd="@dimen/dp8"
-              android:layout_marginRight="@dimen/dp8"
-              android:paddingBottom="2dp"
-              android:textColor="@android:color/black"
-              android:textSize="@dimen/dp18"
-              />
 
           <net.iGap.emoji.EmojiTextView
               android:id="@+id/cs_txt_contact_name"
@@ -84,52 +67,18 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lytContainer5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
 
-          <net.iGap.emoji.EmojiTextView
-              android:id="@+id/cs_txt_last_message_sender"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:paddingBottom="1dp"
-              android:singleLine="true"
-              android:textColor="#2bbfbd"
-              android:textSize="@dimen/dp13"
-              />
-
-          <net.iGap.emoji.EmojiTextView
-              android:id="@+id/cs_txt_last_message"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="start"
-              android:gravity="start"
-              android:maxLines="1"
-              android:paddingBottom="1dp"
-              android:singleLine="true"
-              android:text="LAST MESSAGE"
-              android:textColor="#FF616161"
-              android:textSize="@dimen/dp13"
-              />
-
-          <com.wang.avi.AVLoadingIndicatorView
-              android:id="@+id/cs_avi"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="top"
-              android:layout_marginLeft="@dimen/dp8"
-              android:layout_marginStart="@dimen/dp8"
-              android:visibility="gone"
-              app:indicatorColor="@color/room_message_blue"
-              app:indicatorName="BallPulseIndicator"
-              style="@style/AVLoadingIndicatorView.Small"
-              />
         </LinearLayout>
 
       </LinearLayout>
 
       <LinearLayout
+          android:id="@+id/lytContainer6"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:layout_marginEnd="@dimen/dp8"
@@ -139,63 +88,12 @@
           >
 
         <LinearLayout
+            android:id="@+id/lytContainer7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-          <net.iGap.module.MaterialDesignTextView
-              android:id="@+id/cs_txt_mute"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginEnd="@dimen/dp4"
-              android:layout_marginLeft="@dimen/dp4"
-              android:layout_marginRight="@dimen/dp4"
-              android:layout_marginStart="@dimen/dp4"
-              android:text="@string/md_muted"
-              android:textAppearance="@style/TextIconAppearance_toolbar"
-              android:textColor="@color/grayNew"
-              android:textSize="@dimen/dp16"
-              />
-
-          <ImageView
-              android:id="@+id/cslr_txt_tic"
-              android:layout_width="16dp"
-              android:layout_height="16dp"
-              android:layout_marginEnd="@dimen/dp4"
-              android:layout_marginRight="@dimen/dp4"
-              style="@style/ChatMessages.MaterialDesignTextView.Tick"
-              />
-
-          <TextView
-              android:id="@+id/cs_txt_contact_time"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:maxLines="1"
-              android:singleLine="true"
-              android:text="time"
-              android:textColor="@color/gray"
-              android:textSize="@dimen/dp12"
-              android:gravity="center"
-              android:layout_gravity="center"
-              />
-
-
         </LinearLayout>
-        <TextView
-            android:id="@+id/cs_txt_unread_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:layout_marginTop="@dimen/dp4"
-            android:background="@drawable/oval_red"
-            android:gravity="center"
-            android:minHeight="@dimen/dp24"
-            android:minWidth="@dimen/dp24"
-            android:singleLine="true"
-            android:text="1"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/dp10"
-            />
       </LinearLayout>
     </LinearLayout>
     <View

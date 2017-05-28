@@ -39,6 +39,11 @@ android {
   lintOptions {
     disable 'MissingTranslation'
   }
+
+  dexOptions {
+    //incremental true
+    javaMaxHeapSize "4g"
+  }
   //  splits {
   //    abi {
   //      enable true

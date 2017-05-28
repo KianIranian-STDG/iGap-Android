@@ -299,7 +299,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
         @Override
         public ActivitySelectChat.RoomAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
-            View v = inflater.inflate(R.layout.chat_sub_layout, viewGroup, false);
+            View v = inflater.inflate(R.layout.chat_sub_layout_select_chat, viewGroup, false);
             return new ActivitySelectChat.RoomAdapter.ViewHolder(v);
         }
 

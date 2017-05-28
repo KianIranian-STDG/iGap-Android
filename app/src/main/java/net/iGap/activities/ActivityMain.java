@@ -39,6 +39,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,7 +54,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.wang.avi.AVLoadingIndicatorView;
 import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -144,7 +144,6 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 
-import static android.view.View.GONE;
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
 import static net.iGap.G.firstTimeEnterToApp;
@@ -722,64 +721,64 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     public void run() {
 
                         new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                            .content(R.string.content_log_out)
-                            .positiveText(getResources().getString(R.string.B_ok))
-                            .negativeText(getResources().getString(R.string.B_cancel))
-                            .iconRes(R.mipmap.exit_to_app_button)
-                            .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    G.onUserSessionLogout = new OnUserSessionLogout() {
-                                        @Override
-                                        public void onUserSessionLogout() {
+                                .content(R.string.content_log_out)
+                                .positiveText(getResources().getString(R.string.B_ok))
+                                .negativeText(getResources().getString(R.string.B_cancel))
+                                .iconRes(R.mipmap.exit_to_app_button)
+                                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        G.onUserSessionLogout = new OnUserSessionLogout() {
+                                            @Override
+                                            public void onUserSessionLogout() {
 
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    HelperLogout.logout();
-                                                }
-                                            });
-                                        }
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        HelperLogout.logout();
+                                                    }
+                                                });
+                                            }
 
-                                        @Override
-                                        public void onError() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
+                                            @Override
+                                            public void onError() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
 
-                                        @Override
-                                        public void onTimeOut() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
-                                    };
-                                    new RequestUserSessionLogout().userSessionLogout();
-                                }
-                            })
-                            .show();
+                                            @Override
+                                            public void onTimeOut() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
+                                        };
+                                        new RequestUserSessionLogout().userSessionLogout();
+                                    }
+                                })
+                                .show();
                     }
                 }, 256);
             }
@@ -1118,7 +1117,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(ActivityMain.this));
 
         RealmResults<RealmRoom> results = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-            equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+                equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
         roomAdapter = new RoomAdapter(this, results, this);
         mRecyclerView.setAdapter(roomAdapter);
 
@@ -1345,7 +1344,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         for (int i = 0; i < G.deletedRoomList.size(); i++) {
 
                             RealmRoom _RealmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                                equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
+                                    equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
 
                             // delete messages and rooms in the deleted room
                             if (_RealmRoom != null) {
@@ -1440,13 +1439,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
             TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     finish();
                 }
             });
 
             G.iCallFinish = new ICallFinish() {
-                @Override public void onFinish() {
+                @Override
+                public void onFinish() {
                     try {
                         findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
                     } catch (Exception e) {
@@ -1758,27 +1759,48 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         @Override
         public void onBindRealmViewHolder(final ViewHolder holder, final int i) {
 
+            /**
+             * containers
+             */
+            LinearLayout lytContainer1 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer1);
+            LinearLayout lytContainer2 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer2);
+            LinearLayout lytContainer3 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer3);
+            LinearLayout lytContainer4 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer4);
+            LinearLayout lytContainer5 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer5);
+            LinearLayout lytContainer6 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer6);
+            LinearLayout lytContainer7 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer7);
+
             RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
             if (mInfo != null && mInfo.isValid()) {
                 if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (!RealmRoom.isCloudRoom(mInfo.getId()) && mInfo.getActionStateUserId() != userId))))) {
-                    //holder.messageStatus.setVisibility(GONE);
-                    holder.lastMessageSender.setVisibility(View.GONE);
-                    holder.lastMessage.setVisibility(View.VISIBLE);
-                    holder.avi.setVisibility(View.VISIBLE);
-                    holder.lastMessage.setText(mInfo.getActionState());
-                    holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                    removeView(lytContainer5, R.id.lyt_message_sender_room);//holder.lastMessageSender.setVisibility(View.GONE);
+
+                    addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
+                    TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
+                    txtLastMessage.setText(mInfo.getActionState());
+                    txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+
+                    addView(holder, lytContainer5, R.layout.room_layout_avi, R.id.lyt_avi_room, lytContainer5.getChildCount());
+                    (holder.itemView.findViewById(R.id.cs_avi)).setVisibility(View.VISIBLE);
                 } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
-                    holder.avi.setVisibility(View.GONE);
-                    holder.messageStatus.setVisibility(GONE);
-                    holder.lastMessage.setVisibility(View.VISIBLE);
-                    holder.lastMessageSender.setVisibility(View.VISIBLE);
-                    holder.lastMessageSender.setText(R.string.txt_draft);
-                    holder.lastMessageSender.setTextColor(Color.parseColor("#ff4644"));
-                    holder.lastMessage.setText(mInfo.getDraft().getMessage());
-                    holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+                    removeView(lytContainer5, R.id.lyt_avi_room);
+
+
+                    addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
+                    TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
+                    txtLastMessage.setText(mInfo.getDraft().getMessage());
+                    txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+
+                    removeView(lytContainer7, R.id.lyt_tic_room); //holder.messageStatus.setVisibility(GONE);
+
+                    addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
+                    TextView txtView = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
+                    txtView.setText(R.string.txt_draft);
+                    txtView.setTextColor(Color.parseColor("#ff4644"));
+
                 } else {
-                    holder.avi.setVisibility(View.GONE);
+                    removeView(lytContainer5, R.id.lyt_avi_room);
                     if (mInfo.getLastMessage() != null) {
                         String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
 
@@ -1787,15 +1809,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
 
                         if (lastMessage == null || lastMessage.isEmpty()) {
-                            holder.messageStatus.setVisibility(GONE);
-                            holder.lastMessage.setVisibility(GONE);
-                            holder.lastMessageSender.setVisibility(GONE);
+                            removeView(lytContainer7, R.id.lyt_tic_room); //holder.messageStatus.setVisibility(GONE);
+                            removeView(lytContainer5, R.id.lyt_message_sender_room); //holder.lastMessageSender.setVisibility(GONE);
+                            removeView(lytContainer5, R.id.lyt_last_message_room); //holder.lastMessage.setVisibility(GONE);
                         } else {
                             if (mInfo.getLastMessage().isSenderMe()) {
-                                AppUtils.rightMessageStatus(holder.messageStatus, ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isSenderMe());
-                                holder.messageStatus.setVisibility(View.VISIBLE);
+                                if (holder.itemView.findViewById(R.id.lyt_tic_room) == null) {
+                                    View ticView = LayoutInflater.from(G.context).inflate(R.layout.room_layout_tic, null);
+                                    lytContainer7.addView(ticView, 0);
+
+                                    AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isSenderMe());
+                                }
+                                //holder.messageStatus.setVisibility(View.VISIBLE);
                             } else {
-                                holder.messageStatus.setVisibility(GONE);
+                                removeView(lytContainer7, R.id.lyt_tic_room); //holder.messageStatus.setVisibility(GONE);
                             }
 
                             /**
@@ -1839,14 +1866,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             }
 
                             if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                holder.lastMessageSender.setText(lastMessageSender);
-                                holder.lastMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
-                                holder.lastMessageSender.setVisibility(View.VISIBLE);
+                                addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
+
+                                TextView txtMessageSender = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
+                                txtMessageSender.setText(lastMessageSender);
+                                txtMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
                             } else {
-                                holder.lastMessageSender.setVisibility(GONE);
+                                removeView(lytContainer5, R.id.lyt_message_sender_room);
                             }
 
-                            holder.lastMessage.setVisibility(View.VISIBLE);
+                            addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
+                            TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
 
                             if (mInfo.getLastMessage() != null) {
                                 ProtoGlobal.RoomMessageType _type, tmp;
@@ -1873,56 +1903,56 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                                 switch (_type) {
                                     case VOICE:
-                                        holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        holder.lastMessage.setText(R.string.voice_message);
+                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                                        txtLastMessage.setText(R.string.voice_message);
                                         break;
                                     case VIDEO:
-                                        holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        holder.lastMessage.setText(R.string.video_message);
+                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                                        txtLastMessage.setText(R.string.video_message);
                                         break;
                                     case FILE:
-                                        holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        holder.lastMessage.setText(R.string.file_message);
+                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                                        txtLastMessage.setText(R.string.file_message);
                                         break;
                                     case AUDIO:
-                                        holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        holder.lastMessage.setText(R.string.audio_message);
+                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                                        txtLastMessage.setText(R.string.audio_message);
                                         break;
                                     case IMAGE:
-                                        holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        holder.lastMessage.setText(R.string.image_message);
+                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                                        txtLastMessage.setText(R.string.image_message);
                                         break;
                                     case CONTACT:
-                                        holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        holder.lastMessage.setText(R.string.contact_message);
+                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                                        txtLastMessage.setText(R.string.contact_message);
                                         break;
                                     case GIF:
-                                        holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        holder.lastMessage.setText(R.string.gif_message);
+                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                                        txtLastMessage.setText(R.string.gif_message);
                                         break;
                                     case LOCATION:
-                                        holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        holder.lastMessage.setText(R.string.location_message);
+                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                                        txtLastMessage.setText(R.string.location_message);
                                         break;
                                     default:
                                         if (!HelperCalander.isLanguagePersian) {
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                                holder.lastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
+                                                txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
                                             }
                                         }
-                                        holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
-                                        holder.lastMessage.setText(lastMessage);
+                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+                                        txtLastMessage.setText(lastMessage);
                                         break;
                                 }
                             } else {
-                                holder.lastMessage.setText(lastMessage);
+                                txtLastMessage.setText(lastMessage);
                             }
                         }
                     } else {
-                        holder.lastMessage.setVisibility(GONE);
-                        holder.lastSeen.setVisibility(GONE);
-                        holder.messageStatus.setVisibility(GONE);
-                        holder.lastMessageSender.setVisibility(GONE);
+                        removeView(lytContainer5, R.id.lyt_last_message_room); //holder.lastMessage.setVisibility(GONE);
+                        removeView(lytContainer5, R.id.lyt_message_sender_room); //holder.lastMessageSender.setVisibility(GONE);
+                        removeView(lytContainer7, R.id.lyt_time_room); //holder.lastSeen.setVisibility(GONE);
+                        removeView(lytContainer7, R.id.lyt_tic_room); //holder.messageStatus.setVisibility(GONE);
                     }
                 }
 
@@ -1948,48 +1978,60 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                holder.chatIcon.setTypeface(typeFaceIcon);
+                /**
+                 * ********************* chat icon *********************
+                 */
                 if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
-                    holder.chatIcon.setVisibility(GONE);
-                } else if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
-                    typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");
-                    holder.chatIcon.setTypeface(typeFaceIcon);
-                    holder.chatIcon.setVisibility(View.VISIBLE);
-                    holder.chatIcon.setText(getStringChatIcon(RoomType.GROUP));
-                } else if (mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                    typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
-                    holder.chatIcon.setTypeface(typeFaceIcon);
-                    holder.chatIcon.setVisibility(View.VISIBLE);
-                    holder.chatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
+                    removeView(lytContainer4, R.id.lyt_chat_icon_room);
+                } else {
+                    addView(holder, lytContainer4, R.layout.room_layout_chat_icon, R.id.lyt_chat_icon_room, 0);
+
+                    TextView txtChatIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_chat_icon);
+                    if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
+                        typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");
+                        txtChatIcon.setText(getStringChatIcon(RoomType.GROUP));
+                    } else if (mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                        typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
+                        txtChatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
+                    }
+                    txtChatIcon.setTypeface(typeFaceIcon);
                 }
 
                 holder.name.setText(mInfo.getTitle());
 
                 if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
-                    holder.lastSeen.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
-
-                    holder.lastSeen.setVisibility(View.VISIBLE);
+                    addView(holder, lytContainer7, R.layout.room_layout_time, R.id.lyt_time_room, lytContainer7.getChildCount());
+                    ((TextView) holder.itemView.findViewById(R.id.cs_txt_contact_time)).setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
                 } else {
-                    holder.lastSeen.setVisibility(GONE);
+                    removeView(lytContainer7, R.id.lyt_time_room);//holder.lastSeen.setVisibility(GONE);
                 }
 
+                /**
+                 * ********************* unread *********************
+                 */
                 if (mInfo.getUnreadCount() < 1) {
-                    holder.unreadMessage.setVisibility(GONE);
+                    removeView(lytContainer6, R.id.lyt_unread_room);
                 } else {
-                    holder.unreadMessage.setVisibility(View.VISIBLE);
-                    holder.unreadMessage.setText(Integer.toString(mInfo.getUnreadCount()));
+                    addView(holder, lytContainer6, R.layout.room_layout_unread, R.id.lyt_unread_room, lytContainer6.getChildCount());
 
+                    TextView txtUnread = (TextView) holder.itemView.findViewById(R.id.cs_txt_unread_message);
+                    txtUnread.setText(Integer.toString(mInfo.getUnreadCount()));
                     if (mInfo.getMute()) {
-                        holder.unreadMessage.setBackgroundResource(R.drawable.oval_gray);
+                        txtUnread.setBackgroundResource(R.drawable.oval_gray);
                     } else {
-                        holder.unreadMessage.setBackgroundResource(R.drawable.oval_red);
+                        txtUnread.setBackgroundResource(R.drawable.oval_red);
                     }
                 }
 
+                /**
+                 * ********************* mute *********************
+                 */
                 if (mInfo.getMute()) {
-                    holder.mute.setVisibility(View.VISIBLE);
+                    if (holder.itemView.findViewById(R.id.lyt_mute_room) == null) {
+                        addView(holder, lytContainer7, R.layout.room_layout_mute, R.id.cs_txt_mute, 0);
+                    }
                 } else {
-                    holder.mute.setVisibility(GONE);
+                    removeView(lytContainer7, R.id.lyt_mute_room);
                 }
             }
 
@@ -1997,9 +2039,45 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
              * for change english number to persian number
              */
             if (HelperCalander.isLanguagePersian) {
-                holder.lastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.lastMessage.getText().toString()));
+                TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
+                txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastMessage.getText().toString()));
+
+                TextView txtUnread = (TextView) holder.itemView.findViewById(R.id.cs_txt_unread_message);
+                txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(txtUnread.getText().toString()));
+
                 holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
-                holder.unreadMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.unreadMessage.getText().toString()));
+            }
+        }
+
+
+        /**
+         * add element to view
+         *
+         * @param holder holder of recycler
+         * @param layout chat_sub_layout
+         * @param inflateLayout layout that inflated for showing
+         * @param parentId parent id in inflated layout
+         * @param position position for add element to view
+         */
+        private void addView(ViewHolder holder, LinearLayout layout, int inflateLayout, int parentId, int position) {
+            if (holder.itemView.findViewById(parentId) == null) {
+                View muteView = LayoutInflater.from(G.context).inflate(inflateLayout, null);
+                layout.addView(muteView, position);
+            }
+        }
+
+        /**
+         * remove element from view
+         *
+         * @param container parent of view
+         * @param id view id
+         */
+        private void removeView(LinearLayout container, int id) {
+            for (int i = 0; i < container.getChildCount(); i++) {
+                if (container.getChildAt(i).getId() == id) {
+                    container.removeViewAt(i);
+                    return;
+                }
             }
         }
 
@@ -2008,33 +2086,33 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             public RealmRoom mInfo;
             protected CircleImageView image;
             protected View distanceColor;
-            protected TextView chatIcon;
+            //protected TextView chatIcon;
             protected EmojiTextView name;
-            protected EmojiTextView lastMessageSender;
-            protected TextView mute;
-            protected EmojiTextView lastMessage;
-            protected TextView lastSeen;
-            protected TextView unreadMessage;
-            protected ImageView messageStatus;
-            private AVLoadingIndicatorView avi;
+            //protected EmojiTextView lastMessageSender;
+            //protected TextView mute;
+            //protected EmojiTextView lastMessage;
+            //protected TextView lastSeen;
+            //protected TextView unreadMessage;
+            //protected ImageView messageStatus;
+            //private AVLoadingIndicatorView avi;
 
             public ViewHolder(View view) {
                 super(view);
 
-                avi = (AVLoadingIndicatorView) view.findViewById(R.id.cs_avi);
+                //avi = (AVLoadingIndicatorView) view.findViewById(R.id.cs_avi);
                 image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
                 distanceColor = view.findViewById(R.id.cs_view_distance_color);
-                chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);
+                //chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);
                 name = (EmojiTextView) view.findViewById(R.id.cs_txt_contact_name);
-                lastMessage = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message);
-                lastMessageSender = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message_sender);
-                lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
-                unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
+                //lastMessage = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message);
+                //lastMessageSender = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message_sender);
+                //lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
+                //unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
 
-                mute = (TextView) view.findViewById(R.id.cs_txt_mute);
-                messageStatus = (ImageView) view.findViewById(R.id.cslr_txt_tic);
+                //mute = (TextView) view.findViewById(R.id.cs_txt_mute);
+                //messageStatus = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
-                AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
+                //AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
 
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
