@@ -26,6 +26,7 @@ import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.MyService;
 import net.iGap.realm.RealmMigration;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -42,7 +43,9 @@ import static net.iGap.G.IMAGE_NEW_CHANEL;
 import static net.iGap.G.IMAGE_NEW_GROUP;
 import static net.iGap.G.appBarColor;
 import static net.iGap.G.attachmentColor;
+import static net.iGap.G.authorHash;
 import static net.iGap.G.context;
+import static net.iGap.G.displayName;
 import static net.iGap.G.headerTextColor;
 import static net.iGap.G.helperNotificationAndBadge;
 import static net.iGap.G.imageFile;
@@ -53,6 +56,7 @@ import static net.iGap.G.selectedLanguage;
 import static net.iGap.G.toggleButtonColor;
 import static net.iGap.G.unLogin;
 import static net.iGap.G.unSecure;
+import static net.iGap.G.userId;
 import static net.iGap.G.userTextSize;
 import static net.iGap.G.waitingActionIds;
 
@@ -62,8 +66,8 @@ import static net.iGap.G.waitingActionIds;
 public final class StartupActions {
 
     public StartupActions() {
-        initializeGlobalVariables();
         realmConfiguration();
+        initializeGlobalVariables();
         connectToServer();
         manageSettingPreferences();
         makeFolder();
@@ -256,6 +260,30 @@ public final class StartupActions {
         fillUnSecureList();
         fillUnLoginList();
         fillWaitingRequestActionIdAllowed();
+        mainUserInfo();
+    }
+
+    /**
+     * fill main user info in global variables
+     */
+    private void mainUserInfo() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+
+        if (userInfo != null) {
+
+            userId = userInfo.getUserId();
+
+            if (userInfo.getAuthorHash() != null) {
+                authorHash = userInfo.getAuthorHash();
+            }
+
+            if (userInfo.getUserInfo().getDisplayName() != null) {
+                displayName = userInfo.getUserInfo().getDisplayName();
+            }
+
+        }
+        realm.close();
     }
 
     /**

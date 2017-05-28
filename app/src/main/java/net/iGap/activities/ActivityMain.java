@@ -1759,12 +1759,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         @Override
         public void onBindRealmViewHolder(final ViewHolder holder, final int i) {
 
-            /**
-             * containers
-             */
-            LinearLayout lytContainer1 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer1);
-            LinearLayout lytContainer2 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer2);
-            LinearLayout lytContainer3 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer3);
             LinearLayout lytContainer4 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer4);
             LinearLayout lytContainer5 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer5);
             LinearLayout lytContainer6 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer6);
@@ -1774,7 +1768,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             if (mInfo != null && mInfo.isValid()) {
                 if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (!RealmRoom.isCloudRoom(mInfo.getId()) && mInfo.getActionStateUserId() != userId))))) {
-                    removeView(lytContainer5, R.id.lyt_message_sender_room);//holder.lastMessageSender.setVisibility(View.GONE);
+                    removeView(lytContainer5, R.id.lyt_message_sender_room);
 
                     addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
                     TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
@@ -1792,7 +1786,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     txtLastMessage.setText(mInfo.getDraft().getMessage());
                     txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
 
-                    removeView(lytContainer7, R.id.lyt_tic_room); //holder.messageStatus.setVisibility(GONE);
+                    removeView(lytContainer7, R.id.lyt_tic_room);
 
                     addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
                     TextView txtView = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
@@ -1809,15 +1803,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
 
                         if (lastMessage == null || lastMessage.isEmpty()) {
-                            removeView(lytContainer7, R.id.lyt_tic_room); //holder.messageStatus.setVisibility(GONE);
-                            removeView(lytContainer5, R.id.lyt_message_sender_room); //holder.lastMessageSender.setVisibility(GONE);
-                            removeView(lytContainer5, R.id.lyt_last_message_room); //holder.lastMessage.setVisibility(GONE);
+                            removeView(lytContainer7, R.id.lyt_tic_room);
+                            removeView(lytContainer5, R.id.lyt_message_sender_room);
+                            removeView(lytContainer5, R.id.lyt_last_message_room);
                         } else {
                             if (mInfo.getLastMessage().isAuthorMe()) {
                                 addView(holder, lytContainer7, R.layout.room_layout_tic, R.id.lyt_tic_room, 0);
                                 AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isAuthorMe());
                             } else {
-                                removeView(lytContainer7, R.id.lyt_tic_room); //holder.messageStatus.setVisibility(GONE);
+                                removeView(lytContainer7, R.id.lyt_tic_room);
                             }
 
                             /**
@@ -1944,10 +1938,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             }
                         }
                     } else {
-                        removeView(lytContainer5, R.id.lyt_last_message_room); //holder.lastMessage.setVisibility(GONE);
-                        removeView(lytContainer5, R.id.lyt_message_sender_room); //holder.lastMessageSender.setVisibility(GONE);
-                        removeView(lytContainer7, R.id.lyt_time_room); //holder.lastSeen.setVisibility(GONE);
-                        removeView(lytContainer7, R.id.lyt_tic_room); //holder.messageStatus.setVisibility(GONE);
+                        removeView(lytContainer5, R.id.lyt_last_message_room);
+                        removeView(lytContainer5, R.id.lyt_message_sender_room);
+                        removeView(lytContainer7, R.id.lyt_time_room);
+                        removeView(lytContainer7, R.id.lyt_tic_room);
                     }
                 }
 
@@ -1998,7 +1992,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     addView(holder, lytContainer7, R.layout.room_layout_time, R.id.lyt_time_room, lytContainer7.getChildCount());
                     ((TextView) holder.itemView.findViewById(R.id.cs_txt_contact_time)).setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
                 } else {
-                    removeView(lytContainer7, R.id.lyt_time_room);//holder.lastSeen.setVisibility(GONE);
+                    removeView(lytContainer7, R.id.lyt_time_room);
                 }
 
                 /**
@@ -2020,6 +2014,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 /**
                  * ********************* mute *********************
+                 * hint : message status should be added before mute
+                 * for observance order
                  */
                 if (mInfo.getMute()) {
                     if (holder.itemView.findViewById(R.id.lyt_mute_room) == null) {
@@ -2082,34 +2078,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         public class ViewHolder extends RealmViewHolder {
 
-            public RealmRoom mInfo;
+            RealmRoom mInfo;
             protected CircleImageView image;
-            protected View distanceColor;
-            //protected TextView chatIcon;
             protected EmojiTextView name;
-            //protected EmojiTextView lastMessageSender;
-            //protected TextView mute;
-            //protected EmojiTextView lastMessage;
-            //protected TextView lastSeen;
-            //protected TextView unreadMessage;
-            //protected ImageView messageStatus;
-            //private AVLoadingIndicatorView avi;
 
             public ViewHolder(View view) {
                 super(view);
 
-                //avi = (AVLoadingIndicatorView) view.findViewById(R.id.cs_avi);
                 image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
-                distanceColor = view.findViewById(R.id.cs_view_distance_color);
-                //chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);
                 name = (EmojiTextView) view.findViewById(R.id.cs_txt_contact_name);
-                //lastMessage = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message);
-                //lastMessageSender = (EmojiTextView) view.findViewById(R.id.cs_txt_last_message_sender);
-                //lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
-                //unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
-
-                //mute = (TextView) view.findViewById(R.id.cs_txt_mute);
-                //messageStatus = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
                 //AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
 
