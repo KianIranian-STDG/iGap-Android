@@ -58,6 +58,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     public static final String USER_ID_STR = "USER_ID";
     public static final String INCOMING_CALL_STR = "INCOMING_CALL_STR";
 
+
     boolean isIncomingCall = false;
     long userId;
 
@@ -241,6 +242,14 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                 playSound(R.raw.igap_noresponse);
                                 avLoadingIndicatorView.setVisibility(View.GONE);
                                 new RequestSignalingLeave().signalingLeave();
+
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override public void run() {
+                                        stopTimer();
+                                        endVoiceAndFinish();
+                                    }
+                                }, 500);
+
                                 break;
                             case NOT_ANSWERED:
                                 playSound(R.raw.igap_noresponse);
@@ -278,7 +287,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         txtTimer = (TextView) findViewById(R.id.fcr_txt_timer);
 
-        txtStatus.setText(CallState.INCAMING_CALL.toString());
+        if (isIncomingCall) {
+            txtStatus.setText(CallState.INCAMING_CALL.toString());
+        } else {
+            txtStatus.setText(CallState.SIGNALING.toString());
+        }
+
 
         /**
          * *************** layoutCallEnd ***************
@@ -377,7 +391,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         btnChat = (MaterialDesignTextView) findViewById(R.id.fcr_btn_chat);
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                HelperPublicMethod.goToChatRoom(userId, null, null);
+                HelperPublicMethod.goToChatRoom(true, userId, null, null);
 
                 if (!isConnected) {
                     endCall();
@@ -466,6 +480,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     private void endVoiceAndFinish() {
         cancelRingtone();
         finish();
+
+        if (G.iCallFinish != null) {
+            G.iCallFinish.onFinish();
+        }
+
     }
 
     private void answer(FrameLayout layoutAnswer, FrameLayout layoutChat) {

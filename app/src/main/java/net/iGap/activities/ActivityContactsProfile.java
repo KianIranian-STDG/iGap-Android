@@ -92,6 +92,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatGetRoom;
+import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsDelete;
@@ -118,7 +119,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private boolean isBlockUser = false;
     RealmRegisteredInfo rrg;
     private long sheardId = -2;
-    static ActivityContactsProfile activityContactsProfile;
 
     TextView txtCountOfShearedMedia;
 
@@ -158,8 +158,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     protected void onResume() {
 
         super.onResume();
-
-        activityContactsProfile = this;
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -707,20 +705,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 } else {
                     rippleCall.setVisibility(View.GONE);
                 }
+            } else {
+                new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         }
 
-        if (ActivityCall.isConnected) {
-
-            findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
-            TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
-            txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    finish();
-                    ActivityChat.activityChat.finish();
-                }
-            });
-        }
 
         vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override

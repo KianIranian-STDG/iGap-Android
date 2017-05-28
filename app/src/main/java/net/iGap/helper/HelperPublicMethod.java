@@ -40,7 +40,7 @@ public class HelperPublicMethod {
 
     //**************************************************************************************************************************************
 
-    public static void goToChatRoom(final long peerId, final Oncomplet oncomplet, final OnError onError) {
+    public static void goToChatRoom(final boolean fromCall, final long peerId, final Oncomplet oncomplet, final OnError onError) {
 
         final Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
@@ -51,7 +51,7 @@ public class HelperPublicMethod {
                 oncomplet.complete();
             }
 
-            goToRoom(realmRoom.getId(), -1);
+            goToRoom(fromCall, realmRoom.getId(), -1);
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override public void onChatGetRoom(final long roomId) {
@@ -60,7 +60,7 @@ public class HelperPublicMethod {
                         onError.error();
                     }
 
-                    getUserInfo(peerId, roomId, oncomplet, onError);
+                    getUserInfo(fromCall, peerId, roomId, oncomplet, onError);
 
                     G.onChatGetRoom = null;
                 }
@@ -89,7 +89,7 @@ public class HelperPublicMethod {
         realm.close();
     }
 
-    private static void getUserInfo(final long peerId, final long roomId, final Oncomplet oncomplet, final OnError onError) {
+    private static void getUserInfo(final boolean fromCall, final long peerId, final long roomId, final Oncomplet oncomplet, final OnError onError) {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
@@ -129,7 +129,7 @@ public class HelperPublicMethod {
                                             oncomplet.complete();
                                         }
 
-                                        goToRoom(roomId, peerId);
+                                        goToRoom(fromCall, roomId, peerId);
 
                                         G.onUserInfoResponse = null;
 
@@ -163,10 +163,14 @@ public class HelperPublicMethod {
         new RequestUserInfo().userInfo(peerId);
     }
 
-    private static void goToRoom(long roomid, long peerId) {
+    private static void goToRoom(boolean fromcall, long roomid, long peerId) {
 
         Intent intent = new Intent(G.currentActivity, ActivityChat.class);
         intent.putExtra("RoomId", roomid);
+
+        if (fromcall) {
+            intent.putExtra("FROM_CALL", true);
+        }
 
         if (peerId >= 0) {
             intent.putExtra("peerId", peerId);

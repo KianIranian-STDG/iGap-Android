@@ -86,6 +86,7 @@ import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
+import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatClearMessageResponse;
@@ -139,6 +140,7 @@ import net.iGap.request.RequestClientCondition;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
+import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 
@@ -155,6 +157,7 @@ import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition, OnClientGetRoomListResponse {
 
+    public static ActivityMain activityMain;
     public static boolean isMenuButtonAddShown = false;
     FloatingActionButton btnStartNewChat;
     FloatingActionButton btnCreateNewGroup;
@@ -193,6 +196,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onDestroy() {
         super.onDestroy();
 
+        activityMain = null;
+
         if (mRealm != null) {
             mRealm.close();
         }
@@ -213,6 +218,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        activityMain = this;
 
         progressBar = (ProgressBar) findViewById(R.id.ac_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);
@@ -632,15 +639,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } else {
                 itemNavCall.setVisibility(View.GONE);
             }
+        } else {
+            new RequestSignalingGetConfiguration().signalingGetConfiguration();
         }
-
-
-
-
-
-
-
-
 
 
         ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
@@ -1433,6 +1434,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 ActivityMain.this.recreate();
             }
         };
+
+        if (ActivityCall.isConnected) {
+
+            findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
+            TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
+            txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            G.iCallFinish = new ICallFinish() {
+                @Override public void onFinish() {
+                    try {
+                        findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
+                    } catch (Exception e) {
+                    }
+                }
+            };
+        } else {
+            findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
+        }
+
+
 
         if (drawer != null) {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);

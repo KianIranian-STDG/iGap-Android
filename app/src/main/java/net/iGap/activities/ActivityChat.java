@@ -142,6 +142,7 @@ import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
+import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.IResendMessage;
 import net.iGap.interfaces.OnActivityChatStart;
@@ -247,6 +248,7 @@ import net.iGap.request.RequestClientUnsubscribeFromRoom;
 import net.iGap.request.RequestGroupDeleteMessage;
 import net.iGap.request.RequestGroupEditMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
+import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
@@ -400,6 +402,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private boolean isChatReadOnly = false;
     private boolean isMuteNotification;
     private boolean sendByEnter = false;
+    private boolean fromCall = false;
 
 
     private long replyToMessageId = 0;
@@ -616,6 +619,36 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             backGroundSeenList.clear();
         }
 
+        if (ActivityCall.isConnected) {
+
+            findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
+            TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
+            txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+
+                    finish();
+
+                    if (!fromCall) {
+                        if (ActivityMain.activityMain != null) {
+                            ActivityMain.activityMain.finish();
+                        }
+                    }
+                }
+            });
+
+            G.iCallFinish = new ICallFinish() {
+                @Override public void onFinish() {
+                    try {
+                        findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
+                    } catch (Exception e) {
+                    }
+                }
+            };
+        } else {
+            findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
+        }
+
+
     }
 
     @Override
@@ -658,6 +691,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         // room id have to be set to default, otherwise I'm in the room always!
         mRoomId = -1;
         super.onDestroy();
+        activityChat = null;
     }
 
     @Override
@@ -706,6 +740,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
+
+            if (fromCall && ActivityCall.isConnected) {
+                Intent intent = new Intent(ActivityChat.this, ActivityMain.class);
+                startActivity(intent);
+            }
+
+
             super.onBackPressed();
         }
     }
@@ -1034,6 +1075,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         if (extras != null) {
             mRoomId = extras.getLong("RoomId");
             chatPeerId = extras.getLong("peerId");
+            fromCall = extras.getBoolean("FROM_CALL");
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
@@ -1563,21 +1605,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     } else {
                         rippleCall.setVisibility(View.GONE);
                     }
+                } else {
+                    new RequestSignalingGetConfiguration().signalingGetConfiguration();
                 }
+
             }
         }
-
-        if (ActivityCall.isConnected) {
-
-            findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
-            TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
-            txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    finish();
-                }
-            });
-        }
-
 
 
 
@@ -1994,13 +2027,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         rippleBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
-                    ActivityPopUpNotification.isGoingToChatFromPopUp = false;
-                    Intent intent = new Intent(context, ActivityMain.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
-                finish();
+                onBackPressed();
             }
         });
 

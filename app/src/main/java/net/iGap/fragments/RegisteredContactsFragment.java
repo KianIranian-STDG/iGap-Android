@@ -334,7 +334,7 @@ public class RegisteredContactsFragment extends Fragment {
                         } else {
                             showProgress();
 
-                            HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getId(), new HelperPublicMethod.Oncomplet() {
+                            HelperPublicMethod.goToChatRoom(false, realmResults.get(getPosition()).getId(), new HelperPublicMethod.Oncomplet() {
                                 @Override public void complete() {
                                     hideProgress();
                                     getActivity().getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();

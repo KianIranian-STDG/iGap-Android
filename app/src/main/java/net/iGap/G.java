@@ -32,6 +32,7 @@ import javax.crypto.spec.SecretKeySpec;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperNotificationAndBadge;
+import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IClientSearchUserName;
 import net.iGap.interfaces.ISignalingAccept;
 import net.iGap.interfaces.ISignalingCallBack;
@@ -361,6 +362,7 @@ public class G extends MultiDexApplication {
     public static OnRecoverySecurityPassword onRecoverySecurityPassword;
     public static IClientSearchUserName onClientSearchUserName;
     public static OnCallLeaveView onCallLeaveView;
+    public static ICallFinish iCallFinish;
 
 
     public static ISignalingOffer iSignalingOffer;
