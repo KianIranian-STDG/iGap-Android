@@ -112,4 +112,5 @@ dependencies {
   }
 
   //compile 'io.pristine:libjingle:11139@aar'
+  compile 'cat.ereza:customactivityoncrash:2.0.0'
 }

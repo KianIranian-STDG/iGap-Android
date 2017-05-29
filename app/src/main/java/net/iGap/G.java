@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
 import android.view.LayoutInflater;
+import cat.ereza.customactivityoncrash.config.CaocConfig;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -29,6 +30,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.spec.SecretKeySpec;
+import net.iGap.activities.ActivityCustomError;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperNotificationAndBadge;
@@ -379,6 +382,10 @@ public class G extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class)
+            //.eventListener(new CustomEventListener())
+            .apply();
 
         context = getApplicationContext();
         handler = new Handler();
