@@ -276,6 +276,14 @@
         android:name="com.google.android.geo.API_KEY"
         android:value="@string/google_maps_key" />
 
+    <activity
+        android:name=".activities.ActivityCustomError"
+        android:process=":error_activity">
+      <intent-filter>
+        <action android:name="cat.ereza.customactivityoncrash.ERROR" />
+      </intent-filter>
+    </activity>
+
   </application>
 
 </manifest>
