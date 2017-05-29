@@ -624,7 +624,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
             TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                     finish();
 
@@ -637,7 +638,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             });
 
             G.iCallFinish = new ICallFinish() {
-                @Override public void onFinish() {
+                @Override
+                public void onFinish() {
                     try {
                         findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
                     } catch (Exception e) {
@@ -2236,7 +2238,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     G.handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                                            if (roomMessage != null && roomMessage.isValid() && !roomMessage.isDeleted()) {
+                                                new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                                            }
                                         }
                                     }, 1000 * i);
                                 } else {
