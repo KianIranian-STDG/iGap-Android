@@ -1847,7 +1847,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         recyclerView.setItemAnimator(null);
         //following lines make scrolling smoother
         //recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(1000);
+        //recyclerView.setItemViewCacheSize(1000);
         recyclerView.setDrawingCacheEnabled(true);
 
         mAdapter = new MessagesAdapter<>(this, this, this);
@@ -6384,7 +6384,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
-    private int scrollEnd = 10; // to determine the limits to get to the bottom of the list
+    private int scrollEnd = 30; // to determine the limits to get to the bottom of the list
 
     private void getMessages() {
         Realm realm = Realm.getDefaultInstance();

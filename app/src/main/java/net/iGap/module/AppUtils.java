@@ -46,7 +46,7 @@ public final class AppUtils {
         throw new InstantiationException("This class is not for instantiation.");
     }
 
-    public static String[] exts = { ".jpg", ".jpeg", ".gif", ".png", ".tif" };
+    public static String[] exts = {".jpg", ".jpeg", ".gif", ".png", ".tif"};
 
     public static String suitableThumbFileName(String name) {
         boolean isImage = false;
@@ -157,7 +157,8 @@ public final class AppUtils {
         } else {
 
             FragmentMap.loadImageFromPosition(message.getLocation().getLocationLat(), message.getLocation().getLocationLong(), new FragmentMap.OnGetPicture() {
-                @Override public void getBitmap(Bitmap bitmap) {
+                @Override
+                public void getBitmap(Bitmap bitmap) {
 
                     view.setImageBitmap(bitmap);
 
@@ -165,7 +166,8 @@ public final class AppUtils {
 
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
                             if (message.getLocation() != null) {
                                 message.getLocation().setImagePath(savedPath);
                             }
@@ -197,33 +199,23 @@ public final class AppUtils {
             case DELIVERED:
 
                 setImageDrawable(view, R.drawable.ic_double_check);
-
-                //DrawableCompat.setTint(view.getDrawable(), Color.BLACK);
                 view.setColorFilter(Color.BLACK);
                 break;
             case FAILED:
                 setImageDrawable(view, R.drawable.ic_error);
-
-                //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.red));
                 break;
             case SEEN:
 
                 setImageDrawable(view, R.drawable.ic_double_check);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.iGapColor));
-                //final Drawable originalDrawable = view.getDrawable();
-                //final Drawable wrappedDrawable = DrawableCompat.wrap(originalDrawable);
-                //DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.iGapColor)));
                 break;
             case SENDING:
-                //setImageDrawable(view, R.drawable.ic_clock);
-                //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
                 break;
             case SENT:
                 setImageDrawable(view, R.drawable.ic_check);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
-                //                DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 break;
             default:
                 view.setVisibility(View.GONE);
@@ -295,8 +287,7 @@ public final class AppUtils {
 
     public static long findLastMessageId(long roomId) {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> roomMessages =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+        RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
         if (!roomMessages.isEmpty()) {
             return roomMessages.first().getMessageId();
         }
@@ -455,8 +446,7 @@ public final class AppUtils {
     private static String computeLastMessage(final long roomId, Resources resources, ProtoGlobal.Room.Type roomType, RealmAttachment attachment) {
         Realm realm = Realm.getDefaultInstance();
         String lastMessage = "";
-        RealmResults<RealmRoomMessage> realmList =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         for (RealmRoomMessage realmRoomMessage : realmList) {
             if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
                 lastMessage = AppUtils.rightLastMessage(roomId, resources, roomType, realmRoomMessage, attachment);
@@ -470,8 +460,7 @@ public final class AppUtils {
     public static long computeLastMessageTime(final long roomId) {
         Realm realm = Realm.getDefaultInstance();
         long lastMessageTime = 0;
-        RealmResults<RealmRoomMessage> realmList =
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         for (RealmRoomMessage realmRoomMessage : realmList) {
             if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
                 lastMessageTime = realmRoomMessage.getUpdateOrCreateTime();
@@ -499,25 +488,22 @@ public final class AppUtils {
             newIds[itemsId.indexOf(integer)] = integer;
         }
 
-        return new MaterialDialog.Builder(context).title("Resend Messages")
-            .negativeText(context.getString(R.string.cancel))
-            .items(items)
-            .itemsIds(newIds)
-            .itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                    switch (itemView.getId()) {
-                        case 0:
-                            listener.resendMessage();
-                            break;
-                        case 1:
-                            listener.resendAllMessages();
-                            break;
-                        case 2:
-                            listener.deleteMessage();
-                            break;
-                    }
+        return new MaterialDialog.Builder(context).title("Resend Messages").negativeText(context.getString(R.string.cancel)).items(items).itemsIds(newIds).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                switch (itemView.getId()) {
+                    case 0:
+                        listener.resendMessage();
+                        break;
+                    case 1:
+                        listener.resendAllMessages();
+                        break;
+                    case 2:
+                        listener.deleteMessage();
+                        break;
                 }
-            });
+            }
+        });
     }
 
     public static String humanReadableDuration(double d) {

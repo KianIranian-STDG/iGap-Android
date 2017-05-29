@@ -1767,7 +1767,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
             if (mInfo != null && mInfo.isValid()) {
-                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (!RealmRoom.isCloudRoom(mInfo.getId()) && mInfo.getActionStateUserId() != userId))))) {
+                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (mInfo.getActionStateUserId() != userId))))) {
                     removeView(lytContainer5, R.id.lyt_message_sender_room);
 
                     addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
@@ -1778,23 +1778,23 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     addView(holder, lytContainer5, R.layout.room_layout_avi, R.id.lyt_avi_room, lytContainer5.getChildCount());
                     (holder.itemView.findViewById(R.id.cs_avi)).setVisibility(View.VISIBLE);
                 } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
-                    removeView(lytContainer5, R.id.lyt_avi_room);
-
 
                     addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
                     TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
                     txtLastMessage.setText(mInfo.getDraft().getMessage());
                     txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
 
-                    removeView(lytContainer7, R.id.lyt_tic_room);
-
                     addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
                     TextView txtView = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
                     txtView.setText(R.string.txt_draft);
                     txtView.setTextColor(Color.parseColor("#ff4644"));
 
+                    removeView(lytContainer5, R.id.lyt_avi_room);
+                    removeView(lytContainer7, R.id.lyt_tic_room);
+
                 } else {
                     removeView(lytContainer5, R.id.lyt_avi_room);
+
                     if (mInfo.getLastMessage() != null) {
                         String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
 
@@ -1814,49 +1814,45 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                 removeView(lytContainer7, R.id.lyt_tic_room);
                             }
 
-                            /**
-                             * here i get latest message from chat history with chatId and
-                             * get DisplayName with that . when login app client get latest
-                             * message for each group from server , if latest message that
-                             * send server and latest message that exist in client for that
-                             * room be different latest message sender showing will be wrong
-                             */
+                            if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                /**
+                                 * here i get latest message from chat history with chatId and
+                                 * get DisplayName with that . when login app client get latest
+                                 * message for each group from server , if latest message that
+                                 * send server and latest message that exist in client for that
+                                 * room be different latest message sender showing will be wrong
+                                 */
 
-                            String lastMessageSender = "";
-                            if (mInfo.getLastMessage().isAuthorMe()) {
-                                lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
-                            } else {
+                                String lastMessageSender = "";
+                                if (mInfo.getLastMessage().isAuthorMe()) {
+                                    lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
+                                } else {
+                                    Realm realm = Realm.getDefaultInstance();
+                                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
+                                    if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
 
-                                Realm realm = Realm.getDefaultInstance();
+                                        String _name = realmRegisteredInfo.getDisplayName();
+                                        if (_name.length() > 0) {
 
-                                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
-                                if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
-
-                                    String _name = realmRegisteredInfo.getDisplayName();
-                                    if (_name.length() > 0) {
-
-                                        if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                                            if (HelperCalander.isLanguagePersian) {
-                                                lastMessageSender = _name + ": ";
+                                            if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                                                if (HelperCalander.isLanguagePersian) {
+                                                    lastMessageSender = _name + ": ";
+                                                } else {
+                                                    lastMessageSender = " :" + _name;
+                                                }
                                             } else {
-                                                lastMessageSender = " :" + _name;
-                                            }
-                                        } else {
-                                            if (HelperCalander.isLanguagePersian) {
-                                                lastMessageSender = " :" + _name;
-                                            } else {
-                                                lastMessageSender = _name + ": ";
+                                                if (HelperCalander.isLanguagePersian) {
+                                                    lastMessageSender = " :" + _name;
+                                                } else {
+                                                    lastMessageSender = _name + ": ";
+                                                }
                                             }
                                         }
                                     }
+                                    realm.close();
                                 }
 
-                                realm.close();
-                            }
-
-                            if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
                                 addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
-
                                 TextView txtMessageSender = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
                                 txtMessageSender.setText(lastMessageSender);
                                 txtMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
@@ -2015,7 +2011,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 /**
                  * ********************* mute *********************
                  * hint : message status should be added before mute
-                 * for observance order
+                 * for observance order with mute icon
                  */
                 if (mInfo.getMute()) {
                     if (holder.itemView.findViewById(R.id.lyt_mute_room) == null) {
