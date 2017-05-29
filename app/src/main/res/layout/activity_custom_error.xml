@@ -29,7 +29,7 @@
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp200"
           android:contentDescription="@null"
-          app:srcCompat="@drawable/crash"
+          app:srcCompat="@drawable/ic_crash"
           />
 
       <TextView

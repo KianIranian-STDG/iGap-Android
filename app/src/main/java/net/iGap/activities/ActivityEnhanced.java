@@ -56,7 +56,7 @@ public class ActivityEnhanced extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 70);
+            StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 50);
         }
 
         makeDirectoriesIfNotExist();
