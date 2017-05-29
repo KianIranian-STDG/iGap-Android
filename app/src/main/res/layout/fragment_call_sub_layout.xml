@@ -44,9 +44,9 @@
             android:id="@+id/fcsl_txt_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:paddingBottom="1dp"
             android:singleLine="true"
-            android:layout_gravity="start"
             android:text="Name"
             android:textColor="@android:color/black"
             android:textSize="@dimen/dp15"
@@ -62,26 +62,12 @@
           <TextView
               android:id="@+id/fcsl_txt_time_info"
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="wrap_content"
-              android:singleLine="true"
+              android:layout_weight="1"
               android:gravity="start"
+              android:singleLine="true"
               android:text="(4) 9:24 am"
               android:textColor="@color/gray_5c"
-              android:textSize="@dimen/dp12"
-              android:textStyle="bold"
-              />
-
-
-
-          <TextView
-              android:id="@+id/fcsl_txt_dureation_time"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:singleLine="true"
-              android:text="2.43"
-              android:layout_marginRight="@dimen/dp12"
-              android:textColor="@color/btn_start_page5"
               android:textSize="@dimen/dp12"
               android:textStyle="bold"
               />
@@ -92,21 +78,38 @@
       </LinearLayout>
 
 
-      <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/fcsl_txt_icon"
-          android:layout_gravity="center"
+      <LinearLayout
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginEnd="@dimen/dp4"
-          android:layout_marginLeft="@dimen/dp4"
-          android:layout_marginRight="@dimen/dp4"
-          android:layout_marginStart="@dimen/dp4"
-          android:text="@string/md_call_made"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/green"
-          android:textSize="@dimen/dp22"
-          />
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:layout_marginRight="@dimen/dp8"
+          android:layout_marginLeft="@dimen/dp8"
+          >
 
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/fcsl_txt_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/md_call_made"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@color/green"
+            android:textSize="@dimen/dp22"
+            />
+
+
+        <TextView
+            android:id="@+id/fcsl_txt_dureation_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2:24"
+            android:textColor="@color/btn_start_page5"
+            android:textSize="@dimen/dp12"
+            android:textStyle="bold"
+            />
+
+
+      </LinearLayout>
 
 
     </LinearLayout>

@@ -214,7 +214,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                             cancelRingtone();
                                             startTimer();
                                         }
-                                    }, 500);
+                                    }, 800);
                                 }
 
                                 break;
@@ -226,7 +226,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                         stopTimer();
                                         endVoiceAndFinish();
                                     }
-                                }, 500);
+                                }, 1000);
                                 new RequestSignalingLeave().signalingLeave();
                                 isConnected = false;
                                 break;

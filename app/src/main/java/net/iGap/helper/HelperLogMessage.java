@@ -276,6 +276,10 @@ public class HelperLogMessage {
                 persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
+            case MISSED_VOICE_CALL:
+                persianResult = authorName + " " + logMessage;
+                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+                break;
         }
 
         realm.close();

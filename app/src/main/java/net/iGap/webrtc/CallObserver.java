@@ -152,7 +152,12 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
     @Override public void onRinging() {
         if (G.iSignalingCallBack != null) {
-            G.iSignalingCallBack.onStatusChanged(CallState.RINGING);
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    G.iSignalingCallBack.onStatusChanged(CallState.RINGING);
+                }
+            }, 1000);
+
         }
     }
 

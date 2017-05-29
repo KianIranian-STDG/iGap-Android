@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
@@ -112,18 +114,24 @@ public class FragmentCall extends Fragment {
                     public void onClick(View view) {
                         dialog.dismiss();
 
-                        Realm realm = Realm.getDefaultInstance();
-                        try {
-                            RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
-                            new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                        if (G.userLogin) {
+                            new MaterialDialog.Builder(getActivity()).title(R.string.clean_log).content("Are you sure to clear call logs").
+                                positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    Realm realm = Realm.getDefaultInstance();
+                                    try {
+                                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
+                                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                                        imgCallEmpty.setVisibility(View.VISIBLE);
+                                    } catch (Exception e) {
 
-                            imgCallEmpty.setVisibility(View.VISIBLE);
-
-
-                        } catch (Exception e) {
-
-                        } finally {
-                            realm.close();
+                                    } finally {
+                                        realm.close();
+                                    }
+                                }
+                            }).negativeText(R.string.B_cancel).show();
+                        } else {
+                            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
                         }
                     }
                 });
@@ -284,6 +292,8 @@ public class FragmentCall extends Fragment {
             public ViewHolder(View view) {
                 super(view);
 
+                imgCallEmpty.setVisibility(View.GONE);
+
                 timeDureation = (TextView) itemView.findViewById(R.id.fcsl_txt_dureation_time);
                 // call_type_icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_call_type_icon);
                 image = (CircleImageView) itemView.findViewById(R.id.fcsl_imv_picture);
@@ -324,21 +334,25 @@ public class FragmentCall extends Fragment {
             switch (item.getStatus()) {
                 case OUTGOING:
                     viewHolder.icon.setText(R.string.md_call_made);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
-                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
+                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.green));
                     break;
                 case MISSED:
                     viewHolder.icon.setText(R.string.md_call_missed);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
+                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.red));
+                    viewHolder.timeDureation.setText(R.string.miss);
                     break;
                 case CANCELED:
-                    viewHolder.icon.setText(R.string.md_call_missed_outgoing);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
+
+                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.red));
+                    viewHolder.timeDureation.setText(R.string.not_answer);
                     break;
                 case INCOMING:
                     viewHolder.icon.setText(R.string.md_call_received);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
+                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
                     break;
             }
 
@@ -362,10 +376,7 @@ public class FragmentCall extends Fragment {
             }
 
             if (item.getDuration() > 0) {
-                viewHolder.timeDureation.setVisibility(View.VISIBLE);
                 viewHolder.timeDureation.setText(DateUtils.formatElapsedTime(item.getDuration()));
-            } else {
-                viewHolder.timeDureation.setVisibility(View.GONE);
             }
 
             if (HelperCalander.isLanguagePersian) {

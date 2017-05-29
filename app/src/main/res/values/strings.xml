@@ -909,6 +909,8 @@
   <string name="iGap_has_crashed_reload">Reset</string>
   <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop . We are aware of this unexpected error occurred. Please be sure we are fixing this problem  , all you have to do is only click "Reset" .</string>
   <string name="who_is_allowed_to_call">Who is allowed to call</string>
+  <string name="miss">Miss</string>
+  <string name="not_answer">Not Answer</string>
 
   <string name="nothing">Nothing</string>
 
