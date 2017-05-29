@@ -110,8 +110,8 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/img_icCall"
-        android:layout_width="@dimen/dp200"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp160"
+        android:layout_height="@dimen/dp160"
         android:contentDescription="@null"
         app:srcCompat="@drawable/ic_call"
         android:layout_gravity="center"

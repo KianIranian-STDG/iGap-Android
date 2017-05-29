@@ -903,4 +903,12 @@
   <string name="e_904_9">یوزر در حال مکالمه است</string>
   <string name="tab_to_return_to_call">برای برگشت به صفحه تماس کلیک کنید</string>
   <string name="who_is_allowed_to_call">چه کسی برای تماس مجاز است</string>
+
+  <string name="iGap_has_crashed">iGap has crashed !</string>
+  <string name="iGap_has_crashed_reload">Reload</string>
+  <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop . Please help us fix this by sending us error data , all you have to do is only click "Send Reprt" .</string>
+
+  <string name="nothing">هیچی</string>
+
+
 </resources>

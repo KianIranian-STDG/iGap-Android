@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     tools:ignore="MissingPrefix"
-    android:fitsSystemWindows="false"
+    android:fitsSystemWindows="true"
     >
 
 

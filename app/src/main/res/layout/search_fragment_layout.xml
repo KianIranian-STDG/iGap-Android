@@ -134,8 +134,8 @@
 
 
       <ImageView
-          android:layout_width="@dimen/dp200"
-          android:layout_height="@dimen/dp200"
+          android:layout_width="@dimen/dp160"
+          android:layout_height="@dimen/dp160"
           android:layout_margin="@dimen/dp20"
           app:srcCompat="@drawable/find1"
           android:layout_gravity="top|center"
@@ -154,7 +154,7 @@
           android:textColor="@color/black90"
           android:textSize="@dimen/dp22"
           android:visibility="gone"
-          android:text="Nothing"
+          android:text="@string/nothing"
           />
 
       <TextView

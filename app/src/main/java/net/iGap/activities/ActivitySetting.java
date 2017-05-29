@@ -284,7 +284,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
          /*
           set layout and open dialog for set or change Name & Family
          */
-        ViewGroup layoutNickname = (ViewGroup) findViewById(R.id.st_layout_nickname);
+        //ViewGroup layoutNickname = (ViewGroup) findViewById(R.id.st_layout_nickname);
+        ViewGroup layoutNickname = null;
         layoutNickname.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 

@@ -26,8 +26,8 @@
         >
 
       <android.support.v7.widget.AppCompatImageView
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/dp200"
+          android:layout_width="@dimen/dp160"
+          android:layout_height="@dimen/dp160"
           android:contentDescription="@null"
           app:srcCompat="@drawable/ic_crash"
           />
