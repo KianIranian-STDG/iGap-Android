@@ -846,5 +846,6 @@
   <string name="e_904_8">شما با دستگاه دیگرتان در حال مکالمه هستید</string>
   <string name="e_904_9">یوزر در حال مکالمه است</string>
   <string name="tab_to_return_to_call">tab to return to call</string>
+  <string name="who_is_allowed_to_call">Who is allowed to call</string>
 
 </resources>

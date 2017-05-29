@@ -408,6 +408,45 @@
               />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/stps_ll_who_can_voice_call_to_me"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp40"
+            android:orientation="horizontal"
+            >
+
+          <TextView
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight=".5"
+              android:gravity="center_vertical|start"
+              android:paddingLeft="@dimen/dp8"
+              android:paddingRight="@dimen/dp8"
+              android:paddingTop="@dimen/dp4"
+              android:text="@string/who_is_allowed_to_call"
+              android:textColor="@color/black_register"
+              android:textSize="@dimen/dp14"
+              android:textStyle="normal"
+              fontPath="fonts/IRANSansMobile.ttf"
+              />
+
+          <TextView
+              android:id="@+id/stps_txt_who_can_voice_call_to_me"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical|start"
+              android:paddingLeft="@dimen/dp8"
+              android:paddingRight="@dimen/dp8"
+              android:paddingTop="@dimen/dp4"
+              android:text="@string/everybody"
+              android:textColor="@color/toolbar_background"
+              android:textSize="@dimen/dp14"
+              android:textStyle="normal"
+              fontPath="fonts/IRANSansMobile.ttf"
+              />
+        </LinearLayout>
+
+
       </LinearLayout>
 
 

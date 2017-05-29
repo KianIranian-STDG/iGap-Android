@@ -58,11 +58,13 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     private TextView txtWhoCanInviteMeToChannel;
     private TextView txtWhoCanInviteMeToGroup;
     private TextView txtWhoCanSeeMyLastSeen;
+    private TextView txtWhoCanVoiceCallToMe;
 
     private LinearLayout layoutWhoCanSeeMyAvatar;
     private LinearLayout layoutWhoCanInviteMeToChannel;
     private LinearLayout layoutWhoCanInviteMeToGroup;
     private LinearLayout layoutWhoCanSeeMyLastSeen;
+    private LinearLayout layoutWhoCanVoiceCallToMe;
 
     private RealmChangeListener<RealmModel> userInfoListener;
     private RealmUserInfo realmUserInfo;
@@ -194,11 +196,13 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         txtWhoCanInviteMeToChannel = (TextView) view.findViewById(R.id.stps_txt_who_can_invite_me_to_Channel);
         txtWhoCanInviteMeToGroup = (TextView) view.findViewById(R.id.stps_txt_who_can_invite_me_to_group);
         txtWhoCanSeeMyLastSeen = (TextView) view.findViewById(R.id.stps_who_can_see_my_last_seen);
+        txtWhoCanVoiceCallToMe = (TextView) view.findViewById(R.id.stps_txt_who_can_voice_call_to_me);
 
         layoutWhoCanSeeMyAvatar = (LinearLayout) view.findViewById(R.id.stps_ll_who_can_see_my_avatar);
         layoutWhoCanInviteMeToChannel = (LinearLayout) view.findViewById(R.id.stps_ll_who_can_invite_me_to_Channel);
         layoutWhoCanInviteMeToGroup = (LinearLayout) view.findViewById(R.id.stps_ll_who_can_invite_me_to_group);
         layoutWhoCanSeeMyLastSeen = (LinearLayout) view.findViewById(R.id.stps_ll_who_can_see_my_last_seen);
+        layoutWhoCanVoiceCallToMe = (LinearLayout) view.findViewById(R.id.stps_ll_who_can_voice_call_to_me);
 
         layoutWhoCanSeeMyAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,6 +243,17 @@ public class FragmentPrivacyAndSecurity extends Fragment {
                 }
             }
         });
+
+        layoutWhoCanVoiceCallToMe.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (realmPrivacy != null) {
+                    getStringFromEnumString(realmPrivacy.getWhoCanVoiceCallToMe());
+                    openDialogWhoCan(ProtoGlobal.PrivacyType.VOICE_CALLING, poWhoCan);
+                }
+            }
+        });
+
+
 
         txtDestruction = (TextView) view.findViewById(R.id.stps_txt_Self_destruction);
 
@@ -349,6 +364,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         txtWhoCanInviteMeToChannel.setText(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel()));
         txtWhoCanInviteMeToGroup.setText(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup()));
         txtWhoCanSeeMyLastSeen.setText(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyLastSeen()));
+        txtWhoCanVoiceCallToMe.setText(getStringFromEnumString(realmPrivacy.getWhoCanVoiceCallToMe()));
     }
 
     private int getStringFromEnumString(String str) {

@@ -263,7 +263,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         RealmPrivacy realmPrivacy = getRealm().where(RealmPrivacy.class).findFirst();
 
         if (realmPrivacy == null) {
-            RealmPrivacy.updatePrivacy("", "", "", "");
+            RealmPrivacy.updatePrivacy("", "", "", "", "");
         }
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);

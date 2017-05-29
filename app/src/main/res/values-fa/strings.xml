@@ -902,4 +902,5 @@
   <string name="e_904_8">شما با دستگاه دیگرتان در حال مکالمه هستید</string>
   <string name="e_904_9">یوزر در حال مکالمه است</string>
   <string name="tab_to_return_to_call">برای برگشت به صفحه تماس کلیک کنید</string>
+  <string name="who_is_allowed_to_call">چه کسی برای تماس مجاز است</string>
 </resources>
