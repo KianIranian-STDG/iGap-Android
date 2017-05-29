@@ -203,27 +203,26 @@ public class HelperLogMessage {
 
         switch (messageLog.getType()) {
             case USER_JOINED:
-                persianResult = authorName + " " + logMessage;
+                persianResult = "\u200F" + authorName + " " + logMessage;
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case USER_DELETED:
-                persianResult = authorName + " " + logMessage;
+                persianResult = "\u200F" + authorName + " " + logMessage;
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case ROOM_CREATED:
 
                 if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
-                    persianResult = logMessage + " " + finalTypeRoom + " " + authorName;
+                    persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
                 } else {
-                    persianResult = logMessage + " " + finalTypeRoom + " توسط " + authorName;
+                    persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
                 }
 
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
 
                 break;
             case MEMBER_ADDED:
-                persianResult = logMessage + " " + targetName + " توسط " + authorName;
-
+                persianResult = "\u200F" + targetName + " توسط " + authorName + " " + logMessage;
                 linlInfoPersian = persianResult.lastIndexOf(authorName)
                     + "@"
                     + authorName.length()
@@ -240,8 +239,7 @@ public class HelperLogMessage {
 
                 break;
             case MEMBER_KICKED:
-                persianResult = logMessage + " " + targetName + " توسط " + authorName;
-
+                persianResult = "\u200F" + targetName + " توسط " + authorName + " " + logMessage;
                 linlInfoPersian = persianResult.lastIndexOf(authorName)
                     + "@"
                     + authorName.length()
@@ -258,23 +256,24 @@ public class HelperLogMessage {
 
                 break;
             case MEMBER_LEFT:
-                persianResult = authorName + " " + finalTypeRoom + " " + logMessage;
+                persianResult = "\u200F" + authorName + " " + finalTypeRoom + " " + logMessage;
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case ROOM_CONVERTED_TO_PUBLIC:
-                persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
+                persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case ROOM_CONVERTED_TO_PRIVATE:
-                persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
+                persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
+                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case MEMBER_JOINED_BY_INVITE_LINK:
-                persianResult = authorName + " " + logMessage + " " + finalTypeRoom + " اضافه شد ";
+                persianResult = "\u200F" + authorName + " " + logMessage + " " + finalTypeRoom + " اضافه شد ";
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
 
                 break;
             case ROOM_DELETED:
-                persianResult = logMessage + " " + finalTypeRoom + " توسط " + authorName;
+                persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
         }
