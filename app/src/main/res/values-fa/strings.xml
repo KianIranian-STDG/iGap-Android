@@ -904,9 +904,9 @@
   <string name="tab_to_return_to_call">برای برگشت به صفحه تماس کلیک کنید</string>
   <string name="who_is_allowed_to_call">چه کسی برای تماس مجاز است</string>
 
-  <string name="iGap_has_crashed">iGap has crashed !</string>
-  <string name="iGap_has_crashed_reload">Reload</string>
-  <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop . Please help us fix this by sending us error data , all you have to do is only click "Send Reprt" .</string>
+  <string name="iGap_has_crashed">آی گپ با خطای پیش بینی نشده برخورد کرده است!</string>
+  <string name="iGap_has_crashed_reload">شروع مجدد</string>
+  <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، ‫ تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
 
   <string name="nothing">هیچی</string>
 

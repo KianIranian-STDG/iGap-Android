@@ -906,8 +906,8 @@
   <string name="tab_to_return_to_call">tab to return to call</string>
 
   <string name="iGap_has_crashed">iGap has crashed !</string>
-  <string name="iGap_has_crashed_reload">Reload</string>
-  <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop . Please help us fix this by sending us error data , all you have to do is only click "Send Reprt" .</string>
+  <string name="iGap_has_crashed_reload">Reset</string>
+  <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop . We are aware of this unexpected error occurred. Please be sure we are fixing this problem  , all you have to do is only click "Reset" .</string>
   <string name="who_is_allowed_to_call">Who is allowed to call</string>
 
   <string name="nothing">Nothing</string>
