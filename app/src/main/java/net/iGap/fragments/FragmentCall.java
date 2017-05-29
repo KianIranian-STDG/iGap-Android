@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -53,6 +54,7 @@ public class FragmentCall extends Fragment {
     private RecyclerView.OnScrollListener onScrollListener;
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
+    private AppCompatImageView imgCallEmpty;
 
     ProgressBar progressBar;
 
@@ -72,6 +74,8 @@ public class FragmentCall extends Fragment {
 
         view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
 
+
+        imgCallEmpty = (AppCompatImageView) view.findViewById(R.id.img_icCall);
         progressBar = (ProgressBar) view.findViewById(R.id.fc_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);
 
@@ -112,6 +116,10 @@ public class FragmentCall extends Fragment {
                         try {
                             RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
                             new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+
+                            imgCallEmpty.setVisibility(View.VISIBLE);
+
+
                         } catch (Exception e) {
 
                         } finally {
@@ -122,6 +130,7 @@ public class FragmentCall extends Fragment {
             }
         });
 
+
         mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemViewCacheSize(500);
         mRecyclerView.setDrawingCacheEnabled(true);
@@ -129,6 +138,14 @@ public class FragmentCall extends Fragment {
         Realm realm = Realm.getDefaultInstance();
 
         RealmResults<RealmCallLog> results = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING);
+
+        if (results.size() > 0) {
+            imgCallEmpty.setVisibility(View.GONE);
+
+        } else {
+            imgCallEmpty.setVisibility(View.VISIBLE);
+        }
+
         CallAdapter callAdapter = new CallAdapter(getActivity(), results);
         mRecyclerView.setAdapter(callAdapter);
 
