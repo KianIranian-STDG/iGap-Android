@@ -214,13 +214,13 @@ public class FragmentIgapSearch extends Fragment {
 
                 if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
 
-                    HelperUrl.checkUsernameAndGoToRoom(item.getUser().getUsername(), HelperUrl.ChatEntery.profile);
+                    HelperUrl.checkUsernameAndGoToRoom(item.getUser().getUsername(), HelperUrl.ChatEntry.profile);
                 } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
 
                     if (item.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                        HelperUrl.checkUsernameAndGoToRoom(item.getRoom().getChannelRoomExtra().getPublicExtra().getUsername(), HelperUrl.ChatEntery.profile);
+                        HelperUrl.checkUsernameAndGoToRoom(item.getRoom().getChannelRoomExtra().getPublicExtra().getUsername(), HelperUrl.ChatEntry.profile);
                     } else if (item.getRoom().getType() == ProtoGlobal.Room.Type.GROUP) {
-                        HelperUrl.checkUsernameAndGoToRoom(item.getRoom().getGroupRoomExtra().getPublicExtra().getUsername(), HelperUrl.ChatEntery.profile);
+                        HelperUrl.checkUsernameAndGoToRoom(item.getRoom().getGroupRoomExtra().getPublicExtra().getUsername(), HelperUrl.ChatEntry.profile);
                     }
                 }
 
