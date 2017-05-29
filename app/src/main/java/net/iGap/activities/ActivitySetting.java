@@ -102,6 +102,8 @@ import net.iGap.proto.ProtoUserProfileCheckUsername;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmPrivacy;
+import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
@@ -172,8 +174,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     Realm mRealm;
 
-    RealmChangeListener<RealmModel> userInfoListener;
     RealmUserInfo realmUserInfo;
+    RealmRegisteredInfo mRealmRegisteredInfo;
+
 
     private void setImage(String path) {
         if (path != null) {
@@ -202,20 +205,37 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         super.onResume();
         G.onUserAvatarResponse = this;
 
-        if (realmUserInfo != null) {
-            if (userInfoListener != null) {
-                realmUserInfo.addChangeListener(userInfoListener);
+        realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        realmUserInfo.addChangeListener(new RealmChangeListener<RealmModel>() {
+            @Override public void onChange(RealmModel realmModel) {
+                updateUserInfoUI((RealmUserInfo) realmModel);
             }
+        });
 
-            updateUserInfoUI(realmUserInfo);
-        }
+        mRealmRegisteredInfo = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, G.userId).findFirst();
+        mRealmRegisteredInfo.addChangeListener(new RealmChangeListener<RealmModel>() {
+            @Override public void onChange(RealmModel realmModel) {
+                updateUserInfoUI(realmUserInfo);
+            }
+        });
+
+        updateUserInfoUI(realmUserInfo);
+
+
     }
 
     @Override protected void onPause() {
         super.onPause();
+
         if (realmUserInfo != null) {
             realmUserInfo.removeAllChangeListeners();
         }
+
+        if (mRealmRegisteredInfo != null) {
+            mRealmRegisteredInfo.removeAllChangeListeners();
+        }
+
+
     }
 
     @Override protected void onDestroy() {
@@ -240,13 +260,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        userInfoListener = new RealmChangeListener<RealmModel>() {
-            @Override public void onChange(RealmModel element) {
-                updateUserInfoUI((RealmUserInfo) element);
-            }
-        };
-
         RealmPrivacy realmPrivacy = getRealm().where(RealmPrivacy.class).findFirst();
 
         if (realmPrivacy == null) {
@@ -263,8 +276,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtEmail = (TextView) findViewById(R.id.st_txt_email);
         prgWait = (ProgressBar) findViewById(R.id.st_prgWaiting_addContact);
         AppUtils.setProgresColler(prgWait);
-
-        updateUserInfoUI(realmUserInfo);
 
         new RequestUserProfileGetGender().userProfileGetGender();
         new RequestUserProfileGetEmail().userProfileGetEmail();

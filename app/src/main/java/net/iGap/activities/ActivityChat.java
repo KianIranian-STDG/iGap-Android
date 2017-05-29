@@ -76,7 +76,6 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -3213,38 +3212,38 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 });
                 final Realm realmCondition = Realm.getDefaultInstance();
-                final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, message.roomId).findFirstAsync();
-                realmClientCondition.addChangeListener(new RealmChangeListener<RealmClientCondition>() {
-                    @Override
-                    public void onChange(final RealmClientCondition element) {
-                        realmCondition.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                if (element != null) {
-                                    if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
-                                        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
-                                        if (roomMessage != null) {
-                                            roomMessage.setDeleted(true);
-                                        }
-                                        RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class, SUID.id().get());
-                                        realmOfflineDelete.setOfflineDelete(parseLong(message.messageID));
-                                        element.getOfflineDeleted().add(realmOfflineDelete);
-                                        // delete message
-                                        if (chatType == GROUP) {
-                                            new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(message.messageID));
-                                        } else if (chatType == CHAT) {
-                                            new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(message.messageID));
-                                        } else if (chatType == CHANNEL) {
-                                            new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(message.messageID));
-                                        }
-                                    }
-                                    element.removeAllChangeListeners();
+                final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, message.roomId).findFirst();
+
+                if (realmClientCondition != null) {
+
+                    realmCondition.executeTransaction(new Realm.Transaction() {
+                        @Override public void execute(Realm realm) {
+
+                            if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
+                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
+                                if (roomMessage != null) {
+                                    roomMessage.setDeleted(true);
+                                }
+                                RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class, SUID.id().get());
+                                realmOfflineDelete.setOfflineDelete(parseLong(message.messageID));
+                                realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
+                                // delete message
+                                if (chatType == GROUP) {
+                                    new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(message.messageID));
+                                } else if (chatType == CHAT) {
+                                    new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(message.messageID));
+                                } else if (chatType == CHANNEL) {
+                                    new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(message.messageID));
                                 }
                             }
-                        });
-                        realmCondition.close();
-                    }
-                });
+                        }
+                    });
+                }
+
+                realmCondition.close();
+
+
+
             }
         });
         rootEdit.setOnClickListener(new View.OnClickListener() {

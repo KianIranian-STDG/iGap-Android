@@ -104,7 +104,7 @@
           android:text="@string/md_call_made"
           android:textAppearance="@style/TextIconAppearance_toolbar"
           android:textColor="@color/green"
-          android:textSize="@dimen/dp36"
+          android:textSize="@dimen/dp22"
           />
 
 

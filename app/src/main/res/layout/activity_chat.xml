@@ -81,15 +81,11 @@
                 <LinearLayout
                     android:id="@+id/lyt_user"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center_vertical|left"
+                    android:layout_height="match_parent"
+                    android:gravity="center|left"
                     android:orientation="vertical"
-                    android:paddingBottom="@dimen/dp4"
-                    android:paddingEnd="0dp"
                     android:paddingLeft="@dimen/dp4"
-                    android:paddingRight="0dp"
-                    android:paddingTop="@dimen/dp4"
                     >
 
 
@@ -97,7 +93,7 @@
                       android:layout_width="wrap_content"
                       android:layout_height="0dp"
                       android:layout_weight="1"
-                      android:gravity="center_vertical"
+                      android:gravity="bottom"
                       android:orientation="horizontal"
                       >
 
@@ -106,7 +102,6 @@
                         android:id="@+id/chl_txt_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="bottom"
                         android:maxWidth="@dimen/dp240"
                         android:singleLine="true"
                         android:textColor="@android:color/white"
@@ -132,7 +127,7 @@
                       android:layout_width="wrap_content"
                       android:layout_height="0dp"
                       android:layout_weight="1"
-                      android:gravity="center_vertical"
+                      android:gravity="top"
                       android:orientation="horizontal"
                       >
 
@@ -140,7 +135,6 @@
                         android:id="@+id/chl_txt_last_seen"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="top"
                         android:singleLine="true"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/dp12"
@@ -150,7 +144,6 @@
                         android:id="@+id/avi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="top"
                         android:layout_marginLeft="@dimen/dp8"
                         android:layout_marginStart="@dimen/dp8"
                         android:visibility="gone"
