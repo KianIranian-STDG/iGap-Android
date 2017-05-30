@@ -30,6 +30,13 @@
 }
 ###
 
+#Warning:cat.ereza.customactivityoncrash.config.CaocConfig$Builder: can't find referenced class cat.ereza.customactivityoncrash.config.CaocConfig$BackgroundMode
+
+###CustomCrash
+-keep class cat.ereza.customactivityoncrash.** { *; }
+-dontwarn cat.ereza.customactivityoncrash.**
+#
+
 ###Crashlytics
 -keep class com.crashlytics.** { *; }
 -keepattributes SourceFile,LineNumberTable
@@ -38,13 +45,14 @@
 ###For Compress Module
 -dontwarn com.googlecode.mp4parser.**
 ###
+
 ###Trim
 -keep class com.coremedia.** { *; }
 -keep class com.mp4parser.** { *; }
 -keep class com.googlecode.** { *; }
 ###
 
-
+###Netty
 -keepattributes Signature,InnerClasses
 -keepclasseswithmembers class io.netty.** {
     *;
@@ -53,34 +61,34 @@
     *;
 }
 
+-keep class io.netty.** { *; }
+-dontwarn io.netty.**
+###
+
 -keepnames class com.squareup.** {
     *;
 }
 
-# call
+###Call
 -keep class org.codehaus.** { *; }
 -dontwarn org.codehaus.**
 -keep class org.whispersystems.** { *; }
 -dontwarn org.whispersystems.**
-
 -keep class org.webrtc.** { *; }
 -dontwarn org.webrtc.**
+###
 
-
-# protobuf
+###protobuf
 -keep class com.google.protobuf.** { *; }
 -dontwarn com.google.protobuf.**
+###
 
 #
--keep class io.netty.** { *; }
--dontwarn io.netty.**
-
 -keep class org.jboss.** { *; }
 -keep enum org.jboss.** { *; }
-
 -keep class sun.nio.sctp.AbstractNotificationHandler { *; }
 
-# for fastadapter
+###fastadapter
 -keep public class android.support.v7.widget.** { *; }
 -keep public class android.support.v7.internal.widget.** { *; }
 -keep public class android.support.v7.internal.view.menu.** { *; }
@@ -88,15 +96,13 @@
 -keep public class * extends android.support.v4.view.ActionProvider {
     public <init>(android.content.Context);
 }
+###
 
-# Parceler library
+###Parceler library
 -keep interface org.parceler.Parcel
 -keep @org.parceler.Parcel class * { *; }
 -keep class **$$Parcelable { *; }
-
 -keep class org.parceler.Parceler$$Parcels
-
-#parcel
 -keepclassmembers class * implements android.os.Parcelable {
       public static final android.os.Parcelable$Creator *;
 }
@@ -112,8 +118,8 @@
 -keepnames class * implements android.os.Parcelable {
     public static final ** CREATOR;
 }
+###
 
-#
 -keep class org.apache.http.**
 -keep class android.net.http.**
 -dontwarn com.google.android.gms.**
