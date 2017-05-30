@@ -134,35 +134,40 @@
 
 
       <ImageView
-          android:layout_width="@dimen/dp160"
-          android:layout_height="@dimen/dp160"
-          android:layout_margin="@dimen/dp20"
+          android:layout_width="@dimen/dp180"
+          android:layout_height="@dimen/dp180"
+          android:layout_marginTop="@dimen/dp20"
+          android:layout_marginLeft="@dimen/dp20"
+          android:layout_marginRight="@dimen/dp20"
+          android:layout_marginBottom="@dimen/dp12"
           app:srcCompat="@drawable/find1"
           android:layout_gravity="top|center"
           android:visibility="visible"
           android:id="@+id/sfl_imv_nothing_found"
           android:adjustViewBounds="true"
+          android:paddingTop="@dimen/dp20"
           />
 
 
-      <TextView
-          android:id="@+id/sfl_txt_empty_nothing"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_margin="@dimen/dp8"
-          android:layout_gravity="center"
-          android:textColor="@color/black90"
-          android:textSize="@dimen/dp22"
-          android:visibility="gone"
-          android:text="@string/nothing"
-          />
+      <!--<TextView-->
+      <!--android:id="@+id/sfl_txt_empty_nothing"-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:layout_margin="@dimen/dp8"-->
+      <!--android:layout_gravity="center"-->
+      <!--android:textColor="@color/black90"-->
+      <!--android:textSize="@dimen/dp22"-->
+      <!--android:visibility="gone"-->
+      <!--android:text="@string/nothing"-->
+      <!--/>-->
 
       <TextView
           android:id="@+id/sfl_txt_empty_list_comment"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_margin="@dimen/dp8"
-          android:padding="@dimen/dp16"
+          android:gravity="center"
+          android:paddingLeft="@dimen/dp48"
+          android:paddingRight="@dimen/dp48"
           android:layout_gravity="center"
           android:textSize="@dimen/dp16"
           android:visibility="gone"

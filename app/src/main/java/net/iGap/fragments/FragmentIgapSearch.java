@@ -62,7 +62,7 @@ public class FragmentIgapSearch extends Fragment {
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private TextView txtEmptyListComment;
-    private TextView txtNothing;
+    //private TextView txtNothing;
     private ContentLoadingProgressBar loadingProgressBar;
     private ImageView imvNothingFound;
     private FragmentActivity mActivity;
@@ -93,8 +93,8 @@ public class FragmentIgapSearch extends Fragment {
         txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
         txtEmptyListComment.setVisibility(View.VISIBLE);
 
-        txtNothing = (TextView) view.findViewById(R.id.sfl_txt_empty_nothing);
-        txtNothing.setVisibility(View.VISIBLE);
+        //txtNothing = (TextView) view.findViewById(R.id.sfl_txt_empty_nothing);
+        //txtNothing.setVisibility(View.VISIBLE);
 
         imvNothingFound.setVisibility(View.VISIBLE);
 
@@ -145,12 +145,12 @@ public class FragmentIgapSearch extends Fragment {
                 if (strSize > 1) {
                     txtEmptyListComment.setVisibility(View.GONE);
                     imvNothingFound.setVisibility(View.GONE);
-                    txtNothing.setVisibility(View.GONE);
+                    //txtNothing.setVisibility(View.GONE);
                 } else {
                     txtEmptyListComment.setText(R.string.empty_message);
                     txtEmptyListComment.setVisibility(View.VISIBLE);
                     imvNothingFound.setVisibility(View.VISIBLE);
-                    txtNothing.setVisibility(View.VISIBLE);
+                    //txtNothing.setVisibility(View.VISIBLE);
                 }
 
                 if (strSize > 5) {
@@ -249,7 +249,7 @@ public class FragmentIgapSearch extends Fragment {
                             txtEmptyListComment.setText(R.string.there_is_no_any_result);
                             txtEmptyListComment.setVisibility(View.VISIBLE);
                             imvNothingFound.setVisibility(View.VISIBLE);
-                            txtNothing.setVisibility(View.VISIBLE);
+                            //txtNothing.setVisibility(View.VISIBLE);
 
                             return;
                         }

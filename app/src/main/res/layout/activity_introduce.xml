@@ -464,7 +464,7 @@
       android:layout_marginBottom="@dimen/dp4"
       android:background="@drawable/int_button_interduce"
       android:gravity="center"
-      android:text="@string/btn_start_page5"
+      android:text="@string/btn_start_page6"
       android:textAllCaps="false"
       android:textColor="@color/txt_start_page5"
       android:textSize="@dimen/dp16"
