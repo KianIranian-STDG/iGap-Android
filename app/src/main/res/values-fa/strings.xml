@@ -1,29 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!-- Check connect to internet Page introduce app -->
+ <!-- Check connect to internet Page introduce app -->
   <string name="text_i_introduce_page1">"گپ"</string>
   <string name="text_line_1_introduce_page1">"آی"</string>
   <string name="text_line_2_introduce_page1">"ارتباطی بی حد و مرز"</string>
   <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آی گپ بسازید."</string>
-
+  <string name="text_line_4_introduce_page1">"فقط چند دقیقه وقت میبرد تا شما هم به جمع آی گپی ها بپیوندید."</string>
+  
   <!-- Page 2 introduce app -->
   <string name="text_line_1_introduce_page2">"امنیت در آی گپ"</string>
-  <string name="text_line_2_introduce_page2">"آی گپ ارتباط امن و مطمئن را بین شما ، دوستان و خانواده، تضمین میکند. آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد خود،حداکثر امنیت در حریم خصوصی را برای کاربران خود فراهم کرده است. "</string>
+  <string name="text_line_2_introduce_page2">" آی گپ یک ارتباط امن و مطمئن را بین شما ، دوستان و خانوادتان برقرار میکند. آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در همه جابجایی داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم اورده است .  "</string>
+
 
   <!-- Page 3 introduce app -->
-  <string name="text_line_1_introduce_page3">"گفتگو"</string>
-  <string name="text_line_2_introduce_page3">"شما میتوانید بصورت شخصی و یا گروهی به گفتگو پرداخته و یا کانال ساخته و در آن عضو بگیرید."</string>
+  <string name="text_line_1_introduce_page3">"گفتگو در آی گپ"</string>
+  <string name="text_line_2_introduce_page3">"شما میتوانید در آی گپ بصورت شخصی یک به یک و یا گروهی  گفتگو بپردازید و خیالتان راحت باشد که همیشه به گفتگو های خود دسترسی دارید ، همچنین میتوانید کانال بسازید و در آن عضو بگیرید و اطلاعات خود را بین میلیون ها انسان به اشتراک بگذارید ."</string>
 
   <!-- Page 4 introduce app -->
-  <string name="text_line_1_introduce_page4">"انتقال فایل"</string>
-  <string name="text_line_2_introduce_page4">"شما می توانید هر فایلی را با هر پسوند و حجمی انتقال دهید. هر آنچه دوست دارید را با هر کس که می خواهید به اشتراک بگذارید."</string>
+  <string name="text_line_1_introduce_page4">"انتقال فایل در آی گپ"</string>
+  <string name="text_line_2_introduce_page4">"شما می توانید هر فایلی را با هر پسوند و حجمی انتقال دهید و یا در بستر ابری خود ذخیره کنید . هر آنچه دوست دارید را بدون محدودیت با هر کس که می خواهید به اشتراک بگذارید."</string>
 
+  
   <!-- Page 5 introduce app -->
-  <string name="btn_start_page5">"همین حالا شروع کنید"</string>
-  <string name="text_line_1_introduce_page5">"همه چیز رایگان در آی گپ!"</string>
-  <string name="text_line_2_introduce_page5">"بیش از این شما را خسته نمی کنیم! آی ‌گپ کاملاْ رایگان است! همین حالا دنیای خود را رایگان بسازید."</string>
+  <string name="text_line_1_introduce_page5">"تماس صوتی در آی گپ"</string>
+  <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آی گپ با سایر افرادی که آی گپ دارند تماس صوتی بصورت کاملا رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی کنید ، تماس صوتی آی گپ P2P بوده و حتی سرور های آی گپ هم در جابجایی صدای شما دخالت ندارند."</string>
+  
+  <!-- Page 6 introduce app -->
+  <string name="btn_start_page6">"همین حالا شروع کنید"</string>
+  <string name="text_line_1_introduce_page6">"آی گپ رایگان بوده و هست !"</string>
+  <string name="text_line_2_introduce_page6">"بیش از این شما را خسته نمی کنیم! آی ‌گپ کاملاْ رایگان بوده و هست! همین حالا دنیای خود را در آی گپ بسازید."</string>
 
-  <!-- Fill Profile User  -->
+
+
+ <!-- Fill Profile User  -->
   <string name="pu_title_profileUser">"پروفایل خود را تکمیل کنید"</string>
   <string name="pu_desc_profileUser">"نام مستعار خود را وارد کرده و برای خود عکس پروفایل انتخاب نمایید"</string>
   <string name="pu_addPhoto_profileUser">"عکس پروفایل"</string>
