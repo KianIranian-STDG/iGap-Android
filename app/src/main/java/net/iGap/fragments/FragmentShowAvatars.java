@@ -10,10 +10,12 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -102,7 +104,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
     private GroupChatRole roleGroup;
     private ChannelChatRole roleChannel;
     private int avatarListSize = 0;
-
+    private FragmentActivity mActivity;
     private FragmentShowAvatars.AdapterViewPager mAdapter;
     private RealmResults<RealmAvatar> avatarList;
     public static OnComplete onComplete;
@@ -129,7 +131,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         if (getIntentData(this.getArguments())) {
             initComponent(view);
         } else {
-            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
         }
     }
 
@@ -182,7 +184,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override public void onComplete(RippleView rippleView) {
-                getActivity().onBackPressed();
+                mActivity.onBackPressed();
             }
         });
 
@@ -193,7 +195,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
             @Override public void onComplete(RippleView rippleView) {
 
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.chat_popup_dialog_custom, true).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View v = dialog.getCustomView();
 
                 DialogAnimation.animationUp(dialog);
@@ -336,7 +338,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                                 txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
                             }
                         } else {
-                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+                            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
                         }
                     }
                 }
@@ -402,7 +404,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
     }
 
     private void showPopupMenu(int r) {
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).items(r).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
+        MaterialDialog dialog = new MaterialDialog.Builder(mActivity).items(r).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
             @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                 if (text.equals(getResources().getString(R.string.save_to_gallery))) {
@@ -486,7 +488,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
         @Override public Object instantiateItem(View container, final int position) {
 
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            LayoutInflater inflater = LayoutInflater.from(mActivity);
             final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
 
             final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
@@ -718,5 +720,11 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
     private void deletePhotoChat() {
 
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

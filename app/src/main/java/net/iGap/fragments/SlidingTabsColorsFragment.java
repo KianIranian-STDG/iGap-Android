@@ -9,8 +9,10 @@
 */
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,7 +28,7 @@ public class SlidingTabsColorsFragment extends Fragment {
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
     private ArrayList<Fragment> pages = new ArrayList<Fragment>();
-
+    private FragmentActivity mActivity;
     private static final String TAG = "SlidingTabsColorsFragment";
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -67,5 +69,11 @@ public class SlidingTabsColorsFragment extends Fragment {
         @Override public int getCount() {
             return pages.size();
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -61,7 +63,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     private Double longitude;
     private Mode mode;
     Marker marker;
-
+    private FragmentActivity mActivity;
     public enum Mode {
         sendPosition, seePosition;
     }
@@ -102,13 +104,13 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     }
 
     private void close() {
-        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentMap.this).commit();
+        mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentMap.this).commit();
     }
 
     private void initComponent(View view) {
 
         SupportMapFragment mapFragment = new SupportMapFragment();
-        getActivity().getSupportFragmentManager()
+        mActivity.getSupportFragmentManager()
             .beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
             .replace(mf_fragment_map_view, mapFragment, null)
@@ -148,14 +150,14 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                                     close();
 
                                     if (path.length() > 0) {
-                                        ActivityChat activity = (ActivityChat) getActivity();
+                                        ActivityChat activity = (ActivityChat) mActivity;
                                         activity.sendPosition(latitude, longitude, path);
                                     }
                                 }
                             });
                         } catch (Exception e) {
                             close();
-                            ActivityChat activity = (ActivityChat) getActivity();
+                            ActivityChat activity = (ActivityChat) mActivity;
                             activity.sendPosition(latitude, longitude, null);
                         }
                     }
@@ -181,8 +183,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         final boolean[] updatePosition = { true };
 
         //if device has not gps permision in androi 6+ return form map
-        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
         }
@@ -351,5 +352,11 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                 listener.getBitmap(result);
             }
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

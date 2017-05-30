@@ -10,12 +10,14 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,7 +68,7 @@ public class SearchFragment extends Fragment {
     private ItemAdapter itemAdapter;
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
-
+    private FragmentActivity mActivity;
     public static SearchFragment newInstance() {
         return new SearchFragment();
     }
@@ -131,9 +133,9 @@ public class SearchFragment extends Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
 
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
-                getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
             }
         });
 
@@ -346,7 +348,7 @@ public class SearchFragment extends Fragment {
             intent.putExtra("RoomId", realmRoom.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             G.context.startActivity(intent);
-            getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+            mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override public void onChatGetRoom(final long roomId) {
@@ -359,8 +361,8 @@ public class SearchFragment extends Fragment {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             realm.close();
                             G.context.startActivity(intent);
-                            if (getActivity() != null) {
-                                getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                            if (mActivity != null) {
+                                mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
                             }
 
                             G.onChatGetRoom = null;
@@ -403,5 +405,11 @@ public class SearchFragment extends Fragment {
         public RealmAvatar avatar;
         public ProtoGlobal.Room.Type roomType;
         public SearchType type = SearchType.header;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

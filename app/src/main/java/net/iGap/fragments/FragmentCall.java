@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,7 +59,7 @@ public class FragmentCall extends Fragment {
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
     private AppCompatImageView imgCallEmpty;
-
+    private FragmentActivity mActivity;
     ProgressBar progressBar;
 
     private RealmRecyclerView mRecyclerView;
@@ -84,7 +86,7 @@ public class FragmentCall extends Fragment {
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_call_ripple_txtBack);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
-                getActivity().getSupportFragmentManager().popBackStack();
+                mActivity.getSupportFragmentManager().popBackStack();
             }
         });
 
@@ -94,7 +96,7 @@ public class FragmentCall extends Fragment {
             @Override
             public void onClick(View v) {
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.chat_popup_dialog_custom, true).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View view = dialog.getCustomView();
 
                 DialogAnimation.animationUp(dialog);
@@ -115,7 +117,7 @@ public class FragmentCall extends Fragment {
                         dialog.dismiss();
 
                         if (G.userLogin) {
-                            new MaterialDialog.Builder(getActivity()).title(R.string.clean_log).content("Are you sure to clear call logs").
+                            new MaterialDialog.Builder(mActivity).title(R.string.clean_log).content("Are you sure to clear call logs").
                                 positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     Realm realm = Realm.getDefaultInstance();
@@ -154,7 +156,7 @@ public class FragmentCall extends Fragment {
             imgCallEmpty.setVisibility(View.VISIBLE);
         }
 
-        CallAdapter callAdapter = new CallAdapter(getActivity(), results);
+        CallAdapter callAdapter = new CallAdapter(mActivity, results);
         mRecyclerView.setAdapter(callAdapter);
 
         onScrollListener = new RecyclerView.OnScrollListener() {
@@ -211,7 +213,7 @@ public class FragmentCall extends Fragment {
                 fragment.setArguments(bundle);
 
                 try {
-                    getActivity().getSupportFragmentManager()
+                    mActivity.getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                         .addToBackStack(null)
@@ -397,5 +399,11 @@ public class FragmentCall extends Fragment {
                 }
             });
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

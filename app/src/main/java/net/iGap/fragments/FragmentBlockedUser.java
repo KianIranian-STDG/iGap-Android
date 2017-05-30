@@ -10,12 +10,14 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +48,7 @@ import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 
 public class FragmentBlockedUser extends Fragment {
-
+    private FragmentActivity mActivity;
 
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class FragmentBlockedUser extends Fragment {
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fbu_ripple_back_Button);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentBlockedUser.this).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentBlockedUser.this).commit();
             }
         });
 
@@ -86,7 +88,7 @@ public class FragmentBlockedUser extends Fragment {
                 // if you want to have  single select in select list
                 //  bundle.putBoolean("SINGLE_SELECT", true);
                 fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager()
+                mActivity.getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                     .addToBackStack(null)
@@ -102,7 +104,7 @@ public class FragmentBlockedUser extends Fragment {
 
         RealmResults<RealmRegisteredInfo> results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
 
-        BlockListAdapter blockListAdapter = new BlockListAdapter(getActivity(), results);
+        BlockListAdapter blockListAdapter = new BlockListAdapter(mActivity, results);
         realmRecyclerView.setAdapter(blockListAdapter);
 
         realm.close();
@@ -183,5 +185,11 @@ public class FragmentBlockedUser extends Fragment {
                 }
             });
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

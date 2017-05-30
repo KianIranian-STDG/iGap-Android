@@ -11,12 +11,14 @@
 package net.iGap.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -50,6 +52,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
     private ViewGroup parent;
     private RippleView rippleSet;
     private MaterialDesignTextView txtSet;
+    private FragmentActivity mActivity;
 
     public static FragmentAddContact newInstance() {
         return new FragmentAddContact();
@@ -171,7 +174,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         //    }
         //};
 
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         rippleSet = (RippleView) view.findViewById(R.id.ac_ripple_set);
         rippleSet.setEnabled(false);
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -231,7 +234,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
         InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        getActivity().getSupportFragmentManager().popBackStack();
+        mActivity.getSupportFragmentManager().popBackStack();
     }
 
     /**
@@ -274,5 +277,10 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         }
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
+    }
     //***************************************************************************************
 }

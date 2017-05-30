@@ -146,9 +146,9 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
                     @Override public void onError(int majorCode, int minorCode, int time) {
                         hideProgressBar();
-                        getActivity().runOnUiThread(new Runnable() {
+                        mActivity.runOnUiThread(new Runnable() {
                             @Override public void run() {
-                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override public void onClick(View view) {
@@ -162,9 +162,9 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
                     @Override public void onTimeOut() {
                         hideProgressBar();
-                        getActivity().runOnUiThread(new Runnable() {
+                        mActivity.runOnUiThread(new Runnable() {
                             @Override public void run() {
-                                final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override public void onClick(View view) {
@@ -204,7 +204,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         txtInputLayout.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 if (raPrivate.isChecked()) {
-                    final PopupMenu popup = new PopupMenu(getActivity(), view);
+                    final PopupMenu popup = new PopupMenu(mActivity, view);
                     //Inflating the Popup using xml file
                     popup.getMenuInflater().inflate(R.menu.menu_item_copy, popup.getMenu());
 
@@ -293,8 +293,8 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                 if (!identity.equals(RequestClientGetRoom.CreateRoomMode.requestFromOwner.toString())) return;
 
                 try {
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
+                    if (mActivity != null) {
+                        mActivity.runOnUiThread(new Runnable() {
                             @Override public void run() {
 
                                 hideProgressBar();
@@ -326,7 +326,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
             @Override public void onTimeOut() {
 
-                getActivity().runOnUiThread(new Runnable() {
+                mActivity.runOnUiThread(new Runnable() {
                     @Override public void run() {
                         hideProgressBar();
                     }
@@ -389,7 +389,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         if (mActivity != null) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override public void onClick(View view) {
                             snack.dismiss();
@@ -406,7 +406,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         if (mActivity != null) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override public void onClick(View view) {

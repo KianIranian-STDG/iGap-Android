@@ -341,7 +341,7 @@ public class FragmentShowMember extends Fragment {
                 });
             }
         };
-        getActivity().runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mCurrentUpdateCount = 0;
@@ -479,9 +479,9 @@ public class FragmentShowMember extends Fragment {
         mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.fcm_recycler_view_show_member);
         mRecyclerView.setItemViewCacheSize(100);
 
-        final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(getActivity());
+        final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(mActivity);
         mRecyclerView.getRecycleView().setLayoutManager(preCachingLayoutManager);
-        preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(getActivity()));
+        preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(mActivity));
 
         progressBar = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
         AppUtils.setProgresColler(progressBar);
@@ -493,7 +493,7 @@ public class FragmentShowMember extends Fragment {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                getActivity().getSupportFragmentManager().popBackStack();
+                mActivity.getSupportFragmentManager().popBackStack();
             }
         });
 
@@ -639,23 +639,23 @@ public class FragmentShowMember extends Fragment {
                 @Override
                 public void onClick(View v) {
                     try {
-                        HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
+                        HelperPermision.getStoragePermision(mActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
 
                                 Intent intent = null;
 
                                 if (mContact.peerId == userID) {
-                                    intent = new Intent(getActivity(), ActivitySetting.class);
+                                    intent = new Intent(mActivity, ActivitySetting.class);
                                 } else {
-                                    intent = new Intent(getActivity(), ActivityContactsProfile.class);
+                                    intent = new Intent(mActivity, ActivityContactsProfile.class);
 
                                     intent.putExtra("peerId", mContact.peerId);
                                     intent.putExtra("RoomId", mRoomID);
                                     intent.putExtra("enterFrom", ProtoGlobal.Room.Type.GROUP.toString());
                                 }
 
-                                //getActivity().finish();
+                                //mActivity.finish();
                                 //if (ActivityChat.activityChat != null) ActivityChat.activityChat.finish();
 
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -677,58 +677,58 @@ public class FragmentShowMember extends Fragment {
                 @Override
                 public boolean onLongClick(View v) {
 
-                    if (getActivity() instanceof ActivityGroupProfile) {
+                    if (mActivity instanceof ActivityGroupProfile) {
 
                         if (role.equals(GroupChatRole.OWNER.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
 
-                                ((ActivityGroupProfile) getActivity()).kickMember(mContact.peerId);
+                                ((ActivityGroupProfile) mActivity).kickMember(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
 
-                                ((ActivityGroupProfile) getActivity()).kickAdmin(mContact.peerId);
+                                ((ActivityGroupProfile) mActivity).kickAdmin(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
 
-                                ((ActivityGroupProfile) getActivity()).kickModerator(mContact.peerId);
+                                ((ActivityGroupProfile) mActivity).kickModerator(mContact.peerId);
                             }
                         } else if (role.equals(GroupChatRole.ADMIN.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((ActivityGroupProfile) getActivity()).kickMember(mContact.peerId);
+                                ((ActivityGroupProfile) mActivity).kickMember(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                                ((ActivityGroupProfile) getActivity()).kickModerator(mContact.peerId);
+                                ((ActivityGroupProfile) mActivity).kickModerator(mContact.peerId);
                             }
                         } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((ActivityGroupProfile) getActivity()).kickMember(mContact.peerId);
+                                ((ActivityGroupProfile) mActivity).kickMember(mContact.peerId);
                             }
                         }
-                    } else if (getActivity() instanceof ActivityChannelProfile) {
+                    } else if (mActivity instanceof ActivityChannelProfile) {
 
                         if (role.equals(GroupChatRole.OWNER.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
 
-                                ((ActivityChannelProfile) getActivity()).kickMember(mContact.peerId);
+                                ((ActivityChannelProfile) mActivity).kickMember(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
 
-                                ((ActivityChannelProfile) getActivity()).kickAdmin(mContact.peerId);
+                                ((ActivityChannelProfile) mActivity).kickAdmin(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
 
-                                ((ActivityChannelProfile) getActivity()).kickModerator(mContact.peerId);
+                                ((ActivityChannelProfile) mActivity).kickModerator(mContact.peerId);
                             }
                         } else if (role.equals(GroupChatRole.ADMIN.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((ActivityChannelProfile) getActivity()).kickMember(mContact.peerId);
+                                ((ActivityChannelProfile) mActivity).kickMember(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                                ((ActivityChannelProfile) getActivity()).kickModerator(mContact.peerId);
+                                ((ActivityChannelProfile) mActivity).kickModerator(mContact.peerId);
                             }
                         } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((ActivityChannelProfile) getActivity()).kickMember(mContact.peerId);
+                                ((ActivityChannelProfile) mActivity).kickMember(mContact.peerId);
                             }
                         }
                     }

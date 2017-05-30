@@ -10,11 +10,13 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,6 +65,7 @@ public class FragmentIgapSearch extends Fragment {
     private TextView txtNothing;
     private ContentLoadingProgressBar loadingProgressBar;
     private ImageView imvNothingFound;
+    private FragmentActivity mActivity;
 
     public static FragmentIgapSearch newInstance() {
         return new FragmentIgapSearch();
@@ -177,10 +180,10 @@ public class FragmentIgapSearch extends Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
 
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
-                //getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIgapSearch.this).commit();
-                getActivity().onBackPressed();
+                //mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIgapSearch.this).commit();
+                mActivity.onBackPressed();
             }
         });
 
@@ -224,7 +227,7 @@ public class FragmentIgapSearch extends Fragment {
                     }
                 }
 
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIgapSearch.this).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIgapSearch.this).commit();
 
                 return false;
             }
@@ -237,7 +240,7 @@ public class FragmentIgapSearch extends Fragment {
         G.onClientSearchUserName = new IClientSearchUserName() {
             @Override public void OnGetList(final ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builderList) {
 
-                getActivity().runOnUiThread(new Runnable() {
+                mActivity.runOnUiThread(new Runnable() {
                     @Override public void run() {
 
                         loadingProgressBar.setVisibility(View.GONE);
@@ -293,7 +296,7 @@ public class FragmentIgapSearch extends Fragment {
             }
 
             @Override public void OnErrore() {
-                getActivity().runOnUiThread(new Runnable() {
+                mActivity.runOnUiThread(new Runnable() {
                     @Override public void run() {
                         loadingProgressBar.setVisibility(View.GONE);
                     }
@@ -321,7 +324,7 @@ public class FragmentIgapSearch extends Fragment {
     //        intent.putExtra("RoomId", realmRoom.getId());
     //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     //        G.context.startActivity(intent);
-    //        getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+    //        mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
     //    } else {
     //        G.onChatGetRoom = new OnChatGetRoom() {
     //            @Override
@@ -336,8 +339,8 @@ public class FragmentIgapSearch extends Fragment {
     //                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     //                        realm.close();
     //                        G.context.startActivity(intent);
-    //                        if (getActivity() != null) {
-    //                            getActivity().getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+    //                        if (mActivity != null) {
+    //                            mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
     //                        }
     //                    }
     //                });
@@ -364,5 +367,10 @@ public class FragmentIgapSearch extends Fragment {
     //    realm.close();
     //}
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
+    }
     //*********************************************************************************************
 }

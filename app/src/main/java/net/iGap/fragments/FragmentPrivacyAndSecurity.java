@@ -10,11 +10,13 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +74,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     private RealmPrivacy realmPrivacy;
     private RealmChangeListener<RealmModel> privacyListener;
     private int poWhoCan;
-
+    private FragmentActivity mActivity;
     public FragmentPrivacyAndSecurity() {
     }
 
@@ -160,7 +162,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentPrivacyAndSecurity.this).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentPrivacyAndSecurity.this).commit();
             }
         });
 
@@ -170,7 +172,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentSecurity fragmentSecurity = new FragmentSecurity();
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSecurity).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSecurity).commit();
             }
         });
 
@@ -179,7 +181,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentActiveSessions fragmentActiveSessions = new FragmentActiveSessions();
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(st_layoutParent, fragmentActiveSessions, null).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(st_layoutParent, fragmentActiveSessions, null).commit();
             }
         });
 
@@ -188,7 +190,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentBlockedUser fragmentBlockedUser = new FragmentBlockedUser();
-                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null).commit();
             }
         });
 
@@ -257,7 +259,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
         txtDestruction = (TextView) view.findViewById(R.id.stps_txt_Self_destruction);
 
-        sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         poSelfRemove = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_SELF_REMOVE, 2);
         ViewGroup ltSelfDestruction = (ViewGroup) view.findViewById(R.id.stps_layout_Self_destruction);
         ltSelfDestruction.setOnClickListener(new View.OnClickListener() {
@@ -388,5 +390,11 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         }
 
         return resString;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

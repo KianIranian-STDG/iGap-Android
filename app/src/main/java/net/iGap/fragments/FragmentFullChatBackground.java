@@ -10,12 +10,14 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,7 @@ public class FragmentFullChatBackground extends Fragment {
     private MaterialDesignTextView txtBack, txtSet;
     private ImageView imgFullImage;
     private RippleView rippleSet, rippleBack;
+    private FragmentActivity mActivity;
 
     public FragmentFullChatBackground() {
         // Required empty public constructor
@@ -65,7 +68,7 @@ public class FragmentFullChatBackground extends Fragment {
         rippleSet = (RippleView) view.findViewById(R.id.stcbf_ripple_set);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentFullChatBackground.this).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentFullChatBackground.this).commit();
             }
         });
 
@@ -82,8 +85,14 @@ public class FragmentFullChatBackground extends Fragment {
                 editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, fullImage);
                 editor.apply();
 
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentFullChatBackground.this).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentFullChatBackground.this).commit();
             }
         });
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

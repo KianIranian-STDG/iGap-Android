@@ -2,6 +2,7 @@ package net.iGap.fragments;
 
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +61,7 @@ public class FragmentSecurity extends Fragment {
     private static final int CHANGE_EMAIL = 2;
     private static final int CONFIRM_EMAIL = 3;
     private static final int CHANGE_QUESTION = 4;
-
+    private FragmentActivity mActivity;
     public FragmentSecurity() {
         // Required empty public constructor
     }
@@ -132,7 +134,7 @@ public class FragmentSecurity extends Fragment {
                         viewChangeRecoveryQuestion();
                         break;
                     default:
-                        getActivity().getSupportFragmentManager().popBackStack();
+                        mActivity.getSupportFragmentManager().popBackStack();
 
                 }
                 closeKeyboard(v);
@@ -145,7 +147,7 @@ public class FragmentSecurity extends Fragment {
             public void onClick(View v) {
 
                 FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSetSecurityPassword).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSetSecurityPassword).commit();
             }
         });
 
@@ -153,7 +155,7 @@ public class FragmentSecurity extends Fragment {
             @Override
             public void onClick(View v) {
 
-                new MaterialDialog.Builder(getActivity()).title(R.string.set_recovery_question).items(R.array.securityRecoveryPassword).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(mActivity).title(R.string.set_recovery_question).items(R.array.securityRecoveryPassword).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -175,7 +177,7 @@ public class FragmentSecurity extends Fragment {
                         bundle.putBoolean("IS_EMAIL", isRecoveryByEmail);
 
                         fragmentSecurityRecovery.setArguments(bundle);
-                        getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSecurityRecovery).commit();
+                        mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSecurityRecovery).commit();
 
                     }
                 }).show();
@@ -216,7 +218,7 @@ public class FragmentSecurity extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("OLD_PASSWORD", password);
                 fragmentSetSecurityPassword.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSetSecurityPassword).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSetSecurityPassword).commit();
             }
         });
 
@@ -236,7 +238,7 @@ public class FragmentSecurity extends Fragment {
         txtTurnPasswordOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MaterialDialog.Builder(getActivity()).title(R.string.turn_Password_off).content(R.string.turn_Password_off_desc).positiveText(getResources().getString(R.string.B_ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(mActivity).title(R.string.turn_Password_off).content(R.string.turn_Password_off_desc).positiveText(getResources().getString(R.string.B_ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         new RequestUserTwoStepVerificationUnsetPassword().unsetPassword(password);
@@ -269,7 +271,7 @@ public class FragmentSecurity extends Fragment {
                 txtQuestionTwo = questionTwo;
                 //this.hasConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
                 //this.unconfirmedEmailPattern = unconfirmedEmailPattern;
-                getActivity().runOnUiThread(new Runnable() {
+                mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
@@ -306,7 +308,7 @@ public class FragmentSecurity extends Fragment {
 
             @Override
             public void checkPassword() {
-                getActivity().runOnUiThread(new Runnable() {
+                mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         rootSetPassword.setVisibility(View.VISIBLE);
@@ -319,7 +321,7 @@ public class FragmentSecurity extends Fragment {
 
             @Override
             public void errorCheckPassword(final int getWait) {
-                getActivity().runOnUiThread(new Runnable() {
+                mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         dialogWaitTime(getWait);
@@ -329,7 +331,7 @@ public class FragmentSecurity extends Fragment {
 
             @Override
             public void unSetPassword() {
-                getActivity().runOnUiThread(new Runnable() {
+                mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
@@ -344,7 +346,7 @@ public class FragmentSecurity extends Fragment {
 
             @Override
             public void changeRecoveryQuestion() {
-                getActivity().runOnUiThread(new Runnable() {
+                mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         viewChangeRecoveryQuestion();
@@ -448,7 +450,7 @@ public class FragmentSecurity extends Fragment {
     }
 
     private void viewConfirmEmail() {
-        getActivity().runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 page = 0;
@@ -460,7 +462,7 @@ public class FragmentSecurity extends Fragment {
     }
 
     private void viewChangeEmail() {
-        getActivity().runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 page = 0;
@@ -472,7 +474,7 @@ public class FragmentSecurity extends Fragment {
     }
 
     private void viewChangeHint() {
-        getActivity().runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 page = 0;
@@ -485,7 +487,7 @@ public class FragmentSecurity extends Fragment {
     }
 
     private void viewChangeRecoveryQuestion() {
-        getActivity().runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 page = 0;
@@ -498,19 +500,19 @@ public class FragmentSecurity extends Fragment {
     }
 
     private void closeKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     private void error(String error) {
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
-        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, error, Toast.LENGTH_SHORT).show();
     }
 
     private void dialogWaitTime(long time) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialogWait = new MaterialDialog.Builder(getActivity()).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialogWait = new MaterialDialog.Builder(mActivity).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -536,6 +538,12 @@ public class FragmentSecurity extends Fragment {
             }
         };
         countWaitTimer.start();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 
 

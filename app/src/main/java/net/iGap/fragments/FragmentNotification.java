@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -20,6 +21,7 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +75,7 @@ public class FragmentNotification extends Fragment {
     private int realmTimes;
     private int realmLedColor;
     private RealmNotificationSetting realmNotificationSetting;
-
+    private FragmentActivity mActivity;
     public FragmentNotification() {
         // Required empty public constructor
     }
@@ -164,7 +166,7 @@ public class FragmentNotification extends Fragment {
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 try {
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    mActivity.getSupportFragmentManager().popBackStack();
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -187,7 +189,7 @@ public class FragmentNotification extends Fragment {
         ltPopupNotification.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.st_popupNotification))
+                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_popupNotification))
                     .items(R.array.notifications_notification)
                     .negativeText(getResources().getString(R.string.B_cancel))
                     .itemsCallback(new MaterialDialog.ListCallback() {
@@ -322,7 +324,7 @@ public class FragmentNotification extends Fragment {
         }
         ltSound.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.Ringtone))
+                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.Ringtone))
                     .titleGravity(GravityEnum.START)
                     .titleColor(getResources().getColor(android.R.color.black))
                     .items(R.array.sound_message)
@@ -332,47 +334,47 @@ public class FragmentNotification extends Fragment {
 
                             switch (which) {
                                 case 0:
-                                    MediaPlayer.create(getActivity(), R.raw.igap).start();
+                                    MediaPlayer.create(mActivity, R.raw.igap).start();
                                     break;
                                 case 1:
-                                    MediaPlayer.create(getActivity(), R.raw.aooow).start();
+                                    MediaPlayer.create(mActivity, R.raw.aooow).start();
                                     break;
                                 case 2:
-                                    MediaPlayer.create(getActivity(), R.raw.bbalert).start();
+                                    MediaPlayer.create(mActivity, R.raw.bbalert).start();
                                     break;
                                 case 3:
-                                    MediaPlayer.create(getActivity(), R.raw.boom).start();
+                                    MediaPlayer.create(mActivity, R.raw.boom).start();
                                     break;
                                 case 4:
-                                    MediaPlayer.create(getActivity(), R.raw.bounce).start();
+                                    MediaPlayer.create(mActivity, R.raw.bounce).start();
                                     break;
                                 case 5:
-                                    MediaPlayer.create(getActivity(), R.raw.doodoo).start();
+                                    MediaPlayer.create(mActivity, R.raw.doodoo).start();
                                     break;
 
                                 case 6:
-                                    MediaPlayer.create(getActivity(), R.raw.jing).start();
+                                    MediaPlayer.create(mActivity, R.raw.jing).start();
                                     break;
                                 case 7:
-                                    MediaPlayer.create(getActivity(), R.raw.lili).start();
+                                    MediaPlayer.create(mActivity, R.raw.lili).start();
                                     break;
                                 case 8:
-                                    MediaPlayer.create(getActivity(), R.raw.msg).start();
+                                    MediaPlayer.create(mActivity, R.raw.msg).start();
                                     break;
                                 case 9:
-                                    MediaPlayer.create(getActivity(), R.raw.newa).start();
+                                    MediaPlayer.create(mActivity, R.raw.newa).start();
                                     break;
                                 case 10:
-                                    MediaPlayer.create(getActivity(), R.raw.none).start();
+                                    MediaPlayer.create(mActivity, R.raw.none).start();
                                     break;
                                 case 11:
-                                    MediaPlayer.create(getActivity(), R.raw.onelime).start();
+                                    MediaPlayer.create(mActivity, R.raw.onelime).start();
                                     break;
                                 case 12:
-                                    MediaPlayer.create(getActivity(), R.raw.tone).start();
+                                    MediaPlayer.create(mActivity, R.raw.tone).start();
                                     break;
                                 case 13:
-                                    MediaPlayer.create(getActivity(), R.raw.woow).start();
+                                    MediaPlayer.create(mActivity, R.raw.woow).start();
                                     break;
                             }
 
@@ -445,7 +447,7 @@ public class FragmentNotification extends Fragment {
         ltVibrate.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
 
-                new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.st_vibrate))
+                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_vibrate))
                     .items(R.array.vibrate)
                     .negativeText(getResources().getString(R.string.B_cancel))
                     .itemsCallback(new MaterialDialog.ListCallback() {
@@ -473,7 +475,7 @@ public class FragmentNotification extends Fragment {
                                     vLong.vibrate(500);
                                     break;
                                 case 4:
-                                    AudioManager am2 = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+                                    AudioManager am2 = (AudioManager) mActivity.getSystemService(Context.AUDIO_SERVICE);
 
                                     switch (am2.getRingerMode()) {
                                         case AudioManager.RINGER_MODE_SILENT:
@@ -531,7 +533,7 @@ public class FragmentNotification extends Fragment {
             @Override public void onClick(View view) {
 
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title("Smart Notifications")
+                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title("Smart Notifications")
                     .customView(R.layout.dialog_number_picker, wrapInScrollView)
                     .positiveText(R.string.B_ok)
                     .negativeText(R.string.B_cancel)
@@ -612,7 +614,7 @@ public class FragmentNotification extends Fragment {
         ltLedColor.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.stns_popup_colorpicer, wrapInScrollView)
+                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView)
                     .positiveText(getResources().getString(R.string.set))
                     .negativeText(getResources().getString(DISCARD))
                     .title(getResources().getString(R.string.st_led_color))
@@ -750,5 +752,11 @@ public class FragmentNotification extends Fragment {
 
         txtSound = (TextView) view.findViewById(R.id.ntg_txt_desc_sound);
         ltSound = (ViewGroup) view.findViewById(R.id.ntg_layout_sound);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

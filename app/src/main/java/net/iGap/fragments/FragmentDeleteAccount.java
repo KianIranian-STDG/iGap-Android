@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +62,7 @@ public class FragmentDeleteAccount extends Fragment {
     private String phone;
     private ViewGroup ltTime;
     private ProgressBar prgWaiting;
+    private FragmentActivity mActivity;
 
     public FragmentDeleteAccount() {
         // Required empty public constructor
@@ -96,9 +99,9 @@ public class FragmentDeleteAccount extends Fragment {
         });
 
         try {
-            HelperPermision.getSmsPermision(getActivity(), new OnGetPermission() {
+            HelperPermision.getSmsPermision(mActivity, new OnGetPermission() {
                 @Override public void Allow() {
-                    getActivity().registerReceiver(smsReceiver, filter);
+                    mActivity.registerReceiver(smsReceiver, filter);
                 }
 
                 @Override public void deny() {
@@ -168,7 +171,7 @@ public class FragmentDeleteAccount extends Fragment {
             @Override public void onClick(View view) {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
             }
         });
 
@@ -187,7 +190,7 @@ public class FragmentDeleteAccount extends Fragment {
 
                 if (edtDeleteAccount.getText().length() > 0) {
 
-                    new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.delete_account))
+                    new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.delete_account))
                         .titleColor(getResources().getColor(android.R.color.black))
                         .content(R.string.sure_delete_account)
                         .positiveText(getResources().getString(R.string.B_ok))
@@ -223,8 +226,7 @@ public class FragmentDeleteAccount extends Fragment {
                                             hideProgressBar();
                                             G.handler.post(new Runnable() {
                                                 @Override public void run() {
-                                                    final Snackbar snack =
-                                                        Snackbar.make(getActivity().findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                                                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
                                                     snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                         @Override public void onClick(View view) {
                                                             snack.dismiss();
@@ -244,7 +246,7 @@ public class FragmentDeleteAccount extends Fragment {
                         .show();
                 } else {
 
-                    final Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.please_enter_code_for_verify, Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.please_enter_code_for_verify, Snackbar.LENGTH_LONG);
 
                     snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                         @Override public void onClick(View view) {
@@ -315,7 +317,7 @@ public class FragmentDeleteAccount extends Fragment {
 
     @Override public void onPause() {
         try {
-            getActivity().unregisterReceiver(smsReceiver);
+            mActivity.unregisterReceiver(smsReceiver);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -327,8 +329,8 @@ public class FragmentDeleteAccount extends Fragment {
         G.handler.post(new Runnable() {
             @Override public void run() {
                 prgWaiting.setVisibility(View.VISIBLE);
-                if (getActivity() != null) {
-                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (mActivity != null) {
+                    mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -338,8 +340,8 @@ public class FragmentDeleteAccount extends Fragment {
         G.handler.post(new Runnable() {
             @Override public void run() {
                 prgWaiting.setVisibility(View.GONE);
-                if (getActivity() != null) {
-                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (mActivity != null) {
+                    mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -347,7 +349,7 @@ public class FragmentDeleteAccount extends Fragment {
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(title)
+        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title(title)
             .customView(R.layout.dialog_remind_time, wrapInScrollView)
             .positiveText(R.string.B_ok)
             .autoDismiss(false)
@@ -355,7 +357,7 @@ public class FragmentDeleteAccount extends Fragment {
             .onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     dialog.dismiss();
-                    getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
+                    mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
                 }
             })
             .canceledOnTouchOutside(false)
@@ -385,5 +387,11 @@ public class FragmentDeleteAccount extends Fragment {
             }
         };
         countWaitTimer.start();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

@@ -87,7 +87,7 @@ public class RegisteredContactsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         /**
          * not import contact in every enter to this page
@@ -96,7 +96,7 @@ public class RegisteredContactsFragment extends Fragment {
         //isImportContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, false);
         //if (!isImportContactList) {
         //    try {
-        //        HelperPermision.getContactPermision(getActivity(), new OnGetPermission() {
+        //        HelperPermision.getContactPermision(mActivity, new OnGetPermission() {
         //            @Override
         //            public void Allow() throws IOException {
         //                importContactList();
@@ -190,7 +190,7 @@ public class RegisteredContactsFragment extends Fragment {
                 } else {
                     results = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
                 }
-                realmRecyclerView.setAdapter(new ContactListAdapter(getActivity(), results));
+                realmRecyclerView.setAdapter(new ContactListAdapter(mActivity, results));
 
                 realmRecyclerView.getRecycleView().removeItemDecoration(decoration);
                 decoration = new StickyRecyclerHeadersDecoration(new StikyHeader(results));
@@ -210,7 +210,7 @@ public class RegisteredContactsFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
                 fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager()
+                mActivity.getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                     .addToBackStack(null)
@@ -225,8 +225,8 @@ public class RegisteredContactsFragment extends Fragment {
             @Override public void onComplete(RippleView rippleView) {
                 // close and remove fragment from stack
 
-                //getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().onBackPressed();
+                //mActivity.getSupportFragmentManager().popBackStack();
+                mActivity.onBackPressed();
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleView.getWindowToken(), 0);
             }
@@ -238,7 +238,7 @@ public class RegisteredContactsFragment extends Fragment {
         realmRecyclerView.setItemViewCacheSize(100);
         realmRecyclerView.setDrawingCacheEnabled(true);
         results = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
-        realmRecyclerView.setAdapter(new ContactListAdapter(getActivity(), results));
+        realmRecyclerView.setAdapter(new ContactListAdapter(mActivity, results));
 
         StikyHeader stikyHeader = new StikyHeader(results);
         decoration = new StickyRecyclerHeadersDecoration(stikyHeader);
@@ -323,7 +323,7 @@ public class RegisteredContactsFragment extends Fragment {
                     @Override public void onClick(View v) {
 
                         if (isCallAction) {
-                            getActivity().getSupportFragmentManager().popBackStack();
+                            mActivity.getSupportFragmentManager().popBackStack();
 
                             long userId = realmResults.get(getPosition()).getId();
                             if (userId != 134 && G.userId != userId) {
@@ -337,7 +337,7 @@ public class RegisteredContactsFragment extends Fragment {
                             HelperPublicMethod.goToChatRoom(false, realmResults.get(getPosition()).getId(), new HelperPublicMethod.Oncomplet() {
                                 @Override public void complete() {
                                     hideProgress();
-                                    getActivity().getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
+                                    mActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
                                 }
                             }, new HelperPublicMethod.OnError() {
                                 @Override public void error() {

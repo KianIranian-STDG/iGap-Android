@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,7 +44,7 @@ import net.iGap.module.structs.StructContactInfo;
 
 public class NotRegisteredContactsFragment extends Fragment {
     private FastAdapter fastAdapter;
-
+    private FragmentActivity mActivity;
     public static NotRegisteredContactsFragment newInstance() {
         return new NotRegisteredContactsFragment();
     }
@@ -145,7 +146,7 @@ public class NotRegisteredContactsFragment extends Fragment {
             @Override public void onClick(View view) {
                 // close and remove fragment from stack
                 softKeyboard.closeSoftKeyboard();
-                getActivity().getSupportFragmentManager().popBackStack();
+                mActivity.getSupportFragmentManager().popBackStack();
             }
         });
 
@@ -208,5 +209,11 @@ public class NotRegisteredContactsFragment extends Fragment {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

@@ -2,12 +2,14 @@ package net.iGap.fragments;
 
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +44,7 @@ public class FragmentSecurityRecovery extends Fragment {
     private TextView txtSetRecoveryByEmail;
     private TextView txtSetRecoveryQuestionPassOne;
     private TextView txtSetRecoveryQuestionPassTwo;
-
+    private FragmentActivity mActivity;
 
     public FragmentSecurityRecovery() {
         // Required empty public constructor
@@ -191,14 +193,14 @@ public class FragmentSecurityRecovery extends Fragment {
 
     private void pageRegister() {
 
-        getActivity().getSupportFragmentManager().popBackStack();
+        mActivity.getSupportFragmentManager().popBackStack();
     }
 
     private void pageSetting() {
 
-        getActivity().getSupportFragmentManager().popBackStack();
+        mActivity.getSupportFragmentManager().popBackStack();
         //FragmentSecurity fragmentSecurity = new FragmentSecurity();
-        //getActivity()
+        //mActivity
         //    .getSupportFragmentManager()
         //    .beginTransaction()
         //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
@@ -208,14 +210,20 @@ public class FragmentSecurityRecovery extends Fragment {
     }
 
     private void closeKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     private void error(String error) {
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
-        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 
 }
