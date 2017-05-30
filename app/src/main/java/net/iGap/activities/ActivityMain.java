@@ -2004,7 +2004,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     if (mInfo.getMute()) {
                         txtUnread.setBackgroundResource(R.drawable.oval_gray);
                     } else {
-                        txtUnread.setBackgroundResource(R.drawable.oval_red);
+                        AndroidUtils.setBackgroundShapeColor(txtUnread, Color.parseColor(G.notificationColor));
                     }
                 }
 
