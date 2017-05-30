@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fec107"
+    android:layoutDirection="ltr"
+    android:orientation="horizontal"
     >
 
   <TextView
       android:id="@+id/cslcs_btn_call_strip"
-      android:layout_width="match_parent"
-      android:gravity="center"
-      android:textSize="@dimen/dp20"
-      android:textColor="@color/black90"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:background="@color/md_green_A100"
+      android:layout_weight="1"
+      android:gravity="center"
+      android:padding="@dimen/dp4"
       android:text="@string/tab_to_return_to_call"
+      android:textColor="@color/black90"
+      android:textSize="@dimen/dp16"
+      />
+
+
+  <TextView
+      android:id="@+id/cslcs_txt_timer"
+      android:layout_width="wrap_content"
+
+      android:layout_height="wrap_content"
+      android:padding="@dimen/dp4"
+      android:text="00:00"
+      android:textColor="@color/black90"
+      android:textSize="@dimen/dp14"
       />
 </LinearLayout>

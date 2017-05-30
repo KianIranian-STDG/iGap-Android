@@ -117,7 +117,7 @@ public class FragmentCall extends Fragment {
                         dialog.dismiss();
 
                         if (G.userLogin) {
-                            new MaterialDialog.Builder(mActivity).title(R.string.clean_log).content("Are you sure to clear call logs").
+                            new MaterialDialog.Builder(mActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                                 positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     Realm realm = Realm.getDefaultInstance();

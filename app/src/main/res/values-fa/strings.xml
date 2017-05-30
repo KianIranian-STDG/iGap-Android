@@ -840,10 +840,10 @@
   <string name="title_limit_Create_Group">محدودیت در تعداد ساخت اتاق های گفتگو یا اطلاع رسانی</string>
   <string name="text_limit_Create_Group">شما اجازه دارید نهایتاً ۲۵ گروه و یا کانال بسازید</string>
   <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
-  <string name="calls">تماس</string>
-  <string name="igap_call">تماس آی گپ</string>
+  <string name="calls">تماس صوتی</string>
+  <string name="igap_call">تماس صوتی آی گپ</string>
   <string name="No_messages_here_yet">در حال حاضر پیامی وجود ندارد</string>
-  <string name="clean_log">پاک کردن تاریخچه تماس</string>
+  <string name="clean_log">پاک کردن تاریخچه پیام صوتی</string>
   <string name="mandatory">(اجباری)</string>
   <string name="optional">اختیاری</string>
   <string name="desc_group_chanel">توضیحات (اختیاری)</string>
@@ -901,16 +901,18 @@
   <string name="e_904_7">شماره گرفته شده فعال نیست</string>
   <string name="e_904_8">شما با دستگاه دیگرتان در حال مکالمه هستید</string>
   <string name="e_904_9">یوزر در حال مکالمه است</string>
-  <string name="tab_to_return_to_call">برای برگشت به صفحه تماس کلیک کنید</string>
-  <string name="who_is_allowed_to_call">چه کسی برای تماس مجاز است</string>
-  <string name="miss">Miss</string>
-  <string name="not_answer">Not Answer</string>
+  <string name="tab_to_return_to_call">بازگشت به صفحه تماس</string>
+  <string name="who_is_allowed_to_call">افراد مجاز برای تماس صوتی</string>
+  <string name="miss">از دست رفته</string>
+  <string name="not_answer">بدون پاسخ</string>
 
   <string name="iGap_has_crashed">آی گپ با خطای پیش بینی نشده برخورد کرده است!</string>
   <string name="iGap_has_crashed_reload">شروع مجدد</string>
   <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، ‫ تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
 
-  <string name="nothing">هیچی</string>
+  <string name="nothing">چیزی نیست!</string>
+  <string name="are_you_sure_clear_call_logs">آیا شما مطمئن هستید که میخواهید تاریخچه تماس صوتی را پاک کنید ؟</string>
+  <string name="please_write_your_reasons">لطفا دلیل خود را بنویسید</string>
 
 
 </resources>

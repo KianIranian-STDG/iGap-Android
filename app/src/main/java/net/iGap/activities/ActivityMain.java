@@ -1426,6 +1426,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (ActivityCall.isConnected) {
 
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
+
+            ActivityCall.txtTimerMain = (TextView) findViewById(R.id.cslcs_txt_timer);
+
             TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
                 @Override

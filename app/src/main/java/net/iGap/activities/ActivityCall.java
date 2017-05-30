@@ -20,7 +20,6 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -35,6 +34,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperPublicMethod;
@@ -57,6 +57,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     public static final String USER_ID_STR = "USER_ID";
     public static final String INCOMING_CALL_STR = "INCOMING_CALL_STR";
+
+    public static TextView txtTimeChat, txtTimerMain;
 
 
     boolean isIncomingCall = false;
@@ -121,7 +123,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     @Override public void onCreate(Bundle savedInstanceState) {
 
         G.isInCall = true;
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(
             LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
@@ -203,6 +205,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                 break;
                             case CONNECTED:
                                 avLoadingIndicatorView.setVisibility(View.GONE);
+                                layoutOption.setVisibility(View.VISIBLE);
 
                                 if (!isConnected) {
                                     isConnected = true;
@@ -436,7 +439,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
             layoutAnswer.setVisibility(View.GONE);
             layoutChat.setVisibility(View.GONE);
-            layoutOption.setVisibility(View.VISIBLE);
+            layoutOption.setVisibility(View.INVISIBLE);
         }
 
         muteMusic();
@@ -479,17 +482,16 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void endVoiceAndFinish() {
         cancelRingtone();
+
         finish();
 
         if (G.iCallFinish != null) {
             G.iCallFinish.onFinish();
         }
-
     }
 
     private void answer(FrameLayout layoutAnswer, FrameLayout layoutChat) {
         if (canClick) {
-            layoutOption.setVisibility(View.VISIBLE);
             layoutAnswer.setVisibility(View.GONE);
             layoutChat.setVisibility(View.GONE);
 
@@ -509,6 +511,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     }
 
     private void startTimer() {
+
+        txtTimeChat = txtTimerMain = null;
 
         txtTimer.setVisibility(View.VISIBLE);
         secend = 0;
@@ -544,7 +548,19 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                             s += secend;
                         }
 
+                        if (HelperCalander.isLanguagePersian) {
+                            s = HelperCalander.convertToUnicodeFarsiNumber(s);
+                        }
+
                         txtTimer.setText(s);
+
+                        if (txtTimeChat != null) {
+                            txtTimeChat.setText(s);
+                        }
+
+                        if (txtTimerMain != null) {
+                            txtTimerMain.setText(s);
+                        }
                     }
                 });
             }
@@ -552,6 +568,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     }
 
     private void stopTimer() {
+
+        txtTimeChat = txtTimerMain = null;
 
         txtTimer.setVisibility(View.GONE);
 

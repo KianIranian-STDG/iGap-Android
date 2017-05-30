@@ -242,7 +242,7 @@
   <string name="chi_clearChat">Clear Chat History</string>
   <string name="chi_blockContact">Block this contact</string>
   <string name="chi_title_setting">Settings</string>
-  <string name="chi_popup_call">Call</string>
+  <string name="chi_popup_call">Voice Call</string>
   <string name="chi_popup_copy">Copy</string>
   <string name="chi_NEXT_STEP">Next Step</string>
 
@@ -847,8 +847,8 @@
   <string name="title_limit_Create_Group">Restriction in Number of Rooms</string>
   <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
   <string name="show_sender_name_in_group">Show Sender Name in Groups</string>
-  <string name="calls">Calls</string>
-  <string name="igap_call">iGap Call</string>
+  <string name="calls">Voice Calls</string>
+  <string name="igap_call">iGap Voice Call</string>
   <string name="No_messages_here_yet">No messages here yet…</string>
   <string name="mandatory">(Mandatory)</string>
   <string name="optional">(Optional)</string>
@@ -907,15 +907,17 @@
   <string name="e_904_7">Dialed number is not active</string>
   <string name="e_904_8">You are talking with your other devices</string>
   <string name="e_904_9">The user is in conversation</string>
-  <string name="tab_to_return_to_call">tab to return to call</string>
+  <string name="tab_to_return_to_call">Return to Call Screen</string>
 
   <string name="iGap_has_crashed">iGap has crashed !</string>
   <string name="iGap_has_crashed_reload">Reset</string>
   <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop . We are aware of this unexpected error occurred. Please be sure we are fixing this problem  , all you have to do is only click "Reset" .</string>
-  <string name="who_is_allowed_to_call">Who is allowed to call</string>
-  <string name="miss">Miss</string>
+  <string name="who_is_allowed_to_call">Who can access to voice call</string>
+  <string name="miss">Miss Call</string>
   <string name="not_answer">Not Answer</string>
 
   <string name="nothing">Nothing</string>
+  <string name="are_you_sure_clear_call_logs">Are you sure to clear voice call logs ?</string>
+  <string name="please_write_your_reasons">Please write your reasons</string>
 
 </resources>

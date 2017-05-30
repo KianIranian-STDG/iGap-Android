@@ -198,5 +198,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(60000, "ProtoPushLoginToken.PushLoginTokenResponse");
         lookupMap.put(60001, "ProtoPushTwoStepVerification.PushTwoStepVerificationResponse");
         lookupMap.put(60002, "ProtoPushUserInfoExpired.PushUserInfoExpiredResponse");
+        lookupMap.put(60003, "ProtoPushRateSignaling.PushRateSignalingResponse");
+
     }
 }

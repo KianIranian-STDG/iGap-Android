@@ -94,9 +94,14 @@
 
 
     <activity
+        android:name=".activities.ActivityRatingBar"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
+        android:theme="@style/Theme.AppCompat.Translucent"
+        android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+
+    <activity
         android:name=".activities.ActivityCall"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
-
 
       <!--
       <intent-filter>

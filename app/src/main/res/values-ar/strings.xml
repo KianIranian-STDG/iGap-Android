@@ -849,5 +849,7 @@
   <string name="who_is_allowed_to_call">Who is allowed to call</string>
   <string name="miss">Miss</string>
   <string name="not_answer">Not Answer</string>
+  <string name="are_you_sure_clear_call_logs">Are you sure to clear call logs</string>
+  <string name="please_write_your_reasons">Please write your reasons</string>
 
 </resources>
