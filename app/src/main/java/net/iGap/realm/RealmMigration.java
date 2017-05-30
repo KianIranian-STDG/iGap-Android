@@ -109,6 +109,15 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             RealmObjectSchema realmCallLog = schema.create(RealmCallLog.class.getSimpleName()).addField(RealmCallLogFields.ID, long.class, FieldAttribute.REQUIRED).addField(RealmCallLogFields.NAME, String.class).addField(RealmCallLogFields.TIME, long.class, FieldAttribute.REQUIRED).addField(RealmCallLogFields.LOG_PROTO, byte[].class);
             realmCallLog.addPrimaryKey(RealmCallLogFields.ID);
+            oldVersion++;
+        }
+
+        if (oldVersion == 10) {
+            RealmObjectSchema realmPrivacySchema = schema.get(RealmPrivacy.class.getSimpleName());
+            if (realmPrivacySchema != null) {
+                realmPrivacySchema.addField(RealmPrivacyFields.WHO_CAN_VOICE_CALL_TO_ME, String.class);
+            }
+            oldVersion++;
         }
     }
 }
