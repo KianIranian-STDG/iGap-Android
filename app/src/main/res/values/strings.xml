@@ -19,9 +19,13 @@
   <string name="text_line_2_introduce_page4">You can transfer any file with any size and type; and then share anything you’d like to with anyone you\'d want to.</string>
 
   <!-- Page 5 introduce app -->
+  <string name="text_line_1_introduce_page5">File Transferring</string>
+  <string name="text_line_2_introduce_page5">You can transfer any file with any size and type; and then share anything you’d like to with anyone you\'d want to.</string>
+
+  <!-- Page 6 introduce app -->
   <string name="btn_start_page5">Start Now</string>
-  <string name="text_line_1_introduce_page5">Everything for Free in iGap!</string>
-  <string name="text_line_2_introduce_page5"><![CDATA[ Better not to bore you any more! <br /> iGap is thoroughly free. So, build your own world free just now! ]]></string>
+  <string name="text_line_1_introduce_page6">Everything for Free in iGap!</string>
+  <string name="text_line_2_introduce_page6"><![CDATA[ Better not to bore you any more! <br /> iGap is thoroughly free. So, build your own world free just now! ]]></string>
 
   <!--Fill Profile User -->
   <string name="pu_title_profileUser">Complete Your User Profile</string>

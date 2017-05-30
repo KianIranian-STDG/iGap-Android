@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.view.View;
@@ -41,7 +42,6 @@ import java.io.File;
 import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.AdapterViewPager;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnReceiveInfoLocation;
@@ -66,13 +66,14 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private boolean isOne2 = true;
     private boolean isOne3 = true;
     private boolean isOne4 = true;
+    private boolean isOne5 = true;
     private boolean locationFound;
     private boolean registrationTry;
     private boolean enableRegistration = true;
-    private ImageView logoIgap, logoSecurity, logoChat, transfer, boy;
-    private TextView txt_i_p1_l1, txt_p1_l1, txt_p1_l2, txt_p1_l3, txt_p2_l1, txt_p2_l2, txt_p3_l1, txt_p3_l2, txt_p4_l1, txt_p4_l2, txt_p5_l1, txt_p5_l2, txtSkip;
+    private ImageView logoIgap, logoSecurity, logoChat, transfer, call, boy;
+    private TextView txt_i_p1_l1, txt_p1_l1, txt_p1_l2, txt_p1_l3, txt_p2_l1, txt_p2_l2, txt_p3_l1, txt_p3_l2, txt_p4_l1, txt_p4_l2, txt_p5_l1, txt_p5_l2, txt_p6_l1, txt_p6_l2, txtSkip;
     private Button btnStart;
-    private ViewGroup layout_test;
+    private ViewGroup layout_iGap;
     private JustifiedTextView justifiedTextView;
     private String isoCode = "", countryName = "", pattern = "", regex = "", body = null;
     private int callingCode;
@@ -150,7 +151,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                     };
 
                     new AlertDialog.Builder(ActivityIntroduce.this).setMessage(R.string.you_have_to_get_storage_permision_for_continue).setCancelable(false).
-                            setPositiveButton(ActivityIntroduce.this.getString(R.string.ok), onOkListener).setNegativeButton(ActivityIntroduce.this.getString(R.string.cancel), onCancelListener).create().show();
+                        setPositiveButton(ActivityIntroduce.this.getString(R.string.ok), onOkListener).setNegativeButton(ActivityIntroduce.this.getString(R.string.cancel), onCancelListener).create().show();
                 }
             });
         } catch (IOException e) {
@@ -190,17 +191,17 @@ public class ActivityIntroduce extends ActivityEnhanced {
             getInfo();
         }
 
-        layout_test = (ViewGroup) findViewById(R.id.int_layout_test);
+        layout_iGap = (ViewGroup) findViewById(R.id.int_layout_iGap);
 
         layout = new int[]{
-                R.layout.view_pager_introduce_1,
+            R.layout.view_pager_introduce_1,
         };
 
         viewPager = (ViewPager) findViewById(R.id.int_viewPager_introduce);
 
         circleButton = (CustomCircleImage) findViewById(R.id.int_circleButton_introduce);
         if (circleButton != null) {
-            circleButton.circleButtonCount(5);
+            circleButton.circleButtonCount(6);
         }
 
         txtSkip = (TextView) findViewById(R.id.int_txt_skip);
@@ -235,12 +236,16 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         txt_p4_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page4)));
 
-        boy = (ImageView) findViewById(R.id.int_img_boy_introduce);
+        call = (ImageView) findViewById(R.id.int_img_call_introduce);
         txt_p5_l1 = (TextView) findViewById(R.id.int_txt_p5_l1);
         txt_p5_l2 = (TextView) findViewById(R.id.int_txt_p5_l2);
 
+        boy = (ImageView) findViewById(R.id.int_img_boy_introduce);
+        txt_p6_l1 = (TextView) findViewById(R.id.int_txt_p6_l1);
+        txt_p6_l2 = (TextView) findViewById(R.id.int_txt_p6_l2);
+        txt_p6_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page5)));
+
         btnStart = (Button) findViewById(R.id.int_btnStart);
-        txt_p5_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page5)));
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,11 +269,15 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
                 switch (position) {
 
-                    case 0:
+                    case 0://Igap 1
                         txtSkip.bringToFront();
                         if (positionOffset == 0) {
 
                             isOne1 = true;
+                            isOne2 = true;
+                            isOne3 = true;
+                            isOne4 = true;
+                            isOne5 = true;
 
                             if (logoSecurity.getVisibility() == View.VISIBLE) {
 
@@ -276,22 +285,25 @@ public class ActivityIntroduce extends ActivityEnhanced {
                             }
 
                             if (isOne0) {
-                                animationInPage1(logoIgap, layout_test, txt_p1_l2, txt_p1_l3);
+                                animationInPage1(logoIgap, layout_iGap, txt_p1_l2, txt_p1_l3);
                                 isOne0 = false;
                             }
                         }
 
                         break;
 
-                    case 1:
+                    case 1://Security 2
                         txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne0 = true;
                             isOne2 = true;
+                            isOne3 = true;
+                            isOne4 = true;
+                            isOne5 = true;
 
                             if (logoIgap.getVisibility() == View.VISIBLE) {
 
-                                animationOutPage1(logoIgap, layout_test, txt_p1_l2, txt_p1_l3);
+                                animationOutPage1(logoIgap, layout_iGap, txt_p1_l2, txt_p1_l3);
                             }
                             if (logoChat.getVisibility() == View.VISIBLE) {
                                 animationOut(logoChat, txt_p3_l1, txt_p3_l2);
@@ -304,14 +316,16 @@ public class ActivityIntroduce extends ActivityEnhanced {
                             }
                         }
                         break;
-                    case 2:
+                    case 2://Chat 3
                         txtSkip.bringToFront();
                         if (positionOffset == 0) {
+                            isOne0 = true;
                             isOne1 = true;
                             isOne3 = true;
+                            isOne4 = true;
+                            isOne5 = true;
 
                             if (logoSecurity.getVisibility() == View.VISIBLE) {
-
                                 animationOut(logoSecurity, txt_p2_l1, txt_p2_l2);
                             }
                             if (transfer.getVisibility() == View.VISIBLE) {
@@ -324,18 +338,19 @@ public class ActivityIntroduce extends ActivityEnhanced {
                             }
                         }
                         break;
-                    case 3:
+                    case 3://transfer 4
                         txtSkip.bringToFront();
                         if (positionOffset == 0) {
+                            isOne0 = true;
+                            isOne1 = true;
                             isOne2 = true;
                             isOne4 = true;
+                            isOne5 = true;
                             if (viewPager.isFocusable()) {
-
                                 if (logoChat.getVisibility() == View.VISIBLE) {
-
                                     animationOut(logoChat, txt_p3_l1, txt_p3_l2);
-                                } else if (boy.getVisibility() == View.VISIBLE) {
-                                    animationOutBoy(boy, txt_p5_l1, txt_p5_l2, btnStart);
+                                } else if (call.getVisibility() == View.VISIBLE) {
+                                    animationOut(call, txt_p5_l1, txt_p5_l2);
                                 }
                                 if (isOne3) {
 
@@ -345,21 +360,47 @@ public class ActivityIntroduce extends ActivityEnhanced {
                             }
                         }
                         break;
-                    case 4:
+                    case 4://call 5
+                        txtSkip.bringToFront();
+                        if (positionOffset == 0) {
+                            isOne0 = true;
+                            isOne1 = true;
+                            isOne2 = true;
+                            isOne3 = true;
+                            isOne5 = true;
+
+                            if (viewPager.isFocusable()) {
+                                if (transfer.getVisibility() == View.VISIBLE) {
+                                    animationOut(transfer, txt_p4_l1, txt_p4_l2);
+                                } else if (boy.getVisibility() == View.VISIBLE) {
+                                    animationOutBoy(boy, txt_p6_l1, txt_p6_l2, btnStart);
+                                }
+                                if (isOne4) {
+                                    animationIn(call, txt_p5_l1, txt_p5_l2);
+                                    isOne4 = false;
+                                }
+                            }
+                        }
+                        break;
+                    case 5://boy 6
                         txtSkip.bringToFront();
                         btnStart.bringToFront();
                         btnStart.getParent().requestLayout();
 
                         if (positionOffset == 0) {
+                            isOne0 = true;
+                            isOne1 = true;
+                            isOne2 = true;
                             isOne3 = true;
+                            isOne4 = true;
 
-                            if (transfer.getVisibility() == View.VISIBLE) {
+                            if (call.getVisibility() == View.VISIBLE) {
 
-                                animationOut(transfer, txt_p4_l1, txt_p4_l2);
+                                animationOut(call, txt_p5_l1, txt_p5_l2);
                             }
-                            if (isOne4) {
-                                animationInBoy(boy, txt_p5_l1, txt_p5_l2, btnStart);
-                                isOne4 = false;
+                            if (isOne5) {
+                                animationInBoy(boy, txt_p6_l1, txt_p6_l2, btnStart);
+                                isOne5 = false;
                             }
                         }
                         break;
@@ -639,12 +680,12 @@ public class ActivityIntroduce extends ActivityEnhanced {
         scaleDown.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                logo.setVisibility(View.VISIBLE);
-                txt1.setVisibility(View.VISIBLE);
-                txt2.setVisibility(View.VISIBLE);
-                if (txt3 != null) {
-                    txt3.setVisibility(View.VISIBLE);
-                }
+                //logo.setVisibility(View.VISIBLE);
+                //txt1.setVisibility(View.VISIBLE);
+                //txt2.setVisibility(View.VISIBLE);
+                //if (txt3 != null) {
+                //    txt3.setVisibility(View.VISIBLE);
+                //}
 
                 invisibleItems(logo);
             }
@@ -720,6 +761,51 @@ public class ActivityIntroduce extends ActivityEnhanced {
         }
     }
 
+    private void animationOut(final ImageView logo, final TextView txt1, final TextView txt2) {
+
+        viewPager.setEnabled(false);
+
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 1, 0);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(logo, "scaleY", 1, 0);
+        final ObjectAnimator fade = ObjectAnimator.ofFloat(logo, "alpha", 1, 0);
+        ObjectAnimator txt_fade1 = ObjectAnimator.ofFloat(txt1, "alpha", 1, 0);
+        ObjectAnimator txt_fade2 = ObjectAnimator.ofFloat(txt2, "alpha", 1, 0);
+        ObjectAnimator txt_scaleX1 = ObjectAnimator.ofFloat(txt1, "scaleX", 1, 0);
+        ObjectAnimator txt_scaleX2 = ObjectAnimator.ofFloat(txt2, "scaleX", 1, 0);
+        ObjectAnimator txt_scaleY1 = ObjectAnimator.ofFloat(txt1, "scaleY", 1, 0);
+        ObjectAnimator txt_scaleY2 = ObjectAnimator.ofFloat(txt2, "scaleY", 1, 0);
+
+        final AnimatorSet scaleDown = new AnimatorSet();
+        scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(txt_fade1).with(txt_fade2);
+
+        scaleDown.setDuration(500);
+        scaleDown.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+                //invisibleItems(logo);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                logo.setVisibility(View.GONE);
+                txt1.setVisibility(View.GONE);
+                txt2.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        scaleDown.start();
+    }
+
     private void animationInBoy(final ImageView logo, final TextView txt1, final TextView txt2, final Button start) {
 
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 0, 1);
@@ -746,23 +832,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
                 txt2.setVisibility(View.VISIBLE);
                 start.setVisibility(View.VISIBLE);
 
-                logoIgap.setVisibility(View.INVISIBLE);
-                logoSecurity.setVisibility(View.INVISIBLE);
-                logoChat.setVisibility(View.INVISIBLE);
-                transfer.setVisibility(View.INVISIBLE);
+                invisibleItems(logo);
 
-                layout_test.setVisibility(View.GONE);
-                txt_p1_l2.setVisibility(View.GONE);
-                txt_p1_l3.setVisibility(View.GONE);
-
-                txt_p2_l1.setVisibility(View.GONE);
-                txt_p2_l2.setVisibility(View.GONE);
-
-                txt_p3_l1.setVisibility(View.GONE);
-                txt_p3_l2.setVisibility(View.GONE);
-
-                txt_p4_l1.setVisibility(View.GONE);
-                txt_p4_l2.setVisibility(View.GONE);
             }
 
             @Override
@@ -789,51 +860,6 @@ public class ActivityIntroduce extends ActivityEnhanced {
         }, 500);
     }
 
-    private void animationOut(final ImageView logo, final TextView txt1, final TextView txt2) {
-
-        viewPager.setEnabled(false);
-
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 1, 0);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(logo, "scaleY", 1, 0);
-        final ObjectAnimator fade = ObjectAnimator.ofFloat(logo, "alpha", 1, 0);
-        ObjectAnimator txt_fade1 = ObjectAnimator.ofFloat(txt1, "alpha", 1, 0);
-        ObjectAnimator txt_fade2 = ObjectAnimator.ofFloat(txt2, "alpha", 1, 0);
-        ObjectAnimator txt_scaleX1 = ObjectAnimator.ofFloat(txt1, "scaleX", 1, 0);
-        ObjectAnimator txt_scaleX2 = ObjectAnimator.ofFloat(txt2, "scaleX", 1, 0);
-        ObjectAnimator txt_scaleY1 = ObjectAnimator.ofFloat(txt1, "scaleY", 1, 0);
-        ObjectAnimator txt_scaleY2 = ObjectAnimator.ofFloat(txt2, "scaleY", 1, 0);
-
-        final AnimatorSet scaleDown = new AnimatorSet();
-        scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(txt_fade1).with(txt_fade2);
-
-        scaleDown.setDuration(500);
-        scaleDown.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-                invisibleItems(logo);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                logo.setVisibility(View.GONE);
-                txt1.setVisibility(View.GONE);
-                txt2.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-        scaleDown.start();
-    }
-
     private void animationOutBoy(final ImageView logo, final TextView txt1, final TextView txt2, final Button start) {
 
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 1, 0);
@@ -857,23 +883,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
             @Override
             public void onAnimationStart(Animator animation) {
 
-                logoIgap.setVisibility(View.INVISIBLE);
-                logoSecurity.setVisibility(View.INVISIBLE);
-                logoChat.setVisibility(View.INVISIBLE);
-                transfer.setVisibility(View.INVISIBLE);
-
-                layout_test.setVisibility(View.GONE);
-                txt_p1_l2.setVisibility(View.GONE);
-                txt_p1_l3.setVisibility(View.GONE);
-
-                txt_p2_l1.setVisibility(View.GONE);
-                txt_p2_l2.setVisibility(View.GONE);
-
-                txt_p3_l1.setVisibility(View.GONE);
-                txt_p3_l2.setVisibility(View.GONE);
-
-                txt_p4_l1.setVisibility(View.GONE);
-                txt_p4_l2.setVisibility(View.GONE);
+                invisibleItems(logo);
             }
 
             @Override
@@ -899,16 +909,13 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
     private void invisibleItems(ImageView logo) {
 
-        if (logo.equals(logoIgap)) {
+        if (logo.equals(logoIgap)) { // 1
 
             logoSecurity.setVisibility(View.INVISIBLE);
             logoChat.setVisibility(View.INVISIBLE);
             transfer.setVisibility(View.INVISIBLE);
+            call.setVisibility(View.INVISIBLE);
             boy.setVisibility(View.GONE);
-
-            txt_p5_l1.setVisibility(View.GONE);
-            txt_p5_l2.setVisibility(View.GONE);
-            btnStart.setVisibility(View.GONE);
 
             txt_p2_l1.setVisibility(View.GONE);
             txt_p2_l2.setVisibility(View.GONE);
@@ -918,18 +925,22 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
             txt_p4_l1.setVisibility(View.GONE);
             txt_p4_l2.setVisibility(View.GONE);
-        }
-        if (logo.equals(logoSecurity)) {
-            logoChat.setVisibility(View.INVISIBLE);
-            logoIgap.setVisibility(View.INVISIBLE);
-            transfer.setVisibility(View.INVISIBLE);
-            boy.setVisibility(View.GONE);
 
             txt_p5_l1.setVisibility(View.GONE);
             txt_p5_l2.setVisibility(View.GONE);
-            btnStart.setVisibility(View.GONE);
 
-            layout_test.setVisibility(View.GONE);
+            txt_p6_l1.setVisibility(View.GONE);
+            txt_p6_l2.setVisibility(View.GONE);
+            btnStart.setVisibility(View.GONE);
+        }
+        if (logo.equals(logoSecurity)) { //2
+            logoIgap.setVisibility(View.INVISIBLE);
+            logoChat.setVisibility(View.INVISIBLE);
+            transfer.setVisibility(View.INVISIBLE);
+            call.setVisibility(View.INVISIBLE);
+            boy.setVisibility(View.GONE);
+
+            layout_iGap.setVisibility(View.GONE);
             txt_p1_l2.setVisibility(View.GONE);
             txt_p1_l3.setVisibility(View.GONE);
 
@@ -938,19 +949,23 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
             txt_p4_l1.setVisibility(View.GONE);
             txt_p4_l2.setVisibility(View.GONE);
+
+            txt_p5_l1.setVisibility(View.GONE);
+            txt_p5_l2.setVisibility(View.GONE);
+
+            txt_p6_l1.setVisibility(View.GONE);
+            txt_p6_l2.setVisibility(View.GONE);
+            btnStart.setVisibility(View.GONE);
         }
-        if (logo.equals(logoChat)) {
+        if (logo.equals(logoChat)) { // 3
 
             logoIgap.setVisibility(View.INVISIBLE);
             logoSecurity.setVisibility(View.INVISIBLE);
             transfer.setVisibility(View.INVISIBLE);
+            call.setVisibility(View.INVISIBLE);
             boy.setVisibility(View.GONE);
 
-            txt_p5_l1.setVisibility(View.GONE);
-            txt_p5_l2.setVisibility(View.GONE);
-            btnStart.setVisibility(View.GONE);
-
-            layout_test.setVisibility(View.GONE);
+            layout_iGap.setVisibility(View.GONE);
             txt_p1_l2.setVisibility(View.GONE);
             txt_p1_l3.setVisibility(View.GONE);
 
@@ -959,36 +974,23 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
             txt_p4_l1.setVisibility(View.GONE);
             txt_p4_l2.setVisibility(View.GONE);
-        }
-        if (logo.equals(transfer)) {
-
-            logoIgap.setVisibility(View.INVISIBLE);
-            logoSecurity.setVisibility(View.INVISIBLE);
-            logoChat.setVisibility(View.INVISIBLE);
-            boy.setVisibility(View.GONE);
 
             txt_p5_l1.setVisibility(View.GONE);
             txt_p5_l2.setVisibility(View.GONE);
+
+            txt_p6_l1.setVisibility(View.GONE);
+            txt_p6_l2.setVisibility(View.GONE);
             btnStart.setVisibility(View.GONE);
-
-            layout_test.setVisibility(View.GONE);
-            txt_p1_l2.setVisibility(View.GONE);
-            txt_p1_l3.setVisibility(View.GONE);
-
-            txt_p2_l1.setVisibility(View.GONE);
-            txt_p2_l2.setVisibility(View.GONE);
-
-            txt_p3_l1.setVisibility(View.GONE);
-            txt_p3_l2.setVisibility(View.GONE);
         }
-        if (logo.equals(boy)) {
+        if (logo.equals(transfer)) { // 4
 
             logoIgap.setVisibility(View.INVISIBLE);
             logoSecurity.setVisibility(View.INVISIBLE);
             logoChat.setVisibility(View.INVISIBLE);
-            transfer.setVisibility(View.INVISIBLE);
+            call.setVisibility(View.INVISIBLE);
+            boy.setVisibility(View.GONE);
 
-            layout_test.setVisibility(View.GONE);
+            layout_iGap.setVisibility(View.GONE);
             txt_p1_l2.setVisibility(View.GONE);
             txt_p1_l3.setVisibility(View.GONE);
 
@@ -998,8 +1000,61 @@ public class ActivityIntroduce extends ActivityEnhanced {
             txt_p3_l1.setVisibility(View.GONE);
             txt_p3_l2.setVisibility(View.GONE);
 
+            txt_p5_l1.setVisibility(View.GONE);
+            txt_p5_l2.setVisibility(View.GONE);
+
+            txt_p6_l1.setVisibility(View.GONE);
+            txt_p6_l2.setVisibility(View.GONE);
+            btnStart.setVisibility(View.GONE);
+        }
+        if (logo.equals(call)) { // 5
+
+            logoIgap.setVisibility(View.INVISIBLE);
+            logoSecurity.setVisibility(View.INVISIBLE);
+            logoChat.setVisibility(View.INVISIBLE);
+            transfer.setVisibility(View.INVISIBLE);
+            boy.setVisibility(View.GONE);
+
+            layout_iGap.setVisibility(View.GONE);
+            txt_p1_l2.setVisibility(View.GONE);
+            txt_p1_l3.setVisibility(View.GONE);
+
+            txt_p2_l1.setVisibility(View.GONE);
+            txt_p2_l2.setVisibility(View.GONE);
+
+            txt_p3_l1.setVisibility(View.GONE);
+            txt_p3_l2.setVisibility(View.GONE);
+
             txt_p4_l1.setVisibility(View.GONE);
             txt_p4_l2.setVisibility(View.GONE);
+
+            txt_p6_l1.setVisibility(View.GONE);
+            txt_p6_l2.setVisibility(View.GONE);
+            btnStart.setVisibility(View.GONE);
+        }
+        if (logo.equals(boy)) { //6
+
+            logoIgap.setVisibility(View.INVISIBLE);
+            logoSecurity.setVisibility(View.INVISIBLE);
+            logoChat.setVisibility(View.INVISIBLE);
+            transfer.setVisibility(View.INVISIBLE);
+            call.setVisibility(View.INVISIBLE);
+
+            layout_iGap.setVisibility(View.GONE);
+            txt_p1_l2.setVisibility(View.GONE);
+            txt_p1_l3.setVisibility(View.GONE);
+
+            txt_p2_l1.setVisibility(View.GONE);
+            txt_p2_l2.setVisibility(View.GONE);
+
+            txt_p3_l1.setVisibility(View.GONE);
+            txt_p3_l2.setVisibility(View.GONE);
+
+            txt_p4_l1.setVisibility(View.GONE);
+            txt_p4_l2.setVisibility(View.GONE);
+
+            txt_p5_l1.setVisibility(View.GONE);
+            txt_p5_l2.setVisibility(View.GONE);
         }
     }
 
@@ -1071,6 +1126,38 @@ public class ActivityIntroduce extends ActivityEnhanced {
             finishAffinity();
         } else {
             ActivityCompat.finishAffinity(this);
+        }
+    }
+
+    public class AdapterViewPager extends PagerAdapter {
+        int[] layout;
+
+        public AdapterViewPager(int[] layout) {
+            this.layout = layout;
+        }
+
+        @Override
+        public int getCount() {
+            return 6;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view.equals(object);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+
+            View view = G.inflater.inflate(R.layout.view_pager_introduce_1, container, false);
+            container.addView(view);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+
+            container.removeView((View) object);
         }
     }
 }
