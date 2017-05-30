@@ -118,7 +118,7 @@ public class LoginActions extends Application {
 
     private static void getRoomList() {
 
-        int _limit = ActivityMain.curentMainRoomListPosition + 20;
+        int _limit = ActivityMain.currentMainRoomListPosition + 20;
 
         if (_limit < 100) {
             new RequestClientGetRoomList().clientGetRoomList(0, _limit, true);

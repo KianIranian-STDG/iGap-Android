@@ -26,7 +26,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
@@ -448,7 +447,7 @@ public class HelperUrl {
                         insertLinkSpan(strBuilder, start, end, true);
                     }
                 } catch (IndexOutOfBoundsException e) {
-
+                    e.printStackTrace();
                 }
             }
         }
@@ -468,11 +467,11 @@ public class HelperUrl {
             return linkInfo;
         }
 
-        long time = System.currentTimeMillis();
+
         linkInfo += analysisAtSignLinkInfo(text);
 
         linkInfo += analysisHashLinkInfo(text);
-        Log.i("LLL", "time : " + (System.currentTimeMillis() - time));
+
         String newText = text.toLowerCase();
 
         String[] list = newText.replace(System.getProperty("line.separator"), " ").split(" ");
@@ -526,11 +525,6 @@ public class HelperUrl {
         return result;
     }
 
-
-    //******************************************************************************************************************
-    //******************************************************************************************************************
-
-    //**************************************    invite by link *******************************************************************
 
     private static void checkAndJoinToRoom(final String token) {
 

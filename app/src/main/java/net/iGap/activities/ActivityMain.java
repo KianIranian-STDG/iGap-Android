@@ -167,29 +167,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     Realm mRealm;
 
-
     public static MyAppBarLayout appBarLayout;
 
-    public static ArcMenu arcMenu;
-    private int clickPosition = 0;
-    private boolean keepMedia;
+    private ArcMenu arcMenu;
     private Typeface titleTypeface;
     private SwipeRefreshLayout swipeRefreshLayout;
     private SharedPreferences sharedPreferences;
-    private boolean isGetContactList = false;
     private ImageView imgNavImage;
     private DrawerLayout drawer;
-    private Toolbar mainToolbar;
 
-    public static int curentMainRoomListPosition = 0;
+    public static int currentMainRoomListPosition = 0;
     private int mOffset = 0;
     private int mLimit = 20;
-    private RecyclerView.OnScrollListener onScrollListener;
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = false;
 
     private RealmRecyclerView mRecyclerView;
-    private RoomAdapter roomAdapter;
 
     @Override
     protected void onDestroy() {
@@ -236,7 +229,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         musicPlayer = new MusicPlayer(mediaLayout);
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
+        boolean isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
         /**
          * just do this action once
          */
@@ -311,7 +304,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         initFloatingButtonCreateNew();
         initDrawerMenu();
 
-        keepMedia = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
+        boolean keepMedia = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
         if (keepMedia && G.isCalculatKeepMedia) {// if Was selected keep media at 1week
             G.isCalculatKeepMedia = false;
             G.handler.postDelayed(new Runnable() {
@@ -371,7 +364,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void initDrawerMenu() {
 
-        mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -787,10 +780,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            clickPosition = (int) ev.getX();
-        }
         return super.dispatchTouchEvent(ev);
     }
 
@@ -1118,10 +1107,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         RealmResults<RealmRoom> results = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                 equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
-        roomAdapter = new RoomAdapter(this, results, this);
+        RoomAdapter roomAdapter = new RoomAdapter(this, results, this);
         mRecyclerView.setAdapter(roomAdapter);
 
-        onScrollListener = new RecyclerView.OnScrollListener() {
+        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -1148,7 +1137,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                curentMainRoomListPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                currentMainRoomListPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
             }
         };
 
@@ -2101,8 +2090,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                 startActivity(intent);
                                 overridePendingTransition(0, 0);
 
-                                if (ActivityMain.arcMenu != null && ActivityMain.arcMenu.isMenuOpened()) {
-                                    ActivityMain.arcMenu.toggleMenu();
+                                if (arcMenu != null && arcMenu.isMenuOpened()) {
+                                    arcMenu.toggleMenu();
                                 }
                             }
                         }
