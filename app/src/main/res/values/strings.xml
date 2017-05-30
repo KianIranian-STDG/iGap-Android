@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+ <resources>
   <!-- Check connect to internet Page introduce app -->
   <string name="text_i_introduce_page1">i</string>
   <string name="text_line_1_introduce_page1">GAP</string>
   <string name="text_line_2_introduce_page1">Limitless Connection</string>
   <string name="text_line_3_introduce_page1">Build your own world by iGap right now.</string>
-  <string name="text_line_4_introduce_page1">Build your own world by iGap right now.</string>
-
+  <string name="text_line_4_introduce_page1">It takes only few minutes to join iGap users!</string>
+  
   <!-- Page 2 introduce app -->
   <string name="text_line_1_introduce_page2">Security &amp; Privacy</string>
   <string name="text_line_2_introduce_page2">iGap attaches the utmost importance to your security and privacy using the individual encryption algorithms and guarantees a safe and secure connection between you, your friends and family.</string>
 
   <!-- Page 3 introduce app -->
   <string name="text_line_1_introduce_page3">Chat</string>
-  <string name="text_line_2_introduce_page3">You can chat in private or group and even create your own channel and add members.</string>
+  <string name="text_line_2_introduce_page3">You can have one-on-one or group chats and even create your own channel and add members in order to share information with millions of people.</string>
 
   <!-- Page 4 introduce app -->
   <string name="text_line_1_introduce_page4">File Transferring</string>
-  <string name="text_line_2_introduce_page4">You can transfer any file with any size and type; and then share anything you’d like to with anyone you\'d want to.</string>
+  <string name="text_line_2_introduce_page4">You have an authority to transfer any file with any size and type or save them on your cloud storage; and then share anything you’d like to with anyone you’d want to.</string>
 
   <!-- Page 5 introduce app -->
-  <string name="text_line_1_introduce_page5">File Transferring</string>
-  <string name="text_line_2_introduce_page5">You can transfer any file with any size and type; and then share anything you’d like to with anyone you\'d want to.</string>
+  <string name="text_line_1_introduce_page5">Voice Call</string>
+  <string name="text_line_2_introduce_page5">Your power is summarized in having a thoroughly free and secure voice call with all others using iGap and save your money as well! As iGap voice call is P2P-based, no need to worry about the iGap servers interference in your voice transmission.</string>
 
   <!-- Page 6 introduce app -->
-  <string name="btn_start_page5">Start Now</string>
+  <string name="btn_start_page6">Start Now</string>
   <string name="text_line_1_introduce_page6">Everything for Free in iGap!</string>
-  <string name="text_line_2_introduce_page6"><![CDATA[ Better not to bore you any more! <br /> iGap is thoroughly free. So, build your own world free just now! ]]></string>
+  <string name="text_line_2_introduce_page6"><![CDATA[ Let’s stop boring you! <br /> iGap is thoroughly free. So, just now build your own world freely! ]]></string>
+
 
   <!--Fill Profile User -->
   <string name="pu_title_profileUser">Complete Your User Profile</string>
