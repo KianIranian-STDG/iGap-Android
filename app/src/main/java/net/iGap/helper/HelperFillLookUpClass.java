@@ -192,6 +192,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30906, "ProtoSignalingSessionHold.SignalingSessionHoldResponse");
         lookupMap.put(30907, "ProtoSignalingGetLog.SignalingGetLogResponse");
         lookupMap.put(30908, "ProtoSignalingClearLog.SignalingClearLogResponse");
+        lookupMap.put(30909, "ProtoSignalingRate.SignalingRateResponse");
 
         // Push 600xx
         lookupMap.put(60000, "ProtoPushLoginToken.PushLoginTokenResponse");
