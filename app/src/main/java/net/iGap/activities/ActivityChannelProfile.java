@@ -54,7 +54,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentNotification;
@@ -102,6 +101,7 @@ import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.enums.PutExtraKeys;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoChannelCheckUsername;
 import net.iGap.proto.ProtoGlobal;
@@ -256,7 +256,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
         //=========Put Extra Start
         Bundle extras = getIntent().getExtras();
-        roomId = extras.getLong(Config.PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString());
+        roomId = extras.getLong(PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString());
 
         Realm realm = Realm.getDefaultInstance();
 

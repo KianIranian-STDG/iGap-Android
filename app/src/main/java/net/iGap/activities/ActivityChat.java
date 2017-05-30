@@ -198,7 +198,9 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.ProgressState;
+import net.iGap.module.enums.PutExtraKeys;
 import net.iGap.module.enums.SendingStep;
+import net.iGap.module.structs.StructBackGroundSeen;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.module.structs.StructCompress;
@@ -336,7 +338,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public static OnPathAdapterBottomSheet onPathAdapterBottomSheet;
     private View viewBottomSheet;
 
-
     private RealmRoomMessage voiceLastMessage = null;
     public static OnComplete hashListener;
     public static OnComplete onComplete;
@@ -347,11 +348,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private RealmRoomMessage firstUnreadMessage;
     private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
-
-    private class StructBackGroundSeen {
-        private Long messageID;
-        ProtoGlobal.Room.Type roomType;
-    }
 
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
 
@@ -642,14 +638,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     try {
                         findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
                     } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             };
         } else {
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
         }
-
-
     }
 
     @Override
@@ -3217,7 +3212,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (realmClientCondition != null) {
 
                     realmCondition.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
 
                             if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
                                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
@@ -3853,7 +3849,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             if (roomMessage != null) {
                 AbstractMessage message = null;
 
-                if (mAdapter != null && struct != null) {
+                if (mAdapter != null) {
                     message = mAdapter.getItemByFileIdentity(struct.messageId);
 
                     // message doesn't exists
@@ -3894,7 +3890,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         } else if (chatType == CHANNEL) {
             Intent intent = new Intent(G.context, ActivityChannelProfile.class);
-            intent.putExtra(Config.PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
+            intent.putExtra(PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
             startActivity(intent);
         }
     }
