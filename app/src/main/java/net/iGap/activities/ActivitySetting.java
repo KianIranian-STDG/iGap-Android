@@ -280,7 +280,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         new RequestUserProfileGetGender().userProfileGetGender();
         new RequestUserProfileGetEmail().userProfileGetEmail();
 
-
+        realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        updateUserInfoUI(realmUserInfo);
          /*
           set layout and open dialog for set or change Name & Family
          */
