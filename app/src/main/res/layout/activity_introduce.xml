@@ -44,7 +44,7 @@
         <!--page 1-->
         <ImageView
             android:id="@+id/int_img_logo_introduce"
-            android:layout_width="@dimen/dp80"
+            android:layout_width="@dimen/dp110"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
