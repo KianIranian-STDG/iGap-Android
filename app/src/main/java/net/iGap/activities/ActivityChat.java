@@ -1288,21 +1288,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 if (isChatReadOnly) {
                     viewAttachFile.setVisibility(View.GONE);
-                    ((RecyclerView) findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
+                    (findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
                 }
 
                 if (chatType == CHAT) {
 
-                    //RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                    //chatPeerId = realmChatRoom.getPeerId();
-
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                     if (realmRegisteredInfo != null) {
-                        //title = realmRegisteredInfo.getDisplayName();
                         initialize = realmRegisteredInfo.getInitials();
                         color = realmRegisteredInfo.getColor();
-                        //lastSeen = realmRegisteredInfo.getLastSeen();
-                        //userStatus = realmRegisteredInfo.getStatus();
                         phoneNumber = realmRegisteredInfo.getPhoneNumber();
                     } else {
                         title = realmRoom.getTitle();
