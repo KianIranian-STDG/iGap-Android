@@ -136,7 +136,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else {
                 msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
                 view.hasEmoji = mMessage.hasEmojiInText;
-                ;
                 view.setText(msg);
             }
 
