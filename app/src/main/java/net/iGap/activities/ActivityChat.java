@@ -648,6 +648,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         } else {
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
         }
+
+        setAvatar();
     }
 
     @Override
@@ -1151,8 +1153,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             if (HelperCalander.isLanguagePersian) {
                 txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
             }
-
-            setAvatar();
         }
 
         realm.close();
