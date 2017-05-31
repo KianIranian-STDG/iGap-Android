@@ -604,13 +604,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 pageDrawer = 10;
 
-                drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-                        super.onDrawerClosed(drawerView);
-
-                    }
-                });
             }
         });
 
@@ -800,6 +793,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                 }
                             })
                             .show();
+
+                        pageDrawer = 0;
                         break;
                     }
                 }
