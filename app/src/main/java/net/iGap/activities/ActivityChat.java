@@ -563,6 +563,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
+                        /**
+                         * hint: should use from this method here because we need checkAction
+                         * state after set members count for avoid from hide action if exist
+                         */
+                        checkAction();
+
                         updateUnreadCountRealm.close();
                     }
                 });
@@ -1333,7 +1339,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         initAppbarSelected();
         getDraft();
         getUserInfo();
-        checkAction();
         insertShearedData();
 
         G.onChatSendMessage = new OnChatSendMessage() {
