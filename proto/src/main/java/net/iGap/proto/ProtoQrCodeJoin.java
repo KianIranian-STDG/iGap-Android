@@ -569,7 +569,7 @@ public final class ProtoQrCodeJoin {
           throw new NullPointerException();
         }
 
-          inviteToken_ = value;
+        inviteToken_ = value;
         onChanged();
         return this;
       }
@@ -591,7 +591,7 @@ public final class ProtoQrCodeJoin {
         }
         checkByteStringIsUtf8(value);
 
-          inviteToken_ = value;
+        inviteToken_ = value;
         onChanged();
         return this;
       }
@@ -1147,7 +1147,7 @@ public final class ProtoQrCodeJoin {
           throw new NullPointerException();
         }
 
-          qrCodeImage_ = value;
+        qrCodeImage_ = value;
         onChanged();
         return this;
       }
@@ -1219,7 +1219,9 @@ public final class ProtoQrCodeJoin {
             "\n\020QrCodeJoin.proto\022\005proto\032\rRequest.proto" +
                     "\032\016Response.proto\"C\n\nQrCodeJoin\022\037\n\007reques" +
                     "t\030\001 \001(\0132\016.proto.Request\022\024\n\014invite_token\030" +
-                    "\002 \001(\t\"N\n\022QrCodeJoinResponse\022!\n\010response\030" + "\001 \001(\0132\017.proto.Response\022\025\n\rqr_code_image\030" + "\002 \001(\014B!\n\016net.iGap.protoB\017ProtoQrCodeJoin" +
+                    "\002 \001(\t\"N\n\022QrCodeJoinResponse\022!\n\010response\030" +
+                    "\001 \001(\0132\017.proto.Response\022\025\n\rqr_code_image\030" +
+                    "\002 \001(\014B!\n\016net.iGap.protoB\017ProtoQrCodeJoin" +
                     "b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1238,8 +1240,8 @@ public final class ProtoQrCodeJoin {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_QrCodeJoinResponse_descriptor,
         new java.lang.String[] { "Response", "QrCodeImage", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

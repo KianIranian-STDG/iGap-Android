@@ -342,7 +342,6 @@ public final class ProtoChannelGetMessagesStats {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoChannelGetMessagesStats.ChannelGetMessagesStats prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -1209,7 +1208,6 @@ public final class ProtoChannelGetMessagesStats {
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-
       public static Builder newBuilder(net.iGap.proto.ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
@@ -1793,7 +1791,6 @@ public final class ProtoChannelGetMessagesStats {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }

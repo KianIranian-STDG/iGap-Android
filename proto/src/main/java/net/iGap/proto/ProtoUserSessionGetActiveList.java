@@ -228,7 +228,6 @@ public final class ProtoUserSessionGetActiveList {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoUserSessionGetActiveList.UserSessionGetActiveList prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -1419,7 +1418,6 @@ public final class ProtoUserSessionGetActiveList {
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-
       public static Builder newBuilder(net.iGap.proto.ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse.Session prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
@@ -2524,7 +2522,6 @@ public final class ProtoUserSessionGetActiveList {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoUserSessionGetActiveList.UserSessionGetActiveListResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -3135,8 +3132,8 @@ public final class ProtoUserSessionGetActiveList {
     internal_static_proto_UserSessionGetActiveListResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserSessionGetActiveListResponse_descriptor, new java.lang.String[]{"Response", "Session",});
     internal_static_proto_UserSessionGetActiveListResponse_Session_descriptor =
       internal_static_proto_UserSessionGetActiveListResponse_descriptor.getNestedTypes().get(0);
-    internal_static_proto_UserSessionGetActiveListResponse_Session_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserSessionGetActiveListResponse_Session_descriptor,
-            new java.lang.String[]{"SessionId", "AppName", "AppId", "AppBuildVersion", "AppVersion", "Platform", "PlatformVersion", "Device", "DeviceName", "Language", "Country", "Current", "CreateTime", "ActiveTime", "Ip",});
+    internal_static_proto_UserSessionGetActiveListResponse_Session_fieldAccessorTable =
+            new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserSessionGetActiveListResponse_Session_descriptor, new java.lang.String[]{"SessionId", "AppName", "AppId", "AppBuildVersion", "AppVersion", "Platform", "PlatformVersion", "Device", "DeviceName", "Language", "Country", "Current", "CreateTime", "ActiveTime", "Ip",});
     net.iGap.proto.ProtoRequest.getDescriptor();
     net.iGap.proto.ProtoResponse.getDescriptor();
     net.iGap.proto.ProtoGlobal.getDescriptor();

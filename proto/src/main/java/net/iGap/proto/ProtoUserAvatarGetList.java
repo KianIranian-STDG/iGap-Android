@@ -1433,7 +1433,10 @@ public final class ProtoUserAvatarGetList {
             "\n\027UserAvatarGetList.proto\022\005proto\032\rReques" +
                     "t.proto\032\016Response.proto\032\014Global.proto\"E\n" +
                     "\021UserAvatarGetList\022\037\n\007request\030\001 \001(\0132\016.pr" +
-                    "oto.Request\022\017\n\007user_id\030\002 \001(\004\"]\n\031UserAvat" + "arGetListResponse\022!\n\010response\030\001 \001(\0132\017.pr" + "oto.Response\022\035\n\006avatar\030\002 \003(\0132\r.proto.Ava" + "tarB(\n\016net.iGap.protoB\026ProtoUserAvatarGe" +
+                    "oto.Request\022\017\n\007user_id\030\002 \001(\004\"]\n\031UserAvat" +
+                    "arGetListResponse\022!\n\010response\030\001 \001(\0132\017.pr" +
+                    "oto.Response\022\035\n\006avatar\030\002 \003(\0132\r.proto.Ava" +
+                    "tarB(\n\016net.iGap.protoB\026ProtoUserAvatarGe" +
                     "tListb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1453,9 +1456,9 @@ public final class ProtoUserAvatarGetList {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserAvatarGetListResponse_descriptor,
         new java.lang.String[] { "Response", "Avatar", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
-      net.iGap.proto.ProtoGlobal.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

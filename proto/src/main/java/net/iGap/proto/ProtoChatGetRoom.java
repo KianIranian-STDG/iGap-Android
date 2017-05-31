@@ -1273,7 +1273,10 @@ public final class ProtoChatGetRoom {
     java.lang.String[] descriptorData = {
             "\n\021ChatGetRoom.proto\022\005proto\032\rRequest.prot" +
                     "o\032\016Response.proto\032\014Global.proto\"?\n\013ChatG" +
-                    "etRoom\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022" + "\017\n\007peer_id\030\002 \001(\004\"S\n\023ChatGetRoomResponse\022" + "!\n\010response\030\001 \001(\0132\017.proto.Response\022\031\n\004ro" + "om\030\002 \001(\0132\013.proto.RoomB\"\n\016net.iGap.protoB" +
+                    "etRoom\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022" +
+                    "\017\n\007peer_id\030\002 \001(\004\"S\n\023ChatGetRoomResponse\022" +
+                    "!\n\010response\030\001 \001(\0132\017.proto.Response\022\031\n\004ro" +
+                    "om\030\002 \001(\0132\013.proto.RoomB\"\n\016net.iGap.protoB" +
                     "\020ProtoChatGetRoomb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1292,9 +1295,9 @@ public final class ProtoChatGetRoom {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChatGetRoomResponse_descriptor,
         new java.lang.String[] { "Response", "Room", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
-      net.iGap.proto.ProtoGlobal.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

@@ -13,7 +13,6 @@ public final class ProtoSignalingGetLog {
   public static void registerAllExtensions(com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
-
   public interface SignalingGetLogOrBuilder extends
           // @@protoc_insertion_point(interface_extends:proto.SignalingGetLog)
           com.google.protobuf.MessageOrBuilder {
@@ -22,12 +21,10 @@ public final class ProtoSignalingGetLog {
      * <code>optional .proto.Request request = 1;</code>
      */
     boolean hasRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     net.iGap.proto.ProtoRequest.Request getRequest();
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -37,18 +34,15 @@ public final class ProtoSignalingGetLog {
      * <code>optional .proto.Pagination pagination = 2;</code>
      */
     boolean hasPagination();
-
     /**
      * <code>optional .proto.Pagination pagination = 2;</code>
      */
     net.iGap.proto.ProtoGlobal.Pagination getPagination();
-
     /**
      * <code>optional .proto.Pagination pagination = 2;</code>
      */
     net.iGap.proto.ProtoGlobal.PaginationOrBuilder getPaginationOrBuilder();
   }
-
   /**
    * Protobuf type {@code proto.SignalingGetLog}
    */
@@ -59,7 +53,6 @@ public final class ProtoSignalingGetLog {
     private SignalingGetLog(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private SignalingGetLog() {
     }
 
@@ -132,21 +125,18 @@ public final class ProtoSignalingGetLog {
 
     public static final int REQUEST_FIELD_NUMBER = 1;
     private net.iGap.proto.ProtoRequest.Request request_;
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public boolean hasRequest() {
       return request_ != null;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
       return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
-
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -156,21 +146,18 @@ public final class ProtoSignalingGetLog {
 
     public static final int PAGINATION_FIELD_NUMBER = 2;
     private net.iGap.proto.ProtoGlobal.Pagination pagination_;
-
     /**
      * <code>optional .proto.Pagination pagination = 2;</code>
      */
     public boolean hasPagination() {
       return pagination_ != null;
     }
-
     /**
      * <code>optional .proto.Pagination pagination = 2;</code>
      */
     public net.iGap.proto.ProtoGlobal.Pagination getPagination() {
       return pagination_ == null ? net.iGap.proto.ProtoGlobal.Pagination.getDefaultInstance() : pagination_;
     }
-
     /**
      * <code>optional .proto.Pagination pagination = 2;</code>
      */
@@ -179,7 +166,6 @@ public final class ProtoSignalingGetLog {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -214,7 +200,6 @@ public final class ProtoSignalingGetLog {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -300,15 +285,12 @@ public final class ProtoSignalingGetLog {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoSignalingGetLog.SignalingGetLog prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -318,7 +300,6 @@ public final class ProtoSignalingGetLog {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.SignalingGetLog}
      */
@@ -342,12 +323,10 @@ public final class ProtoSignalingGetLog {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
         }
       }
-
       public Builder clear() {
         super.clear();
         if (requestBuilder_ == null) {
@@ -420,7 +399,6 @@ public final class ProtoSignalingGetLog {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof net.iGap.proto.ProtoSignalingGetLog.SignalingGetLog) {
           return mergeFrom((net.iGap.proto.ProtoSignalingGetLog.SignalingGetLog) other);
@@ -463,14 +441,12 @@ public final class ProtoSignalingGetLog {
 
       private net.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
       public boolean hasRequest() {
         return requestBuilder_ != null || request_ != null;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -481,7 +457,6 @@ public final class ProtoSignalingGetLog {
           return requestBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -498,7 +473,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -512,7 +486,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -530,7 +503,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -545,7 +517,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -554,7 +525,6 @@ public final class ProtoSignalingGetLog {
         onChanged();
         return getRequestFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -565,7 +535,6 @@ public final class ProtoSignalingGetLog {
           return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         }
       }
-
       /**
        * <code>optional .proto.Request request = 1;</code>
        */
@@ -579,14 +548,12 @@ public final class ProtoSignalingGetLog {
 
       private net.iGap.proto.ProtoGlobal.Pagination pagination_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.Pagination, net.iGap.proto.ProtoGlobal.Pagination.Builder, net.iGap.proto.ProtoGlobal.PaginationOrBuilder> paginationBuilder_;
-
       /**
        * <code>optional .proto.Pagination pagination = 2;</code>
        */
       public boolean hasPagination() {
         return paginationBuilder_ != null || pagination_ != null;
       }
-
       /**
        * <code>optional .proto.Pagination pagination = 2;</code>
        */
@@ -597,7 +564,6 @@ public final class ProtoSignalingGetLog {
           return paginationBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Pagination pagination = 2;</code>
        */
@@ -614,7 +580,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Pagination pagination = 2;</code>
        */
@@ -628,7 +593,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Pagination pagination = 2;</code>
        */
@@ -646,7 +610,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Pagination pagination = 2;</code>
        */
@@ -661,7 +624,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Pagination pagination = 2;</code>
        */
@@ -670,7 +632,6 @@ public final class ProtoSignalingGetLog {
         onChanged();
         return getPaginationFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Pagination pagination = 2;</code>
        */
@@ -681,7 +642,6 @@ public final class ProtoSignalingGetLog {
           return pagination_ == null ? net.iGap.proto.ProtoGlobal.Pagination.getDefaultInstance() : pagination_;
         }
       }
-
       /**
        * <code>optional .proto.Pagination pagination = 2;</code>
        */
@@ -707,7 +667,6 @@ public final class ProtoSignalingGetLog {
 
     // @@protoc_insertion_point(class_scope:proto.SignalingGetLog)
     private static final net.iGap.proto.ProtoSignalingGetLog.SignalingGetLog DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new net.iGap.proto.ProtoSignalingGetLog.SignalingGetLog();
     }
@@ -745,12 +704,10 @@ public final class ProtoSignalingGetLog {
      * <code>optional .proto.Response response = 1;</code>
      */
     boolean hasResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     net.iGap.proto.ProtoResponse.Response getResponse();
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -760,28 +717,23 @@ public final class ProtoSignalingGetLog {
      * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
      */
     java.util.List<net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> getSignalingLogList();
-
     /**
      * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
      */
     net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog getSignalingLog(int index);
-
     /**
      * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
      */
     int getSignalingLogCount();
-
     /**
      * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
      */
     java.util.List<? extends net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLogOrBuilder> getSignalingLogOrBuilderList();
-
     /**
      * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
      */
     net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLogOrBuilder getSignalingLogOrBuilder(int index);
   }
-
   /**
    * Protobuf type {@code proto.SignalingGetLogResponse}
    */
@@ -792,7 +744,6 @@ public final class ProtoSignalingGetLog {
     private SignalingGetLogResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private SignalingGetLogResponse() {
       signalingLog_ = java.util.Collections.emptyList();
     }
@@ -875,7 +826,6 @@ public final class ProtoSignalingGetLog {
        * <code>optional .proto.SignalingOffer.Type type = 2;</code>
        */
       int getTypeValue();
-
       /**
        * <code>optional .proto.SignalingOffer.Type type = 2;</code>
        */
@@ -885,7 +835,6 @@ public final class ProtoSignalingGetLog {
        * <code>optional .proto.SignalingGetLogResponse.SignalingLog.Status status = 3;</code>
        */
       int getStatusValue();
-
       /**
        * <code>optional .proto.SignalingGetLogResponse.SignalingLog.Status status = 3;</code>
        */
@@ -895,12 +844,10 @@ public final class ProtoSignalingGetLog {
        * <code>optional .proto.RegisteredUser peer = 4;</code>
        */
       boolean hasPeer();
-
       /**
        * <code>optional .proto.RegisteredUser peer = 4;</code>
        */
       net.iGap.proto.ProtoGlobal.RegisteredUser getPeer();
-
       /**
        * <code>optional .proto.RegisteredUser peer = 4;</code>
        */
@@ -916,7 +863,6 @@ public final class ProtoSignalingGetLog {
        */
       int getDuration();
     }
-
     /**
      * Protobuf type {@code proto.SignalingGetLogResponse.SignalingLog}
      */
@@ -927,7 +873,6 @@ public final class ProtoSignalingGetLog {
       private SignalingLog(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
         super(builder);
       }
-
       private SignalingLog() {
         id_ = 0L;
         type_ = 0;
@@ -1132,7 +1077,6 @@ public final class ProtoSignalingGetLog {
 
       public static final int ID_FIELD_NUMBER = 1;
       private long id_;
-
       /**
        * <code>optional uint64 id = 1;</code>
        */
@@ -1142,14 +1086,12 @@ public final class ProtoSignalingGetLog {
 
       public static final int TYPE_FIELD_NUMBER = 2;
       private int type_;
-
       /**
        * <code>optional .proto.SignalingOffer.Type type = 2;</code>
        */
       public int getTypeValue() {
         return type_;
       }
-
       /**
        * <code>optional .proto.SignalingOffer.Type type = 2;</code>
        */
@@ -1160,14 +1102,12 @@ public final class ProtoSignalingGetLog {
 
       public static final int STATUS_FIELD_NUMBER = 3;
       private int status_;
-
       /**
        * <code>optional .proto.SignalingGetLogResponse.SignalingLog.Status status = 3;</code>
        */
       public int getStatusValue() {
         return status_;
       }
-
       /**
        * <code>optional .proto.SignalingGetLogResponse.SignalingLog.Status status = 3;</code>
        */
@@ -1178,21 +1118,18 @@ public final class ProtoSignalingGetLog {
 
       public static final int PEER_FIELD_NUMBER = 4;
       private net.iGap.proto.ProtoGlobal.RegisteredUser peer_;
-
       /**
        * <code>optional .proto.RegisteredUser peer = 4;</code>
        */
       public boolean hasPeer() {
         return peer_ != null;
       }
-
       /**
        * <code>optional .proto.RegisteredUser peer = 4;</code>
        */
       public net.iGap.proto.ProtoGlobal.RegisteredUser getPeer() {
         return peer_ == null ? net.iGap.proto.ProtoGlobal.RegisteredUser.getDefaultInstance() : peer_;
       }
-
       /**
        * <code>optional .proto.RegisteredUser peer = 4;</code>
        */
@@ -1202,7 +1139,6 @@ public final class ProtoSignalingGetLog {
 
       public static final int OFFER_TIME_FIELD_NUMBER = 5;
       private int offerTime_;
-
       /**
        * <code>optional uint32 offer_time = 5;</code>
        */
@@ -1212,7 +1148,6 @@ public final class ProtoSignalingGetLog {
 
       public static final int DURATION_FIELD_NUMBER = 6;
       private int duration_;
-
       /**
        * <code>optional uint32 duration = 6;</code>
        */
@@ -1221,7 +1156,6 @@ public final class ProtoSignalingGetLog {
       }
 
       private byte memoizedIsInitialized = -1;
-
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized == 1) return true;
@@ -1280,7 +1214,6 @@ public final class ProtoSignalingGetLog {
       }
 
       private static final long serialVersionUID = 0L;
-
       @java.lang.Override
       public boolean equals(final java.lang.Object obj) {
         if (obj == this) {
@@ -1373,15 +1306,12 @@ public final class ProtoSignalingGetLog {
       public Builder newBuilderForType() {
         return newBuilder();
       }
-
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
       }
-
       public static Builder newBuilder(net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
-
       public Builder toBuilder() {
         return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
       }
@@ -1391,7 +1321,6 @@ public final class ProtoSignalingGetLog {
         Builder builder = new Builder(parent);
         return builder;
       }
-
       /**
        * Protobuf type {@code proto.SignalingGetLogResponse.SignalingLog}
        */
@@ -1415,12 +1344,10 @@ public final class ProtoSignalingGetLog {
           super(parent);
           maybeForceBuilderInitialization();
         }
-
         private void maybeForceBuilderInitialization() {
           if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
           }
         }
-
         public Builder clear() {
           super.clear();
           id_ = 0L;
@@ -1497,7 +1424,6 @@ public final class ProtoSignalingGetLog {
         public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
           return (Builder) super.addRepeatedField(field, value);
         }
-
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog) {
             return mergeFrom((net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog) other);
@@ -1551,14 +1477,12 @@ public final class ProtoSignalingGetLog {
         }
 
         private long id_;
-
         /**
          * <code>optional uint64 id = 1;</code>
          */
         public long getId() {
           return id_;
         }
-
         /**
          * <code>optional uint64 id = 1;</code>
          */
@@ -1568,7 +1492,6 @@ public final class ProtoSignalingGetLog {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional uint64 id = 1;</code>
          */
@@ -1580,14 +1503,12 @@ public final class ProtoSignalingGetLog {
         }
 
         private int type_ = 0;
-
         /**
          * <code>optional .proto.SignalingOffer.Type type = 2;</code>
          */
         public int getTypeValue() {
           return type_;
         }
-
         /**
          * <code>optional .proto.SignalingOffer.Type type = 2;</code>
          */
@@ -1596,7 +1517,6 @@ public final class ProtoSignalingGetLog {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional .proto.SignalingOffer.Type type = 2;</code>
          */
@@ -1604,7 +1524,6 @@ public final class ProtoSignalingGetLog {
           net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type result = net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type.valueOf(type_);
           return result == null ? net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type.UNRECOGNIZED : result;
         }
-
         /**
          * <code>optional .proto.SignalingOffer.Type type = 2;</code>
          */
@@ -1617,7 +1536,6 @@ public final class ProtoSignalingGetLog {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional .proto.SignalingOffer.Type type = 2;</code>
          */
@@ -1629,14 +1547,12 @@ public final class ProtoSignalingGetLog {
         }
 
         private int status_ = 0;
-
         /**
          * <code>optional .proto.SignalingGetLogResponse.SignalingLog.Status status = 3;</code>
          */
         public int getStatusValue() {
           return status_;
         }
-
         /**
          * <code>optional .proto.SignalingGetLogResponse.SignalingLog.Status status = 3;</code>
          */
@@ -1645,7 +1561,6 @@ public final class ProtoSignalingGetLog {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional .proto.SignalingGetLogResponse.SignalingLog.Status status = 3;</code>
          */
@@ -1653,7 +1568,6 @@ public final class ProtoSignalingGetLog {
           net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status result = net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status.valueOf(status_);
           return result == null ? net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status.UNRECOGNIZED : result;
         }
-
         /**
          * <code>optional .proto.SignalingGetLogResponse.SignalingLog.Status status = 3;</code>
          */
@@ -1666,7 +1580,6 @@ public final class ProtoSignalingGetLog {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional .proto.SignalingGetLogResponse.SignalingLog.Status status = 3;</code>
          */
@@ -1679,14 +1592,12 @@ public final class ProtoSignalingGetLog {
 
         private net.iGap.proto.ProtoGlobal.RegisteredUser peer_ = null;
         private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoGlobal.RegisteredUser, net.iGap.proto.ProtoGlobal.RegisteredUser.Builder, net.iGap.proto.ProtoGlobal.RegisteredUserOrBuilder> peerBuilder_;
-
         /**
          * <code>optional .proto.RegisteredUser peer = 4;</code>
          */
         public boolean hasPeer() {
           return peerBuilder_ != null || peer_ != null;
         }
-
         /**
          * <code>optional .proto.RegisteredUser peer = 4;</code>
          */
@@ -1697,7 +1608,6 @@ public final class ProtoSignalingGetLog {
             return peerBuilder_.getMessage();
           }
         }
-
         /**
          * <code>optional .proto.RegisteredUser peer = 4;</code>
          */
@@ -1714,7 +1624,6 @@ public final class ProtoSignalingGetLog {
 
           return this;
         }
-
         /**
          * <code>optional .proto.RegisteredUser peer = 4;</code>
          */
@@ -1728,7 +1637,6 @@ public final class ProtoSignalingGetLog {
 
           return this;
         }
-
         /**
          * <code>optional .proto.RegisteredUser peer = 4;</code>
          */
@@ -1746,7 +1654,6 @@ public final class ProtoSignalingGetLog {
 
           return this;
         }
-
         /**
          * <code>optional .proto.RegisteredUser peer = 4;</code>
          */
@@ -1761,7 +1668,6 @@ public final class ProtoSignalingGetLog {
 
           return this;
         }
-
         /**
          * <code>optional .proto.RegisteredUser peer = 4;</code>
          */
@@ -1770,7 +1676,6 @@ public final class ProtoSignalingGetLog {
           onChanged();
           return getPeerFieldBuilder().getBuilder();
         }
-
         /**
          * <code>optional .proto.RegisteredUser peer = 4;</code>
          */
@@ -1781,7 +1686,6 @@ public final class ProtoSignalingGetLog {
             return peer_ == null ? net.iGap.proto.ProtoGlobal.RegisteredUser.getDefaultInstance() : peer_;
           }
         }
-
         /**
          * <code>optional .proto.RegisteredUser peer = 4;</code>
          */
@@ -1794,14 +1698,12 @@ public final class ProtoSignalingGetLog {
         }
 
         private int offerTime_;
-
         /**
          * <code>optional uint32 offer_time = 5;</code>
          */
         public int getOfferTime() {
           return offerTime_;
         }
-
         /**
          * <code>optional uint32 offer_time = 5;</code>
          */
@@ -1811,7 +1713,6 @@ public final class ProtoSignalingGetLog {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional uint32 offer_time = 5;</code>
          */
@@ -1823,14 +1724,12 @@ public final class ProtoSignalingGetLog {
         }
 
         private int duration_;
-
         /**
          * <code>optional uint32 duration = 6;</code>
          */
         public int getDuration() {
           return duration_;
         }
-
         /**
          * <code>optional uint32 duration = 6;</code>
          */
@@ -1840,7 +1739,6 @@ public final class ProtoSignalingGetLog {
           onChanged();
           return this;
         }
-
         /**
          * <code>optional uint32 duration = 6;</code>
          */
@@ -1865,7 +1763,6 @@ public final class ProtoSignalingGetLog {
 
       // @@protoc_insertion_point(class_scope:proto.SignalingGetLogResponse.SignalingLog)
       private static final net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog DEFAULT_INSTANCE;
-
       static {
         DEFAULT_INSTANCE = new net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog();
       }
@@ -1898,21 +1795,18 @@ public final class ProtoSignalingGetLog {
     private int bitField0_;
     public static final int RESPONSE_FIELD_NUMBER = 1;
     private net.iGap.proto.ProtoResponse.Response response_;
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public boolean hasResponse() {
       return response_ != null;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
       return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
-
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -1922,35 +1816,30 @@ public final class ProtoSignalingGetLog {
 
     public static final int SIGNALING_LOG_FIELD_NUMBER = 2;
     private java.util.List<net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> signalingLog_;
-
     /**
      * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
      */
     public java.util.List<net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> getSignalingLogList() {
       return signalingLog_;
     }
-
     /**
      * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
      */
     public java.util.List<? extends net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLogOrBuilder> getSignalingLogOrBuilderList() {
       return signalingLog_;
     }
-
     /**
      * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
      */
     public int getSignalingLogCount() {
       return signalingLog_.size();
     }
-
     /**
      * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
      */
     public net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog getSignalingLog(int index) {
       return signalingLog_.get(index);
     }
-
     /**
      * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
      */
@@ -1959,7 +1848,6 @@ public final class ProtoSignalingGetLog {
     }
 
     private byte memoizedIsInitialized = -1;
-
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1994,7 +1882,6 @@ public final class ProtoSignalingGetLog {
     }
 
     private static final long serialVersionUID = 0L;
-
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
@@ -2077,15 +1964,12 @@ public final class ProtoSignalingGetLog {
     public Builder newBuilderForType() {
       return newBuilder();
     }
-
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -2095,7 +1979,6 @@ public final class ProtoSignalingGetLog {
       Builder builder = new Builder(parent);
       return builder;
     }
-
     /**
      * Protobuf type {@code proto.SignalingGetLogResponse}
      */
@@ -2119,13 +2002,11 @@ public final class ProtoSignalingGetLog {
         super(parent);
         maybeForceBuilderInitialization();
       }
-
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders) {
           getSignalingLogFieldBuilder();
         }
       }
-
       public Builder clear() {
         super.clear();
         if (responseBuilder_ == null) {
@@ -2205,7 +2086,6 @@ public final class ProtoSignalingGetLog {
       public Builder addRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field, Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
-
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse) {
           return mergeFrom((net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse) other);
@@ -2266,19 +2146,16 @@ public final class ProtoSignalingGetLog {
         }
         return this;
       }
-
       private int bitField0_;
 
       private net.iGap.proto.ProtoResponse.Response response_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
       public boolean hasResponse() {
         return responseBuilder_ != null || response_ != null;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2289,7 +2166,6 @@ public final class ProtoSignalingGetLog {
           return responseBuilder_.getMessage();
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2306,7 +2182,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2320,7 +2195,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2338,7 +2212,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2353,7 +2226,6 @@ public final class ProtoSignalingGetLog {
 
         return this;
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2362,7 +2234,6 @@ public final class ProtoSignalingGetLog {
         onChanged();
         return getResponseFieldBuilder().getBuilder();
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2373,7 +2244,6 @@ public final class ProtoSignalingGetLog {
           return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         }
       }
-
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -2386,7 +2256,6 @@ public final class ProtoSignalingGetLog {
       }
 
       private java.util.List<net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> signalingLog_ = java.util.Collections.emptyList();
-
       private void ensureSignalingLogIsMutable() {
         if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           signalingLog_ = new java.util.ArrayList<net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog>(signalingLog_);
@@ -2406,7 +2275,6 @@ public final class ProtoSignalingGetLog {
           return signalingLogBuilder_.getMessageList();
         }
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2417,7 +2285,6 @@ public final class ProtoSignalingGetLog {
           return signalingLogBuilder_.getCount();
         }
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2428,7 +2295,6 @@ public final class ProtoSignalingGetLog {
           return signalingLogBuilder_.getMessage(index);
         }
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2445,7 +2311,6 @@ public final class ProtoSignalingGetLog {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2459,7 +2324,6 @@ public final class ProtoSignalingGetLog {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2476,7 +2340,6 @@ public final class ProtoSignalingGetLog {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2493,7 +2356,6 @@ public final class ProtoSignalingGetLog {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2507,7 +2369,6 @@ public final class ProtoSignalingGetLog {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2521,7 +2382,6 @@ public final class ProtoSignalingGetLog {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2535,7 +2395,6 @@ public final class ProtoSignalingGetLog {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2549,7 +2408,6 @@ public final class ProtoSignalingGetLog {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2563,14 +2421,12 @@ public final class ProtoSignalingGetLog {
         }
         return this;
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
       public net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Builder getSignalingLogBuilder(int index) {
         return getSignalingLogFieldBuilder().getBuilder(index);
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2581,7 +2437,6 @@ public final class ProtoSignalingGetLog {
           return signalingLogBuilder_.getMessageOrBuilder(index);
         }
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2592,21 +2447,18 @@ public final class ProtoSignalingGetLog {
           return java.util.Collections.unmodifiableList(signalingLog_);
         }
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
       public net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Builder addSignalingLogBuilder() {
         return getSignalingLogFieldBuilder().addBuilder(net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.getDefaultInstance());
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
       public net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Builder addSignalingLogBuilder(int index) {
         return getSignalingLogFieldBuilder().addBuilder(index, net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.getDefaultInstance());
       }
-
       /**
        * <code>repeated .proto.SignalingGetLogResponse.SignalingLog signaling_log = 2;</code>
        */
@@ -2637,7 +2489,6 @@ public final class ProtoSignalingGetLog {
 
     // @@protoc_insertion_point(class_scope:proto.SignalingGetLogResponse)
     private static final net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new net.iGap.proto.ProtoSignalingGetLog.SignalingGetLogResponse();
     }
@@ -2679,7 +2530,6 @@ public final class ProtoSignalingGetLog {
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\025SignalingGetLog.proto\022\005proto\032\rRequest." +

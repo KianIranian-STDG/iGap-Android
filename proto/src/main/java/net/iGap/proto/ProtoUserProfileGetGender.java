@@ -228,7 +228,6 @@ public final class ProtoUserProfileGetGender {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoUserProfileGetGender.UserProfileGetGender prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -776,7 +775,6 @@ public final class ProtoUserProfileGetGender {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoUserProfileGetGender.UserProfileGetGenderResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }

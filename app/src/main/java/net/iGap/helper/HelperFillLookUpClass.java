@@ -194,6 +194,15 @@ public class HelperFillLookUpClass {
         lookupMap.put(30908, "ProtoSignalingClearLog.SignalingClearLogResponse");
         lookupMap.put(30909, "ProtoSignalingRate.SignalingRateResponse");
 
+        // Geo 10xx , 310xx
+        lookupMap.put(31000, "ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse");
+        lookupMap.put(31001, "ProtoGeoRegister.GeoRegisterResponse");
+        lookupMap.put(31002, "ProtoGeoUpdatePosition.GeoUpdatePositionResponse");
+        lookupMap.put(31003, "ProtoGeoGetComment.GeoGetCommentResponse");
+        lookupMap.put(31004, "ProtoGeoUpdateComment.GeoUpdateCommentResponse");
+        lookupMap.put(31005, "ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse");
+        lookupMap.put(31006, "ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse");
+
         // Push 600xx
         lookupMap.put(60000, "ProtoPushLoginToken.PushLoginTokenResponse");
         lookupMap.put(60001, "ProtoPushTwoStepVerification.PushTwoStepVerificationResponse");

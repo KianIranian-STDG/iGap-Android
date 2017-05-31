@@ -569,7 +569,7 @@ public final class ProtoUserUsernameToId {
           throw new NullPointerException();
         }
 
-          username_ = value;
+        username_ = value;
         onChanged();
         return this;
       }
@@ -591,7 +591,7 @@ public final class ProtoUserUsernameToId {
         }
         checkByteStringIsUtf8(value);
 
-          username_ = value;
+        username_ = value;
         onChanged();
         return this;
       }
@@ -1217,7 +1217,9 @@ public final class ProtoUserUsernameToId {
             "\n\026UserUsernameToId.proto\022\005proto\032\rRequest" +
                     ".proto\032\016Response.proto\"E\n\020UserUsernameTo" +
                     "Id\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\020\n\010u" +
-                    "sername\030\002 \001(\t\"N\n\030UserUsernameToIdRespons" + "e\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007" + "user_id\030\003 \001(\004B\'\n\016net.iGap.protoB\025ProtoUs" +
+                    "sername\030\002 \001(\t\"N\n\030UserUsernameToIdRespons" +
+                    "e\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\017\n\007" +
+                    "user_id\030\003 \001(\004B\'\n\016net.iGap.protoB\025ProtoUs" +
                     "erUsernameToIdb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1236,8 +1238,8 @@ public final class ProtoUserUsernameToId {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserUsernameToIdResponse_descriptor,
         new java.lang.String[] { "Response", "UserId", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

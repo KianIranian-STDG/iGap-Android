@@ -569,7 +569,7 @@ public final class ProtoClientResolveUsername {
           throw new NullPointerException();
         }
 
-          username_ = value;
+        username_ = value;
         onChanged();
         return this;
       }
@@ -591,7 +591,7 @@ public final class ProtoClientResolveUsername {
         }
         checkByteStringIsUtf8(value);
 
-          username_ = value;
+        username_ = value;
         onChanged();
         return this;
       }
@@ -1707,7 +1707,9 @@ public final class ProtoClientResolveUsername {
                     "\n\035ClientResolveUsernameResponse\022!\n\010respo" +
                     "nse\030\001 \001(\0132\017.proto.Response\0227\n\004type\030\002 \001(\016" +
                     "2).proto.ClientResolveUsernameResponse.T" +
-                    "ype\022#\n\004user\030\003 \001(\0132\025.proto.RegisteredUser" + "\022\031\n\004room\030\004 \001(\0132\013.proto.Room\"\032\n\004Type\022\010\n\004U" + "SER\020\000\022\010\n\004ROOM\020\001B,\n\016net.iGap.protoB\032Proto", "ClientResolveUsernameb\006proto3"
+                    "ype\022#\n\004user\030\003 \001(\0132\025.proto.RegisteredUser" +
+                    "\022\031\n\004room\030\004 \001(\0132\013.proto.Room\"\032\n\004Type\022\010\n\004U" +
+                    "SER\020\000\022\010\n\004ROOM\020\001B,\n\016net.iGap.protoB\032Proto", "ClientResolveUsernameb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1728,9 +1730,9 @@ public final class ProtoClientResolveUsername {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ClientResolveUsernameResponse_descriptor,
         new java.lang.String[] { "Response", "Type", "User", "Room", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
-      net.iGap.proto.ProtoGlobal.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

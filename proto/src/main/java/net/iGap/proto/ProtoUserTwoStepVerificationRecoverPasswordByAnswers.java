@@ -338,7 +338,6 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoUserTwoStepVerificationRecoverPasswordByAnswers.UserTwoStepVerificationRecoverPasswordByAnswers prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -788,7 +787,6 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
      * <code>optional string token = 2;</code>
      */
     java.lang.String getToken();
-
     /**
      * <code>optional string token = 2;</code>
      */
@@ -892,7 +890,6 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
 
     public static final int TOKEN_FIELD_NUMBER = 2;
     private volatile java.lang.Object token_;
-
     /**
      * <code>optional string token = 2;</code>
      */
@@ -907,7 +904,6 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
         return s;
       }
     }
-
     /**
      * <code>optional string token = 2;</code>
      */
@@ -1038,11 +1034,9 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoUserTwoStepVerificationRecoverPasswordByAnswers.UserTwoStepVerificationRecoverPasswordByAnswersResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
@@ -1296,7 +1290,6 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
       }
 
       private java.lang.Object token_ = "";
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -1311,7 +1304,6 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
           return (java.lang.String) ref;
         }
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -1325,7 +1317,6 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -1333,12 +1324,11 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
         if (value == null) {
           throw new NullPointerException();
         }
-
+  
         token_ = value;
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -1348,7 +1338,6 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
         onChanged();
         return this;
       }
-
       /**
        * <code>optional string token = 2;</code>
        */
@@ -1357,7 +1346,7 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
           throw new NullPointerException();
         }
         checkByteStringIsUtf8(value);
-
+        
         token_ = value;
         onChanged();
         return this;
@@ -1378,7 +1367,6 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
 
     // @@protoc_insertion_point(class_scope:proto.UserTwoStepVerificationRecoverPasswordByAnswersResponse)
     private static final net.iGap.proto.ProtoUserTwoStepVerificationRecoverPasswordByAnswers.UserTwoStepVerificationRecoverPasswordByAnswersResponse DEFAULT_INSTANCE;
-
     static {
       DEFAULT_INSTANCE = new net.iGap.proto.ProtoUserTwoStepVerificationRecoverPasswordByAnswers.UserTwoStepVerificationRecoverPasswordByAnswersResponse();
     }
@@ -1416,8 +1404,8 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor descriptor;
 
+  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
             "\n5UserTwoStepVerificationRecoverPassword" +
@@ -1445,8 +1433,7 @@ public final class ProtoUserTwoStepVerificationRecoverPasswordByAnswers {
     internal_static_proto_UserTwoStepVerificationRecoverPasswordByAnswers_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserTwoStepVerificationRecoverPasswordByAnswers_descriptor, new java.lang.String[]{"Request", "AnswerOne", "AnswerTwo",});
     internal_static_proto_UserTwoStepVerificationRecoverPasswordByAnswersResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_proto_UserTwoStepVerificationRecoverPasswordByAnswersResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserTwoStepVerificationRecoverPasswordByAnswersResponse_descriptor, new java.lang.String[]{"Response", "Token",});
+    internal_static_proto_UserTwoStepVerificationRecoverPasswordByAnswersResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserTwoStepVerificationRecoverPasswordByAnswersResponse_descriptor, new java.lang.String[]{"Response", "Token",});
     net.iGap.proto.ProtoRequest.getDescriptor();
     net.iGap.proto.ProtoResponse.getDescriptor();
   }
