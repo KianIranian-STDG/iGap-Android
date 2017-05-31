@@ -91,12 +91,17 @@ public class SearchFragment extends Fragment {
 
         imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
         imvNothingFound.setImageResource(R.drawable.find1);
-        imvNothingFound.setVisibility(View.VISIBLE);
-
         txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
-        txtEmptyListComment.setVisibility(View.VISIBLE);
-        txtEmptyListComment.setText(R.string.empty_message3);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imvNothingFound.setVisibility(View.VISIBLE);
+                txtEmptyListComment.setVisibility(View.VISIBLE);
+            }
+        }, 150);
 
+
+        txtEmptyListComment.setText(R.string.empty_message3);
 
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
         edtSearch.addTextChangedListener(new TextWatcher() {

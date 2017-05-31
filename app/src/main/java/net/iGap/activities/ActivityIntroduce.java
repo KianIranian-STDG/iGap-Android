@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ import java.io.File;
 import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnReceiveInfoLocation;
@@ -88,7 +90,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
     //Licence Checking
     private LicenseCheckerCallback mLicenseCheckerCallback;
     private LicenseChecker mChecker;
-
+    private Typeface titleTypeface;
 
     @Override
     protected void onPause() {
@@ -210,14 +212,22 @@ public class ActivityIntroduce extends ActivityEnhanced {
             circleButton.circleButtonCount(6);
         }
 
+        if (!HelperCalander.isLanguagePersian) {
+            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        } else {
+            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+        }
+
         txtSkip = (TextView) findViewById(R.id.int_txt_skip);
         txtSkip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         logoIgap = (ImageView) findViewById(R.id.int_img_logo_introduce);
 
         txt_i_p1_l1 = (TextView) findViewById(R.id.int_txt_i_p1_l1);
-        //        Typeface type = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
-        //        txt_i_p1_l1.setTypeface(type);
+        txt_p1_l1 = (TextView) findViewById(R.id.int_txt_p1_l1);
+
+        txt_i_p1_l1.setTypeface(titleTypeface);
+        txt_p1_l1.setTypeface(titleTypeface);
 
         txt_p1_l2 = (TextView) findViewById(R.id.int_txt_p1_l2);
         txt_p1_l3 = (TextView) findViewById(R.id.int_txt_p1_l3);

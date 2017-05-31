@@ -91,12 +91,18 @@ public class FragmentIgapSearch extends Fragment {
         imvNothingFound.setImageResource(R.drawable.find2);
 
         txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
-        txtEmptyListComment.setVisibility(View.VISIBLE);
+
 
         //txtNothing = (TextView) view.findViewById(R.id.sfl_txt_empty_nothing);
         //txtNothing.setVisibility(View.VISIBLE);
 
-        imvNothingFound.setVisibility(View.VISIBLE);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imvNothingFound.setVisibility(View.VISIBLE);
+                txtEmptyListComment.setVisibility(View.VISIBLE);
+            }
+        }, 150);
 
         loadingProgressBar = (ContentLoadingProgressBar) view.findViewById(R.id.sfl_progress_loading);
         loadingProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
