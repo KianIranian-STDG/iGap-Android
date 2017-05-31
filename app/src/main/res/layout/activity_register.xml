@@ -26,6 +26,7 @@
         android:background="@color/toolbar_background"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
+        android:layoutDirection="ltr"
         >
 
       <RelativeLayout
@@ -451,9 +452,9 @@
             android:paddingLeft="@dimen/dp8"
             android:paddingRight="@dimen/dp8"
             android:paddingStart="@dimen/dp8"
-            android:scrollbarSize="@dimen/dp8"
+            android:scrollbarSize="@dimen/dp6"
             android:scrollbarStyle="outsideInset"
-            android:scrollbarThumbVertical="@color/rg_start_background"
+            android:scrollbarThumbVertical="@color/gray_5c"
             android:scrollbars="vertical"
             android:text="@string/rg_agreement_text_register"
             android:textSize="@dimen/dp14"

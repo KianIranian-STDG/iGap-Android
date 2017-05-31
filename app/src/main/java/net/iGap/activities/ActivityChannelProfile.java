@@ -1215,15 +1215,12 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
     public void kickMember(final Long peerId) {
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_kick_this_member)
-            .positiveText(R.string.ok)
-            .negativeText(R.string.cancel)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestChannelKickMember().channelKickMember(roomId, peerId);
-                }
-            })
-            .show();
+        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new RequestChannelKickMember().channelKickMember(roomId, peerId);
+            }
+        }).show();
 
 
 
@@ -1231,29 +1228,23 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
     public void kickModerator(final Long peerId) {
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member)
-            .positiveText(R.string.ok)
-            .negativeText(R.string.cancel)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestChannelKickModerator().channelKickModerator(roomId, peerId);
-                }
-            })
-            .show();
+        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new RequestChannelKickModerator().channelKickModerator(roomId, peerId);
+            }
+        }).show();
     }
 
     public void kickAdmin(final Long peerId) {
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member)
-            .positiveText(R.string.ok)
-            .negativeText(R.string.cancel)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                    new RequestChannelKickAdmin().channelKickAdmin(roomId, peerId);
-                }
-            })
-            .show();
+                new RequestChannelKickAdmin().channelKickAdmin(roomId, peerId);
+            }
+        }).show();
 
 
 
@@ -1855,8 +1846,10 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                prgWait.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (prgWait != null) {
+                    prgWait.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
             }
         });
     }

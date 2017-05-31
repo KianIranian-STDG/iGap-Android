@@ -19,10 +19,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
@@ -52,6 +56,8 @@ import net.iGap.module.StartupActions;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoLocation;
 import net.iGap.request.RequestInfoPage;
+
+import static net.iGap.G.context;
 
 public class ActivityIntroduce extends ActivityEnhanced {
 
@@ -174,7 +180,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
         if (userInfo != null && userInfo.getUserRegistrationState()) { // user registered before
-            Intent intent = new Intent(G.context, ActivityMain.class);
+            Intent intent = new Intent(context, ActivityMain.class);
             startActivity(intent);
             finish();
             return;
@@ -215,6 +221,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
 
         txt_p1_l2 = (TextView) findViewById(R.id.int_txt_p1_l2);
         txt_p1_l3 = (TextView) findViewById(R.id.int_txt_p1_l3);
+        txt_p1_l3.setText(getResources().getString(R.string.text_line_3_introduce_page1) + "\n" + getResources().getString(R.string.text_line_4_introduce_page1));
 
         txt_p1_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page1)));
 
@@ -243,9 +250,14 @@ public class ActivityIntroduce extends ActivityEnhanced {
         boy = (ImageView) findViewById(R.id.int_img_boy_introduce);
         txt_p6_l1 = (TextView) findViewById(R.id.int_txt_p6_l1);
         txt_p6_l2 = (TextView) findViewById(R.id.int_txt_p6_l2);
-        txt_p6_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page5)));
+        txt_p6_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page6)));
 
         btnStart = (Button) findViewById(R.id.int_btnStart);
+        Drawable mDrawable = ContextCompat.getDrawable(context, R.drawable.int_button_interduce);
+        mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            btnStart.setBackground(mDrawable);
+        }
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -338,7 +350,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                             }
                         }
                         break;
-                    case 3://transfer 4
+                    case 3://boy 4
                         txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne0 = true;
@@ -382,7 +394,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                             }
                         }
                         break;
-                    case 5://boy 6
+                    case 5://transfer1 6
                         txtSkip.bringToFront();
                         btnStart.bringToFront();
                         btnStart.getParent().requestLayout();
@@ -1107,7 +1119,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
     private void displayResult(final String result) {
         G.handler.post(new Runnable() {
             public void run() {
-                Toast.makeText(G.context, result, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, result, Toast.LENGTH_LONG).show();
             }
         });
     }

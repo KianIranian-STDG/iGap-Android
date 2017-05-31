@@ -116,6 +116,5 @@ dependencies {
     exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
   }
 
-  //compile 'io.pristine:libjingle:11139@aar'
   compile 'cat.ereza:customactivityoncrash:2.0.0'
 }

@@ -20,7 +20,7 @@ public final class ProtoResponse {
     /**
      * <code>optional string id = 1;</code>
      */
-    java.lang.String getId();
+    String getId();
     /**
      * <code>optional string id = 1;</code>
      */
@@ -46,7 +46,7 @@ public final class ProtoResponse {
       timestamp_ = 0;
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
@@ -69,7 +69,7 @@ public final class ProtoResponse {
               break;
             }
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               id_ = s;
               break;
@@ -91,25 +91,25 @@ public final class ProtoResponse {
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return net.iGap.proto.ProtoResponse.internal_static_proto_Response_descriptor;
+      return ProtoResponse.internal_static_proto_Response_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-      return net.iGap.proto.ProtoResponse.internal_static_proto_Response_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoResponse.Response.class, net.iGap.proto.ProtoResponse.Response.Builder.class);
+    protected FieldAccessorTable internalGetFieldAccessorTable() {
+      return ProtoResponse.internal_static_proto_Response_fieldAccessorTable.ensureFieldAccessorsInitialized(Response.class, Builder.class);
     }
 
     public static final int ID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object id_;
+    private volatile Object id_;
     /**
      * <code>optional string id = 1;</code>
      */
-    public java.lang.String getId() {
-      java.lang.Object ref = id_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    public String getId() {
+      Object ref = id_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         id_ = s;
         return s;
       }
@@ -118,9 +118,9 @@ public final class ProtoResponse {
      * <code>optional string id = 1;</code>
      */
     public com.google.protobuf.ByteString getIdBytes() {
-      java.lang.Object ref = id_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+      Object ref = id_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((String) ref);
         id_ = b;
         return b;
       } else {
@@ -172,15 +172,16 @@ public final class ProtoResponse {
     }
 
     private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
         return true;
       }
-      if (!(obj instanceof net.iGap.proto.ProtoResponse.Response)) {
+      if (!(obj instanceof Response)) {
         return super.equals(obj);
       }
-      net.iGap.proto.ProtoResponse.Response other = (net.iGap.proto.ProtoResponse.Response) obj;
+      Response other = (Response) obj;
 
       boolean result = true;
       result = result && getId().equals(other.getId());
@@ -188,7 +189,7 @@ public final class ProtoResponse {
       return result;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -204,43 +205,43 @@ public final class ProtoResponse {
       return hash;
     }
 
-    public static net.iGap.proto.ProtoResponse.Response parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static Response parseFrom(com.google.protobuf.ByteString data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoResponse.Response parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static Response parseFrom(com.google.protobuf.ByteString data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoResponse.Response parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static Response parseFrom(byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-    public static net.iGap.proto.ProtoResponse.Response parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
+    public static Response parseFrom(byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoResponse.Response parseFrom(java.io.InputStream input) throws java.io.IOException {
+    public static Response parseFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoResponse.Response parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+    public static Response parseFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoResponse.Response parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
+    public static Response parseDelimitedFrom(java.io.InputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoResponse.Response parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+    public static Response parseDelimitedFrom(java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static net.iGap.proto.ProtoResponse.Response parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
+    public static Response parseFrom(com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
     }
 
-    public static net.iGap.proto.ProtoResponse.Response parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
+    public static Response parseFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -250,15 +251,16 @@ public final class ProtoResponse {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(net.iGap.proto.ProtoResponse.Response prototype) {
+
+    public static Builder newBuilder(Response prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
-    protected Builder newBuilderForType(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+    @Override
+    protected Builder newBuilderForType(BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -267,13 +269,13 @@ public final class ProtoResponse {
      */
     public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
             // @@protoc_insertion_point(builder_implements:proto.Response)
-            net.iGap.proto.ProtoResponse.ResponseOrBuilder {
+            ResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-        return net.iGap.proto.ProtoResponse.internal_static_proto_Response_descriptor;
+        return ProtoResponse.internal_static_proto_Response_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoResponse.internal_static_proto_Response_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoResponse.Response.class, net.iGap.proto.ProtoResponse.Response.Builder.class);
+      protected FieldAccessorTable internalGetFieldAccessorTable() {
+        return ProtoResponse.internal_static_proto_Response_fieldAccessorTable.ensureFieldAccessorsInitialized(Response.class, Builder.class);
       }
 
       // Construct using net.iGap.proto.ProtoResponse.Response.newBuilder()
@@ -281,7 +283,7 @@ public final class ProtoResponse {
         maybeForceBuilderInitialization();
       }
 
-      private Builder(com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      private Builder(BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -299,23 +301,23 @@ public final class ProtoResponse {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return net.iGap.proto.ProtoResponse.internal_static_proto_Response_descriptor;
+        return ProtoResponse.internal_static_proto_Response_descriptor;
       }
 
-      public net.iGap.proto.ProtoResponse.Response getDefaultInstanceForType() {
-        return net.iGap.proto.ProtoResponse.Response.getDefaultInstance();
+      public Response getDefaultInstanceForType() {
+        return Response.getDefaultInstance();
       }
 
-      public net.iGap.proto.ProtoResponse.Response build() {
-        net.iGap.proto.ProtoResponse.Response result = buildPartial();
+      public Response build() {
+        Response result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public net.iGap.proto.ProtoResponse.Response buildPartial() {
-        net.iGap.proto.ProtoResponse.Response result = new net.iGap.proto.ProtoResponse.Response(this);
+      public Response buildPartial() {
+        Response result = new Response(this);
         result.id_ = id_;
         result.timestamp_ = timestamp_;
         onBuilt();
@@ -346,16 +348,16 @@ public final class ProtoResponse {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof net.iGap.proto.ProtoResponse.Response) {
-          return mergeFrom((net.iGap.proto.ProtoResponse.Response) other);
+        if (other instanceof Response) {
+          return mergeFrom((Response) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(net.iGap.proto.ProtoResponse.Response other) {
-        if (other == net.iGap.proto.ProtoResponse.Response.getDefaultInstance()) return this;
+      public Builder mergeFrom(Response other) {
+        if (other == Response.getDefaultInstance()) return this;
         if (!other.getId().isEmpty()) {
           id_ = other.id_;
           onChanged();
@@ -372,11 +374,11 @@ public final class ProtoResponse {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry) throws java.io.IOException {
-        net.iGap.proto.ProtoResponse.Response parsedMessage = null;
+        Response parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (net.iGap.proto.ProtoResponse.Response) e.getUnfinishedMessage();
+          parsedMessage = (Response) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -386,28 +388,28 @@ public final class ProtoResponse {
         return this;
       }
 
-      private java.lang.Object id_ = "";
+      private Object id_ = "";
       /**
        * <code>optional string id = 1;</code>
        */
-      public java.lang.String getId() {
-        java.lang.Object ref = id_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getId() {
+        Object ref = id_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           id_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
        * <code>optional string id = 1;</code>
        */
       public com.google.protobuf.ByteString getIdBytes() {
-        java.lang.Object ref = id_;
+        Object ref = id_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+          com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((String) ref);
           id_ = b;
           return b;
         } else {
@@ -417,7 +419,7 @@ public final class ProtoResponse {
       /**
        * <code>optional string id = 1;</code>
        */
-      public Builder setId(java.lang.String value) {
+      public Builder setId(String value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -488,12 +490,12 @@ public final class ProtoResponse {
     }
 
     // @@protoc_insertion_point(class_scope:proto.Response)
-    private static final net.iGap.proto.ProtoResponse.Response DEFAULT_INSTANCE;
+    private static final Response DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new net.iGap.proto.ProtoResponse.Response();
+      DEFAULT_INSTANCE = new Response();
     }
 
-    public static net.iGap.proto.ProtoResponse.Response getDefaultInstance() {
+    public static Response getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -507,12 +509,12 @@ public final class ProtoResponse {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<Response> getParserForType() {
       return PARSER;
     }
 
-    public net.iGap.proto.ProtoResponse.Response getDefaultInstanceForType() {
+    public Response getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -527,7 +529,7 @@ public final class ProtoResponse {
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
-    java.lang.String[] descriptorData = {
+    String[] descriptorData = {
             "\n\016Response.proto\022\005proto\")\n\010Response\022\n\n\002i" +
                     "d\030\001 \001(\t\022\021\n\ttimestamp\030\002 \001(\rB\037\n\016net.iGap.p" +
                     "rotoB\rProtoResponseb\006proto3"
@@ -541,7 +543,7 @@ public final class ProtoResponse {
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[]{
     }, assigner);
     internal_static_proto_Response_descriptor = getDescriptor().getMessageTypes().get(0);
-    internal_static_proto_Response_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_Response_descriptor, new java.lang.String[]{"Id", "Timestamp",});
+    internal_static_proto_Response_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_Response_descriptor, new String[]{"Id", "Timestamp",});
   }
 
   // @@protoc_insertion_point(outer_class_scope)

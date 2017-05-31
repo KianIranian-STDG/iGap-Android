@@ -15,6 +15,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -75,15 +76,34 @@ public final class AESCrypt {
     /**
      * encrypt symmetricKey with PublicKey
      *
-     * @param key publicKey that get from server
+     * @param keyServer publicKey that get from server
+     * @param keyClient publicKey that exist in client
      * @param symmetricKey random String that generate in client
+     * @param chunkSize split encrypted symmetricKey with this chunkSize and reEncrypt
      */
 
-    public static byte[] encryptSymmetricKey(PublicKey key, byte[] symmetricKey) {
+    public static byte[] encryptSymmetricKey(PublicKey keyServer, PublicKey keyClient, byte[] symmetricKey, int chunkSize) {
         try {
             Cipher cipher = Cipher.getInstance("RSA/NONE/PKCS1Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            return cipher.doFinal(symmetricKey);
+            cipher.init(Cipher.ENCRYPT_MODE, keyServer);
+            byte[] encryptFirst = cipher.doFinal(symmetricKey);
+
+            Cipher cipher2 = Cipher.getInstance("RSA/NONE/PKCS1Padding");
+            cipher2.init(Cipher.ENCRYPT_MODE, keyClient);
+
+            byte[] main = new byte[0];
+
+            while (encryptFirst.length > 0) {
+                byte[] byteArray = Arrays.copyOfRange(encryptFirst, 0, chunkSize);
+
+                byte[] encrypted = cipher2.doFinal(byteArray);
+
+                main = HelperNumerical.appendByteArrays(main, encrypted);
+
+                encryptFirst = Arrays.copyOfRange(encryptFirst, chunkSize, encryptFirst.length);
+            }
+
+            return main;
         } catch (NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException | InvalidKeyException e) {
             e.printStackTrace();
         }
