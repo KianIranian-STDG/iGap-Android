@@ -7,7 +7,7 @@
   <dimen name="messageContainerPaddingBottom">6dp</dimen>
   <dimen name="messageContainerPaddingLeftRight">15dp</dimen>
   <dimen name="chatBoxMaxWidth">405dp</dimen>
-  <dimen name="messageBox_cornerRadius">30dp</dimen>
+  <dimen name="messageBox_cornerRadius">10dp</dimen>
   <dimen name="messageBox_elevation">6dp</dimen>
   <dimen name="messageBox_minusLeftRightMargin">-8dp</dimen>
 

@@ -66,10 +66,10 @@
                             android:text="SAMPLE TEXT"/>
                     </LinearLayout>
 
-                    <include layout="@layout/chat_sub_layout_messages_time"/>
+
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-
+          <include layout="@layout/chat_sub_layout_messages_time" />
         </LinearLayout>
 
 

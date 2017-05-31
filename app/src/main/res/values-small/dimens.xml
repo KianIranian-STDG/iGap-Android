@@ -12,7 +12,7 @@
   <dimen name="design_fab_size_mini">18pt</dimen>
   <dimen name="design_fab_size_normal">23pt</dimen>
 
-  <dimen name="messageBox_cornerRadius">15dp</dimen>
+  <dimen name="messageBox_cornerRadius">5dp</dimen>
   <dimen name="messageBox_elevation">3dp</dimen>
 
   <dimen name="messageBox_minusLeftRightMargin">-4dp</dimen>
