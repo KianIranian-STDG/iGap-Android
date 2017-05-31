@@ -518,6 +518,7 @@
                 android:id="@+id/chl_recycler_view_chat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+              android:background="#e6e6e6"
                 android:overScrollMode="never"
                 android:scrollbars="none"
                 >

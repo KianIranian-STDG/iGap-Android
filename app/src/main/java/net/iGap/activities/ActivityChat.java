@@ -1366,8 +1366,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 Drawable d = Drawable.createFromPath(f.getAbsolutePath());
                 getWindow().setBackgroundDrawable(d);
             }
-        } else {
-            getWindow().setBackgroundDrawableResource(R.drawable.newbg);
         }
 
         /**
@@ -1847,7 +1845,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         //following lines make scrolling smoother
         //recyclerView.setHasFixedSize(true);
         //recyclerView.setItemViewCacheSize(1000);
-        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheEnabled(false);
 
         mAdapter = new MessagesAdapter<>(this, this, this);
 

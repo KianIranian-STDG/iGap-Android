@@ -160,9 +160,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
+        holder.setIsRecyclable(false);
+
         if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogItem.ViewHolder || holder instanceof TimeItem.ViewHolder) {
             return;
         }
+
         /**
          * for return message that start showing to view
          */
@@ -638,7 +641,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      */
     protected String formatTime() {
 
-        String _time = TimeUtils.toLocal(mMessage.time, G.CHAT_MESSAGE_TIME);
+        String _time = TimeUtils.toLocal(mMessage.time, "H:mm a");
 
         return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(_time) : _time;
     }

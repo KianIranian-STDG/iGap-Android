@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="bottom|right"
-    android:layout_marginTop="-3dp"
+    android:layout_marginTop="-1dp"
     android:gravity="right"
-    android:layout_marginBottom="3dp"
+    android:layout_marginBottom="4dp"
     android:orientation="horizontal"
     >
 
@@ -15,6 +15,7 @@
         style="@style/ChatMessages.Time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_marginRight="@dimen/dp4"
         android:gravity="center"
         android:text="@string/edited"/>
@@ -24,6 +25,10 @@
         style="@style/ChatMessages.Time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp4"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:textStyle="italic"
         android:gravity="center"
         android:text="10:21"/>
 
