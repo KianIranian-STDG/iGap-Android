@@ -27,7 +27,7 @@
         >
 
 
-      <android.support.v7.widget.CardView
+      <LinearLayout
           android:id="@+id/contentContainer"
           android:layout_width="match_parent"
           style="@style/ChatMessages.CardView"
@@ -216,7 +216,7 @@
 
         </LinearLayout>
 
-      </android.support.v7.widget.CardView>
+      </LinearLayout>
 
 
       <include layout="@layout/chat_sub_layout_messages_time" />

@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
+            <LinearLayout
                 android:id="@+id/contentContainer"
                 style="@style/ChatMessages.CardView"
                 android:minWidth="50dp"
@@ -51,7 +51,7 @@
 
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
           <include
               android:id="@+id/csl_ll_time"
               layout="@layout/chat_sub_layout_messages_time"
