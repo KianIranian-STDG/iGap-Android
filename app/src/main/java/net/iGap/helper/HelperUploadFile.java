@@ -149,7 +149,9 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
         FileUploadStructure fileUploadStructure = sp.fileUploadStructure;
         fileUploadStructure.token = token;
 
-        updateListeners(sp);
+        if (progress < 100) {
+            updateListeners(sp);
+        }
 
         // not already uploaded
         if (progress != 100.0) {
