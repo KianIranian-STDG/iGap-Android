@@ -111,6 +111,7 @@ public final class AppUtils {
                 case AUDIO:
                 case AUDIO_TEXT:
                     setImageDrawable(view, R.drawable.green_music_note);
+                    break;
                 case FILE:
                 case FILE_TEXT:
 

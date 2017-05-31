@@ -259,7 +259,6 @@ import static java.lang.Long.parseLong;
 import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
-import static net.iGap.R.id.replyFrom;
 import static net.iGap.R.string.member;
 import static net.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
@@ -5156,7 +5155,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             mReplayLayout = (LinearLayout) findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
-            TextView replayFrom = (TextView) mReplayLayout.findViewById(replyFrom);
+            TextView replayFrom = (TextView) mReplayLayout.findViewById(R.id.replyFrom);
             ImageView thumbnail = (ImageView) mReplayLayout.findViewById(R.id.thumbnail);
             TextView closeReplay = (TextView) mReplayLayout.findViewById(R.id.cancelIcon);
             closeReplay.setOnClickListener(new View.OnClickListener() {
