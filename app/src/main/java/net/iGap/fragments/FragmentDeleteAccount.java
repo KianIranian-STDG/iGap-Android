@@ -63,6 +63,7 @@ public class FragmentDeleteAccount extends Fragment {
     private ViewGroup ltTime;
     private ProgressBar prgWaiting;
     private FragmentActivity mActivity;
+    private boolean isFirstClick = true;
 
     public FragmentDeleteAccount() {
         // Required empty public constructor
@@ -200,18 +201,21 @@ public class FragmentDeleteAccount extends Fragment {
 
                                 //                                    String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
                                 String verificationCode = edtDeleteAccount.getText().toString();
-                                if (verificationCode != null && !verificationCode.isEmpty()) {
+                                if (verificationCode != null && !verificationCode.isEmpty() && isFirstClick) {
 
+                                    isFirstClick = false;
                                     G.onUserDelete = new OnUserDelete() {
                                         @Override public void onUserDeleteResponse() {
                                             hideProgressBar();
+
                                         }
 
                                         @Override public void Error(final int majorCode, final int minorCode, final int time) {
 
-                                            G.handler.post(new Runnable() {
+                                            hideProgressBar();
+                                            isFirstClick = true;
+                                            mActivity.runOnUiThread(new Runnable() {
                                                 @Override public void run() {
-                                                    hideProgressBar();
                                                     if (dialog.isShowing()) dialog.dismiss();
                                                     switch (majorCode) {
                                                         case 158:
@@ -224,17 +228,22 @@ public class FragmentDeleteAccount extends Fragment {
 
                                         @Override public void TimeOut() {
                                             hideProgressBar();
-                                            G.handler.post(new Runnable() {
-                                                @Override public void run() {
-                                                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
+                                            isFirstClick = true;
+                                            if (mActivity != null) {
+                                                mActivity.runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
                                         }
                                     };
 

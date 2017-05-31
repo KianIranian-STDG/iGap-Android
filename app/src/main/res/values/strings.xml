@@ -903,7 +903,7 @@
   <string name="Please_enter_your_hint">"Please enter your hint</string>
   <string name="Please_enter_your_email">"Please enter your email</string>
 
-  <string name="error_check_password">Password code is locked for a while due to too many tries.</string>
+ <string name="error_check_password">Password is locked for a while due to too many tries.</string>
   <string name="e_call_permision">Is not allowed to communicate </string>
   <string name="e_904_6">User is blocked </string>
   <string name="e_904_7">Dialed number is not active</string>

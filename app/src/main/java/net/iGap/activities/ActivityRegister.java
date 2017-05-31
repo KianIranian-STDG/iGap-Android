@@ -19,10 +19,12 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.Html;
@@ -1371,16 +1373,6 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    @Override public void onBackPressed() {
-
-        if (dialogWait != null) {
-            if (dialogWait.isShowing()) {
-
-            }
-        } else {
-            super.onBackPressed();
-        }
-    }
 
 
     @Override
@@ -1497,6 +1489,17 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
         Toast.makeText(ActivityRegister.this, error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            finishAffinity();
+        } else {
+            ActivityCompat.finishAffinity(this);
+        }
     }
 
 }
