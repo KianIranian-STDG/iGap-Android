@@ -56,6 +56,7 @@ import static net.iGap.G.selectedLanguage;
 import static net.iGap.G.toggleButtonColor;
 import static net.iGap.G.unLogin;
 import static net.iGap.G.unSecure;
+import static net.iGap.G.unSecureResponseActionId;
 import static net.iGap.G.userId;
 import static net.iGap.G.userTextSize;
 import static net.iGap.G.waitingActionIds;
@@ -252,6 +253,7 @@ public final class StartupActions {
 
         HelperFillLookUpClass.fillLookUpClassArray();
         fillUnSecureList();
+        fillUnSecureServerActionId();
         fillUnLoginList();
         fillWaitingRequestActionIdAllowed();
         mainUserInfo();
@@ -282,13 +284,25 @@ public final class StartupActions {
 
     /**
      * list of actionId that can be doing without secure
+     * (for send request)
      */
     private void fillUnSecureList() {
         unSecure.add("2");
     }
 
     /**
+     * list of actionIds that allowed continue processing even communication is not secure
+     * (for receive response)
+     */
+    private void fillUnSecureServerActionId() {
+        unSecureResponseActionId.add("30001");
+        unSecureResponseActionId.add("30002");
+        unSecureResponseActionId.add("30003");
+    }
+
+    /**
      * list of actionId that can be doing without login
+     * (for send request)
      */
     private void fillUnLoginList() {
         unLogin.add("100");
@@ -308,6 +322,7 @@ public final class StartupActions {
     /**
      * list of actionId that will be storing in waitingActionIds list
      * and after that user login send this request again
+     * (for send request)
      */
     private void fillWaitingRequestActionIdAllowed() {
         waitingActionIds.add("201");

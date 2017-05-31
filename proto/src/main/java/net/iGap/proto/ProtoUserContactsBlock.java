@@ -1151,7 +1151,10 @@ public final class ProtoUserContactsBlock {
     java.lang.String[] descriptorData = {
             "\n\027UserContactsBlock.proto\022\005proto\032\rReques" +
                     "t.proto\032\016Response.proto\"E\n\021UserContactsB" +
-                    "lock\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\017\n" + "\007user_id\030\002 \001(\004\"O\n\031UserContactsBlockRespo" + "nse\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\017" + "\n\007user_id\030\002 \001(\004B(\n\016net.iGap.protoB\026Proto" +
+                    "lock\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\017\n" +
+                    "\007user_id\030\002 \001(\004\"O\n\031UserContactsBlockRespo" +
+                    "nse\022!\n\010response\030\001 \001(\0132\017.proto.Response\022\017" +
+                    "\n\007user_id\030\002 \001(\004B(\n\016net.iGap.protoB\026Proto" +
                     "UserContactsBlockb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1170,8 +1173,8 @@ public final class ProtoUserContactsBlock {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_UserContactsBlockResponse_descriptor,
         new java.lang.String[] { "Response", "UserId", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

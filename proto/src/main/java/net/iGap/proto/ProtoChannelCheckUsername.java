@@ -311,7 +311,6 @@ public final class ProtoChannelCheckUsername {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoChannelCheckUsername.ChannelCheckUsername prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -1069,7 +1068,6 @@ public final class ProtoChannelCheckUsername {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoChannelCheckUsername.ChannelCheckUsernameResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }

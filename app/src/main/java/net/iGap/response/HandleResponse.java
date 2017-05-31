@@ -32,10 +32,11 @@ public class HandleResponse extends Thread {
 
             try {
                 binaryDecode = AESCrypt.decrypt(G.symmetricKey, iv, binaryDecode);
+                HelperUnpackMessage.unpack(binaryDecode);
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
             }
-            HelperUnpackMessage.unpack(binaryDecode);
+
         } else {
             HelperUnpackMessage.unpack(binary);
         }

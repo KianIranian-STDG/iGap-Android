@@ -309,7 +309,6 @@ public final class ProtoUserPrivacySetRule {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoUserPrivacySetRule.UserPrivacySetRule prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -993,7 +992,6 @@ public final class ProtoUserPrivacySetRule {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoUserPrivacySetRule.UserPrivacySetRuleResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }

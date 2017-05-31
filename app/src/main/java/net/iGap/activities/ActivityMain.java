@@ -154,7 +154,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition, OnClientGetRoomListResponse {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnComplete, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, OnClientCondition, OnClientGetRoomListResponse, DrawerLayout.DrawerListener {
 
     public static ActivityMain activityMain;
     public static boolean isMenuButtonAddShown = false;
@@ -183,6 +183,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     boolean isThereAnyMoreItemToLoad = false;
 
     private RealmRecyclerView mRecyclerView;
+
+    private int pageDrawer = 0;
+
 
     @Override
     protected void onDestroy() {
@@ -383,7 +386,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        ViewGroup drawerButton = (ViewGroup) findViewById(R.id.amr_ripple_menu);
+        final ViewGroup drawerButton = (ViewGroup) findViewById(R.id.amr_ripple_menu);
         drawerButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -426,15 +429,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             public void onClick(View v) {
 
                 drawer.closeDrawer(GravityCompat.START);
+                pageDrawer = 1;
 
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        chatGetRoom(G.userId);
-
-                    }
-                }, 225);
             }
         });
 
@@ -456,23 +452,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
-
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        final Fragment fragment = RegisteredContactsFragment.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("TITLE", "New Chat");
-                        fragment.setArguments(bundle);
-
-                        try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                    }
-                }, 256);
+                pageDrawer = 2;
                 lockNavigation();
             }
         });
@@ -488,22 +468,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                pageDrawer = 3;
 
-                        FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("TYPE", "NewGroup");
-                        fragment.setArguments(bundle);
-
-                        try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                    }
-                }, 256);
                 lockNavigation();
             }
         });
@@ -518,22 +484,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         drawer.closeDrawer(GravityCompat.START);
                     }
                 });
+                pageDrawer = 4;
 
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("TYPE", "NewChanel");
-                        fragment.setArguments(bundle);
-                        try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                    }
-                }, 256);
                 lockNavigation();
             }
         });
@@ -549,19 +501,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                pageDrawer = 5;
 
-                        Fragment fragment = FragmentIgapSearch.newInstance();
 
-                        try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "Search_fragment_igap").commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                    }
-                }, 256);
                 lockNavigation();
             }
         });
@@ -577,22 +519,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                pageDrawer = 6;
 
-                        Fragment fragment = RegisteredContactsFragment.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("TITLE", "Contacts");
-                        fragment.setArguments(bundle);
 
-                        try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                    }
-                }, 256);
                 lockNavigation();
             }
         });
@@ -608,6 +537,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 itemNavCall.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -615,17 +545,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             }
                         });
 
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Fragment fragment = FragmentCall.newInstance();
-                                try {
-                                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-                                } catch (Exception e) {
-                                    e.getStackTrace();
-                                }
-                            }
-                        }, 256);
+                        pageDrawer = 7;
+
+
                     }
                 });
             } else {
@@ -647,17 +569,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                pageDrawer = 8;
 
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you !");
-                        sendIntent.setType("text/plain");
-                        startActivity(sendIntent);
-                    }
-                }, 256);
+
             }
         });
         ViewGroup itemNavSetting = (ViewGroup) findViewById(R.id.lm_ll_setting);
@@ -671,30 +585,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                pageDrawer = 9;
 
-                        try {
-                            HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
-                                @Override
-                                public void Allow() {
-                                    Intent intent = new Intent(G.context, ActivitySetting.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    //ActivityMain.mLeftDrawerLayout.closeDrawer();
-                                }
 
-                                @Override
-                                public void deny() {
-
-                                }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, 256);
             }
         });
 
@@ -709,73 +602,211 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                pageDrawer = 10;
 
-                        new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                                .content(R.string.content_log_out)
-                                .positiveText(getResources().getString(R.string.B_ok))
-                                .negativeText(getResources().getString(R.string.B_cancel))
-                                .iconRes(R.mipmap.exit_to_app_button)
-                                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        G.onUserSessionLogout = new OnUserSessionLogout() {
-                                            @Override
-                                            public void onUserSessionLogout() {
-
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        HelperLogout.logout();
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onError() {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                snack.dismiss();
-                                                            }
-                                                        });
-                                                        snack.show();
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onTimeOut() {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                snack.dismiss();
-                                                            }
-                                                        });
-                                                        snack.show();
-                                                    }
-                                                });
-                                            }
-                                        };
-                                        new RequestUserSessionLogout().userSessionLogout();
-                                    }
-                                })
-                                .show();
-                    }
-                }, 256);
             }
         });
+
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+                switch (pageDrawer) {
+                    case 1:
+                        chatGetRoom(G.userId);
+                        pageDrawer = 0;
+                        break;
+                    case 2: {
+                        final Fragment fragment = RegisteredContactsFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("TITLE", "New Chat");
+                        fragment.setArguments(bundle);
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+                        pageDrawer = 0;
+                        break;
+                    }
+                    case 3: {
+                        FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("TYPE", "NewGroup");
+                        fragment.setArguments(bundle);
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+                        pageDrawer = 0;
+                        break;
+                    }
+                    case 4: {
+                        FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("TYPE", "NewChanel");
+                        fragment.setArguments(bundle);
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+
+                        pageDrawer = 0;
+                        break;
+                    }
+                    case 5: {
+                        final Fragment fragment = FragmentIgapSearch.newInstance();
+                        try {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "Search_fragment_igap").commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+
+                        pageDrawer = 0;
+                        break;
+                    }
+                    case 6: {
+                        Fragment fragment = RegisteredContactsFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("TITLE", "Contacts");
+                        fragment.setArguments(bundle);
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+
+                        pageDrawer = 0;
+                        break;
+                    }
+                    case 7: {
+                        Fragment fragment = FragmentCall.newInstance();
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+
+                        pageDrawer = 0;
+                        break;
+                    }
+                    case 8: {
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you !");
+                        sendIntent.setType("text/plain");
+                        startActivity(sendIntent);
+
+                        pageDrawer = 0;
+                        break;
+                    }
+                    case 9: {
+                        try {
+                            HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
+                                @Override
+                                public void Allow() {
+                                    Intent intent = new Intent(G.context, ActivitySetting.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    //ActivityMain.mLeftDrawerLayout.closeDrawer();
+                                }
+                                @Override
+                                public void deny() {
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        pageDrawer = 0;
+                        break;
+                    }
+                    case 10: {
+                        new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
+                            .content(R.string.content_log_out)
+                            .positiveText(getResources().getString(R.string.B_ok))
+                            .negativeText(getResources().getString(R.string.B_cancel))
+                            .iconRes(R.mipmap.exit_to_app_button)
+                            .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    G.onUserSessionLogout = new OnUserSessionLogout() {
+                                        @Override
+                                        public void onUserSessionLogout() {
+
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    HelperLogout.logout();
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onError() {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            snack.dismiss();
+                                                        }
+                                                    });
+                                                    snack.show();
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onTimeOut() {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            snack.dismiss();
+                                                        }
+                                                    });
+                                                    snack.show();
+                                                }
+                                            });
+                                        }
+                                    };
+                                    new RequestUserSessionLogout().userSessionLogout();
+                                }
+                            })
+                            .show();
+
+                        pageDrawer = 0;
+                        break;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
     }
 
     @Override
@@ -795,7 +826,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 Fragment fragment = SearchFragment.newInstance();
 
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1034,6 +1065,26 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
             }
         });
+    }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+
     }
 
     public class PreCachingLayoutManager extends LinearLayoutManager {
@@ -1878,49 +1929,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                     e.printStackTrace();
                                 }
 
-                                switch (_type) {
-                                    case VOICE:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.voice_message);
-                                        break;
-                                    case VIDEO:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.video_message);
-                                        break;
-                                    case FILE:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.file_message);
-                                        break;
-                                    case AUDIO:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.audio_message);
-                                        break;
-                                    case IMAGE:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.image_message);
-                                        break;
-                                    case CONTACT:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.contact_message);
-                                        break;
-                                    case GIF:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.gif_message);
-                                        break;
-                                    case LOCATION:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.location_message);
-                                        break;
-                                    default:
-                                        if (!HelperCalander.isLanguagePersian) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                                txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
-                                            }
+                                String result = AppUtils.conversionMessageType(_type, txtLastMessage, R.color.room_message_blue);
+                                if (result.isEmpty()) {
+                                    if (!HelperCalander.isLanguagePersian) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                            txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
                                         }
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
-                                        txtLastMessage.setText(lastMessage);
-                                        break;
+                                    }
+                                    txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+                                    txtLastMessage.setText(lastMessage);
                                 }
+
                             } else {
                                 txtLastMessage.setText(lastMessage);
                             }

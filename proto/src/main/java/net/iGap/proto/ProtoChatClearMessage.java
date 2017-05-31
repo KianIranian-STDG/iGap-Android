@@ -1275,7 +1275,10 @@ public final class ProtoChatClearMessage {
             "\n\026ChatClearMessage.proto\022\005proto\032\rRequest" +
                     ".proto\032\016Response.proto\"V\n\020ChatClearMessa" +
                     "ge\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\017\n\007r" +
-                    "oom_id\030\002 \001(\004\022\020\n\010clear_id\030\003 \001(\004\"`\n\030ChatCl" + "earMessageResponse\022!\n\010response\030\001 \001(\0132\017.p" + "roto.Response\022\017\n\007room_id\030\002 \001(\004\022\020\n\010clear_" + "id\030\003 \001(\004B\'\n\016net.iGap.protoB\025ProtoChatCle" +
+                    "oom_id\030\002 \001(\004\022\020\n\010clear_id\030\003 \001(\004\"`\n\030ChatCl" +
+                    "earMessageResponse\022!\n\010response\030\001 \001(\0132\017.p" +
+                    "roto.Response\022\017\n\007room_id\030\002 \001(\004\022\020\n\010clear_" +
+                    "id\030\003 \001(\004B\'\n\016net.iGap.protoB\025ProtoChatCle" +
                     "arMessageb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1294,8 +1297,8 @@ public final class ProtoChatClearMessage {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChatClearMessageResponse_descriptor,
         new java.lang.String[] { "Response", "RoomId", "ClearId", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

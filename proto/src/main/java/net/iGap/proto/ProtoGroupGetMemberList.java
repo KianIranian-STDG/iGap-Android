@@ -2296,7 +2296,10 @@ public final class ProtoGroupGetMemberList {
                     "FilterRole\022%\n\npagination\030\004 \001(\0132\021.proto.P" +
                     "agination\";\n\nFilterRole\022\007\n\003ALL\020\000\022\n\n\006MEMB" +
                     "ER\020\001\022\r\n\tMODERATOR\020\002\022\t\n\005ADMIN\020\003\"\270\001\n\032Group" +
-                    "GetMemberListResponse\022!\n\010response\030\001 \001(\0132" + "\017.proto.Response\0228\n\006member\030\002 \003(\0132(.proto", ".GroupGetMemberListResponse.Member\032=\n\006Me" + "mber\022\016\n\006userId\030\001 \001(\004\022#\n\004role\030\002 \001(\0162\025.pro" + "to.GroupRoom.RoleB)\n\016net.iGap.protoB\027Pro" +
+                    "GetMemberListResponse\022!\n\010response\030\001 \001(\0132" +
+                    "\017.proto.Response\0228\n\006member\030\002 \003(\0132(.proto", ".GroupGetMemberListResponse.Member\032=\n\006Me" +
+            "mber\022\016\n\006userId\030\001 \001(\004\022#\n\004role\030\002 \001(\0162\025.pro" +
+            "to.GroupRoom.RoleB)\n\016net.iGap.protoB\027Pro" +
             "toGroupGetMemberListb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2322,9 +2325,9 @@ public final class ProtoGroupGetMemberList {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_GroupGetMemberListResponse_Member_descriptor,
         new java.lang.String[] { "UserId", "Role", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
-      net.iGap.proto.ProtoGlobal.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

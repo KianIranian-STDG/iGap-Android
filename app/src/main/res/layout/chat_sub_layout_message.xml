@@ -45,6 +45,7 @@
                       <net.iGap.emoji.EmojiTextView
                             android:id="@+id/messageText"
                             style="@style/ChatMessages.EmojiTextView"
+                          fontPath="fonts/IRANSansMobile.ttf"
                             android:text="SAMPLE TEXT"/>
 
                     </LinearLayout>

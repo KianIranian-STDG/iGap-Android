@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.util.Log;
+import android.widget.Toast;
 import com.neovisionaries.ws.client.WebSocket;
+import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -51,7 +53,8 @@ public class ConnectionManager {
     private static void initializeReceiver() {
         BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 
-            @Override public void onReceive(Context context, Intent intent) {
+            @Override
+            public void onReceive(Context context, Intent intent) {
                 if (Connectivity.isConnectedMobile(context)) {
                     /**
                      * isConnectedMobile
@@ -98,6 +101,14 @@ public class ConnectionManager {
                             if (HelperTimeOut.heartBeatTimeOut()) {
                                 Log.i("HHH", "Connection heartBeatTimeOut");
                                 //reconnect(true);
+                                if (BuildConfig.DEBUG) {
+                                    G.handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(G.context, "Connection HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
                             } else {
                                 Log.i("HHH", "Connection Not Time Out HeartBeat");
                             }

@@ -799,7 +799,7 @@ public final class ProtoFileDownload {
           throw new NullPointerException();
         }
 
-          token_ = value;
+        token_ = value;
         onChanged();
         return this;
       }
@@ -821,7 +821,7 @@ public final class ProtoFileDownload {
         }
         checkByteStringIsUtf8(value);
 
-          token_ = value;
+        token_ = value;
         onChanged();
         return this;
       }
@@ -1473,7 +1473,7 @@ public final class ProtoFileDownload {
           throw new NullPointerException();
         }
 
-          bytes_ = value;
+        bytes_ = value;
         onChanged();
         return this;
       }
@@ -1549,7 +1549,9 @@ public final class ProtoFileDownload {
                     "\n\010selector\030\005 \001(\0162\034.proto.FileDownload.Se" +
                     "lector\"V\n\010Selector\022\010\n\004FILE\020\000\022\023\n\017SMALL_TH" +
                     "UMBNAIL\020\001\022\023\n\017LARGE_THUMBNAIL\020\002\022\026\n\022WAVEFO" +
-                    "RM_THUMBNAIL\020\003\"H\n\024FileDownloadResponse\022!" + "\n\010response\030\001 \001(\0132\017.proto.Response\022\r\n\005byt" + "es\030\004 \001(\014B#\n\016net.iGap.protoB\021ProtoFileDow", "nloadb\006proto3"
+                    "RM_THUMBNAIL\020\003\"H\n\024FileDownloadResponse\022!" +
+                    "\n\010response\030\001 \001(\0132\017.proto.Response\022\r\n\005byt" +
+                    "es\030\004 \001(\014B#\n\016net.iGap.protoB\021ProtoFileDow", "nloadb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
       public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
@@ -1561,15 +1563,15 @@ public final class ProtoFileDownload {
             net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
     }, assigner);
     internal_static_proto_FileDownload_descriptor = getDescriptor().getMessageTypes().get(0);
-      internal_static_proto_FileDownload_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_FileDownload_descriptor, new java.lang.String[]{"Request", "Token", "Offset", "MaxLimit", "Selector",});
+    internal_static_proto_FileDownload_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_FileDownload_descriptor, new java.lang.String[]{"Request", "Token", "Offset", "MaxLimit", "Selector",});
     internal_static_proto_FileDownloadResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_FileDownloadResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_FileDownloadResponse_descriptor,
         new java.lang.String[] { "Response", "Bytes", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

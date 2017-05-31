@@ -17,11 +17,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import io.realm.Realm;
@@ -109,6 +111,7 @@ public final class AppUtils {
                 case AUDIO:
                 case AUDIO_TEXT:
                     setImageDrawable(view, R.drawable.green_music_note);
+                    break;
                 case FILE:
                 case FILE_TEXT:
 
@@ -150,6 +153,57 @@ public final class AppUtils {
             }
         }
     }
+
+    /**
+     * convert message type to appropriate text
+     */
+    public static String conversionMessageType(ProtoGlobal.RoomMessageType type) {
+        return conversionMessageType(type, null, 0);
+    }
+
+    /**
+     * convert message type to appropriate text and setText if textView isn't null
+     */
+    public static String conversionMessageType(ProtoGlobal.RoomMessageType type, @Nullable TextView textView, int colorId) {
+        String result = "";
+
+        switch (type) {
+            case VOICE:
+                result = G.context.getResources().getString(R.string.voice_message);
+                break;
+            case VIDEO:
+                result = G.context.getResources().getString(R.string.video_message);
+                break;
+            case FILE:
+                result = G.context.getResources().getString(R.string.file_message);
+                break;
+            case AUDIO:
+                result = G.context.getResources().getString(R.string.audio_message);
+                break;
+            case IMAGE:
+                result = G.context.getResources().getString(R.string.image_message);
+                break;
+            case CONTACT:
+                result = G.context.getResources().getString(R.string.contact_message);
+                break;
+            case GIF:
+                result = G.context.getResources().getString(R.string.gif_message);
+                break;
+            case LOCATION:
+                result = G.context.getResources().getString(R.string.location_message);
+                break;
+            default:
+                break;
+        }
+
+        if (textView != null && !result.isEmpty()) {
+            textView.setTextColor(ContextCompat.getColor(context, colorId));
+            textView.setText(result);
+        }
+
+        return result;
+    }
+
 
     private static void getAndSetPositionPicture(final RealmRoomMessage message, final ImageView view) {
         if (message.getLocation().getImagePath() != null) {

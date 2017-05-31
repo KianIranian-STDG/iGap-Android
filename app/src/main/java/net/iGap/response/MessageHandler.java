@@ -12,6 +12,9 @@ package net.iGap.response;
 
 import android.support.annotation.CallSuper;
 import android.util.Log;
+import android.widget.Toast;
+import net.iGap.BuildConfig;
+import net.iGap.G;
 import net.iGap.helper.HelperError;
 import net.iGap.proto.ProtoError;
 
@@ -29,14 +32,23 @@ public abstract class MessageHandler {
         this.identity = identity;
     }
 
-    @CallSuper public void handler() throws NullPointerException {
+    @CallSuper
+    public void handler() throws NullPointerException {
         Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + message);
-        //Log.i("LLL", "MessageHandler handler : " + actionId + " || Response => " + G.lookupMap.get(actionId));
     }
 
-    @CallSuper public void timeOut() {
+    @CallSuper
+    public void timeOut() {
         if (heartBeatTimeOut()) {
             Log.i("HHH", "heartBeatTimeOut");
+            if (BuildConfig.DEBUG) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(G.context, "MessageHandler HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
             //WebSocketClient.reconnect(true);
         } else {
             Log.i("HHH", "Not Time Out HeartBeat");
@@ -45,7 +57,8 @@ public abstract class MessageHandler {
         error();
     }
 
-    @CallSuper public void error() {
+    @CallSuper
+    public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

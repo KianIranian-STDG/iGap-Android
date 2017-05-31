@@ -141,6 +141,7 @@ import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
+import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.IResendMessage;
@@ -259,7 +260,6 @@ import static java.lang.Long.parseLong;
 import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
-import static net.iGap.R.id.replyFrom;
 import static net.iGap.R.string.member;
 import static net.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
@@ -281,7 +281,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 
 public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 
-    public static ActivityChat activityChat;
+    public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
     private AttachFile attachFile;
     private EditText edtSearchMessage;
@@ -563,6 +563,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
+                        /**
+                         * hint: should use from this method here because we need checkAction
+                         * state after set members count for avoid from hide action if exist
+                         */
+                        checkAction();
+
                         updateUnreadCountRealm.close();
                     }
                 });
@@ -576,11 +582,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.onUserInfoResponse = this;
         G.onChannelAddMessageReaction = this;
         G.onChannelGetMessagesStats = this;
-        activityChat = this;
         G.onSetAction = this;
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
         G.helperNotificationAndBadge.cancelNotification();
+
+        finishActivity = new FinishActivity() {
+            @Override
+            public void finishActivity() {
+                ActivityChat.this.finish();
+            }
+        };
 
         initCallbacks();
         HelperNotificationAndBadge.isChatRoomNow = true;
@@ -692,7 +704,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         // room id have to be set to default, otherwise I'm in the room always!
         mRoomId = -1;
         super.onDestroy();
-        activityChat = null;
     }
 
     @Override
@@ -1277,21 +1288,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 if (isChatReadOnly) {
                     viewAttachFile.setVisibility(View.GONE);
-                    ((RecyclerView) findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
+                    (findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
                 }
 
                 if (chatType == CHAT) {
 
-                    //RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                    //chatPeerId = realmChatRoom.getPeerId();
-
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                     if (realmRegisteredInfo != null) {
-                        //title = realmRegisteredInfo.getDisplayName();
                         initialize = realmRegisteredInfo.getInitials();
                         color = realmRegisteredInfo.getColor();
-                        //lastSeen = realmRegisteredInfo.getLastSeen();
-                        //userStatus = realmRegisteredInfo.getStatus();
                         phoneNumber = realmRegisteredInfo.getPhoneNumber();
                     } else {
                         title = realmRoom.getTitle();
@@ -1328,7 +1333,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         initAppbarSelected();
         getDraft();
         getUserInfo();
-        checkAction();
         insertShearedData();
 
         G.onChatSendMessage = new OnChatSendMessage() {
@@ -5154,7 +5158,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             mReplayLayout = (LinearLayout) findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
-            TextView replayFrom = (TextView) mReplayLayout.findViewById(replyFrom);
+            TextView replayFrom = (TextView) mReplayLayout.findViewById(R.id.replyFrom);
             ImageView thumbnail = (ImageView) mReplayLayout.findViewById(R.id.thumbnail);
             TextView closeReplay = (TextView) mReplayLayout.findViewById(R.id.cancelIcon);
             closeReplay.setOnClickListener(new View.OnClickListener() {
@@ -5167,11 +5171,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
-                replayTo.setText(chatItem.forwardedFrom.getMessage());
+                replayTo.setText(AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType()));
             } else {
                 RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(chatItem.messageID)).findFirst();
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
-                replayTo.setText(chatItem.messageText);
+                replayTo.setText(AppUtils.conversionMessageType(chatItem.messageType));
             }
             if (chatType == CHANNEL) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.roomId).findFirst();

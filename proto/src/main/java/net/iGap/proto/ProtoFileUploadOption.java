@@ -257,7 +257,6 @@ public final class ProtoFileUploadOption {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoFileUploadOption.FileUploadOption prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -883,7 +882,6 @@ public final class ProtoFileUploadOption {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoFileUploadOption.FileUploadOptionResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }

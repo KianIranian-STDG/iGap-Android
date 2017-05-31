@@ -286,7 +286,6 @@ public final class ProtoChatDeleteMessage {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoChatDeleteMessage.ChatDeleteMessage prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
@@ -944,7 +943,6 @@ public final class ProtoChatDeleteMessage {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-
     public static Builder newBuilder(net.iGap.proto.ProtoChatDeleteMessage.ChatDeleteMessageResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }

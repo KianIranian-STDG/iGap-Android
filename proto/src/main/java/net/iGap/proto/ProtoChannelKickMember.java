@@ -83,11 +83,11 @@ public final class ProtoChannelKickMember {
               break;
             }
             case 10: {
-                net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
+              net.iGap.proto.ProtoRequest.Request.Builder subBuilder = null;
               if (request_ != null) {
                 subBuilder = request_.toBuilder();
               }
-                request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
+              request_ = input.readMessage(net.iGap.proto.ProtoRequest.Request.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(request_);
                 request_ = subBuilder.buildPartial();
@@ -118,16 +118,16 @@ public final class ProtoChannelKickMember {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_descriptor;
+      return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.Builder.class);
+      return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.Builder.class);
     }
 
     public static final int REQUEST_FIELD_NUMBER = 1;
-      private net.iGap.proto.ProtoRequest.Request request_;
+    private net.iGap.proto.ProtoRequest.Request request_;
     /**
      * <code>optional .proto.Request request = 1;</code>
      */
@@ -138,7 +138,7 @@ public final class ProtoChannelKickMember {
      * <code>optional .proto.Request request = 1;</code>
      */
     public net.iGap.proto.ProtoRequest.Request getRequest() {
-        return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+      return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
     }
     /**
      * <code>optional .proto.Request request = 1;</code>
@@ -215,10 +215,10 @@ public final class ProtoChannelKickMember {
       if (obj == this) {
        return true;
       }
-        if (!(obj instanceof net.iGap.proto.ProtoChannelKickMember.ChannelKickMember)) {
+      if (!(obj instanceof net.iGap.proto.ProtoChannelKickMember.ChannelKickMember)) {
         return super.equals(obj);
       }
-        net.iGap.proto.ProtoChannelKickMember.ChannelKickMember other = (net.iGap.proto.ProtoChannelKickMember.ChannelKickMember) obj;
+      net.iGap.proto.ProtoChannelKickMember.ChannelKickMember other = (net.iGap.proto.ProtoChannelKickMember.ChannelKickMember) obj;
 
       boolean result = true;
       result = result && (hasRequest() == other.hasRequest());
@@ -255,38 +255,38 @@ public final class ProtoChannelKickMember {
       return hash;
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(byte[] data)
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(java.io.InputStream input)
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -294,13 +294,13 @@ public final class ProtoChannelKickMember {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseDelimitedFrom(java.io.InputStream input)
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseDelimitedFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -308,14 +308,14 @@ public final class ProtoChannelKickMember {
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -328,7 +328,7 @@ public final class ProtoChannelKickMember {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-      public static Builder newBuilder(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember prototype) {
+    public static Builder newBuilder(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -351,15 +351,15 @@ public final class ProtoChannelKickMember {
         net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-          return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_descriptor;
+        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.Builder.class);
+        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.Builder.class);
       }
 
-        // Construct using net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.newBuilder()
+      // Construct using net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -391,23 +391,23 @@ public final class ProtoChannelKickMember {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-          return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_descriptor;
+        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMember_descriptor;
       }
 
-        public net.iGap.proto.ProtoChannelKickMember.ChannelKickMember getDefaultInstanceForType() {
-            return net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.getDefaultInstance();
+      public net.iGap.proto.ProtoChannelKickMember.ChannelKickMember getDefaultInstanceForType() {
+        return net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.getDefaultInstance();
       }
 
-        public net.iGap.proto.ProtoChannelKickMember.ChannelKickMember build() {
-            net.iGap.proto.ProtoChannelKickMember.ChannelKickMember result = buildPartial();
+      public net.iGap.proto.ProtoChannelKickMember.ChannelKickMember build() {
+        net.iGap.proto.ProtoChannelKickMember.ChannelKickMember result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-        public net.iGap.proto.ProtoChannelKickMember.ChannelKickMember buildPartial() {
-            net.iGap.proto.ProtoChannelKickMember.ChannelKickMember result = new net.iGap.proto.ProtoChannelKickMember.ChannelKickMember(this);
+      public net.iGap.proto.ProtoChannelKickMember.ChannelKickMember buildPartial() {
+        net.iGap.proto.ProtoChannelKickMember.ChannelKickMember result = new net.iGap.proto.ProtoChannelKickMember.ChannelKickMember(this);
         if (requestBuilder_ == null) {
           result.request_ = request_;
         } else {
@@ -446,16 +446,16 @@ public final class ProtoChannelKickMember {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof net.iGap.proto.ProtoChannelKickMember.ChannelKickMember) {
-              return mergeFrom((net.iGap.proto.ProtoChannelKickMember.ChannelKickMember) other);
+        if (other instanceof net.iGap.proto.ProtoChannelKickMember.ChannelKickMember) {
+          return mergeFrom((net.iGap.proto.ProtoChannelKickMember.ChannelKickMember) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-        public Builder mergeFrom(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember other) {
-            if (other == net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.getDefaultInstance()) return this;
+      public Builder mergeFrom(net.iGap.proto.ProtoChannelKickMember.ChannelKickMember other) {
+        if (other == net.iGap.proto.ProtoChannelKickMember.ChannelKickMember.getDefaultInstance()) return this;
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
@@ -477,11 +477,11 @@ public final class ProtoChannelKickMember {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-          net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parsedMessage = null;
+        net.iGap.proto.ProtoChannelKickMember.ChannelKickMember parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (net.iGap.proto.ProtoChannelKickMember.ChannelKickMember) e.getUnfinishedMessage();
+          parsedMessage = (net.iGap.proto.ProtoChannelKickMember.ChannelKickMember) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -491,7 +491,7 @@ public final class ProtoChannelKickMember {
         return this;
       }
 
-        private net.iGap.proto.ProtoRequest.Request request_ = null;
+      private net.iGap.proto.ProtoRequest.Request request_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoRequest.Request, net.iGap.proto.ProtoRequest.Request.Builder, net.iGap.proto.ProtoRequest.RequestOrBuilder> requestBuilder_;
       /**
        * <code>optional .proto.Request request = 1;</code>
@@ -504,7 +504,7 @@ public final class ProtoChannelKickMember {
        */
       public net.iGap.proto.ProtoRequest.Request getRequest() {
         if (requestBuilder_ == null) {
-            return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
+          return request_ == null ? net.iGap.proto.ProtoRequest.Request.getDefaultInstance() : request_;
         } else {
           return requestBuilder_.getMessage();
         }
@@ -670,10 +670,10 @@ public final class ProtoChannelKickMember {
     // @@protoc_insertion_point(class_scope:proto.ChannelKickMember)
     private static final net.iGap.proto.ProtoChannelKickMember.ChannelKickMember DEFAULT_INSTANCE;
     static {
-        DEFAULT_INSTANCE = new net.iGap.proto.ProtoChannelKickMember.ChannelKickMember();
+      DEFAULT_INSTANCE = new net.iGap.proto.ProtoChannelKickMember.ChannelKickMember();
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember getDefaultInstance() {
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMember getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -696,7 +696,7 @@ public final class ProtoChannelKickMember {
       return PARSER;
     }
 
-      public net.iGap.proto.ProtoChannelKickMember.ChannelKickMember getDefaultInstanceForType() {
+    public net.iGap.proto.ProtoChannelKickMember.ChannelKickMember getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -771,11 +771,11 @@ public final class ProtoChannelKickMember {
               break;
             }
             case 10: {
-                net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
+              net.iGap.proto.ProtoResponse.Response.Builder subBuilder = null;
               if (response_ != null) {
                 subBuilder = response_.toBuilder();
               }
-                response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
+              response_ = input.readMessage(net.iGap.proto.ProtoResponse.Response.parser(), extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(response_);
                 response_ = subBuilder.buildPartial();
@@ -806,16 +806,16 @@ public final class ProtoChannelKickMember {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_descriptor;
+      return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.Builder.class);
+      return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.Builder.class);
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
-      private net.iGap.proto.ProtoResponse.Response response_;
+    private net.iGap.proto.ProtoResponse.Response response_;
     /**
      * <code>optional .proto.Response response = 1;</code>
      */
@@ -826,7 +826,7 @@ public final class ProtoChannelKickMember {
      * <code>optional .proto.Response response = 1;</code>
      */
     public net.iGap.proto.ProtoResponse.Response getResponse() {
-        return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+      return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
     }
     /**
      * <code>optional .proto.Response response = 1;</code>
@@ -903,10 +903,10 @@ public final class ProtoChannelKickMember {
       if (obj == this) {
        return true;
       }
-        if (!(obj instanceof net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse)) {
+      if (!(obj instanceof net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse)) {
         return super.equals(obj);
       }
-        net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse other = (net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse) obj;
+      net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse other = (net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse) obj;
 
       boolean result = true;
       result = result && (hasResponse() == other.hasResponse());
@@ -943,38 +943,38 @@ public final class ProtoChannelKickMember {
       return hash;
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(byte[] data)
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(java.io.InputStream input)
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -982,13 +982,13 @@ public final class ProtoChannelKickMember {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseDelimitedFrom(java.io.InputStream input)
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseDelimitedFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -996,14 +996,14 @@ public final class ProtoChannelKickMember {
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1016,7 +1016,7 @@ public final class ProtoChannelKickMember {
       return DEFAULT_INSTANCE.toBuilder();
     }
 
-      public static Builder newBuilder(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse prototype) {
+    public static Builder newBuilder(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1039,15 +1039,15 @@ public final class ProtoChannelKickMember {
         net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-          return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_descriptor;
+        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-          return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.Builder.class);
+        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_fieldAccessorTable.ensureFieldAccessorsInitialized(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.class, net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.Builder.class);
       }
 
-        // Construct using net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.newBuilder()
+      // Construct using net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1079,23 +1079,23 @@ public final class ProtoChannelKickMember {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-          return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_descriptor;
+        return net.iGap.proto.ProtoChannelKickMember.internal_static_proto_ChannelKickMemberResponse_descriptor;
       }
 
-        public net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse getDefaultInstanceForType() {
-            return net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.getDefaultInstance();
+      public net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse getDefaultInstanceForType() {
+        return net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.getDefaultInstance();
       }
 
-        public net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse build() {
-            net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse result = buildPartial();
+      public net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse build() {
+        net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-        public net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse buildPartial() {
-            net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse result = new net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse(this);
+      public net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse buildPartial() {
+        net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse result = new net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse(this);
         if (responseBuilder_ == null) {
           result.response_ = response_;
         } else {
@@ -1134,16 +1134,16 @@ public final class ProtoChannelKickMember {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse) {
-              return mergeFrom((net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse) other);
+        if (other instanceof net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse) {
+          return mergeFrom((net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-        public Builder mergeFrom(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse other) {
-            if (other == net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse other) {
+        if (other == net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse.getDefaultInstance()) return this;
         if (other.hasResponse()) {
           mergeResponse(other.getResponse());
         }
@@ -1165,11 +1165,11 @@ public final class ProtoChannelKickMember {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-          net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parsedMessage = null;
+        net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse) e.getUnfinishedMessage();
+          parsedMessage = (net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1179,8 +1179,8 @@ public final class ProtoChannelKickMember {
         return this;
       }
 
-        private net.iGap.proto.ProtoResponse.Response response_ = null;
-        private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
+      private net.iGap.proto.ProtoResponse.Response response_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<net.iGap.proto.ProtoResponse.Response, net.iGap.proto.ProtoResponse.Response.Builder, net.iGap.proto.ProtoResponse.ResponseOrBuilder> responseBuilder_;
       /**
        * <code>optional .proto.Response response = 1;</code>
        */
@@ -1192,7 +1192,7 @@ public final class ProtoChannelKickMember {
        */
       public net.iGap.proto.ProtoResponse.Response getResponse() {
         if (responseBuilder_ == null) {
-            return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
+          return response_ == null ? net.iGap.proto.ProtoResponse.Response.getDefaultInstance() : response_;
         } else {
           return responseBuilder_.getMessage();
         }
@@ -1358,10 +1358,10 @@ public final class ProtoChannelKickMember {
     // @@protoc_insertion_point(class_scope:proto.ChannelKickMemberResponse)
     private static final net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse DEFAULT_INSTANCE;
     static {
-        DEFAULT_INSTANCE = new net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse();
+      DEFAULT_INSTANCE = new net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse();
     }
 
-      public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse getDefaultInstance() {
+    public static net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1384,7 +1384,7 @@ public final class ProtoChannelKickMember {
       return PARSER;
     }
 
-      public net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse getDefaultInstanceForType() {
+    public net.iGap.proto.ProtoChannelKickMember.ChannelKickMemberResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1412,7 +1412,10 @@ public final class ProtoChannelKickMember {
       "\n\027ChannelKickMember.proto\022\005proto\032\rReques" +
       "t.proto\032\016Response.proto\"X\n\021ChannelKickMe" +
       "mber\022\037\n\007request\030\001 \001(\0132\016.proto.Request\022\017\n" +
-      "\007room_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"b\n\031Cha" + "nnelKickMemberResponse\022!\n\010response\030\001 \001(\013" + "2\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022\021\n\tme" + "mber_id\030\003 \001(\004B(\n\016net.iGap.protoB\026ProtoCh" +
+              "\007room_id\030\002 \001(\004\022\021\n\tmember_id\030\003 \001(\004\"b\n\031Cha" +
+              "nnelKickMemberResponse\022!\n\010response\030\001 \001(\013" +
+              "2\017.proto.Response\022\017\n\007room_id\030\002 \001(\004\022\021\n\tme" +
+              "mber_id\030\003 \001(\004B(\n\016net.iGap.protoB\026ProtoCh" +
       "annelKickMemberb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
@@ -1426,7 +1429,7 @@ public final class ProtoChannelKickMember {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
+                net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(),
         }, assigner);
     internal_static_proto_ChannelKickMember_descriptor =
       getDescriptor().getMessageTypes().get(0);
@@ -1440,8 +1443,8 @@ public final class ProtoChannelKickMember {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChannelKickMemberResponse_descriptor,
         new java.lang.String[] { "Response", "RoomId", "MemberId", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

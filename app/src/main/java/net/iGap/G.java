@@ -183,6 +183,7 @@ public class G extends MultiDexApplication {
     public static ArrayList<Long> deletedRoomList = new ArrayList<>();
 
     public static ArrayList<String> unSecure = new ArrayList<>();
+    public static ArrayList<String> unSecureResponseActionId = new ArrayList<>();
     public static ArrayList<String> unLogin = new ArrayList<>();// list of actionId that can be doing without secure
     public static ArrayList<String> waitingActionIds = new ArrayList<>();
 

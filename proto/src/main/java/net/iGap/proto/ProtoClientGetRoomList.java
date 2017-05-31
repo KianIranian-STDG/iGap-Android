@@ -283,7 +283,7 @@ public final class ProtoClientGetRoomList {
     }
 
     public Builder newBuilderForType() {
-        return newBuilder();
+      return newBuilder();
     }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -1553,7 +1553,10 @@ public final class ProtoClientGetRoomList {
             "\n\027ClientGetRoomList.proto\022\005proto\032\rReques" +
                     "t.proto\032\016Response.proto\032\014Global.proto\"[\n" +
                     "\021ClientGetRoomList\022\037\n\007request\030\001 \001(\0132\016.pr" +
-                    "oto.Request\022%\n\npagination\030\002 \001(\0132\021.proto." + "Pagination\"Z\n\031ClientGetRoomListResponse\022" + "!\n\010response\030\001 \001(\0132\017.proto.Response\022\032\n\005ro" + "oms\030\002 \003(\0132\013.proto.RoomB(\n\016net.iGap.proto" +
+                    "oto.Request\022%\n\npagination\030\002 \001(\0132\021.proto." +
+                    "Pagination\"Z\n\031ClientGetRoomListResponse\022" +
+                    "!\n\010response\030\001 \001(\0132\017.proto.Response\022\032\n\005ro" +
+                    "oms\030\002 \003(\0132\013.proto.RoomB(\n\016net.iGap.proto" +
                     "B\026ProtoClientGetRoomListb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1574,9 +1577,9 @@ public final class ProtoClientGetRoomList {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ClientGetRoomListResponse_descriptor,
         new java.lang.String[] { "Response", "Rooms", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
-      net.iGap.proto.ProtoGlobal.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

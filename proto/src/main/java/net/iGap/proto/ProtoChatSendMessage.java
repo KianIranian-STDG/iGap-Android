@@ -1043,7 +1043,7 @@ public final class ProtoChatSendMessage {
           throw new NullPointerException();
         }
 
-          message_ = value;
+        message_ = value;
         onChanged();
         return this;
       }
@@ -1065,7 +1065,7 @@ public final class ProtoChatSendMessage {
         }
         checkByteStringIsUtf8(value);
 
-          message_ = value;
+        message_ = value;
         onChanged();
         return this;
       }
@@ -1106,7 +1106,7 @@ public final class ProtoChatSendMessage {
           throw new NullPointerException();
         }
 
-          attachment_ = value;
+        attachment_ = value;
         onChanged();
         return this;
       }
@@ -1128,7 +1128,7 @@ public final class ProtoChatSendMessage {
         }
         checkByteStringIsUtf8(value);
 
-          attachment_ = value;
+        attachment_ = value;
         onChanged();
         return this;
       }
@@ -2288,7 +2288,9 @@ public final class ProtoChatSendMessage {
                     "\030\006 \001(\0132\032.proto.RoomMessageLocation\022*\n\007co" +
                     "ntact\030\007 \001(\0132\031.proto.RoomMessageContact\022\020" +
                     "\n\010reply_to\030\010 \001(\004\0223\n\014forward_from\030\t \001(\0132\035" +
-                    ".proto.RoomMessageForwardFrom\"w\n\027ChatSen", "dMessageResponse\022!\n\010response\030\001 \001(\0132\017.pro" + "to.Response\022\017\n\007room_id\030\002 \001(\004\022(\n\014room_mes" + "sage\030\003 \001(\0132\022.proto.RoomMessageB&\n\016net.iG" +
+                    ".proto.RoomMessageForwardFrom\"w\n\027ChatSen", "dMessageResponse\022!\n\010response\030\001 \001(\0132\017.pro" +
+            "to.Response\022\017\n\007room_id\030\002 \001(\004\022(\n\014room_mes" +
+            "sage\030\003 \001(\0132\022.proto.RoomMessageB&\n\016net.iG" +
             "ap.protoB\024ProtoChatSendMessageb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2299,20 +2301,20 @@ public final class ProtoChatSendMessage {
     };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-            net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(), net.iGap.proto.ProtoGlobal.getDescriptor(),
+                net.iGap.proto.ProtoRequest.getDescriptor(), net.iGap.proto.ProtoResponse.getDescriptor(), net.iGap.proto.ProtoGlobal.getDescriptor(),
         }, assigner);
     internal_static_proto_ChatSendMessage_descriptor =
       getDescriptor().getMessageTypes().get(0);
-      internal_static_proto_ChatSendMessage_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChatSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
+    internal_static_proto_ChatSendMessage_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_ChatSendMessage_descriptor, new java.lang.String[]{"Request", "MessageType", "RoomId", "Message", "Attachment", "Location", "Contact", "ReplyTo", "ForwardFrom",});
     internal_static_proto_ChatSendMessageResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_ChatSendMessageResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_proto_ChatSendMessageResponse_descriptor,
         new java.lang.String[] { "Response", "RoomId", "RoomMessage", });
-      net.iGap.proto.ProtoRequest.getDescriptor();
-      net.iGap.proto.ProtoResponse.getDescriptor();
-      net.iGap.proto.ProtoGlobal.getDescriptor();
+    net.iGap.proto.ProtoRequest.getDescriptor();
+    net.iGap.proto.ProtoResponse.getDescriptor();
+    net.iGap.proto.ProtoGlobal.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
