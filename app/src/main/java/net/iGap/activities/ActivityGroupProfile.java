@@ -1767,8 +1767,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             @Override
                             public void run() {
                                 ActivityGroupProfile.this.finish();
-                                if (ActivityChat.activityChat != null) {
-                                    ActivityChat.activityChat.finish();
+                                if (ActivityChat.finishActivity != null) {
+                                    ActivityChat.finishActivity.finishActivity();
                                 }
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 prgWait.setVisibility(View.GONE);
@@ -1807,8 +1807,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                             @Override
                             public void run() {
                                 ActivityGroupProfile.this.finish();
-                                if (ActivityChat.activityChat != null) {
-                                    ActivityChat.activityChat.finish();
+                                if (ActivityChat.finishActivity != null) {
+                                    ActivityChat.finishActivity.finishActivity();
                                 }
 
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

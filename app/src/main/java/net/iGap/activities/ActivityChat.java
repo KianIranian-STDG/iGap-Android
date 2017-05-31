@@ -141,6 +141,7 @@ import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
+import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.IResendMessage;
@@ -280,7 +281,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 
 public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
 
-    public static ActivityChat activityChat;
+    public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
     private AttachFile attachFile;
     private EditText edtSearchMessage;
@@ -575,11 +576,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.onUserInfoResponse = this;
         G.onChannelAddMessageReaction = this;
         G.onChannelGetMessagesStats = this;
-        activityChat = this;
         G.onSetAction = this;
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
         G.helperNotificationAndBadge.cancelNotification();
+
+        finishActivity = new FinishActivity() {
+            @Override
+            public void finishActivity() {
+                ActivityChat.this.finish();
+            }
+        };
 
         initCallbacks();
         HelperNotificationAndBadge.isChatRoomNow = true;
@@ -691,7 +698,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         // room id have to be set to default, otherwise I'm in the room always!
         mRoomId = -1;
         super.onDestroy();
-        activityChat = null;
     }
 
     @Override

@@ -1342,8 +1342,8 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             public void run() {
                 hideProgressBar();
                 ActivityChannelProfile.this.finish();
-                if (ActivityChat.activityChat != null) {
-                    ActivityChat.activityChat.finish();
+                if (ActivityChat.finishActivity != null) {
+                    ActivityChat.finishActivity.finishActivity();
                 }
             }
         });
