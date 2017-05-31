@@ -566,13 +566,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
-            timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
-            setTextcolor(imgTick, R.color.white);
-        } else {
-            setTextcolor(imgTick, R.color.colorOldBlack);
+        setTextcolor(imgTick, R.color.colorOldBlack);
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-        }
 
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.START;
 
@@ -619,17 +614,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.LOCATION) {
-            timeText.setTextColor(holder.itemView.getResources().getColor(R.color.white));
-            setTextcolor(imgTick, R.color.white);
-        } else {
-            if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
+        if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
                 setTextcolor(imgTick, R.color.iGapColor);
             } else {
                 setTextcolor(imgTick, R.color.colorOldBlack);
             }
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-        }
 
         ((CardView) holder.itemView.findViewById(R.id.contentContainer)).setCardBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_sendColor));
         /**
