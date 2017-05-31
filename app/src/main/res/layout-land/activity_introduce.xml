@@ -112,7 +112,7 @@
             android:layout_marginLeft="@dimen/dp12"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/transfer"
+            app:srcCompat="@drawable/boy"
             android:visibility="invisible"/>
 
         <!--page 5-->
@@ -124,7 +124,7 @@
             android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/boy"
+            app:srcCompat="@drawable/transfer1"
             android:visibility="gone"/>
 
     </android.support.percent.PercentRelativeLayout>

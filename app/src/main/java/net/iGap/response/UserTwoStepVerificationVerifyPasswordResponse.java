@@ -10,8 +10,8 @@
 
 package net.iGap.response;
 
-import android.util.Log;
 import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserTwoStepVerificationVerifyPassword;
 
 public class UserTwoStepVerificationVerifyPasswordResponse extends MessageHandler {
@@ -35,7 +35,6 @@ public class UserTwoStepVerificationVerifyPasswordResponse extends MessageHandle
             (ProtoUserTwoStepVerificationVerifyPassword.UserTwoStepVerificationVerifyPasswordResponse.Builder) message;
         builder.getToken();
 
-        Log.i("VVVVVVVVV", "handler UserTwoStepVerificationVerifyPasswordResponse: ");
         if (G.onSecurityCheckPassword != null) {
             G.onSecurityCheckPassword.verifyPassword(builder.getToken());
         }
@@ -45,12 +44,21 @@ public class UserTwoStepVerificationVerifyPasswordResponse extends MessageHandle
     @Override public void timeOut() {
         super.timeOut();
 
-        Log.i("VVVVVVVVV", "timeOut UserTwoStepVerificationVerifyPasswordResponse: ");
     }
 
     @Override public void error() {
         super.error();
-        Log.i("VVVVVVVVV", "error UserTwoStepVerificationVerifyPasswordResponse: ");
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        final int getWait = errorResponse.getWait();
+
+        if (majorCode == 191) {
+            if (G.onSecurityCheckPassword != null) {
+                G.onSecurityCheckPassword.errorVerifyPassword(getWait);
+            }
+        }
     }
 }
 

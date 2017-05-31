@@ -14,4 +14,6 @@ public interface OnSecurityCheckPassword {
     void getDetailPassword(String questionOne, String questionTwo, String hint, boolean hasConfirmedRecoveryEmail, String unconfirmedEmailPattern);
 
     void verifyPassword(String tokenR);
+
+    void errorVerifyPassword(int wait);
 }

@@ -21,6 +21,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
@@ -1146,6 +1147,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                     public void onClick(View v) {
                         if (editCheckPassword.length() > 0) {
                             new RequestUserTwoStepVerificationVerifyPassword().verifyPassword(editCheckPassword.getText().toString());
+                        } else {
+                            error(getString(R.string.please_enter_code));
                         }
                     }
                 });
@@ -1408,7 +1411,18 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 vgCheckPassword.setVisibility(View.GONE);
                 txtOk.setVisibility(View.GONE);
                 vgMainLayout.setVisibility(View.VISIBLE);
+                closeKeyboard(txtOk);
                 userLogin(token);
+            }
+        });
+    }
+
+    @Override
+    public void errorVerifyPassword(final int wait) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialogWaitTimeVerifyPassword(wait);
             }
         });
     }
@@ -1442,6 +1456,47 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 userLogin(token);
             }
         });
+    }
+
+    private void closeKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    private void dialogWaitTimeVerifyPassword(long time) {
+        boolean wrapInScrollView = true;
+        final MaterialDialog dialogWait = new MaterialDialog.Builder(ActivityRegister.this).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                dialog.dismiss();
+            }
+        }).show();
+
+        View v = dialogWait.getCustomView();
+
+        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) ((millisUntilFinished) / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+            }
+
+            @Override
+            public void onFinish() {
+                remindTime.setText("00:00");
+            }
+        };
+        countWaitTimer.start();
+    }
+
+    private void error(String error) {
+        Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+        vShort.vibrate(200);
+        Toast.makeText(ActivityRegister.this, error, Toast.LENGTH_SHORT).show();
     }
 
 }

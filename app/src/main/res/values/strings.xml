@@ -21,7 +21,7 @@
 
   <!-- Page 5 introduce app -->
   <string name="text_line_1_introduce_page5">Voice Call</string>
-  <string name="text_line_2_introduce_page5">Your power is summarized in having a thoroughly free and secure voice call with all others using iGap and save your money as well! As iGap voice call is P2P-based, no need to worry about the iGap servers interference in your voice transmission.</string>
+ <string name="text_line_2_introduce_page5">Your power is summarized in having a thoroughly free and secure voice call with all others using iGap and save your money as well! As iGap voice call is P2P-based.</string>
 
   <!-- Page 6 introduce app -->
   <string name="btn_start_page6">Start Now</string>

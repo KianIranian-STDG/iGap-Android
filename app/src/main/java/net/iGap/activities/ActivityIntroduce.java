@@ -250,7 +250,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         boy = (ImageView) findViewById(R.id.int_img_boy_introduce);
         txt_p6_l1 = (TextView) findViewById(R.id.int_txt_p6_l1);
         txt_p6_l2 = (TextView) findViewById(R.id.int_txt_p6_l2);
-        txt_p6_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page5)));
+        txt_p6_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page6)));
 
         btnStart = (Button) findViewById(R.id.int_btnStart);
         Drawable mDrawable = ContextCompat.getDrawable(context, R.drawable.int_button_interduce);
@@ -350,7 +350,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                             }
                         }
                         break;
-                    case 3://transfer 4
+                    case 3://boy 4
                         txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne0 = true;
@@ -394,7 +394,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
                             }
                         }
                         break;
-                    case 5://boy 6
+                    case 5://transfer1 6
                         txtSkip.bringToFront();
                         btnStart.bringToFront();
                         btnStart.getParent().requestLayout();

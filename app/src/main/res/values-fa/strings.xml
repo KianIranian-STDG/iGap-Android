@@ -922,6 +922,7 @@
   <string name="nothing">چیزی نیست!</string>
   <string name="are_you_sure_clear_call_logs">آیا شما مطمئن هستید که میخواهید تاریخچه تماس صوتی را پاک کنید ؟</string>
   <string name="please_write_your_reasons">لطفا دلیل خود را بنویسید</string>
+  <string name="error_check_password">Password code is locked for a while due to too many tries.</string>
 
 
 </resources>

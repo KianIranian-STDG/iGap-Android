@@ -50,8 +50,8 @@
     <!--page 1-->
     <ImageView
         android:id="@+id/int_img_logo_introduce"
-        android:layout_width="@dimen/dp110"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp160"
+        android:layout_height="@dimen/dp160"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
@@ -65,8 +65,8 @@
     <!--page 2-->
     <ImageView
         android:id="@+id/int_img_security_introduce"
-        android:layout_width="@dimen/dp140"
-        android:layout_height="@dimen/dp140"
+        android:layout_width="@dimen/dp160"
+        android:layout_height="@dimen/dp160"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
@@ -80,8 +80,8 @@
     <!--page 3-->
     <ImageView
         android:id="@+id/int_img_chat_introduce"
-        android:layout_width="@dimen/dp140"
-        android:layout_height="@dimen/dp140"
+        android:layout_width="@dimen/dp180"
+        android:layout_height="@dimen/dp180"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
@@ -94,8 +94,8 @@
     <!--page 4-->
     <ImageView
         android:id="@+id/int_img_transfer_introduce"
-        android:layout_width="@dimen/dp140"
-        android:layout_height="@dimen/dp140"
+        android:layout_width="@dimen/dp180"
+        android:layout_height="@dimen/dp180"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
@@ -103,14 +103,14 @@
         android:foregroundGravity="center"
         android:scaleType="centerInside"
         android:visibility="gone"
-        app:srcCompat="@drawable/transfer"
+        app:srcCompat="@drawable/transfer1"
         />
 
-    <!--page 6-->
+    <!--page 5-->
     <ImageView
         android:id="@+id/int_img_call_introduce"
-        android:layout_width="@dimen/dp140"
-        android:layout_height="@dimen/dp140"
+        android:layout_width="@dimen/dp160"
+        android:layout_height="@dimen/dp160"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
@@ -118,18 +118,20 @@
         android:foregroundGravity="center"
         android:scaleType="centerInside"
         android:visibility="gone"
-        app:srcCompat="@drawable/transfer"
+        app:srcCompat="@drawable/call"
         />
 
     <!--page 6-->
     <ImageView
         android:id="@+id/int_img_boy_introduce"
-        android:layout_width="@dimen/dp140"
+        android:layout_width="@dimen/dp160"
         android:layout_height="@dimen/dp160"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
+        android:foregroundGravity="center"
+        android:scaleType="centerInside"
         android:visibility="gone"
         app:srcCompat="@drawable/boy"
         />
@@ -175,7 +177,6 @@
             android:textColor="@color/text_line1_igap_dark"
             android:textSize="@dimen/dp26"
             android:visibility="visible"
-            fontPath="fonts/neuropolitical.ttf"
             />
 
         <TextView
@@ -188,7 +189,6 @@
             android:textColor="@color/text_line1_igap_dark"
             android:textSize="@dimen/dp26"
             android:visibility="visible"
-            fontPath="fonts/neuropolitical.ttf"
             />
       </LinearLayout>
 
@@ -199,7 +199,7 @@
           android:layout_gravity="center_horizontal"
           android:layout_marginTop="-5dp"
           android:gravity="center"
-          android:lineSpacingExtra="@dimen/dp4"
+          android:lineSpacingExtra="2dp"
           android:paddingLeft="@dimen/dp28"
           android:paddingRight="@dimen/dp28"
           android:text="@string/text_line_2_introduce_page1"
@@ -217,7 +217,7 @@
           android:layout_marginTop="@dimen/dp4"
           android:clickable="false"
           android:gravity="center"
-          android:lineSpacingExtra="@dimen/dp4"
+          android:lineSpacingExtra="2dp"
           android:paddingLeft="@dimen/dp28"
           android:paddingRight="@dimen/dp28"
           android:text="@string/text_line_3_introduce_page1"
@@ -256,7 +256,7 @@
           android:layout_marginTop="@dimen/dp4"
           android:clickable="false"
           android:gravity="center"
-          android:lineSpacingExtra="@dimen/dp4"
+          android:lineSpacingExtra="2dp"
           android:paddingLeft="@dimen/dp28"
           android:paddingRight="@dimen/dp28"
           android:text="@string/text_line_2_introduce_page2"
@@ -297,7 +297,7 @@
           android:layout_marginTop="@dimen/dp8"
           android:clickable="false"
           android:gravity="center"
-          android:lineSpacingExtra="@dimen/dp4"
+          android:lineSpacingExtra="2dp"
           android:paddingLeft="@dimen/dp28"
           android:paddingRight="@dimen/dp28"
           android:text="@string/text_line_2_introduce_page3"
@@ -337,7 +337,7 @@
           android:layout_marginTop="@dimen/dp8"
           android:clickable="false"
           android:gravity="center"
-          android:lineSpacingExtra="@dimen/dp4"
+          android:lineSpacingExtra="2dp"
           android:paddingLeft="@dimen/dp24"
           android:paddingRight="@dimen/dp24"
           android:text="@string/text_line_2_introduce_page4"
@@ -376,7 +376,7 @@
           android:layout_marginTop="@dimen/dp8"
           android:clickable="false"
           android:gravity="center"
-          android:lineSpacingExtra="@dimen/dp4"
+          android:lineSpacingExtra="2dp"
           android:paddingLeft="@dimen/dp24"
           android:paddingRight="@dimen/dp24"
           android:text="@string/text_line_2_introduce_page5"
@@ -417,7 +417,7 @@
           android:layout_marginTop="@dimen/dp8"
           android:clickable="false"
           android:gravity="center"
-          android:lineSpacingExtra="@dimen/dp4"
+          android:lineSpacingExtra="2dp"
           android:paddingLeft="@dimen/dp28"
           android:paddingRight="@dimen/dp28"
           android:text="@string/text_line_2_introduce_page6"

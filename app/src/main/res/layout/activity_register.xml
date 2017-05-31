@@ -26,6 +26,7 @@
         android:background="@color/toolbar_background"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
+        android:layoutDirection="ltr"
         >
 
       <RelativeLayout
