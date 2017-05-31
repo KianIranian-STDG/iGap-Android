@@ -1878,49 +1878,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                     e.printStackTrace();
                                 }
 
-                                switch (_type) {
-                                    case VOICE:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.voice_message);
-                                        break;
-                                    case VIDEO:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.video_message);
-                                        break;
-                                    case FILE:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.file_message);
-                                        break;
-                                    case AUDIO:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.audio_message);
-                                        break;
-                                    case IMAGE:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.image_message);
-                                        break;
-                                    case CONTACT:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.contact_message);
-                                        break;
-                                    case GIF:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.gif_message);
-                                        break;
-                                    case LOCATION:
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
-                                        txtLastMessage.setText(R.string.location_message);
-                                        break;
-                                    default:
-                                        if (!HelperCalander.isLanguagePersian) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                                txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
-                                            }
+                                String result = AppUtils.conversionMessageType(_type, txtLastMessage, R.color.room_message_blue);
+                                if (result.isEmpty()) {
+                                    if (!HelperCalander.isLanguagePersian) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                            txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
                                         }
-                                        txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
-                                        txtLastMessage.setText(lastMessage);
-                                        break;
+                                    }
+                                    txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+                                    txtLastMessage.setText(lastMessage);
                                 }
+
                             } else {
                                 txtLastMessage.setText(lastMessage);
                             }

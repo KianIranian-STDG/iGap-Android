@@ -5169,11 +5169,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
-                replayTo.setText(chatItem.forwardedFrom.getMessage());
+                replayTo.setText(AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType()));
             } else {
                 RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(chatItem.messageID)).findFirst();
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
-                replayTo.setText(chatItem.messageText);
+                replayTo.setText(AppUtils.conversionMessageType(chatItem.messageType));
             }
             if (chatType == CHANNEL) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.roomId).findFirst();
