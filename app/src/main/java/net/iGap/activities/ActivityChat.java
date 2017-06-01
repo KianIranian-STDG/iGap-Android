@@ -1851,7 +1851,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         //following lines make scrolling smoother
         //recyclerView.setHasFixedSize(true);
         //recyclerView.setItemViewCacheSize(1000);
-        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheEnabled(false);
 
         mAdapter = new MessagesAdapter<>(this, this, this);
 
