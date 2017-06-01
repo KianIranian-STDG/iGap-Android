@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="vertical"
     >
 
 
-  <RelativeLayout
+  <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       >
@@ -15,10 +15,8 @@
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/cm_icon_mute_notification"
         android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -29,8 +27,6 @@
         android:id="@+id/cm_txt_mute_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:paddingBottom="@dimen/dp8"
         android:paddingEnd="@dimen/dp40"
         android:paddingLeft="@dimen/dp40"
@@ -42,10 +38,10 @@
         android:textSize="@dimen/dp14"
         />
 
-  </RelativeLayout>
+  </LinearLayout>
 
-  <RelativeLayout
-      android:layout_width="match_parent"
+  <LinearLayout
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       >
 
@@ -53,10 +49,7 @@
         android:id="@+id/cm_icon_clear_history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
         android:text="@string/md_clearHistory"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -67,8 +60,6 @@
         android:id="@+id/cm_txt_clear_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:paddingBottom="@dimen/dp8"
         android:paddingEnd="@dimen/dp40"
         android:paddingLeft="@dimen/dp40"
@@ -79,10 +70,10 @@
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
         />
-  </RelativeLayout>
+  </LinearLayout>
 
-  <RelativeLayout
-      android:layout_width="match_parent"
+  <LinearLayout
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       >
 
@@ -90,10 +81,7 @@
         android:id="@+id/cm_icon_delete_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
         android:text="@string/md_rubbish_bin"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -104,12 +92,6 @@
         android:id="@+id/cm_txt_delete_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_toEndOf="@+id/cm_icon_delete_chat"
-        android:layout_toRightOf="@+id/cm_icon_delete_chat"
         android:paddingBottom="@dimen/dp8"
         android:paddingEnd="@dimen/dp40"
         android:paddingLeft="@dimen/dp40"
@@ -121,7 +103,7 @@
         android:textSize="@dimen/dp14"
         />
 
-  </RelativeLayout>
+  </LinearLayout>
 
   <!--<TextView-->
   <!--android:id="@+id/cm_txt_cancle"-->
