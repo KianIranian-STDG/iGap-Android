@@ -62,7 +62,6 @@ public class FragmentSecurityRecovery extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.fpac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         Bundle bundle = this.getArguments();
 

@@ -73,12 +73,6 @@
       </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <View
-        android:id="@+id/ar_view_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/rg_line1_background"
-        />
 
     <LinearLayout
         android:id="@+id/rg_rootMainLayout"

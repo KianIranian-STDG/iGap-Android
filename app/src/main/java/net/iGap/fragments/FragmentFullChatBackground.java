@@ -52,7 +52,6 @@ public class FragmentFullChatBackground extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.ffcb_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.ffcb_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         final String fullImage = getArguments().getString("IMAGE");
 

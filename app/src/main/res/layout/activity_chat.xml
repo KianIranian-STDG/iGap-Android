@@ -374,23 +374,12 @@
 
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/gray"
-                        />
 
-                </LinearLayout>
+              </LinearLayout>
 
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/ac_green_line"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#34a49f"
-                />
 
             <LinearLayout
                 android:id="@+id/ac_ll_search_message"
@@ -785,11 +774,6 @@
             android:visibility="gone"
             >
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray"
-                />
 
             <LinearLayout
 

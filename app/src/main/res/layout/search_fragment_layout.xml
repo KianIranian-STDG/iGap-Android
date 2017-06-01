@@ -107,12 +107,6 @@
 
   </android.support.design.widget.AppBarLayout>
 
-  <View
-      android:id="@+id/sfl_view_line"
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      />
-
   <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"

@@ -10,13 +10,7 @@
     tools:ignore="MissingPrefix"
     >
 
-  <View
-      android:id="@+id/view"
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:layout_below="@+id/fch_backgroundToolbar"
-      android:background="#34a49f"
-      />
+
 
   <android.support.v7.widget.Toolbar
       android:id="@+id/fch_backgroundToolbar"
@@ -84,7 +78,7 @@
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
-      android:layout_below="@+id/view"
+      android:layout_below="@+id/fch_backgroundToolbar"
       >
 
     <LinearLayout

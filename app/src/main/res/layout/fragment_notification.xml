@@ -63,13 +63,8 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <View
-        android:id="@+id/fn_view_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#34a49f"/>
 
-    <LinearLayout
+  <LinearLayout
         android:id="@+id/ntg_layout_notifications"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp48"

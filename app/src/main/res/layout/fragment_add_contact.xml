@@ -88,12 +88,8 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <View
-        android:id="@+id/fac_view_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#34a49f"/>
-    <TextView
+
+  <TextView
         fontPath="fonts/IRANSansMobile_Bold.ttf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

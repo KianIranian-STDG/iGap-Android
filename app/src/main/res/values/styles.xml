@@ -66,6 +66,14 @@
         <item name="colorAccent">@android:color/white</item>
     </style>
 
+    <style name="dialog_item_style">
+        <item name="android:paddingBottom">@dimen/dp8</item>
+        <item name="android:paddingLeft">@dimen/dp24</item>
+        <item name="android:paddingRight">@dimen/dp24</item>
+        <item name="android:paddingTop">@dimen/dp8</item>
+    </style>
+
+
     <style name="RedHUGEText" parent="@android:style/Widget.TextView">
 
         <item name="android:textColor">@color/black_register</item>

@@ -79,7 +79,6 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         });
 
         view.findViewById(R.id.fac_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.fac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
         txtSet.setTextColor(getResources().getColor(R.color.line_edit_text));

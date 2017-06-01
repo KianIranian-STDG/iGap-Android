@@ -265,7 +265,6 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         AppUtils.setProgresColler(prgWaiting);
 
         view.findViewById(R.id.ng_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.ang_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         prgWaiting.setVisibility(View.GONE);
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

@@ -67,20 +67,16 @@
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <View
-        android:id="@+id/acb_line_view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#34a49f"
-        android:layout_below="@+id/stcb_backgroundToolbar"
-        />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcvContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="1dp"
         android:layoutDirection="ltr"
-        android:layout_below="@id/stcb_backgroundToolbar" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
 
 
 </RelativeLayout>

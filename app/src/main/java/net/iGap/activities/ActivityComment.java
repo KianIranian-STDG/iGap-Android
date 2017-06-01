@@ -121,7 +121,6 @@ public class ActivityComment extends ActivityEnhanced {
         initLayoutAttachText();
 
         findViewById(R.id.acs_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        findViewById(R.id.asc_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         layoutReplay = new FragmentSubLayoutReplay(findViewById(R.id.acs_ll_replay));
 

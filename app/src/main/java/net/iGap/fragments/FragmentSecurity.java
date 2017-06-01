@@ -79,7 +79,6 @@ public class FragmentSecurity extends Fragment {
         new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail();
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.fpac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         rootSetPassword = (ViewGroup) view.findViewById(R.id.rootSetPassword);
         rootCheckPassword = (ViewGroup) view.findViewById(R.id.rootCheckPassword);

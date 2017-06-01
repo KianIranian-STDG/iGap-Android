@@ -8,7 +8,7 @@
 
 
   <LinearLayout
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       >
 
@@ -27,12 +27,7 @@
         android:id="@+id/cm_txt_mute_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingEnd="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
-        android:paddingRight="@dimen/dp40"
-        android:paddingStart="@dimen/dp40"
-        android:paddingTop="@dimen/dp8"
+        style="@style/dialog_item_style"
         android:text="@string/mute_notification"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
@@ -41,7 +36,7 @@
   </LinearLayout>
 
   <LinearLayout
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       >
 
@@ -60,12 +55,7 @@
         android:id="@+id/cm_txt_clear_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingEnd="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
-        android:paddingRight="@dimen/dp40"
-        android:paddingStart="@dimen/dp40"
-        android:paddingTop="@dimen/dp8"
+        style="@style/dialog_item_style"
         android:text="@string/clear_history"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
@@ -73,7 +63,7 @@
   </LinearLayout>
 
   <LinearLayout
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       >
 
@@ -92,12 +82,7 @@
         android:id="@+id/cm_txt_delete_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingEnd="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
-        android:paddingRight="@dimen/dp40"
-        android:paddingStart="@dimen/dp40"
-        android:paddingTop="@dimen/dp8"
+        style="@style/dialog_item_style"
         android:text="@string/to_delete_chat"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"

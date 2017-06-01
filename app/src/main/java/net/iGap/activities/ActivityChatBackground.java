@@ -96,7 +96,6 @@ public class ActivityChatBackground extends ActivityEnhanced {
         setContentView(R.layout.activity_chat_background);
 
         findViewById(R.id.stcb_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        findViewById(R.id.acb_line_view).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         txtBack = (MaterialDesignTextView) findViewById(R.id.stcb_txt_back);
         rippleBack = (RippleView) findViewById(R.id.stcb_ripple_back);

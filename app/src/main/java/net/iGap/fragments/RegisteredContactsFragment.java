@@ -143,7 +143,6 @@ public class RegisteredContactsFragment extends Fragment {
         }
 
         view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.fc_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
         menu_txt_titleToolbar.setText(title);

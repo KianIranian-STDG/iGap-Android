@@ -1379,7 +1379,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
          */
         appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
-        findViewById(R.id.ac_green_line).setBackgroundColor(Color.parseColor(G.appBarColor));
+
     }
 
 
@@ -1753,7 +1753,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     public void onClick(View view) {
                         dialog.dismiss();
                         initLayoutSearchNavigation();
-                        findViewById(R.id.ac_green_line).setVisibility(View.GONE);
+
                         findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
                         ll_Search.setVisibility(View.VISIBLE);
                         ll_navigate_Message.setVisibility(View.VISIBLE);
@@ -1851,7 +1851,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         //following lines make scrolling smoother
         //recyclerView.setHasFixedSize(true);
         //recyclerView.setItemViewCacheSize(1000);
-        recyclerView.setDrawingCacheEnabled(false);
+        recyclerView.setDrawingCacheEnabled(true);
 
         mAdapter = new MessagesAdapter<>(this, this, this);
 
@@ -2553,11 +2553,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
 
             ll_AppBarSelected.setVisibility(View.VISIBLE);
-            findViewById(R.id.ac_green_line).setVisibility(View.GONE);
         } else {
             toolbar.setVisibility(View.VISIBLE);
             ll_AppBarSelected.setVisibility(View.GONE);
-            findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
         }
     }
 
@@ -3698,7 +3696,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             inflateReplayLayoutIntoStub(item == null ? messages.iterator().next().mMessage : item);
 
             ll_AppBarSelected.setVisibility(View.GONE);
-            findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
+
             toolbar.setVisibility(View.VISIBLE);
 
             mAdapter.deselect();
@@ -3954,7 +3952,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         mAdapter.deselect();
         toolbar.setVisibility(View.VISIBLE);
         ll_AppBarSelected.setVisibility(View.GONE);
-        findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
+
         clearReplyView();
     }
 
