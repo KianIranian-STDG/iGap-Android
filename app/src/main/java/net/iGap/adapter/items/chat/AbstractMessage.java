@@ -706,14 +706,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
                     replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
-                    holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.colorOldBlack));
+                    holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_sendColor));
                     replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                     replayMessage.setTextColor(Color.WHITE);
                 } else {
                     replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundReceive));
-                    holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_sendColor));
-                    replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
-                    replayMessage.setTextColor(Color.BLACK);
+                    holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_receiveColor));
+                    replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+                    replayMessage.setTextColor(Color.WHITE);
                 }
             }
         }
@@ -773,7 +773,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     txtForwardFrom.setText(info.getDisplayName());
                     mMessage.username = info.getUsername();
                     if (mMessage.isSenderMe()) {
-                        txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+                        txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                     } else {
                         txtForwardFrom.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
                     }

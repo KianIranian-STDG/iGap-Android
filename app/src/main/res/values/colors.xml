@@ -120,8 +120,8 @@
     <color name="gray10">#e5e5e5</color>
     <color name="messageBox_sendColor">#c7f1ff</color>
     <color name="messageBox_receiveColor">#fcfaf4</color>
-    <color name="messageBox_replyBoxBackgroundSend">#2caaa3</color>
-    <color name="messageBox_replyBoxBackgroundReceive">#f2f2f2</color>
+    <color name="messageBox_replyBoxBackgroundSend">#00b0bf</color>
+    <color name="messageBox_replyBoxBackgroundReceive">#f7ab07</color>
     <color name="colorOldBlack">#2A2A2A</color>
     <color name="room_message_blue">#007eff</color>
     <color name="room_message_gray">#FF616161</color>
