@@ -39,13 +39,22 @@ public class PushRateSignalingResponse extends MessageHandler {
         showRaingBar(id);
     }
 
-    private void showRaingBar(long id) {
+    private void showRaingBar(final long id) {
 
-        if (id >= 0) {
-            Intent intent = new Intent(G.context, ActivityRatingBar.class);
-            intent.putExtra(ActivityRatingBar.ID_EXTRA, id);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            G.context.startActivity(intent);
+        if (id > 0 && !G.isShowRatingDialog) {
+
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+
+                    Intent intent = new Intent(G.context, ActivityRatingBar.class);
+                    intent.putExtra(ActivityRatingBar.ID_EXTRA, id);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    G.context.startActivity(intent);
+                }
+            }, 1000);
+
+
+
         }
     }
 

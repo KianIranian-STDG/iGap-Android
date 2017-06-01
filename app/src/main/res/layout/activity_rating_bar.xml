@@ -13,7 +13,7 @@
       android:id="@+id/arb_layout_rate"
       android:layout_width="@dimen/dp280"
       android:layout_height="@dimen/dp240"
-      android:background="@color/md_yellow_50"
+      android:background="@color/white"
       android:orientation="vertical"
       android:padding="@dimen/dp4"
       >
@@ -35,7 +35,7 @@
         android:layout_marginTop="@dimen/dp12"
         android:numStars="5"
         android:rating="5"
-        android:stepSize=".1"
+        android:stepSize="1"
         />
     <EditText
         android:id="@+id/arb_edt_resone"
@@ -59,13 +59,19 @@
           android:id="@+id/arb_btn_cancel"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:backgroundTint="@color/iGapColor"
+          android:layout_marginRight="2dp"
           android:layout_weight="1"
+          android:textColor="@color/white"
           android:text="@string/B_cancel"
           />
       <Button
           android:id="@+id/arb_btn_ok"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_marginLeft="2dp"
+          android:backgroundTint="@color/iGapColor"
+          android:textColor="@color/white"
           android:layout_weight="1"
           android:text="@string/B_ok"
           />

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.request.RequestSignalingRate;
 
@@ -25,7 +26,14 @@ public class ActivityRatingBar extends ActivityEnhanced {
     EditText edtResone;
     long id = -1;
 
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        G.isShowRatingDialog = false;
+    }
+
     @Override public void onCreate(Bundle savedInstanceState) {
+
+        G.isShowRatingDialog = true;
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
             | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD

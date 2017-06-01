@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fec107"
-    android:layoutDirection="ltr"
+    android:paddingRight="@dimen/dp4"
+    android:paddingLeft="@dimen/dp4"
+    android:layoutDirection="locale"
     android:orientation="horizontal"
     >
 
@@ -12,18 +14,16 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
-      android:gravity="center"
       android:padding="@dimen/dp4"
       android:text="@string/tab_to_return_to_call"
       android:textColor="@color/black90"
-      android:textSize="@dimen/dp16"
+      android:textSize="@dimen/dp14"
       />
 
 
   <TextView
       android:id="@+id/cslcs_txt_timer"
       android:layout_width="wrap_content"
-
       android:layout_height="wrap_content"
       android:padding="@dimen/dp4"
       android:text="00:00"
