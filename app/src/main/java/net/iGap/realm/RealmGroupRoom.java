@@ -13,12 +13,14 @@ package net.iGap.realm;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import net.iGap.G;
 import net.iGap.helper.HelperString;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
 
 public class RealmGroupRoom extends RealmObject {
     private String role;
+    private int participants_count;
     private String participants_count_label;
     private String participants_count_limit_label;
     private String description;
@@ -41,6 +43,7 @@ public class RealmGroupRoom extends RealmObject {
             realmGroupRoom = realm.createObject(RealmGroupRoom.class);
         }
         realmGroupRoom.setRole(GroupChatRole.convert(room.getRole()));
+        realmGroupRoom.setParticipants_count(room.getParticipantsCount());
         realmGroupRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
         realmGroupRoom.setDescription(room.getDescription());
         if (!room.getPrivateExtra().getInviteLink().isEmpty()) {
@@ -59,8 +62,19 @@ public class RealmGroupRoom extends RealmObject {
         this.role = role.toString();
     }
 
+    public int getParticipants_count() {
+        return participants_count;
+    }
+
+    public void setParticipants_count(int participants_count) {
+        this.participants_count = participants_count;
+    }
+
     public String getParticipantsCountLabel() {
-        return participants_count_label;
+        if (HelperString.isNumeric(participants_count_label) || G.selectedLanguage.equals("en")) {
+            return participants_count_label;
+        }
+        return Integer.toString(getParticipants_count());
     }
 
     public void setParticipantsCountLabel(String participants_count_label) {

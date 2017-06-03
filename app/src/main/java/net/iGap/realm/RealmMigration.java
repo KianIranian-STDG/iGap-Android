@@ -17,7 +17,8 @@ import io.realm.RealmSchema;
 
 public class RealmMigration implements io.realm.RealmMigration {
 
-    @Override public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
+    @Override
+    public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
         RealmSchema schema = realm.getSchema();
 
         if (oldVersion == 1) {
@@ -47,19 +48,12 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 3) {
-            schema.create(RealmWallpaper.class.getSimpleName())
-                .addField(RealmWallpaperFields.LAST_TIME_GET_LIST, long.class, FieldAttribute.REQUIRED)
-                .addField(RealmWallpaperFields.WALL_PAPER_LIST, byte[].class)
-                .addField(RealmWallpaperFields.LOCAL_LIST, byte[].class);
+            schema.create(RealmWallpaper.class.getSimpleName()).addField(RealmWallpaperFields.LAST_TIME_GET_LIST, long.class, FieldAttribute.REQUIRED).addField(RealmWallpaperFields.WALL_PAPER_LIST, byte[].class).addField(RealmWallpaperFields.LOCAL_LIST, byte[].class);
             oldVersion++;
         }
 
         if (oldVersion == 4) {
-            schema.create(RealmPrivacy.class.getSimpleName())
-                .addField("whoCanSeeMyAvatar", String.class)
-                .addField("whoCanInviteMeToChannel", String.class)
-                .addField("whoCanInviteMeToGroup", String.class)
-                .addField("whoCanSeeMyLastSeen", String.class);
+            schema.create(RealmPrivacy.class.getSimpleName()).addField("whoCanSeeMyAvatar", String.class).addField("whoCanInviteMeToChannel", String.class).addField("whoCanInviteMeToGroup", String.class).addField("whoCanSeeMyLastSeen", String.class);
             oldVersion++;
         }
 
@@ -83,10 +77,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 7) {
-            RealmObjectSchema realmPhoneContacts = schema.create(RealmPhoneContacts.class.getSimpleName())
-                .addField(RealmPhoneContactsFields.PHONE, String.class)
-                .addField(RealmPhoneContactsFields.FIRST_NAME, String.class)
-                .addField(RealmPhoneContactsFields.LAST_NAME, String.class);
+            RealmObjectSchema realmPhoneContacts = schema.create(RealmPhoneContacts.class.getSimpleName()).addField(RealmPhoneContactsFields.PHONE, String.class).addField(RealmPhoneContactsFields.FIRST_NAME, String.class).addField(RealmPhoneContactsFields.LAST_NAME, String.class);
             realmPhoneContacts.addPrimaryKey(RealmPhoneContactsFields.PHONE);
             oldVersion++;
         }
@@ -117,6 +108,17 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmPrivacySchema != null) {
                 realmPrivacySchema.addField(RealmPrivacyFields.WHO_CAN_VOICE_CALL_TO_ME, String.class);
             }
+
+            RealmObjectSchema realmGroupSchema = schema.get(RealmGroupRoom.class.getSimpleName());
+            if (realmGroupSchema != null) {
+                realmGroupSchema.addField("participants_count", int.class, FieldAttribute.REQUIRED);
+            }
+
+            RealmObjectSchema realmChannelSchema = schema.get(RealmChannelRoom.class.getSimpleName());
+            if (realmChannelSchema != null) {
+                realmChannelSchema.addField("participants_count", int.class, FieldAttribute.REQUIRED);
+            }
+
             oldVersion++;
         }
     }
