@@ -723,6 +723,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                     startActivity(intent);
                                     //ActivityMain.mLeftDrawerLayout.closeDrawer();
                                 }
+
                                 @Override
                                 public void deny() {
                                 }
@@ -736,64 +737,64 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                     case 10: {
                         new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                            .content(R.string.content_log_out)
-                            .positiveText(getResources().getString(R.string.B_ok))
-                            .negativeText(getResources().getString(R.string.B_cancel))
-                            .iconRes(R.mipmap.exit_to_app_button)
-                            .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    G.onUserSessionLogout = new OnUserSessionLogout() {
-                                        @Override
-                                        public void onUserSessionLogout() {
+                                .content(R.string.content_log_out)
+                                .positiveText(getResources().getString(R.string.B_ok))
+                                .negativeText(getResources().getString(R.string.B_cancel))
+                                .iconRes(R.mipmap.exit_to_app_button)
+                                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        G.onUserSessionLogout = new OnUserSessionLogout() {
+                                            @Override
+                                            public void onUserSessionLogout() {
 
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    HelperLogout.logout();
-                                                }
-                                            });
-                                        }
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        HelperLogout.logout();
+                                                    }
+                                                });
+                                            }
 
-                                        @Override
-                                        public void onError() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
+                                            @Override
+                                            public void onError() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
 
-                                        @Override
-                                        public void onTimeOut() {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
-                                                }
-                                            });
-                                        }
-                                    };
-                                    new RequestUserSessionLogout().userSessionLogout();
-                                }
-                            })
-                            .show();
+                                            @Override
+                                            public void onTimeOut() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                snack.dismiss();
+                                                            }
+                                                        });
+                                                        snack.show();
+                                                    }
+                                                });
+                                            }
+                                        };
+                                        new RequestUserSessionLogout().userSessionLogout();
+                                    }
+                                })
+                                .show();
 
                         pageDrawer = 0;
                         break;
@@ -1982,6 +1983,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     removeView(lytContainer4, R.id.lyt_chat_icon_room);
                 } else {
                     addView(holder, lytContainer4, R.layout.room_layout_chat_icon, R.id.lyt_chat_icon_room, 0);
+
+                    LinearLayout lytChatIcon = (LinearLayout) holder.itemView.findViewById(R.id.lyt_chat_icon_room);
+                    if (G.selectedLanguage.equals("en")) {
+                        lytChatIcon.setPadding(0, 0, (int) getResources().getDimension(R.dimen.dp8), 0);
+                    } else {
+                        lytChatIcon.setPadding((int) getResources().getDimension(R.dimen.dp8), 0, 0, 0);
+                    }
 
                     TextView txtChatIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_chat_icon);
                     if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
