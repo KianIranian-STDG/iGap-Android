@@ -172,21 +172,26 @@ public final class AppUtils {
                 result = G.context.getResources().getString(R.string.voice_message);
                 break;
             case VIDEO:
+            case VIDEO_TEXT:
                 result = G.context.getResources().getString(R.string.video_message);
                 break;
             case FILE:
+            case FILE_TEXT:
                 result = G.context.getResources().getString(R.string.file_message);
                 break;
             case AUDIO:
+            case AUDIO_TEXT:
                 result = G.context.getResources().getString(R.string.audio_message);
                 break;
             case IMAGE:
+            case IMAGE_TEXT:
                 result = G.context.getResources().getString(R.string.image_message);
                 break;
             case CONTACT:
                 result = G.context.getResources().getString(R.string.contact_message);
                 break;
             case GIF:
+            case GIF_TEXT:
                 result = G.context.getResources().getString(R.string.gif_message);
                 break;
             case LOCATION:
