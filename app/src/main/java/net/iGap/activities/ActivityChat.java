@@ -690,7 +690,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll().deleteAllFromRealm();
+                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.ID, mRoomId).findAll().deleteAllFromRealm();
                     realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().deleteAllFromRealm();
                 }
             });
