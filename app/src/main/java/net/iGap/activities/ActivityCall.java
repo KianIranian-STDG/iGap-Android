@@ -175,6 +175,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     @Override public void onLeaveView() {
 
+        isConnected = false;
+
         G.handler.postDelayed(new Runnable() {
             @Override public void run() {
                 endVoiceAndFinish();
@@ -246,6 +248,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                 avLoadingIndicatorView.setVisibility(View.GONE);
                                 new RequestSignalingLeave().signalingLeave();
 
+                                isConnected = false;
                                 G.handler.postDelayed(new Runnable() {
                                     @Override public void run() {
                                         stopTimer();
@@ -471,6 +474,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         new WebRTC().leaveCall();
         isSendLeave = true;
+
+        isConnected = false;
 
         G.handler.postDelayed(new Runnable() {
             @Override public void run() {
