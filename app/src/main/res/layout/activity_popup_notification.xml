@@ -153,7 +153,7 @@
                 android:text="@string/md_emoticon_with_happy_face"
                 android:textColor="@color/gray" />
 
-          <net.iGap.emoji.EmojiEditText
+          <net.iGap.module.EmojiEditTextE
                 android:id="@+id/apn_edt_chat"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

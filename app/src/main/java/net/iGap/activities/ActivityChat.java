@@ -73,6 +73,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.emoji.Emoji;
+import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiClickedListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
@@ -114,15 +122,6 @@ import net.iGap.adapter.items.chat.UnreadMessage;
 import net.iGap.adapter.items.chat.VideoItem;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.VoiceItem;
-import net.iGap.emoji.EmojiEditText;
-import net.iGap.emoji.EmojiTextView;
-import net.iGap.emoji.emoji.Emoji;
-import net.iGap.emoji.listeners.OnEmojiBackspaceClickListener;
-import net.iGap.emoji.listeners.OnEmojiClickedListener;
-import net.iGap.emoji.listeners.OnEmojiPopupDismissListener;
-import net.iGap.emoji.listeners.OnEmojiPopupShownListener;
-import net.iGap.emoji.listeners.OnSoftKeyboardCloseListener;
-import net.iGap.emoji.listeners.OnSoftKeyboardOpenListener;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.fragments.FragmentShowImage;
@@ -181,6 +180,8 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.EmojiEditTextE;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.FileUtils;
 import net.iGap.module.IntentRequests;
@@ -286,7 +287,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private AttachFile attachFile;
     private EditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
-    private net.iGap.emoji.EmojiEditText edtChat;
+    private net.iGap.module.EmojiEditTextE edtChat;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private MaterialDesignTextView imvMicButton;
@@ -307,7 +308,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
     private ProtoGlobal.Room.Type chatType;
-    private net.iGap.emoji.EmojiPopup emojiPopup;
+    private EmojiPopup emojiPopup;
     public static OnComplete onMusicListener;
     private GroupChatRole groupRole;
     private ChannelChatRole channelRole;
@@ -1834,7 +1835,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         imvSmileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_smile_button);
 
-        edtChat = (EmojiEditText) findViewById(R.id.chl_edt_chat);
+        edtChat = (EmojiEditTextE) findViewById(R.id.chl_edt_chat);
         edtChat.requestFocus();
 
         imvSendButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_send_button);
@@ -4292,7 +4293,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * emoji initialization
      */
     private void setUpEmojiPopup() {
-        emojiPopup = net.iGap.emoji.EmojiPopup.Builder.fromRootView(findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override
             public void onEmojiBackspaceClicked(final View v) {
 
@@ -6135,7 +6136,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 int _count = getIntent().getExtras().getInt(ActivitySelectChat.ARG_FORWARD_MESSAGE_COUNT);
                 String str = _count > 1 ? getString(R.string.messages_selected) : getString(R.string.message_selected);
 
-                EmojiTextView emMessage = (EmojiTextView) findViewById(R.id.cslhf_txt_message);
+                EmojiTextViewE emMessage = (EmojiTextViewE) findViewById(R.id.cslhf_txt_message);
 
                 if (HelperCalander.isLanguagePersian) {
 

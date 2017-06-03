@@ -96,7 +96,7 @@
       android:paddingRight="@dimen/dp32"
       >
 
-    <net.iGap.emoji.EmojiTextView
+    <net.iGap.module.EmojiTextViewE
         android:id="@+id/asi_txt_image_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

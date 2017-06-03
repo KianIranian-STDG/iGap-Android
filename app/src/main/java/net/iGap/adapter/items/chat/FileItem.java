@@ -18,9 +18,9 @@ import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
@@ -117,13 +117,13 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
-        protected EmojiTextView messageText;
+        protected EmojiTextViewE messageText;
         protected ImageView thumbnail;
 
         public ViewHolder(View view) {
             super(view);
 
-            messageText = (EmojiTextView) view.findViewById(R.id.messageText);
+            messageText = (EmojiTextViewE) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
             cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
             cslf_txt_file_size = (TextView) view.findViewById(R.id.fileSize);

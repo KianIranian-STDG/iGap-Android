@@ -221,7 +221,7 @@
                 android:padding="@dimen/dp8"
                 android:text="@string/md_emoticon_with_happy_face"/>
 
-          <net.iGap.emoji.EmojiEditText
+          <net.iGap.module.EmojiEditTextE
                 android:id="@+id/acs_edt_chat"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

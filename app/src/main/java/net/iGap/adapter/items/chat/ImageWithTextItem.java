@@ -16,9 +16,9 @@ import android.view.View;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
@@ -108,13 +108,13 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ReserveSpaceRoundedImageView image;
-        protected EmojiTextView messageText;
+        protected EmojiTextViewE messageText;
 
         public ViewHolder(View view) {
             super(view);
 
             image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
-            messageText = (EmojiTextView) view.findViewById(R.id.messageText);
+            messageText = (EmojiTextViewE) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
             messageText.setMovementMethod(LinkMovementMethod.getInstance());
         }

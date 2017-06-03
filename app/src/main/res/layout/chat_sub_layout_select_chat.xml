@@ -67,7 +67,7 @@
               android:textSize="@dimen/dp18"
               />
 
-          <net.iGap.emoji.EmojiTextView
+          <net.iGap.module.EmojiTextViewE
               android:id="@+id/cs_txt_contact_name"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
             android:orientation="horizontal"
             >
 
-          <net.iGap.emoji.EmojiTextView
+          <net.iGap.module.EmojiTextViewE
               android:id="@+id/cs_txt_last_message_sender"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
               android:textSize="@dimen/dp13"
               />
 
-          <net.iGap.emoji.EmojiTextView
+          <net.iGap.module.EmojiTextViewE
               android:id="@+id/cs_txt_last_message"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"

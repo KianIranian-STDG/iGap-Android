@@ -34,7 +34,6 @@ import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -54,6 +53,7 @@ import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceGifImageView;
@@ -127,7 +127,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    protected void setTextIfNeeded(EmojiTextView view, String msg) {
+    protected void setTextIfNeeded(EmojiTextViewE view, String msg) {
 
         if (!TextUtils.isEmpty(msg)) {
             if (mMessage.hasLinkInMessage) {

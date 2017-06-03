@@ -17,12 +17,12 @@ import android.widget.TextView;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
@@ -109,12 +109,12 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
-        protected EmojiTextView messageText;
+        protected EmojiTextViewE messageText;
 
         public ViewHolder(View view) {
             super(view);
 
-            messageText = (EmojiTextView) view.findViewById(R.id.messageText);
+            messageText = (EmojiTextViewE) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
             image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
             duration = (TextView) view.findViewById(R.id.duration);

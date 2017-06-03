@@ -66,7 +66,6 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.fragments.ContactGroupFragment;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentCreateChannel;
@@ -113,6 +112,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.DeviceUtils;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyAppBarLayout;
@@ -2087,13 +2087,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             RealmRoom mInfo;
             protected CircleImageView image;
-            protected EmojiTextView name;
+            protected EmojiTextViewE name;
 
             public ViewHolder(View view) {
                 super(view);
 
                 image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
-                name = (EmojiTextView) view.findViewById(R.id.cs_txt_contact_name);
+                name = (EmojiTextViewE) view.findViewById(R.id.cs_txt_contact_name);
 
                 //AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
 

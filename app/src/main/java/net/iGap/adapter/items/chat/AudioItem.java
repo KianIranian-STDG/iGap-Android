@@ -25,11 +25,11 @@ import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityChat;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
@@ -185,7 +185,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         protected TextView fileSize;
         protected TextView fileName;
         protected TextView songArtist;
-        protected EmojiTextView messageText;
+        protected EmojiTextViewE messageText;
         protected String mFilePath = "";
         protected String mMessageID = "";
         protected String mTimeMusic = "";
@@ -201,7 +201,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             fileSize = (TextView) view.findViewById(R.id.fileSize);
             fileName = (TextView) view.findViewById(R.id.fileName);
             songArtist = (TextView) view.findViewById(R.id.songArtist);
-            messageText = (EmojiTextView) view.findViewById(R.id.messageText);
+            messageText = (EmojiTextViewE) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
 
             btnPlayMusic = (TextView) view.findViewById(R.id.csla_btn_play_music);

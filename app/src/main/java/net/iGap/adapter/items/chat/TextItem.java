@@ -17,8 +17,8 @@ import android.widget.LinearLayout;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.interfaces.IMessageItem;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.proto.ProtoGlobal;
 
 public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
@@ -79,14 +79,14 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected EmojiTextView messageText;
+        protected EmojiTextViewE messageText;
         protected LinearLayout llTime;
 
         public ViewHolder(View view) {
             super(view);
 
             llTime = (LinearLayout) view.findViewById(R.id.csl_ll_time);
-            messageText = (EmojiTextView) view.findViewById(R.id.messageText);
+            messageText = (EmojiTextViewE) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
             messageText.setMovementMethod(LinkMovementMethod.getInstance());
         }
