@@ -251,6 +251,7 @@ public class G extends MultiDexApplication {
     public static long currentTime;
     public static long userId;
     public static long latestHearBeatTime = System.currentTimeMillis();
+    public static long latestResponse = System.currentTimeMillis();
     public static long serverHeartBeatTiming = 60 * 1000;
 
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
@@ -388,8 +389,8 @@ public class G extends MultiDexApplication {
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class)
-            //.eventListener(new CustomEventListener())
-            .apply();
+                //.eventListener(new CustomEventListener())
+                .apply();
 
         context = getApplicationContext();
         handler = new Handler();

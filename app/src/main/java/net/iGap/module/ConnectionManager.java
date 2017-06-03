@@ -100,7 +100,7 @@ public class ConnectionManager {
                              */
                             if (HelperTimeOut.heartBeatTimeOut()) {
                                 Log.i("HHH", "Connection heartBeatTimeOut");
-                                //reconnect(true);
+                                reconnect(true);
                                 if (BuildConfig.DEBUG) {
                                     G.handler.post(new Runnable() {
                                         @Override
