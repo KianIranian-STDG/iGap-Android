@@ -521,7 +521,7 @@ public class HelperUrl {
         if (text == null || text.length() < 1) {
             return result;
         }
-        Pattern p = Pattern.compile("[#]+[A-Za-z0-9-_]+\\b");
+        Pattern p = Pattern.compile("[#]+[\\p{L}A-Za-z0-9-_]+\\b");
         Matcher m = p.matcher(text);
         while (m.find()) {
             result += m.start() + "_" + m.end() + "_" + linkType.hash.toString() + "@";
