@@ -2071,7 +2071,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 return "";
             }
 
-            int subLengh = 70;
+            int subLengh = 50;
 
             if (text.length() > subLengh) {
                 return text.substring(0, subLengh);

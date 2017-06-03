@@ -6355,10 +6355,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
                         break;
                     case LOG:
-                        if (!addTop) {
-                            mAdapter.add(new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
-                        } else {
-                            mAdapter.add(index, new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                        if (messageInfo.showMessage) {
+                            if (!addTop) {
+                                mAdapter.add(new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         }
                         break;
                 }

@@ -262,7 +262,7 @@ import org.parceler.Parcel;
 
         RealmRoomMessage message = putOrUpdate(input, roomId, true, false, false, realm);
 
-        message.setShowMessage(true);
+
 
         realm.close();
 
@@ -274,7 +274,7 @@ import org.parceler.Parcel;
 
         RealmRoomMessage message = putOrUpdate(input, roomId, true, false, true, realm);
 
-        message.setShowMessage(true);
+
 
         realm.close();
 
@@ -286,7 +286,7 @@ import org.parceler.Parcel;
 
         RealmRoomMessage message = putOrUpdate(input, roomId, true, true, true, realm);
 
-        message.setShowMessage(true);
+
 
         realm.close();
 
@@ -316,7 +316,7 @@ import org.parceler.Parcel;
             if (input.hasReplyTo()) {
                 message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), -1));
             }
-            message.setShowMessage(showMessage);
+            message.setShowMessage(true);
         }
 
         message.setMessage(input.getMessage());
@@ -373,6 +373,15 @@ import org.parceler.Parcel;
         if (input.hasLog()) {
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
             message.setLogMessage(HelperLogMessage.logMessage(roomId, input.getAuthor(), input.getLog(), message.getMessageId()));
+
+            if (input.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
+                if (G.authorHash.equals(input.getAuthor().getHash())) {
+                    message.setShowMessage(false);
+                    message.setShowTime(false);
+                }
+            }
+
+
         }
         if (input.hasContact()) {
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
@@ -821,6 +830,10 @@ import org.parceler.Parcel;
     }
 
     public static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
+
+        if (!message.isShowMessage()) {
+            return;
+        }
 
         RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId()).equalTo(RealmRoomMessageFields.SHOW_TIME, true).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
 
