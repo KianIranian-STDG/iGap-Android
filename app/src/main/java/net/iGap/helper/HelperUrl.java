@@ -255,14 +255,18 @@ public class HelperUrl {
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
 
-                String url = strBuilder.toString().substring(start, end);
+                try {
+                    String url = strBuilder.toString().substring(start, end);
 
-                Uri path = Uri.parse(url);
+                    Uri path = Uri.parse(url);
 
-                String domain = path.getQueryParameter("domain");
+                    String domain = path.getQueryParameter("domain");
 
-                if (domain.length() > 0) {
-                    checkUsernameAndGoToRoom(domain, ChatEntry.profile);
+                    if (domain != null && domain.length() > 0) {
+                        checkUsernameAndGoToRoom(domain, ChatEntry.profile);
+                    }
+                } catch (Exception e) {
+
                 }
             }
 
@@ -1010,10 +1014,14 @@ public class HelperUrl {
                 }
             } else {
 
-                String domain = path.getQueryParameter("domain");
+                try {
+                    String domain = path.getQueryParameter("domain");
 
-                if (domain.length() > 0) {
-                    checkUsernameAndGoToRoom(domain, ChatEntry.profile);
+                    if (domain != null && domain.length() > 0) {
+                        checkUsernameAndGoToRoom(domain, ChatEntry.profile);
+                    }
+                } catch (Exception e) {
+
                 }
             }
         } else {

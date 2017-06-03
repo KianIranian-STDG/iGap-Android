@@ -73,6 +73,7 @@ import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
+import net.iGap.helper.FontCache;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
@@ -1824,7 +1825,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
                     TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
-                    txtLastMessage.setText(mInfo.getDraft().getMessage());
+                    txtLastMessage.setText(subStringInternal(mInfo.getDraft().getMessage()));
                     txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
 
                     addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
@@ -1937,11 +1938,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         }
                                     }
                                     txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
-                                    txtLastMessage.setText(lastMessage);
+                                    txtLastMessage.setText(subStringInternal(lastMessage));
                                 }
 
                             } else {
-                                txtLastMessage.setText(lastMessage);
+                                txtLastMessage.setText(subStringInternal(lastMessage));
                             }
                         }
                     } else {
@@ -2049,6 +2050,27 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
             }
+
+            TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
+            if (txtLastMessage != null) {
+                txtLastMessage.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", context));
+            }
+        }
+
+        private String subStringInternal(String text) {
+
+            if (text == null || text.length() == 0) {
+                return "";
+            }
+
+            int subLengh = 70;
+
+            if (text.length() > subLengh) {
+                return text.substring(0, subLengh);
+            } else {
+                return text;
+            }
+
         }
 
 
