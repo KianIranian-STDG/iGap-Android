@@ -55,6 +55,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1422,6 +1423,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             @Override
                             public void run() {
                                 // remove deleted message from adapter
+                                if (mAdapter == null) {
+                                    return;
+                                }
+
                                 mAdapter.removeMessage(messageId);
                                 if (mAdapter.getItemCount() > 0) {
                                     txtEmptyMessages.setVisibility(View.GONE);
@@ -2664,7 +2669,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                                 RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
                                                                 realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
                                                                 realm.copyToRealmOrUpdate(realmOfflineSeen);
-                                                                realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                                                if (realmClientCondition.getOfflineSeen() != null) {
+                                                                    realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                                                } else {
+                                                                    RealmList<RealmOfflineSeen> offlineSeenList = new RealmList<>();
+                                                                    offlineSeenList.add(realmOfflineSeen);
+                                                                    realmClientCondition.setOfflineSeen(offlineSeenList);
+                                                                }
                                                             }
                                                         }
 
@@ -4567,6 +4578,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                             mainVideoPath = AttachFile.getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
 
+                            if (mainVideoPath == null) {
+                                return;
+                            }
+
                             new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
                             sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                         } else {
@@ -5258,7 +5273,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         rippleReplaySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                if (!mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
+                if (mAdapter != null && !mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
                     replay(mAdapter.getSelectedItems().iterator().next().mMessage);
                 }
             }
@@ -6243,6 +6258,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             break;
                         }
                     }
+                    Log.i("TTT", "Time Message 1");
                     mAdapter.add(0, new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                     index = 1;
                 }
@@ -6251,9 +6267,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     if (mAdapter.getItemCount() > 0) {
                         if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDiferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
+                            Log.i("TTT", "Time Message 2 : messageInfo.time : " + messageInfo.time + "  ||  Adapter Time : " + mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time);
                             mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                         }
                     } else {
+                        Log.i("TTT", "Time Message 3");
                         mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                     }
                 }
