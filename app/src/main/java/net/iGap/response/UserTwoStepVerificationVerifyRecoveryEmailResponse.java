@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserTwoStepVerificationVerifyRecoveryEmail;
 
 public class UserTwoStepVerificationVerifyRecoveryEmailResponse extends MessageHandler {
@@ -37,6 +38,11 @@ public class UserTwoStepVerificationVerifyRecoveryEmailResponse extends MessageH
             G.onTwoStepPassword.confirmEmail();
         }
 
+        if (G.twoStepSecurityConfirmEmail != null) {
+            G.twoStepSecurityConfirmEmail.confirmEmail();
+        }
+
+
     }
 
     @Override public void timeOut() {
@@ -45,6 +51,14 @@ public class UserTwoStepVerificationVerifyRecoveryEmailResponse extends MessageH
 
     @Override public void error() {
         super.error();
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        if (G.twoStepSecurityConfirmEmail != null && majorCode == 10113 && minorCode == 2) {
+            G.twoStepSecurityConfirmEmail.errorInvalidConfirmCode();
+        }
     }
 }
 

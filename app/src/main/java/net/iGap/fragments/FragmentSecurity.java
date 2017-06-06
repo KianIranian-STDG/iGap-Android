@@ -10,6 +10,7 @@ import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -18,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
@@ -369,6 +369,16 @@ public class FragmentSecurity extends Fragment {
             public void confirmEmail() {
                 viewConfirmEmail();
             }
+
+            @Override
+            public void errorInvalidPassword() {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        error(getString(R.string.invalid_password));
+                    }
+                });
+            }
         };
 
 
@@ -506,7 +516,14 @@ public class FragmentSecurity extends Fragment {
     private void error(String error) {
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
-        Toast.makeText(mActivity, error, Toast.LENGTH_SHORT).show();
+        final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snack.dismiss();
+            }
+        });
+        snack.show();
     }
 
     private void dialogWaitTime(long time) {

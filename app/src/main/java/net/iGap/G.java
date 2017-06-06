@@ -157,6 +157,7 @@ import net.iGap.interfaces.OnUserUpdateStatus;
 import net.iGap.interfaces.OnUserUsernameToId;
 import net.iGap.interfaces.OnUserVerification;
 import net.iGap.interfaces.OpenFragment;
+import net.iGap.interfaces.TwoStepSecurityConfirmEmail;
 import net.iGap.interfaces.UpdateListAfterKick;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
@@ -366,6 +367,7 @@ public class G extends MultiDexApplication {
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
     public static OnTwoStepPassword onTwoStepPassword;
+    public static TwoStepSecurityConfirmEmail twoStepSecurityConfirmEmail;
     public static OnSecurityCheckPassword onSecurityCheckPassword;
     public static OnRecoverySecurityPassword onRecoverySecurityPassword;
     public static IClientSearchUserName onClientSearchUserName;

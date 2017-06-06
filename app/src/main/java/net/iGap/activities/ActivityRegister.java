@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
@@ -93,6 +94,8 @@ import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
+
+import static net.iGap.R.string.invalid_password;
 
 public class ActivityRegister extends ActivityEnhanced implements OnSecurityCheckPassword, OnRecoverySecurityPassword {
 
@@ -1413,7 +1416,18 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                dialogWaitTimeVerifyPassword(wait);
+                dialogWaitTimeVerifyPassword(invalid_password);
+            }
+        });
+    }
+
+    @Override
+    public void errorInvalidPassword() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                closeKeyboard(txtOk);
+                error(getResources().getString(R.string.invalid_password));
             }
         });
     }
@@ -1487,7 +1501,14 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     private void error(String error) {
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
-        Toast.makeText(ActivityRegister.this, error, Toast.LENGTH_SHORT).show();
+        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snack.dismiss();
+            }
+        });
+        snack.show();
     }
 
     @Override
