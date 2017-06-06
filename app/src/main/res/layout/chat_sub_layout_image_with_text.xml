@@ -23,53 +23,69 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
           <LinearLayout
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              >
+
+            <LinearLayout
                 android:id="@+id/contentContainer"
                 style="@style/ChatMessages.CardView">
 
-                <LinearLayout
-                    android:id="@+id/m_container"
-                    android:layout_width="match_parent"
+              <LinearLayout
+                  android:id="@+id/m_container"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  >
+
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    >
 
+                  <net.iGap.module.ReserveSpaceRoundedImageView
+                      android:id="@+id/thumbnail"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      app:riv_border_color="#9e9e9e"
+                      app:riv_border_width="1px"
+                      app:riv_corner_radius="@dimen/messageBox_cornerRadius"
+                      />
 
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                  <include
+                      android:id="@+id/progress"
+                      layout="@layout/msg_progress_item"
+                      android:layout_width="56dp"
+                      android:layout_height="56dp"
+                      android:layout_gravity="center"
+                      />
+                </FrameLayout>
 
-                      <net.iGap.module.ReserveSpaceRoundedImageView
-                            android:id="@+id/thumbnail"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:riv_border_color="#9e9e9e"
-                            app:riv_border_width="1px"
-                            app:riv_corner_radius="@dimen/messageBox_cornerRadius"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
 
-                        <include
-                            android:id="@+id/progress"
-                            layout="@layout/msg_progress_item"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:layout_gravity="center"/>
-                    </FrameLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-
-                      <net.iGap.module.EmojiTextViewE
-                            android:id="@+id/messageText"
-                            style="@style/ChatMessages.EmojiTextView"
-                            android:text="SAMPLE TEXT"/>
-                    </LinearLayout>
-
-
+                  <net.iGap.module.EmojiTextViewE
+                      android:id="@+id/messageText"
+                      style="@style/ChatMessages.EmojiTextView"
+                      android:text="SAMPLE TEXT"
+                      />
                 </LinearLayout>
+
+
+              </LinearLayout>
+            </LinearLayout>
+            <include layout="@layout/chat_sub_layout_messages_time" />
+
           </LinearLayout>
-          <include layout="@layout/chat_sub_layout_messages_time" />
+
+
         </LinearLayout>
 
 

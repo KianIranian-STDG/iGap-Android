@@ -26,6 +26,13 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+
+                <LinearLayout
                 android:id="@+id/contentContainer"
                 style="@style/ChatMessages.CardView">
 
@@ -84,6 +91,8 @@
             </LinearLayout>
 
           <include layout="@layout/chat_sub_layout_messages_time" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
