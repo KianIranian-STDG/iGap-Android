@@ -11,6 +11,10 @@
 package net.iGap.activities;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -20,6 +24,8 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -97,6 +103,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     MediaPlayer player;
     MediaPlayer ringtonePlayer;
 
+    private SensorManager mSensorManager;
+    private Sensor mProximity;
+    SensorEventListener sensorEventListener;
+    private static final int SENSOR_SENSITIVITY = 4;
+
     @Override protected void onDestroy() {
         super.onDestroy();
 
@@ -162,6 +173,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        registerSensor();
 
 
     }
@@ -777,6 +790,89 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         }
     }
+
+    //*****************************  distance sensor  **********************************************************
+
+    private void registerSensor() {
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+        sensorEventListener = new SensorEventListener() {
+            @Override public void onSensorChanged(SensorEvent event) {
+
+                if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+                    if (event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY) {
+                        // near
+                        screenOff();
+                    } else {
+                        //far
+                        screenOn();
+                    }
+                }
+            }
+
+            @Override public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+    }
+
+    private void screenOn() {
+
+        WindowManager.LayoutParams params = this.getWindow().getAttributes();
+
+        /** Turn on: */
+        params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+        params.screenBrightness = 1;
+        this.getWindow().setAttributes(params);
+
+        enableDisableViewGroup((ViewGroup) findViewById(R.id.ac_layout_call_root), true);
+    }
+
+    private void screenOff() {
+
+        if (isConnected) {
+
+            WindowManager.LayoutParams params = this.getWindow().getAttributes();
+
+            /** Turn off: */
+            params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+            params.screenBrightness = 0;
+            this.getWindow().setAttributes(params);
+
+            enableDisableViewGroup((ViewGroup) findViewById(R.id.ac_layout_call_root), false);
+        }
+    }
+
+    /**
+     * Enables/Disables all child views in a view group.
+     *
+     * @param viewGroup the view group
+     * @param enabled <code>true</code> to enable, <code>false</code> to disable
+     * the views.
+     */
+    public static void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
+        int childCount = viewGroup.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View view = viewGroup.getChildAt(i);
+            view.setEnabled(enabled);
+            if (view instanceof ViewGroup) {
+                enableDisableViewGroup((ViewGroup) view, enabled);
+            }
+        }
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(sensorEventListener, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(sensorEventListener);
+    }
+
 
     //***************************************************************************************
 
