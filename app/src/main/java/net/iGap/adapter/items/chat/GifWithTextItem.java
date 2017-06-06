@@ -19,10 +19,10 @@ import java.io.File;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.LocalFileType;
@@ -155,13 +155,13 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected ReserveSpaceGifImageView image;
-        protected EmojiTextView messageText;
+        protected EmojiTextViewE messageText;
 
         public ViewHolder(View view) {
             super(view);
 
             image = (ReserveSpaceGifImageView) view.findViewById(R.id.thumbnail);
-            messageText = (EmojiTextView) view.findViewById(R.id.messageText);
+            messageText = (EmojiTextViewE) view.findViewById(R.id.messageText);
             messageText.setTextSize(G.userTextSize);
             messageText.setMovementMethod(LinkMovementMethod.getInstance());
         }

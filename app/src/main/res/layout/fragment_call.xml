@@ -11,65 +11,74 @@
     >
 
 
-  <LinearLayout
-      android:id="@+id/fc_layot_title"
+  <android.support.design.widget.AppBarLayout
       android:layout_width="match_parent"
-      android:layout_height="@dimen/dp60"
-      android:background="@color/green"
-      android:orientation="horizontal"
-      android:layoutDirection="ltr"
+      android:layout_height="wrap_content"
       >
 
-    <net.iGap.libs.rippleeffect.RippleView
-        android:id="@+id/fc_call_ripple_txtBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        app:rv_alpha="200"
-        app:rv_centered="true"
-        app:rv_rippleDuration="0"
-        app:rv_ripplePadding="5dp"
-        rv_centered="true"
+    <LinearLayout
+        android:id="@+id/fc_layot_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:background="@color/green"
+        android:orientation="horizontal"
+        android:layoutDirection="ltr"
         >
 
+      <net.iGap.libs.rippleeffect.RippleView
+          android:id="@+id/fc_call_ripple_txtBack"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          app:rv_alpha="200"
+          app:rv_centered="true"
+          app:rv_rippleDuration="0"
+          app:rv_ripplePadding="5dp"
+          rv_centered="true"
+          >
+
+        <net.iGap.module.MaterialDesignTextView
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_back_arrow"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@color/whit_background"
+            />
+      </net.iGap.libs.rippleeffect.RippleView>
+
+      <TextView
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_gravity="center"
+          android:layout_weight="1"
+          android:gravity="center|left"
+          android:singleLine="true"
+          android:text="@string/calls"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textColor="@android:color/white"
+          android:textSize="@dimen/dp18"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
+          android:visibility="visible"
+          />
+
+
       <net.iGap.module.MaterialDesignTextView
+          android:id="@+id/fc_btn_menu"
           android:layout_width="@dimen/dp52"
           android:layout_height="match_parent"
           android:gravity="center"
-          android:text="@string/md_back_arrow"
+          android:text="@string/md_show_more_button"
           android:textAppearance="@style/TextIconAppearance_toolbar"
           android:textColor="@color/whit_background"
           />
-    </net.iGap.libs.rippleeffect.RippleView>
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:gravity="center|left"
-        android:singleLine="true"
-        android:text="@string/calls"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/dp18"
-        fontPath="fonts/IRANSansMobile_Bold.ttf"
-        android:visibility="visible"
-        />
 
 
-    <net.iGap.module.MaterialDesignTextView
-        android:id="@+id/fc_btn_menu"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/md_show_more_button"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
-        android:textColor="@color/whit_background"
-        />
+    </LinearLayout>
+
+  </android.support.design.widget.AppBarLayout>
 
 
-  </LinearLayout>
 
   <FrameLayout
       android:layout_width="match_parent"

@@ -61,6 +61,7 @@ public class StructMessageInfo implements Parcelable {
     public boolean hasEmojiInText = true;
     public boolean showTime = false;
     public String username = "";
+    public boolean showMessage = true;
 
     public String fileMime = "";
     public String filePic = "";
@@ -297,6 +298,7 @@ public class StructMessageInfo implements Parcelable {
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.roomId = roomMessage.getRoomId();
         messageInfo.status = roomMessage.getStatus();
+        messageInfo.showMessage = roomMessage.isShowMessage();
         messageInfo.hasLinkInMessage = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getHasMessageLink() : roomMessage.getHasMessageLink();
         messageInfo.linkInfo = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getLinkInfo() : roomMessage.getLinkInfo();
         messageInfo.hasEmojiInText = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().isHasEmojiInText() : roomMessage.isHasEmojiInText();

@@ -58,6 +58,10 @@ public class UserTwoStepVerificationVerifyPasswordResponse extends MessageHandle
             if (G.onSecurityCheckPassword != null) {
                 G.onSecurityCheckPassword.errorVerifyPassword(getWait);
             }
+        } else if (majorCode == 194) {
+            if (G.onSecurityCheckPassword != null) {
+                G.onSecurityCheckPassword.errorInvalidPassword();
+            }
         }
     }
 }

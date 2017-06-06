@@ -11,11 +11,15 @@
     tools:ignore="MissingPrefix"
     >
 
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/ng_backgroundToolbar"
+      >
     <android.support.v7.widget.Toolbar
-        android:id="@+id/ng_backgroundToolbar"
+
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
-        android:background="@color/toolbar_background"
         android:layoutDirection="ltr"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
@@ -25,56 +29,55 @@
         android:layout_alignParentStart="true"
         >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          >
 
-            <TextView
-                android:id="@+id/ng_txt_titleToolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/new_group"
-                android:textColor="@color/whit_background"
-                android:textSize="@dimen/dp18"
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
-                android:visibility="visible"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/ng_ripple_back"
-                android:layout_toEndOf="@+id/ng_ripple_back"
-                />
+        <TextView
+            android:id="@+id/ng_txt_titleToolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/new_group"
+            android:textColor="@color/whit_background"
+            android:textSize="@dimen/dp18"
+            fontPath="fonts/IRANSansMobile_Bold.ttf"
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/ng_ripple_back"
+            android:layout_toEndOf="@+id/ng_ripple_back"
+            />
 
-          <net.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/ng_ripple_back"
-                rv_centered="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="0"
-                app:rv_ripplePadding="5dp">
+        <net.iGap.libs.rippleeffect.RippleView
+            android:id="@+id/ng_ripple_back"
+            rv_centered="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rv_alpha="200"
+            app:rv_centered="true"
+            app:rv_rippleDuration="0"
+            app:rv_ripplePadding="5dp"
+            >
 
-            <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/ng_txt_back"
-                    android:layout_width="@dimen/dp52"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:gravity="center"
-                    android:text="@string/md_back_arrow"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
-                    android:textColor="@color/whit_background"
-                    />
-          </net.iGap.libs.rippleeffect.RippleView>
-        </RelativeLayout>
+          <net.iGap.module.MaterialDesignTextView
+              android:id="@+id/ng_txt_back"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="match_parent"
+              android:layout_alignParentLeft="true"
+              android:gravity="center"
+              android:text="@string/md_back_arrow"
+              android:textAppearance="@style/TextIconAppearance_toolbar"
+              android:textColor="@color/whit_background"
+              />
+        </net.iGap.libs.rippleeffect.RippleView>
+      </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <View
-        android:id="@+id/ang_view_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/ng_backgroundToolbar"
-        android:background="#34a49f"/>
-    <ScrollView
+  </android.support.design.widget.AppBarLayout>
+
+
+  <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/ng_backgroundToolbar">

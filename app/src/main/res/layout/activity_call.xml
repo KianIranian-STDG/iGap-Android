@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ac_layout_call_root"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,8 +24,8 @@
         android:id="@+id/fcr_imv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00B0BF"
         android:alpha=".5"
+        android:background="#00B0BF"
         android:scaleType="centerCrop"
         />
 
@@ -39,13 +40,13 @@
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:singleLine="true"
           android:layout_marginTop="@dimen/dp16"
+          android:singleLine="true"
           android:text="@string/call_name"
-          android:textColor="#f8f4df"
-          android:textSize="@dimen/dp22"
-
           android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textColor="#f8f4df"
+
+          android:textSize="@dimen/dp22"
           fontPath="fonts/IRANSansMobile_Bold.ttf"
 
           />
@@ -57,8 +58,8 @@
           android:singleLine="true"
           android:text="Name"
           android:textColor="#f8f4df"
-          android:textStyle="bold"
           android:textSize="@dimen/dp22"
+          android:textStyle="bold"
           />
       <LinearLayout
           android:layout_width="match_parent"
@@ -91,8 +92,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="00:00"
-          android:visibility="gone"
           android:textColor="#f8f4df"
+          android:visibility="gone"
           />
 
       <View
@@ -141,9 +142,9 @@
           <net.iGap.module.AvlDirectCall
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:layout_marginBottom="@dimen/dp10"
               android:layout_gravity="center"
+              android:layout_marginBottom="@dimen/dp10"
+              android:orientation="vertical"
               ></net.iGap.module.AvlDirectCall>
 
 
@@ -176,7 +177,7 @@
               android:layout_width="@dimen/dp60"
               android:layout_height="@dimen/dp60"
               android:layout_gravity="bottom"
-              android:background="@drawable/circle_mic"
+              android:background="@drawable/circle_green"
               android:gravity="center"
               android:text="@string/md_phone"
               android:textAppearance="@style/TextIconAppearance.all"

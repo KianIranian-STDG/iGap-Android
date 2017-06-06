@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
@@ -200,7 +201,6 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
 
         findViewById(R.id.ar_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        findViewById(R.id.ar_view_line).setBackgroundColor(Color.parseColor("#999d9d9d"));
 
 
         int portrait = getResources().getConfiguration().orientation;
@@ -1420,6 +1420,17 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     }
 
     @Override
+    public void errorInvalidPassword() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                closeKeyboard(txtOk);
+                error(getResources().getString(R.string.invalid_password));
+            }
+        });
+    }
+
+    @Override
     public void recoveryByEmail(final String tokenR) {
 
         runOnUiThread(new Runnable() {
@@ -1488,7 +1499,14 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     private void error(String error) {
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
-        Toast.makeText(ActivityRegister.this, error, Toast.LENGTH_SHORT).show();
+        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snack.dismiss();
+            }
+        });
+        snack.show();
     }
 
     @Override

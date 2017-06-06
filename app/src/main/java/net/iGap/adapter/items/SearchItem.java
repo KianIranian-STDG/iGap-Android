@@ -21,12 +21,12 @@ import java.io.File;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.fragments.SearchFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
 
@@ -107,7 +107,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         protected CircleImageView avatar;
         protected CustomTextViewMedium name;
         protected TextView txtIcon;
-        protected EmojiTextView lastSeen;
+        protected EmojiTextViewE lastSeen;
         protected TextView txtTime;
 
         public ViewHolder(View view) {
@@ -115,7 +115,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
 
             avatar = (CircleImageView) view.findViewById(R.id.sfsl_imv_contact_avatar);
             name = (CustomTextViewMedium) view.findViewById(R.id.sfsl_txt_contact_name);
-            lastSeen = (EmojiTextView) view.findViewById(R.id.sfsl_txt_contact_lastseen);
+            lastSeen = (EmojiTextViewE) view.findViewById(R.id.sfsl_txt_contact_lastseen);
             txtIcon = (TextView) view.findViewById(R.id.sfsl_txt_icon);
             txtTime = (TextView) view.findViewById(R.id.sfsl_txt_time);
         }

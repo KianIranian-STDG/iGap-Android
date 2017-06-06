@@ -55,6 +55,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.emoji.Emoji;
+import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiClickedListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
@@ -87,7 +96,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -114,15 +122,6 @@ import net.iGap.adapter.items.chat.UnreadMessage;
 import net.iGap.adapter.items.chat.VideoItem;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.VoiceItem;
-import net.iGap.emoji.EmojiEditText;
-import net.iGap.emoji.EmojiTextView;
-import net.iGap.emoji.emoji.Emoji;
-import net.iGap.emoji.listeners.OnEmojiBackspaceClickListener;
-import net.iGap.emoji.listeners.OnEmojiClickedListener;
-import net.iGap.emoji.listeners.OnEmojiPopupDismissListener;
-import net.iGap.emoji.listeners.OnEmojiPopupShownListener;
-import net.iGap.emoji.listeners.OnSoftKeyboardCloseListener;
-import net.iGap.emoji.listeners.OnSoftKeyboardOpenListener;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.fragments.FragmentShowImage;
@@ -181,6 +180,8 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.EmojiEditTextE;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.FileUtils;
 import net.iGap.module.IntentRequests;
@@ -286,7 +287,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private AttachFile attachFile;
     private EditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
-    private net.iGap.emoji.EmojiEditText edtChat;
+    private net.iGap.module.EmojiEditTextE edtChat;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private MaterialDesignTextView imvMicButton;
@@ -307,7 +308,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
     private ProtoGlobal.Room.Type chatType;
-    private net.iGap.emoji.EmojiPopup emojiPopup;
+    private EmojiPopup emojiPopup;
     public static OnComplete onMusicListener;
     private GroupChatRole groupRole;
     private ChannelChatRole channelRole;
@@ -685,15 +686,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             /**
              * delete all  deleted row from database
              */
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).findAll().deleteAllFromRealm();
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().deleteAllFromRealm();
-                }
-            });
-            realm.close();
+            RealmRoom.deleteRoom(mRoomId);
         }
         super.onStop();
 
@@ -1377,7 +1370,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
          */
         appBarLayout = (MyAppBarLayout) findViewById(R.id.ac_appBarLayout);
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
-        findViewById(R.id.ac_green_line).setBackgroundColor(Color.parseColor(G.appBarColor));
+
     }
 
 
@@ -1428,6 +1421,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             @Override
                             public void run() {
                                 // remove deleted message from adapter
+                                if (mAdapter == null) {
+                                    return;
+                                }
+
                                 mAdapter.removeMessage(messageId);
                                 if (mAdapter.getItemCount() > 0) {
                                     txtEmptyMessages.setVisibility(View.GONE);
@@ -1751,7 +1748,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     public void onClick(View view) {
                         dialog.dismiss();
                         initLayoutSearchNavigation();
-                        findViewById(R.id.ac_green_line).setVisibility(View.GONE);
+
                         findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
                         ll_Search.setVisibility(View.VISIBLE);
                         ll_navigate_Message.setVisibility(View.VISIBLE);
@@ -1832,7 +1829,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         imvSmileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_smile_button);
 
-        edtChat = (EmojiEditText) findViewById(R.id.chl_edt_chat);
+        edtChat = (EmojiEditTextE) findViewById(R.id.chl_edt_chat);
         edtChat.requestFocus();
 
         imvSendButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_send_button);
@@ -2551,11 +2548,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
 
             ll_AppBarSelected.setVisibility(View.VISIBLE);
-            findViewById(R.id.ac_green_line).setVisibility(View.GONE);
         } else {
             toolbar.setVisibility(View.VISIBLE);
             ll_AppBarSelected.setVisibility(View.GONE);
-            findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
         }
     }
 
@@ -2672,7 +2667,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                                 RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
                                                                 realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
                                                                 realm.copyToRealmOrUpdate(realmOfflineSeen);
-                                                                realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                                                if (realmClientCondition.getOfflineSeen() != null) {
+                                                                    realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                                                } else {
+                                                                    RealmList<RealmOfflineSeen> offlineSeenList = new RealmList<>();
+                                                                    offlineSeenList.add(realmOfflineSeen);
+                                                                    realmClientCondition.setOfflineSeen(offlineSeenList);
+                                                                }
                                                             }
                                                         }
 
@@ -3049,10 +3050,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 break;
         }
 
-        if (itemsRes != 0) {
+        //if (itemsRes != 0) {
             // Arrays.asList returns fixed size, doing like this fixes remove object
             // UnsupportedOperationException exception
-            List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
+        //List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
 
             Realm realm = Realm.getDefaultInstance();
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.roomId).findFirst();
@@ -3135,7 +3136,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 realm.close();
             }
-        }
+        //}
 
         String _savedFolderName = "";
         if (message.messageType.toString().contains("IMAGE") || message.messageType.toString().contains("VIDEO") || message.messageType.toString().contains("GIF")) {
@@ -3431,7 +3432,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     public void onAvatarAdd(final long roomId, ProtoGlobal.Avatar avatar) {
 
-        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
@@ -3617,7 +3618,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             type = HelperAvatar.AvatarType.ROOM;
         }
 
-        HelperAvatar.getAvatar(idForGetAvatar, type, new OnAvatarGet() {
+        HelperAvatar.getAvatar(idForGetAvatar, type, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
@@ -3696,7 +3697,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             inflateReplayLayoutIntoStub(item == null ? messages.iterator().next().mMessage : item);
 
             ll_AppBarSelected.setVisibility(View.GONE);
-            findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
+
             toolbar.setVisibility(View.VISIBLE);
 
             mAdapter.deselect();
@@ -3952,7 +3953,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         mAdapter.deselect();
         toolbar.setVisibility(View.VISIBLE);
         ll_AppBarSelected.setVisibility(View.GONE);
-        findViewById(R.id.ac_green_line).setVisibility(View.VISIBLE);
+
         clearReplyView();
     }
 
@@ -4292,7 +4293,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * emoji initialization
      */
     private void setUpEmojiPopup() {
-        emojiPopup = net.iGap.emoji.EmojiPopup.Builder.fromRootView(findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override
             public void onEmojiBackspaceClicked(final View v) {
 
@@ -4574,6 +4575,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
                             String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                             mainVideoPath = AttachFile.getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
+
+                            if (mainVideoPath == null) {
+                                return;
+                            }
 
                             new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
                             sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
@@ -5266,7 +5271,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         rippleReplaySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                if (!mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
+                if (mAdapter != null && !mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
                     replay(mAdapter.getSelectedItems().iterator().next().mMessage);
                 }
             }
@@ -6135,7 +6140,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 int _count = getIntent().getExtras().getInt(ActivitySelectChat.ARG_FORWARD_MESSAGE_COUNT);
                 String str = _count > 1 ? getString(R.string.messages_selected) : getString(R.string.message_selected);
 
-                EmojiTextView emMessage = (EmojiTextView) findViewById(R.id.cslhf_txt_message);
+                EmojiTextViewE emMessage = (EmojiTextViewE) findViewById(R.id.cslhf_txt_message);
 
                 if (HelperCalander.isLanguagePersian) {
 
@@ -6251,6 +6256,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             break;
                         }
                     }
+                    Log.i("TTT", "Time Message 1");
                     mAdapter.add(0, new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                     index = 1;
                 }
@@ -6259,9 +6265,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     if (mAdapter.getItemCount() > 0) {
                         if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDiferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
+                            Log.i("TTT", "Time Message 2 : messageInfo.time : " + messageInfo.time + "  ||  Adapter Time : " + mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time);
                             mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                         }
                     } else {
+                        Log.i("TTT", "Time Message 3");
                         mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                     }
                 }
@@ -6354,10 +6362,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
                         break;
                     case LOG:
-                        if (!addTop) {
-                            mAdapter.add(new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
-                        } else {
-                            mAdapter.add(index, new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                        if (messageInfo.showMessage) {
+                            if (!addTop) {
+                                mAdapter.add(new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         }
                         break;
                 }

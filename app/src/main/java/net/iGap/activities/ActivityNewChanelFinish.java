@@ -46,7 +46,6 @@ public class ActivityNewChanelFinish extends ActivityEnhanced {
         radioButtonPrivate = (RadioButton) findViewById(R.id.nclf_radioButton_private);
 
         findViewById(R.id.nclf_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        findViewById(R.id.ancf_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         edtLink = (EditText) findViewById(R.id.nclf_edt_link);
 

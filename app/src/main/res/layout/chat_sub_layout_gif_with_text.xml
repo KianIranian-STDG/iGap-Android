@@ -57,7 +57,7 @@
                         android:orientation="vertical"
                         >
 
-                      <net.iGap.emoji.EmojiTextView
+                      <net.iGap.module.EmojiTextViewE
                             android:id="@+id/messageText"
                             style="@style/ChatMessages.EmojiTextView"
                             android:text="SAMPLE TEXT"/>

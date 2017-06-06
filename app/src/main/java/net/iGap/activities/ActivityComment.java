@@ -23,20 +23,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.emoji.Emoji;
+import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiClickedListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterComment;
-import net.iGap.emoji.EmojiEditText;
-import net.iGap.emoji.emoji.Emoji;
-import net.iGap.emoji.listeners.OnEmojiBackspaceClickListener;
-import net.iGap.emoji.listeners.OnEmojiClickedListener;
-import net.iGap.emoji.listeners.OnEmojiPopupDismissListener;
-import net.iGap.emoji.listeners.OnEmojiPopupShownListener;
-import net.iGap.emoji.listeners.OnSoftKeyboardCloseListener;
-import net.iGap.emoji.listeners.OnSoftKeyboardOpenListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructCommentInfo;
 
@@ -48,7 +49,7 @@ public class ActivityComment extends ActivityEnhanced {
     private FragmentSubLayoutReplay layoutReplay;
 
     private Button btnSend;
-    private EmojiEditText edtChat;
+    private EmojiEditTextE edtChat;
     private MaterialDesignTextView btnSmile;
 
 
@@ -121,7 +122,6 @@ public class ActivityComment extends ActivityEnhanced {
         initLayoutAttachText();
 
         findViewById(R.id.acs_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        findViewById(R.id.asc_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         layoutReplay = new FragmentSubLayoutReplay(findViewById(R.id.acs_ll_replay));
 
@@ -149,7 +149,7 @@ public class ActivityComment extends ActivityEnhanced {
         }
     }
 
-    private net.iGap.emoji.EmojiPopup emojiPopup;
+    private EmojiPopup emojiPopup;
 
     private void initRecycleView() {
 
@@ -162,7 +162,7 @@ public class ActivityComment extends ActivityEnhanced {
     }
 
     private void setUpEmojiPopup() {
-        emojiPopup = net.iGap.emoji.EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override public void onEmojiBackspaceClicked(final View v) {
                 Log.d("MainActivity", "Clicked on Backspace");
             }
@@ -199,7 +199,7 @@ public class ActivityComment extends ActivityEnhanced {
         });
 
         btnSmile = (MaterialDesignTextView) findViewById(R.id.acs_btn_smile);
-        edtChat = (EmojiEditText) findViewById(R.id.acs_edt_chat);
+        edtChat = (EmojiEditTextE) findViewById(R.id.acs_edt_chat);
 
         // to toggle between keyboard and emoji popup
         btnSmile.setOnClickListener(new View.OnClickListener() {

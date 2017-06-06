@@ -924,5 +924,13 @@
   <string name="please_write_your_reasons">لطفا دلیل خود را بنویسید</string>
   <string name="error_check_password">به دلیل تلاش پیاپی، رمزعبور برای مدتی غیرفعال است.</string>
 
+  <string name="your_confirm_email">Enter Your confirm Email code</string>
+  <string name="your_confirm_email_skip">Skip</string>
+  <string name="your_resend_email_skip">Resend confirm code</string>
+  <string name="invalid_verify_email_code">Invalid verify email code</string>
+  <string name="resend_verify_email_code">We\'re resend verify email code on your email</string>
+  <string name="enter_verify_email_code">Please enter verify email code</string>
+  <string name="invalid_password">Password is invalid</string>
+
 
 </resources>

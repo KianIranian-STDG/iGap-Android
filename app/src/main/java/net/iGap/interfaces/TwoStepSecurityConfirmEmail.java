@@ -9,13 +9,10 @@ package net.iGap.interfaces;
  * All rights reserved.
 */
 
-public interface OnSecurityCheckPassword {
+public interface TwoStepSecurityConfirmEmail {
 
-    void getDetailPassword(String questionOne, String questionTwo, String hint, boolean hasConfirmedRecoveryEmail, String unconfirmedEmailPattern);
+    void confirmEmail();
 
-    void verifyPassword(String tokenR);
+    void errorInvalidConfirmCode();
 
-    void errorVerifyPassword(int wait);
-
-    void errorInvalidPassword();
 }

@@ -91,7 +91,6 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         }
 
         view.findViewById(R.id.fch_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.view).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.fch_prgWaiting_addContact);
         AppUtils.setProgresColler(prgWaiting);

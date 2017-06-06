@@ -38,24 +38,25 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.emoji.Emoji;
+import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiClickedListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import io.realm.Realm;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emoji.EmojiEditText;
-import net.iGap.emoji.emoji.Emoji;
-import net.iGap.emoji.listeners.OnEmojiBackspaceClickListener;
-import net.iGap.emoji.listeners.OnEmojiClickedListener;
-import net.iGap.emoji.listeners.OnEmojiPopupDismissListener;
-import net.iGap.emoji.listeners.OnEmojiPopupShownListener;
-import net.iGap.emoji.listeners.OnSoftKeyboardCloseListener;
-import net.iGap.emoji.listeners.OnSoftKeyboardOpenListener;
 import net.iGap.interfaces.IPopUpListener;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
@@ -96,7 +97,7 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
 
     //////////////////////////////////////////    attach layout
     private MaterialDesignTextView btnSmileButton;
-    private EmojiEditText edtChat;
+    private EmojiEditTextE edtChat;
     private MaterialDesignTextView btnMic;
 
     //////////////////////////////////////////
@@ -166,10 +167,10 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
         btnSmileButton.setText(drawableResourceId);
     }
 
-    private net.iGap.emoji.EmojiPopup emojiPopup;
+    private EmojiPopup emojiPopup;
 
     private void setUpEmojiPopup() {
-        emojiPopup = net.iGap.emoji.EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override public void onEmojiBackspaceClicked(final View v) {
 
             }
@@ -455,7 +456,7 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
                 }
             });
 
-            edtChat = (EmojiEditText) findViewById(R.id.apn_edt_chat);
+            edtChat = (EmojiEditTextE) findViewById(R.id.apn_edt_chat);
 
             edtChat.addTextChangedListener(new TextWatcher() {
                 @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

@@ -70,6 +70,11 @@ public class HelperConnectionState {
 
                 if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                     message = G.context.getResources().getString(R.string.waiting_for_network);
+
+                    if (G.iCallFinish != null) {
+                        G.iCallFinish.onFinish();
+                    }
+
                 } else if (G.connectionState == ConnectionState.CONNECTING) {
                     message = G.context.getResources().getString(R.string.connecting);
                 }

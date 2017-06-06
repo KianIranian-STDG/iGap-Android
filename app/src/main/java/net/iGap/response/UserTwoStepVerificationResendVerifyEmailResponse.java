@@ -10,17 +10,15 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
-import net.iGap.proto.ProtoChannelCreate;
-import net.iGap.proto.ProtoError;
+import net.iGap.proto.ProtoUserTwoStepVerificationResendVerifyEmail;
 
-public class ChannelCreateResponse extends MessageHandler {
+public class UserTwoStepVerificationResendVerifyEmailResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
     public String identity;
 
-    public ChannelCreateResponse(int actionId, Object protoClass, String identity) {
+    public UserTwoStepVerificationResendVerifyEmailResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -31,24 +29,20 @@ public class ChannelCreateResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoChannelCreate.ChannelCreateResponse.Builder builder = (ProtoChannelCreate.ChannelCreateResponse.Builder) message;
-        G.onChannelCreate.onChannelCreate(builder.getRoomId(), builder.getInviteLink(), identity);
+
+        ProtoUserTwoStepVerificationResendVerifyEmail.UserTwoStepVerificationResendVerifyEmailResponse.Builder builder = (ProtoUserTwoStepVerificationResendVerifyEmail.UserTwoStepVerificationResendVerifyEmailResponse.Builder) message;
+
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        G.onChannelCreate.onTimeOut();
     }
 
     @Override
     public void error() {
         super.error();
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
 
-        G.onChannelCreate.onError(majorCode, minorCode);
     }
 }
 

@@ -117,11 +117,6 @@
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/fcg_view_line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#34a49f"/>
 
     </android.support.design.widget.AppBarLayout>
 

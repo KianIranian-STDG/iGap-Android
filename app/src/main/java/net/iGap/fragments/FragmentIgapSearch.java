@@ -85,7 +85,6 @@ public class FragmentIgapSearch extends Fragment {
     private void initComponent(View view) {
 
         view.findViewById(R.id.sfl_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.sfl_view_line).setBackgroundColor(Color.parseColor("#999d9d9d"));
 
         imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
         imvNothingFound.setImageResource(R.drawable.find2);

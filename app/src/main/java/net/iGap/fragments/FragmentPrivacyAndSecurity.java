@@ -124,9 +124,6 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
         new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.fpac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
-
-
 
         Realm realm = Realm.getDefaultInstance();
 

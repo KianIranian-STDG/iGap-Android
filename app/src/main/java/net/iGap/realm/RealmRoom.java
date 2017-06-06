@@ -433,6 +433,31 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
+    /**
+     * delete room from realm and also delete all messages
+     * from this room and finally delete RealmClientCondition
+     */
+    public static void deleteRoom(final long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    realmRoom.deleteFromRealm();
+                }
+
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                if (realmClientCondition != null) {
+                    realmClientCondition.deleteFromRealm();
+                }
+
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
+            }
+        });
+        realm.close();
+    }
+
     public long getId() {
         return id;
     }

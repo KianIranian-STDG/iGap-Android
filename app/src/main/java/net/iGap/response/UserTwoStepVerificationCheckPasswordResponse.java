@@ -55,6 +55,10 @@ public class UserTwoStepVerificationCheckPasswordResponse extends MessageHandler
             if (G.onTwoStepPassword != null) {
                 G.onTwoStepPassword.errorCheckPassword(getWait);
             }
+        } else if (majorCode == 10105 && minorCode == 101) {
+            if (G.onTwoStepPassword != null) {
+                G.onTwoStepPassword.errorInvalidPassword();
+            }
         }
     }
 }

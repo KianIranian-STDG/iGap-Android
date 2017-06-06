@@ -33,7 +33,6 @@ import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -53,6 +52,7 @@ import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceGifImageView;
@@ -126,7 +126,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    protected void setTextIfNeeded(EmojiTextView view, String msg) {
+    protected void setTextIfNeeded(EmojiTextViewE view, String msg) {
 
         if (!TextUtils.isEmpty(msg)) {
             if (mMessage.hasLinkInMessage) {
@@ -251,7 +251,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     });
 
-                    HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, realm, new OnAvatarGet() {
+                    HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, realm, new OnAvatarGet() {
                         @Override
                         public void onAvatarGet(final String avatarPath, long ownerId) {
                             G.handler.post(new Runnable() {
@@ -1253,7 +1253,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (progress == 100) {
 
                         G.handler.post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 String type;
                                 if (mMessage.forwardedFrom != null) {
                                     type = mMessage.forwardedFrom.getMessageType().toString().toLowerCase();
@@ -1313,7 +1314,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void OnProgress(final String path, final int progress) {
 
                     G.handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             if (progress == 100) {
                                 progressBar.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
@@ -1333,7 +1335,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void OnError(String token) {
 
                     G.handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             progressBar.withProgress(0);
                             progressBar.withDrawable(R.drawable.ic_download, true);
                             contentLoading.setVisibility(View.GONE);
@@ -1382,7 +1385,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     public void OnProgress(final int progress, FileUploadStructure struct) {
 
                         G.handler.post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 progressBar.withProgress(progress);
 
                                 if (progress == 100) {

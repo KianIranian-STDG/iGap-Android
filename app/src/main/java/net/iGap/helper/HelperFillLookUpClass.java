@@ -74,6 +74,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30143, "ProtoUserPrivacyGetRule.UserPrivacyGetRuleResponse");
         lookupMap.put(30144, "ProtoUserPrivacySetRule.UserPrivacySetRuleResponse");
         lookupMap.put(30145, "ProtoUserVerifyNewDevice.UserVerifyNewDeviceResponse");
+        lookupMap.put(30146, "ProtoUserTwoStepVerificationResendVerifyEmail.UserTwoStepVerificationResendVerifyEmailResponse");
 
         // Chat 2xx , 302xx
         lookupMap.put(30200, "ProtoChatGetRoom.ChatGetRoomResponse");

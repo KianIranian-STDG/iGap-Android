@@ -133,7 +133,6 @@ public class FragmentDeleteAccount extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.fda_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.fda_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         G.onUserGetDeleteToken = new OnUserGetDeleteToken() {
             @Override public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {

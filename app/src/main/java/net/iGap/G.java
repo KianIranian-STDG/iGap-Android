@@ -22,6 +22,8 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.one.EmojiOneProvider;
 import io.fabric.sdk.android.Fabric;
 import java.io.File;
 import java.util.ArrayList;
@@ -155,6 +157,7 @@ import net.iGap.interfaces.OnUserUpdateStatus;
 import net.iGap.interfaces.OnUserUsernameToId;
 import net.iGap.interfaces.OnUserVerification;
 import net.iGap.interfaces.OpenFragment;
+import net.iGap.interfaces.TwoStepSecurityConfirmEmail;
 import net.iGap.interfaces.UpdateListAfterKick;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
@@ -239,6 +242,7 @@ public class G extends MultiDexApplication {
     public static boolean showSenderNameInGroup = false;
     public static boolean needGetSignalingConfiguration = true;
     public static boolean isInCall = false;
+    public static boolean isShowRatingDialog = false;
 
     public static int ivSize;
     public static int userTextSize = 0;
@@ -248,6 +252,7 @@ public class G extends MultiDexApplication {
     public static long currentTime;
     public static long userId;
     public static long latestHearBeatTime = System.currentTimeMillis();
+    public static long latestResponse = System.currentTimeMillis();
     public static long serverHeartBeatTiming = 60 * 1000;
 
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
@@ -362,6 +367,7 @@ public class G extends MultiDexApplication {
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
     public static OnTwoStepPassword onTwoStepPassword;
+    public static TwoStepSecurityConfirmEmail twoStepSecurityConfirmEmail;
     public static OnSecurityCheckPassword onSecurityCheckPassword;
     public static OnRecoverySecurityPassword onRecoverySecurityPassword;
     public static IClientSearchUserName onClientSearchUserName;
@@ -385,12 +391,14 @@ public class G extends MultiDexApplication {
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class)
-            //.eventListener(new CustomEventListener())
-            .apply();
+                //.eventListener(new CustomEventListener())
+                .apply();
 
         context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
 
         new StartupActions();
     }

@@ -42,7 +42,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.emoji.EmojiTextView;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperSaveFile;
@@ -51,6 +50,7 @@ import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TouchImageView;
 import net.iGap.module.structs.StructMessageInfo;
@@ -70,7 +70,7 @@ public class FragmentShowImage extends Fragment {
     private TextView txtImageName;
     private TextView txtImageDate;
     private TextView txtImageTime;
-    private EmojiTextView txtImageDesc;
+    private EmojiTextViewE txtImageDesc;
     private LinearLayout toolbarShowImage;
     private boolean isShowToolbar = true;
     private ViewGroup ltImageName;
@@ -224,7 +224,7 @@ public class FragmentShowImage extends Fragment {
         txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
         txtImageDate = (TextView) view.findViewById(R.id.asi_txt_image_date);
         txtImageTime = (TextView) view.findViewById(R.id.asi_txt_image_time);
-        txtImageDesc = (EmojiTextView) view.findViewById(R.id.asi_txt_image_desc);
+        txtImageDesc = (EmojiTextViewE) view.findViewById(R.id.asi_txt_image_desc);
         toolbarShowImage = (LinearLayout) view.findViewById(R.id.toolbarShowImage);
 
         initViewPager();

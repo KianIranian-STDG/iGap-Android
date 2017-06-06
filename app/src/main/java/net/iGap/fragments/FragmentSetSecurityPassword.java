@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -16,11 +17,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.interfaces.TwoStepSecurityConfirmEmail;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.request.RequestUserTwoStepVerificationResendVerifyEmail;
 import net.iGap.request.RequestUserTwoStepVerificationSetPassword;
+import net.iGap.request.RequestUserTwoStepVerificationVerifyRecoveryEmail;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,10 +38,12 @@ public class FragmentSetSecurityPassword extends Fragment {
     private EditText edtSetAnswerPassOne;
     private EditText edtSetQuestionPassTwo;
     private EditText edtSetAnswerPassTwo;
-    private static EditText edtSetEmail;
+    private EditText edtSetEmail;
+    private EditText edtSetConfirmEmail;
     private static String txtPassword;
     private static String oldPassword = "";
     private FragmentActivity mActivity;
+
     public FragmentSetSecurityPassword() {
         // Required empty public constructor
     }
@@ -55,7 +60,6 @@ public class FragmentSetSecurityPassword extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.fpac_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -87,6 +91,40 @@ public class FragmentSetSecurityPassword extends Fragment {
         final ViewGroup rootHintPassword = (ViewGroup) view.findViewById(R.id.rootHintPassword);
         final ViewGroup rootQuestionPassword = (ViewGroup) view.findViewById(R.id.rootQuestionPassword);
         final ViewGroup rootEmail = (ViewGroup) view.findViewById(R.id.rootEmail);
+        final ViewGroup rootConfirmEmail = (ViewGroup) view.findViewById(R.id.rootConfirmEmail);
+
+        TextView txtSkipConfirmEmail = (TextView) view.findViewById(R.id.txtSkipConfirmEmail);
+        TextView txtResendConfirmEmail = (TextView) view.findViewById(R.id.txtResendConfirmEmail);
+        txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
+                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
+                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
+            }
+        });
+
+
+        txtSkipConfirmEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeKeyboard(v);
+                mActivity.getSupportFragmentManager().popBackStack();
+                edtSetRePassword.setText("");
+                edtSetHintPassword.setText("");
+                edtSetQuestionPassOne.setText("");
+                edtSetQuestionPassTwo.setText("");
+                edtSetAnswerPassOne.setText("");
+                edtSetAnswerPassTwo.setText("");
+                edtSetEmail.setText("");
+            }
+        });
 
 
         RippleView btnOk = (RippleView) view.findViewById(R.id.setPassword_rippleOk);
@@ -145,21 +183,81 @@ public class FragmentSetSecurityPassword extends Fragment {
                         error(getString(R.string.please_complete_all_item));
                     }
                 } else if (page == 5) {
-
-                    closeKeyboard(v);
-                    mActivity.getSupportFragmentManager().popBackStack();
+                    page = 6;
                     new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
-                    edtSetPassword.setText("");
-                    edtSetRePassword.setText("");
-                    edtSetHintPassword.setText("");
-                    edtSetQuestionPassOne.setText("");
-                    edtSetQuestionPassTwo.setText("");
-                    edtSetAnswerPassOne.setText("");
-                    edtSetAnswerPassTwo.setText("");
+
+                    if (edtSetEmail.length() > 0) {
+                        txtToolbar.setText(getResources().getString(R.string.recovery_email));
+                        rootEmail.setVisibility(View.GONE);
+                        rootConfirmEmail.setVisibility(View.VISIBLE);
+                    } else {
+                        closeKeyboard(v);
+                        mActivity.getSupportFragmentManager().popBackStack();
+                        edtSetPassword.setText("");
+                        edtSetRePassword.setText("");
+                        edtSetHintPassword.setText("");
+                        edtSetQuestionPassOne.setText("");
+                        edtSetQuestionPassTwo.setText("");
+                        edtSetAnswerPassOne.setText("");
+                        edtSetAnswerPassTwo.setText("");
+                        edtSetEmail.setText("");
+                    }
+
+
+                } else if (page == 6) {
+
+                    if (edtSetConfirmEmail.length() > 0) {
+                        new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtSetConfirmEmail.getText().toString());
+                    } else {
+                        error(getString(R.string.enter_verify_email_code));
+                    }
+                    closeKeyboard(v);
                 }
 
             }
         });
+
+
+        G.twoStepSecurityConfirmEmail = new TwoStepSecurityConfirmEmail() {
+            @Override
+            public void confirmEmail() {
+
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mActivity.getSupportFragmentManager().popBackStack();
+                        edtSetRePassword.setText("");
+                        edtSetHintPassword.setText("");
+                        edtSetQuestionPassOne.setText("");
+                        edtSetQuestionPassTwo.setText("");
+                        edtSetAnswerPassOne.setText("");
+                        edtSetAnswerPassTwo.setText("");
+                        edtSetEmail.setText("");
+                    }
+                });
+
+            }
+
+            @Override
+            public void errorInvalidConfirmCode() {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.invalid_verify_email_code, Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+        };
+
+
         //
         edtSetPassword = (EditText) view.findViewById(R.id.setPassword_edtSetPassword);
         edtSetRePassword = (EditText) view.findViewById(R.id.setPassword_edtSetRePassword);
@@ -169,6 +267,7 @@ public class FragmentSetSecurityPassword extends Fragment {
         edtSetQuestionPassTwo = (EditText) view.findViewById(R.id.edtSetQuestionPassTwo);
         edtSetAnswerPassTwo = (EditText) view.findViewById(R.id.edtSetAnswerPassTwo);
         edtSetEmail = (EditText) view.findViewById(R.id.edtSetEmail);
+        edtSetConfirmEmail = (EditText) view.findViewById(R.id.edtSetConfirmEmail);
 
 
 
@@ -182,7 +281,14 @@ public class FragmentSetSecurityPassword extends Fragment {
     private void error(String error) {
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
-        Toast.makeText(mActivity, error, Toast.LENGTH_SHORT).show();
+        final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snack.dismiss();
+            }
+        });
+        snack.show();
     }
 
     @Override

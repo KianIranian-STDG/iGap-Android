@@ -50,7 +50,7 @@
           />
 
 
-      <net.iGap.emoji.EmojiEditText
+      <net.iGap.module.EmojiEditTextE
           android:id="@+id/chl_edt_chat"
           android:layout_width="0dp"
           android:layout_height="wrap_content"

@@ -26,4 +26,6 @@ public interface OnTwoStepPassword {
     void changeEmail();
 
     void confirmEmail();
+
+    void errorInvalidPassword();
 }

@@ -88,7 +88,6 @@ public class FragmentNotification extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.toolbar2).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.fn_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         page = getArguments().getString("PAGE");
         roomId = getArguments().getLong("ID");

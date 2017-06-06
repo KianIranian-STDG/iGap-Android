@@ -10,16 +10,15 @@
 
 package net.iGap.request;
 
-import net.iGap.proto.ProtoChannelCreate;
+import net.iGap.proto.ProtoUserTwoStepVerificationResendVerifyEmail;
 
-public class RequestChannelCreate {
+public class RequestUserTwoStepVerificationResendVerifyEmail {
 
-    public void channelCreate(String name, String description) {
-        ProtoChannelCreate.ChannelCreate.Builder builder = ProtoChannelCreate.ChannelCreate.newBuilder();
-        builder.setName(name);
-        builder.setDescription(description);
+    public void ResendVerifyEmail() {
 
-        RequestWrapper requestWrapper = new RequestWrapper(400, builder, name); // set name as identity because client need channel name for show correct log message.
+        ProtoUserTwoStepVerificationResendVerifyEmail.UserTwoStepVerificationResendVerifyEmail.Builder builder = ProtoUserTwoStepVerificationResendVerifyEmail.UserTwoStepVerificationResendVerifyEmail.newBuilder();
+
+        RequestWrapper requestWrapper = new RequestWrapper(146, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

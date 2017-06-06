@@ -192,12 +192,6 @@
                   </net.iGap.libs.rippleeffect.RippleView>
                 </LinearLayout>
             </LinearLayout>
-
-            <View
-                android:id="@+id/asc_view_line"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#34a49f"/>
         </android.support.design.widget.AppBarLayout>
 
     </android.support.design.widget.CoordinatorLayout>
@@ -226,7 +220,7 @@
                 android:padding="@dimen/dp8"
                 android:text="@string/md_emoticon_with_happy_face"/>
 
-          <net.iGap.emoji.EmojiEditText
+          <net.iGap.module.EmojiEditTextE
                 android:id="@+id/acs_edt_chat"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="vertical"
@@ -8,9 +8,9 @@
     >
 
 
-  <RelativeLayout
+  <LinearLayout
       android:id="@+id/dialog_root_item1_notification"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       >
 
@@ -18,9 +18,7 @@
         android:id="@+id/dialog_icon_item1_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -32,23 +30,16 @@
         android:id="@+id/dialog_text_item1_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingStart="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
-        android:paddingRight="@dimen/dp40"
-        android:paddingEnd="@dimen/dp40"
-        android:paddingTop="@dimen/dp8"
+        style="@style/dialog_item_style"
         android:text="@string/mute_notification"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
         />
 
-  </RelativeLayout>
-  <RelativeLayout
+  </LinearLayout>
+  <LinearLayout
       android:id="@+id/dialog_root_item2_notification"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:visibility="gone"
       >
@@ -57,9 +48,7 @@
         android:id="@+id/dialog_icon_item2_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -70,23 +59,16 @@
         android:id="@+id/dialog_text_item2_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingStart="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
-        android:paddingRight="@dimen/dp40"
-        android:paddingEnd="@dimen/dp40"
-        android:paddingTop="@dimen/dp8"
+        style="@style/dialog_item_style"
         android:text="@string/mute_notification"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
         />
 
-  </RelativeLayout>
-  <RelativeLayout
+  </LinearLayout>
+  <LinearLayout
       android:id="@+id/dialog_root_item3_notification"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:visibility="gone"
       >
@@ -95,9 +77,7 @@
         android:id="@+id/dialog_icon_item3_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -108,23 +88,16 @@
         android:id="@+id/dialog_text_item3_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingStart="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
-        android:paddingRight="@dimen/dp40"
-        android:paddingEnd="@dimen/dp40"
-        android:paddingTop="@dimen/dp8"
+        style="@style/dialog_item_style"
         android:text="@string/mute_notification"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
         />
 
-  </RelativeLayout>
-  <RelativeLayout
+  </LinearLayout>
+  <LinearLayout
       android:id="@+id/dialog_root_item4_notification"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:visibility="gone"
       >
@@ -133,10 +106,7 @@
         android:id="@+id/dialog_icon_item4_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-
+        android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -147,24 +117,16 @@
         android:id="@+id/dialog_text_item4_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingStart="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
-        android:paddingRight="@dimen/dp40"
-        android:paddingEnd="@dimen/dp40"
-        android:paddingTop="@dimen/dp8"
-
+        style="@style/dialog_item_style"
         android:text="@string/mute_notification"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
         />
 
-  </RelativeLayout>
-  <RelativeLayout
+  </LinearLayout>
+  <LinearLayout
       android:id="@+id/dialog_root_item5_notification"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:visibility="gone"
       >
@@ -173,10 +135,7 @@
         android:id="@+id/dialog_icon_item5_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-
+        android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -187,24 +146,16 @@
         android:id="@+id/dialog_text_item5_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingStart="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
-        android:paddingRight="@dimen/dp40"
-        android:paddingEnd="@dimen/dp40"
-        android:paddingTop="@dimen/dp8"
-
+        style="@style/dialog_item_style"
         android:text="@string/mute_notification"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
         />
 
-  </RelativeLayout>
-  <RelativeLayout
+  </LinearLayout>
+  <LinearLayout
       android:id="@+id/dialog_root_item6_notification"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:visibility="gone"
       >
@@ -213,9 +164,7 @@
         android:id="@+id/dialog_icon_item6_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -226,23 +175,16 @@
         android:id="@+id/dialog_text_item6_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingStart="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
-        android:paddingRight="@dimen/dp40"
-        android:paddingEnd="@dimen/dp40"
-        android:paddingTop="@dimen/dp8"
+        style="@style/dialog_item_style"
         android:text="@string/mute_notification"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
         />
 
-  </RelativeLayout>
-  <RelativeLayout
+  </LinearLayout>
+  <LinearLayout
       android:id="@+id/dialog_root_item7_notification"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:visibility="gone"
       >
@@ -251,9 +193,7 @@
         android:id="@+id/dialog_icon_item7_notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -264,19 +204,12 @@
         android:id="@+id/dialog_text_item7_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingStart="@dimen/dp40"
-        android:paddingLeft="@dimen/dp40"
-        android:paddingRight="@dimen/dp40"
-        android:paddingEnd="@dimen/dp40"
-        android:paddingTop="@dimen/dp8"
+        style="@style/dialog_item_style"
         android:text="@string/mute_notification"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
         />
 
-  </RelativeLayout>
+  </LinearLayout>
 
 </LinearLayout>

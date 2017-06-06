@@ -744,7 +744,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
     }
 
     private void setAvatar() {
-        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {

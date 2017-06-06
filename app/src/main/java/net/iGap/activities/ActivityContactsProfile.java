@@ -334,11 +334,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                         fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat);
                     }
 
-                    getSupportFragmentManager().beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.chi_layoutParent, fragment)
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, fragment).commit();
                 }
                 realm.close();
             }
@@ -789,7 +785,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     }
 
     private void setAvatar() {
-        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {

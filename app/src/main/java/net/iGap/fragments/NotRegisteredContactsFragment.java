@@ -63,7 +63,6 @@ public class NotRegisteredContactsFragment extends Fragment {
         }
 
         view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));
-        view.findViewById(R.id.fc_view_line).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         //create our FastAdapter
         fastAdapter = new FastAdapter();
