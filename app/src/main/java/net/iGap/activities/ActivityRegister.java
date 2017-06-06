@@ -95,8 +95,6 @@ import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
 
-import static net.iGap.R.string.invalid_password;
-
 public class ActivityRegister extends ActivityEnhanced implements OnSecurityCheckPassword, OnRecoverySecurityPassword {
 
     static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
@@ -1416,7 +1414,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                dialogWaitTimeVerifyPassword(invalid_password);
+                dialogWaitTimeVerifyPassword(wait);
             }
         });
     }

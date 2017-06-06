@@ -95,7 +95,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -3042,10 +3041,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 break;
         }
 
-        if (itemsRes != 0) {
+        //if (itemsRes != 0) {
             // Arrays.asList returns fixed size, doing like this fixes remove object
             // UnsupportedOperationException exception
-            List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
+        //List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
 
             Realm realm = Realm.getDefaultInstance();
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.roomId).findFirst();
@@ -3128,7 +3127,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 realm.close();
             }
-        }
+        //}
 
         String _savedFolderName = "";
         if (message.messageType.toString().contains("IMAGE") || message.messageType.toString().contains("VIDEO") || message.messageType.toString().contains("GIF")) {
