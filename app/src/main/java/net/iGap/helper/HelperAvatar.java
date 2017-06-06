@@ -114,7 +114,7 @@ public class HelperAvatar {
         }
     }
 
-    public static void getAvatar(final long ownerId, AvatarType avatarType, Realm _realm, final OnAvatarGet onAvatarGet) {
+    public static void getAvatar(final long ownerId, AvatarType avatarType, boolean showMain, Realm _realm, final OnAvatarGet onAvatarGet) {
 
         /**
          * first show user initials and after that show avatar if exist
@@ -127,7 +127,7 @@ public class HelperAvatar {
         final RealmAvatar realmAvatar = getLastAvatar(ownerId, _realm);
         if (realmAvatar != null) {
 
-            if (realmAvatar.getFile().isFileExistsOnLocal()) {
+            if (showMain && realmAvatar.getFile().isFileExistsOnLocal()) {
                 onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalFilePath(), ownerId);
             } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
                 onAvatarGet.onAvatarGet(realmAvatar.getFile().getLocalThumbnailPath(), ownerId);
@@ -230,7 +230,19 @@ public class HelperAvatar {
 
     public static void getAvatar(final long ownerId, AvatarType avatarType, final OnAvatarGet onAvatarGet) {
         Realm realm = Realm.getDefaultInstance();
-        getAvatar(ownerId, avatarType, realm, onAvatarGet);
+        getAvatar(ownerId, avatarType, false, realm, onAvatarGet);
+        realm.close();
+    }
+
+    /**
+     * read avatarPath from realm avatar and return latest avatarPath
+     *
+     * @param ownerId if is user set userId and if is room set roomId
+     */
+
+    public static void getAvatar(final long ownerId, AvatarType avatarType, boolean showMain, final OnAvatarGet onAvatarGet) {
+        Realm realm = Realm.getDefaultInstance();
+        getAvatar(ownerId, avatarType, showMain, realm, onAvatarGet);
         realm.close();
     }
 

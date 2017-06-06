@@ -3434,7 +3434,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     public void onAvatarAdd(final long roomId, ProtoGlobal.Avatar avatar) {
 
-        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
@@ -3620,7 +3620,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             type = HelperAvatar.AvatarType.ROOM;
         }
 
-        HelperAvatar.getAvatar(idForGetAvatar, type, new OnAvatarGet() {
+        HelperAvatar.getAvatar(idForGetAvatar, type, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {

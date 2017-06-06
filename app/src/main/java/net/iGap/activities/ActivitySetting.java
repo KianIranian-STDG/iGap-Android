@@ -2236,7 +2236,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     // call this method for show image in enter to this activity
     private void showImage() {
-        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
             @Override public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
                     @Override public void run() {

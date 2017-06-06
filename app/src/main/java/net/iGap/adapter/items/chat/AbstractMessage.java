@@ -251,7 +251,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     });
 
-                    HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, realm, new OnAvatarGet() {
+                    HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, realm, new OnAvatarGet() {
                         @Override
                         public void onAvatarGet(final String avatarPath, long ownerId) {
                             G.handler.post(new Runnable() {
@@ -1264,7 +1264,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (progress == 100) {
 
                         G.handler.post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 String type;
                                 if (mMessage.forwardedFrom != null) {
                                     type = mMessage.forwardedFrom.getMessageType().toString().toLowerCase();
@@ -1324,7 +1325,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void OnProgress(final String path, final int progress) {
 
                     G.handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             if (progress == 100) {
                                 progressBar.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
@@ -1344,7 +1346,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void OnError(String token) {
 
                     G.handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             progressBar.withProgress(0);
                             progressBar.withDrawable(R.drawable.ic_download, true);
                             contentLoading.setVisibility(View.GONE);
@@ -1393,7 +1396,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     public void OnProgress(final int progress, FileUploadStructure struct) {
 
                         G.handler.post(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 progressBar.withProgress(progress);
 
                                 if (progress == 100) {

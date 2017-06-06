@@ -1956,7 +1956,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     private void showAvatar() {
-        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+        HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
