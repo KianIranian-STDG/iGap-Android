@@ -292,6 +292,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private MaterialDesignTextView imvAttachFileButton;
     private MaterialDesignTextView imvMicButton;
     private MaterialDesignTextView btnReplaySelected;
+    private RippleView rippleDeleteSelected;
     private ArrayList<String> listPathString;
     private MaterialDesignTextView btnCancelSendingFile;
     private ViewGroup viewGroupLastSeen;
@@ -2566,6 +2567,76 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     btnReplaySelected.setVisibility(View.VISIBLE);
                 }
             }
+
+
+            for (AbstractMessage message : selectedItems) {
+
+                Realm realm = Realm.getDefaultInstance();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                if (realmRoom != null) {
+                    // if user clicked on any message which he wasn't its sender, remove edit mList option
+                    if (chatType == CHANNEL) {
+                        if (channelRole == ChannelChatRole.MEMBER) {
+                            btnReplaySelected.setVisibility(View.GONE);
+                            rippleDeleteSelected.setVisibility(View.GONE);
+
+                        }
+                        final long senderId = G.userId;
+                        ChannelChatRole roleSenderMessage = null;
+                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                        RealmList<RealmMember> realmMembers = realmChannelRoom.getMembers();
+                        for (RealmMember rm : realmMembers) {
+                            if (rm.getPeerId() == Long.parseLong(message.mMessage.senderID)) {
+                                roleSenderMessage = ChannelChatRole.valueOf(rm.getRole());
+                            }
+                        }
+                        if (senderId != Long.parseLong(message.mMessage.senderID)) {  // if message dose'nt belong to owner
+                            if (channelRole == ChannelChatRole.MEMBER) {
+                                rippleDeleteSelected.setVisibility(View.GONE);
+                            } else if (channelRole == ChannelChatRole.MODERATOR) {
+                                if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
+                                    rippleDeleteSelected.setVisibility(View.GONE);
+                                }
+                            } else if (channelRole == ChannelChatRole.ADMIN) {
+                                if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
+                                    rippleDeleteSelected.setVisibility(View.GONE);
+                                }
+                            }
+                        } else {
+                            rippleDeleteSelected.setVisibility(View.VISIBLE);
+                        }
+                    } else if (chatType == GROUP) {
+
+                        final long senderId = G.userId;
+
+                        GroupChatRole roleSenderMessage = null;
+                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                        RealmList<RealmMember> realmMembers = realmGroupRoom.getMembers();
+                        for (RealmMember rm : realmMembers) {
+                            if (rm.getPeerId() == Long.parseLong(message.mMessage.senderID)) {
+                                roleSenderMessage = GroupChatRole.valueOf(rm.getRole());
+                            }
+                        }
+                        if (senderId != Long.parseLong(message.mMessage.senderID)) {  // if message dose'nt belong to owner
+                            if (groupRole == GroupChatRole.MEMBER) {
+                                rippleDeleteSelected.setVisibility(View.GONE);
+                            } else if (groupRole == GroupChatRole.MODERATOR) {
+                                if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
+                                    rippleDeleteSelected.setVisibility(View.GONE);
+                                }
+                            } else if (groupRole == GroupChatRole.ADMIN) {
+                                if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
+                                    rippleDeleteSelected.setVisibility(View.GONE);
+                                }
+                            }
+                        } else {
+                            rippleDeleteSelected.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    realm.close();
+                }
+            }
+
 
             ll_AppBarSelected.setVisibility(View.VISIBLE);
         } else {
@@ -5316,7 +5387,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
             }
         });
-        RippleView rippleDeleteSelected = (RippleView) findViewById(R.id.chl_ripple_delete_selected);
+        rippleDeleteSelected = (RippleView) findViewById(R.id.chl_ripple_delete_selected);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
