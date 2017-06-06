@@ -712,13 +712,17 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
                 ringtonePlayer = new MediaPlayer();
                 ringtonePlayer.setDataSource(ActivityCall.this, alert);
-                final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                if (audioManager.getStreamVolume(AudioManager.STREAM_RING) != 0) {
+
+                if (am.isWiredHeadsetOn()) {
+                    ringtonePlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                } else {
                     ringtonePlayer.setAudioStreamType(AudioManager.STREAM_RING);
-                    ringtonePlayer.setLooping(true);
-                    ringtonePlayer.prepare();
-                    ringtonePlayer.start();
                 }
+
+                ringtonePlayer.setLooping(true);
+                ringtonePlayer.prepare();
+                ringtonePlayer.start();
+
             } catch (Exception e) {
             }
 
