@@ -686,15 +686,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             /**
              * delete all  deleted row from database
              */
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.ID, mRoomId).findAll().deleteAllFromRealm();
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().deleteAllFromRealm();
-                }
-            });
-            realm.close();
+            RealmRoom.deleteRoom(mRoomId);
         }
         super.onStop();
 
