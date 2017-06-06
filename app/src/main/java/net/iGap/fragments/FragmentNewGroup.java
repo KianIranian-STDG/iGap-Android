@@ -125,11 +125,14 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         return new FragmentNewGroup();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_new_group, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         getIntentData(this.getArguments());
@@ -147,75 +150,78 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
     }
 
     private void showDialogSelectGallery() {
-        new MaterialDialog.Builder(getActivity()).title(getString(R.string.choose_picture))
-            .negativeText(getString(R.string.cancel))
-            .items(R.array.profile)
-            .itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+        new MaterialDialog.Builder(getActivity()).title(getString(R.string.choose_picture)).negativeText(getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                    switch (which) {
-                        case 0: {
+                switch (which) {
+                    case 0: {
 
+                        try {
+                            HelperPermision.getStoragePermision(context, new OnGetPermission() {
+                                @Override
+                                public void Allow() {
+
+                                    if (isAdded()) { // boolean isAdded () Return true if the fragment is currently added to its activity.
+                                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                        intent.setType("image/*");
+                                        startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                                        isInAttach = true;
+                                    }
+                                }
+
+                                @Override
+                                public void deny() {
+
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
+                    case 1: {
+
+                        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                             try {
-                                HelperPermision.getStoragePermision(context, new OnGetPermission() {
-                                    @Override public void Allow() {
 
-                                        if (isAdded()) { // boolean isAdded () Return true if the fragment is currently added to its activity.
-                                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                            intent.setType("image/*");
-                                            startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
-                                            isInAttach = true;
-                                    }
+                                HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
+                                    @Override
+                                    public void Allow() throws IOException {
+                                        HelperPermision.getCameraPermission(getActivity(), new OnGetPermission() {
+                                            @Override
+                                            public void Allow() {
+                                                // this dialog show 2 way for choose image : gallery and camera
+
+                                                if (isAdded()) {
+                                                    useCamera();
+                                                }
+                                                dialog.dismiss();
+                                            }
+
+                                            @Override
+                                            public void deny() {
+
+                                            }
+                                        });
                                     }
 
-                                    @Override public void deny() {
+                                    @Override
+                                    public void deny() {
 
                                     }
                                 });
                             } catch (IOException e) {
                                 e.printStackTrace();
-                        }
-                            break;
-                        }
-                        case 1: {
-
-                            if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                try {
-
-                                    HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
-                                        @Override public void Allow() throws IOException {
-                                            HelperPermision.getCameraPermission(getActivity(), new OnGetPermission() {
-                                                @Override public void Allow() {
-                                                    // this dialog show 2 way for choose image : gallery and camera
-
-                                                    if (isAdded()) {
-                                                        useCamera();
-                                                }
-                                                    dialog.dismiss();
-                                                }
-
-                                                @Override public void deny() {
-
-                                                }
-                                            });
-                                        }
-
-                                        @Override public void deny() {
-
-                                        }
-                                    });
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                             }
-                            } else {
-                                Toast.makeText(context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
                         }
-                            break;
+                        break;
                     }
                 }
-                }
-            })
-            .show();
+            }
+        }).show();
     }
 
     private void useCamera() {
@@ -272,7 +278,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         RippleView rippleBack = (RippleView) view.findViewById(R.id.ng_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleView.getWindowToken(), 0);
                 if (G.IMAGE_NEW_GROUP.exists()) {
@@ -294,7 +301,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
         parent = (RelativeLayout) view.findViewById(R.id.ng_fragmentContainer);
         parent.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
             }
         });
@@ -305,14 +313,17 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
         RippleView rippleCircleImage = (RippleView) view.findViewById(R.id.ng_ripple_circle_image);
         rippleCircleImage.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) throws IOException {
+            @Override
+            public void onComplete(RippleView rippleView) throws IOException {
 
                 HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
-                    @Override public void Allow() {
+                    @Override
+                    public void Allow() {
                         showDialogSelectGallery();
                     }
 
-                    @Override public void deny() {
+                    @Override
+                    public void deny() {
 
                     }
                 });
@@ -332,7 +343,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         final View ViewGroupName = view.findViewById(R.id.ng_view_newGroup);
         edtGroupName.setPadding(0, 8, 0, 8);
         edtGroupName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View view, boolean b) {
+            @Override
+            public void onFocusChange(View view, boolean b) {
 
                 if (b) {
                     ViewGroupName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
@@ -359,15 +371,18 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         edtDescription.setPadding(0, 8, 0, 8);
 
         edtDescription.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 lastSpecialRequestsCursorPosition = edtDescription.getSelectionStart();
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 edtDescription.removeTextChangedListener(this);
 
                 if (edtDescription.getLineCount() > 4) {
@@ -390,7 +405,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
         txtNextStep = (TextView) view.findViewById(R.id.ng_txt_nextStep);
         txtNextStep.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 if (edtGroupName.getText().toString().length() > 0) {
                     prgWaiting.setVisibility(View.VISIBLE);
@@ -423,7 +439,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         //=======================button cancel
         txtCancel = (TextView) view.findViewById(R.id.ng_txt_cancel);
         txtCancel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 if (G.IMAGE_NEW_GROUP.exists()) {
@@ -447,15 +464,18 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
      * @param inviteLink inviteLink
      */
 
-    public static void createChannelRoom(final long roomId, final String inviteLink) {
+    public static void createChannelRoom(final long roomId, final String inviteLink, final String channelName) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom == null) {
                     realmRoom = realm.createObject(RealmRoom.class, roomId);
                 }
-
+                if (channelName != null) {
+                    realmRoom.setTitle(channelName);
+                }
                 RealmChannelRoom realmChannelRoom = realm.createObject(RealmChannelRoom.class);
                 realmChannelRoom.setInviteLink(inviteLink);
 
@@ -468,10 +488,12 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
     private void createChannel() {
 
         G.onChannelCreate = new OnChannelCreate() {
-            @Override public void onChannelCreate(final long roomIdR, final String inviteLink) {
+            @Override
+            public void onChannelCreate(final long roomIdR, final String inviteLink, final String channelName) {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
-                        createChannelRoom(roomIdR, inviteLink);
+                    @Override
+                    public void run() {
+                        createChannelRoom(roomIdR, inviteLink, channelName);
                         mInviteLink = inviteLink;
                         if (existAvatar) {
                             //                            showProgressBar();
@@ -486,11 +508,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                             bundle.putString("INVITE_LINK", inviteLink);
                             bundle.putString("TOKEN", token);
                             fragmentCreateChannel.setArguments(bundle);
-                            mActivity.getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment")
-                                .commitAllowingStateLoss();
+                            mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment").commitAllowingStateLoss();
                             getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                             //                        getRoom(roomIdR, ProtoGlobal.Room.Type.CHANNEL);
                         }
@@ -498,18 +516,21 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 });
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
                 hideProgressBar();
                 if (majorCode == 479) {
                     G.handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             ShowDialogLimitCreate();
                         }
                     });
                 }
             }
 
-            @Override public void onTimeOut() {
+            @Override
+            public void onTimeOut() {
                 hideProgressBar();
             }
         };
@@ -523,7 +544,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
     private void chatToGroup() {
         G.onChatConvertToGroup = new OnChatConvertToGroup() {
-            @Override public void onChatConvertToGroup(long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
+            @Override
+            public void onChatConvertToGroup(long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
 
                 //                if (existAvatar) {
                 //                    new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
@@ -562,12 +584,14 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
             }
 
-            @Override public void Error(int majorCode, int minorCode) {
+            @Override
+            public void Error(int majorCode, int minorCode) {
 
                 hideProgressBar();
             }
 
-            @Override public void timeOut() {
+            @Override
+            public void timeOut() {
                 hideProgressBar();
             }
         };
@@ -577,10 +601,12 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
     private void createGroup() {
         G.onGroupCreate = new OnGroupCreate() {
-            @Override public void onGroupCreate(final long roomIdR) {
+            @Override
+            public void onGroupCreate(final long roomIdR) {
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         roomId = roomIdR;
                         hideProgressBar();
                         getRoom(roomIdR, ProtoGlobal.Room.Type.GROUP);
@@ -601,15 +627,18 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
             }
 
-            @Override public void onTimeOut() {
+            @Override
+            public void onTimeOut() {
                 hideProgressBar();
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
                 hideProgressBar();
                 if (majorCode == 380) {
                     G.handler.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             ShowDialogLimitCreate();
                         }
                     });
@@ -623,14 +652,16 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
     private void getRoom(final long roomId, final ProtoGlobal.Room.Type typeCreate) {
 
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-            @Override public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
+            @Override
+            public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
 
                 if (!identity.equals(RequestClientGetRoom.CreateRoomMode.requestFromOwner.toString())) return;
 
                 try {
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
                                 if (existAvatar) {
                                     showProgressBar();
@@ -652,11 +683,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                                     bundle.putString("TYPE", typeCreate.toString());
                                     bundle.putBoolean("NewRoom", true);
                                     fragment.setArguments(bundle);
-                                    getActivity().getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                        .replace(fragmentContainer, fragment, "contactGroup_fragment")
-                                        .commitAllowingStateLoss();
+                                    getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragment, "contactGroup_fragment").commitAllowingStateLoss();
                                     getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                                     //ActivityMain.mLeftDrawerLayout.closeDrawer();
                                 }
@@ -668,13 +695,15 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 }
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
 
                 //TODO [Saeed Mozaffari] [2017-01-30 1:12 PM] - check get activity null state in app, hint: use handler instead of activity.
                 hideProgressBar();
             }
 
-            @Override public void onTimeOut() {
+            @Override
+            public void onTimeOut() {
 
                 hideProgressBar();
             }
@@ -686,9 +715,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
     private void showInitials() {
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        imgCircleImageView.setImageBitmap(
-            HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(),
-                realmUserInfo.getUserInfo().getColor()));
+        imgCircleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
 
         realm.close();
     }
@@ -719,7 +746,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
     private void setImage(final String imagePath) {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (imagePath != null && new File(imagePath).exists()) {
                     imgCircleImageView.setPadding(0, 0, 0, 0);
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
@@ -731,13 +759,16 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         });
     }
 
-    @Override public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
+    @Override
+    public void onAvatarAdd(final long roomId, final ProtoGlobal.Avatar avatar) {
 
         HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
-            @Override public void onAvatarAdd(final String avatarPath) {
+            @Override
+            public void onAvatarAdd(final String avatarPath) {
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         hideProgressBar();
                         setImage(avatarPath);
 
@@ -804,7 +835,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         }*/
     }
 
-    @Override public void onAvatarAddError() {
+    @Override
+    public void onAvatarAddError() {
         hideProgressBar();
     }
 
@@ -821,11 +853,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
         bundle.putBoolean("NewRoom", true);
         fragment.setArguments(bundle);
-        mActivity.getSupportFragmentManager()
-            .beginTransaction()
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            .replace(fragmentContainer, fragment, "contactGroup_fragment")
-            .commitAllowingStateLoss();
+        mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragment, "contactGroup_fragment").commitAllowingStateLoss();
         mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
         //ActivityMain.mLeftDrawerLayout.closeDrawer();
     }
@@ -838,16 +866,13 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         bundle.putString("INVITE_LINK", mInviteLink);
         bundle.putString("TOKEN", token);
         fragmentCreateChannel.setArguments(bundle);
-        getActivity().getSupportFragmentManager()
-            .beginTransaction()
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            .replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment")
-            .commitAllowingStateLoss();
+        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment").commitAllowingStateLoss();
         getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
     }
 
     //=======================result for picture
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == request_code_TAKE_PICTURE && resultCode == Activity.RESULT_OK) {// result for camera
@@ -888,7 +913,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
                 showProgressBar();
                 HelperUploadFile.startUploadTaskAvatar(pathSaveImage, avatarId, new HelperUploadFile.UpdateListener() {
-                    @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                    @Override
+                    public void OnProgress(int progress, FileUploadStructure struct) {
                         if (progress < 100) {
                             prgWaiting.setProgress(progress);
                         } else {
@@ -899,7 +925,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                         }
                     }
 
-                    @Override public void OnError() {
+                    @Override
+                    public void OnError() {
                         hideProgressBar();
                     }
                 });
@@ -909,14 +936,16 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
     private String pathSaveImage;
 
-    @Override public void onConfigurationChanged(Configuration newConfig) {
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
     //***Show And Hide ProgressBar
     private void showProgressBar() {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 txtNextStep.setEnabled(false);
                 prgWaiting.setVisibility(View.VISIBLE);
                 if (getActivity() != null) getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -926,7 +955,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
     private void hideProgressBar() {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 txtNextStep.setEnabled(true);
                 prgWaiting.setVisibility(View.GONE);
                 if (getActivity() != null) getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -940,8 +970,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
         File image = File.createTempFile(imageFileName,  /* prefix */
-            ".jpg",         /* suffix */
-            storageDir      /* directory */);
+                ".jpg",         /* suffix */
+                storageDir      /* directory */);
 
         // Save a file: path for use with ACTION_VIEW intents
         //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
@@ -949,7 +979,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         return image;
     }
 
-    @Override public void onAttach(Activity activity) {
+    @Override
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
     }

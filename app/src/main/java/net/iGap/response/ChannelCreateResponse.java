@@ -28,18 +28,21 @@ public class ChannelCreateResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
         ProtoChannelCreate.ChannelCreateResponse.Builder builder = (ProtoChannelCreate.ChannelCreateResponse.Builder) message;
-        G.onChannelCreate.onChannelCreate(builder.getRoomId(), builder.getInviteLink());
+        G.onChannelCreate.onChannelCreate(builder.getRoomId(), builder.getInviteLink(), identity);
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
         G.onChannelCreate.onTimeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
