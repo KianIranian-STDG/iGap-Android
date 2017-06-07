@@ -32,11 +32,7 @@ import java.text.DecimalFormat;
 import java.util.Comparator;
 import net.iGap.helper.HelperCalander;
 
-/**
- * @author Peli
- * @author paulburke (ipaulpro)
- * @version 2013-12-11
- */
+
 public class FileUtils {
     public static final String MIME_TYPE_AUDIO = "audio/*";
     public static final String MIME_TYPE_TEXT = "text/*";
@@ -50,12 +46,13 @@ public class FileUtils {
     static final String TAG = "FileUtils";
     private static final boolean DEBUG = false; // Set to true to enable logging
     /**
-     * File and folder comparator. TODO Expose sorting option method
+     * File and folder comparator.
      *
      * @author paulburke
      */
     public static Comparator<File> sComparator = new Comparator<File>() {
-        @Override public int compare(File f1, File f2) {
+        @Override
+        public int compare(File f1, File f2) {
             // Sort alphabetically by lower case, which is much cleaner
             return f1.getName().toLowerCase().compareTo(f2.getName().toLowerCase());
         }
@@ -66,7 +63,8 @@ public class FileUtils {
      * @author paulburke
      */
     public static FileFilter sFileFilter = new FileFilter() {
-        @Override public boolean accept(File file) {
+        @Override
+        public boolean accept(File file) {
             final String fileName = file.getName();
             // Return files only (not directories) and skip hidden files
             return file.isFile() && !fileName.startsWith(HIDDEN_PREFIX);
@@ -78,7 +76,8 @@ public class FileUtils {
      * @author paulburke
      */
     public static FileFilter sDirFilter = new FileFilter() {
-        @Override public boolean accept(File file) {
+        @Override
+        public boolean accept(File file) {
             final String fileName = file.getName();
             // Return directories only and skip hidden directories
             return file.isDirectory() && !fileName.startsWith(HIDDEN_PREFIX);
@@ -256,7 +255,7 @@ public class FileUtils {
         Cursor cursor = null;
         final String column = "_data";
         final String[] projection = {
-            column
+                column
         };
 
         try {
@@ -290,20 +289,7 @@ public class FileUtils {
     public static String getPath(final Context context, final Uri uri) {
 
         if (DEBUG) {
-            Log.d(TAG + " File -", "Authority: "
-                + uri.getAuthority()
-                + ", Fragment: "
-                + uri.getFragment()
-                + ", Port: "
-                + uri.getPort()
-                + ", Query: "
-                + uri.getQuery()
-                + ", Scheme: "
-                + uri.getScheme()
-                + ", Host: "
-                + uri.getHost()
-                + ", Segments: "
-                + uri.getPathSegments().toString());
+            Log.d(TAG + " File -", "Authority: " + uri.getAuthority() + ", Fragment: " + uri.getFragment() + ", Port: " + uri.getPort() + ", Query: " + uri.getQuery() + ", Scheme: " + uri.getScheme() + ", Host: " + uri.getHost() + ", Segments: " + uri.getPathSegments().toString());
         }
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -319,7 +305,6 @@ public class FileUtils {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
 
-                // TODO handle non-primary volumes
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
@@ -345,8 +330,8 @@ public class FileUtils {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
-                    split[1]
+                final String[] selectionArgs = new String[]{
+                        split[1]
                 };
 
                 return getDataColumn(context, contentUri, selection, selectionArgs);

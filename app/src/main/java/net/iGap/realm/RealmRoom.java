@@ -148,6 +148,7 @@ public class RealmRoom extends RealmObject {
         }
 
         realmRoom.isDeleted = false;
+        realmRoom.keepRoom = false;
 
         realmRoom.setColor(room.getColor());
         realmRoom.setInitials(room.getInitials());

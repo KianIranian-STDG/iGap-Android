@@ -21,7 +21,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -204,7 +203,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                     @Override public void run() {
                         txtStatus.setText(callState.toString());
 
-                        Log.e("dddd", callState.toString());
 
                         switch (callState) {
 

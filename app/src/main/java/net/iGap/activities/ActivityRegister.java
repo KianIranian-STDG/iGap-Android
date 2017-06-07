@@ -157,7 +157,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     }
 
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
@@ -166,7 +167,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
         smsReceiver = new IncomingSms(new OnSmsReceive() {
 
-            @Override public void onSmsReceive(final String phoneNumber, final String message) {
+            @Override
+            public void onSmsReceive(final String phoneNumber, final String message) {
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
                         rg_txt_verify_sms.setText(message);
@@ -180,11 +182,13 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
         try {
             HelperPermision.getSmsPermision(ActivityRegister.this, new OnGetPermission() {
-                @Override public void Allow() {
+                @Override
+                public void Allow() {
                     registerReceiver(smsReceiver, filter);
                 }
 
-                @Override public void deny() {
+                @Override
+                public void deny() {
 
                 }
             });
@@ -249,14 +253,17 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         txtTitleToolbar.setTypeface(titleTypeface);
 
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (editable.toString().equals("0")) {
                     Toast.makeText(ActivityRegister.this, getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
                     edtPhoneNumber.setText("");
@@ -310,7 +317,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         }
 
         btnChoseCountry.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 dialogChooseCountry = new Dialog(ActivityRegister.this);
                 dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -324,7 +332,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 edtSearchView = (SearchView) dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
 
                 txtTitle.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         edtSearchView.setIconified(false);
                         edtSearchView.setIconifiedByDefault(true);
@@ -333,7 +342,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 });
 
                 edtSearchView.setOnCloseListener(new SearchView.OnCloseListener() { // close SearchView and show title again
-                    @Override public boolean onClose() {
+                    @Override
+                    public boolean onClose() {
 
                         txtTitle.setVisibility(View.VISIBLE);
 
@@ -345,9 +355,11 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 InputMethodManager im = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                 SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
                 softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-                    @Override public void onSoftKeyboardHide() {
+                    @Override
+                    public void onSoftKeyboardHide() {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 if (edtSearchView.getQuery().toString().length() > 0) {
                                     edtSearchView.setIconified(false);
                                     edtSearchView.clearFocus();
@@ -361,11 +373,13 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                         });
                     }
 
-                    @Override public void onSoftKeyboardShow() {
+                    @Override
+                    public void onSoftKeyboardShow() {
 
                         runOnUiThread(new Runnable() {
 
-                            @Override public void run() {
+                            @Override
+                            public void run() {
 
                                 txtTitle.setVisibility(View.GONE);
                             }
@@ -379,11 +393,13 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
                 final View border = (View) dialogChooseCountry.findViewById(R.id.rg_borderButton);
                 listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                    @Override public void onScrollStateChanged(AbsListView absListView, int i) {
+                    @Override
+                    public void onScrollStateChanged(AbsListView absListView, int i) {
 
                     }
 
-                    @Override public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                    @Override
+                    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 
                         if (i > 0) {
                             border.setVisibility(View.VISIBLE);
@@ -398,12 +414,14 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 adapterDialog.notifyDataSetChanged();
 
                 edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override public boolean onQueryTextSubmit(String s) {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
 
                         return false;
                     }
 
-                    @Override public boolean onQueryTextChange(String s) {
+                    @Override
+                    public boolean onQueryTextChange(String s) {
 
                         adapterDialog.getFilter().filter(s);
                         return false;
@@ -412,12 +430,15 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
                 btnOk = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_okDialog);
                 btnOk.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         G.onInfoCountryResponse = new OnInfoCountryResponse() {
-                            @Override public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
+                            @Override
+                            public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
                                 G.handler.post(new Runnable() {
-                                    @Override public void run() {
+                                    @Override
+                                    public void run() {
                                         edtCodeNumber.setText("+" + callingCode);
                                         edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
                                         regex = regexR;
@@ -427,14 +448,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                                 });
                             }
 
-                            @Override public void onError(int majorCode, int minorCode) {
-                                if (majorCode == 501 && minorCode == 1) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override public void run() {
-                                            // TODO: 9/25/2016 Error 501 - INFO_COUNTRY_BAD_PAYLOAD
-                                        }
-                                    });
-                                }
+                            @Override
+                            public void onError(int majorCode, int minorCode) {
+                                //empty
                             }
                         };
 
@@ -456,67 +472,66 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         btnStart = (Button) findViewById(R.id.rg_btn_start); //check phone and internet connection
         btnStart.setBackgroundColor(Color.parseColor(G.appBarColor));
         btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 if (edtPhoneNumber.getText().length() > 0 && !regex.equals("") && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
 
                     phoneNumber = edtPhoneNumber.getText().toString();
 
-                    MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this).customView(R.layout.rg_mdialog_text, true)
-                        .positiveText(getResources().getString(R.string.B_ok))
-                        .negativeText(getResources().getString(R.string.B_edit))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    MaterialDialog dialog = new MaterialDialog.Builder(ActivityRegister.this).customView(R.layout.rg_mdialog_text, true).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_edit)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                int portaret_landscope = getResources().getConfiguration().orientation;
+                            int portaret_landscope = getResources().getConfiguration().orientation;
 
-                                if (portaret_landscope == 1) {//portrait
-                                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                                    txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+                            if (portaret_landscope == 1) {//portrait
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                                txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
 
-                                    txtAgreement_register.setVisibility(View.GONE);
-                                    txtAgreement_register.startAnimation(trans_x_out);
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override public void run() {
+                                txtAgreement_register.setVisibility(View.GONE);
+                                txtAgreement_register.startAnimation(trans_x_out);
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                                            btnStart.setBackgroundColor(getResources().getColor(R.color.rg_background_verify));
-                                            btnStart.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                            btnChoseCountry.setEnabled(false);
-                                            btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                            edtPhoneNumber.setEnabled(false);
-                                            edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                        btnStart.setBackgroundColor(getResources().getColor(R.color.rg_background_verify));
+                                        btnStart.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                        btnChoseCountry.setEnabled(false);
+                                        btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                        edtPhoneNumber.setEnabled(false);
+                                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                            edtCodeNumber.setEnabled(false);
-                                            edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                        edtCodeNumber.setEnabled(false);
+                                        edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                            layout_verify.setVisibility(View.VISIBLE);
-                                            layout_verify.startAnimation(trans_x_in);
+                                        layout_verify.setVisibility(View.VISIBLE);
+                                        layout_verify.startAnimation(trans_x_in);
 
-                                            checkVerify();
-                                        }
-                                    }, 600);
-                                } else {
+                                        checkVerify();
+                                    }
+                                }, 600);
+                            } else {
 
-                                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-                                    dialogVerifyLandScape = new Dialog(ActivityRegister.this);
+                                dialogVerifyLandScape = new Dialog(ActivityRegister.this);
 
-                                    btnStart.setBackgroundColor(getResources().getColor(R.color.rg_border_editText));
-                                    btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                    btnChoseCountry.setEnabled(false);
-                                    edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                    edtPhoneNumber.setEnabled(false);
+                                btnStart.setBackgroundColor(getResources().getColor(R.color.rg_border_editText));
+                                btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                btnChoseCountry.setEnabled(false);
+                                edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                edtPhoneNumber.setEnabled(false);
 
-                                    dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
-                                    dialogVerifyLandScape.setCanceledOnTouchOutside(false);
-                                    dialogVerifyLandScape.show();
+                                dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
+                                dialogVerifyLandScape.setCanceledOnTouchOutside(false);
+                                dialogVerifyLandScape.show();
 
-                                    checkVerify();
-                                }
+                                checkVerify();
                             }
-                        })
-                        .build();
+                        }
+                    }).build();
 
                     View view = dialog.getCustomView();
                     assert view != null;
@@ -568,12 +583,14 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         rg_prg_verify_connect.setVisibility(View.VISIBLE);
 
         Thread thread = new Thread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 if (G.socketConnection) { //connection ok
                     //                        if (checkInternet()) { //connection ok
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             userRegister();
                             btnStart.setEnabled(false);
                             long time = 0;
@@ -629,7 +646,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                     });
                 } else { // connection error
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             edtPhoneNumber.setEnabled(true);
                             rg_prg_verify_connect.setVisibility(View.GONE);
                             rg_img_verify_connect.setImageResource(R.mipmap.alert);
@@ -725,7 +743,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
         TextView btnCancel = (TextView) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
         btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 int portrait_landscape = getResources().getConfiguration().orientation;
                 if (portrait_landscape == 1) {//portrait
@@ -746,7 +765,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
         TextView btnOk = (TextView) dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);
         btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 userRegister();
                 dialog.dismiss();
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -768,13 +788,14 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
         G.onUserRegistration = new OnUserRegistration() {
 
-            @Override public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex,
-                int verifyCodeDigitCount, final String authorHashR) {
+            @Override
+            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, final String authorHashR) {
                 digitCount = verifyCodeDigitCount;
                 countDownTimer.start();
                 regexFetchCodeVerification = regex;
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         int portrait_landscape = getResources().getConfiguration().orientation;
                         if (portrait_landscape == 1) {//portrait
                             txtTimer.setVisibility(View.VISIBLE);
@@ -803,49 +824,52 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 });
             }
 
-            @Override public void onRegisterError(final int majorCode, int minorCode, int getWait) {
+            @Override
+            public void onRegisterError(final int majorCode, int minorCode, int getWait) {
                 final long time = getWait;
                 if (majorCode == 100 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            // TODO: 9/25/2016  Error 100 - USER_REGISTER_BAD_PAYLOAD
+                        @Override
+                        public void run() {
                             //Invalid countryCode
                             requestRegister();
                         }
                     });
                 } else if (majorCode == 100 && minorCode == 2) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            // TODO: 9/25/2016  Error 100 - USER_REGISTER_BAD_PAYLOAD
+                        @Override
+                        public void run() {
                             //Invalid phoneNumber
                             requestRegister();
                         }
                     });
                 } else if (majorCode == 101) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            // TODO: 9/25/2016  Error 101 - USER_REGISTER_INTERNAL_SERVER_ERROR
+                        @Override
+                        public void run() {
                             //Invalid phoneNumber
                             requestRegister();
                         }
                     });
                 } else if (majorCode == 135) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            // TODO: 9/25/2016  Error 135 - USER_REGISTER_BLOCKED_USER
+                        @Override
+                        public void run() {
                             new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 136) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES, time, majorCode);
                         }
                     });
                 } else if (majorCode == 137) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES_SEND, time, majorCode);
                         }
@@ -861,34 +885,30 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        dialogWait = new MaterialDialog.Builder(ActivityRegister.this).title(title)
-            .customView(R.layout.dialog_remind_time, wrapInScrollView)
-            .positiveText(R.string.B_ok)
-            .autoDismiss(false)
-            .canceledOnTouchOutside(false)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        dialogWait = new MaterialDialog.Builder(ActivityRegister.this).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                    btnStart.setBackgroundColor(getResources().getColor(R.color.green));
-                    btnStart.setTextColor(getResources().getColor(R.color.white));
-                    btnStart.setEnabled(true);
-                    btnChoseCountry.setEnabled(true);
-                    btnChoseCountry.setTextColor(getResources().getColor(R.color.black_register));
-                    edtPhoneNumber.setEnabled(true);
-                    edtPhoneNumber.setTextColor(getResources().getColor(R.color.black_register));
-                    edtCodeNumber.setTextColor(getResources().getColor(R.color.black_register));
-                    txtAgreement_register.setVisibility(View.VISIBLE);
-                    layout_verify.setVisibility(View.GONE);
-                    dialog.dismiss();
-                }
-            })
-            .show();
+                btnStart.setBackgroundColor(getResources().getColor(R.color.green));
+                btnStart.setTextColor(getResources().getColor(R.color.white));
+                btnStart.setEnabled(true);
+                btnChoseCountry.setEnabled(true);
+                btnChoseCountry.setTextColor(getResources().getColor(R.color.black_register));
+                edtPhoneNumber.setEnabled(true);
+                edtPhoneNumber.setTextColor(getResources().getColor(R.color.black_register));
+                edtCodeNumber.setTextColor(getResources().getColor(R.color.black_register));
+                txtAgreement_register.setVisibility(View.VISIBLE);
+                layout_verify.setVisibility(View.GONE);
+                dialog.dismiss();
+            }
+        }).show();
 
         View v = dialogWait.getCustomView();
 
         final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
-            @Override public void onTick(long millisUntilFinished) {
+            @Override
+            public void onTick(long millisUntilFinished) {
                 int seconds = (int) ((millisUntilFinished) / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
@@ -896,7 +916,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
-            @Override public void onFinish() {
+            @Override
+            public void onFinish() {
                 dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(true);
                 remindTime.setText("00:00");
             }
@@ -921,7 +942,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             }
         } else {
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     requestRegister();
                 }
             }, 1000);
@@ -982,9 +1004,11 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
     private void userVerifyResponse(final String verificationCode) {
         G.onUserVerification = new OnUserVerification() {
-            @Override public void onUserVerify(final String tokenR, final boolean newUserR) {
+            @Override
+            public void onUserVerify(final String tokenR, final boolean newUserR) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         rg_txt_verify_sms.setText(getString(R.string.your_login_code_is) + verificationCode);
                         rg_prg_verify_sms.setVisibility(View.GONE);
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
@@ -1005,7 +1029,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 });
             }
 
-            @Override public void onUserVerifyError(final int majorCode, int minorCode, final int time) {
+            @Override
+            public void onUserVerifyError(final int majorCode, int minorCode, final int time) {
 
                 if (majorCode == 184 && minorCode == 1) {
 
@@ -1013,67 +1038,57 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
                 } else if (majorCode == 102 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             errorVerifySms(Reason.INVALID_CODE);
                         }
                     });
                 } else if (majorCode == 102 && minorCode == 2) {
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            // TODO: 9/25/2016 Invalid username
-                        }
-                    });
+                    //empty
                 } else if (majorCode == 103) {
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            // TODO: 9/25/2016 Error 103 - USER_VERIFY_INTERNAL_SERVER_ERROR
-
-                        }
-                    });
+                    //empty
                 } else if (majorCode == 104) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // There is no registered user with given username
-                            // TODO: 9/25/2016 Error 104 - USER_VERIFY_USER_NOT_FOUND
                             new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_GIVEN_USERNAME).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 105) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // User is blocked , You cannot verify the user
-                            // TODO: 9/25/2016 Error 105 - USER_VERIFY_BLOCKED_USER
 
                             new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 106) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // Verification code is invalid
-                            // TODO: 9/25/2016 Error 106 - USER_VERIFY_INVALID_CODE
                             errorVerifySms(Reason.INVALID_CODE);
                         }
                     });
                 } else if (majorCode == 107) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // Verification code is expired
-                            // TODO: 9/25/2016 Error 107 - USER_VERIFY_EXPIRED_CODE
-                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_EXPIRED)
-                                .content(R.string.Toast_Number_Block)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            new MaterialDialog.Builder(ActivityRegister.this).title(R.string.USER_VERIFY_EXPIRED).content(R.string.Toast_Number_Block).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                    }
-                                })
-                                .positiveText(R.string.B_ok)
-                                .show();
+                                }
+                            }).positiveText(R.string.B_ok).show();
                         }
                     });
                 } else if (majorCode == 108) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             // Verification code is locked for a while due to too many tries
 
                             dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES, time, majorCode);
@@ -1162,12 +1177,15 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         if (rg_prg_verify_register != null) rg_prg_verify_register.setVisibility(View.VISIBLE);
         if (rg_txt_verify_register != null) rg_txt_verify_register.setTextAppearance(G.context, R.style.RedHUGEText);
         G.onUserLogin = new OnUserLogin() {
-            @Override public void onLogin() {
+            @Override
+            public void onLogin() {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 //RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, userId).findFirst();
                                 RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                                 if (userInfo == null) {
@@ -1202,38 +1220,20 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 });
             }
 
-            @Override public void onLoginError(int majorCode, int minorCode) {
-                if (majorCode == 9) {
+            @Override
+            public void onLoginError(int majorCode, int minorCode) {
+                if (majorCode == 111 && minorCode == 4) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
-
-                            // TODO: 9/25/2016 Error 109 - USER_LOGIN_BAD_PAYLOAD
-                        }
-                    });
-                } else if (majorCode == 109 && minorCode == 1) {
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-
-                            // TODO: 9/25/2016 Error 109 - USER_LOGIN_BAD_PAYLOAD
-                        }
-                    });
-                } else if (majorCode == 110) {
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-
-                            // TODO: 9/25/2016 Error 110 - USER_LOGIN_INTERNAL_SERVER_ERROR
-                        }
-                    });
-                } else if (majorCode == 111 && minorCode == 4) {
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             HelperLogout.logout();
                         }
                     });
                 } else if (majorCode == 111) {
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             requestLogin();
                         }
                     });
@@ -1249,11 +1249,13 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     private void getUserInfo() {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
                         G.displayName = user.getDisplayName();
@@ -1263,7 +1265,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                         realmUserInfo.setUserRegistrationState(true);
 
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 G.onUserInfoResponse = null;
                                 Intent intent = new Intent(G.context, ActivityMain.class);
                                 intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
@@ -1276,11 +1279,13 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 realm.close();
             }
 
-            @Override public void onUserInfoTimeOut() {
+            @Override
+            public void onUserInfoTimeOut() {
                 requestUserInfo();
             }
 
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
 
             }
         };
@@ -1301,7 +1306,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             new RequestUserInfo().userInfo(userId);
         } else {
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     requestUserInfo();
                 }
             }, 1000);
@@ -1323,7 +1329,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             new RequestUserLogin().userLogin(token);
         } else {
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     requestLogin();
                 }
             }, 1000);
@@ -1346,7 +1353,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         userVerify(userName, verificationCode);
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
 
         try {
             unregisterReceiver(smsReceiver);
@@ -1356,7 +1364,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         super.onStop();
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
     }
 

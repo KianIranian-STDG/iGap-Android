@@ -905,7 +905,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     case WIFI:
                         setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_PHOTO, holder, attachment);
                         break;
-                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
                 }
                 break;
             case VOICE:
@@ -916,7 +915,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     case WIFI:
                         setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, holder, attachment);
                         break;
-                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
                 }
                 break;
             case VIDEO:
@@ -928,7 +926,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     case WIFI:
                         setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VIDEO, holder, attachment);
                         break;
-                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
                 }
                 break;
             case FILE:
@@ -940,7 +937,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     case WIFI:
                         setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_FILE, holder, attachment);
                         break;
-                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
                 }
                 break;
             case AUDIO:
@@ -952,7 +948,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     case WIFI:
                         setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_MUSIC, holder, attachment);
                         break;
-                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
                 }
                 break;
             case GIF:
@@ -964,7 +959,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     case WIFI:
                         setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_GIF, holder, attachment);
                         break;
-                    // TODO: 12/4/2016 [Alireza] roaming and wimax ro check kon
                 }
                 break;
             default:

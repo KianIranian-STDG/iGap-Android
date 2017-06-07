@@ -251,18 +251,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
             updateListeners(sp);
 
             if (sp.chatType != null) {
-
                 UploadComplete(sp.fileUploadStructure, sp.identity, sp.chatType);
-            }
-
-            // remove from selected files to prevent calling this method multiple times
-            // multiple calling may occurs because of the server
-            try {
-                // FIXME: 9/19/2016 [Alireza Eskandarpour Shoferi] uncomment plz
-                //removeFromSelectedFiles(identity);
-            } catch (Exception e) {
-                Log.i("BreakPoint", e.getMessage());
-                e.printStackTrace();
             }
 
             // close file into structure
@@ -471,8 +460,6 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
     }
 
     static ProtoGlobal.ClientAction getAction(ProtoGlobal.RoomMessageType type) {
-
-        //TODO [Saeed Mozaffari] [2016-11-14 11:14 AM] - some actions need to detect
 
         ProtoGlobal.ClientAction action = null;
 

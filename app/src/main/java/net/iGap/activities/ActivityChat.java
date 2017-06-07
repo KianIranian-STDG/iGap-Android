@@ -2866,7 +2866,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 roomMessage.setCreateTime(updateTime);
                 voiceLastMessage = roomMessage;
 
-                // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
                 // in response to a message as replay, so after server done creating replay and
                 // forward options, modify this section and sending message as well.
             }

@@ -144,7 +144,6 @@ public final class AppUtils {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(attachment.getLocalThumbnailPath()), view);
                         } else {
                             view.setVisibility(View.GONE);
-                            // TODO: 11/15/2016 [Alireza] request download bede
                         }
                     } else {
                         view.setVisibility(View.GONE);
