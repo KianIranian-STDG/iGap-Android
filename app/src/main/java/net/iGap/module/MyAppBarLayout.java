@@ -55,7 +55,6 @@ public class MyAppBarLayout extends AppBarLayout implements AppBarLayout.OnOffse
         }
 
         if (mListener != null) {
-            // FIXME: 9/24/2016 [Alireza Eskandarpour Shoferi] bad tashkhis mide ke be bala scroll mishe ya paeen
             mListener.onAppBarLayoutMove(appBarLayout, verticalOffset, verticalOffsetAbs > appBarLayoutHeight - AndroidUtils.getStatusBarHeight(getContext()));
         }
     }

@@ -12,6 +12,7 @@ package net.iGap.realm;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.text.format.DateUtils;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -147,6 +148,7 @@ public class RealmRoom extends RealmObject {
         }
 
         realmRoom.isDeleted = false;
+        realmRoom.keepRoom = false;
 
         realmRoom.setColor(room.getColor());
         realmRoom.setInitials(room.getInitials());
@@ -216,9 +218,9 @@ public class RealmRoom extends RealmObject {
             }
             realmRoom.setLastMessage(realmRoomMessage);
             if (room.getLastMessage().getUpdateTime() == 0) {
-                realmRoom.setUpdatedTime(room.getLastMessage().getCreateTime());
+                realmRoom.setUpdatedTime(room.getLastMessage().getCreateTime() * (DateUtils.SECOND_IN_MILLIS));
             } else {
-                realmRoom.setUpdatedTime(room.getLastMessage().getUpdateTime());
+                realmRoom.setUpdatedTime(room.getLastMessage().getUpdateTime() * (DateUtils.SECOND_IN_MILLIS));
             }
         }
 

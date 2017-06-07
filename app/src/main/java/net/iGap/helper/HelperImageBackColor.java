@@ -17,6 +17,7 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 
 public class HelperImageBackColor {
 
@@ -110,6 +111,7 @@ public class HelperImageBackColor {
         textPaint.setColor(Color.parseColor(mColor));
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(fontSize);
+        textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         textPaint.setStyle(Paint.Style.FILL);
         cs.drawText(alphabetName, with / 2, with / 2 + fontSize / 3, textPaint);
 

@@ -75,6 +75,7 @@ import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.EmojiTextView;
 import com.vanniktech.emoji.emoji.Emoji;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
 import com.vanniktech.emoji.listeners.OnEmojiClickedListener;
@@ -370,7 +371,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private TextView txtHashCounter;
     private TextView txtFileNameForSend;
     private TextView txtNumberOfSelected;
-    private TextView txtName;
+    private EmojiTextView txtName;
     private TextView txtLastSeen;
     private TextView txtEmptyMessages;
 
@@ -1086,7 +1087,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
 
             avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
-            txtName = (TextView) findViewById(R.id.chl_txt_name);
+            txtName = (EmojiTextView) findViewById(R.id.chl_txt_name);
             txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
             viewGroupLastSeen = (ViewGroup) findViewById(R.id.chl_txt_viewGroup_seen);
             imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
@@ -1260,7 +1261,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                     if (realmRoom != null) {
                                         realmRoom.setLastMessage(realmRoomMessages.first());
-                                        realmRoom.setUpdatedTime(realmRoom.getUpdatedTime() / 1000);
                                     }
                                 }
                             });
@@ -2132,7 +2132,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 }
 
                                 RealmRoom rm = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                                if (rm != null) rm.setUpdatedTime(TimeUtils.currentLocalTime() / 1000);
+                                if (rm != null) {
+                                    rm.setUpdatedTime(TimeUtils.currentLocalTime());
+                                }
                             }
                         });
 
@@ -2713,8 +2715,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                     /**
                                                      * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
                                                      */
-                                                    if (room.getUnreadCount() <= 1) {
-                                                        realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
+                                                    if (room.getUnreadCount() <= 1 && countNewMessage < 1) {
+                                                        firstUnreadMessage = realmRoomMessage;
                                                     }
                                                     room.setUnreadCount(0);
                                                 }
@@ -2836,7 +2838,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onMessageFailed(long roomId, RealmRoomMessage message) {
-        if (roomId == mRoomId) {
+        if (mAdapter != null && roomId == mRoomId) {
             mAdapter.updateMessageStatus(message.getMessageId(), ProtoGlobal.RoomMessageStatus.FAILED);
         }
     }
@@ -2862,7 +2864,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 roomMessage.setCreateTime(updateTime);
                 voiceLastMessage = roomMessage;
 
-                // TODO: 9/26/2016 [Alireza Eskandarpour Shoferi] user may wants to send a file
                 // in response to a message as replay, so after server done creating replay and
                 // forward options, modify this section and sending message as well.
             }
@@ -3671,7 +3672,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * clear foreground color for deSelected message
      */
     private void deSelectMessage(int position) {
-        if (mAdapter.getItem(position) != null && mAdapter.getItem(position).mMessage.view != null) {
+        if (mAdapter != null && mAdapter.getItem(position) != null && mAdapter.getItem(position).mMessage.view != null) {
             ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(null);
         }
     }
@@ -4140,7 +4141,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void deleteChat(final int chatId) {
         final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirst();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -5591,6 +5592,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         public void setPosition(String messageId) {
+
+            if (mAdapter == null) {
+                return;
+            }
+
             try {
                 if (mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view != null) {
                     ((FrameLayout) mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view).setForeground(null);
@@ -5604,7 +5610,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
 
-                if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                if (mAdapter.getItem(i).mMessage != null && mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
                     currentHashPosition = hashList.size() + 1;
                 }
 
@@ -6503,7 +6509,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         long fetchMessageId = 0; // with this value realm will be queried for get message
         if (hasUnread() || hasSavedState()) {
 
-            firstUnreadMessage = getFirstUnreadMessage(realm);
+            if (!firstUnreadMessage.isManaged() || !firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
+                firstUnreadMessage = getFirstUnreadMessage(realm);
+            }
 
             /**
              * show unread layout and also set firstUnreadMessageId in startFutureMessageIdUp
@@ -6522,7 +6530,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     txtNewUnreadMessage.setVisibility(View.VISIBLE);
                     txtNewUnreadMessage.setText(countNewMessage + "");
                     llScrollNavigate.setVisibility(View.VISIBLE);
-                    //unreadLayoutMessage();
                     firstUnreadMessageInChat = firstUnreadMessage;
                 }
             } else {

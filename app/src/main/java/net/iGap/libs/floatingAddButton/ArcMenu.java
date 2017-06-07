@@ -183,7 +183,6 @@ import net.iGap.helper.HelperCalander;
      * The proper layout position is directly dependent on the which side the radial arch menu will
      * be show.
      */
-    //TODO: work on fixing this
     private void layoutMenu() {
         if (mMenuSideEnum == MenuSideEnum.ARC_RIGHT || HelperCalander.isLanguagePersian) {
             cx = 0 + menuMargin;

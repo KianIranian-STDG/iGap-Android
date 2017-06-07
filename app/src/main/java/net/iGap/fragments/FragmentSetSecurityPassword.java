@@ -132,42 +132,60 @@ public class FragmentSetSecurityPassword extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (edtSetPassword.length() > 1 && page == 1) {
-                    closeKeyboard(v);
-                    page = 2;
-                    txtToolbar.setText(getResources().getString(R.string.your_password));
-                    txtPassword = edtSetPassword.getText().toString();
-                    rootEnterPassword.setVisibility(View.GONE);
-                    rootReEnterPassword.setVisibility(View.VISIBLE);
+                if (page == 1) {
+                    if (edtSetPassword.length() > 2) {
+
+
+                        closeKeyboard(v);
+                        page = 2;
+                        txtToolbar.setText(getResources().getString(R.string.your_password));
+                        txtPassword = edtSetPassword.getText().toString();
+                        rootEnterPassword.setVisibility(View.GONE);
+                        rootReEnterPassword.setVisibility(View.VISIBLE);
+                    } else {
+                        error(getString(R.string.Password_has_to_mor_than_character));
+                    }
 
 
                 } else if (page == 2) {
 
-                    if (edtSetRePassword.length() > 1 && txtPassword.equals(edtSetRePassword.getText().toString())) {
-                        closeKeyboard(v);
-                        page = 3;
-                        txtToolbar.setText(getResources().getString(R.string.password_hint));
-                        rootReEnterPassword.setVisibility(View.GONE);
-                        rootHintPassword.setVisibility(View.VISIBLE);
+                    if (edtSetRePassword.length() > 2) {
+                        if (txtPassword.equals(edtSetRePassword.getText().toString())) {
+
+
+                            closeKeyboard(v);
+                            page = 3;
+                            txtToolbar.setText(getResources().getString(R.string.password_hint));
+                            rootReEnterPassword.setVisibility(View.GONE);
+                            rootHintPassword.setVisibility(View.VISIBLE);
+                        } else {
+                            error(getString(R.string.Password_dose_not_match));
+                        }
 
                     } else {
 
-                        error(getString(R.string.Password_dose_not_match));
+                        error(getString(R.string.Password_has_to_mor_than_character));
                     }
 
                 } else if (page == 3) {
 
-                    if (edtSetHintPassword.length() > 0 && !txtPassword.equals(edtSetHintPassword.getText().toString())) {
-                        closeKeyboard(v);
-                        page = 4;
-                        txtToolbar.setText(getResources().getString(R.string.recovery_question));
-                        rootHintPassword.setVisibility(View.GONE);
-                        rootQuestionPassword.setVisibility(View.VISIBLE);
+                    if (edtSetHintPassword.length() > 0) {
+
+                        if (!txtPassword.equals(edtSetHintPassword.getText().toString())) {
 
 
+                            closeKeyboard(v);
+                            page = 4;
+                            txtToolbar.setText(getResources().getString(R.string.recovery_question));
+                            rootHintPassword.setVisibility(View.GONE);
+                            rootQuestionPassword.setVisibility(View.VISIBLE);
+
+                        } else {
+                            error(getString(R.string.Hint_cant_the_same_password));
+                        }
                     } else {
 
-                        error(getString(R.string.Hint_cant_the_same_password));
+                        error(getString(R.string.please_set_hint));
                     }
 
                 } else if (page == 4) {

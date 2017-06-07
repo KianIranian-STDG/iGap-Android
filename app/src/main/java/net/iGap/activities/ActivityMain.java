@@ -54,6 +54,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.vanniktech.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -409,7 +410,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
 
             imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
-            TextView txtNavName = (TextView) findViewById(R.id.lm_txt_user_name);
+            EmojiTextView txtNavName = (EmojiTextView) findViewById(R.id.lm_txt_user_name);
             TextView txtNavPhone = (TextView) findViewById(R.id.lm_txt_phone_number);
             txtNavName.setText(username);
             txtNavPhone.setText(phoneNumber);
@@ -1358,10 +1359,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private ContentLoadingProgressBar contentLoading;
 
     private void getChatsList() {
-        //swipeRefreshLayout.setRefreshing(true);
-        /*if (fromServer && G.socketConnection) {
-            testIsSecure();
-        } else {*/
         if (firstTimeEnterToApp) {
             testIsSecure();
         }
@@ -1376,9 +1373,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-
                 final Realm realm = Realm.getDefaultInstance();
-
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -1388,13 +1383,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             RealmRoom _RealmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).
                                     equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
 
-                            // delete messages and rooms in the deleted room
                             if (_RealmRoom != null) {
-                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, _RealmRoom.getId()).findAll().deleteAllFromRealm();
-                                _RealmRoom.deleteFromRealm();
+                                RealmRoom.deleteRoom(_RealmRoom.getId());
                             }
                         }
-
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }, new Realm.Transaction.OnSuccess() {
@@ -1634,7 +1626,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public void execute(Realm realm) {
 
-                    if (realmRoom.getType() != null) {
+                    if (realmRoom.isValid() && !realmRoom.isDeleted() && realmRoom.getType() != null) {
                         String action = HelperGetAction.getAction(roomId, realmRoom.getType(), clientAction);
                         realmRoom.setActionState(action, userId);
                     }

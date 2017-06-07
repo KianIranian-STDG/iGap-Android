@@ -40,6 +40,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.vanniktech.emoji.EmojiEditText;
+import com.vanniktech.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -126,7 +128,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     private AppBarLayout appBarLayout;
 
-    private TextView txtLastSeen, txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtPhoneNumber, txtNotifyAndSound, txtNickname;
+    private TextView txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtPhoneNumber, txtNotifyAndSound;
+    private EmojiEditText txtNickname;
+    private EmojiTextView txtLastSeen;
     private ViewGroup vgPhoneNumber, vgSharedMedia, layoutNickname;
     private net.iGap.module.CircleImageView imgUser;
     private MaterialDesignTextView imgMenu, txtBack;
@@ -415,7 +419,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         });
 
-        txtNickname = (TextView) findViewById(R.id.chi_txt_nikName);//set nickname
+        txtNickname = (EmojiEditText) findViewById(R.id.chi_txt_nikName);//set nickname
         if (displayName != null && !displayName.equals("")) {
             txtNickname.setText(displayName);
         } else {
@@ -452,7 +456,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                   LinearLayout.LayoutParams viewParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
 
                                                   TextInputLayout inputFirstName = new TextInputLayout(ActivityContactsProfile.this);
-                                                  final EditText edtFirstName = new EditText(ActivityContactsProfile.this);
+                final EmojiEditText edtFirstName = new EmojiEditText(ActivityContactsProfile.this);
                                                   edtFirstName.setHint(R.string.first_name);
                                                   edtFirstName.setText(firsName);
                                                   edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -616,7 +620,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         //            @Override
         //            public void onClick(View view) {
 
-        txtLastSeen = (TextView) findViewById(R.id.chi_txt_lastSeen_title);
+        txtLastSeen = (EmojiTextView) findViewById(R.id.chi_txt_lastSeen_title);
         titleToolbar = (TextView) findViewById(R.id.chi_txt_titleToolbar_DisplayName);
         titleLastSeen = (TextView) findViewById(R.id.chi_txt_titleToolbar_LastSeen);
         txtUserName = (TextView) findViewById(R.id.chi_txt_userName);
@@ -1100,7 +1104,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();
 
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
@@ -1190,7 +1194,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         };
         final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
         if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, roomId).findFirst() == null) {
             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());

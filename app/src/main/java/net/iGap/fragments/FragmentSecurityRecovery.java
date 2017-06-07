@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnRecoverySecurityPassword;
@@ -216,7 +216,14 @@ public class FragmentSecurityRecovery extends Fragment {
     private void error(String error) {
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
-        Toast.makeText(mActivity, error, Toast.LENGTH_SHORT).show();
+        final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snack.dismiss();
+            }
+        });
+        snack.show();
     }
 
     @Override

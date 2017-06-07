@@ -53,6 +53,34 @@ public class RealmChannelRoom extends RealmObject {
         return realmChannelRoom;
     }
 
+    /**
+     * create room with empty info , just Id and inviteLink
+     *
+     * @param roomId roomId
+     * @param inviteLink inviteLink
+     */
+
+    public static void createChannelRoom(final long roomId, final String inviteLink, final String channelName) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom == null) {
+                    realmRoom = realm.createObject(RealmRoom.class, roomId);
+                }
+                if (channelName != null) {
+                    realmRoom.setTitle(channelName);
+                }
+                RealmChannelRoom realmChannelRoom = realm.createObject(RealmChannelRoom.class);
+                realmChannelRoom.setInviteLink(inviteLink);
+
+                realmRoom.setChannelRoom(realmChannelRoom);
+            }
+        });
+        realm.close();
+    }
+
     public ChannelChatRole getRole() {
         return (role != null) ? ChannelChatRole.valueOf(role) : null;
     }

@@ -98,7 +98,7 @@
                       >
 
 
-                    <TextView
+                    <com.vanniktech.emoji.EmojiTextView
                         android:id="@+id/chl_txt_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -106,6 +106,7 @@
                         android:singleLine="true"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/dp14"
+                        fontPath="fonts/IRANSansMobile_Bold.ttf"
                         />
 
                     <net.iGap.module.MaterialDesignTextView

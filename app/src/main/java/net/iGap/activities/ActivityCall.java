@@ -10,7 +10,10 @@
 
 package net.iGap.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,7 +24,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,6 +110,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     SensorEventListener sensorEventListener;
     private static final int SENSOR_SENSITIVITY = 4;
 
+    HeadsetPluginReciver headsetPluginReciver;
+
     @Override protected void onDestroy() {
         super.onDestroy();
 
@@ -176,6 +180,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         registerSensor();
 
+        headsetPluginReciver = new HeadsetPluginReciver();
+
 
     }
 
@@ -186,15 +192,33 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     //***************************************************************************************
 
-    @Override public void onLeaveView() {
+    @Override public void onLeaveView(String type) {
 
         isConnected = false;
 
-        G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
-                endVoiceAndFinish();
-            }
-        }, 1000);
+        if (type.equals("error")) {
+
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    cancelRingtone();
+                    avLoadingIndicatorView.setVisibility(View.GONE);
+                    txtStatus.setText("");
+                }
+            });
+
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    endVoiceAndFinish();
+                }
+            }, 3000);
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override public void run() {
+                    endVoiceAndFinish();
+                }
+            }, 1000);
+        }
+
     }
 
     private void initCallBack() {
@@ -204,7 +228,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                     @Override public void run() {
                         txtStatus.setText(callState.toString());
 
-                        Log.e("dddd", callState.toString());
 
                         switch (callState) {
 
@@ -732,13 +755,20 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     private void playSound(final int resSound) {
 
         final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if (audioManager.getStreamVolume(AudioManager.STREAM_RING) != 0) {
+        if (audioManager.getStreamVolume(AudioManager.STREAM_RING) != 0 || audioManager.isWiredHeadsetOn()) {
 
             if (player == null) {
                 try {
                     player = new MediaPlayer();
                     player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
-                    player.setAudioStreamType(AudioManager.STREAM_RING);
+
+                    if (audioManager.isWiredHeadsetOn()) {
+                        player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                    } else {
+                        player.setAudioStreamType(AudioManager.STREAM_RING);
+                    }
+
+
                     player.setLooping(true);
                     player.prepare();
                     player.start();
@@ -749,6 +779,14 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 try {
                     player.reset();
                     player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
+
+                    if (audioManager.isWiredHeadsetOn()) {
+                        player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                    } else {
+                        player.setAudioStreamType(AudioManager.STREAM_RING);
+                    }
+
+
                     player.prepare();
                     player.setLooping(true);
                     player.start();
@@ -857,12 +895,14 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
      * the views.
      */
     public static void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
-        int childCount = viewGroup.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View view = viewGroup.getChildAt(i);
-            view.setEnabled(enabled);
-            if (view instanceof ViewGroup) {
-                enableDisableViewGroup((ViewGroup) view, enabled);
+        if (viewGroup != null) {
+            int childCount = viewGroup.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View view = viewGroup.getChildAt(i);
+                view.setEnabled(enabled);
+                if (view instanceof ViewGroup) {
+                    enableDisableViewGroup((ViewGroup) view, enabled);
+                }
             }
         }
     }
@@ -870,13 +910,51 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     @Override protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(sensorEventListener, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
+
+        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(headsetPluginReciver, filter);
+
     }
 
     @Override protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(sensorEventListener);
+
+        unregisterReceiver(headsetPluginReciver);
     }
 
+
+    //***************************************************************************************
+
+    class HeadsetPluginReciver extends BroadcastReceiver {
+
+        @Override public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
+
+                // if you need ti dermine plugin state
+
+               /* int state = intent.getIntExtra("state", -1);
+                switch (state) {
+                    case 0:
+                        Log.d("dddddd", "Headset is unplugged");
+                        break;
+                    case 1:
+                        Log.d("dddddd", "Headset is plugged");
+                        break;
+                    default:
+                        Log.d("dddddd", "I have no idea what the headset state is");
+                }
+
+              */
+
+                if (ringtonePlayer != null && ringtonePlayer.isPlaying()) {
+                    cancelRingtone();
+                    playRingtone();
+                }
+            }
+        }
+    }
 
     //***************************************************************************************
 
