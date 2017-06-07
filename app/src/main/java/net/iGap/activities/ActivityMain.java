@@ -1496,6 +1496,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     try {
                         findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
                     } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             };
