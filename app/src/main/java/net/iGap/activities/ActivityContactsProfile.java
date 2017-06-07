@@ -1104,7 +1104,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         // make request for clearing messages
         final Realm realm = Realm.getDefaultInstance();
 
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
@@ -1194,7 +1194,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         };
         final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
         if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, roomId).findFirst() == null) {
             RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());

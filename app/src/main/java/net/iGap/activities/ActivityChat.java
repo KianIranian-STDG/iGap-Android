@@ -4143,7 +4143,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void deleteChat(final int chatId) {
         final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirstAsync();
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirst();
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
