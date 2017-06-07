@@ -713,7 +713,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundReceive));
                     holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_receiveColor));
                     replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-                    replayMessage.setTextColor(Color.WHITE);
+                    replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.green));
                 }
             }
         }
