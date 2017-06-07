@@ -2842,7 +2842,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onMessageFailed(long roomId, RealmRoomMessage message) {
-        if (mAdapter != null && roomId == mRoomId) {
+
+        if (mAdapter != null && message != null && roomId == mRoomId) {
             mAdapter.updateMessageStatus(message.getMessageId(), ProtoGlobal.RoomMessageStatus.FAILED);
         }
     }
