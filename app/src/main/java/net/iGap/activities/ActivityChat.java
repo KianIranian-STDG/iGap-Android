@@ -1260,7 +1260,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                     if (realmRoom != null) {
                                         realmRoom.setLastMessage(realmRoomMessages.first());
-                                        realmRoom.setUpdatedTime(realmRoom.getUpdatedTime() / 1000);
                                     }
                                 }
                             });
@@ -2134,7 +2133,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 }
 
                                 RealmRoom rm = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                                if (rm != null) rm.setUpdatedTime(TimeUtils.currentLocalTime() / 1000);
+                                if (rm != null) {
+                                    rm.setUpdatedTime(TimeUtils.currentLocalTime());
+                                }
                             }
                         });
 

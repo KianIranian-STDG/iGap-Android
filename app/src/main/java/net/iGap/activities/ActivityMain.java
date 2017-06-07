@@ -1358,10 +1358,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private ContentLoadingProgressBar contentLoading;
 
     private void getChatsList() {
-        //swipeRefreshLayout.setRefreshing(true);
-        /*if (fromServer && G.socketConnection) {
-            testIsSecure();
-        } else {*/
         if (firstTimeEnterToApp) {
             testIsSecure();
         }
@@ -1376,9 +1372,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-
                 final Realm realm = Realm.getDefaultInstance();
-
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -1388,13 +1382,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             RealmRoom _RealmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).
                                     equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
 
-                            // delete messages and rooms in the deleted room
                             if (_RealmRoom != null) {
-                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, _RealmRoom.getId()).findAll().deleteAllFromRealm();
-                                _RealmRoom.deleteFromRealm();
+                                RealmRoom.deleteRoom(_RealmRoom.getId());
                             }
                         }
-
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }, new Realm.Transaction.OnSuccess() {
