@@ -857,12 +857,14 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
      * the views.
      */
     public static void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
-        int childCount = viewGroup.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View view = viewGroup.getChildAt(i);
-            view.setEnabled(enabled);
-            if (view instanceof ViewGroup) {
-                enableDisableViewGroup((ViewGroup) view, enabled);
+        if (viewGroup != null) {
+            int childCount = viewGroup.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View view = viewGroup.getChildAt(i);
+                view.setEnabled(enabled);
+                if (view instanceof ViewGroup) {
+                    enableDisableViewGroup((ViewGroup) view, enabled);
+                }
             }
         }
     }
