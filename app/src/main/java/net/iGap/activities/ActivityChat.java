@@ -2297,7 +2297,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        bottomSheetDialog.show();
+                        if (!ActivityChat.this.isFinishing()) {
+                            bottomSheetDialog.show();
+                        }
                     }
                 }, 100);
             }

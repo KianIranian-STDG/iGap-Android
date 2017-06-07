@@ -133,7 +133,7 @@ public class FragmentSetSecurityPassword extends Fragment {
             public void onClick(View v) {
 
                 if (page == 1) {
-                    if (edtSetPassword.length() > 2) {
+                    if (edtSetPassword.length() >= 2) {
 
 
                         closeKeyboard(v);
@@ -149,7 +149,7 @@ public class FragmentSetSecurityPassword extends Fragment {
 
                 } else if (page == 2) {
 
-                    if (edtSetRePassword.length() > 2) {
+                    if (edtSetRePassword.length() >= 2) {
                         if (txtPassword.equals(edtSetRePassword.getText().toString())) {
 
 

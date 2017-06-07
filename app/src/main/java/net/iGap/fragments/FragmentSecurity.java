@@ -145,7 +145,7 @@ public class FragmentSecurity extends Fragment {
             public void onClick(View v) {
 
                 FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSetSecurityPassword).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentSetSecurityPassword).commit();
             }
         });
 
@@ -175,7 +175,7 @@ public class FragmentSecurity extends Fragment {
                         bundle.putBoolean("IS_EMAIL", isRecoveryByEmail);
 
                         fragmentSecurityRecovery.setArguments(bundle);
-                        mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSecurityRecovery).commit();
+                        mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentSecurityRecovery).commit();
 
                     }
                 }).show();
@@ -216,7 +216,7 @@ public class FragmentSecurity extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("OLD_PASSWORD", password);
                 fragmentSetSecurityPassword.setArguments(bundle);
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.parentPrivacySecurity, fragmentSetSecurityPassword).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentSetSecurityPassword).commit();
             }
         });
 
