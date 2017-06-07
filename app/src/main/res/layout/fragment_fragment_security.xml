@@ -330,6 +330,7 @@
         android:textSize="@dimen/dp13"
         android:gravity="center"
         android:maxLines="1"
+        android:singleLine="true"
         android:inputType="textPassword"
         />
 
@@ -378,6 +379,7 @@
         android:textSize="@dimen/dp13"
         android:gravity="center"
         android:maxLines="1"
+        android:singleLine="true"
         />
 
   </LinearLayout>
@@ -409,6 +411,7 @@
         android:layout_marginRight="@dimen/dp32"
         android:hint="@string/password_Question_one"
         android:textSize="@dimen/dp13"
+        android:maxLines="1"
         android:singleLine="true"
 
         />
@@ -420,6 +423,7 @@
         android:layout_marginRight="@dimen/dp32"
         android:hint="@string/password_answer"
         android:textSize="@dimen/dp13"
+        android:maxLines="1"
         android:singleLine="true"
         />
 
@@ -431,6 +435,7 @@
         android:text="@string/password_Question_title_two"
         android:textColor="@color/gray_4c"
         android:textSize="@dimen/dp18"
+
         />
 
     <EditText
@@ -441,6 +446,7 @@
         android:layout_marginRight="@dimen/dp32"
         android:hint="@string/password_Question_two"
         android:textSize="@dimen/dp13"
+        android:maxLines="1"
         android:singleLine="true"
         />
     <EditText
@@ -451,7 +457,9 @@
         android:layout_marginRight="@dimen/dp32"
         android:hint="@string/password_answer"
         android:textSize="@dimen/dp13"
+        android:maxLines="1"
         android:singleLine="true"
+
         />
 
   </LinearLayout>
@@ -487,6 +495,7 @@
         android:textSize="@dimen/dp13"
         android:gravity="center"
         android:maxLines="1"
+        android:singleLine="true"
         />
 
     <TextView
@@ -535,6 +544,7 @@
         android:textSize="@dimen/dp13"
         android:gravity="center"
         android:maxLines="1"
+        android:singleLine="true"
         />
   </LinearLayout>
 </LinearLayout>

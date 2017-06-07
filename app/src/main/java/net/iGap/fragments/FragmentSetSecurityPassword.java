@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import java.util.regex.Pattern;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.TwoStepSecurityConfirmEmail;
@@ -143,6 +144,7 @@ public class FragmentSetSecurityPassword extends Fragment {
                         rootEnterPassword.setVisibility(View.GONE);
                         rootReEnterPassword.setVisibility(View.VISIBLE);
                     } else {
+                        closeKeyboard(v);
                         error(getString(R.string.Password_has_to_mor_than_character));
                     }
 
@@ -159,11 +161,12 @@ public class FragmentSetSecurityPassword extends Fragment {
                             rootReEnterPassword.setVisibility(View.GONE);
                             rootHintPassword.setVisibility(View.VISIBLE);
                         } else {
+                            closeKeyboard(v);
                             error(getString(R.string.Password_dose_not_match));
                         }
 
                     } else {
-
+                        closeKeyboard(v);
                         error(getString(R.string.Password_has_to_mor_than_character));
                     }
 
@@ -181,10 +184,11 @@ public class FragmentSetSecurityPassword extends Fragment {
                             rootQuestionPassword.setVisibility(View.VISIBLE);
 
                         } else {
+                            closeKeyboard(v);
                             error(getString(R.string.Hint_cant_the_same_password));
                         }
                     } else {
-
+                        closeKeyboard(v);
                         error(getString(R.string.please_set_hint));
                     }
 
@@ -197,18 +201,28 @@ public class FragmentSetSecurityPassword extends Fragment {
                         rootEmail.setVisibility(View.VISIBLE);
 
                     } else {
-
+                        closeKeyboard(v);
                         error(getString(R.string.please_complete_all_item));
                     }
                 } else if (page == 5) {
-                    page = 6;
-                    new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
 
                     if (edtSetEmail.length() > 0) {
-                        txtToolbar.setText(getResources().getString(R.string.recovery_email));
-                        rootEmail.setVisibility(View.GONE);
-                        rootConfirmEmail.setVisibility(View.VISIBLE);
+                        Pattern EMAIL_ADDRESS = patternEmail();
+
+                        if (EMAIL_ADDRESS.matcher(edtSetEmail.getText().toString()).matches()) {
+                            page = 6;
+                            new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
+
+                            txtToolbar.setText(getResources().getString(R.string.recovery_email));
+                            rootEmail.setVisibility(View.GONE);
+                            rootConfirmEmail.setVisibility(View.VISIBLE);
+                        } else {
+                            closeKeyboard(v);
+                            error(getString(R.string.invalid_email));
+                        }
                     } else {
+                        page = 6;
+                        new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
                         closeKeyboard(v);
                         mActivity.getSupportFragmentManager().popBackStack();
                         edtSetPassword.setText("");
@@ -227,6 +241,7 @@ public class FragmentSetSecurityPassword extends Fragment {
                     if (edtSetConfirmEmail.length() > 0) {
                         new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtSetConfirmEmail.getText().toString());
                     } else {
+                        closeKeyboard(v);
                         error(getString(R.string.enter_verify_email_code));
                     }
                     closeKeyboard(v);
@@ -287,8 +302,10 @@ public class FragmentSetSecurityPassword extends Fragment {
         edtSetEmail = (EditText) view.findViewById(R.id.edtSetEmail);
         edtSetConfirmEmail = (EditText) view.findViewById(R.id.edtSetConfirmEmail);
 
+    }
 
-
+    private Pattern patternEmail() {
+        return Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{2,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,64}" + "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" + ")+");
     }
 
     private void closeKeyboard(View v) {
