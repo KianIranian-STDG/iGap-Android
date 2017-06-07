@@ -53,6 +53,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.vanniktech.emoji.EmojiEditText;
+import com.vanniktech.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -149,9 +151,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     AttachFile attachFile;
     private CircleImageView imvGroupAvatar;
-    private TextView txtGroupNameTitle;
-    private TextView txtGroupName;
-    private TextView txtGroupDescription;
+    private EmojiTextView txtGroupNameTitle;
+    private EmojiTextView txtGroupName;
+    private EmojiTextView txtGroupDescription;
     private TextView txtNumberOfSharedMedia;
     private TextView txtMemberNumber;
 
@@ -490,13 +492,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         ltLink = (ViewGroup) findViewById(R.id.agp_ll_link);
         imvGroupAvatar = (CircleImageView) findViewById(R.id.agp_imv_group_avatar);
         TextView txtDeleteGroup = (TextView) findViewById(R.id.agp_txt_str_delete_and_leave_group);
-        txtGroupNameTitle = (TextView) findViewById(R.id.agp_txt_group_name_title);
+        txtGroupNameTitle = (EmojiTextView) findViewById(R.id.agp_txt_group_name_title);
         txtGroupNameTitle.setText(title);
 
-        txtGroupName = (TextView) findViewById(R.id.agp_txt_group_name);
+        txtGroupName = (EmojiTextView) findViewById(R.id.agp_txt_group_name);
         txtGroupName.setText(title);
 
-        txtGroupDescription = (TextView) findViewById(R.id.agp_txt_group_description);
+        txtGroupDescription = (EmojiTextView) findViewById(R.id.agp_txt_group_description);
 
         txtGroupDescription.setText(HelperUrl.setUrlLink(description, true, false, null, true));
         txtGroupDescription.setMovementMethod(LinkMovementMethod.getInstance());
@@ -1598,7 +1600,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
         final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
-        final EditText edtUserName = new EditText(ActivityGroupProfile.this);
+        final EmojiEditText edtUserName = new EmojiEditText(ActivityGroupProfile.this);
         edtUserName.setHint(getResources().getString(R.string.st_username));
         edtUserName.setText(txtGroupNameTitle.getText().toString());
         edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));

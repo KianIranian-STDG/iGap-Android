@@ -48,7 +48,7 @@
               android:src="@mipmap/empty"
               />
 
-          <TextView
+          <com.vanniktech.emoji.EmojiTextView
               android:id="@+id/lm_txt_user_name"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
