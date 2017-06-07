@@ -10,6 +10,7 @@ import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import java.util.regex.Pattern;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnTwoStepPassword;
@@ -394,6 +396,7 @@ public class FragmentSecurity extends Fragment {
                         closeKeyboard(v);
                         edtCheckPassword.setText("");
                     } else {
+                        closeKeyboard(v);
                         error(getString(R.string.please_set_password));
                     }
                 }
@@ -409,7 +412,7 @@ public class FragmentSecurity extends Fragment {
                         edtSetQuestionPassTwo.setText("");
                         edtSetAnswerPassTwo.setText("");
                     } else {
-
+                        closeKeyboard(v);
                         error(getString(R.string.Please_complete_all_Item));
                     }
                 }
@@ -417,10 +420,18 @@ public class FragmentSecurity extends Fragment {
                 //change email
                 if (rootChangeEmail.getVisibility() == View.VISIBLE) {
                     if (edtSetEmail.length() > 0) {
-                        new RequestUserTwoStepVerificationChangeRecoveryEmail().changeRecoveryEmail(password, edtSetEmail.getText().toString());
-                        closeKeyboard(v);
-                        edtSetEmail.setText("");
+
+                        Pattern EMAIL_ADDRESS = patternEmail();
+                        if (EMAIL_ADDRESS.matcher(edtSetEmail.getText().toString()).matches()) {
+                            new RequestUserTwoStepVerificationChangeRecoveryEmail().changeRecoveryEmail(password, edtSetEmail.getText().toString());
+                            closeKeyboard(v);
+                            edtSetEmail.setText("");
+                        } else {
+                            closeKeyboard(v);
+                            error(getString(R.string.invalid_email));
+                        }
                     } else {
+                        closeKeyboard(v);
                         error(getString(R.string.Please_enter_your_email));
                     }
                 }
@@ -434,9 +445,11 @@ public class FragmentSecurity extends Fragment {
                             closeKeyboard(v);
                             edtChangeHint.setText("");
                         } else {
+                            closeKeyboard(v);
                             error(getString(R.string.hint_can_same_password));
                         }
                     } else {
+                        closeKeyboard(v);
                         error(getString(R.string.Please_enter_your_hint));
                     }
                 }
@@ -449,6 +462,7 @@ public class FragmentSecurity extends Fragment {
                         edtConfirmedEmail.setText("");
                         closeKeyboard(v);
                     } else {
+                        closeKeyboard(v);
                         error(getString(R.string.please_enter_code));
                     }
                 }
@@ -515,7 +529,14 @@ public class FragmentSecurity extends Fragment {
     private void error(String error) {
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
-
+        final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snack.dismiss();
+            }
+        });
+        snack.show();
     }
 
     private void dialogWaitTime(long time) {
@@ -554,5 +575,9 @@ public class FragmentSecurity extends Fragment {
         mActivity = (FragmentActivity) activity;
     }
 
+
+    private Pattern patternEmail() {
+        return Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{2,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,64}" + "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" + ")+");
+    }
 
 }
