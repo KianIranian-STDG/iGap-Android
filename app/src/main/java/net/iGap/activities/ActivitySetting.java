@@ -53,8 +53,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-import com.vanniktech.emoji.EmojiEditText;
-import com.vanniktech.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
@@ -92,6 +90,8 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.EmojiEditTextE;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.FileUtils;
 import net.iGap.module.IntentRequests;
@@ -151,7 +151,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private PopupWindow popupWindow;
     private int poRbDialogLangouage = -1;
     private int poRbDialogTextSize = -1;
-    private EmojiTextView txtNickName;
+    private EmojiTextViewE txtNickName;
     private TextView txtUserName;
     private TextView txtPhoneNumber;
     private ToggleButton toggleSentByEnter, toggleEnableAnimation, toggleAutoGifs, toggleSaveToGallery, toggleInAppBrowser, toggleCrop;
@@ -172,7 +172,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     public ProgressBar prgWait;
     private TextView txtGander;
     private TextView txtEmail;
-    private EmojiTextView txtNickNameTitle;
+    private EmojiTextViewE txtNickNameTitle;
 
     Realm mRealm;
 
@@ -270,8 +270,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        txtNickNameTitle = (EmojiTextView) findViewById(R.id.ac_txt_nickname_title);
-        txtNickName = (EmojiTextView) findViewById(R.id.st_txt_nikName);
+        txtNickNameTitle = (EmojiTextViewE) findViewById(R.id.ac_txt_nickname_title);
+        txtNickName = (EmojiTextViewE) findViewById(R.id.st_txt_nikName);
         txtUserName = (TextView) findViewById(R.id.st_txt_userName);
         txtPhoneNumber = (TextView) findViewById(R.id.st_txt_phoneNumber);
         txtGander = (TextView) findViewById(R.id.st_txt_gander);
@@ -315,7 +315,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
                 TextInputLayout inputFirstName = new TextInputLayout(ActivitySetting.this);
-                final EmojiEditText edtFirstName = new EmojiEditText(ActivitySetting.this);
+                final EmojiEditTextE edtFirstName = new EmojiEditTextE(ActivitySetting.this);
                 edtFirstName.setHint(getResources().getString(R.string.fac_First_Name));
                 edtFirstName.setText(firsName);
                 edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -331,7 +331,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 }
 
                 TextInputLayout inputLastName = new TextInputLayout(ActivitySetting.this);
-                final EmojiEditText edtLastName = new EmojiEditText(ActivitySetting.this);
+                final EmojiEditTextE edtLastName = new EmojiEditTextE(ActivitySetting.this);
                 edtLastName.setHint(getResources().getString(R.string.fac_Last_Name));
                 edtLastName.setText(lastName);
                 edtLastName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));

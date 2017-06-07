@@ -180,7 +180,7 @@
             android:src="@mipmap/empty"
             />
 
-        <com.vanniktech.emoji.EmojiTextView
+        <net.iGap.module.EmojiTextViewE
             android:id="@+id/chi_txt_lastSeen_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -262,7 +262,7 @@
               />
 
 
-          <com.vanniktech.emoji.EmojiTextView
+          <net.iGap.module.EmojiTextViewE
               android:id="@+id/chi_txt_nikName"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"

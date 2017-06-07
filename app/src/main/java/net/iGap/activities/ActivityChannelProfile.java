@@ -46,8 +46,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.vanniktech.emoji.EmojiEditText;
-import com.vanniktech.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -99,6 +97,8 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.EmojiEditTextE;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SUID;
@@ -139,13 +139,13 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
     private AppBarLayout appBarLayout;
     private TextView txtChannelLink;
-    private EmojiTextView txtChannelNameInfo, txtDescription;
+    private EmojiTextViewE txtChannelNameInfo, txtDescription;
     private MaterialDesignTextView imgPopupMenu;
     private CircleImageView imgCircleImageView;
     private FloatingActionButton fab;
     private PopupWindow popupWindow;
     private TextView titleToolbar;
-    private EmojiTextView txtChannelName;
+    private EmojiTextViewE txtChannelName;
     TextView txtSharedMedia;
     private EditText edtRevoke;
 
@@ -297,7 +297,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         //=========Put Extra End
 
         txtSharedMedia = (TextView) findViewById(R.id.txt_shared_media);
-        txtChannelNameInfo = (EmojiTextView) findViewById(R.id.txt_channel_name_info);
+        txtChannelNameInfo = (EmojiTextViewE) findViewById(R.id.txt_channel_name_info);
         prgWait = (ProgressBar) findViewById(R.id.agp_prgWaiting);
         AppUtils.setProgresColler(prgWait);
 
@@ -312,7 +312,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         ViewGroup vgRootAddMember = (ViewGroup) findViewById(R.id.agp_root_layout_add_member);
         ViewGroup ltLink = (ViewGroup) findViewById(R.id.layout_channel_link);
         imgPopupMenu = (MaterialDesignTextView) findViewById(R.id.pch_img_menuPopup);
-        txtDescription = (EmojiTextView) findViewById(R.id.txt_description);
+        txtDescription = (EmojiTextViewE) findViewById(R.id.txt_description);
         if ((role == ChannelChatRole.MEMBER) || (role == ChannelChatRole.MODERATOR)) {
             vgRootAddMember.setVisibility(View.GONE);
         }
@@ -471,7 +471,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             }
         });
 
-        txtChannelName = (EmojiTextView) findViewById(R.id.txt_channel_name);
+        txtChannelName = (EmojiTextViewE) findViewById(R.id.txt_channel_name);
 
         TextView txtShowMember = (TextView) findViewById(R.id.agp_txt_show_member);
         txtShowMember.setOnClickListener(new View.OnClickListener() {
@@ -1081,7 +1081,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
         final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
-        final EmojiEditText edtNameChannel = new EmojiEditText(ActivityChannelProfile.this);
+        final EmojiEditTextE edtNameChannel = new EmojiEditTextE(ActivityChannelProfile.this);
         edtNameChannel.setHint(getResources().getString(R.string.st_username));
         edtNameChannel.setText(txtChannelNameInfo.getText().toString());
         edtNameChannel.setTextColor(getResources().getColor(R.color.text_edit_text));

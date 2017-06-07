@@ -53,8 +53,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.vanniktech.emoji.EmojiEditText;
-import com.vanniktech.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -102,6 +100,8 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.EmojiEditTextE;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.GroupChatRole;
@@ -151,9 +151,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     AttachFile attachFile;
     private CircleImageView imvGroupAvatar;
-    private EmojiTextView txtGroupNameTitle;
-    private EmojiTextView txtGroupName;
-    private EmojiTextView txtGroupDescription;
+    private EmojiTextViewE txtGroupNameTitle;
+    private EmojiTextViewE txtGroupName;
+    private EmojiTextViewE txtGroupDescription;
     private TextView txtNumberOfSharedMedia;
     private TextView txtMemberNumber;
 
@@ -492,13 +492,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         ltLink = (ViewGroup) findViewById(R.id.agp_ll_link);
         imvGroupAvatar = (CircleImageView) findViewById(R.id.agp_imv_group_avatar);
         TextView txtDeleteGroup = (TextView) findViewById(R.id.agp_txt_str_delete_and_leave_group);
-        txtGroupNameTitle = (EmojiTextView) findViewById(R.id.agp_txt_group_name_title);
+        txtGroupNameTitle = (EmojiTextViewE) findViewById(R.id.agp_txt_group_name_title);
         txtGroupNameTitle.setText(title);
 
-        txtGroupName = (EmojiTextView) findViewById(R.id.agp_txt_group_name);
+        txtGroupName = (EmojiTextViewE) findViewById(R.id.agp_txt_group_name);
         txtGroupName.setText(title);
 
-        txtGroupDescription = (EmojiTextView) findViewById(R.id.agp_txt_group_description);
+        txtGroupDescription = (EmojiTextViewE) findViewById(R.id.agp_txt_group_description);
 
         txtGroupDescription.setText(HelperUrl.setUrlLink(description, true, false, null, true));
         txtGroupDescription.setMovementMethod(LinkMovementMethod.getInstance());
@@ -1600,7 +1600,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
         final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
-        final EmojiEditText edtUserName = new EmojiEditText(ActivityGroupProfile.this);
+        final EmojiEditTextE edtUserName = new EmojiEditTextE(ActivityGroupProfile.this);
         edtUserName.setHint(getResources().getString(R.string.st_username));
         edtUserName.setText(txtGroupNameTitle.getText().toString());
         edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));

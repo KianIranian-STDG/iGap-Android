@@ -167,7 +167,7 @@
                 />
           </net.iGap.libs.rippleeffect.RippleView>
 
-          <com.vanniktech.emoji.EmojiTextView
+          <net.iGap.module.EmojiTextViewE
               android:id="@+id/agp_txt_group_name_title"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -254,7 +254,7 @@
                   android:textSize="@dimen/dp15"
                   />
 
-              <com.vanniktech.emoji.EmojiTextView
+              <net.iGap.module.EmojiTextViewE
                   android:id="@+id/agp_txt_group_name"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -365,7 +365,7 @@
                 android:layout_gravity="center"
                 />
 
-            <com.vanniktech.emoji.EmojiTextView
+            <net.iGap.module.EmojiTextViewE
                 android:id="@+id/agp_txt_group_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

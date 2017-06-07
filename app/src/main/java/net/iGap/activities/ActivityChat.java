@@ -75,7 +75,6 @@ import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.EmojiTextView;
 import com.vanniktech.emoji.emoji.Emoji;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
 import com.vanniktech.emoji.listeners.OnEmojiClickedListener;
@@ -371,7 +370,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private TextView txtHashCounter;
     private TextView txtFileNameForSend;
     private TextView txtNumberOfSelected;
-    private EmojiTextView txtName;
+    private EmojiTextViewE txtName;
     private TextView txtLastSeen;
     private TextView txtEmptyMessages;
 
@@ -1087,7 +1086,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
 
             avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
-            txtName = (EmojiTextView) findViewById(R.id.chl_txt_name);
+            txtName = (EmojiTextViewE) findViewById(R.id.chl_txt_name);
             txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
             viewGroupLastSeen = (ViewGroup) findViewById(R.id.chl_txt_viewGroup_seen);
             imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
