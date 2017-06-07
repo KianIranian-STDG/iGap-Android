@@ -931,6 +931,8 @@
   <string name="resend_verify_email_code">We\'re resend verify email code on your email</string>
   <string name="enter_verify_email_code">Please enter verify email code</string>
   <string name="invalid_password">Password is invalid</string>
+  <string name="please_set_password">"Please set password</string>
+  <string name="please_set_hint">"Please set hint</string>
 
 
 </resources>
