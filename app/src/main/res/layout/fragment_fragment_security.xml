@@ -8,6 +8,8 @@
     android:orientation="vertical"
     tools:context="net.iGap.fragments.FragmentSecurity"
     tools:ignore="MissingPrefix"
+    android:layoutDirection="ltr"
+    android:elevation="999dp"
     >
 
 

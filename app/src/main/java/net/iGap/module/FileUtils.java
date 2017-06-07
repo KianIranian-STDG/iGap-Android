@@ -253,7 +253,7 @@ public class FileUtils {
     public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
 
         Cursor cursor = null;
-        final String column = "_data";
+        final String column = MediaStore.Images.Media.DATA;
         final String[] projection = {
                 column
         };
@@ -266,6 +266,8 @@ public class FileUtils {
                 final int column_index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(column_index);
             }
+        } catch (IllegalArgumentException e) {
+
         } finally {
             if (cursor != null) cursor.close();
         }
