@@ -146,7 +146,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         }
 
         if (G.onCallLeaveView != null) {
-            G.onCallLeaveView.onLeaveView();
+            G.onCallLeaveView.onLeaveView("");
         }
     }
 
@@ -202,7 +202,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         }
 
         if (G.onCallLeaveView != null) {
-            G.onCallLeaveView.onLeaveView();
+            G.onCallLeaveView.onLeaveView("error");
         }
 
         HelperError.showSnackMessage(message);

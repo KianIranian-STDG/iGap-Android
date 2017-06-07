@@ -11,5 +11,5 @@
 package net.iGap.interfaces;
 
 public interface OnCallLeaveView {
-    void onLeaveView();
+    void onLeaveView(String Type);
 }
