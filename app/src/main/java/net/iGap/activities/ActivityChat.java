@@ -2717,8 +2717,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                     /**
                                                      * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
                                                      */
-                                                    if (room.getUnreadCount() <= 1) {
-                                                        realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
+                                                    if (room.getUnreadCount() <= 1 && countNewMessage < 1) {
+                                                        firstUnreadMessage = realmRoomMessage;
                                                     }
                                                     room.setUnreadCount(0);
                                                 }
@@ -6512,7 +6512,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         long fetchMessageId = 0; // with this value realm will be queried for get message
         if (hasUnread() || hasSavedState()) {
 
-            firstUnreadMessage = getFirstUnreadMessage(realm);
+            if (!firstUnreadMessage.isManaged() || !firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
+                firstUnreadMessage = getFirstUnreadMessage(realm);
+            }
 
             /**
              * show unread layout and also set firstUnreadMessageId in startFutureMessageIdUp
@@ -6531,7 +6533,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     txtNewUnreadMessage.setVisibility(View.VISIBLE);
                     txtNewUnreadMessage.setText(countNewMessage + "");
                     llScrollNavigate.setVisibility(View.VISIBLE);
-                    //unreadLayoutMessage();
                     firstUnreadMessageInChat = firstUnreadMessage;
                 }
             } else {

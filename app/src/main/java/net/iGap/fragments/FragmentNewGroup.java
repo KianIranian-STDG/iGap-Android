@@ -76,8 +76,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmChannelRoom;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelAvatarAdd;
 import net.iGap.request.RequestChannelCreate;
@@ -457,34 +455,6 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         });
     }
 
-    /**
-     * create room with empty info , just Id and inviteLink
-     *
-     * @param roomId roomId
-     * @param inviteLink inviteLink
-     */
-
-    public static void createChannelRoom(final long roomId, final String inviteLink, final String channelName) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom == null) {
-                    realmRoom = realm.createObject(RealmRoom.class, roomId);
-                }
-                if (channelName != null) {
-                    realmRoom.setTitle(channelName);
-                }
-                RealmChannelRoom realmChannelRoom = realm.createObject(RealmChannelRoom.class);
-                realmChannelRoom.setInviteLink(inviteLink);
-
-                realmRoom.setChannelRoom(realmChannelRoom);
-            }
-        });
-        realm.close();
-    }
-
     private void createChannel() {
 
         G.onChannelCreate = new OnChannelCreate() {
@@ -493,14 +463,12 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        createChannelRoom(roomIdR, inviteLink, channelName);
+                        RealmChannelRoom.createChannelRoom(roomIdR, inviteLink, channelName);
                         mInviteLink = inviteLink;
                         if (existAvatar) {
-                            //                            showProgressBar();
                             mInviteLink = inviteLink;
                             new RequestChannelAvatarAdd().channelAvatarAdd(roomIdR, token);
                         } else {
-
                             hideProgressBar();
                             FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
                             Bundle bundle = new Bundle();
@@ -510,14 +478,16 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                             fragmentCreateChannel.setArguments(bundle);
                             mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment").commitAllowingStateLoss();
                             getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                            //                        getRoom(roomIdR, ProtoGlobal.Room.Type.CHANNEL);
                         }
                     }
                 });
+
+                G.onChannelCreate = null;
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
+                G.onChannelCreate = null;
                 hideProgressBar();
                 if (majorCode == 479) {
                     G.handler.post(new Runnable() {

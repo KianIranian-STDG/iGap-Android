@@ -13,6 +13,7 @@ package net.iGap.response;
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupCreate;
+import net.iGap.request.RequestClientGetRoom;
 
 public class GroupCreateResponse extends MessageHandler {
 
@@ -33,7 +34,11 @@ public class GroupCreateResponse extends MessageHandler {
 
         super.handler();
         ProtoGroupCreate.GroupCreateResponse.Builder builder = (ProtoGroupCreate.GroupCreateResponse.Builder) message;
-        G.onGroupCreate.onGroupCreate(builder.getRoomId());
+        if (builder.getResponse().getId().isEmpty()) {
+            new RequestClientGetRoom().clientGetRoom(builder.getRoomId(), RequestClientGetRoom.CreateRoomMode.requestFromOwner);
+        } else {
+            G.onGroupCreate.onGroupCreate(builder.getRoomId());
+        }
     }
 
     @Override

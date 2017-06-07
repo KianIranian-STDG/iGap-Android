@@ -13,6 +13,8 @@ package net.iGap.response;
 import net.iGap.G;
 import net.iGap.proto.ProtoChannelCreate;
 import net.iGap.proto.ProtoError;
+import net.iGap.realm.RealmChannelRoom;
+import net.iGap.request.RequestClientGetRoom;
 
 public class ChannelCreateResponse extends MessageHandler {
 
@@ -32,7 +34,12 @@ public class ChannelCreateResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoChannelCreate.ChannelCreateResponse.Builder builder = (ProtoChannelCreate.ChannelCreateResponse.Builder) message;
-        G.onChannelCreate.onChannelCreate(builder.getRoomId(), builder.getInviteLink(), identity);
+        if (builder.getResponse().getId().isEmpty()) {
+            RealmChannelRoom.createChannelRoom(builder.getRoomId(), builder.getInviteLink(), identity);
+            new RequestClientGetRoom().clientGetRoom(builder.getRoomId(), RequestClientGetRoom.CreateRoomMode.requestFromOwner);
+        } else {
+            G.onChannelCreate.onChannelCreate(builder.getRoomId(), builder.getInviteLink(), identity);
+        }
     }
 
     @Override

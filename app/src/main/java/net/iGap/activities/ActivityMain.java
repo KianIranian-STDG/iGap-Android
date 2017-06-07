@@ -1626,7 +1626,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public void execute(Realm realm) {
 
-                    if (realmRoom.getType() != null) {
+                    if (realmRoom.isValid() && !realmRoom.isDeleted() && realmRoom.getType() != null) {
                         String action = HelperGetAction.getAction(roomId, realmRoom.getType(), clientAction);
                         realmRoom.setActionState(action, userId);
                     }
