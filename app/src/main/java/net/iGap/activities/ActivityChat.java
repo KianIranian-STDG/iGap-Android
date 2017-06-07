@@ -2839,7 +2839,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onMessageFailed(long roomId, RealmRoomMessage message) {
-        if (roomId == mRoomId) {
+        if (mAdapter != null && roomId == mRoomId) {
             mAdapter.updateMessageStatus(message.getMessageId(), ProtoGlobal.RoomMessageStatus.FAILED);
         }
     }
@@ -3674,7 +3674,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * clear foreground color for deSelected message
      */
     private void deSelectMessage(int position) {
-        if (mAdapter.getItem(position) != null && mAdapter.getItem(position).mMessage.view != null) {
+        if (mAdapter != null && mAdapter.getItem(position) != null && mAdapter.getItem(position).mMessage.view != null) {
             ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(null);
         }
     }
@@ -5594,6 +5594,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         public void setPosition(String messageId) {
+
+            if (mAdapter == null) {
+                return;
+            }
+
             try {
                 if (mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view != null) {
                     ((FrameLayout) mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view).setForeground(null);
@@ -5607,7 +5612,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
 
-                if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                if (mAdapter.getItem(i).mMessage != null && mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
                     currentHashPosition = hashList.size() + 1;
                 }
 
