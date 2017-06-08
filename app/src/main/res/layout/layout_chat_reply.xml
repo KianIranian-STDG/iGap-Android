@@ -11,6 +11,7 @@
     >
 
     <ImageView
+        android:id="@+id/lcr_imv_replay"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginRight="@dimen/dp4"
@@ -48,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+          android:textColor="@color/black90"
             android:maxLines="1"
             android:singleLine="true"
             android:text="SAMPLE TEXT"/>

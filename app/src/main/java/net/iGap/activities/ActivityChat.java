@@ -5258,6 +5258,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = (TextView) mReplayLayout.findViewById(R.id.replayTo);
             TextView replayFrom = (TextView) mReplayLayout.findViewById(R.id.replyFrom);
+            replayFrom.setTextColor(Color.parseColor(G.appBarColor));
+
+            ImageView imvReplayIcon = (ImageView) findViewById(R.id.lcr_imv_replay);
+            imvReplayIcon.setColorFilter(Color.parseColor(G.appBarColor));
+
             ImageView thumbnail = (ImageView) mReplayLayout.findViewById(R.id.thumbnail);
             TextView closeReplay = (TextView) mReplayLayout.findViewById(R.id.cancelIcon);
             closeReplay.setOnClickListener(new View.OnClickListener() {
@@ -5270,11 +5275,26 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
-                replayTo.setText(AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType()));
+
+                String _text = AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType());
+                if (_text != null && _text.length() > 0) {
+                    replayTo.setText(_text);
+                } else {
+                    replayTo.setText(chatItem.forwardedFrom.getMessage());
+                }
+
+
+
             } else {
                 RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(chatItem.messageID)).findFirst();
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
-                replayTo.setText(AppUtils.conversionMessageType(chatItem.messageType));
+
+                String _text = AppUtils.conversionMessageType(chatItem.messageType);
+                if (_text != null && _text.length() > 0) {
+                    replayTo.setText(_text);
+                } else {
+                    replayTo.setText(chatItem.messageText);
+                }
             }
             if (chatType == CHANNEL) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.roomId).findFirst();
@@ -6240,6 +6260,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 String str = _count > 1 ? getString(R.string.messages_selected) : getString(R.string.message_selected);
 
                 EmojiTextViewE emMessage = (EmojiTextViewE) findViewById(R.id.cslhf_txt_message);
+
+                TextView txtForwardMessage = (TextView) findViewById(R.id.cslhf_txt_forward_from);
+                txtForwardMessage.setTextColor(Color.parseColor(G.appBarColor));
+
+                ImageView imvForwardIcon = (ImageView) findViewById(R.id.cslhs_imv_forward);
+                imvForwardIcon.setColorFilter(Color.parseColor(G.appBarColor));
+
+
 
                 if (HelperCalander.isLanguagePersian) {
 
