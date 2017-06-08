@@ -5533,12 +5533,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                             if (charSequence.length() > 0) {
                                 selectMessage(selectedPosition);
-                                txtMessageCounter.setText(messageCounter + " " + getString(R.string.of) + messageCounter);
+                                txtMessageCounter.setText(messageCounter + " " + getString(R.string.of) + " " + messageCounter);
                             } else {
                                 txtMessageCounter.setText("0 " + getString(R.string.of) + " 0");
                             }
                         } else {
-                            txtMessageCounter.setText("0 " + getString(R.string.of) + messageCounter);
+                            txtMessageCounter.setText("0 " + getString(R.string.of) + " " + messageCounter);
                             selectedPosition = 0;
                         }
                     }

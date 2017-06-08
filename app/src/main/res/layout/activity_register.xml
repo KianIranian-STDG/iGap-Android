@@ -197,11 +197,12 @@
               android:layout_height="@dimen/dp40"
               android:layout_weight=".7"
               android:background="@drawable/rg_background_agreement"
-              android:gravity="start|center_vertical"
+              android:gravity="left|center_vertical"
               android:inputType="phone"
               android:padding="@dimen/dp4"
               android:textColor="@color/rg_black_register"
               android:textSize="@dimen/dp14"
+              android:textAlignment="gravity"
               app:mask="###-###-####"
               />
 

@@ -9,12 +9,12 @@
   
   <!-- Page 2 introduce app -->
   <string name="text_line_1_introduce_page2">"امنیت در آی گپ"</string>
-  <string name="text_line_2_introduce_page2">" آی گپ یک ارتباط امن و مطمئن را بین شما ، دوستان و خانوادتان برقرار میکند. آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در همه جابجایی داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم اورده است .  "</string>
+  <string name="text_line_2_introduce_page2">" آی گپ یک ارتباط امن و مطمئن را بین شما ، دوستان و خانوادتان برقرار میکند. آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است .  "</string>
 
 
   <!-- Page 3 introduce app -->
   <string name="text_line_1_introduce_page3">"گفتگو در آی گپ"</string>
-  <string name="text_line_2_introduce_page3">"شما میتوانید در آی گپ بصورت شخصی یک به یک و یا گروهی  گفتگو بپردازید و خیالتان راحت باشد که همیشه به گفتگو های خود دسترسی دارید ، همچنین میتوانید کانال بسازید و در آن عضو بگیرید و اطلاعات خود را بین میلیون ها انسان به اشتراک بگذارید ."</string>
+  <string name="text_line_2_introduce_page3">"شما میتوانید در آی گپ بصورت دونفره و یا گروهی به گفتگو بپردازید و خیالتان راحت باشد که همیشه به گفتگو های خود دسترسی دارید ، همچنین میتوانید کانال بسازید و در آن عضو بگیرید و اطلاعات خود را بین میلیون ها انسان به اشتراک بگذارید ."</string>
 
   <!-- Page 4 introduce app -->
   <string name="text_line_1_introduce_page4">"انتقال فایل در آی گپ"</string>
@@ -28,7 +28,7 @@
   <!-- Page 6 introduce app -->
   <string name="btn_start_page6">"همین حالا شروع کنید"</string>
   <string name="text_line_1_introduce_page6">"آی گپ رایگان بوده و هست !"</string>
-  <string name="text_line_2_introduce_page6">"بیش از این شما را خسته نمی کنیم! آی ‌گپ کاملاْ رایگان بوده و هست! همین حالا دنیای خود را در آی گپ بسازید."</string>
+  <string name="text_line_2_introduce_page6">"بیش از این شما را خسته نمی کنیم! آی ‌گپ کاملاً رایگان بوده و هست! همین حالا دنیای خود را در آی گپ بسازید."</string>
 
 
 
@@ -142,7 +142,7 @@
   <string name="am_file">"فایل"</string>
   <string name="am_contact">"مخاطب"</string>
 
-  <string name="clear_history_content">"آیا از پاکسازی تاریخچه گفتگو مطمئن هستید؟"</string>
+  <string name="clear_history_content">"آیا از پاکسازی تاریخچه اطمینان دارید؟"</string>
 
   <string name="delete_chat_content">"آیا از حذف کامل این گفتگو مطمئنید؟"</string>
   <string name="to_delete_contact">"حذف مخاطب"</string>
@@ -376,8 +376,8 @@
   <string name="your_link">"پیوند شما"</string>
   <string name="public_channel">"کانال عمومی"</string>
   <string name="private_channel">"کانال خصوصی"</string>
-  <string name="desc_private_channel">"برای پیوستن به کانال‌های عمومی باید از طریق پیوند دعوت اقدام کرد."</string>
-  <string name="desc_public_channel">"کانال‌های عمومی ممکن است در نتایج جستجو ظاهر شوند، هرکس می‌تواند عضو آنها شود."</string>
+  <string name="desc_private_channel">"هر کاربری نمی تواند عضو این کانال شود. کاربران تنها زمانی می توانند عضو این کانال شوند که مدیر(ان) آنها را به عنوان عضو به گروه اضافه کنند."</string>
+  <string name="desc_public_channel">"کاربران می توانند با جستوجوی نام کاربری یا دریافت لینک دعوت به این کانال بپیوندند."</string>
   <string formatted="false" name="last_msg_format_chat">"%s"</string>
 
 
@@ -473,7 +473,7 @@
   <string name="time_out">عدم امکان اتصال به سرور</string>
   <string name="resend_all_messages">"‫ارسال دوبارهٔ %d پیام"</string>‬‬‬‬‬‬
   <string name="resend_chat_message">"‫ارسال دوبارهٔ پیام"</string>‬‬‬‬‬‬
-  <string name="if_you_are_away_for">"اگر دور باشید"</string>
+  <string name="if_you_are_away_for">"پس از"</string>
   <string name="st_Gander">"جنسیت:"</string>
   <string name="st_email">"ایمیل:"</string>
   <string name="month_1">" ۱ماه"</string>
@@ -548,10 +548,10 @@
   <string name="error_email">نشانی ایمیل نامعتبر</string>
   <string name="do_you_want_delete_this">آیا از حذف آیتم انتخاب شده اطمینان دارید ؟</string>
   <string name="do_you_want_clear_history_this">آیا از پاک کردن تاریخچه آیتم انتخاب شده اطمینان دارید ؟</string>
-  <string name="active_session_title">بستن و غیرفعال کردن جلسه</string>
-  <string name="active_session_all_title"> غیرفعال کردن تمام جلسه ها</string>
+  <string name="active_session_title">لغو و بستن جلسه</string>
+  <string name="active_session_all_title">لغو و بستن جلسات</string>
   <string name="active_session_content">آیا مطمئنید که می‌خواهید این جلسه را غیرفعال کنید؟</string>
-  <string name="active_session_all_content">آیا مطمئنید که می‌خواهید تمام جلسه ها را غیرفعال کنید؟</string>
+  <string name="active_session_all_content">آیا از لغو همهء جلسات فعال اطمینان دارید؟</string>
   <string name="USER_VERIFY_GIVEN_USERNAME">هیچ کاربری با نام کابری ارائه شده ثبت نام نکرده است.</string>
   <string name="USER_VERIFY_MANY_TRIES">کد تأییدیه به دلیل چندین مرتبه وارد کردن برای مدتی مسدود می‌باشد.</string>
   <string name="USER_VERIFY_MANY_TRIES_SEND">کد تأییدیه چندین مرتبه ارسال شده است.</string>
@@ -562,14 +562,14 @@
   <string name="minute_ago">دقیقه پیش</string>
   <string name="device">وسیله:</string>
   <string name="country">کشور:</string>
-  <string name="create_time">ایجاد زمان:</string>
+  <string name="create_time">ایجاد شده در:</string>
   <string name="ip">شناسه</string>
   <string name="current_session">جلسهٔ فعلی</string>
   <string name="Active_session">جلسهٔ فعال</string>
   <string name="terminate">غیرفعال کردن</string>
-  <string name="terminate_all">غیرفعال کردن تمامی جلسات دیگر</string>
+  <string name="terminate_all">لغو تمامی جلسات فعال</string>
   <string name="forwarded_from">ارسال شده از</string>
-  <string name="more">بیشتر...</string>
+  <string name="more">بیشتر…</string>
   <string name="do_you_want_to_delet_this_chat">آیا می‌خواهید این گفتگو را حذف کنید؟</string>
   <string name="sound_at_most">صدای بلند</string>
   <string name="number">تعداد</string>
@@ -626,7 +626,7 @@
   <string name="please_enter_code_for_verify">لطفاْ به منظور تأیید کد را وارد کنید.</string>
   <string name="server_do_not_response">سرور پاسخ نمی‌دهد.</string>
   <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آی‌گپ</string>
-  <string name="TERMINATE">پایان</string>
+  <string name="TERMINATE">لغو</string>
   <string name="iGap_version">آی گپ اندروید نسخه</string>
   <string name="do_you_want_left_this">آیااز ترک ایتم انتخاب شده اطمینان دارید؟</string>
 
@@ -775,14 +775,14 @@
   <string name="array_delete_photo_group">حذف عکس</string>
   <string name="group_link_hint_revoke">لینک دعوت گروه</string>
   <string name="channel_title_convert_to_private">تبدیل به کانال خصوصی</string>
-  <string name="channel_text_convert_to_private">آیا می خواهید این گروه را به حالت خصوصی درآورید?</string>
+  <string name="channel_text_convert_to_private">آیا می خواهید این گروه را به گروه خصوصی تبدیل کنید؟</string>
   <string name="channel_title_convert_to_public">تبدیل به کانال عمومی</string>
-  <string name="channel_text_convert_to_public">آیا می خواهید این کانال را به حالت عمومی درآورید?</string>
+  <string name="channel_text_convert_to_public">آیا می خواهید این کانال را به کانال عمومی تبدیل کنید؟</string>
   <string name="channel_title_channel_set_username">تخصیص لینک عمومی کانال</string>
   <string name="group_title_convert_to_private">تبدیل به گروه خصوصی</string>
-  <string name="group_text_convert_to_private">آیا می خواهید این گروه را به حالت خصوصی درآورید?</string>
+  <string name="group_text_convert_to_private">آیا می خواهید این گروه را به گروه خصوصی تبدیل کنید؟</string>
   <string name="group_title_convert_to_public">تبدیل به گروه عمومی</string>
-  <string name="group_text_convert_to_public">آیا می خواهید این گروه را به حالت عمومی درآورید?</string>
+  <string name="group_text_convert_to_public">آیا می خواهید این گروه را به گروه عمومی تبدیل کنید؟</string>
   <string name="group_title_set_username">تخصیص نام کاربری</string>
   <string name="permission_storage">محل ذخیره سازی را بدهید</string>
   <string name="you_have_to_get_storage_permision_for_continue">برای ادامه کار نیاز به مجوز ذخیره سازی می باشد</string>
@@ -933,4 +933,22 @@
   <string name="please_set_password">"Please set password</string>
   <string name="please_set_hint">"Please set hint</string>
   <string name="invalid_email">"Your email is invalid</string>
+  <string name="yes">"بله</string>
+  <string name="no">"خیر</string>
+
+
+  <string name="not_answered">Not Answered ANSWERED</string>
+  <string name="unavalable">Unavalable</string>
+  <string name="too_long">Too Long</string>
+  <string name="signaling">Signaling</string>
+  <string name="incoming_call">Incoming Call</string>
+  <string name="ringing">Ringing</string>
+  <string name="connecting_call">Connecting</string>
+  <string name="connected">Connected</string>
+  <string name="disconnected">Disconnected</string>
+  <string name="faild">Faild</string>
+  <string name="reject">Reject</string>
+  <string name="busy">Busy</string>
+
+
 </resources>
