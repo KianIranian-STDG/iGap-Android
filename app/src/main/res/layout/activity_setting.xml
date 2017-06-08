@@ -148,7 +148,7 @@
               />
         </net.iGap.libs.rippleeffect.RippleView>
 
-        <com.vanniktech.emoji.EmojiTextView
+        <net.iGap.module.EmojiTextViewE
             android:id="@+id/ac_txt_nickname_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -241,7 +241,7 @@
                 fontPath="fonts/IRANSansMobile.ttf"
                 />
 
-            <com.vanniktech.emoji.EmojiTextView
+            <net.iGap.module.EmojiTextViewE
                 android:id="@+id/st_txt_nikName"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp28"

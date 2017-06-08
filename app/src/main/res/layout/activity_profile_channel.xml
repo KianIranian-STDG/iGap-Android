@@ -140,7 +140,7 @@
               android:src="@mipmap/empty"
               />
 
-          <com.vanniktech.emoji.EmojiTextView
+          <net.iGap.module.EmojiTextViewE
               android:id="@+id/txt_channel_name"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -229,7 +229,7 @@
                   android:textSize="@dimen/dp15"
                   />
 
-              <com.vanniktech.emoji.EmojiTextView
+              <net.iGap.module.EmojiTextViewE
                   android:id="@+id/txt_channel_name_info"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -304,7 +304,7 @@
                 android:textSize="@dimen/dp15"
                 />
 
-            <com.vanniktech.emoji.EmojiTextView
+            <net.iGap.module.EmojiTextViewE
                 android:id="@+id/txt_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

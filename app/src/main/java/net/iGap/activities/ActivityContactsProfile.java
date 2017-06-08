@@ -40,8 +40,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.vanniktech.emoji.EmojiEditText;
-import com.vanniktech.emoji.EmojiTextView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
@@ -70,6 +68,8 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.EmojiEditTextE;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SUID;
@@ -129,8 +129,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private AppBarLayout appBarLayout;
 
     private TextView txtUserName, titleToolbar, titleLastSeen, txtBlockContact, txtClearChat, txtPhoneNumber, txtNotifyAndSound;
-    private EmojiEditText txtNickname;
-    private EmojiTextView txtLastSeen;
+    private EmojiTextViewE txtNickname;
+    private EmojiTextViewE txtLastSeen;
     private ViewGroup vgPhoneNumber, vgSharedMedia, layoutNickname;
     private net.iGap.module.CircleImageView imgUser;
     private MaterialDesignTextView imgMenu, txtBack;
@@ -419,7 +419,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         });
 
-        txtNickname = (EmojiEditText) findViewById(R.id.chi_txt_nikName);//set nickname
+        txtNickname = (EmojiTextViewE) findViewById(R.id.chi_txt_nikName);//set nickname
         if (displayName != null && !displayName.equals("")) {
             txtNickname.setText(displayName);
         } else {
@@ -456,7 +456,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                                   LinearLayout.LayoutParams viewParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
 
                                                   TextInputLayout inputFirstName = new TextInputLayout(ActivityContactsProfile.this);
-                final EmojiEditText edtFirstName = new EmojiEditText(ActivityContactsProfile.this);
+                final EmojiEditTextE edtFirstName = new EmojiEditTextE(ActivityContactsProfile.this);
                                                   edtFirstName.setHint(R.string.first_name);
                                                   edtFirstName.setText(firsName);
                                                   edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -620,7 +620,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         //            @Override
         //            public void onClick(View view) {
 
-        txtLastSeen = (EmojiTextView) findViewById(R.id.chi_txt_lastSeen_title);
+        txtLastSeen = (EmojiTextViewE) findViewById(R.id.chi_txt_lastSeen_title);
         titleToolbar = (TextView) findViewById(R.id.chi_txt_titleToolbar_DisplayName);
         titleLastSeen = (TextView) findViewById(R.id.chi_txt_titleToolbar_LastSeen);
         txtUserName = (TextView) findViewById(R.id.chi_txt_userName);
