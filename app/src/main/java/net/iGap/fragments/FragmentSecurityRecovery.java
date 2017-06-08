@@ -24,6 +24,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.enums.Security;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByAnswers;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByToken;
+import net.iGap.request.RequestUserTwoStepVerificationResendVerifyEmail;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +63,8 @@ public class FragmentSecurityRecovery extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
 
         Bundle bundle = this.getArguments();
 
@@ -107,6 +110,22 @@ public class FragmentSecurityRecovery extends Fragment {
 
         txtSetRecoveryQuestionPassOne.setText(questionOne);
         txtSetRecoveryQuestionPassTwo.setText(questionTwo);
+
+        TextView txtResendConfirmEmail = (TextView) view.findViewById(R.id.txtResendConfirmEmail);
+        txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
+                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
+                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
+            }
+        });
 
         edtSetRecoveryAnswerPassOne = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassOne);
         edtSetRecoveryAnswerPassTwo = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassTwo);

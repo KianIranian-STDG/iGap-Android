@@ -224,7 +224,7 @@ public class FragmentActiveSessions extends Fragment {
 
                 if (item instanceof AdapterActiveSessions) {
                     if (((AdapterActiveSessions) item).getItem().isCurrent()) {
-                        new MaterialDialog.Builder(mActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(mActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -287,7 +287,7 @@ public class FragmentActiveSessions extends Fragment {
                             }
                         }).show();
                     } else {
-                        new MaterialDialog.Builder(mActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(mActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 prgWaiting.setVisibility(View.VISIBLE);
@@ -299,7 +299,7 @@ public class FragmentActiveSessions extends Fragment {
                 } else {
                     final int size = list.size();
                     if (size > 1) {
-                        new MaterialDialog.Builder(mActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(mActivity).title(R.string.active_session_all_title).content(R.string.active_session_all_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 

@@ -222,15 +222,36 @@
         />
 
     <TextView
-        android:id="@+id/txtSetRecoveryByQuestion"
-        android:layout_width="match_parent"
+        android:id="@+id/txtResendConfirmEmail"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp32"
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32"
-        android:layout_marginTop="@dimen/dp48"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp32"
+        android:gravity="start"
+        android:text="@string/your_resend_email_skip"
+        android:textColor="@color/green"
+        android:textSize="@dimen/dp14"
+        android:padding="@dimen/dp16"
+        android:visibility="visible"
+        />
+
+    <TextView
+        android:id="@+id/txtSetRecoveryByQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp4"
         android:text="@string/recovery_by_question"
         android:singleLine="true"
+        android:gravity="start"
         android:textColor="@color/green"
+        android:padding="@dimen/dp16"
         android:textSize="@dimen/dp13"
         />
 
