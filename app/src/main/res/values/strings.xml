@@ -920,7 +920,6 @@
   <string name="nothing">Nothing</string>
  <string name="are_you_sure_clear_call_logs">Are you sure you want to clear voice call logs ?</string>
   <string name="please_write_your_reasons">Please write your reasons</string>
-
  <string name="your_confirm_email">Enter Your confirm Email code</string>
  <string name="your_confirm_email_skip">Skip</string>
  <string name="your_resend_email_skip">Resend confirm code</string>
@@ -933,4 +932,20 @@
  <string name="invalid_email">"Your email is invalid</string>
  <string name="yes">"Yes</string>
  <string name="odv">"No</string>
+
+
+  <string name="not_answered">Not Answered ANSWERED</string>
+  <string name="unavalable">Unavalable</string>
+  <string name="too_long">Too Long</string>
+  <string name="signaling">Signaling</string>
+  <string name="incoming_call">Incoming Call</string>
+  <string name="ringing">Ringing</string>
+  <string name="connecting_call">Connecting</string>
+  <string name="connected">Connected</string>
+  <string name="disconnected">Disconnected</string>
+  <string name="faild">Faild</string>
+  <string name="reject">Reject</string>
+  <string name="busy">Busy</string>
+
+
 </resources>

@@ -31,6 +31,8 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -68,7 +70,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     public static TextView txtTimeChat, txtTimerMain;
 
-
     boolean isIncomingCall = false;
     long userId;
 
@@ -87,7 +88,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     private int secend = 0;
     private int minute = 0;
 
-
     VerticalSwipe verticalSwipe;
     TextView txtName;
     TextView txtStatus;
@@ -95,6 +95,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     ImageView userCallerPicture;
     LinearLayout layoutCaller;
     LinearLayout layoutOption;
+    FrameLayout layoutAnswer;
     MaterialDesignTextView btnCircleChat;
     MaterialDesignTextView btnEndCall;
     MaterialDesignTextView btnAnswer;
@@ -124,7 +125,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         unMuteMusic();
 
         new RequestSignalingGetLog().signalingGetLog(0, 1);
-
     }
 
     @Override public void onBackPressed() {
@@ -148,7 +148,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             return;
         }
 
-
         try {
             HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
                 @Override public void Allow() throws IOException {
@@ -166,7 +165,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                     if (!isIncomingCall) {
                         new WebRTC().createOffer(userId);
                     }
-
                 }
 
                 @Override public void deny() {
@@ -181,8 +179,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         registerSensor();
 
         headsetPluginReciver = new HeadsetPluginReciver();
-
-
     }
 
     @Override public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -218,7 +214,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 }
             }, 1000);
         }
-
     }
 
     private void initCallBack() {
@@ -226,8 +221,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             @Override public void onStatusChanged(final CallState callState) {
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
-                        txtStatus.setText(callState.toString());
-
+                        txtStatus.setText(getTextString(callState));
 
                         switch (callState) {
 
@@ -305,7 +299,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                 playSound(R.raw.igap_discounect);
                                 avLoadingIndicatorView.setVisibility(View.GONE);
                                 break;
-
                         }
                     }
                 });
@@ -313,11 +306,56 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         };
     }
 
+    private String getTextString(CallState callState) {
+
+        String result = "";
+
+        switch (callState) {
+
+            case SIGNALING:
+                result = getResources().getString(R.string.signaling);
+                break;
+            case INCAMING_CALL:
+                result = getResources().getString(R.string.incoming_call);
+                break;
+            case RINGING:
+                result = getResources().getString(R.string.ringing);
+                break;
+            case CONNECTING:
+                result = getResources().getString(R.string.connecting_call);
+                break;
+            case CONNECTED:
+                result = getResources().getString(R.string.connected);
+                break;
+            case DISCONNECTED:
+                result = getResources().getString(R.string.disconnected);
+                break;
+            case FAILD:
+                result = getResources().getString(R.string.faild);
+                break;
+            case REJECT:
+                result = getResources().getString(R.string.reject);
+                break;
+            case BUSY:
+                result = getResources().getString(R.string.busy);
+                break;
+            case NOT_ANSWERED:
+                result = getResources().getString(R.string.not_answered);
+                break;
+            case UNAVAILABLE:
+                result = getResources().getString(R.string.unavalable);
+                break;
+            case TOO_LONG:
+                result = getResources().getString(R.string.too_long);
+                break;
+        }
+
+        return result;
+    }
+
     //***************************************************************************************
 
-
     private void initComponent() {
-
 
         verticalSwipe = new VerticalSwipe();
         txtName = (TextView) findViewById(R.id.fcr_txt_name);
@@ -330,11 +368,10 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         txtTimer = (TextView) findViewById(R.id.fcr_txt_timer);
 
         if (isIncomingCall) {
-            txtStatus.setText(CallState.INCAMING_CALL.toString());
+            txtStatus.setText(R.string.incoming_call);
         } else {
-            txtStatus.setText(CallState.SIGNALING.toString());
+            txtStatus.setText(R.string.signaling);
         }
-
 
         /**
          * *************** layoutCallEnd ***************
@@ -370,10 +407,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             });
         }
 
-
-
-
-
         /**
          * *************** layoutChat ***************
          */
@@ -399,13 +432,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             });
         }
 
-
-
         /**
          * *************** layoutAnswer ***************
          */
 
-        final FrameLayout layoutAnswer = (FrameLayout) findViewById(R.id.fcr_layout_answer_call);
+        layoutAnswer = (FrameLayout) findViewById(R.id.fcr_layout_answer_call);
         btnAnswer = (MaterialDesignTextView) findViewById(R.id.fcr_btn_call);
 
         if (isIncomingCall) {
@@ -423,9 +454,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             });
         }
 
-
-
-
         /**
          * *********************************************
          */
@@ -438,7 +466,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 if (!isConnected) {
                     endCall();
                 }
-
             }
         });
 
@@ -547,7 +574,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                     btnEndCall.setVisibility(View.GONE);
                 }
             });
-
         }
     }
 
@@ -680,7 +706,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
     }
 
     private void muteMusic() {
@@ -745,11 +770,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 ringtonePlayer.setLooping(true);
                 ringtonePlayer.prepare();
                 ringtonePlayer.start();
-
             } catch (Exception e) {
             }
-
         }
+
+        startRingAnimation();
     }
 
     private void playSound(final int resSound) {
@@ -768,7 +793,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                         player.setAudioStreamType(AudioManager.STREAM_RING);
                     }
 
-
                     player.setLooping(true);
                     player.prepare();
                     player.start();
@@ -786,7 +810,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                         player.setAudioStreamType(AudioManager.STREAM_RING);
                     }
 
-
                     player.prepare();
                     player.setLooping(true);
                     player.start();
@@ -803,7 +826,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 ringtonePlayer.stop();
                 ringtonePlayer.release();
                 ringtonePlayer = null;
-
             }
         } catch (Exception e) {
 
@@ -831,6 +853,45 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         } catch (Exception e) {
 
         }
+
+        stopRingAnimation();
+    }
+
+    private void startRingAnimation() {
+
+        final int start = 2500;
+        final int duration = 500;
+
+        Animation animation1 = new TranslateAnimation(0, 0, 0, -getResources().getDimension(R.dimen.dp32));
+        animation1.setStartOffset(start);
+        animation1.setDuration(duration);
+        animation1.setRepeatMode(Animation.RESTART);
+        animation1.setRepeatCount(Animation.INFINITE);
+        animation1.setInterpolator(new OvershootInterpolator());
+        btnAnswer.setAnimation(animation1);
+
+        Animation animation3 = new TranslateAnimation(0, 0, 0, -getResources().getDimension(R.dimen.dp32));
+        animation3.setStartOffset(start + 150);
+        animation3.setDuration(duration - 150);
+        animation3.setRepeatMode(Animation.RESTART);
+        animation3.setInterpolator(new OvershootInterpolator());
+        animation3.setRepeatCount(Animation.INFINITE);
+        btnCircleChat.setAnimation(animation3);
+
+        Animation animation2 = new TranslateAnimation(0, 0, 0, -getResources().getDimension(R.dimen.dp32));
+        animation2.setStartOffset(start + 300);
+        animation2.setDuration(duration - 300);
+        animation2.setInterpolator(new OvershootInterpolator());
+        animation2.setRepeatMode(Animation.RESTART);
+        animation2.setRepeatCount(Animation.INFINITE);
+        btnEndCall.setAnimation(animation2);
+    }
+
+    private void stopRingAnimation() {
+
+        btnAnswer.clearAnimation();
+        btnEndCall.clearAnimation();
+        btnCircleChat.clearAnimation();
     }
 
     //*****************************  distance sensor  **********************************************************
@@ -864,8 +925,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         WindowManager.LayoutParams params = this.getWindow().getAttributes();
 
-        /** Turn on: */
-        params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
         params.screenBrightness = 1;
         this.getWindow().setAttributes(params);
 
@@ -878,8 +937,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
             WindowManager.LayoutParams params = this.getWindow().getAttributes();
 
-            /** Turn off: */
-            params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
             params.screenBrightness = 0;
             this.getWindow().setAttributes(params);
 
@@ -913,7 +970,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(headsetPluginReciver, filter);
-
     }
 
     @Override protected void onPause() {
@@ -922,7 +978,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         unregisterReceiver(headsetPluginReciver);
     }
-
 
     //***************************************************************************************
 
@@ -963,6 +1018,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             verticalSwipe.setView(view);
             canTouch = true;
             down = true;
+
+            stopRingAnimation();
         }
     }
 

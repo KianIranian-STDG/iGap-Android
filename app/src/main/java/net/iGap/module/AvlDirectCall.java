@@ -82,7 +82,7 @@ public class AvlDirectCall extends LinearLayout {
 
         Animation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setStartOffset(start);
-        fadeIn.setDuration(250);
+        fadeIn.setDuration(500);
         fadeIn.setRepeatCount(Animation.REVERSE);
         fadeIn.setRepeatCount(Animation.INFINITE);
 

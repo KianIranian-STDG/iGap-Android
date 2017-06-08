@@ -934,4 +934,18 @@
   <string name="please_set_hint">"Please set hint</string>
   <string name="invalid_email">"Your email is invalid</string>
 
+
+  <string name="not_answered">Not Answered ANSWERED</string>
+  <string name="unavalable">Unavalable</string>
+  <string name="too_long">Too Long</string>
+  <string name="signaling">Signaling</string>
+  <string name="incoming_call">Incoming Call</string>
+  <string name="ringing">Ringing</string>
+  <string name="connecting_call">Connecting</string>
+  <string name="connected">Connected</string>
+  <string name="disconnected">Disconnected</string>
+  <string name="faild">Faild</string>
+  <string name="reject">Reject</string>
+  <string name="busy">Busy</string>
+
 </resources>
