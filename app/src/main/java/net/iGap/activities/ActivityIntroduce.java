@@ -219,7 +219,12 @@ public class ActivityIntroduce extends ActivityEnhanced {
         }
 
         txtSkip = (TextView) findViewById(R.id.int_txt_skip);
-        txtSkip.setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        Drawable mDrawableSkip = ContextCompat.getDrawable(context, R.drawable.background_skip);
+        mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            txtSkip.setBackground(mDrawableSkip);
+        }
 
         logoIgap = (ImageView) findViewById(R.id.int_img_logo_introduce);
 
