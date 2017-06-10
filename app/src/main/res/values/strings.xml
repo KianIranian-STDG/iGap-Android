@@ -947,5 +947,7 @@
   <string name="reject">Reject</string>
   <string name="busy">Busy</string>
 
+  <string name="not_answerd_call">"UnAnswered Call"</string>
+
 
 </resources>

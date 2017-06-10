@@ -377,14 +377,6 @@ import org.parceler.Parcel;
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
             message.setLogMessage(HelperLogMessage.logMessage(roomId, input.getAuthor(), input.getLog(), message.getMessageId()));
 
-            if (input.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
-                if (G.authorHash.equals(input.getAuthor().getHash())) {
-                    message.setShowMessage(false);
-                    message.setShowTime(false);
-                }
-            }
-
-
         }
         if (input.hasContact()) {
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));

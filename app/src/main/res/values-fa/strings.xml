@@ -949,5 +949,6 @@
   <string name="reject">رد تماس</string>
   <string name="busy">مشغول</string>
 
+  <string name="not_answerd_call">"تماس بدون جواب"</string>
 
 </resources>
