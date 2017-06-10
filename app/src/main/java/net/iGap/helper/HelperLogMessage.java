@@ -277,8 +277,12 @@ public class HelperLogMessage {
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case MISSED_VOICE_CALL:
-                persianResult = authorName + " " + logMessage;
-                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+                // persianResult = authorName + " " + logMessage;
+                //  linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+
+                persianResult = englishResult = logMessage;
+                linkInfoEnglish = linlInfoPersian = "";
+
                 break;
         }
 
