@@ -1009,6 +1009,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
+                        if (ActivityChat.onComplete != null) {
+                            ActivityChat.onComplete.complete(false, roomId + "", "");
+                        }
                     }
                 }).negativeText(R.string.B_cancel).show();
 
