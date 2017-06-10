@@ -24,7 +24,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.enums.Security;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByAnswers;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByToken;
-import net.iGap.request.RequestUserTwoStepVerificationResendVerifyEmail;
+import net.iGap.request.RequestUserTwoStepVerificationRequestRecoveryToken;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +64,7 @@ public class FragmentSecurityRecovery extends Fragment {
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
+        new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecovertyToken();
 
         Bundle bundle = this.getArguments();
 
@@ -115,7 +115,7 @@ public class FragmentSecurityRecovery extends Fragment {
         txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
+                new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecovertyToken();
                 final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
