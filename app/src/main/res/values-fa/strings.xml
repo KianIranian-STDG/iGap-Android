@@ -345,7 +345,7 @@
   <string name="waiting_for_network">"در انتظار اتصال به اینترنت"</string>
   <string name="connecting">"در حال برقراری ارتباط"</string>
   <string name="updating">"در حال به‌روزرسانی"</string>
-  <string name="last_seen_recently">"به تازگی"</string>
+  <string name="last_seen_recently">"همین حالا"</string>
   <string name="member">"اعضا"</string>
   <string name="exception">"خطا:"</string>
   <string name="please_enter_phone_number">"لطفاً شماره تماس را وارد کنید."</string>
