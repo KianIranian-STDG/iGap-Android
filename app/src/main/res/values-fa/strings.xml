@@ -952,6 +952,6 @@
   <string name="invalid_email_token">"Your email token is invalid"</string>
   <string name="invalid_question_token">"Your answer is invalid"</string>
 
-  <string name="not_answerd_call">"تماس بدون جواب"</string>
+  <string name="not_answerd_call">"به تماس شما پاسخ نداد و یا تماس شما ناموفق بود"</string>
 
 </resources>
