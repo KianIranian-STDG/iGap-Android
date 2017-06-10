@@ -6647,30 +6647,20 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = (recyclerView.getLayoutManager()).getChildCount();
+                totalItemCount = (recyclerView.getLayoutManager()).getItemCount();
+                firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                if (!firsInitScrollPositionMessageLoader) {
-                    lastPositionMessageLoader = lastVisiblePosition;
-                    firsInitScrollPositionMessageLoader = true;
-                }
-
-                int state = lastPositionMessageLoader - lastVisiblePosition;
-                if (state > 0) { // up
-
+                if (firstVisiblePosition < scrollEnd) {
                     /**
                      * scroll to top
                      */
                     loadMessage(UP);
-
-                    lastPositionMessageLoader = lastVisiblePosition;
-                } else if (state < 0) { //down
-
+                } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
                     /**
                      * scroll to bottom
                      */
                     loadMessage(DOWN);
-
-                    lastPositionMessageLoader = lastVisiblePosition;
                 }
             }
         };

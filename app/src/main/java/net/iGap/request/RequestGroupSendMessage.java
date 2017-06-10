@@ -13,7 +13,7 @@ package net.iGap.request;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupSendMessage;
 
-public class RequestGroupSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02 PM] - change builder to force use newBuilder
+public class RequestGroupSendMessage {
     ProtoGroupSendMessage.GroupSendMessage.Builder groupSendMessage;
 
     public RequestGroupSendMessage newBuilder(ProtoGlobal.RoomMessageType messageType, long roomId) {
