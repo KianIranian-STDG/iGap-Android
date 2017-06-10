@@ -949,8 +949,8 @@
   <string name="reject">رد تماس</string>
   <string name="busy">مشغول</string>
 
-  <string name="invalid_email_token">"Your email token is invalid"</string>
-  <string name="invalid_question_token">"Your answer is invalid"</string>
+  <string name="invalid_email_token">"کد تایید پست الکترونیکی نادرست است"</string>
+  <string name="invalid_question_token">"پاسخ شما نادرست است"</string>
 
   <string name="not_answerd_call">"به تماس شما پاسخ نداد و یا تماس شما ناموفق بود"</string>
 
