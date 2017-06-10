@@ -83,7 +83,7 @@ public class HelperGetAction {
                 Realm realm = Realm.getDefaultInstance();
 
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, latestStruct.userId).findFirst();
-                if (realmRegisteredInfo != null) {
+                if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName().length() > 0) {
                     String action;
                     if (HelperCalander.isLanguagePersian) {
                         if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
