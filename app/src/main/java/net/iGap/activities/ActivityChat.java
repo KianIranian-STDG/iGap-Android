@@ -5451,13 +5451,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                                     // remove deleted message from adapter
                                     mAdapter.removeMessage(messageId);
-                                    if (mAdapter.getItemCount() > 0) {
-                                        txtEmptyMessages.setVisibility(View.GONE);
-                                    } else {
-                                        txtEmptyMessages.setVisibility(View.VISIBLE);
-                                    }
-
-
                                     // remove tag from edtChat if the message has deleted
                                     if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
                                         if (messageID.mMessage.messageID.equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
@@ -5468,6 +5461,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
                             }
+                        }
+
+                        if (mAdapter.getItemCount() > 0) {
+                            txtEmptyMessages.setVisibility(View.GONE);
+                        } else {
+                            txtEmptyMessages.setVisibility(View.VISIBLE);
                         }
                     }
                 });
