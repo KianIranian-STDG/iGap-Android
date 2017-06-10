@@ -40,15 +40,15 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
-        @Override public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
+        @Override
+        public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
 
             if (item instanceof TimeItem) {
                 if (item.isSelected()) v.performLongClick();
             } else {
                 if (iMessageItem != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
 
-                    if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || item.mMessage.status.equalsIgnoreCase(
-                        ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                    if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
 
                         if (item.isSelected()) v.performLongClick();
                         return true;
@@ -87,7 +87,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         withOnPreLongClickListener(this);
         withOnLongClickListener(longClickListener);
         withOnClickListener(new OnClickListener<Item>() {
-            @Override public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
+            @Override
+            public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
                 if (getSelectedItems().size() == 0) {
                     if (iMessageItem != null && item.mMessage != null && item.mMessage.senderID != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
                         if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
@@ -101,7 +102,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     }
                 } else {
                     if (!(item instanceof TimeItem)) {
-                        if (!item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        if (item.mMessage != null && item.mMessage.status != null && !item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             v.performLongClick();
                         }
                     }
@@ -371,7 +372,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
-    @Override public void notifyAdapterItemRemoved(int position) {
+    @Override
+    public void notifyAdapterItemRemoved(int position) {
         super.notifyAdapterItemRemoved(position);
 
         if (onChatMessageSelectionChanged != null) {
@@ -379,7 +381,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
     }
 
-    @Override public void deselect() {
+    @Override
+    public void deselect() {
         super.deselect();
 
         if (onChatMessageSelectionChanged != null) {
@@ -397,7 +400,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         ((FrameLayout) v).setForeground(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    @Override public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
+    @Override
+    public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
         if (!item.isSelected()) {
             makeSelected(v);
         } else {

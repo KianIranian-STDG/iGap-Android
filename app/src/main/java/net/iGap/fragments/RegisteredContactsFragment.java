@@ -56,8 +56,10 @@ import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.request.RequestUserContactsGetList;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.R.string.contacts;
 
 public class RegisteredContactsFragment extends Fragment {
 
@@ -79,11 +81,14 @@ public class RegisteredContactsFragment extends Fragment {
         return new RegisteredContactsFragment();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
-    @Override public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
 
@@ -136,7 +141,7 @@ public class RegisteredContactsFragment extends Fragment {
             if (title.equals("New Chat")) {
                 title = G.context.getString(R.string.New_Chat);
             } else if (title.equals("Contacts")) {
-                title = G.context.getString(R.string.contacts);
+                title = G.context.getString(contacts);
             } else if (title.equals("call")) {
                 title = G.context.getString(R.string.call_with);
             }
@@ -151,7 +156,8 @@ public class RegisteredContactsFragment extends Fragment {
         edtSearch = (EditText) view.findViewById(R.id.menu_edt_search);
         final TextView txtSearch = (TextView) view.findViewById(R.id.menu_btn_search);
         txtSearch.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 txtClose.setVisibility(View.VISIBLE);
                 edtSearch.setVisibility(View.VISIBLE);
                 edtSearch.setFocusable(true);
@@ -161,7 +167,8 @@ public class RegisteredContactsFragment extends Fragment {
         });
 
         txtClose.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (edtSearch.getText().length() > 0) {
                     edtSearch.setText("");
                 } else {
@@ -176,11 +183,13 @@ public class RegisteredContactsFragment extends Fragment {
         });
 
         edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 Realm realm = Realm.getDefaultInstance();
 
@@ -198,30 +207,28 @@ public class RegisteredContactsFragment extends Fragment {
                 realm.close();
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
         vgAddContact.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 FragmentAddContact fragment = FragmentAddContact.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
                 fragment.setArguments(bundle);
-                mActivity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .addToBackStack(null)
-                    .add(R.id.fragmentContainer, fragment)
-                    .commit();
+                mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).add(R.id.fragmentContainer, fragment).commit();
             }
         });
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.menu_txtBack);
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.menu_ripple_txtBack);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 // close and remove fragment from stack
 
                 //mActivity.getSupportFragmentManager().popBackStack();
@@ -245,27 +252,21 @@ public class RegisteredContactsFragment extends Fragment {
 
         realm.close();
 
-        ///**
-        // * after send contact automatically do get contact list
-        // * so if !G.isSendContact try for get list for getting
-        // * contacts if other account imported to server
-        // */
-        //if (!G.isSendContact || contacts.size() == 0) {
-        //    /**
-        //     * if contacts size is zero send request for get contacts list
-        //     * for insuring that contacts not exist really or not
-        //     */
-        //    new RequestUserContactsGetList().userContactGetList();
-        //}
-
+        /**
+         * if contacts size is zero send request for get contacts list
+         * for insuring that contacts not exist really or not
+         */
+        if (results.size() == 0) {
+            new RequestUserContactsGetList().userContactGetList();
+        }
     }
-
 
 
     private void hideProgress() {
 
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 prgWaiting.setVisibility(View.GONE);
             }
@@ -274,19 +275,22 @@ public class RegisteredContactsFragment extends Fragment {
 
     private void showProgress() {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 prgWaiting.setVisibility(View.VISIBLE);
             }
         });
     }
 
-    @Override public void onAttach(Activity activity) {
+    @Override
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
     }
 
-    @Override public void onDetach() {
+    @Override
+    public void onDetach() {
         super.onDetach();
         hideProgress();
     }
@@ -319,7 +323,8 @@ public class RegisteredContactsFragment extends Fragment {
                 topLine = (View) view.findViewById(R.id.topLine);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         if (isCallAction) {
                             mActivity.getSupportFragmentManager().popBackStack();
@@ -334,12 +339,14 @@ public class RegisteredContactsFragment extends Fragment {
                             showProgress();
 
                             HelperPublicMethod.goToChatRoom(false, realmResults.get(getPosition()).getId(), new HelperPublicMethod.Oncomplet() {
-                                @Override public void complete() {
+                                @Override
+                                public void complete() {
                                     hideProgress();
                                     mActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
                                 }
                             }, new HelperPublicMethod.OnError() {
-                                @Override public void error() {
+                                @Override
+                                public void error() {
                                     hideProgress();
                                 }
                             });
@@ -353,7 +360,8 @@ public class RegisteredContactsFragment extends Fragment {
             }
         }
 
-        @Override public ContactListAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        @Override
+        public ContactListAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
             View v = inflater.inflate(R.layout.contact_item, viewGroup, false);
 
             if (count != realmResults.size()) {
@@ -361,7 +369,8 @@ public class RegisteredContactsFragment extends Fragment {
                 count = realmResults.size();
 
                 realmRecyclerView.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         realmRecyclerView.getRecycleView().removeItemDecoration(decoration);
                         decoration = new StickyRecyclerHeadersDecoration(new StikyHeader(realmResults));
@@ -373,7 +382,8 @@ public class RegisteredContactsFragment extends Fragment {
             return new ViewHolder(v);
         }
 
-        @Override public void onBindRealmViewHolder(final ContactListAdapter.ViewHolder viewHolder, int i) {
+        @Override
+        public void onBindRealmViewHolder(final ContactListAdapter.ViewHolder viewHolder, int i) {
 
             String header = realmResults.get(i).getDisplay_name();
 
@@ -412,11 +422,13 @@ public class RegisteredContactsFragment extends Fragment {
         private void setAvatar(final ViewHolder holder, long userId) {
 
             HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
-                @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+                @Override
+                public void onAvatarGet(final String avatarPath, long ownerId) {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                 }
 
-                @Override public void onShowInitials(final String initials, final String color) {
+                @Override
+                public void onShowInitials(final String initials, final String color) {
                     holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                 }
             });
@@ -433,23 +445,27 @@ public class RegisteredContactsFragment extends Fragment {
             this.realmResults = realmResults;
         }
 
-        @Override public long getHeaderId(int position) {
+        @Override
+        public long getHeaderId(int position) {
             return realmResults.get(position).getDisplay_name().toString().toUpperCase().charAt(0);
         }
 
-        @Override public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        @Override
+        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
             return new RecyclerView.ViewHolder(view) {
             };
         }
 
-        @Override public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+        @Override
+        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
 
             CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
             textView.setText(realmResults.get(position).getDisplay_name().toUpperCase().substring(0, 1));
         }
 
-        @Override public int getItemCount() {
+        @Override
+        public int getItemCount() {
             return realmResults.size();
         }
     }

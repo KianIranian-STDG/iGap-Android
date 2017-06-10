@@ -392,7 +392,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private Boolean isNotJoin = false; // this value will be trued when come to this chat with username
     private boolean isCheckBottomSheet = false;
     private boolean firsInitScrollPosition = false;
-    private boolean firsInitScrollPositionMessageLoader = false;
     private boolean initHash = false;
     private boolean initAttach = false;
     private boolean initEmoji = false;
@@ -417,7 +416,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private int countNewMessage = 0;
     private int lastPosition = 0;
-    private int lastPositionMessageLoader = 0;
     private int unreadCount = 0;
     private int latestRequestCode;
     private int messageCounter = 0;
