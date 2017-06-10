@@ -340,7 +340,7 @@
   <string name="waiting_for_network">Waiting for network…</string>
   <string name="connecting">Connecting…</string>
   <string name="updating">Updating…</string>
-  <string name="last_seen_recently">Last Seen Recently</string>
+  <string name="last_seen_recently">Just Now</string>
   <string name="member">Members</string>
   <string name="save_ok">Saved</string>
   <string name="exception">Exception:</string>
@@ -514,10 +514,10 @@
   <string name="long_time_ago">long time ago</string>
   <string name="last_month">last month</string>
   <string name="last_week">last week</string>
-  <string name="online">online</string>
-  <string name="exactly">exactly</string>
-  <string name="recently">recently</string>
-  <string name="support">support</string>
+  <string name="online">Online</string>
+  <string name="exactly">Exactly</string>
+  <string name="recently">Recently</string>
+  <string name="support">Support</string>
   <string name="service_notification">Notification Service</string>
   <string name="B_edit">Edit</string>
   <string name="left">Leave</string>
@@ -913,7 +913,7 @@
   <string name="iGap_has_crashed">iGap has crashed !</string>
   <string name="iGap_has_crashed_reload">Reset</string>
   <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop . We are aware of this unexpected error occurred. Please be sure we are fixing this problem  , all you have to do is only click "Reset" .</string>
-  <string name="who_is_allowed_to_call">Who can access to voice call</string>
+  <string name="who_is_allowed_to_call">Who can call me ?</string>
   <string name="miss">Miss Call</string>
   <string name="not_answer">Not Answer</string>
 
