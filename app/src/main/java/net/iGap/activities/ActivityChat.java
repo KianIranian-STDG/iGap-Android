@@ -6853,15 +6853,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
                     }
 
-                    if (structMessageInfos.size() > 0) {
-                        txtEmptyMessages.setVisibility(View.GONE);
-                    } else {
-                        if (prgWaiting != null) {
-                            prgWaiting.setVisibility(View.GONE);
-                        }
-                        txtEmptyMessages.setVisibility(View.VISIBLE);
-                    }
-
                     if (directionString.equals(UP.toString())) {
                         switchAddItem(structMessageInfos, true);
                     } else {
@@ -6885,9 +6876,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (prgWaiting != null) {
-                                        prgWaiting.setVisibility(View.GONE);
-                                    }
                                     txtEmptyMessages.setVisibility(View.VISIBLE);
                                 }
                             });
