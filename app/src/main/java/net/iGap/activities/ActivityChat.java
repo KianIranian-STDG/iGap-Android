@@ -3091,6 +3091,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             case FILE_TEXT:
             case IMAGE_TEXT:
             case VIDEO_TEXT:
+            case AUDIO_TEXT:
             case GIF_TEXT:
                 //itemsRes = R.array.fileTextMessageDialogItems;
 

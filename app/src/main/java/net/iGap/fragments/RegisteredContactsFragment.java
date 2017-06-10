@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -59,6 +60,7 @@ import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserContactsGetList;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.G.context;
 import static net.iGap.R.string.contacts;
 
 public class RegisteredContactsFragment extends Fragment {
@@ -401,11 +403,14 @@ public class RegisteredContactsFragment extends Fragment {
             Realm realm = Realm.getDefaultInstance();
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmResults.get(i).getId()).findFirst();
             if (realmRegisteredInfo != null) {
-
+                viewHolder.subtitle.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
                 if (realmRegisteredInfo.getStatus() != null) {
                     if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                         viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(realmResults.get(i).getId(), realmRegisteredInfo.getLastSeen(), false));
                     } else {
+                        if (realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.ONLINE.toString())) {
+                            viewHolder.subtitle.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
+                        }
                         viewHolder.subtitle.setText(realmRegisteredInfo.getStatus());
                     }
                 }
