@@ -933,7 +933,8 @@
   <string name="please_set_password">"Please set password</string>
   <string name="please_set_hint">"Please set hint</string>
   <string name="invalid_email">"Your email is invalid</string>
-
+  <string name="yes">"بله"</string>
+  <string name="no">"خیر"</string>
 
   <string name="not_answered">Not Answered ANSWERED</string>
   <string name="unavalable">Unavalable</string>
@@ -947,5 +948,10 @@
   <string name="faild">Faild</string>
   <string name="reject">Reject</string>
   <string name="busy">Busy</string>
+
+  <string name="invalid_email_token">"Your email token is invalid"</string>
+  <string name="invalid_question_token">"Your answer is invalid"</string>
+
+  <string name="not_answerd_call">"تماس بدون جواب"</string>
 
 </resources>

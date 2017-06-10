@@ -546,5 +546,23 @@
         android:maxLines="1"
         android:singleLine="true"
         />
+
+    <TextView
+        android:id="@+id/tsv_txtResendConfirmEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp32"
+        android:gravity="start"
+        android:text="@string/your_resend_email_skip"
+        android:textColor="@color/green"
+        android:textSize="@dimen/dp14"
+        android:padding="@dimen/dp16"
+        android:visibility="visible"
+        />
+
   </LinearLayout>
 </LinearLayout>

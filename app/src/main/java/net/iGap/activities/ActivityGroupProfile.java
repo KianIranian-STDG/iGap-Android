@@ -1296,36 +1296,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
     }
 
-    //=============get last avatar
-    //TODO [Saeed Mozaffari] [2016-12-03 10:18 AM] - in do ta method ro az inja baradram va be surate global estefade konam
-
-    public RealmList<RealmAvatar> getAvatars() {
-        RealmList<RealmAvatar> avatars = new RealmList<>();
-        Realm realm = Realm.getDefaultInstance();
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findAllSorted(RealmAvatarFields.ID, Sort.ASCENDING)) {
-            avatars.add(avatar);
-        }
-        realm.close();
-        return avatars;
-    }
-
-    public RealmAvatar getLastAvatar() {
-        RealmList<RealmAvatar> avatars = getAvatars();
-        if (avatars.isEmpty()) {
-            return null;
-        }
-        // make sure return last avatar which has attachment
-        for (int i = avatars.size() - 1; i >= 0; i--) {
-            RealmAvatar avatar = getAvatars().get(i);
-            if (avatar.getFile() != null) {
-                return avatar;
-            }
-        }
-        return null;
-    }
-
-    //=============
-
     private void addMemberToGroup() {
 
         Realm realm = Realm.getDefaultInstance();

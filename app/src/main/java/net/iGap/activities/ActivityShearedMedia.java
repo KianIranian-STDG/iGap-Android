@@ -596,7 +596,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         gLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (mNewList.get(position).isItemTime) {
+                if (position < mNewList.size() && mNewList.get(position).isItemTime) {
                     return spanItemCount;
                 } else {
                     return 1;

@@ -155,7 +155,7 @@ public class HelperLogMessage {
         /**
          * detect log message
          */
-        logMessage = logMessageString(messageLog.getType());
+        logMessage = logMessageString(messageLog.getType(), author);
         String englishResult = "";
 
         /**
@@ -277,8 +277,12 @@ public class HelperLogMessage {
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case MISSED_VOICE_CALL:
-                persianResult = authorName + " " + logMessage;
-                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+                // persianResult = authorName + " " + logMessage;
+                //  linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+
+                persianResult = englishResult = logMessage;
+                linkInfoEnglish = linlInfoPersian = "";
+
                 break;
         }
 
@@ -287,7 +291,7 @@ public class HelperLogMessage {
         return (englishResult + "\n" + persianResult + "\n" + linkInfoEnglish + "\n" + linlInfoPersian);
     }
 
-    private static String logMessageString(ProtoGlobal.RoomMessageLog.Type type) {
+    private static String logMessageString(ProtoGlobal.RoomMessageLog.Type type, ProtoGlobal.RoomMessage.Author author) {
 
         int message = 0;
 
@@ -331,7 +335,13 @@ public class HelperLogMessage {
                 message = R.string.MISSED_SCREEN_SHARE;
                 break;
             case MISSED_VOICE_CALL:
-                message = R.string.MISSED_VOICE_CALL;
+
+                if (G.authorHash.equals(author.getHash())) {
+                    message = R.string.not_answerd_call;
+                } else {
+                    message = R.string.MISSED_VOICE_CALL;
+                }
+
                 break;
             case MISSED_VIDEO_CALL:
                 message = R.string.MISSED_VIDEO_CALL;

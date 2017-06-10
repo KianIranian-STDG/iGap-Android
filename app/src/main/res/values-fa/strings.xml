@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
- <!-- Check connect to internet Page introduce app -->
+  <!-- Check connect to internet Page introduce app -->
   <string name="text_i_introduce_page1">"گپ"</string>
   <string name="text_line_1_introduce_page1">"آی"</string>
   <string name="text_line_2_introduce_page1">"ارتباطی بی حد و مرز"</string>
   <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آی گپ بسازید."</string>
   <string name="text_line_4_introduce_page1">"فقط چند دقیقه وقت میبرد تا شما هم به جمع آی گپی ها بپیوندید."</string>
-  
+
   <!-- Page 2 introduce app -->
   <string name="text_line_1_introduce_page2">"امنیت در آی گپ"</string>
   <string name="text_line_2_introduce_page2">" آی گپ یک ارتباط امن و مطمئن را بین شما ، دوستان و خانوادتان برقرار میکند. آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است .  "</string>
@@ -20,19 +20,18 @@
   <string name="text_line_1_introduce_page4">"انتقال فایل در آی گپ"</string>
   <string name="text_line_2_introduce_page4">"شما می توانید هر فایلی را با هر پسوند و حجمی انتقال دهید و یا در بستر ابری خود ذخیره کنید . هر آنچه دوست دارید را بدون محدودیت با هر کس که می خواهید به اشتراک بگذارید."</string>
 
-  
+
   <!-- Page 5 introduce app -->
   <string name="text_line_1_introduce_page5">"تماس صوتی در آی گپ"</string>
   <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آی گپ با سایر افرادی که آی گپ دارند تماس صوتی بصورت کاملا رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی کنید ، تماس صوتی آی گپ P2P بوده و حتی سرور های آی گپ هم در جابجایی صدای شما دخالت ندارند."</string>
-  
+
   <!-- Page 6 introduce app -->
   <string name="btn_start_page6">"همین حالا شروع کنید"</string>
   <string name="text_line_1_introduce_page6">"آی گپ رایگان بوده و هست !"</string>
   <string name="text_line_2_introduce_page6">"بیش از این شما را خسته نمی کنیم! آی ‌گپ کاملاً رایگان بوده و هست! همین حالا دنیای خود را در آی گپ بسازید."</string>
 
 
-
- <!-- Fill Profile User  -->
+  <!-- Fill Profile User  -->
   <string name="pu_title_profileUser">"پروفایل خود را تکمیل کنید"</string>
   <string name="pu_desc_profileUser">"نام مستعار خود را وارد کرده و برای خود عکس پروفایل انتخاب نمایید"</string>
   <string name="pu_addPhoto_profileUser">"عکس پروفایل"</string>
@@ -346,7 +345,7 @@
   <string name="waiting_for_network">"در انتظار اتصال به اینترنت"</string>
   <string name="connecting">"در حال برقراری ارتباط"</string>
   <string name="updating">"در حال به‌روزرسانی"</string>
-  <string name="last_seen_recently">"به تازگی"</string>
+  <string name="last_seen_recently">"همین حالا"</string>
   <string name="member">"اعضا"</string>
   <string name="exception">"خطا:"</string>
   <string name="please_enter_phone_number">"لطفاً شماره تماس را وارد کنید."</string>
@@ -923,32 +922,36 @@
   <string name="please_write_your_reasons">لطفا دلیل خود را بنویسید</string>
   <string name="error_check_password">به دلیل تلاش پیاپی، رمزعبور برای مدتی غیرفعال است.</string>
 
-  <string name="your_confirm_email">Enter Your confirm Email code</string>
-  <string name="your_confirm_email_skip">Skip</string>
-  <string name="your_resend_email_skip">Resend confirm code</string>
-  <string name="invalid_verify_email_code">Invalid verify email code</string>
-  <string name="resend_verify_email_code">We\'re resend verify email code on your email</string>
-  <string name="enter_verify_email_code">Please enter verify email code</string>
-  <string name="invalid_password">Password is invalid</string>
-  <string name="please_set_password">"Please set password</string>
-  <string name="please_set_hint">"Please set hint</string>
-  <string name="invalid_email">"Your email is invalid</string>
-  <string name="yes">"بله</string>
-  <string name="no">"خیر</string>
+  <string name="your_confirm_email">لطفا کد تایید پست الکرتونیکی وارد کنید</string>
+  <string name="your_confirm_email_skip">بیخیال</string>
+  <string name="your_resend_email_skip">ارسال مجدد کد تایید</string>
+  <string name="invalid_verify_email_code">کد تایید نامعتبر است</string>
+  <string name="resend_verify_email_code"> مجددا کد تایید برا برای شما ارسال کردیم</string>
+  <string name="enter_verify_email_code">لطفا کد تایید را وارد کنید</string>
+  <string name="invalid_password">کلمه عبور نامعتبر است</string>
+  <string name="please_set_password">تنظیم کلمه عبور</string>
+  <string name="please_set_hint">تنظیم یاداوری</string>
+  <string name="invalid_email">پست الکترونیکی نا معتبر</string>
+  <string name="yes">"بله"</string>
+  <string name="no">"خیر"</string>
 
 
-  <string name="not_answered">Not Answered ANSWERED</string>
-  <string name="unavalable">Unavalable</string>
-  <string name="too_long">Too Long</string>
-  <string name="signaling">Signaling</string>
-  <string name="incoming_call">Incoming Call</string>
-  <string name="ringing">Ringing</string>
-  <string name="connecting_call">Connecting</string>
-  <string name="connected">Connected</string>
-  <string name="disconnected">Disconnected</string>
-  <string name="faild">Faild</string>
-  <string name="reject">Reject</string>
-  <string name="busy">Busy</string>
+  <string name="not_answered">پاسخی دریافت نشد</string>
+  <string name="unavalable">در دسترس نیست</string>
+  <string name="too_long">خیلی طولانی</string>
+  <string name="signaling">سیگنالینگ</string>
+  <string name="incoming_call">تماس ورودی</string>
+  <string name="ringing">در حال زنگ خوردن</string>
+  <string name="connecting_call">در حال اتصال</string>
+  <string name="connected">متصل شد</string>
+  <string name="disconnected">قطع شد</string>
+  <string name="faild">ناموفق</string>
+  <string name="reject">رد تماس</string>
+  <string name="busy">مشغول</string>
 
+  <string name="invalid_email_token">"کد تایید پست الکترونیکی نادرست است"</string>
+  <string name="invalid_question_token">"پاسخ شما نادرست است"</string>
+
+  <string name="not_answerd_call">"به تماس شما پاسخ نداد و یا تماس شما ناموفق بود"</string>
 
 </resources>

@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserTwoStepVerificationRecoverPasswordByAnswers;
 
 public class UserTwoStepVerificationRecoverPasswordByAnswersResponse extends MessageHandler {
@@ -46,6 +47,18 @@ public class UserTwoStepVerificationRecoverPasswordByAnswersResponse extends Mes
 
     @Override public void error() {
         super.error();
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+
+        if (majorCode == 10134) {
+            if (G.onRecoverySecurityPassword != null) {
+                G.onRecoverySecurityPassword.errorRecoveryByQuestion();
+            }
+        }
+
     }
 }
 

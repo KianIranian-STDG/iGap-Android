@@ -139,13 +139,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             >
-          <net.iGap.module.AvlDirectCall
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:layout_marginBottom="@dimen/dp10"
-              android:orientation="vertical"
-              ></net.iGap.module.AvlDirectCall>
+          <!--<net.iGap.module.AvlDirectCall-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:layout_gravity="center"-->
+          <!--android:layout_marginBottom="@dimen/dp10"-->
+          <!--android:orientation="vertical"-->
+          <!--&gt;</net.iGap.module.AvlDirectCall>-->
 
 
           <net.iGap.module.MaterialDesignTextView

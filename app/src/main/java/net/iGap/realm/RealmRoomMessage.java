@@ -374,14 +374,6 @@ import org.parceler.Parcel;
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
             message.setLogMessage(HelperLogMessage.logMessage(roomId, input.getAuthor(), input.getLog(), message.getMessageId()));
 
-            if (input.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
-                if (G.authorHash.equals(input.getAuthor().getHash())) {
-                    message.setShowMessage(false);
-                    message.setShowTime(false);
-                }
-            }
-
-
         }
         if (input.hasContact()) {
             message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
@@ -875,17 +867,19 @@ import org.parceler.Parcel;
 
     public static void isEmojiInText(RealmRoomMessage roomMessage, String message) {
 
-        //final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(message);
+        //EmojiEditTextE et = new EmojiEditTextE(G.context);
+        //et.setText(message);
         //
-        //EmojiHandler.addEmojis(G.context, spannableStringBuilder, 30);
+        //final SpannableStringBuilder spannableStringBuilder = (SpannableStringBuilder) et.getText();
         //
-        //if (spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), EmojiSpan.class).length > 0) {
+        //if (spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), DynamicDrawableSpan.class).length > 0) {
         //    roomMessage.setHasEmojiInText(true);
         //} else {
         //    roomMessage.setHasEmojiInText(false);
         //}
 
-        roomMessage.setHasEmojiInText(true); //after complete code un comment the above code
+        roomMessage.setHasEmojiInText(true);
+
     }
 
     public static long getReplyMessageId(RealmRoomMessage realmRoomMessage) {
@@ -945,5 +939,40 @@ import org.parceler.Parcel;
         }
         realm.close();
         return false;
+    }
+
+    public static void clearHistoryMessage(final long roomId) {
+        final Realm realm = Realm.getDefaultInstance();
+
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+        if (realmClientCondition != null && realmClientCondition.isLoaded() && realmClientCondition.isValid()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+                    if (realmRoom == null || !realmRoom.isLoaded() || !realmRoom.isValid()) {
+                        return;
+                    }
+
+                    if (realmRoom.getLastMessage() != null) {
+                        realmClientCondition.setClearId(realmRoom.getLastMessage().getMessageId());
+                        G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, realmRoom.getLastMessage().getMessageId());
+                    }
+                    realmRoom.setUnreadCount(0);
+                    realmRoom.setLastMessage(null);
+                    realmRoom.setFirstUnreadMessage(null);
+                    realmRoom.setUpdatedTime(0);
+
+                    RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
+                    realmRoomMessages.deleteAllFromRealm();
+                }
+            });
+
+            if (G.onClearChatHistory != null) {
+                G.onClearChatHistory.onClearChatHistory();
+            }
+        }
+        realm.close();
     }
 }

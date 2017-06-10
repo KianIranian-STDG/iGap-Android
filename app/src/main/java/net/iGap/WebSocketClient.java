@@ -28,6 +28,8 @@ import net.iGap.request.RequestWrapper;
 import net.iGap.response.HandleResponse;
 
 import static net.iGap.Config.ALLOW_RECONNECT_AGAIN_NORMAL;
+import static net.iGap.G.latestHearBeatTime;
+import static net.iGap.G.latestResponse;
 
 public class WebSocketClient {
 
@@ -61,6 +63,8 @@ public class WebSocketClient {
                             webSocketClient.disconnect();
                         }
                     } else {
+                        latestHearBeatTime = System.currentTimeMillis();
+                        latestResponse = System.currentTimeMillis();
                         reconnectQueueLimitation = 0;
                         G.socketConnection = true;
                         HelperConnectionState.connectionState(ConnectionState.CONNECTING);

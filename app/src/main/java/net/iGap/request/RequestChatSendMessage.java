@@ -13,7 +13,7 @@ package net.iGap.request;
 import net.iGap.proto.ProtoChatSendMessage;
 import net.iGap.proto.ProtoGlobal;
 
-public class RequestChatSendMessage { //TODO [Saeed Mozaffari] [2016-08-29 1:02 PM] - change
+public class RequestChatSendMessage {
     // builder to force use newBuilder
     ProtoChatSendMessage.ChatSendMessage.Builder chatSendMessage;
 

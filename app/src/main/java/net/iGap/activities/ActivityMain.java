@@ -1269,22 +1269,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void muteNotification(final Long id, final boolean mute) {
-
         Realm realm = Realm.getDefaultInstance();
-
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst().setMute(!mute);
             }
         });
-
         realm.close();
     }
 
     private void clearHistory(Long id) {
-
-        ActivityChat.clearHistoryMessage(id);
+        RealmRoomMessage.clearHistoryMessage(id);
     }
 
     private void onSelectRoomMenu(String message, RealmRoom item) {

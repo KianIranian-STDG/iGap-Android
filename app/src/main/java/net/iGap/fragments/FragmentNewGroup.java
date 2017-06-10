@@ -668,7 +668,6 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
             @Override
             public void onError(int majorCode, int minorCode) {
 
-                //TODO [Saeed Mozaffari] [2017-01-30 1:12 PM] - check get activity null state in app, hint: use handler instead of activity.
                 hideProgressBar();
             }
 
@@ -751,58 +750,6 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 });
             }
         });
-
-
-        /*if (prefix.equals("NewChanel")) {
-            HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
-                @Override
-                public void onAvatarAdd(final String avatarPath) {
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //TODO [Saeed Mozaffari] [2016-12-07 3:50 PM] - also for avatar timeout do this actions
-
-                            txtNextStep.setEnabled(true);
-                            prgWaiting.setVisibility(View.GONE);
-                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            setImage(avatarPath);
-                            startRoom();
-                        }
-                    });
-
-                }
-            });
-
-        } else {
-            Realm realm = Realm.getDefaultInstance();
-
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
-                    realmAvatar.setOwnerId(roomId);
-                    realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
-
-                    try {
-                        AndroidUtils.copyFile(new File(pathSaveImage), new File(G.DIR_IMAGE_USER + "/" + avatar.getFile().getToken() + "_" + avatar.getFile().getName()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            realm.close();
-
-            // have to be inside a delayed handler
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    setImage(roomId);
-                }
-            }, 500);
-
-            getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
-        }*/
     }
 
     @Override
@@ -825,7 +772,6 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         fragment.setArguments(bundle);
         mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragment, "contactGroup_fragment").commitAllowingStateLoss();
         mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-        //ActivityMain.mLeftDrawerLayout.closeDrawer();
     }
 
     private void startChannelRoom(long roomId) {

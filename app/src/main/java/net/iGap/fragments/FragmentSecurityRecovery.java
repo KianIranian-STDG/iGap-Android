@@ -24,7 +24,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.enums.Security;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByAnswers;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByToken;
-import net.iGap.request.RequestUserTwoStepVerificationResendVerifyEmail;
+import net.iGap.request.RequestUserTwoStepVerificationRequestRecoveryToken;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,12 +59,12 @@ public class FragmentSecurityRecovery extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
+        new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecovertyToken();
 
         Bundle bundle = this.getArguments();
 
@@ -115,7 +115,7 @@ public class FragmentSecurityRecovery extends Fragment {
         txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
+                new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecovertyToken();
                 final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
@@ -170,12 +170,35 @@ public class FragmentSecurityRecovery extends Fragment {
                 }
 
                 @Override
+                public void errorRecoveryByEmail() {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeKeyboard(view);
+                            error(getString(R.string.invalid_email_token));
+                        }
+                    });
+                }
+
+                @Override
                 public void recoveryByQuestion(String token) {
                     if (page == Security.SETTING) {
                         pageSetting();
                     } else {
                         pageRegister();
                     }
+                }
+
+                @Override
+                public void errorRecoveryByQuestion() {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeKeyboard(view);
+                            error(getString(R.string.invalid_question_token));
+
+                        }
+                    });
                 }
             };
         }
@@ -228,21 +251,33 @@ public class FragmentSecurityRecovery extends Fragment {
     }
 
     private void closeKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        if (mActivity != null) {
+            try {
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            } catch (IllegalStateException e) {
+                e.getStackTrace();
+            }
+        }
     }
 
     private void error(String error) {
-        Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-        vShort.vibrate(200);
-        final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
-        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                snack.dismiss();
+        if (mActivity != null) {
+            try {
+                Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                vShort.vibrate(200);
+                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
+            } catch (IllegalStateException e) {
+                e.getStackTrace();
             }
-        });
-        snack.show();
+        }
     }
 
     @Override

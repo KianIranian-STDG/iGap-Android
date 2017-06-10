@@ -774,7 +774,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             }
         }
 
-        startRingAnimation();
+        //  startRingAnimation();
     }
 
     private void playSound(final int resSound) {
@@ -854,7 +854,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         }
 
-        stopRingAnimation();
+        //  stopRingAnimation();
     }
 
     private void startRingAnimation() {
@@ -1019,7 +1019,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             canTouch = true;
             down = true;
 
-            stopRingAnimation();
+            //  stopRingAnimation();
         }
     }
 

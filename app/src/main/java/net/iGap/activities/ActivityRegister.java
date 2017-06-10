@@ -1456,6 +1456,17 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     }
 
     @Override
+    public void errorRecoveryByEmail() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                closeKeyboard(txtOk);
+                error(getString(R.string.invalid_email_token));
+            }
+        });
+    }
+
+    @Override
     public void recoveryByQuestion(final String tokenR) {
 
         runOnUiThread(new Runnable() {
@@ -1466,6 +1477,17 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 txtOk.setVisibility(View.GONE);
                 vgMainLayout.setVisibility(View.VISIBLE);
                 userLogin(token);
+            }
+        });
+    }
+
+    @Override
+    public void errorRecoveryByQuestion() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                closeKeyboard(txtOk);
+                error(getString(R.string.invalid_question_token));
             }
         });
     }
