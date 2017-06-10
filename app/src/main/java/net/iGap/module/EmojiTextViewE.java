@@ -4,9 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import com.vanniktech.emoji.EmojiTextView;
 
-/**
- * Created by android3 on 6/3/2017.
- */
 
 public class EmojiTextViewE extends EmojiTextView {
 
