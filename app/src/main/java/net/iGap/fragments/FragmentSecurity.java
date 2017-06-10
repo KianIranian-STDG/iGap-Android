@@ -32,6 +32,7 @@ import net.iGap.request.RequestUserTwoStepVerificationChangeRecoveryEmail;
 import net.iGap.request.RequestUserTwoStepVerificationChangeRecoveryQuestion;
 import net.iGap.request.RequestUserTwoStepVerificationCheckPassword;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
+import net.iGap.request.RequestUserTwoStepVerificationResendVerifyEmail;
 import net.iGap.request.RequestUserTwoStepVerificationUnsetPassword;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyRecoveryEmail;
 
@@ -56,6 +57,7 @@ public class FragmentSecurity extends Fragment {
     private ViewGroup rootChangeEmail;
     private ViewGroup rootChangeHint;
     private ViewGroup rootConfirmedEmail;
+    private TextView txtResendConfirmEmail;
     private RippleView rippleOk;
     private int page;
     private static final int CHANGE_HINT = 1;
@@ -89,6 +91,7 @@ public class FragmentSecurity extends Fragment {
         rootChangeEmail = (ViewGroup) view.findViewById(R.id.tsv_rootChangeEmail);
         rootChangeHint = (ViewGroup) view.findViewById(R.id.tsv_rootChangeHint);
         rootConfirmedEmail = (ViewGroup) view.findViewById(R.id.tsv_rootConfirmedEmail);
+        txtResendConfirmEmail = (TextView) view.findViewById(R.id.tsv_txtResendConfirmEmail);
 
         rippleOk = (RippleView) view.findViewById(R.id.verifyPassword_rippleOk);
         final EditText edtCheckPassword = (EditText) view.findViewById(R.id.setPassword_edtCheckPassword);
@@ -138,6 +141,21 @@ public class FragmentSecurity extends Fragment {
 
                 }
                 closeKeyboard(v);
+            }
+        });
+
+        txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
+                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
+                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
             }
         });
 
