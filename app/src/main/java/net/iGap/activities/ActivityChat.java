@@ -6495,7 +6495,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         long fetchMessageId = 0; // with this value realm will be queried for get message
         if (hasUnread() || hasSavedState()) {
 
-            if (!firstUnreadMessage.isManaged() || !firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
+            if (firstUnreadMessage == null || !firstUnreadMessage.isManaged() || !firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
                 firstUnreadMessage = getFirstUnreadMessage(realm);
             }
 

@@ -56,7 +56,6 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.interfaces.OnChatDelete;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserContactDelete;
@@ -71,7 +70,6 @@ import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.SUID;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
@@ -79,19 +77,13 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmCallConfig;
-import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
-import net.iGap.realm.RealmOfflineDelete;
-import net.iGap.realm.RealmOfflineDeleteFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactImport;
@@ -1146,40 +1138,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         new RequestUserInfo().userInfo(userId);
     }
 
-    private void deleteChat() {
-        G.onChatDelete = new OnChatDelete() {
-            @Override
-            public void onChatDelete(long roomId) {
-            }
-
-            @Override
-            public void onChatDeleteError(int majorCode, int minorCode) {
-
-            }
-        };
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-
-        if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, roomId).findFirst() == null) {
-            RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
-            realmOfflineDelete.setOfflineDelete(userId);
-
-            realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
-
-            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().deleteFromRealm();
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
-
-            new RequestChatDelete().chatDelete(roomId);
-
-            realm.close();
-            finish();
-            // call this for finish activity chat when delete chat
-            if (G.onDeleteChatFinishActivity != null) {
-                G.onDeleteChatFinishActivity.onFinish();
-            }
-        }
-
-    }
 
     @Override
     public void onUserUpdateStatus(long userId, final long time, final String status) {
