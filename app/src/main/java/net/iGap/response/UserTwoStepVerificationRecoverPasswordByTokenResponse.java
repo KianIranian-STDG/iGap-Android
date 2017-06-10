@@ -44,6 +44,12 @@ public class UserTwoStepVerificationRecoverPasswordByTokenResponse extends Messa
 
     @Override public void error() {
         super.error();
+
+        if (G.onRecoverySecurityPassword != null) {
+            G.onRecoverySecurityPassword.errorRecoveryByEmail();
+            ;
+        }
+
     }
 }
 

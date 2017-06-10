@@ -947,6 +947,9 @@
   <string name="reject">Reject</string>
   <string name="busy">Busy</string>
 
+  <string name="invalid_email_token">"Your email token is invalid"</string>
+  <string name="invalid_question_token">"Your answer is invalid"</string>
+
   <string name="not_answerd_call">"UnAnswered Call"</string>
 
 

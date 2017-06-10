@@ -46,6 +46,12 @@ public class UserTwoStepVerificationRecoverPasswordByAnswersResponse extends Mes
 
     @Override public void error() {
         super.error();
+
+
+
+        if (G.onRecoverySecurityPassword != null) {
+            G.onRecoverySecurityPassword.errorRecoveryByEmail();
+        }
     }
 }
 

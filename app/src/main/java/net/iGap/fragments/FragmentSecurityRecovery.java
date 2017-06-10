@@ -59,7 +59,7 @@ public class FragmentSecurityRecovery extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
@@ -170,12 +170,35 @@ public class FragmentSecurityRecovery extends Fragment {
                 }
 
                 @Override
+                public void errorRecoveryByEmail() {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeKeyboard(view);
+                            error(getString(R.string.invalid_email_token));
+                        }
+                    });
+                }
+
+                @Override
                 public void recoveryByQuestion(String token) {
                     if (page == Security.SETTING) {
                         pageSetting();
                     } else {
                         pageRegister();
                     }
+                }
+
+                @Override
+                public void errorRecoveryByQuestion(String tokenR) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeKeyboard(view);
+                            error(getString(R.string.invalid_question_token));
+
+                        }
+                    });
                 }
             };
         }
