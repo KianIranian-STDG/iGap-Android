@@ -1,11 +1,13 @@
 package net.iGap.activities;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
+import net.iGap.G;
 import net.iGap.R;
 
 public class ActivityCustomError extends Activity {
@@ -20,6 +22,8 @@ public class ActivityCustomError extends Activity {
         //errorDetailsText.setText(CustomActivityOnCrash.getStackTraceFromIntent(getIntent()));
 
         Button restartButton = (Button) findViewById(R.id.restart_button);
+        restartButton.setBackgroundColor(Color.parseColor(G.appBarColor));
+
         //
         final CaocConfig config = CustomActivityOnCrash.getConfigFromIntent(getIntent());
 

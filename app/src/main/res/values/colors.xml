@@ -32,7 +32,7 @@
     //mo
     <!--toolbar-->
 
-    <color name="toolbar_background">#41c6c4</color>
+    <color name="toolbar_background">#00B0BF</color>
     <color name="toolbar_transparent">#bf000000</color>
 
     <!--REGISTER PAGE-->
