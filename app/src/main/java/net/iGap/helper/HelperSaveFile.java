@@ -70,6 +70,8 @@ public class HelperSaveFile {
                 return false;
             }
 
+            Boolean shudCopy = true;
+
             String destinationPath = " ";
 
             switch (folderType) {
@@ -100,14 +102,24 @@ public class HelperSaveFile {
 
                     if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).exists()) {
                         destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath() + "/" + fileName;
+                    } else {
+                        HelperSaveFile.saveVideoToGallary(filePath, true);
+                        shudCopy = false;
                     }
 
                     break;
+
+                case image:
+
+                    savePicToGallary(filePath, true);
+                    shudCopy = false;
+                    break;
             }
 
-            AndroidUtils.copyFile(src, new File(destinationPath));
-
-            Toast.makeText(G.currentActivity, sucsesMessageSRC, Toast.LENGTH_SHORT).show();
+            if (shudCopy) {
+                AndroidUtils.copyFile(src, new File(destinationPath));
+                Toast.makeText(G.currentActivity, sucsesMessageSRC, Toast.LENGTH_SHORT).show();
+            }
 
             return true;
         } catch (Exception e) {
