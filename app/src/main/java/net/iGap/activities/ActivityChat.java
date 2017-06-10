@@ -1605,8 +1605,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             isMuteNotification = realmRoom.getMute();
         }
 
-
-        if (chatType == CHAT && chatPeerId != 134) {
+        if (chatType == CHAT && !isChatReadOnly) {
 
             if (G.userId != chatPeerId) {
 
@@ -4926,7 +4925,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != G.userId) {
                     if (phoneNumber == null) {
-                        if (realmContacts == null && chatType == CHAT && chatPeerId != 134) {
+                        if (realmContacts == null && chatType == CHAT && !isChatReadOnly) {
                             initSpamBarLayout(realmRegisteredInfo);
                             vgSpamUser.setVisibility(View.VISIBLE);
                         }
