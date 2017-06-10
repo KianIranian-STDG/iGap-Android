@@ -420,6 +420,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private int latestRequestCode;
     private int messageCounter = 0;
     private int selectedPosition = 0;
+    private boolean isNoMessage = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -2825,6 +2826,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     if (roomId == mRoomId) {
                                         // I'm sender . but another account sent this message and i received it.
                                         if (addToView) {
+                                            txtEmptyMessages.setVisibility(View.GONE);
                                             switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
                                         }
                                         setBtnDownVisible(realmRoomMessage);
@@ -3954,6 +3956,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     // message doesn't exists
                     if (message == null) {
+                        txtEmptyMessages.setVisibility(View.GONE);
                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
                         if (!G.userLogin) {
                             G.handler.postDelayed(new Runnable() {
@@ -6016,6 +6019,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                txtEmptyMessages.setVisibility(View.GONE);
                                 switchAddItem(new ArrayList<>(Collections.singletonList(finalMessageInfo)), false);
                             }
                         });
