@@ -950,7 +950,7 @@
   <string name="invalid_email_token">"Your email token is invalid"</string>
   <string name="invalid_question_token">"Your answer is invalid"</string>
 
-  <string name="not_answerd_call">"UnAnswered Call"</string>
+  <string name="not_answerd_call">"Did not respond to your call or failed."</string>
 
 
 </resources>
