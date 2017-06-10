@@ -390,6 +390,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private Boolean isNotJoin = false; // this value will be trued when come to this chat with username
     private boolean isCheckBottomSheet = false;
     private boolean firsInitScrollPosition = false;
+    private boolean firsInitScrollPositionMessageLoader = false;
     private boolean initHash = false;
     private boolean initAttach = false;
     private boolean initEmoji = false;
@@ -414,6 +415,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private int countNewMessage = 0;
     private int lastPosition = 0;
+    private int lastPositionMessageLoader = 0;
     private int unreadCount = 0;
     private int latestRequestCode;
     private int messageCounter = 0;
@@ -1541,7 +1543,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.onHelperSetAction = new OnHelperSetAction() {
             @Override
             public void onAction(ProtoGlobal.ClientAction ClientAction) {
-                //TODO [Saeed Mozaffari] [2017-02-16 11:28 AM] - if chatType was null get roomType with roomId
                 HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
             }
         };
@@ -3612,10 +3613,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public void clearHistory(long chatId) {
         llScrollNavigate.setVisibility(View.GONE);
         saveMessageIdPositionState(0);
-        clearHistoryMessage(chatId);
+        RealmRoomMessage.clearHistoryMessage(chatId);
         addToView = true;
         txtEmptyMessages.setVisibility(View.VISIBLE);
-
     }
 
 
@@ -4095,52 +4095,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 deleteChat(item);
                 break;
         }
-    }
-
-    public static void clearHistoryMessage(final long chatId) {
-
-        // make request for clearing messages
-        final Realm realm = Realm.getDefaultInstance();
-
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirst();
-
-        if (realmClientCondition != null && realmClientCondition.isLoaded() && realmClientCondition.isValid()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
-
-                    if (realmRoom.isLoaded() && realmRoom.isValid() && realmRoom.getLastMessage() != null) {
-                        realmClientCondition.setClearId(realmRoom.getLastMessage().getMessageId());
-
-                        G.clearMessagesUtil.clearMessages(realmRoom.getType(), chatId, realmRoom.getLastMessage().getMessageId());
-                    }
-
-                    RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll();
-                    for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-                        if (realmRoomMessage != null) {
-                            // delete chat history message
-                            realmRoomMessage.deleteFromRealm();
-                        }
-                    }
-
-                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst();
-                    if (room != null) {
-                        room.setUnreadCount(0);
-                        room.setLastMessage(null);
-                        room.setFirstUnreadMessage(null);
-                        room.setUpdatedTime(0);
-                    }
-                    // finally delete whole chat history
-                    realmRoomMessages.deleteAllFromRealm();
-                }
-            });
-
-            if (G.onClearChatHistory != null) {
-                G.onClearChatHistory.onClearChatHistory();
-            }
-        }
-        realm.close();
     }
 
     private void deleteChat(final int chatId) {
@@ -6678,7 +6632,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             switchAddItem(messageInfos, true);
         } else {
             switchAddItem(messageInfos, false);
-            if (hasSavedState()) { //TODO [Saeed Mozaffari] [2017-05-02 6:48 PM] - how keep state after add item to recycler view for avoid from find item position and scroll to position again
+            if (hasSavedState()) {
                 int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
                 LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
                 linearLayout.scrollToPositionWithOffset(position, 0);
@@ -6693,22 +6647,30 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                visibleItemCount = (recyclerView.getLayoutManager()).getChildCount();
-                totalItemCount = (recyclerView.getLayoutManager()).getItemCount();
-                firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
+                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                if (!firsInitScrollPositionMessageLoader) {
+                    lastPositionMessageLoader = lastVisiblePosition;
+                    firsInitScrollPositionMessageLoader = true;
+                }
 
-                //TODO [Saeed Mozaffari] [2017-05-07 10:28 AM] - check scroll to top and bottom
-                if (firstVisiblePosition < scrollEnd) {
+                int state = lastPositionMessageLoader - lastVisiblePosition;
+                if (state > 0) { // up
+
                     /**
                      * scroll to top
                      */
                     loadMessage(UP);
-                } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
+
+                    lastPositionMessageLoader = lastVisiblePosition;
+                } else if (state < 0) { //down
+
                     /**
                      * scroll to bottom
                      */
                     loadMessage(DOWN);
+
+                    lastPositionMessageLoader = lastVisiblePosition;
                 }
             }
         };
@@ -6927,7 +6889,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 public void run() {
                                     //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
                                     mAdapter.notifyDataSetChanged();
-                                    //recyclerView.removeOnScrollListener(scrollListener); // remove check for up and down
                                 }
                             });
                             isWaitingForHistoryUp = false;
@@ -7055,7 +7016,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void run() {
                 int progressIndex = 0;
                 if (direction == DOWN) {
-                    // direction down not tested yet
                     progressIndex = mAdapter.getAdapterItemCount() - 1;
                 }
                 if (progressState == SHOW) {

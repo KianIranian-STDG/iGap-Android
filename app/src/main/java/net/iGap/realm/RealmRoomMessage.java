@@ -946,4 +946,39 @@ import org.parceler.Parcel;
         realm.close();
         return false;
     }
+
+    public static void clearHistoryMessage(final long roomId) {
+        final Realm realm = Realm.getDefaultInstance();
+
+        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+        if (realmClientCondition != null && realmClientCondition.isLoaded() && realmClientCondition.isValid()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+                    if (realmRoom == null || !realmRoom.isLoaded() || !realmRoom.isValid()) {
+                        return;
+                    }
+
+                    if (realmRoom.getLastMessage() != null) {
+                        realmClientCondition.setClearId(realmRoom.getLastMessage().getMessageId());
+                        G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, realmRoom.getLastMessage().getMessageId());
+                    }
+                    realmRoom.setUnreadCount(0);
+                    realmRoom.setLastMessage(null);
+                    realmRoom.setFirstUnreadMessage(null);
+                    realmRoom.setUpdatedTime(0);
+
+                    RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
+                    realmRoomMessages.deleteAllFromRealm();
+                }
+            });
+
+            if (G.onClearChatHistory != null) {
+                G.onClearChatHistory.onClearChatHistory();
+            }
+        }
+        realm.close();
+    }
 }

@@ -44,7 +44,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmModel;
-import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -856,15 +855,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                         case 0:
                             String call = "+" + Long.parseLong(mPhone);
                             try {
-                                //                                        Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-                                //                                        phoneIntent.setData(Uri.parse("tel:" + call));
-                                //startActivity(phoneIntent); //TODO [Saeed Mozaffari] [2016-09-07 11:31 AM] - phone intent permission
                                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                                 callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
                                 callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(callIntent);
                             } catch (Exception ex) {
-
                                 ex.getStackTrace();
                             }
                             break;
@@ -1098,42 +1093,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         return items;
     }
 
-    //TODO [Saeed Mozaffari] [2016-10-15 3:31 PM] - clearHistory , DeleteChat , use in ActivityMain , ActivityChat , ActivityContactsProfile . mitunim method ha ro tekrar nakonim va ye ja bashe va az chand ja farakhani konim
     private void clearHistory() {
-
-        // make request for clearing messages
-        final Realm realm = Realm.getDefaultInstance();
-
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-        if (realmRoom != null && realmRoom.getLastMessage() != null) {
-            realmClientCondition.setClearId(realmRoom.getLastMessage().getMessageId());
-            G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, realmRoom.getLastMessage().getMessageId());
-        }
-
-        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
-        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-            if (realmRoomMessage != null) {
-                // delete chat history message
-                realmRoomMessage.deleteFromRealm();
-            }
-        }
-
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (room != null) {
-            room.setUnreadCount(0);
-            room.setLastMessage(null);
-        }
-        // finally delete whole chat history
-        realmRoomMessages.deleteAllFromRealm();
-
-        if (G.onClearChatHistory != null) {
-            G.onClearChatHistory.onClearChatHistory();
-        }
-
-        realm.close();
+        RealmRoomMessage.clearHistoryMessage(roomId);
     }
 
     private void deleteContact() {
