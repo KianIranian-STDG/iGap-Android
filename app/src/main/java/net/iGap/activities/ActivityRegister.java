@@ -1482,7 +1482,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     }
 
     @Override
-    public void errorRecoveryByQuestion(String tokenR) {
+    public void errorRecoveryByQuestion() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

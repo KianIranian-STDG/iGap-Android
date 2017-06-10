@@ -190,7 +190,7 @@ public class FragmentSecurityRecovery extends Fragment {
                 }
 
                 @Override
-                public void errorRecoveryByQuestion(String tokenR) {
+                public void errorRecoveryByQuestion() {
                     mActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

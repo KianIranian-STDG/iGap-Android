@@ -17,6 +17,6 @@ public interface OnRecoverySecurityPassword {
 
     void recoveryByQuestion(String tokenR);
 
-    void errorRecoveryByQuestion(String tokenR);
+    void errorRecoveryByQuestion();
 
 }
