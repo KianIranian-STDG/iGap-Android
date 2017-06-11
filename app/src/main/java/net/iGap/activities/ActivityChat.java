@@ -1928,7 +1928,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 /**
                  * have unread
                  */
-                if (countNewMessage > 0) {
+                if (countNewMessage > 0 && firstUnreadMessageInChat != null) {
                     /**
                      * if unread message is exist in list set position to this item and create
                      * unread layout otherwise should clear list and load from unread again
@@ -2071,6 +2071,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onClick(View view) {
 
+                final Realm realmMessage = Realm.getDefaultInstance();
+
                 txtEmptyMessages.setVisibility(View.GONE);
 
                 HelperSetAction.setCancel(mRoomId);
@@ -2111,17 +2113,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     final String message = getWrittenMessage();
                     if (!message.equals(messageInfo.messageText)) {
 
-                        realm.executeTransaction(new Realm.Transaction() {
+                        realmMessage.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
+                                RealmRoomMessage roomMessage = realmMessage.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
-                                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                                RealmClientCondition realmClientCondition = realmMessage.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
-                                RealmOfflineEdited realmOfflineEdited = realm.createObject(RealmOfflineEdited.class, SUID.id().get());
+                                RealmOfflineEdited realmOfflineEdited = realmMessage.createObject(RealmOfflineEdited.class, SUID.id().get());
                                 realmOfflineEdited.setMessageId(parseLong(messageInfo.messageID));
                                 realmOfflineEdited.setMessage(message);
-                                realmOfflineEdited = realm.copyToRealm(realmOfflineEdited);
+                                realmOfflineEdited = realmMessage.copyToRealm(realmOfflineEdited);
 
                                 realmClientCondition.getOfflineEdited().add(realmOfflineEdited);
 
@@ -2134,7 +2136,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                                 }
 
-                                RealmRoom rm = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                RealmRoom rm = realmMessage.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                 if (rm != null) {
                                     rm.setUpdatedTime(TimeUtils.currentLocalTime());
                                 }
@@ -2182,14 +2184,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         for (int i = 0; i < messages.length; i++) {
                             final String message = messages[i];
                             if (!message.isEmpty()) {
-                                final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                final RealmRoom room = realmMessage.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                 final String identity = Long.toString(SUID.id().get());
                                 final long currentTime = TimeUtils.currentLocalTime();
 
-                                realm.executeTransaction(new Realm.Transaction() {
+                                realmMessage.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
-                                        RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, parseLong(identity));
+                                        RealmRoomMessage roomMessage = realmMessage.createObject(RealmRoomMessage.class, parseLong(identity));
 
                                         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                                         roomMessage.setMessage(message);
@@ -2208,7 +2210,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                          *  user wants to replay to a message
                                          */
                                         if (userTriesReplay()) {
-                                            RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
+                                            RealmRoomMessage messageToReplay = realmMessage.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
                                             if (messageToReplay != null) {
                                                 roomMessage.setReplyTo(messageToReplay);
                                             }
@@ -2216,10 +2218,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     }
                                 });
 
-                                final RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(identity)).findFirst();
+                                final RealmRoomMessage roomMessage = realmMessage.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(identity)).findFirst();
 
                                 if (roomMessage != null) {
-                                    realm.executeTransaction(new Realm.Transaction() {
+                                    realmMessage.executeTransaction(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
                                             if (room != null) {
@@ -2230,10 +2232,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 }
 
                                 if (chatType == CHANNEL) {
-                                    realm.executeTransaction(new Realm.Transaction() {
+                                    realmMessage.executeTransaction(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
-                                            RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+                                            RealmChannelExtra realmChannelExtra = realmMessage.createObject(RealmChannelExtra.class);
                                             realmChannelExtra.setMessageId(parseLong(identity));
                                             realmChannelExtra.setThumbsUp("0");
                                             realmChannelExtra.setThumbsDown("0");
@@ -2280,6 +2282,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
                     }
                 }
+
+                realmMessage.close();
             }
         });
 
@@ -3371,8 +3375,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void onClick(View v) {
                 dialog.dismiss();
 
-                final String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath
-                    : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+                final String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
 
                 if (new File(_dPath).exists()) {
 
@@ -3412,16 +3415,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     if (_token != null && _token.length() > 0 && _size > 0) {
 
                         HelperDownloadFile.startDownload(_token, _cashid, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
-                            @Override public void OnProgress(String path, int progress) {
+                            @Override
+                            public void OnProgress(String path, int progress) {
 
                                 if (progress == 100) {
 
                                     runOnUiThread(new Runnable() {
-                                        @Override public void run() {
+                                        @Override
+                                        public void run() {
                                             if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
 
-                                                HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download,
-                                                    R.string.file_save_to_download_folder);
+                                                HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
                                             } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
                                                 HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
                                             } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
@@ -3439,7 +3443,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 }
                             }
 
-                            @Override public void OnError(String token) {
+                            @Override
+                            public void OnError(String token) {
 
                             }
                         });
