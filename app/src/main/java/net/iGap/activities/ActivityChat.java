@@ -1928,7 +1928,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 /**
                  * have unread
                  */
-                if (countNewMessage > 0 && firstUnreadMessageInChat != null) {
+                if (countNewMessage > 0) {
                     /**
                      * if unread message is exist in list set position to this item and create
                      * unread layout otherwise should clear list and load from unread again
@@ -1953,6 +1953,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         unreadCount = countNewMessage;
                         firstUnreadMessage = firstUnreadMessageInChat;
                         getMessages();
+
+                        if (firstUnreadMessage == null) {
+                            firstUnreadMessageInChat = null;
+                            resetMessagingValue();
+                            countNewMessage = 0;
+                            txtNewUnreadMessage.setVisibility(View.GONE);
+                            txtNewUnreadMessage.setText(countNewMessage + "");
+                            getMessages();
+                            return;
+                        }
 
                         int position1 = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
                         if (position1 > 0) {
@@ -6694,9 +6704,21 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         } else {
             /**
-             * send request to server for get message
+             * send request to server for get message.
+             *
+             * if direction is DOWN check again realmRoomMessage for detection
+             * that exist any message without checking deleted state and if
+             * exist use from that messageId instead of zero for getOnlineMessage
              */
-            getOnlineMessage(0, direction);
+            long oldMessageId = 0;
+            if (direction == DOWN) {
+                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findFirst();
+                if (realmRoomMessage != null) {
+                    oldMessageId = realmRoomMessage.getMessageId();
+                }
+            }
+
+            getOnlineMessage(oldMessageId, direction);
         }
 
         if (messageInfos.size() > 0) {

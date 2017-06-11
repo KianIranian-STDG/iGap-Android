@@ -32,7 +32,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -1717,7 +1716,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         ViewGroup ltKeepMedia = (ViewGroup) findViewById(R.id.st_layout_keepMedia);
         TextView txtKeepMedia = (TextView) findViewById(R.id.st_txt_keepMedia);
         boolean isForever = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
-        Log.i("KKKKKKK", "isForever: " + isForever);
         if (isForever) {
             txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
         } else {
@@ -1826,7 +1824,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         editor.apply();
 
                         for (Integer aWhich : which) {
-                            Log.i("JJJJ", "WIFI: " + aWhich);
 
                             if (aWhich == 0) {
                                 editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, aWhich);

@@ -64,9 +64,9 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                      */
                     RealmRoom.clearUnreadCount(chatUpdateStatus.getRoomId(), chatUpdateStatus.getUpdaterAuthorHash(), chatUpdateStatus.getStatus());
                     /**
-                     * find message from database and update its status
+                     * find message from realm that isn't SEEN and update status
                      */
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId()).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findFirst();
                     if (roomMessage != null) {
                         roomMessage.setStatus(chatUpdateStatus.getStatus().toString());
                         realm.copyToRealmOrUpdate(roomMessage);
