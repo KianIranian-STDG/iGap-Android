@@ -39,6 +39,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -256,6 +257,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     @Override
                     public void deny() {
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(SHP_SETTING.KEY_GET_CONTACT, true);
+                        editor.apply();
+
                         /**
                          * user not allowed to import contact, so client set
                          * isSendContact = true for avoid from try again
@@ -1019,6 +1025,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.i("SSS", "getChatList 5");
                     new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
                 }
             }).start();
