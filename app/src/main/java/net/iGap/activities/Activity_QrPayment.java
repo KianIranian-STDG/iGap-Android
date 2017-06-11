@@ -83,7 +83,6 @@ public class Activity_QrPayment extends ActivityEnhanced {
     @Override protected void onResume() {
         super.onResume();
 
-        initComponent.deSelectOtherView();
     }
 
     private class initComponent {
@@ -99,12 +98,10 @@ public class Activity_QrPayment extends ActivityEnhanced {
 
             findViewById(R.id.apqp_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-            CardView cardViewEComerece = (CardView) findViewById(R.id.aqp_cardview_e_commerece);
-            cardViewEComerece.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+            CardView cardViewShowTotal = (CardView) findViewById(R.id.apqp_card_view_show_total);
+            cardViewShowTotal.setCardBackgroundColor(Color.parseColor(G.appBarColor));
 
-                }
-            });
+
 
             initChargeBalance();
             initTransactiomHistory();
@@ -118,14 +115,11 @@ public class Activity_QrPayment extends ActivityEnhanced {
 
             txtChargeBalance = (TextView) findViewById(R.id.aqp_txt_charge_balance);
             txtChargeBalanceIcon = (TextView) findViewById(R.id.aqp_txt_icon_charge_balance);
+            setBackGround(txtChargeBalanceIcon, R.drawable.grey_charge_balance);
             cardViewChargeBAlance = (CardView) findViewById(R.id.aqp_card_view_charge_balance);
 
             cardViewChargeBAlance.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
-
-                    deSelectOtherView();
-
-                    toggleChargeBalance(true);
 
                     startActivity(new Intent(Activity_QrPayment.this, Activity_charge_balance.class));
                 }
@@ -136,14 +130,11 @@ public class Activity_QrPayment extends ActivityEnhanced {
 
             txtTransactionHistory = (TextView) findViewById(R.id.aqp_txt_transaction_history);
             txtTransactionHistoryIcon = (TextView) findViewById(R.id.aqp_txt_icon_transaction_history);
+            setBackGround(txtTransactionHistoryIcon, R.drawable.grey_transaction_history);
             cardViewTransactionHistory = (CardView) findViewById(R.id.aqp_card_view_transaction_history);
 
             cardViewTransactionHistory.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
-
-                    deSelectOtherView();
-
-                    toggleTransactionHistory(true);
 
                     startActivity(new Intent(Activity_QrPayment.this, Activity_transactionHistory.class));
                 }
@@ -154,14 +145,12 @@ public class Activity_QrPayment extends ActivityEnhanced {
 
             txtTransferMony = (TextView) findViewById(R.id.aqp_txt_transfer_mony);
             txtTransferMonyIcon = (TextView) findViewById(R.id.aqp_txt_icon_transfer_mony);
+            setBackGround(txtTransferMonyIcon, R.drawable.grey_transfer);
             cardViewTransferMony = (CardView) findViewById(R.id.aqp_card_view_transfer_mony);
 
             cardViewTransferMony.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
 
-                    deSelectOtherView();
-
-                    toggleTransferMony(true);
 
                     startActivity(new Intent(Activity_QrPayment.this, Activity_Transfer_mony.class));
                 }
@@ -172,14 +161,12 @@ public class Activity_QrPayment extends ActivityEnhanced {
 
             txtCreateQRCode = (TextView) findViewById(R.id.aqp_txt_create_qr_code);
             txtCreateQRCodeIcon = (TextView) findViewById(R.id.aqp_txt_icon_create_qr_code);
+            setBackGround(txtCreateQRCodeIcon, R.drawable.qr_code);
             cardViewCreateQRCode = (CardView) findViewById(R.id.aqp_card_view_crate_qr_code);
 
             cardViewCreateQRCode.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
 
-                    deSelectOtherView();
-
-                    toggleCreateQRCode(true);
 
                     startActivity(new Intent(Activity_QrPayment.this, Activity_CreateQRCode.class));
                 }
@@ -190,6 +177,7 @@ public class Activity_QrPayment extends ActivityEnhanced {
 
             txtPayViaQRCode = (TextView) findViewById(R.id.aqp_txt_pay_via_qr_code);
             txtPayViaQRCodeIcon = (TextView) findViewById(R.id.aqp_txt_icon_pay_via_qr_code);
+            setBackGround(txtPayViaQRCodeIcon, R.drawable.grey_pay_qr_code);
             cardViewPayViaQRCode = (CardView) findViewById(R.id.aqp_card_view_pay_via_qr_code);
 
             cardViewPayViaQRCode.setOnClickListener(new View.OnClickListener() {
@@ -198,9 +186,6 @@ public class Activity_QrPayment extends ActivityEnhanced {
                     try {
                         HelperPermision.getCameraPermission(Activity_QrPayment.this, new OnGetPermission() {
                             @Override public void Allow() {
-                                deSelectOtherView();
-
-                                togglePayViaQRCode(true);
 
                                 startActivity(new Intent(Activity_QrPayment.this, Activity_payViaQRCode.class));
                             }
@@ -220,14 +205,12 @@ public class Activity_QrPayment extends ActivityEnhanced {
 
             txtChargeOut = (TextView) findViewById(R.id.aqp_txt_charge_out);
             txtChargeOutIcon = (TextView) findViewById(R.id.aqp_txt_icon_charge_out);
+            setBackGround(txtChargeOutIcon, R.drawable.grey_charge_out);
             cardViewChargeOut = (CardView) findViewById(R.id.aqp_card_view_charge_out);
 
             cardViewChargeOut.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
 
-                    deSelectOtherView();
-
-                    toggleChargeOut(true);
 
                     startActivity(new Intent(Activity_QrPayment.this, Activity_ChargeOut.class));
                 }
@@ -236,114 +219,9 @@ public class Activity_QrPayment extends ActivityEnhanced {
 
         //*********************************************************   deSelect view       ***********
 
-        private void deSelectOtherView() {
 
-            switch (action) {
 
-                case chargeBalance:
-                    toggleChargeBalance(false);
-                    break;
-                case transactionHistory:
-                    toggleTransactionHistory(false);
-                    break;
-                case transferMony:
-                    toggleTransferMony(false);
-                    break;
-                case crateQRCode:
-                    toggleCreateQRCode(false);
-                    break;
-                case payViaQRCode:
-                    togglePayViaQRCode(false);
-                    break;
-                case chargeOut:
-                    toggleChargeOut(false);
-                    break;
-            }
-        }
 
-        private void toggleChargeBalance(boolean isSelect) {
-
-            if (isSelect) {
-                txtChargeBalance.setTextColor(Color.WHITE);
-                setBackGround(txtChargeBalanceIcon, R.drawable.white_charge_balance);
-                cardViewChargeBAlance.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.green));
-                action = Action.chargeBalance;
-            } else {
-                txtChargeBalance.setTextColor(Color.GRAY);
-                setBackGround(txtChargeBalanceIcon, R.drawable.grey_charge_balance);
-                cardViewChargeBAlance.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.white_s1));
-            }
-        }
-
-        private void toggleTransactionHistory(boolean isSelect) {
-
-            if (isSelect) {
-                txtTransactionHistory.setTextColor(Color.WHITE);
-                setBackGround(txtTransactionHistoryIcon, R.drawable.white_transaction_history);
-                cardViewTransactionHistory.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.green));
-                action = Action.transactionHistory;
-            } else {
-                txtTransactionHistory.setTextColor(Color.GRAY);
-                setBackGround(txtTransactionHistoryIcon, R.drawable.grey_transaction_history);
-                cardViewTransactionHistory.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.white_s1));
-            }
-        }
-
-        private void toggleTransferMony(boolean isSelect) {
-
-            if (isSelect) {
-                txtTransferMony.setTextColor(Color.WHITE);
-                setBackGround(txtTransferMonyIcon, R.drawable.white_transfer);
-                cardViewTransferMony.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.green));
-                action = Action.transferMony;
-            } else {
-                txtTransferMony.setTextColor(Color.GRAY);
-                setBackGround(txtTransferMonyIcon, R.drawable.grey_transfer);
-                cardViewTransferMony.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.white_s1));
-            }
-        }
-
-        private void toggleCreateQRCode(boolean isSelect) {
-
-            if (isSelect) {
-                txtCreateQRCode.setTextColor(Color.WHITE);
-                setBackGround(txtCreateQRCodeIcon, R.drawable.white_create_qr_code);
-                cardViewCreateQRCode.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.green));
-                action = Action.crateQRCode;
-            } else {
-                txtCreateQRCode.setTextColor(Color.GRAY);
-                setBackGround(txtCreateQRCodeIcon, R.drawable.grey_create_qr_code);
-                cardViewCreateQRCode.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.white_s1));
-            }
-        }
-
-        private void togglePayViaQRCode(boolean isSelect) {
-
-            if (isSelect) {
-                txtPayViaQRCode.setTextColor(Color.WHITE);
-                setBackGround(txtPayViaQRCodeIcon, R.drawable.white_pay_qr_code);
-                cardViewPayViaQRCode.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.green));
-                action = Action.payViaQRCode;
-            } else {
-                txtPayViaQRCode.setTextColor(Color.GRAY);
-                setBackGround(txtPayViaQRCodeIcon, R.drawable.grey_pay_qr_code);
-                cardViewPayViaQRCode.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.white_s1));
-            }
-        }
-
-        private void toggleChargeOut(boolean isSelect) {
-
-            if (isSelect) {
-                txtChargeOut.setTextColor(Color.WHITE);
-                setBackGround(txtChargeOutIcon, R.drawable.white_charge_out);
-                cardViewChargeOut.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.green));
-                action = Action.chargeOut;
-            } else {
-                txtChargeOut.setTextColor(Color.GRAY);
-                setBackGround(txtChargeOutIcon, R.drawable.grey_charge_out);
-                cardViewChargeOut.setCardBackgroundColor(getColor(Activity_QrPayment.this, R.color.white_s1));
-            }
-        }
     }
 
     private void setBackGround(View view, int redDrawable) {
