@@ -27,8 +27,11 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -52,6 +55,7 @@ import android.widget.TextView;
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.gigamole.navigationtabstrip.NavigationTabStrip;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import io.realm.Realm;
@@ -61,6 +65,7 @@ import io.realm.RealmViewHolder;
 import io.realm.Sort;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import net.iGap.Config;
 import net.iGap.G;
@@ -70,6 +75,8 @@ import net.iGap.fragments.ContactGroupFragment;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.fragments.FragmentIgapSearch;
+import net.iGap.fragments.FragmentMain;
+import net.iGap.fragments.FragmentMap;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
@@ -215,6 +222,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initTabStrip();
+
+
         activityMain = this;
 
         progressBar = (ProgressBar) findViewById(R.id.ac_progress_bar_waiting);
@@ -337,6 +347,77 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }, 5000);
         }
     }
+
+    //*******************************************************************************************************************************************
+
+    private ViewPager mViewPager;
+    private ArrayList<Fragment> pages = new ArrayList<Fragment>();
+
+    private void initTabStrip() {
+
+        final NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
+        navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_rss_feed),
+            getString(R.string.md_phone), getString(R.string.md_room));
+        navigationTabStrip.setTabIndex(0, true);
+        navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp24));
+        navigationTabStrip.setStripColor(Color.RED);
+        navigationTabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override public void onPageSelected(int position) {
+
+                Log.e("dddddd", "onPageSelected   " + position);
+            }
+
+            @Override public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        navigationTabStrip.setOnTabStripSelectedIndexListener(new NavigationTabStrip.OnTabStripSelectedIndexListener() {
+            @Override public void onStartTabSelected(String title, int index) {
+                Log.e("dddddd", "onStartTabSelected   " + title + "   " + index);
+            }
+
+            @Override public void onEndTabSelected(String title, int index) {
+                Log.e("dddddd", "onEndTabSelected   " + title + "   " + index);
+            }
+        });
+
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
+        pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
+        pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
+        pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
+        pages.add(FragmentCall.newInstance());
+        pages.add(FragmentMap.getInctance(43.54, 52.56, FragmentMap.Mode.sendPosition));
+
+        //  mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager()));
+
+        navigationTabStrip.setViewPager(mViewPager);
+    }
+
+    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        SampleFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override public Fragment getItem(int i) {
+
+            return pages.get(i);
+        }
+
+        @Override public int getCount() {
+            return pages.size();
+        }
+    }
+
+    //******************************************************************************************************************************
+
 
     /**
      * send client condition
