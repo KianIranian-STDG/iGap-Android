@@ -1872,7 +1872,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         mAdapter = new MessagesAdapter<>(this, this, this);
 
-        mAdapter.withFilterPredicate(new IItemAdapter.Predicate<AbstractMessage>() {
+        mAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AbstractMessage>() {
             @Override
             public boolean filter(AbstractMessage item, CharSequence constraint) {
                 return !item.mMessage.messageText.toLowerCase().contains(constraint.toString().toLowerCase());
