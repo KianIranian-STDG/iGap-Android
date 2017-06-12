@@ -1943,6 +1943,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                      */
 
                     firstUnreadMessage = firstUnreadMessageInChat;
+                    if (!firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
+                        resetAndGetFromEnd();
+                        return;
+                    }
                     int position = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
                     if (position > 0) {
 
@@ -1963,12 +1967,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         getMessages();
 
                         if (firstUnreadMessage == null) {
-                            firstUnreadMessageInChat = null;
-                            resetMessagingValue();
-                            countNewMessage = 0;
-                            txtNewUnreadMessage.setVisibility(View.GONE);
-                            txtNewUnreadMessage.setText(countNewMessage + "");
-                            getMessages();
+                            resetAndGetFromEnd();
                             return;
                         }
 
@@ -3827,6 +3826,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 });
             }
         });
+    }
+
+
+    private void resetAndGetFromEnd() {
+        firstUnreadMessageInChat = null;
+        resetMessagingValue();
+        countNewMessage = 0;
+        txtNewUnreadMessage.setVisibility(View.GONE);
+        txtNewUnreadMessage.setText(countNewMessage + "");
+        getMessages();
     }
 
     private ArrayList<Parcelable> getMessageStructFromSelectedItems() {
