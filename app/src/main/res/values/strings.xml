@@ -270,7 +270,7 @@
   <string name="edited">Edited</string>
   <string name="today">Today</string>
   <string name="yesterday">Yesterday</string>
-  <string name="clean_log">Clear Call logs</string>
+  <string name="clean_log">Clear Call log</string>
 
 
   <!-- array -->
@@ -918,7 +918,7 @@
   <string name="not_answer">Not Answer</string>
 
   <string name="nothing">Nothing</string>
-  <string name="are_you_sure_clear_call_logs">Are you sure you want to clear voice call logs ?</string>
+  <string name="are_you_sure_clear_call_logs">Are you sure you want to clear voice call log?</string>
   <string name="please_write_your_reasons">Please write your reasons</string>
   <string name="your_confirm_email">Enter Your confirm Email code</string>
   <string name="your_confirm_email_skip">Skip</string>
