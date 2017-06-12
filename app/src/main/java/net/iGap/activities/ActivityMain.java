@@ -408,24 +408,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //navigationView.setNavigationItemSelectedListener(this);
 
-        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-            String username = realmUserInfo.getUserInfo().getDisplayName();
-            String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
-
-            imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
-            EmojiTextViewE txtNavName = (EmojiTextViewE) findViewById(R.id.lm_txt_user_name);
-            TextView txtNavPhone = (TextView) findViewById(R.id.lm_txt_phone_number);
-            txtNavName.setText(username);
-            txtNavPhone.setText(phoneNumber);
-
-            if (HelperCalander.isLanguagePersian) {
-                txtNavPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavPhone.getText().toString()));
-                txtNavName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavName.getText().toString()));
-            }
-            new RequestUserInfo().userInfo(realmUserInfo.getUserId());
-            setImage(realmUserInfo.getUserId());
-        }
+        setDrawerInfo(true);
 
         findViewById(R.id.lm_layout_header).setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -1406,6 +1389,34 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.deletedRoomList.clear();
     }
 
+    /**
+     * set drawer info
+     *
+     * @param updateFromServer if is set true send request to sever for get own info
+     */
+    private void setDrawerInfo(boolean updateFromServer) {
+        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo != null) {
+            String username = realmUserInfo.getUserInfo().getDisplayName();
+            String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
+
+            imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
+            EmojiTextViewE txtNavName = (EmojiTextViewE) findViewById(R.id.lm_txt_user_name);
+            TextView txtNavPhone = (TextView) findViewById(R.id.lm_txt_phone_number);
+            txtNavName.setText(username);
+            txtNavPhone.setText(phoneNumber);
+
+            if (HelperCalander.isLanguagePersian) {
+                txtNavPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavPhone.getText().toString()));
+                txtNavName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavName.getText().toString()));
+            }
+            if (updateFromServer) {
+                new RequestUserInfo().userInfo(realmUserInfo.getUserId());
+            }
+            setImage(realmUserInfo.getUserId());
+        }
+    }
+
     @Override
     public void onBackPressed() {
         openNavigation();
@@ -1524,6 +1535,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         HelperUrl.getLinkinfo(getIntent(), ActivityMain.this);
         getIntent().setData(null);
+
+        setDrawerInfo(false);
     }
 
     @Override

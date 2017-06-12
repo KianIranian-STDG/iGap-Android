@@ -95,7 +95,7 @@ public class HelperImageBackColor {
          * set gradient color on LinearGradient
          */
         //LinearGradient gradient = new LinearGradient(0, with, with, with * 2, new int[]{Color.parseColor(color), 0xFF333333}, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
-        LinearGradient gradient = new LinearGradient(0, with / 3, (with * 5) / 3, with * 2, new int[] { Color.parseColor(color), 0xFF555555 }, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
+        LinearGradient gradient = new LinearGradient(0, with / 3, (with * 5) / 3, with * 2, new int[]{Color.parseColor(color), 0xFF555555}, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
         Paint p = new Paint();
         p.setDither(true);
         p.setAntiAlias(true);
@@ -119,30 +119,30 @@ public class HelperImageBackColor {
     }
 
     /**
-     * this method get a text and return first character of text and first character of last word of
-     * text
+     * this method get a text and return first character of
+     * text and first character of last word of text
      */
     public static String getFirstAlphabetName(String name) {
         name = name.trim();
-        String[] splited = name.split("\\s+");
+        String[] splitted = name.split("\\s+");
 
-        int size = splited.length;
-        String charfirst, mname, Upname;
+        int size = splitted.length;
+        String charFirst, lowName, upName;
 
-        if (!splited[0].equals("") && splited[0] != null && !splited[0].isEmpty()) {
+        if (!splitted[0].equals("") && splitted[0] != null && !splitted[0].isEmpty()) {
             if (size == 1) {
-                charfirst = splited[0].trim();
-                mname = charfirst.substring(0, 1);
+                charFirst = splitted[0].trim();
+                lowName = charFirst.substring(0, 1);
             } else {
-                charfirst = splited[0].trim();
-                String charlast = splited[size - 1].trim();
-                mname = charfirst.substring(0, 1) + charlast.substring(0, 1);
+                charFirst = splitted[0].trim();
+                String charLast = splitted[size - 1].trim();
+                lowName = charFirst.substring(0, 1) + charLast.substring(0, 1);
             }
-            Upname = mname.toUpperCase();
+            upName = lowName.toUpperCase();
         } else {
-            Upname = " ";
+            upName = " ";
         }
 
-        return Upname;
+        return upName;
     }
 }

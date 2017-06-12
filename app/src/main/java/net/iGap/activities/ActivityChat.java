@@ -574,6 +574,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                          */
                         checkAction();
 
+                        RealmRoom room = updateUnreadCountRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                        if (room != null) {
+                            if (txtName == null) {
+                                txtName = (EmojiTextViewE) findViewById(R.id.chl_txt_name);
+                            }
+                            txtName.setText(room.getTitle());
+                        }
+
                         updateUnreadCountRealm.close();
                     }
                 });
