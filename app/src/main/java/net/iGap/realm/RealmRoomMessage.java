@@ -183,8 +183,6 @@ import org.parceler.Parcel;
 
     public static void fetchMessages(final long roomId, final OnActivityChatStart callback) {
 
-        if (G.userLogin) {
-
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
@@ -212,18 +210,20 @@ import org.parceler.Parcel;
                                             realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
                                             callback.sendSeenStatus(roomMessage);
                                         } else {
-                                            if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
-                                                /**
-                                                 * check timeout, because when forward message to room ,message state is sending
-                                                 * and add forward message to Realm from here and finally client have duplicated message
-                                                 */
-                                                if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
-                                                    if (roomMessage.getAttachment() != null) {
-                                                        if (!HelperUploadFile.isUploading(roomMessage.getMessageId() + "")) {
-                                                            callback.resendMessageNeedsUpload(roomMessage);
+                                            if (G.userLogin) {
+                                                if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
+                                                    /**
+                                                     * check timeout, because when forward message to room ,message state is sending
+                                                     * and add forward message to Realm from here and finally client have duplicated message
+                                                     */
+                                                    if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
+                                                        if (roomMessage.getAttachment() != null) {
+                                                            if (!HelperUploadFile.isUploading(roomMessage.getMessageId() + "")) {
+                                                                callback.resendMessageNeedsUpload(roomMessage);
+                                                            }
+                                                        } else {
+                                                            callback.resendMessage(roomMessage);
                                                         }
-                                                    } else {
-                                                        callback.resendMessage(roomMessage);
                                                     }
                                                 }
                                             }
@@ -246,7 +246,6 @@ import org.parceler.Parcel;
                     });
                 }
             });
-        }
     }
 
     public boolean isShowTime() {
