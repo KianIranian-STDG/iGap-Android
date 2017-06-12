@@ -861,7 +861,7 @@
   <string name="please_enter_your_password">Please enter your Password</string>
   <string name="your_password">Your Password</string>
   <string name="please_re_enter_your_password">Please re-enter Your Password</string>
-  <string name="please_create_hint_for_your_password">Please create a hint password</string>
+  <string name="please_create_hint_for_your_password">Please create a password hint</string>
   <string name="password_hint">Password Hint</string>
   <string name="password_Question_title_one">Question one (Mandatory)</string>
   <string name="password_Question_one">eg: Who is your Favorite teacher?</string>
@@ -881,15 +881,22 @@
   <string name="Change_hint">Change Hint</string>
   <string name="turn_Password_off">Turn Password Off</string>
   <string name="turn_Password_off_desc">Do you really want to remove password?</string>
+
   <string name="set_recovery_email">Set Recovery E-Mail</string>
-  <string name="set_recovery_question">Set Recovery Question</string>
+  <string name="set_recovery_dialog_title">Set Recovery by:</string>
+
   <string name="set_unconfirmed_email">Set Confirmed E-Mail</string>
   <string name="Recovery_with_question">Recovery with question</string>
   <string name="please_enter_confirm_code">Please enter confirm code</string>
+
   <string name="recovery_by_email">Recovery via E-mail</string>
   <string name="recovery_by_question">Recovery via Question</string>
+
+  <string name="recovery_by_question_dialog">E-mail:</string>
+  <string name="recovery_by_email_dialog">Question:</string>
+
   <string name="recovery_Password">Recovery Password</string>
-  <string name="your_email_desc">Please add your valid e-mail! It is the only way to recover your forgotten password</string>
+  <string name="your_email_desc">Please add your valid e-mail! It is way to recover your forgotten password</string>
   <string name="call_with">Select Contact</string>
   <string name="please_enter_code">Please enter code</string>
   <string name="please_enter_all_item">Please enter code</string>

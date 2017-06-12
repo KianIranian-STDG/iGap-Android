@@ -35,6 +35,7 @@ public class FragmentSecurityRecovery extends Fragment {
     //private String page;
     private String questionOne = "";
     private String questionTwo = "";
+    private String txtPaternEmail = "";
     private boolean isRecoveryByEmail;
     private ViewGroup rootRecoveryEmail;
     private ViewGroup rootRecoveryQuestionPassword;
@@ -72,6 +73,7 @@ public class FragmentSecurityRecovery extends Fragment {
             page = (Security) bundle.get("PAGE");
             questionOne = bundle.getString("QUESTION_ONE");
             questionTwo = bundle.getString("QUESTION_TWO");
+            txtPaternEmail = bundle.getString("PATERN_EMAIL");
             isRecoveryByEmail = bundle.getBoolean("IS_EMAIL");
         }
 
@@ -130,6 +132,7 @@ public class FragmentSecurityRecovery extends Fragment {
         edtSetRecoveryAnswerPassOne = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassOne);
         edtSetRecoveryAnswerPassTwo = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassTwo);
         edtSetRecoveryEmail = (EditText) view.findViewById(R.id.edtSetRecoveryEmail);
+        edtSetRecoveryEmail.setHint(txtPaternEmail);
 
         if (isRecoveryByEmail) {
             rootRecoveryEmail.setVisibility(View.VISIBLE);

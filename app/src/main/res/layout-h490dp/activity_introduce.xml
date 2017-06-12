@@ -223,7 +223,7 @@
           android:paddingRight="@dimen/dp22"
           android:text="@string/text_line_2_introduce_page1"
           android:textColor="@color/text_line1_igap_dark"
-          android:textSize="@dimen/dp18"
+          android:textSize="@dimen/dp16"
           android:textStyle="bold"
           android:visibility="gone"
           />
@@ -263,9 +263,10 @@
           android:layout_gravity="center_horizontal"
           android:text="@string/text_line_1_introduce_page2"
           android:textColor="@color/text_line1_igap_dark"
-          android:textSize="@dimen/dp15"
+          android:textSize="@dimen/dp16"
           android:textStyle="bold"
           android:visibility="gone"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
 
       <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -282,6 +283,7 @@
           android:textColor="@color/text_line2_lc__dark"
           android:textSize="@dimen/dp15"
           android:visibility="gone"
+          android:layout_marginTop="@dimen/dp4"
           />
 
 
@@ -305,9 +307,10 @@
           android:layout_gravity="center_horizontal"
           android:text="@string/text_line_1_introduce_page3"
           android:textColor="@color/text_line1_igap_dark"
-          android:textSize="@dimen/dp15"
+          android:textSize="@dimen/dp16"
           android:textStyle="bold"
           android:visibility="gone"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
 
       <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -318,6 +321,7 @@
           android:clickable="false"
           android:gravity="center_horizontal"
           android:lineSpacingExtra="0dp"
+          android:layout_marginTop="@dimen/dp4"
           android:paddingLeft="@dimen/dp22"
           android:paddingRight="@dimen/dp22"
           android:text="@string/text_line_2_introduce_page3"
@@ -346,9 +350,10 @@
           android:layout_gravity="center_horizontal"
           android:text="@string/text_line_1_introduce_page4"
           android:textColor="@color/text_line1_igap_dark"
-          android:textSize="@dimen/dp15"
+          android:textSize="@dimen/dp16"
           android:textStyle="bold"
           android:visibility="gone"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
 
       <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -364,6 +369,7 @@
           android:text="@string/text_line_2_introduce_page4"
           android:textColor="@color/text_line2_lc__dark"
           android:textSize="@dimen/dp15"
+          android:layout_marginTop="@dimen/dp4"
           android:visibility="gone"
           />
 
@@ -386,9 +392,10 @@
           android:layout_gravity="center_horizontal"
           android:text="@string/text_line_1_introduce_page5"
           android:textColor="@color/text_line1_igap_dark"
-          android:textSize="@dimen/dp15"
+          android:textSize="@dimen/dp16"
           android:textStyle="bold"
           android:visibility="gone"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
 
       <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -405,6 +412,7 @@
           android:textColor="@color/text_line2_lc__dark"
           android:textSize="@dimen/dp15"
           android:visibility="gone"
+          android:layout_marginTop="@dimen/dp4"
           />
 
     </LinearLayout>
@@ -429,9 +437,10 @@
           android:layout_gravity="center_horizontal"
           android:text="@string/text_line_1_introduce_page6"
           android:textColor="@color/text_line1_igap_dark"
-          android:textSize="@dimen/dp15"
+          android:textSize="@dimen/dp16"
           android:textStyle="bold"
           android:visibility="gone"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
 
       <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -448,6 +457,7 @@
           android:textColor="@color/text_line2_lc__dark"
           android:textSize="@dimen/dp15"
           android:visibility="gone"
+          android:layout_marginTop="@dimen/dp4"
           />
 
     </LinearLayout>

@@ -50,6 +50,8 @@ public class UserTwoStepVerificationGetPasswordDetailResponse extends MessageHan
 
     @Override public void timeOut() {
         super.timeOut();
+
+
     }
 
 

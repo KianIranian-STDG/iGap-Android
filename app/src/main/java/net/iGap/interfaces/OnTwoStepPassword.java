@@ -13,6 +13,10 @@ public interface OnTwoStepPassword {
 
     void getPasswordDetail(String questionOne, String questionTwo, String hint, boolean hasConfirmedRecoveryEmail, String unconfirmedEmailPattern);
 
+    void errorGetPasswordDetail();
+
+    void timeOutGetPasswordDetail();
+
     void checkPassword();
 
     void errorCheckPassword(int getWait);
@@ -26,6 +30,8 @@ public interface OnTwoStepPassword {
     void changeEmail();
 
     void confirmEmail();
+
+    void errorConfirmEmail();
 
     void errorInvalidPassword();
 }

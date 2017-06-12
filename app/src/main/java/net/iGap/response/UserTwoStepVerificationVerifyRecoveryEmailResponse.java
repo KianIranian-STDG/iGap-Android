@@ -58,7 +58,13 @@ public class UserTwoStepVerificationVerifyRecoveryEmailResponse extends MessageH
 
         if (G.twoStepSecurityConfirmEmail != null && majorCode == 10113 && minorCode == 2) {
             G.twoStepSecurityConfirmEmail.errorInvalidConfirmCode();
+            return;
         }
+
+        if (G.onTwoStepPassword != null) {
+            G.onTwoStepPassword.errorConfirmEmail();
+        }
+
     }
 }
 

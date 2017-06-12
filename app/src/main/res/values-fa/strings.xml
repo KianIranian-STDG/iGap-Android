@@ -855,7 +855,7 @@
   <string name="optional">اختیاری</string>
   <string name="desc_group_chanel">توضیحات (اختیاری)</string>
 
-  <string name="set_additional_password">دومین رمزعبور را تعیین کنید </string>
+  <string name="set_additional_password">رمزعبور را تعیین کنید </string>
   <string name="two_step_verification_title">فعال سازی دو مرحله ای </string>
   <string name="two_step_verification_description">شما می توانید رمزعبوری را در نظر بگیرید، این رمز زمانی مورد نیاز است که بخواهید جهت ورود به حساب کاربریتان از دستگاه دیگری استفاده نمایید. بعلاوهٔ این رمز شما زمان ورود به حساب کاربری کد تأییدی نیز به صورت پیامک دریافت میکنید. </string>
   <string name="enter_a_password"> رمز عبور را وارد کنید</string>
@@ -870,27 +870,34 @@
   <string name="password_Question_two">برای مثال: بهترین دوست شما کیست؟</string>
   <string name="password_answer">جواب </string>
   <string name="password_Question_title">پرسش رمزعبور</string>
-  <string name="recovery_email">بازیابی به کمک آدرس الکترونیکی</string>
-  <string name="your_email">آدرس الکترونیکی (اختیاری) </string>
-  <string name="recovery_question"> بازیابی به کمک سؤال امنیتی</string>
+  <string name="recovery_email">بازیابی از طریق پست الکترونیکی</string>
+  <string name="your_email">پست الکترونیکی (اختیاری) </string>
+  <string name="recovery_question"> بازیابی از طریق سؤال امنیتی</string>
   <string name="two_step_verification">فعال سازی دو مرحله ای </string>
   <string name="forgot_password"> رمزعبور خود را فراموش کرده اید؟</string>
-  <string name="Recovery_with_email">بازیابی به کمک آدرس الکترونیکی </string>
+  <string name="Recovery_with_email">بازیابی از طریق پست الکترونیکی </string>
   <string name="recent_code">کد جدید</string>
   <string name="enter_code">کد را وارد کنید </string>
   <string name="Change_password">تغییر رمزعبور </string>
   <string name="Change_hint">تغییر نشانهٔ رمزعبور </string>
   <string name="turn_Password_off">غیرفعال سازی درخواست رمزعبور </string>
   <string name="turn_Password_off_desc">آیا قطعاً می خواهید  رمز عبور را غیرفعال نمایید؟ </string>
-  <string name="set_recovery_email">تعیین آدرس الکترونیکی برای بازیابی</string>
-  <string name="set_recovery_question"> تعیین سؤال امنیتی برای بازیابی</string>
-  <string name="set_unconfirmed_email">تعیین ایمیل تأیید شده </string>
-  <string name="Recovery_with_question">بازیابی به کمک سؤال امنیتی </string>
+  <string name="set_recovery_email">تغییر پست الکترونیکی</string>
+  <string name="set_unconfirmed_email">وارد کردن کد تایید پست الکترونیکی</string>
+
+  <string name="set_recovery_dialog_title">بازیابی از طریق:</string>
+  <string name="Recovery_with_question">بازیابی از طریق سؤال امنیتی </string>
+
   <string name="please_enter_confirm_code"> لطفاً کد تأیید شده را وارد نمایید</string>
-  <string name="recovery_by_email"> بازیابی به کمک آدرس الکترونیکی</string>
-  <string name="recovery_by_question"> بازیابی به کمک سؤال امنیتی</string>
+
+  <string name="recovery_by_email"> بازیابی از طریق پست الکترونیکی</string>
+  <string name="recovery_by_question"> بازیابی از طریق سؤال امنیتی</string>
+
+  <string name="recovery_by_question_dialog"> سؤال امنیتی</string>
+  <string name="recovery_by_email_dialog">پست الکترونیکی</string>
+
   <string name="recovery_Password">بازیابی رمزعبور </string>
-  <string name="your_email_desc"> لطفاً آدرس الکترونیکی معتبری اضافه کنید. این کار تنها گزینه برای بازیابی رمزعبور فراموش شده است.</string>
+  <string name="your_email_desc"> لطفاً پست الکترونیکی معتبری اضافه کنید. این گزینه برای بازیابی رمزعبور فراموش شده است.</string>
   <string name="call_with">انتخاب مخاطب </string>
   <string name="please_enter_code">لطفاً کد را وارد نمایید </string>
   <string name="please_enter_all_item">لطفاً کد را وارد نمایید </string>
@@ -901,7 +908,7 @@
   <string name="Please_complete_all_Item">"لطفاً همهٔ موارد را کامل کنید </string>
   <string name="hint_can_same_password">"نشانهٔ رمزعبور نباید با رمزعبور مشابه باشد </string>
   <string name="Please_enter_your_hint">"لطفاً نشانهٔ رمزعبور را وارد نمایید </string>
-  <string name="Please_enter_your_email">"لطفاً آدرس الکترونیکی خود را وارد نمایید </string>
+  <string name="Please_enter_your_email">"لطفاً پست الکترونیکی خود را وارد نمایید </string>
 
   <string name="e_call_permision">اجازه برقراری ارتباط نیست </string>
   <string name="e_904_6">یوزر بلاک شده است</string>
@@ -922,7 +929,7 @@
   <string name="please_write_your_reasons">لطفا دلیل خود را بنویسید</string>
   <string name="error_check_password">به دلیل تلاش پیاپی، رمزعبور برای مدتی غیرفعال است.</string>
 
-  <string name="your_confirm_email">لطفا کد تایید پست الکرتونیکی وارد کنید</string>
+  <string name="your_confirm_email">لطفا کد تایید پست الکترونیکی را وارد کنید</string>
   <string name="your_confirm_email_skip">بیخیال</string>
   <string name="your_resend_email_skip">ارسال مجدد کد تایید</string>
   <string name="invalid_verify_email_code">کد تایید نامعتبر است</string>
