@@ -93,7 +93,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_selected_chat);
 
         progressBar = (ProgressBar) findViewById(R.id.ac_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);

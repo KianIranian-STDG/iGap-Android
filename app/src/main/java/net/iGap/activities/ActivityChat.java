@@ -1886,12 +1886,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
          */
         layoutManager.setStackFromEnd(true);
 
-        /**
-         * set behavior to RecyclerView
-         * CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
-         * params.setBehavior(new ShouldScrolledBehavior(layoutManager, mAdapter));
-         * recyclerView.setLayoutParams(params);
-         */
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
