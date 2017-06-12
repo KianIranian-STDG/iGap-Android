@@ -913,13 +913,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         };
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_private)).content(getString(R.string.group_text_convert_to_private)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_private)).content(getString(R.string.group_text_convert_to_private)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 new RequestGroupRemoveUsername().groupRemoveUsername(roomId);
             }
-        }).negativeText(R.string.B_cancel).show();
+        }).negativeText(R.string.no).show();
     }
 
     private void setTextGroupLik() {
@@ -934,14 +934,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     private void convertToPublic() {
-        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_public)).content(getString(R.string.group_text_convert_to_public)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_public)).content(getString(R.string.group_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 dialog.dismiss();
                 setUsername();
             }
-        }).negativeText(R.string.B_cancel).show();
+        }).negativeText(R.string.no).show();
     }
 
     private void setUsername() {

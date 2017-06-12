@@ -21,12 +21,12 @@
 
   <!-- Page 5 introduce app -->
   <string name="text_line_1_introduce_page5">Voice Call</string>
-  <string name="text_line_2_introduce_page5">Your power is summarized in having a thoroughly free and secure voice call with all others using iGap and save your money as well! As iGap voice call is P2P-based.</string>
+  <string name="text_line_2_introduce_page5">You can make thoroughly free and secure voice calls to anyone on iGap and save your money. As it is P2P-based, no worries about servers interference in voice transmission.</string>
 
   <!-- Page 6 introduce app -->
   <string name="btn_start_page6">Start Now</string>
   <string name="text_line_1_introduce_page6">Everything for Free in iGap!</string>
-  <string name="text_line_2_introduce_page6"><![CDATA[ Let’s stop boring you! <br /> iGap is thoroughly free. So, just now build your own world freely! ]]></string>
+  <string name="text_line_2_introduce_page6"><![CDATA[ Let’s stop waiting! <br /> iGap is thoroughly free. So, just now build your own world freely! ]]></string>
 
 
   <!--Fill Profile User -->
@@ -726,8 +726,8 @@
   <string name="prefix">""</string>  <!-- have to empty -->
   <string name="MEMBER_KICKED">"Kicked out"</string>
   <string name="MEMBER_LEFT">"Left Page"</string>
-  <string name="ROOM_CONVERTED_TO_PUBLIC">"The Private Page Converted to Public"</string>
-  <string name="ROOM_CONVERTED_TO_PRIVATE">"The Public Page Converted to Private"</string>
+  <string name="ROOM_CONVERTED_TO_PUBLIC">"Converted the Private Page to Public"</string>
+  <string name="ROOM_CONVERTED_TO_PRIVATE">"Converted the Public Page to Private"</string>
   <string name="MEMBER_JOINED_BY_INVITE_LINK">"Join by Invitation Link"</string>
   <string name="MEMBER_JOINED_BY_INVITE_LINK_2">"اضافه شد"</string>
   <string name="Room_Deleted">"Deleted Room"</string>
@@ -804,7 +804,7 @@
   <string name="room_not_exist">There is no room with this ID</string>
   <string name="app_theme">iGap Theme Color</string>
   <string name="app_notif_color">Notification Color</string>
-  <string name="theme">Theme Color</string>
+  <string name="theme">Color</string>
   <string name="is"> is </string>
   <string name="are"> are </string>
   <string name="members_are">Members are </string>
@@ -951,6 +951,7 @@
   <string name="invalid_question_token">"Your answer is invalid"</string>
 
   <string name="not_answerd_call">"Did not respond to your call or failed."</string>
+  <string name="desc_self_destroy">"If you choose one of the periods in the following and never use your iGap account during the certain time, your account will be destructed and deleted spontaneously."</string>
 
 
 </resources>

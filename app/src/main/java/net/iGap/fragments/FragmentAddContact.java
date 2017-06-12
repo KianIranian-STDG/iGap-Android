@@ -180,8 +180,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             @Override public void onComplete(final RippleView rippleView) {
 
                 new MaterialDialog.Builder(getActivity()).title(R.string.add_to_list_contact)
-                    .content(R.string.text_add_to_list_contact)
-                    .positiveText(R.string.B_ok)
+                    .content(R.string.text_add_to_list_contact).positiveText(R.string.yes)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             addContactToServer();
@@ -196,8 +195,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                                 addToContactList(rippleView);
                             }
                         }
-                    })
-                    .negativeText(R.string.B_cancel)
+                    }).negativeText(R.string.no)
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 

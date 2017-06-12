@@ -559,7 +559,7 @@
   <string name="convert_chat_to_group_content">آیا می‌خواهید این گفتگو را به گروه انتقال دهید؟</string>
   <string name="convert_chat_to_group_title">انتقال گفتگو به گروه</string>
   <string name="minute_ago">دقیقه پیش</string>
-  <string name="device">وسیله:</string>
+  <string name="device">دستگاه:</string>
   <string name="country">کشور:</string>
   <string name="create_time">ایجاد شده در:</string>
   <string name="ip">شناسه</string>
@@ -932,7 +932,7 @@
   <string name="please_set_password">تنظیم کلمه عبور</string>
   <string name="please_set_hint">تنظیم یاداوری</string>
   <string name="invalid_email">پست الکترونیکی نا معتبر</string>
-  <string name="yes">"بله"</string>
+  <string name="yes">"بلی"</string>
   <string name="no">"خیر"</string>
 
 
@@ -953,5 +953,6 @@
   <string name="invalid_question_token">"پاسخ شما نادرست است"</string>
 
   <string name="not_answerd_call">"به تماس شما پاسخ نداد و یا تماس شما ناموفق بود"</string>
+  <string name="desc_self_destroy">"درصورتی که از حساب کاربری خود در طول یکی از مدت زمان های ارائه شده به هیچ وجه استفاده نکنید، حساب شما پس از مدت تعیین شده به صورت خودکار تخریب و برای همیشه حذف می شود."</string>
 
 </resources>
