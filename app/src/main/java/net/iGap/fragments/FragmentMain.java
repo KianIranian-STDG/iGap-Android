@@ -3,7 +3,6 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PointF;
@@ -40,7 +39,6 @@ import java.util.List;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.WebSocketClient;
 import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityProfile;
@@ -51,9 +49,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperClientCondition;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnClientCondition;
-import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
@@ -72,7 +67,6 @@ import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelDelete;
 import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChatDelete;
@@ -92,7 +86,7 @@ import static net.iGap.realm.RealmRoom.putChatToDatabase;
  * Created by android3 on 6/11/2017.
  */
 
-public class FragmentMain extends Fragment implements OnChatSendMessageResponse, OnClientGetRoomListResponse, OnClientCondition, OnComplete {
+public class FragmentMain extends Fragment implements OnComplete {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -100,21 +94,12 @@ public class FragmentMain extends Fragment implements OnChatSendMessageResponse,
     FloatingActionButton btnStartNewChat;
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
-    LinearLayout mediaLayout;
-
     ProgressBar progressBar;
-
-    Realm mRealm;
-
     private ArcMenu arcMenu;
-    private Typeface titleTypeface;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private SharedPreferences sharedPreferences;
-    private ImageView imgNavImage;
 
-    public static int currentMainRoomListPosition = 0;
     private int mOffset = 0;
-    private int mLimit = 20;
+    private int mLimit = 100;
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = false;
 
@@ -144,24 +129,23 @@ public class FragmentMain extends Fragment implements OnChatSendMessageResponse,
 
         mainType = (MainType) getArguments().getSerializable(STR_MAIN_TYPE);
 
+
         progressBar = (ProgressBar) view.findViewById(R.id.ac_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_main_swipe_refresh_layout);
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setEnabled(false);
 
         initRecycleView(view);
         initFloatingButtonCreateNew(view);
+        initListener();
 
         arcMenu.setBackgroundTintColor();
 
         btnStartNewChat.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
         btnCreateNewGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
         btnCreateNewChannel.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-
-        G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
-        G.onClientGetRoomListResponse = this;
-        G.onClientCondition = this;
-
 
 
     }
@@ -210,37 +194,36 @@ public class FragmentMain extends Fragment implements OnChatSendMessageResponse,
         RoomAdapter roomAdapter = new RoomAdapter(getActivity(), results, this);
         mRecyclerView.setAdapter(roomAdapter);
 
-        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        if (mainType == MainType.all) {
 
-            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
 
-                if (isThereAnyMoreItemToLoad) {
-                    if (!isSendRequestForLoading) {
+                @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
 
-                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                    if (isThereAnyMoreItemToLoad) {
+                        if (!isSendRequestForLoading) {
 
-                        if (lastVisiblePosition + 10 >= mOffset) {
+                            //int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                            //
+                            //if (lastVisiblePosition + 10 >= mOffset) {
                             isSendRequestForLoading = true;
 
                             //  mOffset = mRecyclerView.getRecycleView().getAdapter().getItemCount();
                             new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
                             progressBar.setVisibility(View.VISIBLE);
+                            // }
                         }
                     }
                 }
-            }
+            };
 
-            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+            mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
+        }
 
-                currentMainRoomListPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-            }
-        };
 
-        mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      /*  swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
                 if (heartBeatTimeOut()) {
                     WebSocketClient.checkConnection();
@@ -259,7 +242,7 @@ public class FragmentMain extends Fragment implements OnChatSendMessageResponse,
 
         //   swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
 
-        swipeRefreshLayout.setColorSchemeColors(Color.parseColor(G.progressColor));
+        swipeRefreshLayout.setColorSchemeColors(Color.parseColor(G.progressColor));*/
 
         mRecyclerView.getRecycleView().addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -312,7 +295,10 @@ public class FragmentMain extends Fragment implements OnChatSendMessageResponse,
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
-                arcMenu.toggleMenu();
+                if (arcMenu.isMenuOpened()) {
+                    arcMenu.toggleMenu();
+                }
+
                 ((ActivityMain) getActivity()).lockNavigation();
             }
         });
@@ -336,7 +322,9 @@ public class FragmentMain extends Fragment implements OnChatSendMessageResponse,
                 }
                 ((ActivityMain) getActivity()).lockNavigation();
 
-                arcMenu.toggleMenu();
+                if (arcMenu.isMenuOpened()) {
+                    arcMenu.toggleMenu();
+                }
             }
         });
 
@@ -358,9 +346,190 @@ public class FragmentMain extends Fragment implements OnChatSendMessageResponse,
                     e.getStackTrace();
                 }
                 ((ActivityMain) getActivity()).lockNavigation();
-                arcMenu.toggleMenu();
+                if (arcMenu.isMenuOpened()) {
+                    arcMenu.toggleMenu();
+                }
             }
         });
+
+        switch (mainType) {
+
+            case all:
+                break;
+            case chat:
+                arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        btnStartNewChat.performClick();
+                    }
+                });
+
+                break;
+            case group:
+                arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        btnCreateNewGroup.performClick();
+                    }
+                });
+
+                break;
+            case channel:
+                arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        btnCreateNewChannel.performClick();
+                    }
+                });
+
+                break;
+        }
+    }
+
+    private void initListener() {
+
+        switch (mainType) {
+
+            case all:
+
+                ((ActivityMain) getActivity()).mainActionApp = new ActivityMain.MainInterface() {
+                    @Override public void onAction(ActivityMain.MainAction action) {
+                        doAction(action);
+                    }
+                };
+
+                ((ActivityMain) getActivity()).mainInterfaceGetRoomList = new ActivityMain.MainInterfaceGetRoomList() {
+                    @Override public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+
+                        onclientGetRoomList(roomList, response, fromLogin);
+                    }
+
+                    @Override public void onError(int majorCode, int minorCode) {
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
+                            }
+                        });
+
+                        if (majorCode == 9) {
+                            if (G.currentActivity != null) {
+                                G.currentActivity.finish();
+                            }
+                            Intent intent = new Intent(G.context, ActivityProfile.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            G.context.startActivity(intent);
+                        }
+                    }
+
+                    @Override public void onTimeout() {
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                progressBar.setVisibility(View.GONE);
+                                firstTimeEnterToApp = false;
+                                getChatsList();
+                                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
+                            }
+                        });
+                    }
+                };
+
+                break;
+            case chat:
+                ((ActivityMain) getActivity()).mainActionChat = new ActivityMain.MainInterface() {
+                    @Override public void onAction(ActivityMain.MainAction action) {
+                        doAction(action);
+                    }
+                };
+                break;
+            case group:
+                ((ActivityMain) getActivity()).mainActionGroup = new ActivityMain.MainInterface() {
+                    @Override public void onAction(ActivityMain.MainAction action) {
+                        doAction(action);
+                    }
+                };
+                break;
+            case channel:
+                ((ActivityMain) getActivity()).mainActionChannel = new ActivityMain.MainInterface() {
+                    @Override public void onAction(ActivityMain.MainAction action) {
+                        doAction(action);
+                    }
+                };
+                break;
+        }
+    }
+
+    private void doAction(ActivityMain.MainAction action) {
+
+        switch (action) {
+
+            case downScrool:
+
+                ((Activity) getActivity()).runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager()).findFirstVisibleItemPosition();
+                        if (firstVisibleItem < 5) {
+                            mRecyclerView.getRecycleView().scrollToPosition(0);
+                        }
+                    }
+                });
+
+                break;
+            case clinetCondition:
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+
+                break;
+        }
+    }
+
+    private void onclientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+        if (fromLogin) {
+            mOffset = 0;
+        }
+
+        boolean deleteBefore = false;
+        if (mOffset == 0) {
+            deleteBefore = true;
+        }
+
+        if (roomList.size() > 0) {
+            putChatToDatabase(roomList, deleteBefore, false);
+            isThereAnyMoreItemToLoad = true;
+        } else {
+            putChatToDatabase(roomList, deleteBefore, true);
+            isThereAnyMoreItemToLoad = false;
+        }
+
+        /**
+         * to first enter to app , client first compute clientCondition then
+         * getRoomList and finally send condition that before get clientCondition;
+         * in else state compute new client condition with latest messaging state
+         */
+        if (firstTimeEnterToApp) {
+            firstTimeEnterToApp = false;
+            sendClientCondition();
+        } else if (fromLogin || mOffset == 0) {
+
+            new Thread(new Runnable() {
+                @Override public void run() {
+                    Log.i("SSS", "getChatList 5");
+                    new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
+                }
+            }).start();
+        }
+
+        mOffset += roomList.size();
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override public void run() {
+                progressBar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
+            }
+        });
+
+        isSendRequestForLoading = false;
     }
 
     //***************************************************************************************************************************
@@ -502,154 +671,9 @@ public class FragmentMain extends Fragment implements OnChatSendMessageResponse,
         return false;
     }
 
-    //*****************************************************************************************************************************
 
-    @Override public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
-        //empty
-    }
 
-    @Override
-    public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-                if (room != null && realmRoomMessage != null) {
-                    /**
-                     * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                     */
-                    if (room.getUnreadCount() <= 1) {
-                        realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                        room.setFirstUnreadMessage(realmRoomMessage);
-                    }
-                }
-            }
-        });
-        realm.close();
-
-        ((Activity) getActivity()).runOnUiThread(new Runnable() {
-            @Override public void run() {
-                int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager()).findFirstVisibleItemPosition();
-                if (firstVisibleItem < 5) {
-                    mRecyclerView.getRecycleView().scrollToPosition(0);
-                }
-            }
-        });
-
-        /**
-         * don't send update status for own message
-         */
-        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
-            // user has received the message, so I make a new delivered update status request
-            if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-            } else if (roomType == GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-            }
-        }
-    }
-
-    @Override public void onMessageFailed(final long roomId, RealmRoomMessage roomMessage) {
-        //empty
-    }
-
-    //************************
-
-    @Override public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
-
-        if (fromLogin) {
-            mOffset = 0;
-        }
-
-        boolean deleteBefore = false;
-        if (mOffset == 0) {
-            deleteBefore = true;
-        }
-
-        if (roomList.size() > 0) {
-            putChatToDatabase(roomList, deleteBefore, false);
-            isThereAnyMoreItemToLoad = true;
-        } else {
-            putChatToDatabase(roomList, deleteBefore, true);
-            isThereAnyMoreItemToLoad = false;
-        }
-
-        /**
-         * to first enter to app , client first compute clientCondition then
-         * getRoomList and finally send condition that before get clientCondition;
-         * in else state compute new client condition with latest messaging state
-         */
-        if (firstTimeEnterToApp) {
-            firstTimeEnterToApp = false;
-            sendClientCondition();
-        } else if (fromLogin || mOffset == 0) {
-
-            new Thread(new Runnable() {
-                @Override public void run() {
-                    Log.i("SSS", "getChatList 5");
-                    new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
-                }
-            }).start();
-        }
-
-        mOffset += roomList.size();
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
-                progressBar.setVisibility(View.GONE);
-                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
-            }
-        });
-
-        isSendRequestForLoading = false;
-    }
-
-    @Override public void onError(int majorCode, int minorCode) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
-                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
-            }
-        });
-
-        if (majorCode == 9) {
-            if (G.currentActivity != null) {
-                G.currentActivity.finish();
-            }
-            Intent intent = new Intent(G.context, ActivityProfile.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            G.context.startActivity(intent);
-        }
-    }
-
-    @Override public void onTimeout() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
-                progressBar.setVisibility(View.GONE);
-                firstTimeEnterToApp = false;
-                getChatsList();
-                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
-            }
-        });
-    }
-
-    //************************
-    @Override public void onClientCondition() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-    }
-
-    @Override public void onClientConditionError() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-    }
 
     //************************
 

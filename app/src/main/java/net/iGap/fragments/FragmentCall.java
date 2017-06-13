@@ -53,6 +53,9 @@ import net.iGap.request.RequestSignalingGetLog;
 
 public class FragmentCall extends Fragment {
 
+    public static final String strGonTitle = "strGonTitle";
+    boolean goneTitle = false;
+
     private int mOffset = 0;
     private int mLimit = 50;
     private RecyclerView.OnScrollListener onScrollListener;
@@ -64,8 +67,15 @@ public class FragmentCall extends Fragment {
 
     private RealmRecyclerView mRecyclerView;
 
-    public static FragmentCall newInstance() {
-        return new FragmentCall();
+    public static FragmentCall newInstance(boolean goneTitle) {
+
+        FragmentCall fragmentCall = new FragmentCall();
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(strGonTitle, goneTitle);
+        fragmentCall.setArguments(bundle);
+
+        return fragmentCall;
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,6 +85,8 @@ public class FragmentCall extends Fragment {
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        goneTitle = getArguments().getBoolean(strGonTitle);
 
         view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
 
@@ -96,47 +108,7 @@ public class FragmentCall extends Fragment {
             @Override
             public void onClick(View v) {
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-                View view = dialog.getCustomView();
-
-                DialogAnimation.animationUp(dialog);
-                dialog.show();
-
-                final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
-                txtClear.setText(getResources().getString(R.string.clean_log));
-
-                TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
-                iconClear.setText(getResources().getString(R.string.md_rubbish_delete_file));
-
-                ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
-                root1.setVisibility(View.VISIBLE);
-
-                root1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-
-                        if (G.userLogin) {
-                            new MaterialDialog.Builder(mActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
-                                positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    Realm realm = Realm.getDefaultInstance();
-                                    try {
-                                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
-                                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                                        imgCallEmpty.setVisibility(View.VISIBLE);
-                                    } catch (Exception e) {
-
-                                    } finally {
-                                        realm.close();
-                                    }
-                                }
-                            }).negativeText(R.string.B_cancel).show();
-                        } else {
-                            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
-                        }
-                    }
-                });
+                openDialogMenu();
             }
         });
 
@@ -226,7 +198,16 @@ public class FragmentCall extends Fragment {
         });
 
         getLogListWithOfset();
+
+        if (goneTitle) {
+
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fabContactList.getLayoutParams();
+            params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, (int) G.context.getResources().getDimension(R.dimen.dp60));
+
+            view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
+        }
     }
+
 
     private void getLogListWithOfset() {
         isSendRequestForLoading = true;
@@ -234,6 +215,49 @@ public class FragmentCall extends Fragment {
         new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
 
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void openDialogMenu() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+        View view = dialog.getCustomView();
+
+        DialogAnimation.animationUp(dialog);
+        dialog.show();
+
+        final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
+        txtClear.setText(getResources().getString(R.string.clean_log));
+
+        TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
+        iconClear.setText(getResources().getString(R.string.md_rubbish_delete_file));
+
+        ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
+        root1.setVisibility(View.VISIBLE);
+
+        root1.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                dialog.dismiss();
+
+                if (G.userLogin) {
+                    new MaterialDialog.Builder(mActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
+                        positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Realm realm = Realm.getDefaultInstance();
+                            try {
+                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
+                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                                imgCallEmpty.setVisibility(View.VISIBLE);
+                            } catch (Exception e) {
+
+                            } finally {
+                                realm.close();
+                            }
+                        }
+                    }).negativeText(R.string.B_cancel).show();
+                } else {
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+                }
+            }
+        });
     }
 
     //*************************************************************************************************************

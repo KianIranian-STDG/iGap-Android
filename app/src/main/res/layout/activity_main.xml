@@ -25,88 +25,141 @@
       <RelativeLayout
           android:id="@+id/rootToolbar"
         android:layout_width="match_parent"
-          android:layout_height="@dimen/dp60"
+          android:layout_height="wrap_content"
           app:layout_scrollFlags="scroll|enterAlways"
         >
         <android.support.v7.widget.Toolbar
             android:id="@+id/main_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
+            android:layout_height="wrap_content"
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
 
             >
 
+
           <LinearLayout
-              android:id="@+id/amr_toolbar"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               >
 
             <LinearLayout
-                android:id="@+id/amr_ripple_menu"
-                android:layout_width="@dimen/dp52"
-                android:layout_height="match_parent"
-                android:gravity="center"
-
+                android:id="@+id/amr_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp60"
+                android:orientation="horizontal"
                 >
 
-              <ImageView
-                  android:id="@+id/amr_btn_menu"
-                  android:layout_width="@dimen/dp28"
-                  android:layout_height="@dimen/dp28"
-                  app:srcCompat="@drawable/hamburger_menu"
-                  android:adjustViewBounds="true"
-                  android:layout_gravity="center"
-                  android:tint="@color/white"
-                  />
-            </LinearLayout>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                />
-
-            <net.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/amr_ripple_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="100"
-                rv_centered="true"
-                >
-
-              <net.iGap.module.MaterialDesignTextView
-                  android:id="@+id/amr_btn_search"
+              <LinearLayout
+                  android:id="@+id/amr_ripple_menu"
                   android:layout_width="@dimen/dp52"
                   android:layout_height="match_parent"
-                  android:background="?attr/selectableItemBackgroundBorderless"
                   android:gravity="center"
-                  android:text="@string/md_searching_magnifying_glass"
-                  android:textAppearance="@style/TextIconAppearance_toolbar"
+
+                  >
+
+                <ImageView
+                    android:id="@+id/amr_btn_menu"
+                    android:layout_width="@dimen/dp28"
+                    android:layout_height="@dimen/dp28"
+                    app:srcCompat="@drawable/hamburger_menu"
+                    android:adjustViewBounds="true"
+                    android:layout_gravity="center"
+                    android:tint="@color/white"
+                    />
+              </LinearLayout>
+
+
+              <TextView
+                  android:id="@+id/cl_txt_igap"
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:gravity="center"
+                  android:singleLine="true"
+                  android:text="@string/app_name"
+                  android:textAppearance="?android:attr/textAppearanceMedium"
                   android:textColor="@android:color/white"
-                  android:textSize="@dimen/dp28"
+                  fontPath="fonts/IRANSansMobile_Bold.ttf"
+                  android:textSize="@dimen/dp18"
+                  tools:ignore="MissingPrefix"
                   />
 
-            </net.iGap.libs.rippleeffect.RippleView>
+
+              <net.iGap.libs.rippleeffect.RippleView
+                  android:id="@+id/amr_ripple_search"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  app:rv_alpha="200"
+                  app:rv_centered="true"
+                  app:rv_rippleDuration="100"
+                  rv_centered="true"
+                  >
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/amr_btn_search"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:text="@string/md_searching_magnifying_glass"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dp28"
+                    />
+
+              </net.iGap.libs.rippleeffect.RippleView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/am_layot_title_call"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp60"
+                android:background="@color/green"
+                android:visibility="gone"
+                android:orientation="horizontal"
+                android:layoutDirection="ltr"
+                >
+
+
+              <TextView
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_gravity="center"
+                  android:layout_weight="1"
+                  android:gravity="center"
+                  android:layout_marginLeft="@dimen/dp52"
+                  android:singleLine="true"
+                  android:text="@string/calls"
+                  android:textAppearance="?android:attr/textAppearanceMedium"
+                  android:textColor="@android:color/white"
+                  android:textSize="@dimen/dp18"
+                  fontPath="fonts/IRANSansMobile_Bold.ttf"
+                  android:visibility="visible"
+                  tools:ignore="MissingPrefix"
+                  />
+
+
+              <net.iGap.module.MaterialDesignTextView
+                  android:id="@+id/am_btn_menu"
+                  android:layout_width="@dimen/dp52"
+                  android:layout_height="match_parent"
+                  android:gravity="center"
+                  android:text="@string/md_show_more_button"
+                  android:textAppearance="@style/TextIconAppearance_toolbar"
+                  android:textColor="@color/whit_background"
+                  />
+
+
+            </LinearLayout>
+
+
           </LinearLayout>
+
+
         </android.support.v7.widget.Toolbar>
-        <TextView
-            android:id="@+id/cl_txt_igap"
-          android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/app_name"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/white"
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:textSize="@dimen/dp18"
-            tools:ignore="MissingPrefix"
-          />
+
       </RelativeLayout>
 
       <com.gigamole.navigationtabstrip.NavigationTabStrip
@@ -114,7 +167,7 @@
           android:layout_width="wrap_content"
           android:background="@color/colorEmojiPopupCategoryBottomBorder"
           android:layout_height="@dimen/dp60"
-          app:nts_active_color="@color/iGapColor"
+          app:nts_active_color="@color/white"
           app:nts_animation_duration="300"
           app:nts_color="#000"
           app:nts_corners_radius="1.5dp"
