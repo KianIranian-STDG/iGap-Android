@@ -44,6 +44,7 @@ import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.ContactGroupFragment;
@@ -71,7 +72,10 @@ import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatGetRoom;
+import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnChatUpdateStatusResponse;
+import net.iGap.interfaces.OnClientCondition;
+import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnConnectionChangeState;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
@@ -86,6 +90,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.LoginActions;
+import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyAppBarLayout;
 import net.iGap.module.SHP_SETTING;
@@ -95,6 +100,8 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestSignalingGetConfiguration;
@@ -103,10 +110,12 @@ import net.iGap.request.RequestUserSessionLogout;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
+import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 
 public class ActivityMain extends ActivityEnhanced
-    implements OnUserInfoMyClient, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
+    implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom,
+    OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
 
     public static ActivityMain activityMain;
     public static boolean isMenuButtonAddShown = false;
@@ -123,6 +132,32 @@ public class ActivityMain extends ActivityEnhanced
     public static int currentMainRoomListPosition = 0;
     private int pageDrawer = 0;
     private ContentLoadingProgressBar contentLoading;
+
+    public MainInterface mainActionApp;
+    public MainInterface mainActionChat;
+    public MainInterface mainActionGroup;
+    public MainInterface mainActionChannel;
+
+    public MainInterfaceGetRoomList mainInterfaceGetRoomList;
+
+    public enum MainAction {
+        downScrool, clinetCondition
+    }
+
+    public interface MainInterface {
+        void onAction(MainAction action);
+    }
+
+    public interface MainInterfaceGetRoomList {
+
+        void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin);
+
+        void onError(int majorCode, int minorCode);
+
+        void onTimeout();
+    }
+
+
 
     @Override
     protected void onDestroy() {
@@ -299,11 +334,13 @@ public class ActivityMain extends ActivityEnhanced
     private void initTabStrip() {
 
         final NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
+        navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
         navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_rss_feed),
             getString(R.string.md_phone), getString(R.string.md_room));
         navigationTabStrip.setTabIndex(0, true);
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp24));
-        navigationTabStrip.setStripColor(Color.RED);
+        navigationTabStrip.setStripColor(Color.WHITE);
+
         navigationTabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -325,6 +362,29 @@ public class ActivityMain extends ActivityEnhanced
 
             @Override public void onEndTabSelected(String title, int index) {
                 Log.e("dddddd", "onEndTabSelected   " + title + "   " + index);
+
+                switch (index) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                        findViewById(R.id.amr_toolbar).setVisibility(View.VISIBLE);
+                        findViewById(R.id.am_layot_title_call).setVisibility(View.GONE);
+
+                        findViewById(R.id.main_toolbar).setVisibility(View.VISIBLE);
+
+                        break;
+                    case 4:
+                        findViewById(R.id.amr_toolbar).setVisibility(View.GONE);
+                        findViewById(R.id.am_layot_title_call).setVisibility(View.VISIBLE);
+
+                        findViewById(R.id.main_toolbar).setVisibility(View.VISIBLE);
+                        break;
+                    case 5:
+                        findViewById(R.id.main_toolbar).setVisibility(View.GONE);
+                        break;
+                }
+
             }
         });
 
@@ -334,13 +394,28 @@ public class ActivityMain extends ActivityEnhanced
         pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
         pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
         pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
-        pages.add(FragmentCall.newInstance());
+
+        final FragmentCall fragmentCall = FragmentCall.newInstance(true);
+
+        pages.add(fragmentCall);
         pages.add(FragmentMap.getInctance(43.54, 52.56, FragmentMap.Mode.sendPosition));
 
         //  mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager()));
+        mViewPager.setOffscreenPageLimit(6);
 
         navigationTabStrip.setViewPager(mViewPager);
+
+        MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
+
+        txtMenu.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                fragmentCall.openDialogMenu();
+            }
+        });
+
+
     }
 
     class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -646,7 +721,7 @@ public class ActivityMain extends ActivityEnhanced
 
                 switch (pageDrawer) {
                     case 1:
-                        chatGetRoom(G.userId);
+                        chatGetRoom(userId);
                         pageDrawer = 0;
                         break;
                     case 2: {
@@ -715,7 +790,7 @@ public class ActivityMain extends ActivityEnhanced
                         break;
                     }
                     case 7: {
-                        Fragment fragment = FragmentCall.newInstance();
+                        Fragment fragment = FragmentCall.newInstance(false);
                         try {
                             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                         } catch (Exception e) {
@@ -1061,14 +1136,17 @@ public class ActivityMain extends ActivityEnhanced
 
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
 
+        findViewById(R.id.am_layot_title_call).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
-
+        G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.onSetActionInRoom = this;
+        G.onClientCondition = this;
+        G.onClientGetRoomListResponse = this;
 
         startService(new Intent(this, ServiceContact.class));
 
@@ -1247,6 +1325,128 @@ public class ActivityMain extends ActivityEnhanced
         }
         realm.close();
     }
+
+    //*****************************************************************************************************************************
+
+    @Override public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
+        //empty
+    }
+
+    @Override
+    public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override public void execute(Realm realm) {
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                if (room != null && realmRoomMessage != null) {
+                    /**
+                     * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                     */
+                    if (room.getUnreadCount() <= 1) {
+                        realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
+                        room.setFirstUnreadMessage(realmRoomMessage);
+                    }
+                }
+            }
+        });
+        realm.close();
+
+        switch (roomType) {
+
+            case CHAT:
+                if (mainActionChat != null) {
+                    mainActionChat.onAction(MainAction.downScrool);
+                }
+                break;
+            case GROUP:
+                if (mainActionGroup != null) {
+                    mainActionGroup.onAction(MainAction.downScrool);
+                }
+                break;
+            case CHANNEL:
+                if (mainActionChannel != null) {
+                    mainActionChannel.onAction(MainAction.downScrool);
+                }
+                break;
+        }
+
+        if (mainActionApp != null) {
+            mainActionApp.onAction(MainAction.downScrool);
+        }
+
+        /**
+         * don't send update status for own message
+         */
+        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
+            // user has received the message, so I make a new delivered update status request
+            if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            }
+        }
+    }
+
+    @Override public void onMessageFailed(final long roomId, RealmRoomMessage roomMessage) {
+        //empty
+    }
+
+    //************************
+    @Override public void onClientCondition() {
+
+        notifySubFragmentForCondition();
+    }
+
+    @Override public void onClientConditionError() {
+        notifySubFragmentForCondition();
+    }
+
+    private void notifySubFragmentForCondition() {
+
+        if (mainActionApp != null) {
+            mainActionApp.onAction(MainAction.clinetCondition);
+        }
+
+        if (mainActionChat != null) {
+            mainActionChat.onAction(MainAction.clinetCondition);
+        }
+
+        if (mainActionGroup != null) {
+            mainActionGroup.onAction(MainAction.clinetCondition);
+        }
+
+        if (mainActionChannel != null) {
+            mainActionChannel.onAction(MainAction.clinetCondition);
+        }
+    }
+
+    //************************
+
+    @Override public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+
+        if (mainInterfaceGetRoomList != null) {
+            mainInterfaceGetRoomList.onClientGetRoomList(roomList, response, fromLogin);
+        }
+    }
+
+    @Override public void onError(int majorCode, int minorCode) {
+
+        if (mainInterfaceGetRoomList != null) {
+            mainInterfaceGetRoomList.onError(majorCode, minorCode);
+        }
+    }
+
+    @Override public void onTimeout() {
+
+        if (mainInterfaceGetRoomList != null) {
+            mainInterfaceGetRoomList.onTimeout();
+        }
+    }
+
+    //*************************************************************
+
 
     public void lockNavigation() {
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
