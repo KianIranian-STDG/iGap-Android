@@ -1495,9 +1495,15 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         });
     }
 
-    private void closeKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    private void closeKeyboard(final View v) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+        });
+
     }
 
     private void dialogWaitTimeVerifyPassword(long time) {

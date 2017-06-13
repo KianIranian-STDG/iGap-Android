@@ -107,6 +107,9 @@
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/dp14"
                         fontPath="fonts/IRANSansMobile_Bold.ttf"
+                        app:emojiSize="@dimen/dp14"
+                        android:lineSpacingMultiplier=".8"
+                        android:padding="3dp"
                         />
 
                     <net.iGap.module.MaterialDesignTextView
@@ -132,13 +135,15 @@
                       android:orientation="horizontal"
                       >
 
-                    <TextView
+                    <net.iGap.module.EmojiTextViewE
                         android:id="@+id/chl_txt_last_seen"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/dp12"
+                        app:emojiSize="@dimen/dp14"
+                        android:lineSpacingMultiplier=".8"
                         />
 
                     <com.wang.avi.AVLoadingIndicatorView

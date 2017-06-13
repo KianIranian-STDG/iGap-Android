@@ -864,9 +864,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         } else if (connectionStateR == ConnectionState.UPDATING) {
                             txtIgap.setText(R.string.updating);
                             txtIgap.setTypeface(null, Typeface.BOLD);
-                        } else {
+                        } else if (connectionStateR == ConnectionState.IGAP) {
                             txtIgap.setText(R.string.app_name);
                             txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
+                        } else {
+                            txtIgap.setTypeface(null, Typeface.BOLD);
                         }
                     }
                 });

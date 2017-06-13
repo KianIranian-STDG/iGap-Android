@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp68"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
   <FrameLayout
@@ -30,9 +31,9 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/dp12"
         >
       <LinearLayout
+          android:paddingTop="@dimen/dp8"
           android:id="@+id/lytContainer3"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
@@ -55,12 +56,16 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:maxWidth="@dimen/dp160"
-              android:paddingBottom="1dp"
               android:singleLine="true"
               android:text="Name"
               android:textColor="@color/black90"
               android:textSize="@dimen/dp15"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
+              app:emojiSize="@dimen/dp16"
+              android:lineSpacingMultiplier=".8"
+              android:lineSpacingExtra="0dp"
+              android:paddingBottom="@dimen/dp4"
+              android:paddingTop="@dimen/dp4"
               />
 
 
@@ -78,6 +83,7 @@
       </LinearLayout>
 
       <LinearLayout
+          android:paddingTop="@dimen/dp12"
           android:id="@+id/lytContainer6"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
