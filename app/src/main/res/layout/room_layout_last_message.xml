@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lyt_last_message_room"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,14 +12,18 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="start"
-      android:gravity="start"
+      android:gravity="start|top"
       android:maxLines="1"
-      android:paddingBottom="1dp"
       android:singleLine="true"
-      android:text="LAST MESSAGE"
       android:textColor="#FF616161"
-      android:textSize="@dimen/dp13"
+      android:text="LAST MESSAGE"
+      android:textSize="@dimen/dp14"
+      app:emojiSize="@dimen/dp18"
+      android:lineSpacingMultiplier=".79"
+      android:lineSpacingExtra="0dp"
+      android:paddingBottom="@dimen/dp4"
+      android:paddingTop="@dimen/dp4"
+      fontPath="fonts/IRANSansMobile.ttf"
       />
-
 
 </LinearLayout>
