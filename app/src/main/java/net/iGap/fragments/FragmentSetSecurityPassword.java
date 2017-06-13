@@ -136,8 +136,6 @@ public class FragmentSetSecurityPassword extends Fragment {
                 if (page == 1) {
                     if (edtSetPassword.length() >= 2) {
 
-
-                        closeKeyboard(v);
                         page = 2;
                         txtToolbar.setText(getResources().getString(R.string.your_password));
                         txtPassword = edtSetPassword.getText().toString();
@@ -154,8 +152,6 @@ public class FragmentSetSecurityPassword extends Fragment {
                     if (edtSetRePassword.length() >= 2) {
                         if (txtPassword.equals(edtSetRePassword.getText().toString())) {
 
-
-                            closeKeyboard(v);
                             page = 3;
                             txtToolbar.setText(getResources().getString(R.string.password_hint));
                             rootReEnterPassword.setVisibility(View.GONE);
@@ -176,8 +172,6 @@ public class FragmentSetSecurityPassword extends Fragment {
 
                         if (!txtPassword.equals(edtSetHintPassword.getText().toString())) {
 
-
-                            closeKeyboard(v);
                             page = 4;
                             txtToolbar.setText(getResources().getString(R.string.recovery_question));
                             rootHintPassword.setVisibility(View.GONE);
@@ -193,7 +187,6 @@ public class FragmentSetSecurityPassword extends Fragment {
                     }
 
                 } else if (page == 4) {
-                    closeKeyboard(v);
                     if (edtSetQuestionPassOne.length() > 0 && edtSetQuestionPassTwo.length() > 0 && edtSetAnswerPassOne.length() > 0 && edtSetAnswerPassTwo.length() > 0) {
                         page = 5;
                         txtToolbar.setText(getResources().getString(R.string.recovery_email));
@@ -206,6 +199,7 @@ public class FragmentSetSecurityPassword extends Fragment {
                     }
                 } else if (page == 5) {
 
+                    FragmentSecurity.isFirstSetPassword = false;
                     if (edtSetEmail.length() > 0) {
                         Pattern EMAIL_ADDRESS = patternEmail();
 
@@ -241,7 +235,6 @@ public class FragmentSetSecurityPassword extends Fragment {
                     if (edtSetConfirmEmail.length() > 0) {
                         new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtSetConfirmEmail.getText().toString());
                     } else {
-                        closeKeyboard(v);
                         error(getString(R.string.enter_verify_email_code));
                     }
                     closeKeyboard(v);

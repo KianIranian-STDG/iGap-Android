@@ -68,7 +68,8 @@ public class FragmentSecurity extends Fragment {
     private static final int CONFIRM_EMAIL = 3;
     private static final int CHANGE_QUESTION = 4;
     private FragmentActivity mActivity;
-    boolean isFirstArrive = true;
+    public boolean isFirstArrive = true;
+    public static boolean isFirstSetPassword = true;
 
     public FragmentSecurity() {
         // Required empty public constructor
@@ -123,10 +124,11 @@ public class FragmentSecurity extends Fragment {
             prgWaiting.setVisibility(View.VISIBLE);
             new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail();
         } else {
-
-            prgWaiting.setVisibility(View.GONE);
-            setSecondView();
-
+            if (!isFirstSetPassword) {
+                setSecondView();
+            } else {
+                setFirstView();
+            }
         }
 
 
@@ -280,12 +282,14 @@ public class FragmentSecurity extends Fragment {
         txtTurnPasswordOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MaterialDialog.Builder(mActivity).title(R.string.turn_Password_off).content(R.string.turn_Password_off_desc).positiveText(getResources().getString(R.string.B_ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(mActivity).title(R.string.turn_Password_off).content(R.string.turn_Password_off_desc).positiveText(getResources().getString(R.string.yes)).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        isFirstSetPassword = true;
                         new RequestUserTwoStepVerificationUnsetPassword().unsetPassword(password);
                     }
-                }).negativeText(getResources().getString(R.string.B_cancel)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                }).negativeText(getResources().getString(R.string.no)).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.dismiss();
@@ -327,6 +331,7 @@ public class FragmentSecurity extends Fragment {
                             rootCheckPassword.setVisibility(View.VISIBLE);
                             rippleOk.setVisibility(View.VISIBLE);
                             edtCheckPassword.setHint(hint);
+                            isFirstSetPassword = false;
 
                             if (hasConfirmedRecoveryEmail || unconfirmedEmailPattern.length() == 0) {
                                 txtSetRecoveryEmail.setVisibility(View.VISIBLE);
@@ -345,17 +350,25 @@ public class FragmentSecurity extends Fragment {
                             root_ChangePassword.setVisibility(View.GONE);
                             rootCheckPassword.setVisibility(View.GONE);
                             rippleOk.setVisibility(View.GONE);
+                            isFirstSetPassword = true;
                         }
                     }
                 });
             }
 
+
+
             @Override
-            public void errorGetPasswordDetail() {
+            public void errorGetPasswordDetail(final int majorCode, final int minorCode) {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mActivity.getSupportFragmentManager().popBackStack();
+
+                        if (majorCode == 188 && minorCode == 1) {  //USER DON'T SET A PASSWORD
+                            setFirstView();
+                        } else { // CAN'T CONNECT TO SERVER
+                            mActivity.getSupportFragmentManager().popBackStack();
+                        }
                     }
                 });
             }
@@ -551,6 +564,21 @@ public class FragmentSecurity extends Fragment {
 
     }
 
+    private void setFirstView() {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                rootSetPassword.setVisibility(View.VISIBLE);
+                rootSetAdditionPassword.setVisibility(View.VISIBLE);
+                root_ChangePassword.setVisibility(View.GONE);
+                rootCheckPassword.setVisibility(View.GONE);
+                rippleOk.setVisibility(View.GONE);
+                prgWaiting.setVisibility(View.GONE);
+            }
+        });
+    }
+
     private void setSecondView() {
         mActivity.runOnUiThread(new Runnable() {
             @Override
@@ -560,6 +588,7 @@ public class FragmentSecurity extends Fragment {
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootCheckPassword.setVisibility(View.GONE);
                 rippleOk.setVisibility(View.GONE);
+                prgWaiting.setVisibility(View.GONE);
             }
         });
 

@@ -882,7 +882,8 @@
   <string name="turn_Password_off">Turn Password Off</string>
   <string name="turn_Password_off_desc">Do you really want to remove password?</string>
 
-  <string name="set_recovery_email">Set Recovery E-Mail</string>
+  <string name="change_email_recovery">Set Recovery E-Mail</string>
+  <string name="Change_question_recovery">Set Recovery question</string>
   <string name="set_recovery_dialog_title">Set Recovery by:</string>
 
   <string name="set_unconfirmed_email">Set Confirmed E-Mail</string>
