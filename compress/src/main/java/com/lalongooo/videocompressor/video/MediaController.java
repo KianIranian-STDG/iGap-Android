@@ -145,7 +145,8 @@ import java.nio.ByteBuffer;
     }
 
 
-    @TargetApi(16) private long readAndWriteTrack(MediaExtractor extractor, MP4Builder mediaMuxer, MediaCodec.BufferInfo info, long start, long end, File file, boolean isAudio) throws Exception {
+    @TargetApi(16)
+    private long readAndWriteTrack(MediaExtractor extractor, MP4Builder mediaMuxer, MediaCodec.BufferInfo info, long start, long end, File file, boolean isAudio) throws Exception {
         int trackIndex = selectTrack(extractor, isAudio);
         if (trackIndex >= 0) {
             extractor.selectTrack(trackIndex);
@@ -269,6 +270,9 @@ import java.nio.ByteBuffer;
             Bitmap bmp = null;
             re.setDataSource(path);
             bmp = retriever.getFrameAtTime();
+            if (bmp == null) {
+                return false;
+            }
             videoHeight = bmp.getHeight();
             videoWidth = bmp.getWidth();
         } catch (IllegalArgumentException e) {

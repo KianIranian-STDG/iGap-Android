@@ -6949,13 +6949,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
 
                         if (direction.equals(UP.toString())) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
-                                    mAdapter.notifyDataSetChanged();
-                                }
-                            });
                             isWaitingForHistoryUp = false;
                             isWaitingForHistoryUp = false;
                             allowGetHistoryUp = false;
@@ -6964,6 +6957,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             isWaitingForHistoryDown = false;
                             allowGetHistoryDown = false;
                         }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
 
 
