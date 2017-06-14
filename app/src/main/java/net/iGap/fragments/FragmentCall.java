@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -64,6 +66,10 @@ public class FragmentCall extends Fragment {
     private AppCompatImageView imgCallEmpty;
     private FragmentActivity mActivity;
     ProgressBar progressBar;
+    private int attampOnError = 0;
+    boolean canclick = false;
+    int move = 0;
+
 
     private RealmRecyclerView mRecyclerView;
 
@@ -152,15 +158,24 @@ public class FragmentCall extends Fragment {
         mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
 
         G.iSignalingGetCallLog = new ISignalingGetCallLog() {
-            @Override public void onGetList(int size) {
+            @Override public void onGetList(final int size) {
 
-                G.handler.post(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override public void run() {
                         progressBar.setVisibility(View.GONE);
                     }
                 });
 
-                if (size == 0) {
+                if (size == -1) {
+
+                    if (attampOnError < 2) {
+                        isSendRequestForLoading = false;
+                        attampOnError++;
+                    } else {
+                        isThereAnyMoreItemToLoad = false;
+                        mRecyclerView.getRecycleView().removeOnScrollListener(onScrollListener);
+                    }
+                } else if (size == 0) {
                     isThereAnyMoreItemToLoad = false;
                     mRecyclerView.getRecycleView().removeOnScrollListener(onScrollListener);
                 } else {
@@ -209,13 +224,23 @@ public class FragmentCall extends Fragment {
     }
 
 
+
     private void getLogListWithOfset() {
-        isSendRequestForLoading = true;
 
-        new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
+        if (G.isSecure && G.userLogin) {
+            isSendRequestForLoading = true;
+            new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override public void run() {
+                    getLogListWithOfset();
+                }
+            }, 1000);
+        }
 
-        progressBar.setVisibility(View.VISIBLE);
     }
+
 
     public void openDialogMenu() {
         final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
@@ -333,13 +358,33 @@ public class FragmentCall extends Fragment {
 
                         // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getlogProto().getPeer().getId(), null, null);
 
-                        long userId = realmResults.get(getPosition()).getlogProto().getPeer().getId();
+                        if (canclick) {
+                            long userId = realmResults.get(getPosition()).getlogProto().getPeer().getId();
 
-                        if (userId != 134 && G.userId != userId) {
-                            call(userId, false);
+                            if (userId != 134 && G.userId != userId) {
+                                call(userId, false);
+                            }
+                        }
+                    }
+                });
+
+                itemView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override public boolean onTouch(View v, MotionEvent event) {
+
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            move = (int) event.getX();
+                        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                            int i = Math.abs((int) (move - event.getX()));
+
+                            if (i < 2) {
+                                canclick = true;
+                            } else {
+                                canclick = false;
+                            }
                         }
 
-
+                        return false;
                     }
                 });
             }
