@@ -21,7 +21,6 @@ import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -514,7 +513,6 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             new Thread(new Runnable() {
                 @Override public void run() {
-                    Log.i("SSS", "getChatList 5");
                     new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
                 }
             }).start();
