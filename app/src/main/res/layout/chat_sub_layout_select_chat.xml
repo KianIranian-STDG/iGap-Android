@@ -97,6 +97,7 @@
               android:singleLine="true"
               android:textColor="#2bbfbd"
               android:textSize="@dimen/dp13"
+              fontPath="fonts/IRANSansMobile.ttf"
               />
 
           <net.iGap.module.EmojiTextViewE

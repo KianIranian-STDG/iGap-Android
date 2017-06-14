@@ -18,7 +18,7 @@
       android:textColor="#2bbfbd"
       android:textSize="@dimen/dp13"
       app:emojiSize="@dimen/dp18"
-      android:lineSpacingMultiplier=".94"
+      android:lineSpacingMultiplier=".79"
       android:lineSpacingExtra="0dp"
       android:paddingBottom="@dimen/dp4"
       android:paddingTop="@dimen/dp4"

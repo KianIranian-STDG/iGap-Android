@@ -161,6 +161,9 @@
             android:textSize="@dimen/dp15"
             android:textStyle="bold"
             fontPath="fonts/IRANSansMobile.ttf"
+            app:emojiSize="@dimen/dp14"
+            android:lineSpacingMultiplier=".8"
+            android:padding="@dimen/dp4"
             />
 
       </LinearLayout>
@@ -255,6 +258,9 @@
                 android:textSize="@dimen/dp14"
                 android:theme="@style/Setting_editText"
                 fontPath="fonts/IRANSansMobile.ttf"
+                app:emojiSize="@dimen/dp14"
+                android:lineSpacingMultiplier=".8"
+                android:padding="@dimen/dp4"
                 />
 
           </LinearLayout>
