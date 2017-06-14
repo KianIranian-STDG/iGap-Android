@@ -109,7 +109,7 @@
                         fontPath="fonts/IRANSansMobile_Bold.ttf"
                         app:emojiSize="@dimen/dp14"
                         android:lineSpacingMultiplier=".8"
-                        android:padding="3dp"
+                        android:padding="@dimen/dp4"
                         />
 
                     <net.iGap.module.MaterialDesignTextView
