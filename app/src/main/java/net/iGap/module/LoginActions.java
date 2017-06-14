@@ -73,7 +73,7 @@ public class LoginActions extends Application {
                          * app is background send clientCondition (: .
                          */
                         if (!firstTimeEnterToApp || !isAppInFg) {
-                            new RequestClientGetRoomList().clientGetRoomList(0, 100);
+                            new RequestClientGetRoomList().clientGetRoomList(0, 50);
                         }
 
                         if (firstEnter) {

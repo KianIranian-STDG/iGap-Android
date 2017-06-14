@@ -148,6 +148,18 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             return;
         }
 
+        //if(savedInstanceState.getBoolean("GO_TO_MAIN")){
+        //
+        //    Intent intent = new Intent(G.context, ActivityMain.class);
+        //    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //    startActivity(intent);
+        //    finish();
+        //    return;
+        //
+        //}
+        // savedInstanceState.putBoolean("GO_TO_MAIN",true);
+
+
         try {
             HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
                 @Override public void Allow() throws IOException {

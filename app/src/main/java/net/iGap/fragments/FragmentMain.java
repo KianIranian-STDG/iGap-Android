@@ -81,9 +81,6 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
-/**
- * Created by android3 on 6/11/2017.
- */
 
 public class FragmentMain extends Fragment implements OnComplete {
 
@@ -193,9 +190,11 @@ public class FragmentMain extends Fragment implements OnComplete {
         RoomAdapter roomAdapter = new RoomAdapter(getActivity(), results, this);
         mRecyclerView.setAdapter(roomAdapter);
 
-   /*     if (mainType == MainType.all) {
+        if (mainType == MainType.all) {
 
-            RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+            getChatsList();
+
+        /*    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
 
                 @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
@@ -217,8 +216,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                 }
             };
 
-            mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
-        }*/
+            mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);*/
+        }
 
 
 

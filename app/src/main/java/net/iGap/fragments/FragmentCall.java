@@ -303,6 +303,11 @@ public class FragmentCall extends Fragment {
                     intent.putExtra(ActivityCall.USER_ID_STR, userID);
                     intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    if (isIncomingCall) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    }
+
                     G.context.startActivity(intent);
                 }
 
@@ -417,7 +422,7 @@ public class FragmentCall extends Fragment {
                 case CANCELED:
 
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.red));
+                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.green));
                     viewHolder.timeDureation.setText(R.string.not_answer);
                     break;
                 case INCOMING:
