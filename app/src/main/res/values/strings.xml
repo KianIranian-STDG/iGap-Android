@@ -893,8 +893,8 @@
   <string name="recovery_by_email">Recovery via E-mail</string>
   <string name="recovery_by_question">Recovery via Question</string>
 
-  <string name="recovery_by_question_dialog">E-mail:</string>
-  <string name="recovery_by_email_dialog">Question:</string>
+  <string name="recovery_by_question_dialog">E-mail</string>
+  <string name="recovery_by_email_dialog">Question</string>
 
   <string name="recovery_Password">Recovery Password</string>
   <string name="your_email_desc">Please add your valid e-mail! It is way to recover your forgotten password</string>
