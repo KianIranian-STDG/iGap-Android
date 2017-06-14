@@ -422,6 +422,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private int messageCounter = 0;
     private int selectedPosition = 0;
     private boolean isNoMessage = true;
+    private boolean isEmojiSHow = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -1854,8 +1855,19 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         edtChat = (EmojiEditTextE) findViewById(R.id.chl_edt_chat);
         edtChat.requestFocus();
 
+        edtChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isEmojiSHow) {
+
+                    imvSmileButton.performClick();
+                }
+            }
+        });
+
         imvSendButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_send_button);
         imvSendButton.setTextColor(Color.parseColor(G.attachmentColor));
+
 
         imvAttachFileButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_attach_button);
         layoutAttachBottom = (LinearLayout) findViewById(R.id.layoutAttachBottom);
@@ -4426,6 +4438,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onEmojiPopupShown() {
                 changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+                isEmojiSHow = true;
             }
         }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
             @Override
@@ -4436,6 +4449,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onEmojiPopupDismiss() {
                 changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+                isEmojiSHow = false;
             }
         }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
             @Override
