@@ -782,7 +782,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     TextView txtView = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
                     txtView.setText(R.string.txt_draft);
                     txtView.setTextColor(Color.parseColor("#ff4644"));
-
+                    txtView.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
                     removeView(lytContainer5, R.id.lyt_avi_room);
                     removeView(lytContainer7, R.id.lyt_tic_room);
                 } else {
@@ -852,6 +852,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 TextView txtMessageSender = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
                                 txtMessageSender.setText(lastMessageSender);
                                 txtMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
+                                txtMessageSender.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
                             } else {
                                 removeView(lytContainer5, R.id.lyt_message_sender_room);
                             }
@@ -954,7 +955,9 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
                     addView(holder, lytContainer7, R.layout.room_layout_time, R.id.lyt_time_room, lytContainer7.getChildCount());
-                    ((TextView) holder.itemView.findViewById(R.id.cs_txt_contact_time)).setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
+                    TextView txtTime = ((TextView) holder.itemView.findViewById(R.id.cs_txt_contact_time));
+                    txtTime.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
+                    txtTime.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
                 } else {
                     removeView(lytContainer7, R.id.lyt_time_room);
                 }
