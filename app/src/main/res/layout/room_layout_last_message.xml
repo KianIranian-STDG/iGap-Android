@@ -17,7 +17,7 @@
       android:singleLine="true"
       android:textColor="#FF616161"
       android:text="LAST MESSAGE"
-      android:textSize="@dimen/dp14"
+      android:textSize="@dimen/dp13"
       app:emojiSize="@dimen/dp18"
       android:lineSpacingMultiplier=".79"
       android:lineSpacingExtra="0dp"
