@@ -100,7 +100,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     private int mOffset = 0;
     private int mLimit = 100;
     boolean isSendRequestForLoading = false;
-    boolean isThereAnyMoreItemToLoad = false;
+    boolean isThereAnyMoreItemToLoad = true;
 
     private RealmRecyclerView mRecyclerView;
     private MainType mainType;
