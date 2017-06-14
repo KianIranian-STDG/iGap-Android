@@ -98,7 +98,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private int mOffset = 0;
-    private int mLimit = 100;
+    private int mLimit = 50;
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
 
@@ -193,7 +193,7 @@ public class FragmentMain extends Fragment implements OnComplete {
         RoomAdapter roomAdapter = new RoomAdapter(getActivity(), results, this);
         mRecyclerView.setAdapter(roomAdapter);
 
-        if (mainType == MainType.all) {
+   /*     if (mainType == MainType.all) {
 
             RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -218,7 +218,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             };
 
             mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
-        }
+        }*/
 
 
 
@@ -528,6 +528,15 @@ public class FragmentMain extends Fragment implements OnComplete {
         });
 
         isSendRequestForLoading = false;
+
+        if (isThereAnyMoreItemToLoad) {
+            isSendRequestForLoading = true;
+            new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+
+
     }
 
     //***************************************************************************************************************************

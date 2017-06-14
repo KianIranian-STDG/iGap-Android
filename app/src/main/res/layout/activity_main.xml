@@ -144,7 +144,7 @@
           app:nts_corners_radius="1.5dp"
           app:nts_factor="1.5"
           app:nts_gravity="bottom"
-          app:nts_inactive_color="@color/gray"
+          app:nts_inactive_color="#adffffff"
           app:nts_type="point"
           app:nts_typeface="fonts/MaterialIcons-Regular.ttf"
           app:nts_weight="3dp"

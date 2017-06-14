@@ -88,7 +88,7 @@
             android:singleLine="true"
             android:text="@string/md_cloud"
             android:textAppearance="@style/TextIconAppearance_toolbar"
-            android:textColor="#3b000000"
+            android:textColor="#adffffff"
             android:textSize="45sp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/dp8"

@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 import io.realm.Realm;
 import net.iGap.G;
-import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperClientCondition;
 import net.iGap.interfaces.OnSecuring;
 import net.iGap.interfaces.OnUserInfoResponse;
@@ -74,7 +73,7 @@ public class LoginActions extends Application {
                          * app is background send clientCondition (: .
                          */
                         if (!firstTimeEnterToApp || !isAppInFg) {
-                            getRoomList();
+                            new RequestClientGetRoomList().clientGetRoomList(0, 100);
                         }
 
                         if (firstEnter) {
@@ -116,29 +115,7 @@ public class LoginActions extends Application {
         }, 500);
     }
 
-    private static void getRoomList() {
 
-        int _limit = ActivityMain.currentMainRoomListPosition + 20;
-
-        if (_limit < 100) {
-            new RequestClientGetRoomList().clientGetRoomList(0, _limit, true);
-        } else {
-
-            new RequestClientGetRoomList().clientGetRoomList(0, 100, true);
-
-            int offset = 100;
-
-            for (int i = 100; i < _limit; i += 100) {
-                offset += 100;
-
-                new RequestClientGetRoomList().clientGetRoomList(i, 100);
-            }
-
-            if (offset < _limit) {
-                new RequestClientGetRoomList().clientGetRoomList(offset, 100);
-            }
-        }
-    }
 
     private static void getUserInfo() {
         Realm realm = Realm.getDefaultInstance();
