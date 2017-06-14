@@ -293,7 +293,7 @@
   <string name="array_Default">Default</string>
   <string name="array_Short">Short</string>
   <string name="array_Long">Long</string>
-  <string name="array_Only_if_silent">Only if it is silent</string>
+  <string name="array_Only_if_silent">Only for silent mode</string>
   <string name="array_From_Gallery">Gallery</string>
   <string name="array_From_Camera">Camera</string>
   <string name="array_Delete_photo">Delete Photo</string>
@@ -681,7 +681,7 @@
   <string name="do_you_want_left_this">"Are you sure you want to leave the selected item ?"</string>
   <string name="do_you_want_delete_this">Are you sure you want to delete the selected item ?</string>
   <string name="do_you_want_clear_history_this">Are you sure you want to clear history the selected item ?</string>
-  <string name="content_log_out">Are you sure you want to logout of your iGap account ?</string>
+  <string name="content_log_out">Are you sure you want to log out of your iGap account ?</string>
   <string name="st_signature">Signature</string>
   <string name="one_day">Last day</string>
   <string name="two_day">Two days ago</string>
@@ -879,25 +879,25 @@
   <string name="enter_code">Enter your code</string>
   <string name="Change_password">Change Password</string>
   <string name="Change_hint">Change Hint</string>
-  <string name="turn_Password_off">Turn Password Off</string>
+  <string name="turn_Password_off">Turn Password off</string>
   <string name="turn_Password_off_desc">Do you really want to remove password?</string>
 
   <string name="change_email_recovery">Set Recovery E-Mail</string>
   <string name="Change_question_recovery">Set Recovery question</string>
-  <string name="set_recovery_dialog_title">Set Recovery by:</string>
+  <string name="set_recovery_dialog_title"> Recover password via:</string>
 
   <string name="set_unconfirmed_email">Set Confirmed E-Mail</string>
-  <string name="Recovery_with_question">Recovery with question</string>
-  <string name="please_enter_confirm_code">Please enter confirm code</string>
+  <string name="Recovery_with_question">Recovery with Question</string>
+  <string name="please_enter_confirm_code">Please enter emailed confirmation code</string>
 
   <string name="recovery_by_email">Recovery via E-mail</string>
   <string name="recovery_by_question">Recovery via Question</string>
 
-  <string name="recovery_by_question_dialog">Question</string>
+  <string name="recovery_by_question_dialog">Security Question</string>
   <string name="recovery_by_email_dialog">E-mail</string>
 
   <string name="recovery_Password">Recovery Password</string>
-  <string name="your_email_desc">Please add your valid e-mail! It is way to recover your forgotten password</string>
+  <string name="your_email_desc">Please add your valid e-mail! It is another way to recover your forgotten password</string>
   <string name="call_with">Select Contact</string>
   <string name="please_enter_code">Please enter code</string>
   <string name="please_enter_all_item">Please enter code</string>
@@ -920,7 +920,7 @@
 
   <string name="iGap_has_crashed">iGap has crashed !</string>
   <string name="iGap_has_crashed_reload">Reset</string>
-  <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop . We are aware of this unexpected error occurred. Please be sure we are fixing this problem  , all you have to do is only click "Reset" .</string>
+  <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop. We are aware of this error. Please be sure we are fixing this problem, all you have to do is only click "Reset".</string>
   <string name="who_is_allowed_to_call">Who can call me ?</string>
   <string name="miss">Miss Call</string>
   <string name="not_answer">Not Answer</string>

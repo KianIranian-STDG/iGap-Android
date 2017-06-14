@@ -298,7 +298,7 @@
   <string name="array_Default">"پیش‌فرض"</string>
   <string name="array_Short">"کوتاه"</string>
   <string name="array_Long">"بلند"</string>
-  <string name="array_Only_if_silent">"اگر فقط دستگاه در حالت بی‌صدا بود"</string>
+  <string name="array_Only_if_silent">"در حالت سکوت دستگاه"</string>
   <string name="array_From_Gallery">"گالری"</string>
   <string name="array_From_Camera">"دوربین"</string>
   <string name="array_Delete_photo">"حذف عکس"</string>
@@ -550,7 +550,7 @@
   <string name="active_session_title">لغو و بستن جلسه</string>
   <string name="active_session_all_title">لغو و بستن جلسات</string>
   <string name="active_session_content">آیا مطمئنید که می‌خواهید این جلسه را غیرفعال کنید؟</string>
-  <string name="active_session_all_content">آیا از لغو همهء جلسات فعال اطمینان دارید؟</string>
+  <string name="active_session_all_content">آیا از لغو همهٔ جلسات فعال اطمینان دارید؟</string>
   <string name="USER_VERIFY_GIVEN_USERNAME">هیچ کاربری با نام کابری ارائه شده ثبت نام نکرده است.</string>
   <string name="USER_VERIFY_MANY_TRIES">کد تأییدیه به دلیل چندین مرتبه وارد کردن برای مدتی مسدود می‌باشد.</string>
   <string name="USER_VERIFY_MANY_TRIES_SEND">کد تأییدیه چندین مرتبه ارسال شده است.</string>
@@ -802,7 +802,7 @@
   <string name="room_not_exist">صفحه ای با این شناسه یافت نشد</string>
   <string name="app_theme">رنگ پوسته آی گپ</string>
   <string name="app_notif_color">رنگ اعلانات در آی گپ</string>g>
-  <string name="theme">رنگ بندی پوسته</string>
+  <string name="theme">رنگ بندی</string>
 
   <string name="is"></string>
   <string name="are"></string>
@@ -889,7 +889,7 @@
   <string name="set_recovery_dialog_title">بازیابی از طریق:</string>
   <string name="Recovery_with_question">بازیابی از طریق سؤال امنیتی </string>
 
-  <string name="please_enter_confirm_code"> لطفاً کد تأیید شده را وارد نمایید</string>
+  <string name="please_enter_confirm_code"> لطفاً کد ایمیل تأیید شده را وارد نمایید</string>
 
   <string name="recovery_by_email"> بازیابی از طریق پست الکترونیکی</string>
   <string name="recovery_by_question"> بازیابی از طریق سؤال امنیتی</string>
@@ -898,7 +898,7 @@
   <string name="recovery_by_email_dialog">پست الکترونیکی</string>
 
   <string name="recovery_Password">بازیابی رمزعبور </string>
-  <string name="your_email_desc"> لطفاً پست الکترونیکی معتبری اضافه کنید. این گزینه برای بازیابی رمزعبور فراموش شده است.</string>
+  <string name="your_email_desc"> لطفاً پست الکترونیکی معتبری وارد کنید. این گزینه برای بازیابی رمزعبور فراموش شده است.</string>
   <string name="call_with">انتخاب مخاطب </string>
   <string name="please_enter_code">لطفاً کد را وارد نمایید </string>
   <string name="please_enter_all_item">لطفاً کد را وارد نمایید </string>

@@ -196,10 +196,10 @@
     </style>
 
     <style name="AVLoadingIndicatorView.Small">
-        <item name="minWidth">@dimen/dp24</item>
-        <item name="maxWidth">@dimen/dp24</item>
-        <item name="minHeight">@dimen/dp24</item>
-        <item name="maxHeight">@dimen/dp24</item>
+      <item name="minWidth">@dimen/dp20</item>
+      <item name="maxWidth">@dimen/dp20</item>
+      <item name="minHeight">@dimen/dp20</item>
+      <item name="maxHeight">@dimen/dp20</item>
         <item name="indicatorName">BallPulseIndicator</item>
     </style>
 
