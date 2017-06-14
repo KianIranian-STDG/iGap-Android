@@ -574,14 +574,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                          */
                         checkAction();
 
-                        RealmRoom room = updateUnreadCountRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                        if (room != null) {
-                            if (txtName == null) {
-                                txtName = (EmojiTextViewE) findViewById(R.id.chl_txt_name);
-                            }
-                            txtName.setText(room.getTitle());
-                        }
-
                         updateUnreadCountRealm.close();
                     }
                 });
@@ -1823,7 +1815,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 finish();
@@ -1880,7 +1872,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         mAdapter = new MessagesAdapter<>(this, this, this);
 
-        mAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AbstractMessage>() {
+        mAdapter.withFilterPredicate(new IItemAdapter.Predicate<AbstractMessage>() {
             @Override
             public boolean filter(AbstractMessage item, CharSequence constraint) {
                 return !item.mMessage.messageText.toLowerCase().contains(constraint.toString().toLowerCase());
@@ -1930,17 +1922,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 /**
                  * have unread
                  */
-                if (countNewMessage > 0) {
+                if (countNewMessage > 0 && firstUnreadMessageInChat != null) {
                     /**
                      * if unread message is exist in list set position to this item and create
                      * unread layout otherwise should clear list and load from unread again
                      */
 
                     firstUnreadMessage = firstUnreadMessageInChat;
-                    if (!firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
-                        resetAndGetFromEnd();
-                        return;
-                    }
                     int position = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
                     if (position > 0) {
 
@@ -1959,11 +1947,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         unreadCount = countNewMessage;
                         firstUnreadMessage = firstUnreadMessageInChat;
                         getMessages();
-
-                        if (firstUnreadMessage == null) {
-                            resetAndGetFromEnd();
-                            return;
-                        }
 
                         int position1 = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
                         if (position1 > 0) {
@@ -3820,16 +3803,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 });
             }
         });
-    }
-
-
-    private void resetAndGetFromEnd() {
-        firstUnreadMessageInChat = null;
-        resetMessagingValue();
-        countNewMessage = 0;
-        txtNewUnreadMessage.setVisibility(View.GONE);
-        txtNewUnreadMessage.setText(countNewMessage + "");
-        getMessages();
     }
 
     private ArrayList<Parcelable> getMessageStructFromSelectedItems() {
@@ -6715,21 +6688,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         } else {
             /**
-             * send request to server for get message.
-             *
-             * if direction is DOWN check again realmRoomMessage for detection
-             * that exist any message without checking deleted state and if
-             * exist use from that messageId instead of zero for getOnlineMessage
+             * send request to server for get message
              */
-            long oldMessageId = 0;
-            if (direction == DOWN) {
-                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findFirst();
-                if (realmRoomMessage != null) {
-                    oldMessageId = realmRoomMessage.getMessageId();
-                }
-            }
-
-            getOnlineMessage(oldMessageId, direction);
+            getOnlineMessage(0, direction);
         }
 
         if (messageInfos.size() > 0) {

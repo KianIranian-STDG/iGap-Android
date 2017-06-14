@@ -610,17 +610,6 @@
               fontPath="fonts/IRANSansMobile.ttf"
               />
         </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|top"
-            android:text="@string/desc_self_destroy"
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="@dimen/dp13"
-            android:padding="@dimen/dp8"
-            android:textStyle="normal"
-            fontPath="fonts/IRANSansMobile.ttf"
-            />
       </LinearLayout>
     </LinearLayout>
   </ScrollView>

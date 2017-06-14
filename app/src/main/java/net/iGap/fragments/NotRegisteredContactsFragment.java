@@ -72,7 +72,7 @@ public class NotRegisteredContactsFragment extends Fragment {
         final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         final ItemAdapter itemAdapter = new ItemAdapter();
-        itemAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<ContactItemNotRegister>() {
+        itemAdapter.withFilterPredicate(new IItemAdapter.Predicate<ContactItemNotRegister>() {
             @Override public boolean filter(ContactItemNotRegister item, CharSequence constraint) {
                 return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }

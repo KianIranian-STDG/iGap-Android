@@ -1524,25 +1524,25 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             }
         };
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_private)).content(getString(R.string.channel_text_convert_to_private)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_private)).content(getString(R.string.channel_text_convert_to_private)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 new RequestChannelRemoveUsername().channelRemoveUsername(roomId);
             }
-        }).negativeText(R.string.no).show();
+        }).negativeText(R.string.B_cancel).show();
     }
 
     private void convertToPublic() {
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_public)).content(getString(R.string.channel_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_public)).content(getString(R.string.channel_text_convert_to_public)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 dialog.dismiss();
                 setUsername();
             }
-        }).negativeText(R.string.no).show();
+        }).negativeText(R.string.B_cancel).show();
     }
 
     private void setUsername() {

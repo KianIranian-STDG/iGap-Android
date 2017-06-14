@@ -137,8 +137,7 @@ public class HelperSetAction {
 
     private static void timeOutChecking(final StructAction structAction) {
         G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 /**
                  * check that this action exist in structAction or not.
                  * if not exist don't try for cancel that ,because this
@@ -290,8 +289,7 @@ public class HelperSetAction {
     public static void clearAllActions() {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+            @Override public void execute(Realm realm) {
                 for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
                     realmRoom.setActionState(null, 0);
                 }

@@ -123,7 +123,7 @@ public class HelperClientCondition {
 
                 clientCondition.addRooms(room);
                 Log.i("CLI", "Condition : " + realmClientCondition);
-                //clearOffline(realmClientCondition, realm);
+                clearOffline(realmClientCondition, realm);
             }
         }
         realm.close();

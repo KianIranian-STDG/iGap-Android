@@ -12,10 +12,8 @@ package net.iGap.response;
 
 import io.realm.Realm;
 import net.iGap.G;
-import net.iGap.helper.HelperImageBackColor;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileNickname;
-import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
 
 public class UserProfileSetNicknameResponse extends MessageHandler {
@@ -32,22 +30,16 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override
-    public void handler() {
+    @Override public void handler() {
         super.handler();
 
         final ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder userProfileNickNameResponse = (ProtoUserProfileNickname.UserProfileSetNicknameResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmUserInfo.class).findFirst().getUserInfo();
-                if (realmRegisteredInfo != null) {
-                    realmRegisteredInfo.setDisplayName(userProfileNickNameResponse.getNickname());
-                    realmRegisteredInfo.setInitials(HelperImageBackColor.getFirstAlphabetName(userProfileNickNameResponse.getNickname()));
-                    G.displayName = userProfileNickNameResponse.getNickname();
-                }
+            @Override public void execute(Realm realm) {
+                realm.where(RealmUserInfo.class).findFirst().getUserInfo().setDisplayName(userProfileNickNameResponse.getNickname());
+                G.displayName = userProfileNickNameResponse.getNickname();
             }
         });
 
@@ -58,13 +50,11 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
         }
     }
 
-    @Override
-    public void timeOut() {
+    @Override public void timeOut() {
         super.timeOut();
     }
 
-    @Override
-    public void error() {
+    @Override public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         final int majorCode = errorResponse.getMajorCode();

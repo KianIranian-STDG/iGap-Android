@@ -328,7 +328,9 @@ public class ActivityPaint extends ActivityEnhanced {
 
     private void showAlertDialogExit() {
 
-        new MaterialDialog.Builder(ActivityPaint.this).title(getString(R.string.do_you_want_exit)).positiveText(R.string.yes).negativeText(R.string.no)
+        new MaterialDialog.Builder(ActivityPaint.this).title(getString(R.string.do_you_want_exit))
+            .positiveText(R.string.ok)
+            .negativeText(R.string.cancel)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override public void onPositive(MaterialDialog dialog) {
                     super.onPositive(dialog);
