@@ -168,7 +168,7 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.request.RequestWrapper;
 
-public class G extends MultiDexApplication {// test iranGit Commit
+public class G extends MultiDexApplication {
 
     public static Context context;
     public static Handler handler;
