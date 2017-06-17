@@ -322,7 +322,7 @@ public class ActivityMain extends ActivityEnhanced
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
         navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_rss_feed),
             getString(R.string.md_phone));
-        navigationTabStrip.setTabIndex(0, true);
+
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp24));
         navigationTabStrip.setStripColor(Color.WHITE);
 
@@ -333,20 +333,16 @@ public class ActivityMain extends ActivityEnhanced
 
             @Override public void onEndTabSelected(String title, int index) {
 
-                switch (index) {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                        findViewById(R.id.amr_ripple_search).setVisibility(View.VISIBLE);
-                        findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
+                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
 
-                        break;
-                    case 4:
-                        findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
-                        findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
+                if (adapter.getItem(index) instanceof FragmentMain) {
 
-                        break;
+                    findViewById(R.id.amr_ripple_search).setVisibility(View.VISIBLE);
+                    findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
+                } else if (adapter.getItem(index) instanceof FragmentCall) {
+
+                    findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
+                    findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -363,10 +359,12 @@ public class ActivityMain extends ActivityEnhanced
         pages.add(fragmentCall);
 
         mViewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager()));
-        mViewPager.setOffscreenPageLimit(6);
+        mViewPager.setOffscreenPageLimit(pages.size());
 
 
         navigationTabStrip.setViewPager(mViewPager);
+
+        mViewPager.setCurrentItem(0);
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
 
