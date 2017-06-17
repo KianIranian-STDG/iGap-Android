@@ -407,7 +407,14 @@ public class FragmentMain extends Fragment implements OnComplete {
         if (isThereAnyMoreItemToLoad) {
             isSendRequestForLoading = true;
             new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
-            progressBar.setVisibility(View.VISIBLE);
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            });
+
+
         }
 
 
