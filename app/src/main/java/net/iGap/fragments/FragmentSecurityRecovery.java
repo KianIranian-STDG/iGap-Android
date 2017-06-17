@@ -73,7 +73,7 @@ public class FragmentSecurityRecovery extends Fragment {
             page = (Security) bundle.get("PAGE");
             questionOne = bundle.getString("QUESTION_ONE");
             questionTwo = bundle.getString("QUESTION_TWO");
-            txtPaternEmail = bundle.getString("PATERN_EMAIL");
+            //txtPaternEmail = bundle.getString("PATERN_EMAIL");
             isRecoveryByEmail = bundle.getBoolean("IS_EMAIL");
         }
 
@@ -133,7 +133,7 @@ public class FragmentSecurityRecovery extends Fragment {
         edtSetRecoveryAnswerPassOne = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassOne);
         edtSetRecoveryAnswerPassTwo = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassTwo);
         edtSetRecoveryEmail = (EditText) view.findViewById(R.id.edtSetRecoveryEmail);
-        edtSetRecoveryEmail.setHint(txtPaternEmail);
+        edtSetRecoveryEmail.setHint("");
 
         if (isRecoveryByEmail) {
             rootRecoveryEmail.setVisibility(View.VISIBLE);
@@ -171,6 +171,16 @@ public class FragmentSecurityRecovery extends Fragment {
                         pageRegister();
                     }
 
+                }
+
+                @Override
+                public void getEmailPatern(final String patern) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            edtSetRecoveryEmail.setHint(patern);
+                        }
+                    });
                 }
 
                 @Override

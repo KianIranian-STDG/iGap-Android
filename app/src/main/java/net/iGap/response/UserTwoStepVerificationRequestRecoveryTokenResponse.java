@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoUserTwoStepVerificationRequestRecoveryToken;
 
 public class UserTwoStepVerificationRequestRecoveryTokenResponse extends MessageHandler {
@@ -32,6 +33,10 @@ public class UserTwoStepVerificationRequestRecoveryTokenResponse extends Message
         ProtoUserTwoStepVerificationRequestRecoveryToken.UserTwoStepVerificationRequestRecoveryTokenResponse.Builder builder =
             (ProtoUserTwoStepVerificationRequestRecoveryToken.UserTwoStepVerificationRequestRecoveryTokenResponse.Builder) message;
         builder.getEmailPattern();
+
+        if (G.onRecoverySecurityPassword != null) {
+            G.onRecoverySecurityPassword.getEmailPatern(builder.getEmailPattern());
+        }
     }
 
     @Override public void timeOut() {

@@ -13,6 +13,8 @@ public interface OnRecoverySecurityPassword {
 
     void recoveryByEmail(String tokenR);
 
+    void getEmailPatern(String patern);
+
     void errorRecoveryByEmail();
 
     void recoveryByQuestion(String tokenR);
