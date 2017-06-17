@@ -13,6 +13,7 @@ package net.iGap.response;
 import io.realm.Realm;
 import io.realm.RealmList;
 import net.iGap.G;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupUpdateStatus;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
@@ -65,7 +66,7 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                     /**
                      * find message from database and update its status
                      */
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findFirst();
                     if (roomMessage != null) {
                         roomMessage.setStatus(builder.getStatus().toString());
                         realm.copyToRealmOrUpdate(roomMessage);
