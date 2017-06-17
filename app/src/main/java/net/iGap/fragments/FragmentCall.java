@@ -304,10 +304,7 @@ public class FragmentCall extends Fragment {
                     intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    if (isIncomingCall) {
-                        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                    }
-
+                    ActivityCall.isGoingfromApp = true;
                     G.context.startActivity(intent);
                 }
 

@@ -68,6 +68,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     public static final String USER_ID_STR = "USER_ID";
     public static final String INCOMING_CALL_STR = "INCOMING_CALL_STR";
 
+    public static boolean isGoingfromApp = false;
+
     public static TextView txtTimeChat, txtTimerMain;
 
     boolean isIncomingCall = false;
@@ -137,28 +139,24 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     @Override public void onCreate(Bundle savedInstanceState) {
 
+        if (isGoingfromApp) {
+            isGoingfromApp = false;
+        } else {
+
+            G.isInCall = false;
+
+            Intent intent = new Intent(G.context, ActivityMain.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         G.isInCall = true;
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(
             LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
         super.onCreate(savedInstanceState);
-
-        if (getIntent().getExtras().getBoolean("FINISH_OTHER")) {
-            return;
-        }
-
-        //if(savedInstanceState.getBoolean("GO_TO_MAIN")){
-        //
-        //    Intent intent = new Intent(G.context, ActivityMain.class);
-        //    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //    startActivity(intent);
-        //    finish();
-        //    return;
-        //
-        //}
-        // savedInstanceState.putBoolean("GO_TO_MAIN",true);
-
 
         try {
             HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
