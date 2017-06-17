@@ -289,7 +289,7 @@
   <string name="array_Call">"تماس"</string>
   <string name="array_Copy">"کپی"</string>
   <string name="array_Off">"خاموش"</string>
-  <string name="array_No_popup">"بدون پنجره های تبلیغاتی"</string>
+  <string name="array_No_popup">"بدون پنجرۀ اعلان"</string>
   <string name="array_Only_when_screen_on">"‫تنها زمانی که صفحهٔ نمایشگر روشن است"</string>‬‬‬‬‬‬
   <string name="array_Only_when_screen_off">"تنها زمانی که صفحهٔ نمایشگر خاموش است"</string>
   <string name="array_Always_show_popup">"نمایش همیشگی پنجره های تبلیغاتی"</string>
@@ -347,6 +347,7 @@
   <string name="updating">"در حال به‌روزرسانی"</string>
   <string name="last_seen_recently">"همین حالا"</string>
   <string name="member">"اعضا"</string>
+  <string name="member_chat">عضو</string>
   <string name="exception">"خطا:"</string>
   <string name="please_enter_phone_number">"لطفاً شماره تماس را وارد کنید."</string>
   <string name="please_enter_firstname_or_lastname">"لطفاً نام یا نام خانوادگی را وارد کنید."</string>
@@ -940,7 +941,7 @@
   <string name="please_set_password">تنظیم کلمه عبور</string>
   <string name="please_set_hint">تنظیم یاداوری</string>
   <string name="invalid_email">پست الکترونیکی نا معتبر</string>
-  <string name="yes">"بله"</string>
+  <string name="yes">"بلی"</string>
   <string name="no">"خیر"</string>
 
 

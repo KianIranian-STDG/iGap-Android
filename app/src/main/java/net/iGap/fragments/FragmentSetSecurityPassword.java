@@ -216,6 +216,7 @@ public class FragmentSetSecurityPassword extends Fragment {
                         }
                     } else {
                         page = 0;
+                        FragmentSecurity.isSetRecoveryEmail = false;
                         new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
                         closeKeyboard(v);
                         mActivity.getSupportFragmentManager().popBackStack();
@@ -247,6 +248,7 @@ public class FragmentSetSecurityPassword extends Fragment {
             @Override
             public void onClick(View v) {
                 page = 5;
+                FragmentSecurity.isSetRecoveryEmail = false;
                 btnOk.performClick();
             }
         });

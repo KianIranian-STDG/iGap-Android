@@ -2,7 +2,7 @@
 <resources>
   <!-- Check connect to internet Page introduce app -->
   <string name="text_i_introduce_page1">i</string>
-  <string name="text_line_1_introduce_page1">GAP</string>
+  <string name="text_line_1_introduce_page1">Gap</string>
   <string name="text_line_2_introduce_page1">Limitless Connection</string>
   <string name="text_line_3_introduce_page1">Build your own world by iGap right now.</string>
   <string name="text_line_4_introduce_page1">It takes only few minutes to join iGap users!</string>
@@ -342,6 +342,7 @@
   <string name="updating">Updating…</string>
   <string name="last_seen_recently">Just Now</string>
   <string name="member">Members</string>
+  <string name="member_chat">Members</string>
   <string name="save_ok">Saved</string>
   <string name="exception">Exception:</string>
   <string name="please_enter_phone_number">Please enter your phone number</string>

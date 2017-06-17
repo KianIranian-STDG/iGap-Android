@@ -51,6 +51,7 @@ public class FragmentSecurity extends Fragment {
     private String txtQuestionTwo = "";
     private String txtPaternEmail = "";
     private boolean isRecoveryByEmail = false;
+    public static boolean isSetRecoveryEmail = false;
     private ViewGroup rootSetPassword;
     private ViewGroup rootCheckPassword;
     private ViewGroup rootSetAdditionPassword;
@@ -70,6 +71,8 @@ public class FragmentSecurity extends Fragment {
     private FragmentActivity mActivity;
     public boolean isFirstArrive = true;
     public static boolean isFirstSetPassword = true;
+    private TextView txtSetConfirmedEmail;
+    private TextView txtSetRecoveryEmail;
 
     public FragmentSecurity() {
         // Required empty public constructor
@@ -113,8 +116,8 @@ public class FragmentSecurity extends Fragment {
 
         TextView txtChangePassword = (TextView) view.findViewById(R.id.tsv_changePassword);
         TextView txtTurnPasswordOff = (TextView) view.findViewById(R.id.tsv_turnPasswordOff);
-        final TextView txtSetRecoveryEmail = (TextView) view.findViewById(tsv_setRecoveryEmail);
-        final TextView txtSetConfirmedEmail = (TextView) view.findViewById(tsv_setConfirmedEmail);
+        txtSetRecoveryEmail = (TextView) view.findViewById(tsv_setRecoveryEmail);
+        txtSetConfirmedEmail = (TextView) view.findViewById(tsv_setConfirmedEmail);
         TextView txtSetRecoveryQuestion = (TextView) view.findViewById(R.id.tsv_setRecoveryQuestion);
         TextView txtChangeHint = (TextView) view.findViewById(R.id.tsv_changeHint);
         TextView txtForgotPassword = (TextView) view.findViewById(R.id.txtForgotPassword);
@@ -337,10 +340,12 @@ public class FragmentSecurity extends Fragment {
                                 txtSetRecoveryEmail.setVisibility(View.VISIBLE);
                                 txtSetConfirmedEmail.setVisibility(View.GONE);
                                 view.findViewById(R.id.tsv_viewConfirmedEmail).setVisibility(View.GONE);
+                                isSetRecoveryEmail = true;
                             } else {
                                 txtSetRecoveryEmail.setVisibility(View.VISIBLE);
                                 view.findViewById(R.id.tsv_viewRecoveryEmail).setVisibility(View.VISIBLE);
                                 txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                                isSetRecoveryEmail = false;
 
                             }
 
@@ -434,18 +439,35 @@ public class FragmentSecurity extends Fragment {
             @Override
             public void changeHint() {
 
-                viewChangeHint();
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewChangeHint();
+                    }
+                });
             }
 
             @Override
             public void changeEmail() {
 
-                viewChangeEmail();
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewChangeEmail();
+                    }
+                });
+
             }
 
             @Override
             public void confirmEmail() {
-                viewConfirmEmail();
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewConfirmEmail();
+                    }
+                });
+
             }
 
             @Override
@@ -589,6 +611,12 @@ public class FragmentSecurity extends Fragment {
                 rootCheckPassword.setVisibility(View.GONE);
                 rippleOk.setVisibility(View.GONE);
                 prgWaiting.setVisibility(View.GONE);
+                if (!isSetRecoveryEmail) {
+                    txtSetConfirmedEmail.setVisibility(View.GONE);
+
+                } else {
+                    txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -615,6 +643,8 @@ public class FragmentSecurity extends Fragment {
                 rootConfirmedEmail.setVisibility(View.GONE);
                 rootChangeEmail.setVisibility(View.GONE);
                 rippleOk.setVisibility(View.GONE);
+                isSetRecoveryEmail = true;
+                txtSetConfirmedEmail.setVisibility(View.VISIBLE);
             }
         });
     }

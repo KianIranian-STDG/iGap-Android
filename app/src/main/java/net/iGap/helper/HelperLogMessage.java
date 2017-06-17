@@ -213,7 +213,7 @@ public class HelperLogMessage {
             case ROOM_CREATED:
 
                 if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
-                    persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
+                    persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
                 } else {
                     persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
                 }
@@ -260,12 +260,26 @@ public class HelperLogMessage {
                 linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
                 break;
             case ROOM_CONVERTED_TO_PUBLIC:
-                persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
-                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+
+                if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
+                    persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
+                    linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+                } else {
+                    persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
+                    linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+                }
+
                 break;
             case ROOM_CONVERTED_TO_PRIVATE:
-                persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
-                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+
+                if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
+                    persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
+                    linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+                } else {
+                    persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
+                    linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+                }
+
                 break;
             case MEMBER_JOINED_BY_INVITE_LINK:
                 persianResult = "\u200F" + authorName + " " + logMessage + " " + finalTypeRoom + " اضافه شد ";
