@@ -6584,6 +6584,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private boolean isWaitingForHistoryDown; // client send request for getHistory, avoid for send request again
     private boolean allowGetHistoryUp = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
     private boolean allowGetHistoryDown = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
+    private boolean firstUp = true; // if is firstUp getClientRoomHistory with low limit in UP direction
+    private boolean firstDown = true; // if is firstDown getClientRoomHistory with low limit in DOWN direction
     private long gapMessageIdUp; // messageId that maybe lost in local
     private long gapMessageIdDown; // messageId that maybe lost in local
     private long reachMessageIdUp; // messageId that will be checked after getHistory for detect reached to that or no
@@ -6904,14 +6906,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
              */
             progressItem(SHOW, direction);
 
-            MessageLoader.getOnlineMessage(mRoomId, oldMessageId, reachMessageId, direction, new OnMessageReceive() {
+            int limit = Config.LIMIT_GET_HISTORY_NORMAL;
+            if ((firstUp && direction == UP) || (firstDown && direction == DOWN)) {
+                limit = Config.LIMIT_GET_HISTORY_LOW;
+            }
+
+            MessageLoader.getOnlineMessage(mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
                 @Override
                 public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, String directionString) {
                     if (roomId != mRoomId) {
                         return;
                     }
                     hideProgress();
-                    long startFutureMessageId;
                     /**
                      * hide progress received history
                      */
@@ -6922,12 +6928,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     Sort sort;
                     ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction directionEnum;
                     if (directionString.equals(UP.toString())) {
-                        startFutureMessageId = startFutureMessageIdUp = startMessageId;
+                        firstUp = false;
+                        startFutureMessageIdUp = startMessageId;
                         directionEnum = UP;
                         sort = Sort.DESCENDING;
                         isWaitingForHistoryUp = false;
                     } else {
-                        startFutureMessageId = startFutureMessageIdDown = endMessageId;
+                        firstDown = false;
+                        startFutureMessageIdDown = endMessageId;
                         directionEnum = DOWN;
                         sort = Sort.ASCENDING;
                         isWaitingForHistoryDown = false;
