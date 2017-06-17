@@ -12,11 +12,14 @@ package net.iGap.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -84,6 +87,8 @@ import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.interfaces.OpenFragment;
+import net.iGap.libs.floatingAddButton.ArcMenu;
+import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.EmojiTextViewE;
@@ -138,6 +143,11 @@ public class ActivityMain extends ActivityEnhanced
 
     public MainInterfaceGetRoomList mainInterfaceGetRoomList;
 
+    public ArcMenu arcMenu;
+    FloatingActionButton btnStartNewChat;
+    FloatingActionButton btnCreateNewGroup;
+    FloatingActionButton btnCreateNewChannel;
+
     public enum MainAction {
         downScrool, clinetCondition
     }
@@ -180,6 +190,16 @@ public class ActivityMain extends ActivityEnhanced
         setContentView(R.layout.activity_main);
 
         initTabStrip();
+
+        initFloatingButtonCreateNew();
+
+        arcMenu.setBackgroundTintColor();
+
+        btnStartNewChat.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+        btnCreateNewGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+        btnCreateNewChannel.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+
+
 
         activityMain = this;
 
@@ -311,7 +331,123 @@ public class ActivityMain extends ActivityEnhanced
         }
     }
 
+
     //*******************************************************************************************************************************************
+
+    private void initFloatingButtonCreateNew() {
+        arcMenu = (ArcMenu) findViewById(R.id.ac_arc_button_add);
+        arcMenu.setStateChangeListener(new StateChangeListener() {
+            @Override public void onMenuOpened() {
+
+            }
+
+            @Override public void onMenuClosed() {
+                isMenuButtonAddShown = false;
+            }
+        });
+
+        btnStartNewChat = (FloatingActionButton) findViewById(R.id.ac_fab_start_new_chat);
+        btnStartNewChat.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                final Fragment fragment = RegisteredContactsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TITLE", "New Chat");
+                fragment.setArguments(bundle);
+
+                try {
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+                if (arcMenu.isMenuOpened()) {
+                    arcMenu.toggleMenu();
+                }
+
+                lockNavigation();
+            }
+        });
+
+        btnCreateNewGroup = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_group);
+        btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TYPE", "NewGroup");
+                fragment.setArguments(bundle);
+
+                try {
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+                lockNavigation();
+
+                if (arcMenu.isMenuOpened()) {
+                    arcMenu.toggleMenu();
+                }
+            }
+        });
+
+        btnCreateNewChannel = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_channel);
+        btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("TYPE", "NewChanel");
+                fragment.setArguments(bundle);
+                try {
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+                lockNavigation();
+                if (arcMenu.isMenuOpened()) {
+                    arcMenu.toggleMenu();
+                }
+            }
+        });
+
+        arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                int item = mViewPager.getCurrentItem();
+
+                if (item == 0) {
+                    arcMenu.toggleMenu();
+                } else if (item == 1) {
+                    btnStartNewChat.performClick();
+                } else if (item == 2) {
+                    btnCreateNewGroup.performClick();
+                } else if (item == 3) {
+                    btnCreateNewChannel.performClick();
+                } else if (item == 4) {
+
+                    ((FragmentCall) pages.get(4)).fabContactList.performClick();
+                }
+            }
+        });
+    }
+
+    //*******************************************************************************************************************************************
+
+    private void setFabIcon(int res) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            arcMenu.fabMenu.setImageDrawable(getResources().getDrawable(res, context.getTheme()));
+        } else {
+            arcMenu.fabMenu.setImageDrawable(getResources().getDrawable(res));
+        }
+    }
 
     private ViewPager mViewPager;
     private ArrayList<Fragment> pages = new ArrayList<Fragment>();
@@ -339,11 +475,21 @@ public class ActivityMain extends ActivityEnhanced
 
                     findViewById(R.id.amr_ripple_search).setVisibility(View.VISIBLE);
                     findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
+                    setFabIcon(R.mipmap.plus);
                 } else if (adapter.getItem(index) instanceof FragmentCall) {
 
                     findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
                     findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
+                    setFabIcon(R.drawable.ic_call_black_24dp);
                 }
+
+                if (arcMenu.isMenuOpened()) {
+                    arcMenu.toggleMenu();
+                }
+
+                arcMenu.fabMenu.show();
+
+
             }
         });
 
@@ -374,6 +520,14 @@ public class ActivityMain extends ActivityEnhanced
                 fragmentCall.openDialogMenu();
             }
         });
+
+        if (HelperCalander.isLanguagePersian) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                mViewPager.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                navigationTabStrip.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            }
+        }
+
     }
 
     class SampleFragmentPagerAdapter extends FragmentPagerAdapter {

@@ -3,7 +3,6 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.Typeface;
@@ -12,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -49,8 +47,6 @@ import net.iGap.helper.HelperClientCondition;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnComplete;
-import net.iGap.libs.floatingAddButton.ArcMenu;
-import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -87,11 +83,9 @@ public class FragmentMain extends Fragment implements OnComplete {
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
     public static boolean isMenuButtonAddShown = false;
-    FloatingActionButton btnStartNewChat;
-    FloatingActionButton btnCreateNewGroup;
-    FloatingActionButton btnCreateNewChannel;
+
     ProgressBar progressBar;
-    private ArcMenu arcMenu;
+
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private int mOffset = 0;
@@ -134,15 +128,7 @@ public class FragmentMain extends Fragment implements OnComplete {
         swipeRefreshLayout.setEnabled(false);
 
         initRecycleView(view);
-        initFloatingButtonCreateNew(view);
         initListener();
-
-        arcMenu.setBackgroundTintColor();
-
-        btnStartNewChat.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-        btnCreateNewGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-        btnCreateNewChannel.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-
 
     }
 
@@ -246,17 +232,19 @@ public class FragmentMain extends Fragment implements OnComplete {
             @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (arcMenu.isMenuOpened()) arcMenu.toggleMenu();
+                if (((ActivityMain) getActivity()).arcMenu.isMenuOpened()) {
+                    ((ActivityMain) getActivity()).arcMenu.toggleMenu();
+                }
 
                 if (dy > 0) {
                     // Scroll Down
-                    if (arcMenu.fabMenu.isShown()) {
-                        arcMenu.fabMenu.hide();
+                    if (((ActivityMain) getActivity()).arcMenu.fabMenu.isShown()) {
+                        ((ActivityMain) getActivity()).arcMenu.fabMenu.hide();
                     }
                 } else if (dy < 0) {
                     // Scroll Up
-                    if (!arcMenu.fabMenu.isShown()) {
-                        arcMenu.fabMenu.show();
+                    if (!((ActivityMain) getActivity()).arcMenu.fabMenu.isShown()) {
+                        ((ActivityMain) getActivity()).arcMenu.fabMenu.show();
                     }
                 }
             }
@@ -267,123 +255,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
     }
 
-    private void initFloatingButtonCreateNew(View view) {
-        arcMenu = (ArcMenu) view.findViewById(R.id.ac_arc_button_add);
-        arcMenu.setStateChangeListener(new StateChangeListener() {
-            @Override public void onMenuOpened() {
 
-            }
-
-            @Override public void onMenuClosed() {
-                isMenuButtonAddShown = false;
-            }
-        });
-
-        btnStartNewChat = (FloatingActionButton) view.findViewById(R.id.ac_fab_start_new_chat);
-        btnStartNewChat.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                final Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "New Chat");
-                fragment.setArguments(bundle);
-
-                try {
-                    getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-
-                ((ActivityMain) getActivity()).lockNavigation();
-            }
-        });
-
-        btnCreateNewGroup = (FloatingActionButton) view.findViewById(R.id.ac_fab_crate_new_group);
-        btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE", "NewGroup");
-                fragment.setArguments(bundle);
-
-                try {
-                    getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                ((ActivityMain) getActivity()).lockNavigation();
-
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-            }
-        });
-
-        btnCreateNewChannel = (FloatingActionButton) view.findViewById(R.id.ac_fab_crate_new_channel);
-        btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE", "NewChanel");
-                fragment.setArguments(bundle);
-                try {
-                    getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                ((ActivityMain) getActivity()).lockNavigation();
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-            }
-        });
-
-        switch (mainType) {
-
-            case all:
-                break;
-            case chat:
-                arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        btnStartNewChat.performClick();
-                    }
-                });
-
-                break;
-            case group:
-                arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        btnCreateNewGroup.performClick();
-                    }
-                });
-
-                break;
-            case channel:
-                arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        btnCreateNewChannel.performClick();
-                    }
-                });
-
-                break;
-        }
-    }
 
     private void initListener() {
 
@@ -689,7 +561,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
     @Override public void complete(boolean result, String messageOne, String MessageTow) {
         if (messageOne.equals("closeMenuButton")) {
-            arcMenu.toggleMenu();
+            ((ActivityMain) getActivity()).arcMenu.toggleMenu();
         }
     }
     //**************************************************************************************************************************************
@@ -1102,8 +974,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 startActivity(intent);
                                 getActivity().overridePendingTransition(0, 0);
 
-                                if (arcMenu != null && arcMenu.isMenuOpened()) {
-                                    arcMenu.toggleMenu();
+                                if (((ActivityMain) getActivity()).arcMenu != null && ((ActivityMain) getActivity()).arcMenu.isMenuOpened()) {
+                                    ((ActivityMain) getActivity()).arcMenu.toggleMenu();
                                 }
                             }
                         }
