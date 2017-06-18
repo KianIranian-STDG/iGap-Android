@@ -21,7 +21,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -554,8 +553,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
-        Log.i("OOOOOOO", "updateLayoutForReceive  iconHearing.setVisibility(View.VISIBLE);: " + mMessage.status);
-
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
@@ -608,7 +605,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     protected void updateLayoutForSend(VH holder) {
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.END;
-        Log.i("OOOOOOO", "updateLayoutForSend  iconHearing.setVisibility(View.VISIBLE);: " + mMessage.status);
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
@@ -633,7 +629,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 iconHearing.setVisibility(View.VISIBLE);
                 setTextcolor(imgTick, R.color.iGapColor);
                 imgTick.setVisibility(View.VISIBLE);
-                Log.i("VVVVVVVVVV", "َAbstract  iconHearing.setVisibility(View.VISIBLE);: " + imgTick.getVisibility());
             } else {
                 setTextcolor(imgTick, R.color.colorOldBlack);
             }

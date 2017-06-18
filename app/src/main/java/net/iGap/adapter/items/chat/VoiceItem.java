@@ -14,7 +14,6 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,8 +39,6 @@ import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmOfflineListen;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 
@@ -81,25 +78,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
-
         holder.mRoomId = mMessage.roomId;
-
-        //if (realmRoomMessage !=null){
-        //    if (realmRoomMessage.getStatus().contains(ProtoGlobal.RoomMessageStatus.LISTENED.toString())){
-        //        holder.iconHearing.setVisibility(View.VISIBLE);
-        //        holder.tic.setVisibility(View.VISIBLE);
-        //        //try {
-        //        //    holder.tic.setColorFilter(ContextCompat.getColor(G.context, R.color.iGapColor));
-        //        //} catch (NullPointerException e) {
-        //        //    // imageView.setColorFilter(color,android.graphics.PorterDuff.Mode.MULTIPLY);
-        //        //    try {
-        //        //        holder.tic.setColorFilter(G.context.getResources().getColor(R.color.iGapColor));
-        //        //    } catch (Exception e1) {
-        //        //    }
-        //        //}
-        //    }
-        //}
 
         RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class)
             .equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID))
@@ -252,9 +231,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                                     offlineSeenListen.add(realmOfflineListen);
                                     realmClientCondition.setOfflineListen(offlineSeenListen);
                                 }
-
-                                //realmClientCondition.getOfflineListen().add(realmOfflineListen);
-                                Log.i("OOOOOOOBB", "mMessageID: " + mMessageID);
                             }
                         }
                     });

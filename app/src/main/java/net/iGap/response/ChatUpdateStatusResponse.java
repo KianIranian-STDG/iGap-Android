@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import android.util.Log;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.proto.ProtoChatUpdateStatus;
@@ -46,7 +45,6 @@ public class ChatUpdateStatusResponse extends MessageHandler {
         final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
 
         final Realm realm = Realm.getDefaultInstance();
-        Log.i("OOOOOOOGG", "chatUpdateStatus.getStatus(): " + chatUpdateStatus.getStatus());
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
