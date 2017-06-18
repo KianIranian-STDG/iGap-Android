@@ -553,7 +553,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
-
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
@@ -606,10 +605,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     protected void updateLayoutForSend(VH holder) {
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.END;
-
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
+        TextView iconHearing = (TextView) holder.itemView.findViewById(R.id.cslr_txt_hearing);
         LinearLayout lytRight = (LinearLayout) holder.itemView.findViewById(R.id.lyt_right);
         if (lytRight != null) {
             lytRight.setVisibility(View.VISIBLE);
@@ -626,6 +625,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else {
             if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
                 setTextcolor(imgTick, R.color.iGapColor);
+            } else if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
+                iconHearing.setVisibility(View.VISIBLE);
+                setTextcolor(imgTick, R.color.iGapColor);
+                imgTick.setVisibility(View.VISIBLE);
             } else {
                 setTextcolor(imgTick, R.color.colorOldBlack);
             }
