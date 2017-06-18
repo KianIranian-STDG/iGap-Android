@@ -22,6 +22,7 @@ import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmOfflineDelete;
 import net.iGap.realm.RealmOfflineEdited;
+import net.iGap.realm.RealmOfflineListen;
 import net.iGap.realm.RealmOfflineSeen;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
@@ -91,6 +92,11 @@ public class HelperClientCondition {
                     room.addOfflineSeen(offlineSeen.getOfflineSeen());
                 }
 
+                for (RealmOfflineListen offlineListen : realmClientCondition.getOfflineListen()) { // DONE
+                    room.addOfflineSeen(offlineListen.getOfflineListen());
+                    Log.i("OOOOOOOBB", "chatUpdateStatus.getStatus(): ");
+                }
+
                 room.setClearId(realmClientCondition.getClearId()); //DONE
 
                 List<RealmRoomMessage> allItemsAscending =
@@ -149,6 +155,7 @@ public class HelperClientCondition {
                 realmClientCondition.setOfflineEdited(new RealmList<RealmOfflineEdited>());
                 realmClientCondition.setOfflineDeleted(new RealmList<RealmOfflineDelete>());
                 realmClientCondition.setOfflineSeen(new RealmList<RealmOfflineSeen>());
+                realmClientCondition.setOfflineListen(new RealmList<RealmOfflineListen>());
             }
         });
     }

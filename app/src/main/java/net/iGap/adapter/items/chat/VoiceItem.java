@@ -14,12 +14,14 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import io.realm.Realm;
+import io.realm.RealmList;
 import java.io.File;
 import java.util.List;
 import net.iGap.G;
@@ -30,14 +32,22 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.SUID;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmClientCondition;
+import net.iGap.realm.RealmClientConditionFields;
+import net.iGap.realm.RealmOfflineListen;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
+
+    private long roomId;
 
     public VoiceItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(true, type, messageClickListener);
@@ -66,10 +76,31 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         super.bindView(holder, payloads);
 
         ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
-
+        holder.mType = type;
         AppUtils.rightFileThumbnailIcon(holder.thumbnail, _type, null);
 
         Realm realm = Realm.getDefaultInstance();
+
+        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
+
+        holder.mRoomId = mMessage.roomId;
+
+        //if (realmRoomMessage !=null){
+        //    if (realmRoomMessage.getStatus().contains(ProtoGlobal.RoomMessageStatus.LISTENED.toString())){
+        //        holder.iconHearing.setVisibility(View.VISIBLE);
+        //        holder.tic.setVisibility(View.VISIBLE);
+        //        //try {
+        //        //    holder.tic.setColorFilter(ContextCompat.getColor(G.context, R.color.iGapColor));
+        //        //} catch (NullPointerException e) {
+        //        //    // imageView.setColorFilter(color,android.graphics.PorterDuff.Mode.MULTIPLY);
+        //        //    try {
+        //        //        holder.tic.setColorFilter(G.context.getResources().getColor(R.color.iGapColor));
+        //        //    } catch (Exception e1) {
+        //        //    }
+        //        //}
+        //    }
+        //}
+
         RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class)
             .equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID))
             .findFirst();
@@ -151,14 +182,18 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected ImageView thumbnail;
+        protected ImageView tic;
         protected TextView btnPlayMusic;
         protected SeekBar musicSeekbar;
         protected OnComplete complete;
         protected TextView txt_Timer;
         protected TextView author;
+        protected TextView iconHearing;
         protected String mFilePath = "";
         protected String mMessageID = "";
         protected String mTimeMusic = "";
+        protected long mRoomId;
+        protected ProtoGlobal.Room.Type mType;
 
         public ViewHolder(View view) {
             super(view);
@@ -167,7 +202,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             author = (TextView) view.findViewById(R.id.cslv_txt_author);
             btnPlayMusic = (TextView) view.findViewById(R.id.csla_btn_play_music);
             txt_Timer = (TextView) view.findViewById(R.id.csla_txt_timer);
+            iconHearing = (TextView) view.findViewById(R.id.cslr_txt_hearing);
             musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);
+            tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
             complete = new OnComplete() {
                 @Override public void complete(boolean result, String messageOne, final String MessageTow) {
@@ -194,6 +231,35 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 @Override public void onClick(View v) {
 
                     if (mFilePath.length() < 1) return;
+
+                    G.chatUpdateStatusUtil.sendUpdateStatus(mType, mRoomId, Long.parseLong(mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
+
+                    final Realm realm = Realm.getDefaultInstance();
+
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+
+                            if (realmClientCondition != null) {
+
+                                RealmOfflineListen realmOfflineListen = realm.createObject(RealmOfflineListen.class, SUID.id().get());
+                                realmOfflineListen.setOfflineListen(Long.parseLong(mMessageID));
+                                if (realmClientCondition.getOfflineListen() != null) {
+                                    realmClientCondition.getOfflineListen().add(realmOfflineListen);
+                                } else {
+                                    RealmList<RealmOfflineListen> offlineSeenListen = new RealmList<>();
+                                    offlineSeenListen.add(realmOfflineListen);
+                                    realmClientCondition.setOfflineListen(offlineSeenListen);
+                                }
+
+                                //realmClientCondition.getOfflineListen().add(realmOfflineListen);
+                                Log.i("BBBB", "btnPlayMusic: ");
+                            }
+                        }
+                    });
+
+                    realm.close();
 
                     if (mMessageID.equals(MusicPlayer.messageId)) {
                         MusicPlayer.onCompleteChat = complete;
