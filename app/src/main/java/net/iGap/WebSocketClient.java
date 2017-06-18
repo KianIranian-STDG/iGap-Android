@@ -204,7 +204,6 @@ public class WebSocketClient {
                             reconnectQueueLimitation--;
                         }
 
-                        HelperSetAction.clearAllActions();
                         if (allowForReconnecting) {
                             allowForReconnecting = false;
                             HelperConnectionState.connectionState(ConnectionState.CONNECTING);

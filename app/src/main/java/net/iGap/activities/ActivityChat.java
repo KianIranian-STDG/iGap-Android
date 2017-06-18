@@ -3481,19 +3481,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         });
     }
 
-    private void saveToFolder() {
-
-    }
-
-
-
     @Override
     public void onFailedMessageClick(View view, final StructMessageInfo message, final int pos) {
         final List<StructMessageInfo> failedMessages = mAdapter.getFailedMessages();
         new ResendMessage(this, new IResendMessage() {
             @Override
             public void deleteMessage() {
-                mAdapter.remove(pos);
+                if (mAdapter.getAdapterItemCount() > pos) {
+                    mAdapter.remove(pos);
+                }
             }
 
             @Override
