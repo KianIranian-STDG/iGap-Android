@@ -129,8 +129,8 @@ public final class MessageLoader {
 
     //*********** get message from server
 
-    public static void getOnlineMessage(final long roomId, final long messageIdGetHistory, final long reachMessageId, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
-        new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistory, direction, Long.toString(roomId) + "*" + messageIdGetHistory + "*" + reachMessageId + "*" + direction);
+    public static void getOnlineMessage(final long roomId, final long messageIdGetHistory, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
+        new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistory, limit, direction, Long.toString(roomId) + "*" + messageIdGetHistory + "*" + reachMessageId + "*" + direction);
 
         G.onClientGetRoomHistoryResponse = new OnClientGetRoomHistoryResponse() {
             @Override

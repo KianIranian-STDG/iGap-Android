@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lyt_message_sender_room"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,10 +11,14 @@
       android:id="@+id/cs_txt_last_message_sender"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:paddingBottom="1dp"
+      android:layout_gravity="start"
+      android:gravity="start|top"
+      android:maxLines="1"
       android:singleLine="true"
       android:textColor="#2bbfbd"
       android:textSize="@dimen/dp13"
+      app:emojiSize="@dimen/dp14"
+      fontPath="fonts/IRANSansMobile.ttf"
       />
 
 

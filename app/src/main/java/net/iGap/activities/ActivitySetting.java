@@ -83,6 +83,7 @@ import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserProfileCheckUsername;
 import net.iGap.interfaces.OnUserProfileSetEmailResponse;
 import net.iGap.interfaces.OnUserProfileSetGenderResponse;
+import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -106,6 +107,8 @@ import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmPrivacy;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
@@ -192,9 +195,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private void showInitials() {
 
         RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        circleImageView.setImageBitmap(
-            HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(),
-                realmUserInfo.getUserInfo().getColor()));
+        circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
 
 
         if (G.onChangeUserPhotoListener != null) {
@@ -203,20 +204,23 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         G.onUserAvatarResponse = this;
 
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
         realmUserInfo.addChangeListener(new RealmChangeListener<RealmModel>() {
-            @Override public void onChange(RealmModel realmModel) {
+            @Override
+            public void onChange(RealmModel realmModel) {
                 updateUserInfoUI((RealmUserInfo) realmModel);
             }
         });
 
         mRealmRegisteredInfo = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, G.userId).findFirst();
         mRealmRegisteredInfo.addChangeListener(new RealmChangeListener<RealmModel>() {
-            @Override public void onChange(RealmModel realmModel) {
+            @Override
+            public void onChange(RealmModel realmModel) {
                 updateUserInfoUI(realmUserInfo);
             }
         });
@@ -226,7 +230,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
 
         if (realmUserInfo != null) {
@@ -240,7 +245,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
 
         if (mRealm != null) {
@@ -258,7 +264,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         return mRealm;
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
@@ -289,7 +296,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
          */
         ViewGroup layoutNickname = (ViewGroup) findViewById(R.id.st_layout_nickname);
         layoutNickname.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 final LinearLayout layoutNickname = new LinearLayout(ActivitySetting.this);
                 layoutNickname.setOrientation(LinearLayout.VERTICAL);
@@ -352,27 +360,25 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 layoutNickname.addView(inputFirstName, layoutParams);
                 layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_nickname))
-                    .positiveText(getResources().getString(R.string.B_ok))
-                    .customView(layoutNickname, true)
-                    .widgetColor(getResources().getColor(R.color.toolbar_background))
-                    .negativeText(getResources().getString(R.string.B_cancel))
-                    .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_nickname)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
 
                 final String finalFirsName = firsName;
                 edtFirstName.addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void afterTextChanged(Editable editable) {
 
                         if (!edtFirstName.getText().toString().equals(finalFirsName)) {
                             positive.setEnabled(true);
@@ -384,15 +390,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 final String finalLastName = lastName;
                 edtLastName.addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void afterTextChanged(Editable editable) {
                         if (!edtLastName.getText().toString().equals(finalLastName)) {
                             positive.setEnabled(true);
                         } else {
@@ -402,7 +411,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override public void onFocusChange(View view, boolean b) {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
                         if (b) {
                             viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                         } else {
@@ -412,7 +422,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override public void onFocusChange(View view, boolean b) {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
                         if (b) {
                             viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                         } else {
@@ -422,7 +433,60 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 positive.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
+                        showProgressBar();
+                        G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
+                            @Override
+                            public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+                                setAvatar();
+
+                                /**
+                                 * update RealmRoom for cloud chat if exist
+                                 */
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
+                                            if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == userId) {
+                                                realmRoom.setTitle(nickName);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                });
+                                realm.close();
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideProgressBar();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onUserProfileNickNameError(int majorCode, int minorCode) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideProgressBar();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onUserProfileNickNameTimeOut() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideProgressBar();
+                                    }
+                                });
+                            }
+                        };
+
 
                         String fullName = "";
                         if (edtFirstName.length() == 0) {
@@ -450,7 +514,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
          */
         ViewGroup layoutGander = (ViewGroup) findViewById(R.id.st_layout_gander);
         layoutGander.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 int position = -1;
 
                 try {
@@ -466,47 +531,44 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 }
 
                 G.onUserProfileSetGenderResponse = new OnUserProfileSetGenderResponse() {
-                    @Override public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
+                    @Override
+                    public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
                         hideProgressBar();
                     }
 
-                    @Override public void Error(int majorCode, int minorCode) {
+                    @Override
+                    public void Error(int majorCode, int minorCode) {
                         hideProgressBar();
                     }
 
-                    @Override public void onTimeOut() {
+                    @Override
+                    public void onTimeOut() {
                         hideProgressBar();
                     }
                 };
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Gander))
-                    .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.array_gander)
-                    .itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Gander)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.array_gander).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            switch (which) {
-                                case 0: {
-                                    new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
-                                    break;
-                                }
-                                case 1: {
-                                    new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
-                                    break;
-                                }
+                        switch (which) {
+                            case 0: {
+                                new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.MALE);
+                                break;
                             }
-                            return false;
+                            case 1: {
+                                new RequestUserProfileSetGender().setUserProfileGender(ProtoGlobal.Gender.FEMALE);
+                                break;
+                            }
                         }
-                    })
-                    .positiveText(getResources().getString(R.string.B_ok))
-                    .negativeText(getResources().getString(R.string.B_cancel))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            showProgressBar();
-                        }
-                    })
-                    .show();
+                        return false;
+                    }
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        showProgressBar();
+                    }
+                }).show();
             }
         });
 
@@ -515,7 +577,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
          */
         ViewGroup ltEmail = (ViewGroup) findViewById(R.id.st_layout_email);
         ltEmail.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 final LinearLayout layoutEmail = new LinearLayout(ActivitySetting.this);
                 layoutEmail.setOrientation(LinearLayout.VERTICAL);
 
@@ -547,27 +610,25 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 layoutEmail.addView(inputEmail, layoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_email))
-                    .positiveText(getResources().getString(R.string.save))
-                    .customView(layoutEmail, true)
-                    .widgetColor(getResources().getColor(R.color.toolbar_background))
-                    .negativeText(getResources().getString(R.string.B_cancel))
-                    .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_email)).positiveText(getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
 
                 final String finalEmail = userEmail;
                 edtEmail.addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void afterTextChanged(Editable editable) {
 
                         if (!edtEmail.getText().toString().equals(finalEmail)) {
                             positive.setEnabled(true);
@@ -580,7 +641,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 positive.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         dialog.dismiss();
                         showProgressBar();
                         new RequestUserProfileSetEmail().setUserProfileEmail(edtEmail.getText().toString());
@@ -588,7 +650,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 edtEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override public void onFocusChange(View view, boolean b) {
+                    @Override
+                    public void onFocusChange(View view, boolean b) {
                         if (b) {
                             viewEmail.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                         } else {
@@ -598,15 +661,18 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 G.onUserProfileSetEmailResponse = new OnUserProfileSetEmailResponse() {
-                    @Override public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
+                    @Override
+                    public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
                         hideProgressBar();
                     }
 
-                    @Override public void Error(int majorCode, int minorCode) {
+                    @Override
+                    public void Error(int majorCode, int minorCode) {
                         hideProgressBar();
                         if (majorCode == 114 && minorCode == 1) {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     inputEmail.setErrorEnabled(true);
                                     positive.setEnabled(false);
                                     inputEmail.setError("" + getResources().getString(R.string.error_email));
@@ -614,7 +680,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             });
                         } else if (majorCode == 115) {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
+                                @Override
+                                public void run() {
                                     inputEmail.setErrorEnabled(true);
                                     positive.setEnabled(false);
                                     inputEmail.setError("" + getResources().getString(R.string.error_email));
@@ -623,7 +690,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         }
                     }
 
-                    @Override public void onTimeOut() {
+                    @Override
+                    public void onTimeOut() {
                         hideProgressBar();
                     }
                 };
@@ -636,7 +704,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
          */
         ViewGroup layoutUserName = (ViewGroup) findViewById(R.id.st_layout_username);
         layoutUserName.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 final LinearLayout layoutUserName = new LinearLayout(ActivitySetting.this);
                 layoutUserName.setOrientation(LinearLayout.VERTICAL);
@@ -663,26 +732,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 layoutUserName.addView(inputUserName, layoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_username))
-                    .positiveText(getResources().getString(R.string.save))
-                    .customView(layoutUserName, true)
-                    .widgetColor(getResources().getColor(R.color.toolbar_background))
-                    .negativeText(getResources().getString(R.string.B_cancel))
-                    .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
 
                 final String finalUserName = userName;
                 edtUserName.addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     }
 
-                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     }
 
-                    @Override public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void afterTextChanged(Editable editable) {
 
                         if (HelperString.regexCheckUsername(editable.toString())) {
                             new RequestUserProfileCheckUsername().userProfileCheckUsername(editable.toString());
@@ -694,9 +761,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     }
                 });
                 G.onUserProfileCheckUsername = new OnUserProfileCheckUsername() {
-                    @Override public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
+                    @Override
+                    public void OnUserProfileCheckUsername(final ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status status) {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 if (status == ProtoUserProfileCheckUsername.UserProfileCheckUsernameResponse.Status.AVAILABLE) {
                                     if (!edtUserName.getText().toString().equals(finalUserName)) {
                                         positive.setEnabled(true);
@@ -719,35 +788,41 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         });
                     }
 
-                    @Override public void Error(int majorCode, int minorCode) {
+                    @Override
+                    public void Error(int majorCode, int minorCode) {
 
                     }
                 };
 
                 positive.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         new RequestUserProfileUpdateUsername().userProfileUpdateUsername(edtUserName.getText().toString());
                     }
                 });
 
                 G.onUserProfileUpdateUsername = new OnUserProfileUpdateUsername() {
-                    @Override public void onUserProfileUpdateUsername(final String username) {
+                    @Override
+                    public void onUserProfileUpdateUsername(final String username) {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 dialog.dismiss();
                             }
                         });
                     }
 
-                    @Override public void Error(final int majorCode, int minorCode, final int time) {
+                    @Override
+                    public void Error(final int majorCode, int minorCode, final int time) {
 
                         switch (majorCode) {
                             case 175:
                                 if (dialog.isShowing()) dialog.dismiss();
 
                                 runOnUiThread(new Runnable() {
-                                    @Override public void run() {
+                                    @Override
+                                    public void run() {
                                         dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
                                     }
                                 });
@@ -758,9 +833,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 };
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                            @Override public void onFocusChange(View view, boolean b) {
+                            @Override
+                            public void onFocusChange(View view, boolean b) {
                                 if (b) {
                                     viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                                 } else {
@@ -785,10 +862,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         final TextView titleToolbar = (TextView) findViewById(R.id.st_txt_titleToolbar);
         final ViewGroup viewGroup = (ViewGroup) findViewById(R.id.st_parentLayoutCircleImage);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override public void onOffsetChanged(AppBarLayout appBarLayout, final int verticalOffset) {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, final int verticalOffset) {
 
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         if (verticalOffset < -5) {
                             viewGroup.animate().alpha(0).setDuration(500);
                             titleToolbar.animate().alpha(1).setDuration(250);
@@ -813,7 +892,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         RippleView rippleBack = (RippleView) findViewById(R.id.st_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 finish();
             }
         });
@@ -824,7 +904,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         RippleView rippleMore = (RippleView) findViewById(R.id.st_ripple_more);
         rippleMore.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View v = dialog.getCustomView();
@@ -852,7 +933,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
 
                 root1.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         dialog.dismiss();
 
                         final MaterialDialog inDialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.dialog_content_custom, true).build();
@@ -945,7 +1027,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 });
 
                 root2.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         dialog.dismiss();
 
@@ -995,7 +1078,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         //fab button for set pic
         fab = (FloatingActionButton) findViewById(R.id.st_fab_setPic);
         fab.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 startDialog(R.array.profile);
             }
@@ -1005,7 +1089,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
           page for show all image user
          */
         FragmentShowAvatars.onComplete = new OnComplete() {
-            @Override public void complete(boolean result, String messageOne, String MessageTow) {
+            @Override
+            public void complete(boolean result, String messageOne, String MessageTow) {
 
                 //                showImage();
                 long mAvatarId = 0;
@@ -1014,15 +1099,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 }
 
                 HelperAvatar.avatarDelete(userId, mAvatarId, HelperAvatar.AvatarType.USER, new OnAvatarDelete() {
-                    @Override public void latestAvatarPath(final String avatarPath) {
+                    @Override
+                    public void latestAvatarPath(final String avatarPath) {
                         setImage(avatarPath);
                     }
 
-                    @Override public void showInitials(final String initials, final String color) {
+                    @Override
+                    public void showInitials(final String initials, final String color) {
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                circleImageView.setImageBitmap(
-                                    HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
+                            @Override
+                            public void run() {
+                                circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
                                 if (G.onChangeUserPhotoListener != null) {
                                     G.onChangeUserPhotoListener.onChangePhoto(null);
                                 }
@@ -1037,17 +1124,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         RippleView rippleImageView = (RippleView) findViewById(R.id.st_ripple_circleImage);
         rippleImageView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
                     FragmentShowAvatars.appBarLayout = fab;
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
-                    ActivitySetting.this.getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.st_layoutParent, fragment, null)
-                        .commit();
+                    ActivitySetting.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragment, null).commit();
                 }
             }
         });
@@ -1070,54 +1153,52 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtLanguage.setText(textLanguage);
         ViewGroup ltLanguage = (ViewGroup) findViewById(R.id.st_layout_language);
         ltLanguage.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Language))
-                    .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black))
-                    .items(R.array.language)
-                    .itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Language)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            txtLanguage.setText(text.toString());
-                            poRbDialogLangouage = which;
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
-                            editor.apply();
+                        txtLanguage.setText(text.toString());
+                        poRbDialogLangouage = which;
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
+                        editor.apply();
 
-                            switch (which) {
-                                case 0:
-                                    setLocale("en");
-                                    if (onRefreshActivity != null) onRefreshActivity.refresh("en");
-                                    HelperCalander.isLanguagePersian = false;
-                                    G.selectedLanguage = "en";
-                                    break;
-                                case 1:
-                                    G.selectedLanguage = "fa";
-                                    setLocale("fa");
-                                    if (onRefreshActivity != null) onRefreshActivity.refresh("fa");
-                                    HelperCalander.isLanguagePersian = true;
-                                    break;
-                                case 2:
-                                    G.selectedLanguage = "ar";
-                                    setLocale("ar");
-                                    if (onRefreshActivity != null) onRefreshActivity.refresh("ar");
-                                    HelperCalander.isLanguagePersian = false;
-                                    break;
-                                case 3:
-                                    G.selectedLanguage = "nl";
-                                    setLocale("nl");
-                                    if (onRefreshActivity != null) onRefreshActivity.refresh("nl");
-                                    HelperCalander.isLanguagePersian = false;
-                                    break;
-                            }
+                        switch (which) {
+                            case 0:
+                                setLocale("en");
+                                HelperCalander.isLanguagePersian = false;
+                                if (onRefreshActivity != null) onRefreshActivity.refresh("en");
+                                G.selectedLanguage = "en";
+                                break;
+                            case 1:
+                                G.selectedLanguage = "fa";
+                                setLocale("fa");
+                                HelperCalander.isLanguagePersian = true;
+                                if (onRefreshActivity != null) onRefreshActivity.refresh("fa");
 
-                            return false;
+                                break;
+                            case 2:
+                                G.selectedLanguage = "ar";
+                                setLocale("ar");
+                                HelperCalander.isLanguagePersian = false;
+                                if (onRefreshActivity != null) onRefreshActivity.refresh("ar");
+
+                                break;
+                            case 3:
+                                G.selectedLanguage = "nl";
+                                setLocale("nl");
+                                HelperCalander.isLanguagePersian = false;
+                                if (onRefreshActivity != null) onRefreshActivity.refresh("nl");
+
+                                break;
                         }
-                    })
-                    .positiveText(getResources().getString(R.string.B_ok))
-                    .negativeText(getResources().getString(R.string.B_cancel))
-                    .show();
+
+                        return false;
+                    }
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
             }
         });
 
@@ -1132,7 +1213,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         RelativeLayout lyCleanUp = (RelativeLayout) findViewById(R.id.st_layout_cleanup);
         lyCleanUp.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 final MaterialDialog inDialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.dialog_content_custom, true).build();
                 View view = inDialog.getCustomView();
@@ -1174,17 +1256,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
          */
         LinearLayout ltClearCache = (LinearLayout) findViewById(R.id.st_layout_clearCache);
         ltClearCache.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 final long sizeFolderPhotoDialog = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
                 final long sizeFolderVideoDialog = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
                 final long sizeFolderDocumentDialog = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
 
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_Clear_Cache))
-                    .customView(R.layout.st_dialog_clear_cach, wrapInScrollView)
-                    .positiveText(getResources().getString(R.string.st_title_Clear_Cache))
-                    .show();
+                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_Clear_Cache)).customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText(getResources().getString(R.string.st_title_Clear_Cache)).show();
 
                 View view = dialog.getCustomView();
 
@@ -1207,7 +1287,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final CheckBox checkBoxDocument = (CheckBox) view.findViewById(R.id.st_checkBox_document_dialogClearCash);
 
                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
                         if (checkBoxPhoto.isChecked()) {
                             for (File file : filePhoto.listFiles()) {
@@ -1250,7 +1331,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         stsp_toggle_crop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1265,7 +1347,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         txtCrop.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 stsp_toggle_crop.setChecked(!stsp_toggle_crop.isChecked());
             }
         });
@@ -1284,7 +1367,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         toggleVote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1299,7 +1383,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         txtVote.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 toggleVote.setChecked(!toggleVote.isChecked());
             }
         });
@@ -1319,7 +1404,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         toggleShowSenderInGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1336,7 +1422,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         txtShowSenderNameInGroup.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 toggleShowSenderInGroup.setChecked(!toggleShowSenderInGroup.isChecked());
             }
         });
@@ -1359,7 +1446,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         stsp_toggle_Compress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1374,7 +1462,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         txtCompress.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 stsp_toggle_Compress.setChecked(!stsp_toggle_Compress.isChecked());
             }
@@ -1395,7 +1484,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         stsp_toggle_Trim.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1410,7 +1500,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         txtTrim.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 stsp_toggle_Trim.setChecked(!stsp_toggle_Trim.isChecked());
             }
@@ -1422,13 +1513,10 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
          */
         TextView txtPrivacySecurity = (TextView) findViewById(R.id.st_txt_privacySecurity);
         txtPrivacySecurity.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity = new FragmentPrivacyAndSecurity();
-                getSupportFragmentManager().beginTransaction()
-                    .addToBackStack(null)
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity, null)
-                    .commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity, null).commit();
             }
         });
 
@@ -1446,7 +1534,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         toggleEnableDataShams.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
@@ -1464,7 +1553,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         txtDataShams.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 toggleEnableDataShams.setChecked(!toggleEnableDataShams.isChecked());
             }
         });
@@ -1483,34 +1573,36 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ViewGroup ltMessageTextSize = (ViewGroup) findViewById(R.id.st_layout_messageTextSize);
         ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize))
-                    .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black))
-                    .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
-                    .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        .titleGravity(GravityEnum.START)
+                        .titleColor(getResources().getColor(android.R.color.black))
+                        .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
+                        .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            if (text != null) {
-                                txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                                if (text != null) {
+                                    txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
 
-                                if (HelperCalander.isLanguagePersian) {
-                                    txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
+                                    if (HelperCalander.isLanguagePersian) {
+                                        txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
+                                    }
                                 }
+                                poRbDialogTextSize = which;
+                                int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                                editor.apply();
+
+                                StartupActions.textSizeDetection(sharedPreferences);
+
+                                return false;
                             }
-                            poRbDialogTextSize = which;
-                            int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-                            editor.apply();
-
-                            StartupActions.textSizeDetection(sharedPreferences);
-
-                            return false;
-                        }
-                    })
-                    .positiveText(getResources().getString(R.string.B_ok))
-                    .show();
+                        })
+                        .positiveText(getResources().getString(R.string.B_ok))
+                        .show();
             }
         });
 
@@ -1519,7 +1611,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
          */
         TextView txtChatBackground = (TextView) findViewById(R.id.st_txt_chatBackground);
         txtChatBackground.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 startActivity(new Intent(ActivitySetting.this, ActivityChatBackground.class));
             }
         });
@@ -1531,13 +1624,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         TextView txtSelectAppColor = (TextView) findViewById(R.id.asn_txt_app_title_bar_color);
         txtSelectAppColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.app_theme);
             }
         });
 
         imgAppBarSelected.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 showSelectAppColorDialog(R.string.app_theme);
             }
@@ -1550,14 +1645,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         bgShapeNotification.setColor(Color.parseColor(G.notificationColor));
 
         imgNotificationColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showSelectAppColorDialog(R.string.app_notif_color);
             }
         });
 
         TextView txtNotificatinColor = (TextView) findViewById(R.id.asn_txt_app_notification_color);
         txtNotificatinColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.app_notif_color);
             }
         });
@@ -1569,14 +1666,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         bgShapeToggleBottomColor.setColor(Color.parseColor(G.toggleButtonColor));
 
         imgToggleBottomColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showSelectAppColorDialog(R.string.toggle_botton_color);
             }
         });
 
         TextView txtToggleBottomColor = (TextView) findViewById(R.id.asn_txt_app_toggle_botton_color);
         txtToggleBottomColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.toggle_botton_color);
             }
         });
@@ -1588,14 +1687,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         bgShapeSendAndAttachColor.setColor(Color.parseColor(G.attachmentColor));
 
         imgSendAndAttachColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showSelectAppColorDialog(R.string.send_and_attach_botton_color);
             }
         });
 
         TextView txtSendAndAttachColor = (TextView) findViewById(R.id.asn_txt_send_and_attach_color);
         txtSendAndAttachColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.send_and_attach_botton_color);
             }
         });
@@ -1607,21 +1708,24 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         bgShapeHeaderTextColor.setColor(Color.parseColor(G.headerTextColor));
 
         imgHeaderTextColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showSelectAppColorDialog(R.string.default_header_font_color);
             }
         });
 
         TextView txtHeaderTextColor = (TextView) findViewById(R.id.asn_txt_default_header_font_color);
         txtHeaderTextColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.default_header_font_color);
             }
         });
 
         TextView txtSetToDefaultColor = (TextView) findViewById(R.id.asn_txt_set_color_to_default);
         txtSetToDefaultColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSetDefaultColorDialog();
             }
         });
@@ -1633,14 +1737,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         bgShapeProgressColor.setColor(Color.parseColor(G.progressColor));
 
         imgHeaderProgressColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 showSelectAppColorDialog(R.string.default_progress_color);
             }
         });
 
         TextView txtProgressColor = (TextView) findViewById(R.id.asn_txt_default_progress_color);
         txtProgressColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showSelectAppColorDialog(R.string.default_progress_color);
             }
         });
@@ -1660,7 +1766,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         ltInAppBrowser.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (toggleInAppBrowser.isChecked()) {
@@ -1677,7 +1784,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         TextView txtNotifyAndSound = (TextView) findViewById(R.id.st_txt_notifyAndSound);
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 startActivity(new Intent(ActivitySetting.this, ActivitySettingNotification.class));
             }
         });
@@ -1692,7 +1800,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         toggleSentByEnter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1707,7 +1816,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         ltSentByEnter.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 toggleSentByEnter.setChecked(!toggleSentByEnter.isChecked());
             }
@@ -1725,34 +1835,32 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         ltKeepMedia.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_keepMedia)
-                    .content(R.string.st_dialog_content_keepMedia)
-                    .positiveText(getResources().getString(R.string.keep_media_forever))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
-                            editor.apply();
-                            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
-                        }
-                    })
-                    .negativeText(getResources().getString(R.string.keep_media_1week))
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
-                            editor.apply();
-                            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
-                        }
-                    })
-                    .show();
+            @Override
+            public void onClick(View v) {
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_keepMedia).content(R.string.st_dialog_content_keepMedia).positiveText(getResources().getString(R.string.keep_media_forever)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
+                        editor.apply();
+                        txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
+                    }
+                }).negativeText(getResources().getString(R.string.keep_media_1week)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
+                        editor.apply();
+                        txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
+                    }
+                }).show();
             }
         });
 
         TextView txtAutoDownloadData = (TextView) findViewById(R.id.st_txt_autoDownloadData);
         txtAutoDownloadData.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 KEY_AD_DATA_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
                 KEY_AD_DATA_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1);
@@ -1761,10 +1869,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_DATA_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
                 KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 5);
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
-                    KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                        KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
@@ -1801,7 +1910,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         TextView txtAutoDownloadWifi = (TextView) findViewById(R.id.st_txt_autoDownloadWifi);
         txtAutoDownloadWifi.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 KEY_AD_WIFI_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
                 KEY_AD_WIFI_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
@@ -1810,10 +1920,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_WIFI_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
                 KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5);
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
-                    KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                        KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1853,7 +1964,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         TextView txtAutoDownloadRoaming = (TextView) findViewById(R.id.st_txt_autoDownloadRoaming);
         txtAutoDownloadRoaming.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 KEY_AD_ROAMING_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
                 KEY_AD_ROAMING_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
@@ -1862,10 +1974,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_ROAMING_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
                 KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[] {
-                    KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
+                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                        KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
                         //
 
@@ -1912,7 +2025,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         ltEnableAnimation.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (toggleEnableAnimation.isChecked()) {
@@ -1937,7 +2051,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         toggleAutoGifs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1952,7 +2067,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         ltAutoGifs.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 toggleAutoGifs.setChecked(!toggleAutoGifs.isChecked());
             }
         });
@@ -1967,7 +2083,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
 
         toggleSaveToGallery.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1984,28 +2101,32 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         ltSaveToGallery.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 toggleSaveToGallery.setChecked(!toggleSaveToGallery.isChecked());
             }
         });
 
         TextView txtWebViewHome = (TextView) findViewById(R.id.st_txt_iGap_home);
         txtWebViewHome.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 HelperUrl.openBrowser("https://www.igap.net/");
             }
         });
 
         TextView txtWebViewBlog = (TextView) findViewById(R.id.st_txt_privacy_blog);
         txtWebViewBlog.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 HelperUrl.openBrowser("https://blog.igap.net");
             }
         });
 
         TextView txtCreateTicket = (TextView) findViewById(R.id.st_txt_create_ticket);
         txtCreateTicket.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 HelperUrl.openBrowser("https://support.igap.net");
             }
         });
@@ -2018,7 +2139,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             txtVersionApp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVersionApp.getText().toString()));
         }
 
-        showImage();
+        setAvatar();
     }
 
     private void updateUserInfoUI(RealmUserInfo userInfo) {
@@ -2075,21 +2196,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         String titleMessage = getResources().getString(title);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.stns_popup_colorpicer, wrapInScrollView)
-            .positiveText(getResources().getString(R.string.set))
-            .negativeText(getResources().getString(R.string.DISCARD))
-            .title(titleMessage)
-            .onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(getResources().getString(R.string.set)).negativeText(getResources().getString(R.string.DISCARD)).title(titleMessage).onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            })
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            }
+        }).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            })
-            .build();
+            }
+        }).build();
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
@@ -2100,7 +2217,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         picker.addOpacityBar(opacityBar);
 
         dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 dialog.dismiss();
 
@@ -2143,25 +2261,22 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void showSetDefaultColorDialog() {
 
-        new MaterialDialog.Builder(ActivitySetting.this).title(R.string.set_color_to_default)
-            .positiveText(R.string.st_dialog_reset_all_notification_yes)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
-                    headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
-                    //  toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));
-                    sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
-                    appBarColorClick(Color.parseColor(Config.default_appBarColor));
-                    progressColorClick(Color.parseColor(Config.default_appBarColor), false);
-                }
-            })
-            .negativeText(R.string.st_dialog_reset_all_notification_no)
-            .onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        new MaterialDialog.Builder(ActivitySetting.this).title(R.string.set_color_to_default).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
+                headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
+                //  toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));
+                sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
+                appBarColorClick(Color.parseColor(Config.default_appBarColor));
+                progressColorClick(Color.parseColor(Config.default_appBarColor), false);
+            }
+        }).negativeText(R.string.st_dialog_reset_all_notification_no).onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            })
-            .show();
+            }
+        }).show();
     }
 
     private void appBarColorClick(int color) {
@@ -2237,19 +2352,23 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     // call this method for show image in enter to this activity
-    private void showImage() {
+    private void setAvatar() {
         HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
-            @Override public void onAvatarGet(final String avatarPath, long ownerId) {
+            @Override
+            public void onAvatarGet(final String avatarPath, long ownerId) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), circleImageView);
                     }
                 });
             }
 
-            @Override public void onShowInitials(final String initials, final String color) {
+            @Override
+            public void onShowInitials(final String initials, final String color) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
                     }
                 });
@@ -2260,46 +2379,47 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     //dialog for choose pic from gallery or camera
     private void startDialog(int r) {
 
-        new MaterialDialog.Builder(this).title(getResources().getString(R.string.choose_picture))
-            .negativeText(getResources().getString(R.string.B_cancel))
-            .items(r)
-            .itemsCallback(new MaterialDialog.ListCallback() {
-                @Override public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
-                    if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) { // camera
+        new MaterialDialog.Builder(this).title(getResources().getString(R.string.choose_picture)).negativeText(getResources().getString(R.string.B_cancel)).items(r).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+                if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) { // camera
 
-                        try {
-                            HelperPermision.getStoragePermision(ActivitySetting.this, new OnGetPermission() {
-                                @Override public void Allow() throws IOException {
-                                    HelperPermision.getCameraPermission(ActivitySetting.this, new OnGetPermission() {
-                                        @Override public void Allow() {
-                                            dialog.dismiss();
-                                            useCamera();
-                                        }
+                    try {
+                        HelperPermision.getStoragePermision(ActivitySetting.this, new OnGetPermission() {
+                            @Override
+                            public void Allow() throws IOException {
+                                HelperPermision.getCameraPermission(ActivitySetting.this, new OnGetPermission() {
+                                    @Override
+                                    public void Allow() {
+                                        dialog.dismiss();
+                                        useCamera();
+                                    }
 
-                                        @Override public void deny() {
+                                    @Override
+                                    public void deny() {
 
-                                        }
-                                    });
-                                }
+                                    }
+                                });
+                            }
 
-                                @Override public void deny() {
+                            @Override
+                            public void deny() {
 
-                                }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        try {
-                            new AttachFile(ActivitySetting.this).requestOpenGalleryForImageSingleSelect();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        dialog.dismiss();
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
+                } else {
+                    try {
+                        new AttachFile(ActivitySetting.this).requestOpenGalleryForImageSingleSelect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    dialog.dismiss();
                 }
-            })
-            .show();
+            }
+        }).show();
     }
 
     private void useCamera() {
@@ -2327,7 +2447,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     //=====================================================================================result
     // from camera , gallery and crop
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
@@ -2373,7 +2494,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             showProgressBar();
             HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                @Override public void OnProgress(int progress, FileUploadStructure struct) {
+                @Override
+                public void OnProgress(int progress, FileUploadStructure struct) {
                     if (progress < 100) {
                         prgWait.setProgress(progress);
                     } else {
@@ -2381,7 +2503,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     }
                 }
 
-                @Override public void OnError() {
+                @Override
+                public void OnError() {
                     hideProgressBar();
                 }
             });
@@ -2401,20 +2524,23 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         finish();
     }
 
-    @Override public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
+    @Override
+    public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
 
         /**
          * if another account do this action we haven't avatar source and have
          *  to download avatars . for do this action call HelperAvatar.getAvatar
          */
         if (pathSaveImage == null) {
-            showImage();
+            setAvatar();
         } else {
             HelperAvatar.avatarAdd(userId, pathSaveImage, avatar, new OnAvatarAdd() {
-                @Override public void onAvatarAdd(final String avatarPath) {
+                @Override
+                public void onAvatarAdd(final String avatarPath) {
 
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             hideProgressBar();
                             setImage(avatarPath);
                         }
@@ -2425,11 +2551,13 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
     }
 
-    @Override public void onAvatarAddTimeOut() {
+    @Override
+    public void onAvatarAddTimeOut() {
         hideProgressBar();
     }
 
-    @Override public void onAvatarError() {
+    @Override
+    public void onAvatarError() {
         hideProgressBar();
     }
 
@@ -2449,7 +2577,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void showProgressBar() {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (prgWait != null) {
                     prgWait.setVisibility(View.VISIBLE);
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -2460,7 +2589,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void hideProgressBar() {
         runOnUiThread(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (prgWait != null) {
                     prgWait.setVisibility(View.GONE);
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -2471,23 +2601,19 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(title)
-            .customView(R.layout.dialog_remind_time, wrapInScrollView)
-            .positiveText(R.string.B_ok)
-            .autoDismiss(false)
-            .canceledOnTouchOutside(false)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                }
-            })
-            .show();
+        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+            }
+        }).show();
 
         View v = dialog.getCustomView();
 
         final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
-            @Override public void onTick(long millisUntilFinished) {
+            @Override
+            public void onTick(long millisUntilFinished) {
                 int seconds = (int) ((millisUntilFinished) / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
@@ -2495,7 +2621,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
-            @Override public void onFinish() {
+            @Override
+            public void onFinish() {
                 //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
             }
         };
@@ -2503,7 +2630,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     private final CustomTabsActivityHelper.CustomTabsFallback mCustomTabsFallback = new CustomTabsActivityHelper.CustomTabsFallback() {
-        @Override public void openUri(Activity activity, Uri uri) {
+        @Override
+        public void openUri(Activity activity, Uri uri) {
 
             try {
                 activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));

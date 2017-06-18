@@ -13,6 +13,7 @@ package net.iGap.realm;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateUtils;
+import android.util.Log;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
@@ -183,35 +184,36 @@ import org.parceler.Parcel;
 
     public static void fetchMessages(final long roomId, final OnActivityChatStart callback) {
 
-        if (G.userLogin) {
 
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    final Realm realm = Realm.getDefaultInstance();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                final Realm realm = Realm.getDefaultInstance();
 
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
 
+                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findAll();
+                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
-                            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).findAll();
-                            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                        if (realmClientCondition != null) {
+                            for (RealmRoomMessage roomMessage : realmRoomMessages) {
+                                if (roomMessage != null) {
+                                    Log.e("dddddd", roomMessage.getStatus() + "");
 
-                            if (realmClientCondition != null) {
-                                for (RealmRoomMessage roomMessage : realmRoomMessages) {
-                                    if (roomMessage != null) {
-                                        /**
-                                         * don't send seen for own message
-                                         */
-                                        if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
-                                            roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-                                            RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
-                                            realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
+                                    /**
+                                     * don't send seen for own message
+                                     */
+                                    if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
+                                        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                                        RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
+                                        realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
 
-                                            realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                            callback.sendSeenStatus(roomMessage);
-                                        } else {
+                                        realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                        callback.sendSeenStatus(roomMessage);
+                                    } else {
+                                        if (G.userLogin) {
                                             if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
                                                 /**
                                                  * check timeout, because when forward message to room ,message state is sending
@@ -232,21 +234,21 @@ import org.parceler.Parcel;
                                 }
                             }
                         }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
 
-                            realm.close();
-                        }
-                    }, new Realm.Transaction.OnError() {
-                        @Override
-                        public void onError(Throwable error) {
-                            realm.close();
-                        }
-                    });
-                }
-            });
-        }
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
+            }
+        });
     }
 
     public boolean isShowTime() {

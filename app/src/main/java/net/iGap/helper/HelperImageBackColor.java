@@ -124,25 +124,25 @@ public class HelperImageBackColor {
      */
     public static String getFirstAlphabetName(String name) {
         name = name.trim();
-        String[] splited = name.split("\\s+");
+        String[] splitted = name.split("\\s+");
 
-        int size = splited.length;
-        String charfirst, mname, Upname;
+        int size = splitted.length;
+        String charFirst, lowName, upName;
 
-        if (!splited[0].equals("") && splited[0] != null && !splited[0].isEmpty()) {
+        if (!splitted[0].equals("") && splitted[0] != null && !splitted[0].isEmpty()) {
             if (size == 1) {
-                charfirst = splited[0].trim();
-                mname = charfirst.substring(0, 1);
+                charFirst = splitted[0].trim();
+                lowName = charFirst.substring(0, 1);
             } else {
-                charfirst = splited[0].trim();
-                String charlast = splited[size - 1].trim();
-                mname = charfirst.substring(0, 1) + charlast.substring(0, 1);
+                charFirst = splitted[0].trim();
+                String charLast = splitted[size - 1].trim();
+                lowName = charFirst.substring(0, 1) + charLast.substring(0, 1);
             }
-            Upname = mname.toUpperCase();
+            upName = lowName.toUpperCase();
         } else {
-            Upname = " ";
+            upName = " ";
         }
 
-        return Upname;
+        return upName;
     }
 }

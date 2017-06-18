@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -31,6 +33,7 @@ import io.realm.Sort;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
@@ -53,6 +56,9 @@ import net.iGap.request.RequestSignalingGetLog;
 
 public class FragmentCall extends Fragment {
 
+    public static final String strGonTitle = "strGonTitle";
+    boolean goneTitle = false;
+
     private int mOffset = 0;
     private int mLimit = 50;
     private RecyclerView.OnScrollListener onScrollListener;
@@ -61,11 +67,23 @@ public class FragmentCall extends Fragment {
     private AppCompatImageView imgCallEmpty;
     private FragmentActivity mActivity;
     ProgressBar progressBar;
+    private int attampOnError = 0;
+    boolean canclick = false;
+    int move = 0;
+    public FloatingActionButton fabContactList;
+
 
     private RealmRecyclerView mRecyclerView;
 
-    public static FragmentCall newInstance() {
-        return new FragmentCall();
+    public static FragmentCall newInstance(boolean goneTitle) {
+
+        FragmentCall fragmentCall = new FragmentCall();
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(strGonTitle, goneTitle);
+        fragmentCall.setArguments(bundle);
+
+        return fragmentCall;
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,6 +93,8 @@ public class FragmentCall extends Fragment {
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        goneTitle = getArguments().getBoolean(strGonTitle);
 
         view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
 
@@ -96,47 +116,7 @@ public class FragmentCall extends Fragment {
             @Override
             public void onClick(View v) {
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-                View view = dialog.getCustomView();
-
-                DialogAnimation.animationUp(dialog);
-                dialog.show();
-
-                final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
-                txtClear.setText(getResources().getString(R.string.clean_log));
-
-                TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
-                iconClear.setText(getResources().getString(R.string.md_rubbish_delete_file));
-
-                ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
-                root1.setVisibility(View.VISIBLE);
-
-                root1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-
-                        if (G.userLogin) {
-                            new MaterialDialog.Builder(mActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
-                                positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    Realm realm = Realm.getDefaultInstance();
-                                    try {
-                                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
-                                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                                        imgCallEmpty.setVisibility(View.VISIBLE);
-                                    } catch (Exception e) {
-
-                                    } finally {
-                                        realm.close();
-                                    }
-                                }
-                            }).negativeText(R.string.B_cancel).show();
-                        } else {
-                            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
-                        }
-                    }
-                });
+                openDialogMenu();
             }
         });
 
@@ -180,15 +160,24 @@ public class FragmentCall extends Fragment {
         mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
 
         G.iSignalingGetCallLog = new ISignalingGetCallLog() {
-            @Override public void onGetList(int size) {
+            @Override public void onGetList(final int size) {
 
-                G.handler.post(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override public void run() {
                         progressBar.setVisibility(View.GONE);
                     }
                 });
 
-                if (size == 0) {
+                if (size == -1) {
+
+                    if (attampOnError < 2) {
+                        isSendRequestForLoading = false;
+                        attampOnError++;
+                    } else {
+                        isThereAnyMoreItemToLoad = false;
+                        mRecyclerView.getRecycleView().removeOnScrollListener(onScrollListener);
+                    }
+                } else if (size == 0) {
                     isThereAnyMoreItemToLoad = false;
                     mRecyclerView.getRecycleView().removeOnScrollListener(onScrollListener);
                 } else {
@@ -200,7 +189,7 @@ public class FragmentCall extends Fragment {
 
         realm.close();
 
-        FloatingActionButton fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
+        fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
         fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
         fabContactList.setOnClickListener(new View.OnClickListener() {
@@ -226,14 +215,98 @@ public class FragmentCall extends Fragment {
         });
 
         getLogListWithOfset();
+
+        if (goneTitle) {
+
+            fabContactList.setVisibility(View.GONE);
+
+            view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
+
+            mRecyclerView.getRecycleView().addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    if (((ActivityMain) getActivity()).arcMenu.isMenuOpened()) {
+                        ((ActivityMain) getActivity()).arcMenu.toggleMenu();
+                    }
+
+                    if (dy > 0) {
+                        // Scroll Down
+                        if (((ActivityMain) getActivity()).arcMenu.fabMenu.isShown()) {
+                            ((ActivityMain) getActivity()).arcMenu.fabMenu.hide();
+                        }
+                    } else if (dy < 0) {
+                        // Scroll Up
+                        if (!((ActivityMain) getActivity()).arcMenu.fabMenu.isShown()) {
+                            ((ActivityMain) getActivity()).arcMenu.fabMenu.show();
+                        }
+                    }
+                }
+            });
+
+        }
     }
 
+
+
     private void getLogListWithOfset() {
-        isSendRequestForLoading = true;
 
-        new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
+        if (G.isSecure && G.userLogin) {
+            isSendRequestForLoading = true;
+            new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override public void run() {
+                    getLogListWithOfset();
+                }
+            }, 1000);
+        }
 
-        progressBar.setVisibility(View.VISIBLE);
+    }
+
+
+    public void openDialogMenu() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+        View view = dialog.getCustomView();
+
+        DialogAnimation.animationUp(dialog);
+        dialog.show();
+
+        final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
+        txtClear.setText(getResources().getString(R.string.clean_log));
+
+        TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
+        iconClear.setText(getResources().getString(R.string.md_rubbish_delete_file));
+
+        ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
+        root1.setVisibility(View.VISIBLE);
+
+        root1.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                dialog.dismiss();
+
+                if (G.userLogin) {
+                    new MaterialDialog.Builder(mActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
+                        positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Realm realm = Realm.getDefaultInstance();
+                            try {
+                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
+                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                                imgCallEmpty.setVisibility(View.VISIBLE);
+                            } catch (Exception e) {
+
+                            } finally {
+                                realm.close();
+                            }
+                        }
+                    }).negativeText(R.string.B_cancel).show();
+                } else {
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+                }
+            }
+        });
     }
 
     //*************************************************************************************************************
@@ -254,6 +327,8 @@ public class FragmentCall extends Fragment {
                     intent.putExtra(ActivityCall.USER_ID_STR, userID);
                     intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    ActivityCall.isGoingfromApp = true;
                     G.context.startActivity(intent);
                 }
 
@@ -309,13 +384,33 @@ public class FragmentCall extends Fragment {
 
                         // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getlogProto().getPeer().getId(), null, null);
 
-                        long userId = realmResults.get(getPosition()).getlogProto().getPeer().getId();
+                        if (canclick) {
+                            long userId = realmResults.get(getPosition()).getlogProto().getPeer().getId();
 
-                        if (userId != 134 && G.userId != userId) {
-                            call(userId, false);
+                            if (userId != 134 && G.userId != userId) {
+                                call(userId, false);
+                            }
+                        }
+                    }
+                });
+
+                itemView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override public boolean onTouch(View v, MotionEvent event) {
+
+                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            move = (int) event.getX();
+                        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                            int i = Math.abs((int) (move - event.getX()));
+
+                            if (i < 2) {
+                                canclick = true;
+                            } else {
+                                canclick = false;
+                            }
                         }
 
-
+                        return false;
                     }
                 });
             }
@@ -348,7 +443,7 @@ public class FragmentCall extends Fragment {
                 case CANCELED:
 
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.red));
+                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.green));
                     viewHolder.timeDureation.setText(R.string.not_answer);
                     break;
                 case INCOMING:

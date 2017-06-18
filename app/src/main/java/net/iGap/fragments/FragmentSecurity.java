@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -48,7 +49,9 @@ public class FragmentSecurity extends Fragment {
     private boolean isChabgePassword = false;
     private String txtQuestionOne = "";
     private String txtQuestionTwo = "";
+    private String txtPaternEmail = "";
     private boolean isRecoveryByEmail = false;
+    public static boolean isSetRecoveryEmail = false;
     private ViewGroup rootSetPassword;
     private ViewGroup rootCheckPassword;
     private ViewGroup rootSetAdditionPassword;
@@ -58,6 +61,7 @@ public class FragmentSecurity extends Fragment {
     private ViewGroup rootChangeHint;
     private ViewGroup rootConfirmedEmail;
     private TextView txtResendConfirmEmail;
+    private ProgressBar prgWaiting;
     private RippleView rippleOk;
     private int page;
     private static final int CHANGE_HINT = 1;
@@ -65,6 +69,12 @@ public class FragmentSecurity extends Fragment {
     private static final int CONFIRM_EMAIL = 3;
     private static final int CHANGE_QUESTION = 4;
     private FragmentActivity mActivity;
+    public boolean isFirstArrive = true;
+    public static boolean isFirstSetPassword = true;
+    private TextView txtSetConfirmedEmail;
+    private TextView txtSetRecoveryEmail;
+    private View lineConfirmView;
+
     public FragmentSecurity() {
         // Required empty public constructor
     }
@@ -79,7 +89,8 @@ public class FragmentSecurity extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail();
+        prgWaiting = (ProgressBar) view.findViewById(R.id.tsv_prgWaiting_addContact);
+
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -93,6 +104,9 @@ public class FragmentSecurity extends Fragment {
         rootConfirmedEmail = (ViewGroup) view.findViewById(R.id.tsv_rootConfirmedEmail);
         txtResendConfirmEmail = (TextView) view.findViewById(R.id.tsv_txtResendConfirmEmail);
 
+        lineConfirmView = view.findViewById(R.id.tsv_viewConfirmedEmail);
+
+
         rippleOk = (RippleView) view.findViewById(R.id.verifyPassword_rippleOk);
         final EditText edtCheckPassword = (EditText) view.findViewById(R.id.setPassword_edtCheckPassword);
         final EditText edtSetQuestionPassOne = (EditText) view.findViewById(R.id.tsv_edtSetQuestionPassOne);
@@ -105,11 +119,24 @@ public class FragmentSecurity extends Fragment {
 
         TextView txtChangePassword = (TextView) view.findViewById(R.id.tsv_changePassword);
         TextView txtTurnPasswordOff = (TextView) view.findViewById(R.id.tsv_turnPasswordOff);
-        final TextView txtSetRecoveryEmail = (TextView) view.findViewById(tsv_setRecoveryEmail);
-        final TextView txtSetConfirmedEmail = (TextView) view.findViewById(tsv_setConfirmedEmail);
+        txtSetRecoveryEmail = (TextView) view.findViewById(tsv_setRecoveryEmail);
+        txtSetConfirmedEmail = (TextView) view.findViewById(tsv_setConfirmedEmail);
         TextView txtSetRecoveryQuestion = (TextView) view.findViewById(R.id.tsv_setRecoveryQuestion);
         TextView txtChangeHint = (TextView) view.findViewById(R.id.tsv_changeHint);
         TextView txtForgotPassword = (TextView) view.findViewById(R.id.txtForgotPassword);
+
+        if (isFirstArrive) {
+
+            prgWaiting.setVisibility(View.VISIBLE);
+            new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail();
+        } else {
+            if (!isFirstSetPassword) {
+                setSecondView();
+            } else {
+                setFirstView();
+            }
+        }
+
 
         view.findViewById(R.id.rootFragmentSecurity).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +164,7 @@ public class FragmentSecurity extends Fragment {
                         viewChangeRecoveryQuestion();
                         break;
                     default:
+                        isFirstArrive = true;
                         mActivity.getSupportFragmentManager().popBackStack();
 
                 }
@@ -148,14 +176,8 @@ public class FragmentSecurity extends Fragment {
             @Override
             public void onClick(View v) {
                 new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
-                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
-                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
+                closeKeyboard(v);
+                error(getString(R.string.resend_verify_email_code));
             }
         });
 
@@ -164,6 +186,7 @@ public class FragmentSecurity extends Fragment {
             @Override
             public void onClick(View v) {
 
+                isFirstArrive = false;
                 FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
                 mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentSetSecurityPassword).commit();
             }
@@ -173,7 +196,7 @@ public class FragmentSecurity extends Fragment {
             @Override
             public void onClick(View v) {
 
-                new MaterialDialog.Builder(mActivity).title(R.string.set_recovery_question).items(R.array.securityRecoveryPassword).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(mActivity).title(R.string.set_recovery_dialog_title).items(R.array.securityRecoveryPassword).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -189,9 +212,8 @@ public class FragmentSecurity extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("PAGE", Security.SETTING);
                         bundle.putString("QUESTION_ONE", txtQuestionOne);
-                        bundle.putString("QUESTION_TWO", txtQuestionOne);
-                        bundle.putString("QUESTION_TWO", txtQuestionOne);
-                        bundle.putString("QUESTION_TWO", txtQuestionOne);
+                        bundle.putString("QUESTION_TWO", txtQuestionTwo);
+                        bundle.putString("PATERN_EMAIL", txtPaternEmail);
                         bundle.putBoolean("IS_EMAIL", isRecoveryByEmail);
 
                         fragmentSecurityRecovery.setArguments(bundle);
@@ -221,6 +243,7 @@ public class FragmentSecurity extends Fragment {
             public void onClick(View v) {
 
                 page = CONFIRM_EMAIL;
+                edtConfirmedEmail.setHint(txtPaternEmail);
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootConfirmedEmail.setVisibility(View.VISIBLE);
@@ -231,6 +254,8 @@ public class FragmentSecurity extends Fragment {
         txtChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                isFirstArrive = false;
 
                 FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
                 Bundle bundle = new Bundle();
@@ -248,6 +273,7 @@ public class FragmentSecurity extends Fragment {
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootChangeEmail.setVisibility(View.VISIBLE);
+                rootConfirmedEmail.setVisibility(View.VISIBLE);
                 rippleOk.setVisibility(View.VISIBLE);
 
             }
@@ -256,12 +282,14 @@ public class FragmentSecurity extends Fragment {
         txtTurnPasswordOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MaterialDialog.Builder(mActivity).title(R.string.turn_Password_off).content(R.string.turn_Password_off_desc).positiveText(getResources().getString(R.string.B_ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(mActivity).title(R.string.turn_Password_off).content(R.string.turn_Password_off_desc).positiveText(getResources().getString(R.string.yes)).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        isFirstSetPassword = true;
                         new RequestUserTwoStepVerificationUnsetPassword().unsetPassword(password);
                     }
-                }).negativeText(getResources().getString(R.string.B_cancel)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                }).negativeText(getResources().getString(R.string.no)).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.dismiss();
@@ -287,12 +315,14 @@ public class FragmentSecurity extends Fragment {
 
                 txtQuestionOne = questionOne;
                 txtQuestionTwo = questionTwo;
+                txtPaternEmail = unconfirmedEmailPattern;
                 //this.hasConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
                 //this.unconfirmedEmailPattern = unconfirmedEmailPattern;
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
+                        prgWaiting.setVisibility(View.GONE);
                         if (questionOne.length() > 0 && questionTwo.length() > 0) {
 
                             rootSetPassword.setVisibility(View.GONE);
@@ -301,15 +331,19 @@ public class FragmentSecurity extends Fragment {
                             rootCheckPassword.setVisibility(View.VISIBLE);
                             rippleOk.setVisibility(View.VISIBLE);
                             edtCheckPassword.setHint(hint);
+                            isFirstSetPassword = false;
 
-                            if (hasConfirmedRecoveryEmail || unconfirmedEmailPattern.length() == 0) {
+                            if (hasConfirmedRecoveryEmail && unconfirmedEmailPattern.length() == 0) {
                                 txtSetRecoveryEmail.setVisibility(View.VISIBLE);
                                 txtSetConfirmedEmail.setVisibility(View.GONE);
-                                view.findViewById(R.id.tsv_viewConfirmedEmail).setVisibility(View.GONE);
+                                lineConfirmView.setVisibility(View.GONE);
+                                isSetRecoveryEmail = true;
                             } else {
-                                txtSetRecoveryEmail.setVisibility(View.GONE);
-                                view.findViewById(R.id.tsv_viewRecoveryEmail).setVisibility(View.GONE);
+                                txtSetRecoveryEmail.setVisibility(View.VISIBLE);
+                                view.findViewById(R.id.tsv_viewRecoveryEmail).setVisibility(View.VISIBLE);
                                 txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                                lineConfirmView.setVisibility(View.VISIBLE);
+                                isSetRecoveryEmail = false;
 
                             }
 
@@ -319,7 +353,35 @@ public class FragmentSecurity extends Fragment {
                             root_ChangePassword.setVisibility(View.GONE);
                             rootCheckPassword.setVisibility(View.GONE);
                             rippleOk.setVisibility(View.GONE);
+                            isFirstSetPassword = true;
                         }
+                    }
+                });
+            }
+
+
+
+            @Override
+            public void errorGetPasswordDetail(final int majorCode, final int minorCode) {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (majorCode == 188 && minorCode == 1) {  //USER DON'T SET A PASSWORD
+                            setFirstView();
+                        } else { // CAN'T CONNECT TO SERVER
+                            mActivity.getSupportFragmentManager().popBackStack();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void timeOutGetPasswordDetail() {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mActivity.getSupportFragmentManager().popBackStack();
                     }
                 });
             }
@@ -375,18 +437,45 @@ public class FragmentSecurity extends Fragment {
             @Override
             public void changeHint() {
 
-                viewChangeHint();
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewChangeHint();
+                    }
+                });
             }
 
             @Override
             public void changeEmail() {
 
-                viewChangeEmail();
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewChangeEmail();
+                    }
+                });
+
             }
 
             @Override
             public void confirmEmail() {
-                viewConfirmEmail();
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewConfirmEmail();
+                    }
+                });
+
+            }
+
+            @Override
+            public void errorConfirmEmail() {
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        error(getString(R.string.invalid_verify_email_code));
+                    }
+                });
             }
 
             @Override
@@ -417,6 +506,7 @@ public class FragmentSecurity extends Fragment {
                         closeKeyboard(v);
                         error(getString(R.string.please_set_password));
                     }
+                    return;
                 }
 
                 //change Question
@@ -433,6 +523,7 @@ public class FragmentSecurity extends Fragment {
                         closeKeyboard(v);
                         error(getString(R.string.Please_complete_all_Item));
                     }
+                    return;
                 }
 
                 //change email
@@ -452,6 +543,8 @@ public class FragmentSecurity extends Fragment {
                         closeKeyboard(v);
                         error(getString(R.string.Please_enter_your_email));
                     }
+
+                    return;
                 }
 
 
@@ -470,6 +563,7 @@ public class FragmentSecurity extends Fragment {
                         closeKeyboard(v);
                         error(getString(R.string.Please_enter_your_hint));
                     }
+                    return;
                 }
 
 
@@ -477,12 +571,51 @@ public class FragmentSecurity extends Fragment {
                 if (rootConfirmedEmail.getVisibility() == View.VISIBLE) {
                     if (edtConfirmedEmail.length() > 0) {
                         new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtConfirmedEmail.getText().toString());
+                        txtPaternEmail = edtConfirmedEmail.getText().toString();
                         edtConfirmedEmail.setText("");
                         closeKeyboard(v);
                     } else {
                         closeKeyboard(v);
                         error(getString(R.string.please_enter_code));
                     }
+                }
+            }
+        });
+
+    }
+
+    private void setFirstView() {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                rootSetPassword.setVisibility(View.VISIBLE);
+                rootSetAdditionPassword.setVisibility(View.VISIBLE);
+                root_ChangePassword.setVisibility(View.GONE);
+                rootCheckPassword.setVisibility(View.GONE);
+                rippleOk.setVisibility(View.GONE);
+                prgWaiting.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void setSecondView() {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                rootSetPassword.setVisibility(View.VISIBLE);
+                root_ChangePassword.setVisibility(View.VISIBLE);
+                rootSetAdditionPassword.setVisibility(View.GONE);
+                rootCheckPassword.setVisibility(View.GONE);
+                rippleOk.setVisibility(View.GONE);
+                prgWaiting.setVisibility(View.GONE);
+                if (!isSetRecoveryEmail) {
+                    txtSetConfirmedEmail.setVisibility(View.GONE);
+                    lineConfirmView.setVisibility(View.GONE);
+
+                } else {
+                    txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                    lineConfirmView.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -507,8 +640,12 @@ public class FragmentSecurity extends Fragment {
             public void run() {
                 page = 0;
                 rootSetPassword.setVisibility(View.VISIBLE);
+                rootConfirmedEmail.setVisibility(View.GONE);
                 rootChangeEmail.setVisibility(View.GONE);
                 rippleOk.setVisibility(View.GONE);
+                isSetRecoveryEmail = true;
+                txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                lineConfirmView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -540,7 +677,7 @@ public class FragmentSecurity extends Fragment {
     }
 
     private void closeKeyboard(View v) {
-        if (mActivity != null) {
+        if (isAdded()) {
             try {
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -551,7 +688,7 @@ public class FragmentSecurity extends Fragment {
     }
 
     private void error(String error) {
-        if (mActivity != null) {
+        if (isAdded()) {
             try {
                 Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                 vShort.vibrate(200);
@@ -571,32 +708,35 @@ public class FragmentSecurity extends Fragment {
 
     private void dialogWaitTime(long time) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialogWait = new MaterialDialog.Builder(mActivity).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        if (isAdded()) {
 
-                dialog.dismiss();
-            }
-        }).show();
+            final MaterialDialog dialogWait = new MaterialDialog.Builder(mActivity).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-        View v = dialogWait.getCustomView();
+                    dialog.dismiss();
+                }
+            }).show();
 
-        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
-        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                int seconds = (int) ((millisUntilFinished) / 1000);
-                int minutes = seconds / 60;
-                seconds = seconds % 60;
-                remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-            }
+            View v = dialogWait.getCustomView();
 
-            @Override
-            public void onFinish() {
-                remindTime.setText("00:00");
-            }
-        };
-        countWaitTimer.start();
+            final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+            CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    int seconds = (int) ((millisUntilFinished) / 1000);
+                    int minutes = seconds / 60;
+                    seconds = seconds % 60;
+                    remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                }
+
+                @Override
+                public void onFinish() {
+                    remindTime.setText("00:00");
+                }
+            };
+            countWaitTimer.start();
+        }
     }
 
     @Override

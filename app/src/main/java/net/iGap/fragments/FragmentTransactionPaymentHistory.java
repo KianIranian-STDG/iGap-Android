@@ -42,7 +42,7 @@ public class FragmentTransactionPaymentHistory extends Fragment {
     private FragmentActivity mActivity;
     private PaymentTaype paymentTaype = PaymentTaype.weekly;
 
-    enum PaymentTaype {
+    public enum PaymentTaype {
         weekly, monthly, yearly;
     }
 

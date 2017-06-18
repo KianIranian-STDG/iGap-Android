@@ -147,6 +147,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     private ViewGroup vgCheckPassword;
     private String securityPasswordQuestionOne = "";
     private String securityPasswordQuestionTwo = "";
+    private String securityPaternEmail = "";
     private String securityPasswordHint = "";
     private boolean hasConfirmedRecoveryEmail;
     private String unconfirmedEmailPattern;
@@ -1135,7 +1136,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 txtRecovery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new MaterialDialog.Builder(ActivityRegister.this).title(R.string.set_recovery_question).items(R.array.securityRecoveryPassword).itemsCallback(new MaterialDialog.ListCallback() {
+                        new MaterialDialog.Builder(ActivityRegister.this).title(R.string.set_recovery_dialog_title).items(R.array.securityRecoveryPassword).itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                 switch (which) {
@@ -1152,6 +1153,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                                 bundle.putSerializable("PAGE", Security.REGISTER);
                                 bundle.putString("QUESTION_ONE", securityPasswordQuestionOne);
                                 bundle.putString("QUESTION_TWO", securityPasswordQuestionTwo);
+                                bundle.putString("PATERN_EMAIL", securityPaternEmail);
                                 bundle.putBoolean("IS_EMAIL", isRecoveryByEmail);
                                 fragmentSecurityRecovery.setArguments(bundle);
                                 getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.rg_rootActivityRegister, fragmentSecurityRecovery).commit();
@@ -1456,6 +1458,11 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     }
 
     @Override
+    public void getEmailPatern(final String patern) {
+
+    }
+
+    @Override
     public void errorRecoveryByEmail() {
         runOnUiThread(new Runnable() {
             @Override
@@ -1492,9 +1499,15 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         });
     }
 
-    private void closeKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    private void closeKeyboard(final View v) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+        });
+
     }
 
     private void dialogWaitTimeVerifyPassword(long time) {

@@ -9,16 +9,7 @@ package net.iGap.interfaces;
  * All rights reserved.
 */
 
-public interface OnRecoverySecurityPassword {
-
-    void recoveryByEmail(String tokenR);
+public interface OnRecoveryEmailToken {
 
     void getEmailPatern(String patern);
-
-    void errorRecoveryByEmail();
-
-    void recoveryByQuestion(String tokenR);
-
-    void errorRecoveryByQuestion();
-
 }

@@ -151,6 +151,9 @@
               android:textColor="@android:color/white"
               android:textSize="@dimen/dp16"
               android:textStyle="normal"
+              app:emojiSize="@dimen/dp14"
+              android:lineSpacingMultiplier=".8"
+              android:padding="@dimen/dp4"
               />
 
         </LinearLayout>
@@ -241,6 +244,9 @@
                   android:text=""
                   android:textColor="@color/gray_5c"
                   android:textSize="@dimen/dp13"
+                  app:emojiSize="@dimen/dp14"
+                  android:lineSpacingMultiplier=".8"
+                  android:padding="@dimen/dp4"
                   />
             </LinearLayout>
           </LinearLayout>
@@ -315,6 +321,9 @@
                 android:text=""
                 android:textColor="@color/gray_5c"
                 android:textSize="@dimen/dp13"
+                app:emojiSize="@dimen/dp14"
+                android:lineSpacingMultiplier=".8"
+                android:padding="@dimen/dp4"
                 />
 
           </LinearLayout>

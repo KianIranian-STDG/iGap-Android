@@ -45,6 +45,8 @@ public class Config {
     public static final int FAST_START_PAGE_TIME = (int) 20;
     public static final int LOW_START_PAGE_TIME = (int) 25;
     public static final int FETCH_CONTACT_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);
+    public static final int LIMIT_GET_HISTORY_LOW = 10;
+    public static final int LIMIT_GET_HISTORY_NORMAL = 40;
 
     public static String default_appBarColor = "#00B0BF";
     public static String default_notificationColor = "#f23131";

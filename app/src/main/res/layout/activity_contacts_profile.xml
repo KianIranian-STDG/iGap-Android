@@ -191,6 +191,9 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/dp14"
             android:textStyle="bold"
+            app:emojiSize="@dimen/dp14"
+            android:lineSpacingMultiplier=".8"
+            android:padding="@dimen/dp4"
             />
 
       </LinearLayout>
@@ -274,6 +277,9 @@
               android:text="Alexander Smith"
               android:textColor="@color/gray_5c"
               android:textSize="@dimen/dp13"
+              app:emojiSize="@dimen/dp14"
+              android:lineSpacingMultiplier=".8"
+              android:padding="@dimen/dp4"
               />
 
         </LinearLayout>

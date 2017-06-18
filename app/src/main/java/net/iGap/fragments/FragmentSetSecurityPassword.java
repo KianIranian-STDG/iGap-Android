@@ -76,7 +76,7 @@ public class FragmentSetSecurityPassword extends Fragment {
             }
         });
 
-        RippleView btnBack = (RippleView) view.findViewById(R.id.setPassword_ripple_back);
+        final RippleView btnBack = (RippleView) view.findViewById(R.id.setPassword_ripple_back);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,18 +96,13 @@ public class FragmentSetSecurityPassword extends Fragment {
 
         TextView txtSkipConfirmEmail = (TextView) view.findViewById(R.id.txtSkipConfirmEmail);
         TextView txtResendConfirmEmail = (TextView) view.findViewById(R.id.txtResendConfirmEmail);
+        TextView txtSkipSetEmail = (TextView) view.findViewById(R.id.txtSkipSetEmail);
         txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
-                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
-                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
+                closeKeyboard(v);
+                error(getString(R.string.resend_verify_email_code));
             }
         });
 
@@ -127,8 +122,7 @@ public class FragmentSetSecurityPassword extends Fragment {
             }
         });
 
-
-        RippleView btnOk = (RippleView) view.findViewById(R.id.setPassword_rippleOk);
+        final RippleView btnOk = (RippleView) view.findViewById(R.id.setPassword_rippleOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,8 +130,6 @@ public class FragmentSetSecurityPassword extends Fragment {
                 if (page == 1) {
                     if (edtSetPassword.length() >= 2) {
 
-
-                        closeKeyboard(v);
                         page = 2;
                         txtToolbar.setText(getResources().getString(R.string.your_password));
                         txtPassword = edtSetPassword.getText().toString();
@@ -154,8 +146,6 @@ public class FragmentSetSecurityPassword extends Fragment {
                     if (edtSetRePassword.length() >= 2) {
                         if (txtPassword.equals(edtSetRePassword.getText().toString())) {
 
-
-                            closeKeyboard(v);
                             page = 3;
                             txtToolbar.setText(getResources().getString(R.string.password_hint));
                             rootReEnterPassword.setVisibility(View.GONE);
@@ -176,8 +166,6 @@ public class FragmentSetSecurityPassword extends Fragment {
 
                         if (!txtPassword.equals(edtSetHintPassword.getText().toString())) {
 
-
-                            closeKeyboard(v);
                             page = 4;
                             txtToolbar.setText(getResources().getString(R.string.recovery_question));
                             rootHintPassword.setVisibility(View.GONE);
@@ -193,7 +181,6 @@ public class FragmentSetSecurityPassword extends Fragment {
                     }
 
                 } else if (page == 4) {
-                    closeKeyboard(v);
                     if (edtSetQuestionPassOne.length() > 0 && edtSetQuestionPassTwo.length() > 0 && edtSetAnswerPassOne.length() > 0 && edtSetAnswerPassTwo.length() > 0) {
                         page = 5;
                         txtToolbar.setText(getResources().getString(R.string.recovery_email));
@@ -206,6 +193,7 @@ public class FragmentSetSecurityPassword extends Fragment {
                     }
                 } else if (page == 5) {
 
+                    FragmentSecurity.isFirstSetPassword = false;
                     if (edtSetEmail.length() > 0) {
                         Pattern EMAIL_ADDRESS = patternEmail();
 
@@ -221,7 +209,8 @@ public class FragmentSetSecurityPassword extends Fragment {
                             error(getString(R.string.invalid_email));
                         }
                     } else {
-                        page = 6;
+                        page = 0;
+                        FragmentSecurity.isSetRecoveryEmail = false;
                         new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
                         closeKeyboard(v);
                         mActivity.getSupportFragmentManager().popBackStack();
@@ -241,7 +230,6 @@ public class FragmentSetSecurityPassword extends Fragment {
                     if (edtSetConfirmEmail.length() > 0) {
                         new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtSetConfirmEmail.getText().toString());
                     } else {
-                        closeKeyboard(v);
                         error(getString(R.string.enter_verify_email_code));
                     }
                     closeKeyboard(v);
@@ -249,6 +237,16 @@ public class FragmentSetSecurityPassword extends Fragment {
 
             }
         });
+
+        txtSkipSetEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                page = 5;
+                FragmentSecurity.isSetRecoveryEmail = false;
+                btnOk.performClick();
+            }
+        });
+
 
 
         G.twoStepSecurityConfirmEmail = new TwoStepSecurityConfirmEmail() {
@@ -304,7 +302,7 @@ public class FragmentSetSecurityPassword extends Fragment {
 
     private void closeKeyboard(View v) {
 
-        if (mActivity != null) {
+        if (isAdded()) {
             try {
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
@@ -316,7 +314,7 @@ public class FragmentSetSecurityPassword extends Fragment {
 
     private void error(String error) {
 
-        if (mActivity != null) {
+        if (isAdded()) {
             try {
                 Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                 vShort.vibrate(200);

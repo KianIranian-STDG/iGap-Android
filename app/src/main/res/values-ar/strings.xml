@@ -882,8 +882,8 @@
   <string name="Change_hint">تغییر نشانهٔ رمزعبور </string>
   <string name="turn_Password_off">غیرفعال سازی درخواست رمزعبور </string>
   <string name="turn_Password_off_desc">آیا قطعاً می خواهید  رمز عبور را غیرفعال نمایید؟ </string>
-  <string name="set_recovery_email">تعیین آدرس الکترونیکی برای بازیابی</string>
-  <string name="set_recovery_question"> تعیین سؤال امنیتی برای بازیابی</string>
+  <string name="change_email_recovery">تعیین آدرس الکترونیکی برای بازیابی</string>
+  <string name="set_recovery_dialog_title"> تعیین سؤال امنیتی برای بازیابی</string>
   <string name="set_unconfirmed_email">تعیین ایمیل تأیید شده </string>
   <string name="Recovery_with_question">بازیابی به کمک سؤال امنیتی </string>
   <string name="please_enter_confirm_code"> لطفاً کد تأیید شده را وارد نمایید</string>
