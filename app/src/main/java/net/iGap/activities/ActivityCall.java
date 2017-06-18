@@ -145,7 +145,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
             G.isInCall = false;
 
-            Intent intent = new Intent(G.context, ActivityMain.class);
+            Intent intent = new Intent(this, ActivityMain.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             startActivity(intent);
             finish();
             return;

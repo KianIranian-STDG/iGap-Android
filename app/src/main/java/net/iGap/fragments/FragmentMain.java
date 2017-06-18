@@ -388,7 +388,14 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             new Thread(new Runnable() {
                 @Override public void run() {
-                    new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
+
+                    if (G.clientConditionGlobal != null) {
+                        new RequestClientCondition().clientCondition(G.clientConditionGlobal);
+                    } else {
+                        new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
+                    }
+
+
                 }
             }).start();
         }
@@ -858,7 +865,12 @@ public class FragmentMain extends Fragment implements OnComplete {
                  */
                 if (mInfo.getUnreadCount() < 1) {
                     removeView(lytContainer6, R.id.lyt_unread_room);
+                    holder.name.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
+
                 } else {
+
+                    holder.name.setTypeface(FontCache.get("fonts/IRANSansMobile_Bold.ttf", G.context));
+
                     addView(holder, lytContainer6, R.layout.room_layout_unread, R.id.lyt_unread_room, lytContainer6.getChildCount());
 
                     TextView txtUnread = (TextView) holder.itemView.findViewById(R.id.cs_txt_unread_message);

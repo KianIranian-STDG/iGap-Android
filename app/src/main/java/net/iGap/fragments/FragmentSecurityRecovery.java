@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.interfaces.OnRecoveryEmailToken;
 import net.iGap.interfaces.OnRecoverySecurityPassword;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.enums.Security;
@@ -73,7 +74,7 @@ public class FragmentSecurityRecovery extends Fragment {
             page = (Security) bundle.get("PAGE");
             questionOne = bundle.getString("QUESTION_ONE");
             questionTwo = bundle.getString("QUESTION_TWO");
-            //txtPaternEmail = bundle.getString("PATERN_EMAIL");
+            txtPaternEmail = bundle.getString("PATERN_EMAIL");
             isRecoveryByEmail = bundle.getBoolean("IS_EMAIL");
         }
 
@@ -134,6 +135,21 @@ public class FragmentSecurityRecovery extends Fragment {
         edtSetRecoveryAnswerPassTwo = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassTwo);
         edtSetRecoveryEmail = (EditText) view.findViewById(R.id.edtSetRecoveryEmail);
         edtSetRecoveryEmail.setHint("");
+
+        if (page == Security.REGISTER) {
+            G.onRecoveryEmailToken = new OnRecoveryEmailToken() {
+                @Override
+                public void getEmailPatern(final String patern) {
+
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            edtSetRecoveryEmail.setHint(patern);
+                        }
+                    });
+                }
+            };
+        }
 
         if (isRecoveryByEmail) {
             rootRecoveryEmail.setVisibility(View.VISIBLE);

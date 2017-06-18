@@ -120,6 +120,7 @@ import net.iGap.interfaces.OnInfoTime;
 import net.iGap.interfaces.OnLastSeenUpdateTiming;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnReceivePageInfoTOS;
+import net.iGap.interfaces.OnRecoveryEmailToken;
 import net.iGap.interfaces.OnRecoverySecurityPassword;
 import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnSecuring;
@@ -370,6 +371,7 @@ public class G extends MultiDexApplication {
     public static TwoStepSecurityConfirmEmail twoStepSecurityConfirmEmail;
     public static OnSecurityCheckPassword onSecurityCheckPassword;
     public static OnRecoverySecurityPassword onRecoverySecurityPassword;
+    public static OnRecoveryEmailToken onRecoveryEmailToken;
     public static IClientSearchUserName onClientSearchUserName;
     public static OnCallLeaveView onCallLeaveView;
     public static ICallFinish iCallFinish;

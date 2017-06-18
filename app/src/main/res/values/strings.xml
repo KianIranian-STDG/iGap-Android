@@ -26,7 +26,7 @@
   <!-- Page 6 introduce app -->
   <string name="btn_start_page6">Start Now</string>
   <string name="text_line_1_introduce_page6">Everything for Free in iGap!</string>
-  <string name="text_line_2_introduce_page6"><![CDATA[ Let’s stop boring you! <br /> iGap is thoroughly free. So, just now build your own world freely! ]]></string>
+  <string name="text_line_2_introduce_page6">Let’s stop boring you! \n iGap is thoroughly free. So, just now build your own world freely</string>
 
 
   <!--Fill Profile User -->

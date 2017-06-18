@@ -34,6 +34,10 @@ public class UserTwoStepVerificationRequestRecoveryTokenResponse extends Message
             (ProtoUserTwoStepVerificationRequestRecoveryToken.UserTwoStepVerificationRequestRecoveryTokenResponse.Builder) message;
         builder.getEmailPattern();
 
+        if (G.onRecoveryEmailToken != null) {
+            G.onRecoveryEmailToken.getEmailPatern(builder.getEmailPattern());
+        }
+
         if (G.onRecoverySecurityPassword != null) {
             G.onRecoverySecurityPassword.getEmailPatern(builder.getEmailPattern());
         }

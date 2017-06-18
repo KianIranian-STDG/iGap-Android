@@ -13,6 +13,7 @@ package net.iGap.realm;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateUtils;
+import android.util.Log;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
@@ -199,6 +200,8 @@ import org.parceler.Parcel;
                         if (realmClientCondition != null) {
                             for (RealmRoomMessage roomMessage : realmRoomMessages) {
                                 if (roomMessage != null) {
+                                    Log.e("dddddd", roomMessage.getStatus() + "");
+
                                     /**
                                      * don't send seen for own message
                                      */
