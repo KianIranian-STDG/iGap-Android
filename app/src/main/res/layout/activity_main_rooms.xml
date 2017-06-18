@@ -42,45 +42,6 @@
       android:visibility="gone"
       />
 
-  <net.iGap.libs.floatingAddButton.ArcMenu
-      android:id="@+id/ac_arc_button_add"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="bottom|end"
-      app:borderWidth="0dp"
-      app:menu_color="@color/green"
-      app:menu_scr="@mipmap/plus"
-      android:layout_marginBottom="@dimen/dp60"
-      >
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/ac_fab_start_new_chat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/single_chat"
-        app:backgroundTint="@color/green"
-        app:elevation="@dimen/dp6"
-        />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/ac_fab_crate_new_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/group_chat"
-        app:backgroundTint="@color/green"
-        app:elevation="@dimen/dp6"
-        />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/ac_fab_crate_new_channel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/channel_white"
-        app:backgroundTint="@color/green"
-        app:elevation="@dimen/dp6"
-        />
-
-  </net.iGap.libs.floatingAddButton.ArcMenu>
 
 
 </net.iGap.module.NotTouchableCoordinatorLayout>

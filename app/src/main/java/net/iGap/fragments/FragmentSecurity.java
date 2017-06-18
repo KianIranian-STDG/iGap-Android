@@ -73,6 +73,7 @@ public class FragmentSecurity extends Fragment {
     public static boolean isFirstSetPassword = true;
     private TextView txtSetConfirmedEmail;
     private TextView txtSetRecoveryEmail;
+    private View lineConfirmView;
 
     public FragmentSecurity() {
         // Required empty public constructor
@@ -102,6 +103,8 @@ public class FragmentSecurity extends Fragment {
         rootChangeHint = (ViewGroup) view.findViewById(R.id.tsv_rootChangeHint);
         rootConfirmedEmail = (ViewGroup) view.findViewById(R.id.tsv_rootConfirmedEmail);
         txtResendConfirmEmail = (TextView) view.findViewById(R.id.tsv_txtResendConfirmEmail);
+
+        lineConfirmView = view.findViewById(R.id.tsv_viewConfirmedEmail);
 
 
         rippleOk = (RippleView) view.findViewById(R.id.verifyPassword_rippleOk);
@@ -173,14 +176,8 @@ public class FragmentSecurity extends Fragment {
             @Override
             public void onClick(View v) {
                 new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
-                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
-                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
+                closeKeyboard(v);
+                error(getString(R.string.resend_verify_email_code));
             }
         });
 
@@ -336,15 +333,16 @@ public class FragmentSecurity extends Fragment {
                             edtCheckPassword.setHint(hint);
                             isFirstSetPassword = false;
 
-                            if (hasConfirmedRecoveryEmail || unconfirmedEmailPattern.length() == 0) {
+                            if (hasConfirmedRecoveryEmail && unconfirmedEmailPattern.length() == 0) {
                                 txtSetRecoveryEmail.setVisibility(View.VISIBLE);
                                 txtSetConfirmedEmail.setVisibility(View.GONE);
-                                view.findViewById(R.id.tsv_viewConfirmedEmail).setVisibility(View.GONE);
+                                lineConfirmView.setVisibility(View.GONE);
                                 isSetRecoveryEmail = true;
                             } else {
                                 txtSetRecoveryEmail.setVisibility(View.VISIBLE);
                                 view.findViewById(R.id.tsv_viewRecoveryEmail).setVisibility(View.VISIBLE);
                                 txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                                lineConfirmView.setVisibility(View.VISIBLE);
                                 isSetRecoveryEmail = false;
 
                             }
@@ -613,9 +611,11 @@ public class FragmentSecurity extends Fragment {
                 prgWaiting.setVisibility(View.GONE);
                 if (!isSetRecoveryEmail) {
                     txtSetConfirmedEmail.setVisibility(View.GONE);
+                    lineConfirmView.setVisibility(View.GONE);
 
                 } else {
                     txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                    lineConfirmView.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -645,6 +645,7 @@ public class FragmentSecurity extends Fragment {
                 rippleOk.setVisibility(View.GONE);
                 isSetRecoveryEmail = true;
                 txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                lineConfirmView.setVisibility(View.VISIBLE);
             }
         });
     }

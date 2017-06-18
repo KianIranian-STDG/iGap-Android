@@ -33,6 +33,7 @@ import io.realm.Sort;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
@@ -69,6 +70,7 @@ public class FragmentCall extends Fragment {
     private int attampOnError = 0;
     boolean canclick = false;
     int move = 0;
+    public FloatingActionButton fabContactList;
 
 
     private RealmRecyclerView mRecyclerView;
@@ -187,7 +189,7 @@ public class FragmentCall extends Fragment {
 
         realm.close();
 
-        FloatingActionButton fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
+        fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
         fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
         fabContactList.setOnClickListener(new View.OnClickListener() {
@@ -216,10 +218,32 @@ public class FragmentCall extends Fragment {
 
         if (goneTitle) {
 
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) fabContactList.getLayoutParams();
-            params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, (int) G.context.getResources().getDimension(R.dimen.dp60));
+            fabContactList.setVisibility(View.GONE);
 
             view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
+
+            mRecyclerView.getRecycleView().addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    if (((ActivityMain) getActivity()).arcMenu.isMenuOpened()) {
+                        ((ActivityMain) getActivity()).arcMenu.toggleMenu();
+                    }
+
+                    if (dy > 0) {
+                        // Scroll Down
+                        if (((ActivityMain) getActivity()).arcMenu.fabMenu.isShown()) {
+                            ((ActivityMain) getActivity()).arcMenu.fabMenu.hide();
+                        }
+                    } else if (dy < 0) {
+                        // Scroll Up
+                        if (!((ActivityMain) getActivity()).arcMenu.fabMenu.isShown()) {
+                            ((ActivityMain) getActivity()).arcMenu.fabMenu.show();
+                        }
+                    }
+                }
+            });
+
         }
     }
 

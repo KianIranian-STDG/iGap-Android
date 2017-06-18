@@ -1398,7 +1398,6 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
         securityPasswordQuestionOne = questionOne;
         securityPasswordQuestionTwo = questionTwo;
-        securityPaternEmail = unconfirmedEmailPattern;
         securityPasswordHint = hint;
         this.hasConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
         this.unconfirmedEmailPattern = unconfirmedEmailPattern;
@@ -1455,6 +1454,11 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 userLogin(token);
             }
         });
+
+    }
+
+    @Override
+    public void getEmailPatern(final String patern) {
 
     }
 
