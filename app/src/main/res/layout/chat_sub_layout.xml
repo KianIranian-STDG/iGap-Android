@@ -87,8 +87,6 @@
           android:id="@+id/lytContainer6"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:layout_marginEnd="@dimen/dp8"
-          android:layout_marginRight="@dimen/dp8"
           android:gravity="top|center_horizontal"
           android:orientation="vertical"
           >
@@ -97,6 +95,8 @@
             android:id="@+id/lytContainer7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/dp8"
+            android:paddingRight="@dimen/dp8"
             android:orientation="horizontal"
             >
         </LinearLayout>

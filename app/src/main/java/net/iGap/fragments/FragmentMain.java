@@ -863,6 +863,14 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                     TextView txtUnread = (TextView) holder.itemView.findViewById(R.id.cs_txt_unread_message);
                     txtUnread.setText(Integer.toString(mInfo.getUnreadCount()));
+
+                    if (HelperCalander.isLanguagePersian) {
+                        txtUnread.setBackgroundResource(R.drawable.rect_oval_red);
+                    } else {
+                        txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
+                    }
+
+
                     if (mInfo.getMute()) {
                         txtUnread.setBackgroundResource(R.drawable.oval_gray);
                     } else {
