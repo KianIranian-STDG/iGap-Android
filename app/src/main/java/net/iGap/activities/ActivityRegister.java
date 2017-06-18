@@ -1459,12 +1459,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
     @Override
     public void getEmailPatern(final String patern) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                securityPaternEmail = patern;
-            }
-        });
+
     }
 
     @Override
