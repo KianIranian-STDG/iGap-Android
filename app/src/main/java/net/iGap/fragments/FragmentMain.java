@@ -388,7 +388,14 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             new Thread(new Runnable() {
                 @Override public void run() {
-                    new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
+
+                    if (G.clientConditionGlobal != null) {
+                        new RequestClientCondition().clientCondition(G.clientConditionGlobal);
+                    } else {
+                        new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
+                    }
+
+
                 }
             }).start();
         }
