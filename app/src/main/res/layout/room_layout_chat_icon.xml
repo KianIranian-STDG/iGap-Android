@@ -12,7 +12,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:paddingBottom="2dp"
-      android:textColor="@android:color/black"
+      android:textColor="#333"
       android:textSize="@dimen/dp18"
       />
 

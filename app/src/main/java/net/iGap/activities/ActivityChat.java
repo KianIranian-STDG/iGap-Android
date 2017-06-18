@@ -1386,13 +1386,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         /**
          * set background
          */
+
+        recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
+
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         if (backGroundPath.length() > 0) {
 
             File f = new File(backGroundPath);
             if (f.exists()) {
                 Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                getWindow().setBackgroundDrawable(d);
+                recyclerView.setBackgroundDrawable(d);
             }
         }
 
@@ -1880,7 +1883,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         imvMicButton = (MaterialDesignTextView) findViewById(R.id.chl_imv_mic_button);
 
-        recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
         //remove blinking for updates on items
         recyclerView.setItemAnimator(null);
         //following lines make scrolling smoother

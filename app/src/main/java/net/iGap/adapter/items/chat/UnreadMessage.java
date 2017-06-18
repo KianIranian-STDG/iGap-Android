@@ -10,10 +10,12 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import java.util.List;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
@@ -54,6 +56,8 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
 
                 }
             });
+
+            txtUnreadMessage.setBackgroundColor(Color.parseColor(G.appBarColor));
 
             txtUnreadMessage.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override public boolean onLongClick(View v) {

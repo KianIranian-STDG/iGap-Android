@@ -49,7 +49,7 @@ public class Config {
     public static final int LIMIT_GET_HISTORY_NORMAL = 40;
 
     public static String default_appBarColor = "#00B0BF";
-    public static String default_notificationColor = "#f23131";
+    public static String default_notificationColor = "#e51c23";
     public static String default_toggleButtonColor = "#00B0BF";
     public static String default_attachmentColor = "#00B0BF";
     public static String default_headerTextColor = "#00B0BF";

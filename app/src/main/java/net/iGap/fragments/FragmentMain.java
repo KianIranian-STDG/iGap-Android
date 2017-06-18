@@ -838,15 +838,19 @@ public class FragmentMain extends Fragment implements OnComplete {
                         lytChatIcon.setPadding((int) getResources().getDimension(R.dimen.dp8), 0, 0, 0);
                     }
 
-                    TextView txtChatIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_chat_icon);
-                    if (mInfo.getType() == GROUP) {
-                        typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");
-                        txtChatIcon.setText(getStringChatIcon(RoomType.GROUP));
-                    } else if (mInfo.getType() == CHANNEL) {
-                        typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
-                        txtChatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
+                    if (mainType == MainType.all) {
+                        TextView txtChatIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_chat_icon);
+                        if (mInfo.getType() == GROUP) {
+                            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");
+                            txtChatIcon.setText(getStringChatIcon(RoomType.GROUP));
+                        } else if (mInfo.getType() == CHANNEL) {
+                            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
+                            txtChatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
+                        }
+                        txtChatIcon.setTypeface(typeFaceIcon);
+                    } else {
+                        holder.itemView.findViewById(R.id.cs_txt_chat_icon).setVisibility(View.GONE);
                     }
-                    txtChatIcon.setTypeface(typeFaceIcon);
                 }
 
                 holder.name.setText(mInfo.getTitle());

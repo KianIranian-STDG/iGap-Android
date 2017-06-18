@@ -19,7 +19,7 @@
         android:singleLine="true"
         android:text="Today"
         android:textAllCaps="false"
-        android:textColor="@color/white"
+        android:textColor="#4a5d5c"
         android:textSize="@dimen/dp12"
         />
 </FrameLayout>
