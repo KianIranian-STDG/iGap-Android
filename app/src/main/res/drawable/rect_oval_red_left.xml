@@ -5,7 +5,7 @@
       android:left="7dp"
       android:right="12dp"
       android:top="4dp" />
-  <solid android:color="#f23131"></solid>
+  <solid android:color="@color/unread"></solid>
 
 
   <corners
