@@ -182,7 +182,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected ImageView thumbnail;
-        protected ImageView tic;
+        //protected ImageView tic;
         protected TextView btnPlayMusic;
         protected SeekBar musicSeekbar;
         protected OnComplete complete;
@@ -204,7 +204,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             txt_Timer = (TextView) view.findViewById(R.id.csla_txt_timer);
             iconHearing = (TextView) view.findViewById(R.id.cslr_txt_hearing);
             musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);
-            tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
+            //tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
             complete = new OnComplete() {
                 @Override public void complete(boolean result, String messageOne, final String MessageTow) {
@@ -254,7 +254,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                                 }
 
                                 //realmClientCondition.getOfflineListen().add(realmOfflineListen);
-                                Log.i("BBBB", "btnPlayMusic: ");
+                                Log.i("OOOOOOOBB", "mMessageID: " + mMessageID);
                             }
                         }
                     });

@@ -93,8 +93,7 @@ public class HelperClientCondition {
                 }
 
                 for (RealmOfflineListen offlineListen : realmClientCondition.getOfflineListen()) { // DONE
-                    room.addOfflineSeen(offlineListen.getOfflineListen());
-                    Log.i("OOOOOOOBB", "chatUpdateStatus.getStatus(): ");
+                    room.addOfflineListened(offlineListen.getOfflineListen());
                 }
 
                 room.setClearId(realmClientCondition.getClearId()); //DONE

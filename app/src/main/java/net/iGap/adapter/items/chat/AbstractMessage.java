@@ -632,7 +632,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
                 iconHearing.setVisibility(View.VISIBLE);
                 setTextcolor(imgTick, R.color.iGapColor);
-                Log.i("VVVVVVVVVV", "َAbstract  iconHearing.setVisibility(View.VISIBLE);: " + mMessage.status);
+                imgTick.setVisibility(View.VISIBLE);
+                Log.i("VVVVVVVVVV", "َAbstract  iconHearing.setVisibility(View.VISIBLE);: " + imgTick.getVisibility());
             } else {
                 setTextcolor(imgTick, R.color.colorOldBlack);
             }
