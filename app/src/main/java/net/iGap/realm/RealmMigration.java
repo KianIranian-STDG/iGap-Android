@@ -121,5 +121,17 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == 11) {
+            RealmObjectSchema realmClientCondition = schema.get(RealmClientCondition.class.getSimpleName());
+
+            RealmObjectSchema realmOfflineListen = schema.create(RealmOfflineListen.class.getSimpleName()).addField("id", long.class, FieldAttribute.REQUIRED).addField("offlineListen", long.class);
+            realmOfflineListen.addPrimaryKey("id");
+
+            if (realmClientCondition != null) {
+                realmClientCondition.addRealmListField("offlineListen", realmOfflineListen);
+            }
+            oldVersion++;
+        }
     }
 }
