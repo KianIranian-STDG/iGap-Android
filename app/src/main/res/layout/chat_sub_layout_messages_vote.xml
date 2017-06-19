@@ -33,40 +33,7 @@
         />
   </LinearLayout>
 
-  <LinearLayout
-      android:id="@+id/lyt_see"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_marginLeft="10dp"
-      android:gravity="center_vertical"
-      android:orientation="horizontal"
-      android:paddingLeft="@dimen/dp4"
-      android:paddingRight="@dimen/dp4"
-      >
 
-    <TextView
-        android:id="@+id/txt_views_label"
-        android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="0"
-        android:textColor="@color/room_message_gray"
-        style="@style/ChatMessages.Time"
-        />
-
-    <net.iGap.module.MaterialDesignTextView
-        android:id="@+id/img_eye"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp4"
-        android:text="@string/md_visibility"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
-        android:textColor="@color/gray_6c"
-        android:textSize="@dimen/dp20"
-        />
-
-  </LinearLayout>
 
   <LinearLayout
       android:id="@+id/lyt_vote_down"

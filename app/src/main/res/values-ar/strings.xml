@@ -953,5 +953,6 @@
   <string name="invalid_question_token">"Your answer is invalid"</string>
 
   <string name="not_answerd_call">"تماس بدون جواب"</string>
+  <string name="recorded_by">Recorded By</string>
 
 </resources>

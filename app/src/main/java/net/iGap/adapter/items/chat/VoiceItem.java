@@ -85,7 +85,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             .findFirst();
 
         if (registeredInfo != null) {
-            holder.author.setText("Recorded By " + registeredInfo.getDisplayName());
+            holder.author.setText(G.context.getString(R.string.recorded_by) + registeredInfo.getDisplayName());
         } else {
             holder.author.setText("");
         }

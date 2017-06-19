@@ -888,7 +888,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
 
                     if (mInfo.getMute()) {
-                        txtUnread.setBackgroundResource(R.drawable.oval_gray);
+                        AndroidUtils.setBackgroundShapeColor(txtUnread, Color.parseColor("#c6c1c1"));
                     } else {
                         AndroidUtils.setBackgroundShapeColor(txtUnread, Color.parseColor(G.notificationColor));
                     }

@@ -203,8 +203,9 @@
                     android:layout_marginLeft="@dimen/dp52"
                     android:singleLine="true"
                     android:text="00:00"
+                    android:paddingRight="@dimen/dp8"
                     android:textColor="@color/green"
-                    android:textSize="@dimen/dp12"
+                    android:textSize="@dimen/dp10"
                     />
 
 

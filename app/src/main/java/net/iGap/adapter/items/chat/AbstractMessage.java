@@ -305,6 +305,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.GONE);
         }
 
+
         if (G.showVoteChannelLayout) {
 
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
@@ -316,6 +317,38 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         showVote(holder, realm);
                     }
                 }
+            }
+        } else if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
+
+            holder.itemView.findViewById(R.id.lyt_see).setVisibility(View.VISIBLE);
+            TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
+
+            if ((mMessage.forwardedFrom != null)) {
+
+                ProtoGlobal.Room.Type roomType = null;
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+                if (realmRoom != null) {
+                    roomType = realmRoom.getType();
+                }
+
+                if (roomType != null && roomType == ProtoGlobal.Room.Type.CHANNEL) {
+                    long messageId = mMessage.forwardedFrom.getMessageId();
+                    if (mMessage.forwardedFrom.getMessageId() < 0) {
+                        messageId = messageId * (-1);
+                    }
+                    RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+                    if (realmChannelExtra != null) {
+                        txtViewsLabel.setText(realmChannelExtra.getViewsLabel());
+                    }
+                } else {
+                    txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
+                }
+            } else {
+                txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
+            }
+
+            if (HelperCalander.isLanguagePersian) {
+                txtViewsLabel.setText(HelperCalander.convertToUnicodeFarsiNumber(txtViewsLabel.getText().toString()));
             }
         }
 
@@ -441,6 +474,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             TextView txtVoteDown = (TextView) holder.itemView.findViewById(R.id.txt_vote_down);
             TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
             TextView txtSignature = (TextView) holder.itemView.findViewById(R.id.txt_signature);
+            holder.itemView.findViewById(R.id.lyt_see).setVisibility(View.VISIBLE);
 
             lytVote.setVisibility(View.VISIBLE);
 
@@ -715,14 +749,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
                     replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
-                    holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_sendColor));
+                    //holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_sendColor));
                     replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-                    replayMessage.setTextColor(Color.WHITE);
+                    replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
                 } else {
                     replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundReceive));
-                    holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_receiveColor));
+                    // holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_receiveColor));
                     replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-                    replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.green));
+                    replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
                 }
             }
         }

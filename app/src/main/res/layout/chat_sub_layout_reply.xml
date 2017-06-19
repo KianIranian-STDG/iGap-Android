@@ -18,7 +18,8 @@
         android:layout_width="3dp"
         android:layout_height="match_parent"
         android:layout_marginRight="@dimen/dp8"
-        android:background="@color/colorOldBlack"/>
+        android:background="#f7ab07"
+        />
 
     <ImageView
         android:id="@+id/chslr_imv_replay_pic"

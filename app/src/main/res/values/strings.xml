@@ -960,6 +960,7 @@
   <string name="invalid_question_token">"Your answer is invalid"</string>
 
   <string name="not_answerd_call">"Did not respond to your call or failed."</string>
+  <string name="recorded_by">Recorded By</string>
 
 
 </resources>

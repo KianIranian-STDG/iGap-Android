@@ -962,5 +962,6 @@
   <string name="invalid_question_token">"پاسخ شما نادرست است"</string>
 
   <string name="not_answerd_call">"به تماس شما پاسخ نداد و یا تماس شما ناموفق بود"</string>
+  <string name="recorded_by">ظبط شده توسط </string>
 
 </resources>

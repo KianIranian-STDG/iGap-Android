@@ -1375,9 +1375,11 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_VOTE, 1);
                     editor.apply();
+                    G.showVoteChannelLayout = true;
                 } else {
                     editor.putInt(SHP_SETTING.KEY_VOTE, 0);
                     editor.apply();
+                    G.showVoteChannelLayout = false;
                 }
             }
         });
