@@ -84,12 +84,12 @@ public class LoginActions extends Application {
 
 
                         getUserInfo();
+                        //new RequestGeoRegister().register(true);
+                        //new RequestGeoGetRegisterStatus().getRegisterStatus();
+                        //new RequestGeoUpdateComment().updateComment("");
                         //sendWaitingRequestWrappers();
                     }
                 });
-
-
-
             }
 
             @Override

@@ -115,12 +115,15 @@ public class FragmentMain extends Fragment implements OnComplete {
         return fragment;
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.activity_main_rooms, container, false);
         return fragmentView;
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mainType = (MainType) getArguments().getSerializable(STR_MAIN_TYPE);
@@ -167,22 +170,22 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             case all:
                 results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                    equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+                        equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
 
                 break;
             case chat:
                 results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                    equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+                        equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
 
                 break;
             case group:
                 results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                    equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+                        equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
 
                 break;
             case channel:
                 results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                    equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+                        equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
 
                 break;
         }
@@ -243,7 +246,8 @@ public class FragmentMain extends Fragment implements OnComplete {
         swipeRefreshLayout.setColorSchemeColors(Color.parseColor(G.progressColor));*/
 
         mRecyclerView.getRecycleView().addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 if (arcMenu.isMenuOpened()) arcMenu.toggleMenu();
@@ -270,30 +274,28 @@ public class FragmentMain extends Fragment implements OnComplete {
     private void initFloatingButtonCreateNew(View view) {
         arcMenu = (ArcMenu) view.findViewById(R.id.ac_arc_button_add);
         arcMenu.setStateChangeListener(new StateChangeListener() {
-            @Override public void onMenuOpened() {
+            @Override
+            public void onMenuOpened() {
 
             }
 
-            @Override public void onMenuClosed() {
+            @Override
+            public void onMenuClosed() {
                 isMenuButtonAddShown = false;
             }
         });
 
         btnStartNewChat = (FloatingActionButton) view.findViewById(R.id.ac_fab_start_new_chat);
         btnStartNewChat.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
 
                 try {
-                    getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -307,18 +309,15 @@ public class FragmentMain extends Fragment implements OnComplete {
 
         btnCreateNewGroup = (FloatingActionButton) view.findViewById(R.id.ac_fab_crate_new_group);
         btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
 
                 try {
-                    getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -332,18 +331,15 @@ public class FragmentMain extends Fragment implements OnComplete {
 
         btnCreateNewChannel = (FloatingActionButton) view.findViewById(R.id.ac_fab_crate_new_channel);
         btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -360,7 +356,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                 break;
             case chat:
                 arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         btnStartNewChat.performClick();
                     }
                 });
@@ -368,7 +365,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                 break;
             case group:
                 arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         btnCreateNewGroup.performClick();
                     }
                 });
@@ -376,7 +374,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                 break;
             case channel:
                 arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         btnCreateNewChannel.performClick();
                     }
                 });
@@ -392,21 +391,25 @@ public class FragmentMain extends Fragment implements OnComplete {
             case all:
 
                 ((ActivityMain) getActivity()).mainActionApp = new ActivityMain.MainInterface() {
-                    @Override public void onAction(ActivityMain.MainAction action) {
+                    @Override
+                    public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
                     }
                 };
 
                 ((ActivityMain) getActivity()).mainInterfaceGetRoomList = new ActivityMain.MainInterfaceGetRoomList() {
-                    @Override public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+                    @Override
+                    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
 
                         onclientGetRoomList(roomList, response, fromLogin);
                     }
 
-                    @Override public void onError(int majorCode, int minorCode) {
+                    @Override
+                    public void onError(int majorCode, int minorCode) {
 
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                             }
                         });
@@ -421,10 +424,12 @@ public class FragmentMain extends Fragment implements OnComplete {
                         }
                     }
 
-                    @Override public void onTimeout() {
+                    @Override
+                    public void onTimeout() {
 
                         getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 progressBar.setVisibility(View.GONE);
                                 firstTimeEnterToApp = false;
                                 getChatsList();
@@ -437,21 +442,24 @@ public class FragmentMain extends Fragment implements OnComplete {
                 break;
             case chat:
                 ((ActivityMain) getActivity()).mainActionChat = new ActivityMain.MainInterface() {
-                    @Override public void onAction(ActivityMain.MainAction action) {
+                    @Override
+                    public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
                     }
                 };
                 break;
             case group:
                 ((ActivityMain) getActivity()).mainActionGroup = new ActivityMain.MainInterface() {
-                    @Override public void onAction(ActivityMain.MainAction action) {
+                    @Override
+                    public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
                     }
                 };
                 break;
             case channel:
                 ((ActivityMain) getActivity()).mainActionChannel = new ActivityMain.MainInterface() {
-                    @Override public void onAction(ActivityMain.MainAction action) {
+                    @Override
+                    public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
                     }
                 };
@@ -466,7 +474,8 @@ public class FragmentMain extends Fragment implements OnComplete {
             case downScrool:
 
                 ((Activity) getActivity()).runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager()).findFirstVisibleItemPosition();
                         if (firstVisibleItem < 5) {
                             mRecyclerView.getRecycleView().scrollToPosition(0);
@@ -477,7 +486,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                 break;
             case clinetCondition:
                 getActivity().runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
@@ -515,7 +525,8 @@ public class FragmentMain extends Fragment implements OnComplete {
         } else if (fromLogin || mOffset == 0) {
 
             new Thread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
                 }
             }).start();
@@ -523,8 +534,9 @@ public class FragmentMain extends Fragment implements OnComplete {
 
         mOffset += roomList.size();
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override public void run() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
                 progressBar.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
             }
@@ -535,11 +547,13 @@ public class FragmentMain extends Fragment implements OnComplete {
         if (isThereAnyMoreItemToLoad) {
             isSendRequestForLoading = true;
             new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
-            progressBar.setVisibility(View.VISIBLE);
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            });
         }
-
-
-
     }
 
     //***************************************************************************************************************************
@@ -563,7 +577,8 @@ public class FragmentMain extends Fragment implements OnComplete {
             new RequestClientCondition().clientCondition(clientConditionGlobal);
         } else {
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     sendClientCondition();
                 }
             }, 1000);
@@ -572,7 +587,8 @@ public class FragmentMain extends Fragment implements OnComplete {
 
     private void testIsSecure() {
         new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (G.isSecure && G.userLogin) {
 
                     mOffset = 0;
@@ -599,15 +615,17 @@ public class FragmentMain extends Fragment implements OnComplete {
     private void cleanDeletedRooms() {
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Realm realm = Realm.getDefaultInstance();
                 realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
 
                         for (int i = 0; i < G.deletedRoomList.size(); i++) {
 
                             RealmRoom _RealmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                                equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
+                                    equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
 
                             if (_RealmRoom != null) {
                                 RealmRoom.deleteRoom(_RealmRoom.getId());
@@ -616,11 +634,13 @@ public class FragmentMain extends Fragment implements OnComplete {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }, new Realm.Transaction.OnSuccess() {
-                    @Override public void onSuccess() {
+                    @Override
+                    public void onSuccess() {
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
-                    @Override public void onError(Throwable error) {
+                    @Override
+                    public void onError(Throwable error) {
                         realm.close();
                     }
                 });
@@ -633,7 +653,8 @@ public class FragmentMain extends Fragment implements OnComplete {
     private void muteNotification(final Long id, final boolean mute) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst().setMute(!mute);
             }
         });
@@ -687,7 +708,8 @@ public class FragmentMain extends Fragment implements OnComplete {
 
     //************************
 
-    @Override public void complete(boolean result, String messageOne, String MessageTow) {
+    @Override
+    public void complete(boolean result, String messageOne, String MessageTow) {
         if (messageOne.equals("closeMenuButton")) {
             arcMenu.toggleMenu();
         }
@@ -719,7 +741,8 @@ public class FragmentMain extends Fragment implements OnComplete {
             this.extraLayoutSpace = extraLayoutSpace;
         }
 
-        @Override protected int getExtraLayoutSpace(RecyclerView.State state) {
+        @Override
+        protected int getExtraLayoutSpace(RecyclerView.State state) {
             if (extraLayoutSpace > 0) {
                 return extraLayoutSpace;
             }
@@ -728,15 +751,18 @@ public class FragmentMain extends Fragment implements OnComplete {
 
         private static final float MILLISECONDS_PER_INCH = 2000f; //default is 25f (bigger = slower)
 
-        @Override public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+        @Override
+        public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
 
             final LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
 
-                @Override public PointF computeScrollVectorForPosition(int targetPosition) {
+                @Override
+                public PointF computeScrollVectorForPosition(int targetPosition) {
                     return PreCachingLayoutManager.this.computeScrollVectorForPosition(targetPosition);
                 }
 
-                @Override protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                @Override
+                protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
                     return MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
                 }
             };
@@ -757,12 +783,14 @@ public class FragmentMain extends Fragment implements OnComplete {
             this.mComplete = complete;
         }
 
-        @Override public RoomAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        @Override
+        public RoomAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
             View v = inflater.inflate(R.layout.chat_sub_layout, viewGroup, false);
             return new RoomAdapter.ViewHolder(v);
         }
 
-        @Override public void onBindRealmViewHolder(final ViewHolder holder, final int i) {
+        @Override
+        public void onBindRealmViewHolder(final ViewHolder holder, final int i) {
 
             LinearLayout lytContainer4 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer4);
             LinearLayout lytContainer5 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer5);
@@ -772,8 +800,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
             if (mInfo != null && mInfo.isValid()) {
-                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (mInfo.getActionStateUserId()
-                    != userId))))) {
+                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (mInfo.getActionStateUserId() != userId))))) {
                     removeView(lytContainer5, R.id.lyt_message_sender_room);
 
                     addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
@@ -801,8 +828,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     removeView(lytContainer5, R.id.lyt_avi_room);
 
                     if (mInfo.getLastMessage() != null) {
-                        String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(),
-                            mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                        String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
 
                         if (lastMessage == null) {
                             lastMessage = mInfo.getLastMessage().getMessage();
@@ -815,8 +841,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                         } else {
                             if (mInfo.getLastMessage().isAuthorMe()) {
                                 addView(holder, lytContainer7, R.layout.room_layout_tic, R.id.lyt_tic_room, 0);
-                                AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()),
-                                    mInfo.getLastMessage().isAuthorMe());
+                                AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isAuthorMe());
                             } else {
                                 removeView(lytContainer7, R.id.lyt_tic_room);
                             }
@@ -835,8 +860,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                                     lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                                 } else {
                                     Realm realm = Realm.getDefaultInstance();
-                                    RealmRegisteredInfo realmRegisteredInfo =
-                                        realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
+                                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
                                     if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
 
                                         String _name = realmRegisteredInfo.getDisplayName();
@@ -928,11 +952,13 @@ public class FragmentMain extends Fragment implements OnComplete {
                 }
 
                 HelperAvatar.getAvatar(idForGetAvatar, avatarType, new OnAvatarGet() {
-                    @Override public void onAvatarGet(String avatarPath, long roomId) {
+                    @Override
+                    public void onAvatarGet(String avatarPath, long roomId) {
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                     }
 
-                    @Override public void onShowInitials(String initials, String color) {
+                    @Override
+                    public void onShowInitials(String initials, String color) {
                         holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp52), initials, color));
                     }
                 });
@@ -1089,7 +1115,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                 //AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
 
                 view.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         if (ActivityMain.isMenuButtonAddShown) {
                             mComplete.complete(true, "closeMenuButton", "");
@@ -1111,7 +1138,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                 });
 
                 view.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override public boolean onLongClick(View v) {
+                    @Override
+                    public boolean onLongClick(View v) {
 
                         if (ActivityMain.isMenuButtonAddShown) {
                             mComplete.complete(true, "closeMenuButton", "");
@@ -1125,7 +1153,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 }
 
                                 MyDialog.showDialogMenuItemRooms(getActivity(), mInfo.getType(), mInfo.getMute(), role, new OnComplete() {
-                                    @Override public void complete(boolean result, String messageOne, String MessageTow) {
+                                    @Override
+                                    public void complete(boolean result, String messageOne, String MessageTow) {
                                         onSelectRoomMenu(messageOne, mInfo);
                                     }
                                 });

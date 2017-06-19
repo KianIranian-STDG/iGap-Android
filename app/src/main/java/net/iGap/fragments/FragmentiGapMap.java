@@ -10,29 +10,33 @@
 
 package net.iGap.fragments;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.interfaces.OnGetNearbyCoordinate;
+import net.iGap.interfaces.OnLocationChanged;
+import net.iGap.module.GPSTracker;
+import net.iGap.module.MyInfoWindow;
+import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
+import net.iGap.request.RequestGeoGetNearbyCoordinate;
+import net.iGap.request.RequestGeoGetNearbyDistance;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.MapTile;
@@ -43,20 +47,29 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
-public class FragmentiGapMap extends Fragment implements LocationListener {
+public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, GestureDetector.OnGestureListener {
 
     private MapView map;
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
     private ItemizedOverlay<OverlayItem> latestLocation;
+    private ArrayList<Marker> markers = new ArrayList<>();
+    private GestureDetector mGestureDetector;
 
     private boolean first = true;
     private boolean firstEnter = true;
     private double lat1;
     private double lon1;
+    private Location location;
+
+    public static FragmentiGapMap getInstance() {
+        return new FragmentiGapMap();
+    }
 
     @Nullable
     @Override
@@ -68,17 +81,16 @@ public class FragmentiGapMap extends Fragment implements LocationListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        G.onLocationChanged = this;
+        G.onGetNearbyCoordinate = this;
         startMap(view);
-    }
+        new GPSTracker().detectLocation();
 
-    public static FragmentiGapMap getInstance() {
-        return new FragmentiGapMap();
+        //clickDrawMarkActive();
     }
 
     private void startMap(View view) {
-        map = (MapView) view.findViewById(R.id.map);
-        //map = new MapView(this); //constructor
+        map = (MapView) view.findViewById(R.id.map); //map = new MapView(this); //constructor
         /**
          * Set Type Of Map
          */
@@ -89,7 +101,6 @@ public class FragmentiGapMap extends Fragment implements LocationListener {
          */
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
-
         /**
          * Set Zoom Value
          */
@@ -105,20 +116,59 @@ public class FragmentiGapMap extends Fragment implements LocationListener {
         /**
          * Use From Following Code For Custom Url Tile Server
          */
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 18, 256, ".png", new String[]{Config.URL_MAP}) {
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 20, 256, ".png", new String[]{Config.URL_MAP}) {
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
             }
         });
 
-        currentLocation();
-        clickDrawMarkActive();
+
+        mGestureDetector = new GestureDetector(G.context, this);
+        map.setOnTouchListener(mOnTouchListener);
+
+        Button btnCurrent = (Button) view.findViewById(R.id.btnCurrent);
+        Button btnOthers = (Button) view.findViewById(R.id.btnOthers);
+
+        btnCurrent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (location != null) {
+                    currentLocation(location, false);
+                } else {
+                    new GPSTracker().detectLocation();
+                }
+            }
+        });
+
+        btnOthers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (location != null) {
+                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                    new RequestGeoGetNearbyDistance().getNearbyDistance(location.getLatitude(), location.getLongitude());
+                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                }
+            }
+        });
     }
 
     /**
      * ****************************** methods ******************************
      */
+
+    public View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (mGestureDetector.onTouchEvent(event)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+
 
     private void drawLine(ArrayList<Double[]> points) {
         Polyline line = new Polyline();
@@ -136,50 +186,45 @@ public class FragmentiGapMap extends Fragment implements LocationListener {
     private void drawMark(MotionEvent motionEvent, MapView mapView) {
         Projection projection = mapView.getProjection();
         GeoPoint loc = (GeoPoint) projection.fromPixels((int) motionEvent.getX(), (int) motionEvent.getY());
-        ArrayList<OverlayItem> overlayArray = new ArrayList<>();
         OverlayItem mapItem = new OverlayItem("", "", new GeoPoint((((double) loc.getLatitudeE6()) / 1000000), (((double) loc.getLongitudeE6()) / 1000000)));
-        drawMark(overlayArray, mapItem);
+        drawMark(mapItem, false, 0);
     }
 
-    private void drawMark(double latitude, double longitude) {
-        ArrayList<OverlayItem> overlayArray = new ArrayList<>();
+    private void drawMark(double latitude, double longitude, boolean hasComment, long userId) {
         OverlayItem mapItem = new OverlayItem("", "", new GeoPoint(latitude, longitude));
-        drawMark(overlayArray, mapItem);
+        drawMark(mapItem, hasComment, userId);
     }
 
-    private void drawMark(ArrayList<OverlayItem> overlayArray, OverlayItem mapItem) {
-        Drawable marker = G.context.getResources().getDrawable(R.drawable.location_mark);
-        mapItem.setMarker(marker);
-        overlayArray.add(mapItem);
-        if (itemizedIconOverlay == null) {
-            itemizedIconOverlay = new ItemizedIconOverlay<>(G.context, overlayArray, null);
-            map.getOverlays().add(itemizedIconOverlay);
-            map.invalidate();
-        } else {
-            //map.getOverlays().remove(anotherItemizedIconOverlay); // remove before mark position
-            map.invalidate();
-            itemizedIconOverlay = new ItemizedIconOverlay<>(G.context, overlayArray, null);
-            map.getOverlays().add(itemizedIconOverlay);
-        }
-    }
+    private void drawMark(final OverlayItem mapItem, final boolean hasComment, final long userId) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Marker marker = new Marker(map);
+                marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
+                if (userId != 0) {
+                    if (hasComment) {
+                        marker.setIcon(G.context.getResources().getDrawable(R.drawable.location_mark_comment_yes));
+                    } else {
+                        marker.setIcon(G.context.getResources().getDrawable(R.drawable.location_mark_comment_no));
+                    }
 
-    /**
-     * active location callbacks
-     */
-    private void currentLocation() {
-        LocationManager locationManager;
-        try {
-            locationManager = (LocationManager) G.context.getSystemService(Context.LOCATION_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (G.context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && G.context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
+                    InfoWindow infoWindow = new MyInfoWindow(R.layout.info_map_window, map, userId, hasComment);
+                    marker.setInfoWindow(infoWindow);
                 }
+
+                markers.add(marker);
+                map.getOverlays().add(marker);
+                map.invalidate();
             }
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        });
+    }
+
+    private void currentLocation(Location location, boolean setDefaultZoom) {
+        GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+        if (setDefaultZoom) {
+            map.getController().setZoom(16);
         }
+        map.getController().animateTo(startPoint);
     }
 
     /**
@@ -196,37 +241,37 @@ public class FragmentiGapMap extends Fragment implements LocationListener {
 
             @Override
             public boolean onSingleTapConfirmed(final MotionEvent e, final MapView mapView) {
-                drawMark(e, mapView);
+                //drawMark(e, mapView);
                 return true;
             }
 
             @Override
             public boolean onLongPress(MotionEvent e, MapView mapView) {
-                Projection projection = mapView.getProjection();
-                GeoPoint loc = (GeoPoint) projection.fromPixels((int) e.getX(), (int) e.getY());
-                double longitude = ((double) loc.getLongitudeE6()) / 1000000;
-                double latitude = ((double) loc.getLatitudeE6()) / 1000000;
-
-                if (first) {
-                    first = false;
-                    lat1 = latitude;
-                    lon1 = longitude;
-
-                } else {
-                    first = true;
-
-                    Polyline line = new Polyline();
-                    line.setWidth(2f);
-                    line.setColor(Color.BLUE);
-                    List<GeoPoint> pts = new ArrayList<>();
-                    pts.add(new GeoPoint(lat1, lon1));
-                    pts.add(new GeoPoint(latitude, longitude));
-                    line.setPoints(pts);
-                    line.setGeodesic(true);
-                    map.getOverlayManager().add(line);
-                }
-
-                drawMark(e, mapView);
+                //Projection projection = mapView.getProjection();
+                //GeoPoint loc = (GeoPoint) projection.fromPixels((int) e.getX(), (int) e.getY());
+                //double longitude = ((double) loc.getLongitudeE6()) / 1000000;
+                //double latitude = ((double) loc.getLatitudeE6()) / 1000000;
+                //
+                //if (first) {
+                //    first = false;
+                //    lat1 = latitude;
+                //    lon1 = longitude;
+                //
+                //} else {
+                //    first = true;
+                //
+                //    Polyline line = new Polyline();
+                //    line.setWidth(2f);
+                //    line.setColor(Color.BLUE);
+                //    List<GeoPoint> pts = new ArrayList<>();
+                //    pts.add(new GeoPoint(lat1, lon1));
+                //    pts.add(new GeoPoint(latitude, longitude));
+                //    line.setPoints(pts);
+                //    line.setGeodesic(true);
+                //    map.getOverlayManager().add(line);
+                //}
+                //
+                //drawMark(e, mapView);
                 return super.onLongPress(e, mapView);
             }
         };
@@ -239,17 +284,17 @@ public class FragmentiGapMap extends Fragment implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        this.location = location;
+
         if (firstEnter) {
             firstEnter = false;
-            GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-            map.getController().setZoom(16);
-            map.getController().animateTo(startPoint);
+            currentLocation(location, true);
         }
 
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         OverlayItem overlayItem = new OverlayItem("title", "City", geoPoint);
 
-        Drawable drawable = this.getResources().getDrawable(R.drawable.location_current);
+        Drawable drawable = G.context.getResources().getDrawable(R.drawable.location_current);
         overlayItem.setMarker(drawable);
 
         ArrayList<OverlayItem> overlayItemArrayList = new ArrayList<OverlayItem>();
@@ -262,21 +307,54 @@ public class FragmentiGapMap extends Fragment implements LocationListener {
 
         latestLocation = locationOverlay;
         map.getOverlays().add(locationOverlay);
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(G.context, "Update Position", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
+    public void onNearbyCoordinate(List<ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result> results) {
+
+        for (Marker marker : markers) {
+            map.getOverlays().remove(marker);
+        }
+
+        for (ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result result : results) {
+            drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+        }
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
 
     }
 
     @Override
-    public void onProviderEnabled(String s) {
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
 
     }
 
     @Override
-    public void onProviderDisabled(String s) {
-
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
     }
-
 }
