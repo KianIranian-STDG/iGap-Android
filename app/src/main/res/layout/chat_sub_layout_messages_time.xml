@@ -43,7 +43,21 @@
         style="@style/ChatMessages.MaterialDesignTextView.Tick"
         />
 
-    <LinearLayout
+  <net.iGap.module.MaterialDesignTextView
+      android:id="@+id/cslr_txt_hearing"
+      android:layout_width="16dp"
+      android:layout_height="match_parent"
+      android:layout_marginLeft="@dimen/dp4"
+      android:text="@string/md_hearing"
+      android:layout_gravity="left|center_vertical"
+      android:textColor="@color/black90"
+      android:gravity="center"
+      fontPath="fonts/MaterialIcons-Regular.ttf"
+      android:visibility="gone"
+      />
+
+
+  <LinearLayout
         android:id="@+id/lyt_right"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

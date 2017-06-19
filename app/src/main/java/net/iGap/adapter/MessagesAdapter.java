@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.TimeItem;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IMessageItem;
@@ -43,7 +44,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
 
-            if (item instanceof TimeItem) {
+            if (item instanceof TimeItem || item instanceof LogItem) {
                 if (item.isSelected()) v.performLongClick();
             } else {
                 if (iMessageItem != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {

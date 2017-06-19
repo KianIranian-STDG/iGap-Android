@@ -694,13 +694,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         setDraft();
         HelperNotificationAndBadge.isChatRoomNow = false;
 
-        if (isNotJoin) {
-
-            /**
-             * delete all  deleted row from database
-             */
-            RealmRoom.deleteRoom(mRoomId);
-        }
+        //if (isNotJoin) { // hint : commented this code, because when going to profile and return can't load message
+        //
+        //    /**
+        //     * delete all  deleted row from database
+        //     */
+        //    RealmRoom.deleteRoom(mRoomId);
+        //}
         super.onStop();
 
     }

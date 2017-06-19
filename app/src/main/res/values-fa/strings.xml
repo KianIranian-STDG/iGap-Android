@@ -28,7 +28,7 @@
   <!-- Page 6 introduce app -->
   <string name="btn_start_page6">"همین حالا شروع کنید"</string>
   <string name="text_line_1_introduce_page6">"آی گپ رایگان بوده و هست !"</string>
-  <string name="text_line_2_introduce_page6">"بیش از این شما را خسته نمی کنیم! آی ‌گپ کاملاً رایگان بوده و هست! همین حالا دنیای خود را در آی گپ بسازید."</string>
+  <string name="text_line_2_introduce_page6">"بیش از این شما را خسته نمی کنیم! \n آی ‌گپ کاملاً رایگان بوده و هست! همین حالا دنیای خود را در آی گپ بسازید."</string>
 
 
   <!-- Fill Profile User  -->

@@ -30,7 +30,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -238,25 +237,25 @@ public class ActivityIntroduce extends ActivityEnhanced {
         txt_p1_l3 = (TextView) findViewById(R.id.int_txt_p1_l3);
         txt_p1_l3.setText(getResources().getString(R.string.text_line_3_introduce_page1) + "\n" + getResources().getString(R.string.text_line_4_introduce_page1));
 
-        txt_p1_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page1)));
+        txt_p1_l2.setText(R.string.text_line_2_introduce_page1);
 
         logoSecurity = (ImageView) findViewById(R.id.int_img_security_introduce);
         txt_p2_l1 = (TextView) findViewById(R.id.int_txt_p2_l1);
         txt_p2_l2 = (TextView) findViewById(R.id.int_txt_p2_l2);
 
-        txt_p2_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page2)));
+        txt_p2_l2.setText(R.string.text_line_2_introduce_page2);
 
         logoChat = (ImageView) findViewById(R.id.int_img_chat_introduce);
         txt_p3_l1 = (TextView) findViewById(R.id.int_txt_p3_l1);
         txt_p3_l2 = (TextView) findViewById(R.id.int_txt_p3_l2);
 
-        txt_p3_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page3)));
+        txt_p3_l2.setText(R.string.text_line_2_introduce_page3);
 
         transfer = (ImageView) findViewById(R.id.int_img_transfer_introduce);
         txt_p4_l1 = (TextView) findViewById(R.id.int_txt_p4_l1);
         txt_p4_l2 = (TextView) findViewById(R.id.int_txt_p4_l2);
 
-        txt_p4_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page4)));
+        txt_p4_l2.setText(R.string.text_line_2_introduce_page4);
 
         call = (ImageView) findViewById(R.id.int_img_call_introduce);
         txt_p5_l1 = (TextView) findViewById(R.id.int_txt_p5_l1);
@@ -265,7 +264,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         boy = (ImageView) findViewById(R.id.int_img_boy_introduce);
         txt_p6_l1 = (TextView) findViewById(R.id.int_txt_p6_l1);
         txt_p6_l2 = (TextView) findViewById(R.id.int_txt_p6_l2);
-        txt_p6_l2.setText(Html.fromHtml(getResources().getString(R.string.text_line_2_introduce_page6)));
+        txt_p6_l2.setText(R.string.text_line_2_introduce_page6);
 
         btnStart = (Button) findViewById(R.id.int_btnStart);
         Drawable mDrawable = ContextCompat.getDrawable(context, R.drawable.int_button_interduce);

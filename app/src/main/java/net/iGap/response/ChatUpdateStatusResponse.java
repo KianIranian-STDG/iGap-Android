@@ -18,6 +18,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmClientConditionFields;
+import net.iGap.realm.RealmOfflineListen;
 import net.iGap.realm.RealmOfflineSeen;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
@@ -44,16 +45,25 @@ public class ChatUpdateStatusResponse extends MessageHandler {
         final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
 
         final Realm realm = Realm.getDefaultInstance();
-
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 if (!response.getId().isEmpty()) { // I'm sender
+
                     if (chatUpdateStatus.getStatus() == ProtoGlobal.RoomMessageStatus.SEEN) {
                         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatUpdateStatus.getRoomId()).findFirst();
                         for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) {
                             if (realmOfflineSeen.getOfflineSeen() == chatUpdateStatus.getMessageId()) {
                                 realmOfflineSeen.deleteFromRealm();
+                                break;
+                            }
+                        }
+                    } else if (chatUpdateStatus.getStatus() == ProtoGlobal.RoomMessageStatus.LISTENED) {
+                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatUpdateStatus.getRoomId()).findFirst();
+                        for (RealmOfflineListen realmOfflineListen : realmClientCondition.getOfflineListen()) {
+                            if (realmOfflineListen.getOfflineListen() == chatUpdateStatus.getMessageId()) {
+                                realmOfflineListen.deleteFromRealm();
+
                                 break;
                             }
                         }
@@ -83,7 +93,6 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                         }
                     }
                 }
-
             }
         });
 
