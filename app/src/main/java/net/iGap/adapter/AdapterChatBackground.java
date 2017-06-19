@@ -11,8 +11,6 @@
 package net.iGap.adapter;
 
 import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,7 +24,6 @@ import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityChatBackground;
-import net.iGap.fragments.FragmentFullChatBackground;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
@@ -43,9 +40,11 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     int selected_position = 1;
 
     private ArrayList<ActivityChatBackground.StructWallpaper> mList;
+    private ActivityChatBackground.OnImageClick onImageClick;
 
-    public AdapterChatBackground(ArrayList<ActivityChatBackground.StructWallpaper> List) {
+    public AdapterChatBackground(ArrayList<ActivityChatBackground.StructWallpaper> List, ActivityChatBackground.OnImageClick onImageClick) {
         this.mList = List;
+        this.onImageClick = onImageClick;
     }
 
     @Override
@@ -117,16 +116,16 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             } else {
                 holder2.mPath = "";
                 holder2.messageProgress.setVisibility(View.VISIBLE);
-                if (HelperDownloadFile.isDownLoading(wallpaper.getProtoWallpaper().getFile().getCacheId())) {
+                //  if (HelperDownloadFile.isDownLoading(wallpaper.getProtoWallpaper().getFile().getCacheId())) {
                     startDownload(position, holder2.messageProgress, holder2.contentLoading);
-                }
+                //   }
 
-                holder2.messageProgress.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        downloadFile(position, holder2.messageProgress, holder2.contentLoading);
-                    }
-                });
+                //holder2.messageProgress.setOnClickListener(new View.OnClickListener() {
+                //    @Override
+                //    public void onClick(View view) {
+                //        downloadFile(position, holder2.messageProgress, holder2.contentLoading);
+                //    }
+                //});
             }
 
             if (selected_position == position) {
@@ -223,15 +222,9 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                         notifyItemChanged(selected_position);
                         selected_position = getLayoutPosition();
                         notifyItemChanged(selected_position);
-
-                        FragmentFullChatBackground fragmentActivity = new FragmentFullChatBackground();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("IMAGE", mPath);
-                        fragmentActivity.setArguments(bundle);
-                        ((FragmentActivity) G.currentActivity).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.stcb_root, fragmentActivity, null).commit();
-
-                        ActivityChatBackground.savePath = mPath;
-                        // Do your another stuff for your onClick
+                        if (onImageClick != null) {
+                            onImageClick.onClick(mPath);
+                        }
                     }
                 }
             });

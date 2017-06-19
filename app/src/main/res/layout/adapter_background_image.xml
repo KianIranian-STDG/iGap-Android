@@ -24,7 +24,7 @@
             <ImageView
                 android:id="@+id/imgBackground"
                 android:layout_width="@dimen/dp120"
-                android:layout_height="@dimen/dp200"
+                android:layout_height="@dimen/dp160"
                 android:scaleType="centerCrop"
                 />
 

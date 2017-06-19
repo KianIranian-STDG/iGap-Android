@@ -10,13 +10,16 @@
 
 package net.iGap.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ViewTreeObserver;
+import android.view.View;
+import android.widget.ImageView;
 import io.realm.Realm;
 import java.io.File;
 import java.util.ArrayList;
@@ -27,8 +30,9 @@ import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoInfoWallpaper;
@@ -37,21 +41,22 @@ import net.iGap.request.RequestInfoWallpaper;
 
 public class ActivityChatBackground extends ActivityEnhanced {
 
-    public static String savePath;
-    public MaterialDesignTextView txtSet;
-    private MaterialDesignTextView txtBack;
-    private File addFile;
-    private int spanCount = 3;
+    private String savePath;
     private RippleView rippleBack;
-    private RecyclerView rcvContent;
+    private RippleView rippleSet;
+    private RecyclerView mRecyclerView;
+    private ImageView imgFullImage;
     private AdapterChatBackground adapterChatBackgroundSetting;
+    private ArrayList<StructWallpaper> wList;
 
-    private int spanItemCount = 3;
-
-    public ArrayList<StructWallpaper> wList;
+    //**************************************************
 
     public enum WallpaperType {
         addNew, lockal, proto
+    }
+
+    public interface OnImageClick {
+        void onClick(String imagePath);
     }
 
     public class StructWallpaper {
@@ -85,11 +90,9 @@ public class ActivityChatBackground extends ActivityEnhanced {
         }
     }
 
-    @Override protected void onResume() {
-        super.onResume();
+    //**************************************************
 
-        G.currentActivity = this;
-    }
+
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +100,6 @@ public class ActivityChatBackground extends ActivityEnhanced {
 
         findViewById(R.id.stcb_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        txtBack = (MaterialDesignTextView) findViewById(R.id.stcb_txt_back);
         rippleBack = (RippleView) findViewById(R.id.stcb_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
@@ -105,30 +107,44 @@ public class ActivityChatBackground extends ActivityEnhanced {
             }
         });
 
-        final GridLayoutManager gLayoutManager = new GridLayoutManager(ActivityChatBackground.this, spanItemCount);
+        imgFullImage = (ImageView) findViewById(R.id.stchf_fullImage);
+
+        rippleSet = (RippleView) findViewById(R.id.stcbf_ripple_set);
+
+        rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override public void onComplete(RippleView rippleView) {
+
+                if (savePath != null && savePath.length() > 0) {
+
+                    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, savePath);
+                    editor.apply();
+
+                    finish();
+                }
+            }
+        });
+
 
         fillList(true);
 
-        rcvContent = (RecyclerView) findViewById(R.id.rcvContent);
-        adapterChatBackgroundSetting = new AdapterChatBackground(wList);
-        rcvContent.setAdapter(adapterChatBackgroundSetting);
-        rcvContent.setLayoutManager(gLayoutManager);
-        rcvContent.clearAnimation();
+        mRecyclerView = (RecyclerView) findViewById(R.id.rcvContent);
+        adapterChatBackgroundSetting = new AdapterChatBackground(wList, new OnImageClick() {
+            @Override public void onClick(String imagePath) {
 
-        rcvContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override public void onGlobalLayout() {
-                rcvContent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                int viewWidth = rcvContent.getMeasuredWidth();
-                float cardViewWidth = getResources().getDimension(R.dimen.dp120);
-                int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgFullImage);
 
-                if (newSpanCount < 3) newSpanCount = 3;
+                savePath = imagePath;
 
-                spanItemCount = newSpanCount;
-                gLayoutManager.setSpanCount(newSpanCount);
-                gLayoutManager.requestLayout();
+                rippleSet.setVisibility(View.VISIBLE);
             }
         });
+        mRecyclerView.setAdapter(adapterChatBackgroundSetting);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerView.clearAnimation();
+
+
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
