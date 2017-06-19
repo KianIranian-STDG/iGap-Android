@@ -597,8 +597,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void updateLayoutForSend(VH holder) {
+
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
-        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.END;
+        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.RIGHT;
+
+        LinearLayout voteLayout = (LinearLayout) holder.itemView.findViewById(R.id.vote_container);
+        voteLayout.setGravity(Gravity.RIGHT);
+
+
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
