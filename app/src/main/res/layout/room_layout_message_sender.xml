@@ -19,6 +19,7 @@
       android:textSize="@dimen/dp13"
       app:emojiSize="@dimen/dp14"
       fontPath="fonts/IRANSansMobile.ttf"
+      android:layout_marginBottom="2dp"
       />
 
 

@@ -584,7 +584,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="@dimen/dp12"
-                android:singleLine="true"
                 android:text="New Text"
                 />
 

@@ -14,7 +14,9 @@ import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 
 public class HelperImageBackColor {
@@ -92,10 +94,12 @@ public class HelperImageBackColor {
          * set gradient for circle image
          * set gradient color on LinearGradient
          */
+        //LinearGradient gradient = new LinearGradient(0, with, with, with * 2, new int[]{Color.parseColor(color), 0xFF333333}, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
+        LinearGradient gradient = new LinearGradient(0, with / 3, (with * 5) / 3, with * 2, new int[]{Color.parseColor(color), 0xFF555555}, null, Shader.TileMode.CLAMP);  // CLAMP MIRROR REPEAT
         Paint p = new Paint();
         p.setDither(true);
         p.setAntiAlias(true);
-        p.setColor(Color.parseColor(color));
+        p.setShader(gradient);
         Canvas c = new Canvas(bitmap);
         c.drawCircle(with / 2, with / 2, with / 2, p);
 

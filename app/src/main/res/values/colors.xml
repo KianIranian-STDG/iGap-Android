@@ -19,6 +19,9 @@
     <color name="gray_6c">#696969</color>
     <color name="unread">#e51c23</color>
 
+    <color name="background_log_time">#e9e9e9</color>
+    <color name="text_log_time">#333333</color>
+
     <color name="am_iconFab_black">#000</color>
     <color name="white_s1">#f7f5d8</color>
     <color name="white">#ffffff</color>
