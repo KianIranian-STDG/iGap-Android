@@ -850,6 +850,7 @@
   <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
   <string name="show_sender_name_in_group">Show Sender Name in Groups</string>
   <string name="calls">Voice Calls</string>
+  <string name="map">Map</string>
   <string name="igap_call">iGap Voice Call</string>
   <string name="No_messages_here_yet">No messages here yet…</string>
   <string name="mandatory">(Mandatory)</string>

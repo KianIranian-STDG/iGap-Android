@@ -595,6 +595,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             new RequestSignalingGetConfiguration().signalingGetConfiguration();
         }
 
+        ViewGroup itemNavMap = (ViewGroup) findViewById(R.id.lm_ll_map);
+        itemNavMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
+
+                pageDrawer = 8;
+            }
+        });
+
         ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
         itemNavSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -606,7 +621,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                pageDrawer = 8;
+                pageDrawer = 9;
             }
         });
         ViewGroup itemNavSetting = (ViewGroup) findViewById(R.id.lm_ll_setting);
@@ -620,7 +635,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                pageDrawer = 9;
+                pageDrawer = 10;
             }
         });
 
@@ -635,7 +650,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                pageDrawer = 10;
+                pageDrawer = 11;
             }
         });
 
@@ -659,23 +674,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         pageDrawer = 0;
                         break;
                     case 2: {
-                        //final Fragment fragment = RegisteredContactsFragment.newInstance();
-                        //Bundle bundle = new Bundle();
-                        //bundle.putString("TITLE", "New Chat");
-                        //fragment.setArguments(bundle);
-                        //try {
-                        //    getSupportFragmentManager().beginTransaction()
-                        //        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        //        .addToBackStack(null)
-                        //        .replace(R.id.fragmentContainer, fragment)
-                        //        .commit();
-                        //} catch (Exception e) {
-                        //    e.getStackTrace();
-                        //}
-
-                        FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
+                        final Fragment fragment = RegisteredContactsFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("TITLE", "New Chat");
+                        fragment.setArguments(bundle);
                         try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragmentiGapMap).commit();
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -747,6 +751,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         break;
                     }
                     case 8: {
+                        FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
+                        try {
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap, "map_fragment").commit();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+
+                        pageDrawer = 0;
+                        break;
+                    }
+                    case 9: {
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
                         sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you !");
@@ -756,7 +771,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         pageDrawer = 0;
                         break;
                     }
-                    case 9: {
+                    case 10: {
                         try {
                             HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
                                 @Override
@@ -774,11 +789,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
                         pageDrawer = 0;
                         break;
                     }
-                    case 10: {
+                    case 11: {
+
                         new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
                                 .content(R.string.content_log_out)
                                 .positiveText(getResources().getString(R.string.B_ok))
@@ -838,7 +853,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                     }
                                 })
                                 .show();
-
                         pageDrawer = 0;
                         break;
                     }

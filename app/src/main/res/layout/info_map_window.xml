@@ -7,7 +7,7 @@
 
   <LinearLayout
       android:id="@+id/lyt_map_info"
-      android:layout_width="match_parent"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:background="@drawable/map_info_background"
@@ -16,23 +16,60 @@
       >
     <net.iGap.module.CircleImageView
         android:id="@+id/img_map_user"
-        android:layout_width="@dimen/dp52"
+        android:layout_width="52dp"
         android:layout_height="@dimen/dp52"
         android:paddingBottom="@dimen/dp4"
         android:paddingEnd="@dimen/dp4"
         android:paddingLeft="@dimen/dp4"
         android:paddingRight="@dimen/dp4"
+        android:layout_gravity="top"
         android:paddingTop="@dimen/dp4"
         android:src="@mipmap/empty"
         />
-    <TextView
-        android:id="@+id/txt_map_comment"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:maxLines="3"
-        android:textColor="#222222"
-        android:textSize="@dimen/dp12"
-        />
+        android:orientation="vertical"
+        >
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:orientation="vertical"
+          >
+        <TextView
+            android:id="@+id/txt_map_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxLines="3"
+            android:padding="@dimen/dp4"
+            android:textColor="#222222"
+            android:textSize="@dimen/dp12"
+            />
+        <TextView
+            android:id="@+id/txt_map_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxLines="3"
+            android:padding="@dimen/dp4"
+            android:textColor="#222222"
+            android:textSize="@dimen/dp12"
+            />
+      </LinearLayout>
+      <TextView
+          android:id="@+id/txt_map_comment"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:maxLines="3"
+          android:padding="@dimen/dp4"
+          android:text="no comment"
+          android:textColor="#222222"
+          android:textSize="@dimen/dp12"
+          />
+    </LinearLayout>
   </LinearLayout>
 </LinearLayout>

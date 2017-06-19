@@ -9,6 +9,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGeoGetComment;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestGeoGetComment;
@@ -45,7 +46,16 @@ public class MyInfoWindow extends InfoWindow implements OnGeoGetComment {
         }
         LinearLayout lytMapInfo = (LinearLayout) mView.findViewById(R.id.lyt_map_info);
         txtComment = (TextView) mView.findViewById(R.id.txt_map_comment);
+        TextView txtMapName = (TextView) mView.findViewById(R.id.txt_map_name);
+        TextView txtMapStatus = (TextView) mView.findViewById(R.id.txt_map_status);
         final CircleImageView imgMapUser = (CircleImageView) mView.findViewById(R.id.img_map_user);
+
+        txtMapName.setText(realmRegisteredInfo.getDisplayName());
+        if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+            txtMapStatus.setText(LastSeenTimeUtil.computeTime(userId, realmRegisteredInfo.getLastSeen(), false));
+        } else {
+            txtMapStatus.setText(realmRegisteredInfo.getStatus());
+        }
 
         HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, true, realm, new OnAvatarGet() {
             @Override
