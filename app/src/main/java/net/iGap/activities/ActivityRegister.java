@@ -992,12 +992,12 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             // return step one
             rg_prg_verify_connect.setVisibility(View.VISIBLE);
             rg_img_verify_connect.setVisibility(View.GONE);
-            rg_txt_verify_connect.setTextAppearance(G.context, Typeface.NORMAL);
+            //rg_txt_verify_connect.setTextAppearance(G.context, Typeface.NORMAL);
             // clear step two
             rg_prg_verify_sms.setVisibility(View.GONE);
             rg_img_verify_sms.setVisibility(View.INVISIBLE);
             rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
-            rg_txt_verify_sms.setTextAppearance(G.context, Typeface.NORMAL);
+            //rg_txt_verify_sms.setTextAppearance(G.context, Typeface.NORMAL);
 
             requestRegister();
         }
@@ -1010,7 +1010,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        rg_txt_verify_sms.setText(getString(R.string.your_login_code_is) + verificationCode);
+                        rg_txt_verify_sms.setText(getString(R.string.rg_verify_register2));
                         rg_prg_verify_sms.setVisibility(View.GONE);
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
                         rg_img_verify_sms.setImageResource(R.mipmap.check);
@@ -1109,7 +1109,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             public void run() {
 
 
-                rg_txt_verify_sms.setText((getResources().getString(R.string.your_login_code_is)) + "" + verificationCode);
+                rg_txt_verify_sms.setText((getResources().getString(R.string.rg_verify_register2)));
                 rg_prg_verify_sms.setVisibility(View.GONE);
                 rg_img_verify_sms.setVisibility(View.VISIBLE);
                 rg_img_verify_sms.setImageResource(R.mipmap.check);

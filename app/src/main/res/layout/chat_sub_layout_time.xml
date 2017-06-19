@@ -4,13 +4,26 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content">
 
-    <TextView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/text"
+            android:background="@color/ou_background_crop"
+            />
+
+        <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/dp12"
-        android:background="@drawable/recangle_gray_tranceparent"
         android:maxLines="1"
         android:paddingBottom="@dimen/dp4"
         android:paddingLeft="@dimen/dp24"
@@ -19,7 +32,19 @@
         android:singleLine="true"
         android:text="Today"
         android:textAllCaps="false"
-        android:textColor="#4a5d5c"
+            android:textColor="@color/ou_background_crop"
         android:textSize="@dimen/dp12"
-        />
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+
+            />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/text"
+            android:background="@color/ou_background_crop"
+            />
+    </RelativeLayout>
 </FrameLayout>
