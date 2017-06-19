@@ -17,13 +17,13 @@ import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +32,11 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnLocationChanged;
+import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
-import net.iGap.request.RequestGeoGetNearbyDistance;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.MapTile;
@@ -127,12 +127,30 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         mGestureDetector = new GestureDetector(G.context, this);
         map.setOnTouchListener(mOnTouchListener);
 
-        Button btnCurrent = (Button) view.findViewById(R.id.btnCurrent);
-        Button btnOthers = (Button) view.findViewById(R.id.btnOthers);
+        final ArcMenu arcMap = (ArcMenu) view.findViewById(R.id.arc_map);
 
-        btnCurrent.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton btnLocation = (FloatingActionButton) view.findViewById(R.id.fab_map_location);
+        FloatingActionButton btnOthers = (FloatingActionButton) view.findViewById(R.id.fab_map_others);
+        FloatingActionButton btnList = (FloatingActionButton) view.findViewById(R.id.fab_map_list);
+
+        btnOthers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (arcMap.isMenuOpened()) {
+                    arcMap.toggleMenu();
+                }
+                if (location != null) {
+                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                }
+            }
+        });
+
+        btnLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (arcMap.isMenuOpened()) {
+                    arcMap.toggleMenu();
+                }
                 if (location != null) {
                     currentLocation(location, false);
                 } else {
@@ -141,14 +159,13 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
-        btnOthers.setOnClickListener(new View.OnClickListener() {
+        btnList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (location != null) {
-                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                    new RequestGeoGetNearbyDistance().getNearbyDistance(location.getLatitude(), location.getLongitude());
-                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                if (arcMap.isMenuOpened()) {
+                    arcMap.toggleMenu();
                 }
+                //TODO [Saeed Mozaffari] [2017-06-19 5:49 PM] - Go To Nearby Distance Page
             }
         });
     }
