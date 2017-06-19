@@ -124,8 +124,10 @@
         android:id="@+id/rcvContent"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp160"
+        android:layout_height="@dimen/dp120"
+        android:layout_marginBottom="@dimen/dp20"
         android:layoutDirection="ltr"
+
         />
 
   </FrameLayout>

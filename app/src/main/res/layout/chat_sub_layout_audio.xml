@@ -47,61 +47,17 @@
 
           <LinearLayout
               android:id="@+id/audioBox"
-              android:layout_width="match_parent"
+              android:layout_width="@dimen/dp180"
               android:layout_height="wrap_content"
               android:layoutDirection="ltr"
-              android:minHeight="@dimen/dp110"
+              android:minHeight="@dimen/dp120"
               android:orientation="horizontal"
               android:paddingBottom="@dimen/messageContainerPaddingBottom"
-              android:paddingLeft="@dimen/messageContainerPaddingLeftRight"
-              android:paddingRight="@dimen/messageContainerPaddingLeftRight"
+
               android:paddingTop="@dimen/messageContainerPadding"
               >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                >
 
-              <FrameLayout
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  >
-
-                <ImageView
-                    android:id="@+id/thumbnail"
-                    android:layout_width="@dimen/dp48"
-                    android:layout_height="@dimen/dp48"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@drawable/green_music_note"
-                    />
-
-                <include
-                    layout="@layout/msg_progress_item"
-                    android:id="@+id/progress"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center"
-                    />
-              </FrameLayout>
-
-              <TextView
-                  android:id="@+id/fileSize"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:gravity="bottom"
-                  android:maxLines="1"
-                  android:text="3.2 mb"
-                  android:singleLine="true"
-                  android:textAllCaps="true"
-                  android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                  android:textColor="@color/black90"
-                  android:textSize="12sp"
-                  />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,40 +66,95 @@
                 android:orientation="vertical"
                 >
 
+
               <LinearLayout
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:orientation="vertical"
                   >
 
-                <TextView
-                    android:id="@+id/fileName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="middle"
-                    android:gravity="left"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:maxWidth="@dimen/dp160"
-                    android:text="file_name.ext"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/dp14"
-                    android:textStyle="bold"
-                    />
-
-                <TextView
-                    android:id="@+id/songArtist"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:text="Artist"
-                    android:singleLine="true"
-                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                    android:textColor="@color/black90"
-                    />
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    >
+
+                  <FrameLayout
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      >
+
+                    <ImageView
+                        android:id="@+id/thumbnail"
+                        android:layout_width="@dimen/dp48"
+                        android:layout_height="@dimen/dp48"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        app:srcCompat="@drawable/green_music_note"
+                        />
+
+                    <include
+                        layout="@layout/msg_progress_item"
+                        android:id="@+id/progress"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        />
+                  </FrameLayout>
+
+                  <TextView
+                      android:id="@+id/fileSize"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:gravity="bottom"
+                      android:maxLines="1"
+                      android:text="3.2 mb"
+                      android:singleLine="true"
+                      android:textAllCaps="true"
+                      android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                      android:textColor="@color/black90"
+                      android:textSize="12sp"
+                      />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp4"
+                    android:orientation="vertical"
+                    >
+
+                  <TextView
+                      android:id="@+id/fileName"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:ellipsize="middle"
+                      android:gravity="left"
+                      android:maxLines="1"
+                      android:singleLine="true"
+                      android:maxWidth="@dimen/dp160"
+                      android:text="file_name.ext"
+                      android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                      android:textColor="@android:color/black"
+                      android:textSize="@dimen/dp14"
+                      android:textStyle="bold"
+                      />
+
+                  <TextView
+                      android:id="@+id/songArtist"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:maxLines="1"
+                      android:text="Artist"
+                      android:singleLine="true"
+                      android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                      android:textColor="@color/black90"
+                      />
+
+                </LinearLayout>
 
               </LinearLayout>
+
 
               <LinearLayout
                   android:id="@+id/audioPlayerViewContainer"
@@ -188,7 +199,7 @@
                     android:id="@+id/csla_txt_timer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
+                    android:layout_gravity="right"
                     android:layout_marginLeft="@dimen/dp52"
                     android:singleLine="true"
                     android:text="00:00"

@@ -42,37 +42,14 @@
 
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="@dimen/dp180"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:layoutDirection="ltr"
-                        android:minHeight="@dimen/dp80"
+                        android:minHeight="@dimen/dp95"
                         android:orientation="horizontal">
 
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="@dimen/dp6"
-                            android:padding="@dimen/dp4"
-                            >
 
-                            <ImageView
-                                android:id="@+id/thumbnail"
-                                android:layout_width="38dp"
-                                android:layout_height="38dp"
-                                android:layout_gravity="center"
-                                app:srcCompat="@drawable/microphone_icon"
-                                />
-
-                            <include
-                                android:id="@+id/progress"
-                                layout="@layout/msg_progress_item"
-                                android:layout_width="56dp"
-                                android:layout_height="56dp"
-                                android:layout_gravity="center"/>
-                        </FrameLayout>
 
 
                         <LinearLayout
@@ -82,20 +59,53 @@
                             android:orientation="vertical"
                             >
 
-                            <TextView
-                                android:id="@+id/cslv_txt_author"
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:singleLine="true"
-                                android:text=""
-                                android:textSize="@dimen/dp14"
-                                />
+                                >
+
+                                <FrameLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:padding="@dimen/dp4"
+                                    >
+
+                                    <ImageView
+                                        android:id="@+id/thumbnail"
+                                        android:layout_width="@dimen/dp20"
+                                        android:layout_height="@dimen/dp20"
+                                        android:layout_gravity="center"
+                                        app:srcCompat="@drawable/microphone_icon"
+                                        />
+
+                                    <include
+                                        android:id="@+id/progress"
+                                        layout="@layout/msg_progress_item"
+                                        android:layout_width="@dimen/dp36"
+                                        android:layout_height="@dimen/dp36"
+                                        android:layout_gravity="center"
+                                        />
+                                </FrameLayout>
+
+                                <TextView
+                                    android:id="@+id/cslv_txt_author"
+                                    android:layout_width="wrap_content"
+                                    android:layout_marginTop="@dimen/dp12"
+                                    android:layout_height="wrap_content"
+                                    android:singleLine="true"
+                                    android:text="recored audio"
+                                    android:textSize="@dimen/dp14"
+                                    />
+
+                            </LinearLayout>
+
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="1"
-
                                 android:gravity="left|center"
                                 >
 
@@ -127,7 +137,7 @@
                                 android:id="@+id/csla_txt_timer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
+                                android:layout_gravity="right"
                                 android:layout_marginLeft="@dimen/dp52"
                                 android:text="00:00"
                                 android:textColor="@color/green"

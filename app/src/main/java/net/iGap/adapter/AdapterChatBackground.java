@@ -37,7 +37,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     private final int CHOOSE = 0;
     private final int ALL = 1;
 
-    int selected_position = 1;
+    //  int selected_position = 1;
 
     private ArrayList<ActivityChatBackground.StructWallpaper> mList;
     private ActivityChatBackground.OnImageClick onImageClick;
@@ -128,12 +128,12 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 //});
             }
 
-            if (selected_position == position) {
-                holder2.itemView.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-                holder2.itemView.setPadding((int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4));
-            } else {
-                holder2.itemView.setBackgroundColor(Color.TRANSPARENT);
-            }
+            //if (selected_position == position) {
+            //    holder2.itemView.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+            //    holder2.itemView.setPadding((int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4));
+            //} else {
+            //    holder2.itemView.setBackgroundColor(Color.TRANSPARENT);
+            //}
         }
     }
 
@@ -219,9 +219,9 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                     if (mPath.length() > 0) {
 
                         // Updating old as well as new positions
-                        notifyItemChanged(selected_position);
-                        selected_position = getLayoutPosition();
-                        notifyItemChanged(selected_position);
+                        //  notifyItemChanged(selected_position);
+                        //  selected_position = getLayoutPosition();
+                        //  notifyItemChanged(selected_position);
                         if (onImageClick != null) {
                             onImageClick.onClick(mPath);
                         }
