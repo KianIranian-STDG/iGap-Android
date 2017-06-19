@@ -2668,7 +2668,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             rippleDeleteSelected.setVisibility(View.VISIBLE);
                         }
                     } else if (realmRoom.getReadOnly()) {
-                        rippleReplaySelected.setVisibility(View.GONE);
+                        rippleReplaySelected.setVisibility(View.INVISIBLE);
                     }
                     realm.close();
                 }

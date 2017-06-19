@@ -824,6 +824,7 @@
   <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
   <string name="there_is_no_connection_to_server">ارتباط با سرور برقرار نیست</string>
   <string name="empty_room">هنوز پیامی ندارید</string>
+  <string name="empty_call">شما تاکنون هیچ تماسی برقرار نکرده اید</string>
   <string name="show_member">نمایش اعضا</string>
   <string name="show_vote_layout_in_channel">نمایش لایه ثبت رای در کانال</string>
   <string name="close">بستن</string>

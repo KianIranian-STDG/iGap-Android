@@ -118,16 +118,25 @@
         />
 
     <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/img_icCall"
         android:layout_width="@dimen/dp160"
         android:layout_height="@dimen/dp160"
-        android:contentDescription="@null"
+        android:adjustViewBounds="true"
+        android:id="@+id/img_icCall"
         app:srcCompat="@drawable/ic_call"
         android:layout_gravity="center"
-        android:padding="@dimen/dp4"
-        android:visibility="gone"
         />
 
+    <TextView
+        android:id="@+id/textEmptyCal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp20"
+        android:textSize="@dimen/dp18"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dp52"
+        android:textColor="@color/black90"
+        android:text="@string/empty_room"
+        />
 
   </FrameLayout>
 </LinearLayout>

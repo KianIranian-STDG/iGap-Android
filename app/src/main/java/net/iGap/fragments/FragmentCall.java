@@ -66,6 +66,7 @@ public class FragmentCall extends Fragment {
     boolean isThereAnyMoreItemToLoad = true;
     private AppCompatImageView imgCallEmpty;
     private FragmentActivity mActivity;
+    private TextView empty_call;
     ProgressBar progressBar;
     private int attampOnError = 0;
     boolean canclick = false;
@@ -100,6 +101,7 @@ public class FragmentCall extends Fragment {
 
 
         imgCallEmpty = (AppCompatImageView) view.findViewById(R.id.img_icCall);
+        empty_call = (TextView) view.findViewById(R.id.textEmptyCal);
         progressBar = (ProgressBar) view.findViewById(R.id.fc_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);
 
@@ -131,9 +133,11 @@ public class FragmentCall extends Fragment {
 
         if (results.size() > 0) {
             imgCallEmpty.setVisibility(View.GONE);
+            empty_call.setVisibility(View.GONE);
 
         } else {
             imgCallEmpty.setVisibility(View.VISIBLE);
+            empty_call.setVisibility(View.VISIBLE);
         }
 
         CallAdapter callAdapter = new CallAdapter(mActivity, results);
@@ -295,6 +299,7 @@ public class FragmentCall extends Fragment {
                                 RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
                                 new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
                                 imgCallEmpty.setVisibility(View.VISIBLE);
+                                empty_call.setVisibility(View.VISIBLE);
                             } catch (Exception e) {
 
                             } finally {
@@ -370,6 +375,7 @@ public class FragmentCall extends Fragment {
                 super(view);
 
                 imgCallEmpty.setVisibility(View.GONE);
+                empty_call.setVisibility(View.GONE);
 
                 timeDureation = (TextView) itemView.findViewById(R.id.fcsl_txt_dureation_time);
                 // call_type_icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_call_type_icon);
