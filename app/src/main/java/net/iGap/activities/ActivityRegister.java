@@ -151,7 +151,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     private String securityPasswordHint = "";
     private boolean hasConfirmedRecoveryEmail;
     private String unconfirmedEmailPattern;
-
+    private boolean isConfirmedRecoveryEmail;
 
     public enum Reason {
         SOCKET, TIME_OUT, INVALID_CODE
@@ -1136,16 +1136,22 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 txtRecovery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new MaterialDialog.Builder(ActivityRegister.this).title(R.string.set_recovery_dialog_title).items(R.array.securityRecoveryPassword).itemsCallback(new MaterialDialog.ListCallback() {
+
+                        int item;
+                        if (isConfirmedRecoveryEmail) {
+                            item = R.array.securityRecoveryPassword;
+                        } else {
+                            item = R.array.securityRecoveryPasswordWithoutEmail;
+                        }
+
+                        new MaterialDialog.Builder(ActivityRegister.this).title(R.string.set_recovery_dialog_title).items(item).itemsCallback(new MaterialDialog.ListCallback() {
+
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                switch (which) {
-                                    case 0:
-                                        isRecoveryByEmail = true;
-                                        break;
-                                    case 1:
-                                        isRecoveryByEmail = false;
-                                        break;
+                                if (text.equals(getString(R.string.recovery_by_email_dialog))) {
+                                    isRecoveryByEmail = true;
+                                } else {
+                                    isRecoveryByEmail = false;
                                 }
 
                                 FragmentSecurityRecovery fragmentSecurityRecovery = new FragmentSecurityRecovery();
@@ -1155,6 +1161,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                                 bundle.putString("QUESTION_TWO", securityPasswordQuestionTwo);
                                 bundle.putString("PATERN_EMAIL", securityPaternEmail);
                                 bundle.putBoolean("IS_EMAIL", isRecoveryByEmail);
+                                bundle.putBoolean("IS_CONFIRM_EMAIL", isConfirmedRecoveryEmail);
                                 fragmentSecurityRecovery.setArguments(bundle);
                                 getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.rg_rootActivityRegister, fragmentSecurityRecovery).commit();
                             }
@@ -1398,6 +1405,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
         securityPasswordQuestionOne = questionOne;
         securityPasswordQuestionTwo = questionTwo;
+        isConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
         securityPasswordHint = hint;
         this.hasConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
         this.unconfirmedEmailPattern = unconfirmedEmailPattern;

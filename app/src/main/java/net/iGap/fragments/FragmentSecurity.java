@@ -74,6 +74,9 @@ public class FragmentSecurity extends Fragment {
     private TextView txtSetConfirmedEmail;
     private TextView txtSetRecoveryEmail;
     private View lineConfirmView;
+    private boolean isConfirmedRecoveryEmail;
+    private String mUnconfirmedEmailPattern;
+    private EditText edtConfirmedEmail;
 
     public FragmentSecurity() {
         // Required empty public constructor
@@ -115,7 +118,7 @@ public class FragmentSecurity extends Fragment {
         final EditText edtSetAnswerPassTwo = (EditText) view.findViewById(R.id.tsv_edtSetAnswerPassTwo);
         final EditText edtSetEmail = (EditText) view.findViewById(R.id.tsv_edtSetEmail);
         final EditText edtChangeHint = (EditText) view.findViewById(R.id.tsv_edtChangeHint);
-        final EditText edtConfirmedEmail = (EditText) view.findViewById(R.id.tsv_edtConfirmedEmail);
+        edtConfirmedEmail = (EditText) view.findViewById(R.id.tsv_edtConfirmedEmail);
 
         TextView txtChangePassword = (TextView) view.findViewById(R.id.tsv_changePassword);
         TextView txtTurnPasswordOff = (TextView) view.findViewById(R.id.tsv_turnPasswordOff);
@@ -195,17 +198,21 @@ public class FragmentSecurity extends Fragment {
         txtForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int item;
+                if (isConfirmedRecoveryEmail) {
+                    item = R.array.securityRecoveryPassword;
+                } else {
+                    item = R.array.securityRecoveryPasswordWithoutEmail;
+                }
 
-                new MaterialDialog.Builder(mActivity).title(R.string.set_recovery_dialog_title).items(R.array.securityRecoveryPassword).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(mActivity).title(R.string.set_recovery_dialog_title).items(item).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        switch (which) {
-                            case 0:
-                                isRecoveryByEmail = true;
-                                break;
-                            case 1:
-                                isRecoveryByEmail = false;
-                                break;
+
+                        if (text.equals(getString(R.string.recovery_by_email_dialog))) {
+                            isRecoveryByEmail = true;
+                        } else {
+                            isRecoveryByEmail = false;
                         }
 
                         FragmentSecurityRecovery fragmentSecurityRecovery = new FragmentSecurityRecovery();
@@ -215,6 +222,7 @@ public class FragmentSecurity extends Fragment {
                         bundle.putString("QUESTION_TWO", txtQuestionTwo);
                         bundle.putString("PATERN_EMAIL", txtPaternEmail);
                         bundle.putBoolean("IS_EMAIL", isRecoveryByEmail);
+                        bundle.putBoolean("IS_CONFIRM_EMAIL", isConfirmedRecoveryEmail);
 
                         fragmentSecurityRecovery.setArguments(bundle);
                         mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentSecurityRecovery).commit();
@@ -242,8 +250,8 @@ public class FragmentSecurity extends Fragment {
             @Override
             public void onClick(View v) {
 
+                edtConfirmedEmail.setHint(mUnconfirmedEmailPattern);
                 page = CONFIRM_EMAIL;
-                edtConfirmedEmail.setHint(txtPaternEmail);
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootConfirmedEmail.setVisibility(View.VISIBLE);
@@ -316,8 +324,9 @@ public class FragmentSecurity extends Fragment {
                 txtQuestionOne = questionOne;
                 txtQuestionTwo = questionTwo;
                 txtPaternEmail = unconfirmedEmailPattern;
-                //this.hasConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
-                //this.unconfirmedEmailPattern = unconfirmedEmailPattern;
+                isConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
+                mUnconfirmedEmailPattern = unconfirmedEmailPattern;
+
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -333,7 +342,7 @@ public class FragmentSecurity extends Fragment {
                             edtCheckPassword.setHint(hint);
                             isFirstSetPassword = false;
 
-                            if (hasConfirmedRecoveryEmail && unconfirmedEmailPattern.length() == 0) {
+                            if (unconfirmedEmailPattern.length() == 0) {
                                 txtSetRecoveryEmail.setVisibility(View.VISIBLE);
                                 txtSetConfirmedEmail.setVisibility(View.GONE);
                                 lineConfirmView.setVisibility(View.GONE);
@@ -446,11 +455,12 @@ public class FragmentSecurity extends Fragment {
             }
 
             @Override
-            public void changeEmail() {
+            public void changeEmail(final String unConfirmEmailPatern) {
 
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mUnconfirmedEmailPattern = unConfirmEmailPatern;
                         viewChangeEmail();
                     }
                 });
@@ -644,8 +654,15 @@ public class FragmentSecurity extends Fragment {
                 rootChangeEmail.setVisibility(View.GONE);
                 rippleOk.setVisibility(View.GONE);
                 isSetRecoveryEmail = true;
-                txtSetConfirmedEmail.setVisibility(View.VISIBLE);
-                lineConfirmView.setVisibility(View.VISIBLE);
+                if (mUnconfirmedEmailPattern.length() > 0) {
+                    txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                    lineConfirmView.setVisibility(View.VISIBLE);
+                } else {
+                    txtSetConfirmedEmail.setVisibility(View.GONE);
+                    lineConfirmView.setVisibility(View.GONE);
+                }
+
+
             }
         });
     }

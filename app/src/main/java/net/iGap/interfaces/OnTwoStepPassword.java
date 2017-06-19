@@ -27,7 +27,7 @@ public interface OnTwoStepPassword {
 
     void changeHint();
 
-    void changeEmail();
+    void changeEmail(String unConfirmEmailPatern);
 
     void confirmEmail();
 

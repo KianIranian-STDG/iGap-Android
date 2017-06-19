@@ -35,7 +35,7 @@ public class UserTwoStepVerificationChangeRecoveryEmailResponse extends MessageH
         builder.getUnconfirmedEmailPattern();
 
         if (G.onTwoStepPassword != null) {
-            G.onTwoStepPassword.changeEmail();
+            G.onTwoStepPassword.changeEmail(builder.getUnconfirmedEmailPattern());
         }
     }
 

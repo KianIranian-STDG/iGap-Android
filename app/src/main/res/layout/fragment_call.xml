@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:clickable="true"
     android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingPrefix"
     >
 
@@ -21,8 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="@color/green"
-        android:orientation="horizontal"
         android:layoutDirection="ltr"
+        android:orientation="horizontal"
         >
 
       <net.iGap.libs.rippleeffect.RippleView
@@ -58,8 +58,8 @@
           android:textAppearance="?android:attr/textAppearanceMedium"
           android:textColor="@android:color/white"
           android:textSize="@dimen/dp18"
-          fontPath="fonts/IRANSansMobile_Bold.ttf"
           android:visibility="visible"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
 
 
@@ -79,7 +79,6 @@
   </android.support.design.widget.AppBarLayout>
 
 
-
   <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -97,13 +96,13 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fc_fab_contact_list"
-        android:layout_margin="@dimen/dp12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_call_black_24dp"
         android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/dp12"
         app:backgroundTint="@color/green"
         app:elevation="@dimen/dp6"
+        app:srcCompat="@drawable/ic_call_black_24dp"
         />
 
 
@@ -116,27 +115,32 @@
         android:padding="@dimen/dp4"
         android:visibility="gone"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+      <android.support.v7.widget.AppCompatImageView
+          android:id="@+id/img_icCall"
+          android:layout_width="@dimen/dp160"
+          android:layout_height="@dimen/dp160"
+          android:layout_gravity="center"
+          android:adjustViewBounds="true"
+          app:srcCompat="@drawable/ic_call"
+          />
 
-    <android.support.v7.widget.AppCompatImageView
-        android:layout_width="@dimen/dp160"
-        android:layout_height="@dimen/dp160"
-        android:adjustViewBounds="true"
-        android:id="@+id/img_icCall"
-        app:srcCompat="@drawable/ic_call"
-        android:layout_gravity="center"
-        />
-
-    <TextView
-        android:id="@+id/textEmptyCal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp20"
-        android:textSize="@dimen/dp18"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/dp52"
-        android:textColor="@color/black90"
-        android:text="@string/empty_room"
-        />
-
+      <TextView
+          android:id="@+id/textEmptyCal"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginBottom="@dimen/dp52"
+          android:layout_marginTop="@dimen/dp20"
+          android:text="@string/empty_call"
+          android:textColor="@color/black90"
+          android:textSize="@dimen/dp18"
+          />
+    </LinearLayout>
   </FrameLayout>
 </LinearLayout>

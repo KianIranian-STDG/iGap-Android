@@ -269,4 +269,8 @@
     <item>@string/recovery_by_question_dialog</item>
   </string-array>
 
+  <string-array name="securityRecoveryPasswordWithoutEmail">
+    <item>@string/recovery_by_question_dialog</item>
+  </string-array>
+
 </resources>

@@ -48,6 +48,7 @@ public class FragmentSecurityRecovery extends Fragment {
     private TextView txtSetRecoveryQuestionPassOne;
     private TextView txtSetRecoveryQuestionPassTwo;
     private FragmentActivity mActivity;
+    private boolean isConfirmedRecoveryEmail;
 
     public FragmentSecurityRecovery() {
         // Required empty public constructor
@@ -76,6 +77,7 @@ public class FragmentSecurityRecovery extends Fragment {
             questionTwo = bundle.getString("QUESTION_TWO");
             txtPaternEmail = bundle.getString("PATERN_EMAIL");
             isRecoveryByEmail = bundle.getBoolean("IS_EMAIL");
+            isConfirmedRecoveryEmail = bundle.getBoolean("IS_CONFIRM_EMAIL");
         }
 
         RippleView ripple_back = (RippleView) view.findViewById(R.id.ripple_back);
@@ -108,6 +110,11 @@ public class FragmentSecurityRecovery extends Fragment {
 
         txtSetRecoveryByQuestion = (TextView) view.findViewById(R.id.txtSetRecoveryByQuestion);
         txtSetRecoveryByEmail = (TextView) view.findViewById(R.id.txtSetRecoveryByEmail);
+
+        if (!isConfirmedRecoveryEmail) {
+            txtSetRecoveryByEmail.setVisibility(View.GONE);
+        }
+
         txtSetRecoveryQuestionPassOne = (TextView) view.findViewById(R.id.txtSetRecoveryQuestionPassOne);
         txtSetRecoveryQuestionPassTwo = (TextView) view.findViewById(R.id.txtSetRecoveryQuestionPassTwo);
 
