@@ -826,7 +826,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                 /**
                  * ********************* chat icon *********************
                  */
-                if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
+                if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT || mainType != MainType.all) {
                     removeView(lytContainer4, R.id.lyt_chat_icon_room);
                 } else {
                     addView(holder, lytContainer4, R.layout.room_layout_chat_icon, R.id.lyt_chat_icon_room, 0);
@@ -838,8 +838,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                         lytChatIcon.setPadding((int) getResources().getDimension(R.dimen.dp8), 0, 0, 0);
                     }
 
-                    if (mainType == MainType.all) {
-                        TextView txtChatIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_chat_icon);
+                    TextView txtChatIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_chat_icon);
                         if (mInfo.getType() == GROUP) {
                             typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");
                             txtChatIcon.setText(getStringChatIcon(RoomType.GROUP));
@@ -848,9 +847,6 @@ public class FragmentMain extends Fragment implements OnComplete {
                             txtChatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
                         }
                         txtChatIcon.setTypeface(typeFaceIcon);
-                    } else {
-                        holder.itemView.findViewById(R.id.cs_txt_chat_icon).setVisibility(View.GONE);
-                    }
                 }
 
                 holder.name.setText(mInfo.getTitle());

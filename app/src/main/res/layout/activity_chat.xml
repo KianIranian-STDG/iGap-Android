@@ -85,6 +85,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center|left"
                     android:orientation="vertical"
+                    android:paddingTop="@dimen/dp4"
                     android:paddingLeft="@dimen/dp4"
                     >
 
@@ -94,6 +95,7 @@
                       android:layout_height="0dp"
                       android:layout_weight="1"
                       android:gravity="bottom"
+                      android:paddingBottom="@dimen/dp4"
                       android:orientation="horizontal"
                       >
 
@@ -109,19 +111,19 @@
                         fontPath="fonts/IRANSansMobile_Bold.ttf"
                         app:emojiSize="@dimen/dp14"
                         android:lineSpacingMultiplier=".8"
-                        android:padding="@dimen/dp4"
                         />
 
                     <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/imgMutedRoom"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:paddingLeft="@dimen/dp8"
                         android:paddingRight="@dimen/dp8"
                         android:text="@string/md_flaticon_volume_off_indicator"
+                        android:gravity="bottom"
                         android:textAppearance="@style/TextIconAppearance.all"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/dp14"
+                        android:textSize="@dimen/dp16"
                         android:visibility="gone"
                         />
                   </LinearLayout>
