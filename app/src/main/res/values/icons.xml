@@ -100,6 +100,11 @@
   <string name="md_chat">\ue0b7</string>
 
 
+  <string name="md_pin">\ue901</string>
+  <string name="md_unpin">\ue902</string>
+  <string name="md_circlePin">\ue903</string>
+
+
   <string name="icon_location">\ue901</string>
   <string name="icon_music">\ue911</string>
   <string name="icon_file_empty">\ue924</string>

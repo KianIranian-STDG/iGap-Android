@@ -71,6 +71,7 @@ import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 
 import static net.iGap.G.clientConditionGlobal;
+import static net.iGap.G.context;
 import static net.iGap.G.firstTimeEnterToApp;
 import static net.iGap.G.userId;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
@@ -148,27 +149,31 @@ public class FragmentMain extends Fragment implements OnComplete {
         preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(getActivity()));
 
         RealmResults<RealmRoom> results = null;
-
+        String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.UPDATED_TIME};
+        Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING};
         switch (mainType) {
 
             case all:
-                results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                    equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+                //results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
+                //    equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+
+                results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
+
 
                 break;
             case chat:
                 results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                    equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+                    equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
 
                 break;
             case group:
                 results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                    equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+                    equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
 
                 break;
             case channel:
                 results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                    equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+                    equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
 
                 break;
         }
@@ -533,6 +538,11 @@ public class FragmentMain extends Fragment implements OnComplete {
     private void onSelectRoomMenu(String message, RealmRoom item) {
         if (checkValidationForRealm(item)) {
             switch (message) {
+                case "pinToTop":
+
+                    pinToTop(item.getId(), item.isPinned());
+
+                    break;
                 case "txtMuteNotification":
                     muteNotification(item.getId(), item.getMute());
                     break;
@@ -558,6 +568,21 @@ public class FragmentMain extends Fragment implements OnComplete {
                     break;
             }
         }
+    }
+
+    private void pinToTop(final long id, final boolean isPinned) {
+
+        Realm realm = Realm.getDefaultInstance();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+                realmRoom.setPinned(!isPinned);
+            }
+        });
+        realm.close();
     }
 
     private boolean checkValidationForRealm(RealmRoom realmRoom) {
@@ -863,15 +888,33 @@ public class FragmentMain extends Fragment implements OnComplete {
                 /**
                  * ********************* unread *********************
                  */
+
+                if (mInfo.isPinned()) {
+                    holder.rootChat.setBackgroundColor(ContextCompat.getColor(context, R.color.pin_color));
+                } else {
+                    holder.rootChat.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                }
+
                 if (mInfo.getUnreadCount() < 1) {
                     removeView(lytContainer6, R.id.lyt_unread_room);
                     holder.name.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
 
+                    if (mInfo.isPinned()) {
+                        addView(holder, lytContainer6, R.layout.room_layout_pinned, R.id.lyt_pinned_room, lytContainer6.getChildCount());
+                        TextView txtPinIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_pinned_message);
+                        txtPinIcon.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font2.ttf"));
+                    } else {
+                        removeView(lytContainer6, R.id.lyt_pinned_room);
+                    }
+
                 } else {
+
+
 
                     holder.name.setTypeface(FontCache.get("fonts/IRANSansMobile_Bold.ttf", G.context));
 
                     addView(holder, lytContainer6, R.layout.room_layout_unread, R.id.lyt_unread_room, lytContainer6.getChildCount());
+                    removeView(lytContainer6, R.id.lyt_pinned_room);
 
                     TextView txtUnread = (TextView) holder.itemView.findViewById(R.id.cs_txt_unread_message);
                     txtUnread.setText(Integer.toString(mInfo.getUnreadCount()));
@@ -978,12 +1021,14 @@ public class FragmentMain extends Fragment implements OnComplete {
             RealmRoom mInfo;
             protected CircleImageView image;
             protected EmojiTextViewE name;
+            protected ViewGroup rootChat;
 
             public ViewHolder(View view) {
                 super(view);
 
                 image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
                 name = (EmojiTextViewE) view.findViewById(R.id.cs_txt_contact_name);
+                rootChat = (ViewGroup) view.findViewById(R.id.root_chat_sub_layout);
 
                 //AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
 
@@ -1027,7 +1072,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                                     @Override public void complete(boolean result, String messageOne, String MessageTow) {
                                         onSelectRoomMenu(messageOne, mInfo);
                                     }
-                                });
+                                }, mInfo.isPinned());
                             }
                         }
                         return true;

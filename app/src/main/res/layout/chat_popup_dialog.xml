@@ -2,9 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:orientation="vertical"
+    tools:ignore="MissingPrefix"
     >
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <TextView
+        android:id="@+id/cm_icon_mute_pinToTop"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:text="@string/md_pin"
+        android:textColor="@color/grayNew"
+        android:textSize="@dimen/dp26"
+        fontPath="fonts/iGap_font2.ttf"
+        />
+
+    <TextView
+        android:id="@+id/cm_txt_mute_pinToTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/dialog_item_style"
+        android:text="@string/pin_to_top"
+        android:textColor="@color/black90"
+        android:textSize="@dimen/dp14"
+        />
+
+  </LinearLayout>
 
 
   <LinearLayout

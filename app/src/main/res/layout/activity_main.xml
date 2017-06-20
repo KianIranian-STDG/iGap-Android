@@ -77,13 +77,15 @@
                   android:layout_width="0dp"
                   android:layout_height="match_parent"
                   android:layout_weight="1"
-                  android:gravity="center"
+                  android:gravity="start|center_vertical"
                   android:singleLine="true"
                   android:text="@string/app_name"
                   android:textAppearance="?android:attr/textAppearanceMedium"
                   android:textColor="@android:color/white"
                   fontPath="fonts/IRANSansMobile_Bold.ttf"
                   android:textSize="@dimen/dp18"
+                  android:paddingStart="@dimen/dp15"
+                  android:paddingLeft="@dimen/dp15"
                   tools:ignore="MissingPrefix"
                   />
 

@@ -131,4 +131,5 @@
     <color name="room_message_gray">#FF616161</color>
     <color name="background_progress">#c7101010</color>
     <color name="replay_message_text">#333</color>
+  <color name="pin_color">#f9f9f9</color>
 </resources>

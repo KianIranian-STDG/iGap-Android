@@ -47,6 +47,7 @@ public class RealmRoom extends RealmObject {
     private long actionStateUserId;
     private String actionState;
     private boolean isDeleted = false;
+    private boolean isPinned;
     /**
      * client need keepRoom info for show in forward message that forward
      * from a room that user don't have that room
@@ -595,5 +596,13 @@ public class RealmRoom extends RealmObject {
 
     public long getActionStateUserId() {
         return actionStateUserId;
+    }
+
+    public boolean isPinned() {
+        return isPinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        isPinned = pinned;
     }
 }

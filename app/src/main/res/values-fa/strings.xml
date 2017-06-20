@@ -107,6 +107,8 @@
   <string name="mute">بی صدا</string>
   <string name="unmute">با صدا</string>
   <string name="mute_notification">"اطلاع رسانی بیصدا"</string>
+  <string name="pin_to_top">پین به بالا</string>
+  <string name="Unpin_to_top">برداشتن پین</string>
   <string name="unmute_notification">"اطلاع رسانی باصدا"</string>
   <string name="clear_history">"پاک کردن تاریخچه"</string>
   <string name="to_delete_chat">"حذف گفتگو"</string>

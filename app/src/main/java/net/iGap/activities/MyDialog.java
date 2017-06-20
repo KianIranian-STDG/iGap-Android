@@ -16,16 +16,19 @@ import android.view.View;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import io.realm.Realm;
+import io.realm.RealmResults;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomFields;
 
 public class MyDialog {
-
-    public static void showDialogMenuItemRooms(final Context context, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, final OnComplete complete) {
+    public static void showDialogMenuItemRooms(final Context context, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, final OnComplete complete, boolean isPinned) {
 
         //final Dialog dialog = new Dialog(context);
         //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -48,6 +51,12 @@ public class MyDialog {
 
         TextView txtMuteNotification = null;
 
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll();
+        int pinCount = realmRoom.size();
+        realm.close();
+
+
         txtMuteNotification = (TextView) v.findViewById(R.id.cm_txt_mute_notification);
         MaterialDesignTextView iconMuteNotification = (MaterialDesignTextView) v.findViewById(R.id.cm_icon_mute_notification);
         //        iconMuteNotification.setTypeface();
@@ -55,6 +64,8 @@ public class MyDialog {
         MaterialDesignTextView iconClearHistory = (MaterialDesignTextView) v.findViewById(R.id.cm_icon_clear_history);
         TextView txtDeleteChat = (TextView) v.findViewById(R.id.cm_txt_delete_chat);
         MaterialDesignTextView iconDeleteChat = (MaterialDesignTextView) v.findViewById(R.id.cm_icon_delete_chat);
+        TextView txtPinToTop = (TextView) v.findViewById(R.id.cm_txt_mute_pinToTop);
+        TextView iconPinToTop = (TextView) v.findViewById(R.id.cm_icon_mute_pinToTop);
         //TextView txtCancel = (TextView) dialog.findViewById(R.id.cm_txt_cancle);
 
         if (isMute) {
@@ -66,8 +77,30 @@ public class MyDialog {
             iconMuteNotification.setText(context.getString(R.string.md_muted));
         }
 
+        if (isPinned) {
+            txtPinToTop.setText(context.getString(R.string.Unpin_to_top));
+            iconPinToTop.setText(context.getString(R.string.md_unpin));
+
+        } else {
+            if (pinCount >= 5) {
+                txtPinToTop.setVisibility(View.GONE);
+                iconPinToTop.setVisibility(View.GONE);
+            }
+            txtPinToTop.setText(context.getString(R.string.pin_to_top));
+            iconPinToTop.setText(context.getString(R.string.md_pin));
+        }
+
         //        txtMuteNotification.setText(isMute ? context.getString(R.string.unmute_notification)
         //                : context.getString(R.string.mute_notification));
+
+
+        txtPinToTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (complete != null) complete.complete(true, "pinToTop", "");
+                dialog.dismiss();
+            }
+        });
 
         txtMuteNotification.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
