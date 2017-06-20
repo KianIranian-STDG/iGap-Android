@@ -6,70 +6,83 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp4"
-    android:maxWidth="@dimen/chatBoxMaxWidth"
     android:textDirection="firstStrong"
     >
 
-    <LinearLayout
-        android:id="@+id/mainContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="UselessParent">
+  <LinearLayout
+      android:id="@+id/mainContainer"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      tools:ignore="UselessParent"
+      >
 
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        >
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          >
 
 
         <LinearLayout
-            android:id="@+id/vote_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:id="@+id/contentContainer"
+            style="@style/ChatMessages.CardView"
+            >
 
-            <LinearLayout
+          <LinearLayout
+              android:id="@+id/m_container"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              >
+
+
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 >
 
+              <net.iGap.module.ReserveSpaceGifImageView
+                  android:id="@+id/thumbnail"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  />
 
-                <LinearLayout
-                android:id="@+id/contentContainer"
-                style="@style/ChatMessages.CardView">
-
-                <LinearLayout
-                    android:id="@+id/m_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                      <net.iGap.module.ReserveSpaceGifImageView
-                            android:id="@+id/thumbnail"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            />
-
-                        <include
-                            android:id="@+id/progress"
-                            layout="@layout/msg_progress_item"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:layout_gravity="center"/>
+              <include
+                  layout="@layout/msg_progress_item"
+                  android:id="@+id/progress"
+                  android:layout_width="56dp"
+                  android:layout_height="56dp"
+                  android:layout_gravity="center"
+                  />
 
 
-                    </FrameLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <include layout="@layout/chat_sub_layout_messages_time" />
-
-            </LinearLayout>
-
+            </FrameLayout>
+          </LinearLayout>
         </LinearLayout>
 
+        <include layout="@layout/chat_sub_layout_messages_time" />
+
+      </LinearLayout>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vote_container"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+
+    </LinearLayout>
+
+  </LinearLayout>
 </FrameLayout>

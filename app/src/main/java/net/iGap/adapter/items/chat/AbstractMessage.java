@@ -58,7 +58,6 @@ import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.TimeUtils;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructMessageInfo;
@@ -278,8 +277,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * set message time
          */
-        if (holder.itemView.findViewById(R.id.cslr_txt_time) != null) {
-            ((TextView) holder.itemView.findViewById(R.id.cslr_txt_time)).setText(formatTime());
+
+        TextView txtTime = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
+        if (txtTime != null) {
+            txtTime.setText(HelperCalander.getClocktime(mMessage.time, false));
+
+            if (HelperCalander.isLanguagePersian) {
+                txtTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txtTime.getText().toString()));
+            }
+
         }
 
 
@@ -310,7 +316,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
                 showVote(holder, realm);
-            } else {
+            } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
                 if (mMessage.forwardedFrom != null) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
                     if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
@@ -455,10 +461,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (voteContainer == null) {
             return;
         }
+        voteContainer.setVisibility(View.VISIBLE);
 
-        if (type == ProtoGlobal.Room.Type.CHANNEL) {
-            voteContainer.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp260));
-        }
 
         if (holder.itemView.findViewById(R.id.lyt_vote) == null) {
             View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
@@ -635,7 +639,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.RIGHT;
 
-        LinearLayout voteLayout = (LinearLayout) holder.itemView.findViewById(R.id.vote_container);
+        LinearLayout voteLayout = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer).getParent().getParent();
         voteLayout.setGravity(Gravity.RIGHT);
 
 
@@ -676,17 +680,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         //((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).leftMargin = 0;
     }
 
-    /**
-     * format long time as string
-     *
-     * @return String
-     */
-    protected String formatTime() {
 
-        String _time = TimeUtils.toLocal(mMessage.time, "H:mm a");
-
-        return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(_time) : _time;
-    }
 
     @CallSuper
     protected void replyMessageIfNeeded(VH holder, Realm realm) {

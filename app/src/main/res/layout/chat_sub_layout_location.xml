@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp4"
-    android:maxWidth="@dimen/chatBoxMaxWidth"
     >
 
     <LinearLayout
@@ -18,8 +17,8 @@
         tools:ignore="UselessParent">
 
         <LinearLayout
-            android:id="@+id/vote_container"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -63,6 +62,16 @@
             <include layout="@layout/chat_sub_layout_messages_time" />
 
             </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/vote_container"
+            android:layout_width="@dimen/dp40"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            >
 
         </LinearLayout>
 
