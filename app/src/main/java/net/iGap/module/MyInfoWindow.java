@@ -1,12 +1,15 @@
 package net.iGap.module;
 
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.proto.ProtoGlobal;
@@ -16,19 +19,21 @@ import net.iGap.request.RequestGeoGetComment;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
-public class MyInfoWindow extends InfoWindow implements OnGeoGetComment {
+public class MyInfoWindow extends InfoWindow {
 
     private long userId;
     private boolean hasComment;
-    private TextView txtComment;
     private MapView map;
+    private FragmentActivity mActivity;
+    private FragmentiGapMap fragmentiGapMap;
 
-    public MyInfoWindow(int layoutResId, MapView mapView, long userId, boolean hasComment) {
+    public MyInfoWindow(int layoutResId, MapView mapView, long userId, boolean hasComment, FragmentiGapMap fragmentiGapMap, FragmentActivity mActivity) {
         super(layoutResId, mapView);
         this.map = mapView;
         this.userId = userId;
         this.hasComment = hasComment;
-        G.onGeoGetComment = this;
+        this.fragmentiGapMap = fragmentiGapMap;
+        this.mActivity = mActivity;
     }
 
     public MyInfoWindow(int layoutResId, MapView mapView) {
@@ -45,7 +50,7 @@ public class MyInfoWindow extends InfoWindow implements OnGeoGetComment {
             return;
         }
         LinearLayout lytMapInfo = (LinearLayout) mView.findViewById(R.id.lyt_map_info);
-        txtComment = (TextView) mView.findViewById(R.id.txt_map_comment);
+        final TextView txtComment = (TextView) mView.findViewById(R.id.txt_map_comment);
         TextView txtMapName = (TextView) mView.findViewById(R.id.txt_map_name);
         TextView txtMapStatus = (TextView) mView.findViewById(R.id.txt_map_status);
         final CircleImageView imgMapUser = (CircleImageView) mView.findViewById(R.id.img_map_user);
@@ -79,6 +84,18 @@ public class MyInfoWindow extends InfoWindow implements OnGeoGetComment {
             }
         });
 
+        imgMapUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HelperPublicMethod.goToChatRoom(false, userId, new HelperPublicMethod.Oncomplet() {
+                    @Override
+                    public void complete() {
+                        mActivity.getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
+                    }
+                }, null);
+            }
+        });
+
         lytMapInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,19 +104,22 @@ public class MyInfoWindow extends InfoWindow implements OnGeoGetComment {
         });
 
         if (hasComment) {
+            G.onGeoGetComment = new OnGeoGetComment() {
+                @Override
+                public void onGetComment(final String comment) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtComment.setText(comment);
+                        }
+                    });
+                }
+            };
+
             new RequestGeoGetComment().getComment(userId);
         }
 
         realm.close();
     }
 
-    @Override
-    public void onGetComment(final String comment) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                txtComment.setText(comment);
-            }
-        });
-    }
 }

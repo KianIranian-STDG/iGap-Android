@@ -15,6 +15,7 @@ import net.iGap.realm.RealmPhoneContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
+import net.iGap.request.RequestGeoUpdateComment;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserInfo;
@@ -22,6 +23,7 @@ import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestWrapper;
 
 import static net.iGap.G.context;
+import static net.iGap.G.displayName;
 import static net.iGap.G.firstEnter;
 import static net.iGap.G.firstTimeEnterToApp;
 import static net.iGap.G.isAppInFg;
@@ -86,7 +88,7 @@ public class LoginActions extends Application {
                         getUserInfo();
                         //new RequestGeoRegister().register(true);
                         //new RequestGeoGetRegisterStatus().getRegisterStatus();
-                        //new RequestGeoUpdateComment().updateComment("");
+                        new RequestGeoUpdateComment().updateComment("Hello I'm " + displayName);
                         //sendWaitingRequestWrappers();
                     }
                 });

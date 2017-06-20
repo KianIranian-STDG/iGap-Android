@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -53,7 +55,9 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
-public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, GestureDetector.OnGestureListener {
+import static net.iGap.G.context;
+
+public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate {
 
     private MapView map;
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
@@ -67,6 +71,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private double lon1;
     private Location location;
 
+    private FragmentActivity mActivity;
+
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
     }
@@ -74,7 +80,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Configuration.getInstance().load(G.context, PreferenceManager.getDefaultSharedPreferences(G.context));
+        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
         return inflater.inflate(R.layout.fragment_igap_map, container, false);
     }
 
@@ -99,8 +105,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         /**
          * Zoom With MultiTouch And With Two Finger
          */
-        map.setBuiltInZoomControls(true);
-        map.setMultiTouchControls(true);
+        map.setBuiltInZoomControls(false);
+        map.setMultiTouchControls(false);
         /**
          * Set Zoom Value
          */
@@ -116,16 +122,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         /**
          * Use From Following Code For Custom Url Tile Server
          */
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 20, 256, ".png", new String[]{Config.URL_MAP}) {
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", 16, 16, 256, ".png", new String[]{Config.URL_MAP}) {
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
             }
         });
-
-
-        mGestureDetector = new GestureDetector(G.context, this);
-        map.setOnTouchListener(mOnTouchListener);
 
         final ArcMenu arcMap = (ArcMenu) view.findViewById(R.id.arc_map);
 
@@ -174,19 +176,6 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
      * ****************************** methods ******************************
      */
 
-    public View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (mGestureDetector.onTouchEvent(event)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    };
-
-
-
     private void drawLine(ArrayList<Double[]> points) {
         Polyline line = new Polyline();
         line.setWidth(5f);
@@ -220,12 +209,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
                 if (userId != 0) {
                     if (hasComment) {
-                        marker.setIcon(G.context.getResources().getDrawable(R.drawable.location_mark_comment_yes));
+                        marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_yes));
                     } else {
-                        marker.setIcon(G.context.getResources().getDrawable(R.drawable.location_mark_comment_no));
+                        marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_no));
                     }
 
-                    InfoWindow infoWindow = new MyInfoWindow(R.layout.info_map_window, map, userId, hasComment);
+                    InfoWindow infoWindow = new MyInfoWindow(R.layout.info_map_window, map, userId, hasComment, FragmentiGapMap.this, mActivity);
                     marker.setInfoWindow(infoWindow);
                 }
 
@@ -311,12 +300,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         OverlayItem overlayItem = new OverlayItem("title", "City", geoPoint);
 
-        Drawable drawable = G.context.getResources().getDrawable(R.drawable.location_current);
+        Drawable drawable = context.getResources().getDrawable(R.drawable.location_current);
         overlayItem.setMarker(drawable);
 
         ArrayList<OverlayItem> overlayItemArrayList = new ArrayList<OverlayItem>();
         overlayItemArrayList.add(overlayItem);
-        ItemizedOverlay<OverlayItem> locationOverlay = new ItemizedIconOverlay<>(G.context, overlayItemArrayList, null);
+        ItemizedOverlay<OverlayItem> locationOverlay = new ItemizedIconOverlay<>(context, overlayItemArrayList, null);
 
         if (latestLocation != null) {
             map.getOverlays().remove(latestLocation);
@@ -328,7 +317,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(G.context, "Update Position", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Update Position", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -346,32 +335,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     }
 
     @Override
-    public boolean onDown(MotionEvent motionEvent) {
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent motionEvent) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent motionEvent) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent motionEvent) {
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return false;
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }
