@@ -1024,15 +1024,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         FragmentCreateChannel fragmentCreateChannel = (FragmentCreateChannel) getSupportFragmentManager().findFragmentByTag("createChannel_fragment");
         ContactGroupFragment fragmentContactGroup = (ContactGroupFragment) getSupportFragmentManager().findFragmentByTag("contactGroup_fragment");
         FragmentIgapSearch fragmentIgapSearch = (FragmentIgapSearch) getSupportFragmentManager().findFragmentByTag("Search_fragment_igap");
+        FragmentiGapMap fragmentiGapMap = (FragmentiGapMap) getSupportFragmentManager().findFragmentByTag("map_fragment");
 
         if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
-
             try {
                 getSupportFragmentManager().beginTransaction().remove(fragmentNeGroup).commit();
             } catch (Exception e) {
                 e.getStackTrace();
             }
-
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         } else if (fragmentCreateChannel != null && fragmentCreateChannel.isVisible()) {
             try {
@@ -1055,6 +1054,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else if (myFragment != null && myFragment.isVisible()) {
             try {
                 getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+        } else if (fragmentiGapMap != null && fragmentiGapMap.isVisible()) {
+            try {
+                getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
             } catch (Exception e) {
                 e.getStackTrace();
             }
