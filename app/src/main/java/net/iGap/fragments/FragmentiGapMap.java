@@ -44,6 +44,7 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
@@ -72,6 +73,10 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private Location location;
 
     private FragmentActivity mActivity;
+
+    //0.011 longitude, 0.009 latitude
+    private final double LONGITUDE_LIMIT = 0.011;
+    private final double LATITUDE_LIMIT = 0.009;
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -233,6 +238,15 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         map.getController().animateTo(startPoint);
     }
 
+    private void mapBounding(Location location) {
+        double north = location.getLatitude() + LATITUDE_LIMIT;
+        double east = location.getLongitude() + LONGITUDE_LIMIT;
+        double south = location.getLatitude() - LATITUDE_LIMIT;
+        double west = location.getLongitude() - LONGITUDE_LIMIT;
+        BoundingBoxE6 bBox = new BoundingBoxE6(north, east, south, west);
+        map.setScrollableAreaLimit(bBox);
+    }
+
     /**
      * activation map for show mark after each tap
      */
@@ -295,6 +309,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         if (firstEnter) {
             firstEnter = false;
             currentLocation(location, true);
+            mapBounding(location);
         }
 
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
