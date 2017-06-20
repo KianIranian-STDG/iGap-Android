@@ -135,6 +135,9 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmAvatar = schema.get(RealmAvatar.class.getSimpleName());
             realmAvatar.addIndex(RealmAvatarFields.OWNER_ID);
 
+            RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
+            realmRoom.addField(RealmRoomFields.IS_PINNED, boolean.class, FieldAttribute.REQUIRED);
+
             oldVersion++;
         }
     }
