@@ -328,13 +328,25 @@ public class FragmentCall extends Fragment {
                     new RequestSignalingGetConfiguration().signalingGetConfiguration();
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
                 } else {
-                    Intent intent = new Intent(G.context, ActivityCall.class);
-                    intent.putExtra(ActivityCall.USER_ID_STR, userID);
-                    intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    ActivityCall.isGoingfromApp = true;
-                    G.context.startActivity(intent);
+                    if (G.currentActivity != null) {
+
+                        Intent intent = new Intent(G.currentActivity, ActivityCall.class);
+                        intent.putExtra(ActivityCall.USER_ID_STR, userID);
+                        intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
+                        ActivityCall.isGoingfromApp = true;
+                        G.currentActivity.startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(G.context, ActivityCall.class);
+                        intent.putExtra(ActivityCall.USER_ID_STR, userID);
+                        intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        ActivityCall.isGoingfromApp = true;
+                        G.context.startActivity(intent);
+                    }
+
+
                 }
 
                 realm.close();
