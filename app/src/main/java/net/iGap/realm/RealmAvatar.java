@@ -13,6 +13,7 @@ package net.iGap.realm;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
@@ -22,7 +23,7 @@ public class RealmAvatar extends RealmObject {
 
     @PrimaryKey private long id;
     private long uid; // id for sorting avatars
-    private long ownerId; // userId for users and roomId for rooms
+    @Index private long ownerId; // userId for users and roomId for rooms
     private RealmAttachment file;
 
     public RealmAvatar() {
@@ -100,50 +101,6 @@ public class RealmAvatar extends RealmObject {
         realm.close();
     }
 
-    /**
-     * delete avatar with avatarId and add avatar with that id that
-     * cleared before do this action for send avatar to latest position
-     * hint : i need do this action because client read avatars from RealmAvatar and sort descending
-     * avatars for get latest avatar
-     *
-     * @param ownerId id for add avatar
-     * @param input   avatar that get from server
-     */
-
-   /* private static void sendAvatarToBottom(final long ownerId, final ProtoGlobal.Avatar input) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmResults realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, input.getId()).findAll();
-                        if (realmAvatar.size() > 0) {
-                            Log.i("LOG", "1");
-                            realmAvatar.deleteAllFromRealm();
-                        }
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Realm realm1 = Realm.getDefaultInstance();
-                        realm1.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                Log.i("LOG", "2");
-                                RealmAvatar avatar = realm.createObject(RealmAvatar.class, input.getId());
-                                avatar.setOwnerId(ownerId);
-                                avatar.setFile(RealmAttachment.build(input.getFile(), AttachmentFor.AVATAR, null));
-                            }
-                        });
-                        realm1.close();
-                    }
-                });
-                realm.close();
-            }
-        });
-    }*/
 
     /**
      * delete all avatars from RealmAvatar
@@ -157,27 +114,6 @@ public class RealmAvatar extends RealmObject {
         }
     }
 
-    /**
-     * use this method just for group or channel , because chat don't have avatar in room(chat
-     * avatar exist in channel info)
-     */
-
-
-    /*public static RealmAvatar convert(final ProtoGlobal.Room room) {
-        ProtoGlobal.Avatar avatar = null;
-        switch (room.getType()) {
-            case GROUP:
-                ProtoGlobal.GroupRoom groupRoom = room.getGroupRoomExtra();
-                avatar = groupRoom.getAvatar();
-                break;
-            case CHANNEL:
-                ProtoGlobal.ChannelRoom channelRoom = room.getChannelRoomExtra();
-                avatar = channelRoom.getAvatar();
-                break;
-        }
-
-        return RealmAvatar.put(room.getId(), avatar);
-    }*/
     public static RealmAvatar convert(long userId, final RealmAttachment attachment) {
         Realm realm = Realm.getDefaultInstance();
 

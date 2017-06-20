@@ -64,7 +64,6 @@ public class RealmMember extends RealmObject {
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override public void execute(Realm realm) {
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
-                        RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
 
                         if (realmRoom != null) {
                             for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : builder.getMemberList()) {

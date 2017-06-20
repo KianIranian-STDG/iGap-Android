@@ -232,14 +232,7 @@ public class HelperNotificationAndBadge {
             messageToShow = messageToShow.substring(0, 40);
         }
 
-        notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon())
-            .setLargeIcon(mBitmapIcon)
-            .setContentTitle(mHeader)
-            .setContentText(mContent)
-            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-            .setStyle(getBigStyle())
-            .setContentIntent(pi)
-            .build();
+        notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon()).setLargeIcon(mBitmapIcon).setContentTitle(mHeader).setContentText(mContent).setCategory(NotificationCompat.CATEGORY_MESSAGE).setStyle(getBigStyle()).setContentIntent(pi).build();
 
         if (currentAlarm + delayAlarm < System.currentTimeMillis()) {
 
@@ -253,7 +246,7 @@ public class HelperNotificationAndBadge {
         if (isMute) {
 
             Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
-            notification.vibrate = new long[] { 0, 0, 0 };
+            notification.vibrate = new long[]{0, 0, 0};
         } else {
 
             if (G.isAppInFg) {
@@ -410,66 +403,65 @@ public class HelperNotificationAndBadge {
         popUpList.clear();
 
         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
-            .or()
-            .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString())
-            .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, authorHash)
-            .equalTo(RealmRoomMessageFields.DELETED, false)
-            .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+                .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
+                .or()
+                .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString())
+                .equalTo(RealmRoomMessageFields.DELETED, false)
+                .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, authorHash)
+                .notEqualTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.LOG.toString())
+                .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         if (!realmRoomMessages.isEmpty()) {
             for (RealmRoomMessage roomMessage : realmRoomMessages) {
-                if (roomMessage != null && !roomMessage.getMessageType().toString().equals("LOG")) {
-                    RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-                    if (realmRoom1 != null && realmRoom1.getType() != null && realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
-                        unreadMessageCount++;
-                        messageOne = roomMessage.getMessage();
+                RealmRoom realmRoom1 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                if (realmRoom1 != null && realmRoom1.getType() != null && realmRoom1.getType() != ProtoGlobal.Room.Type.CHANNEL) {
+                    unreadMessageCount++;
+                    messageOne = roomMessage.getMessage();
 
-                        if (unreadMessageCount > 3) {
-                            break;
-                        }
+                    if (unreadMessageCount > 3) {
+                        break;
+                    }
 
-                        addItemToPopUPList(roomMessage);
+                    addItemToPopUPList(roomMessage);
 
-                        if (unreadMessageCount <= 3) {
-                            Item item = new Item();
+                    if (unreadMessageCount <= 3) {
+                        Item item = new Item();
 
-                            item.name = realmRoom1.getTitle() + " : ";
-                            item.roomId = realmRoom1.getId();
+                        item.name = realmRoom1.getTitle() + " : ";
+                        item.roomId = realmRoom1.getId();
 
-                            String text = "";
-                            try {
-                                if (roomMessage.getLogMessage() != null) {
-                                    text = roomMessage.getLogMessage();
-                                } else {
-                                    text = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getMessage() : roomMessage.getMessage();
-                                }
-
-                                if (text.length() < 1) if (roomMessage.getReplyTo() != null) text = roomMessage.getReplyTo().getMessage();
-                                if (text.length() < 1) text = ActivityPopUpNotification.getTextOfMessageType(roomMessage.getMessageType());
-                            } catch (NullPointerException e) {
-                                e.printStackTrace();
+                        String text = "";
+                        try {
+                            if (roomMessage.getLogMessage() != null) {
+                                text = roomMessage.getLogMessage();
+                            } else {
+                                text = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getMessage() : roomMessage.getMessage();
                             }
 
-                            item.message = text;
-                            item.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
-                            list.add(item);
+                            if (text.length() < 1) if (roomMessage.getReplyTo() != null) text = roomMessage.getReplyTo().getMessage();
+                            if (text.length() < 1) text = ActivityPopUpNotification.getTextOfMessageType(roomMessage.getMessageType());
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
 
-                            if (unreadMessageCount == 1) {
-                                roomId = roomMessage.getRoomId();
+                        item.message = text;
+                        item.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
+                        list.add(item);
 
-                                if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                    senderId = realmRoom1.getId();
-                                } else {
-                                    senderId = realmRoom1.getChatRoom().getPeerId();
-                                }
+                        if (unreadMessageCount == 1) {
+                            roomId = roomMessage.getRoomId();
 
+                            if (realmRoom1.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                senderId = realmRoom1.getId();
+                            } else {
+                                senderId = realmRoom1.getChatRoom().getPeerId();
                             }
 
-
                         }
+
 
                     }
+
                 }
             }
 
@@ -577,26 +569,26 @@ public class HelperNotificationAndBadge {
     }
 
     public long[] setVibrator(int vb) {
-        long[] intVibrator = new long[] {};
+        long[] intVibrator = new long[]{};
 
         switch (vb) {
             case 0:
-                intVibrator = new long[] { 0, 0, 0 };
+                intVibrator = new long[]{0, 0, 0};
                 break;
             case 1:
-                intVibrator = new long[] { 0, 300, 0 };
+                intVibrator = new long[]{0, 300, 0};
                 break;
             case 2:
-                intVibrator = new long[] { 0, 200, 0 };
+                intVibrator = new long[]{0, 200, 0};
                 break;
             case 3:
-                intVibrator = new long[] { 0, 700, 0 };
+                intVibrator = new long[]{0, 700, 0};
                 break;
             case 4:
                 AudioManager am2 = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
                 switch (am2.getRingerMode()) {
                     case AudioManager.RINGER_MODE_SILENT:
-                        intVibrator = new long[] { 0, 300, 0 };
+                        intVibrator = new long[]{0, 300, 0};
                         break;
                     case AudioManager.RINGER_MODE_VIBRATE:
                         Log.i("MyApp", "Vibrate mode");
@@ -745,7 +737,8 @@ public class HelperNotificationAndBadge {
         public RemoteActionReceiver() {
         }
 
-        @Override public void onReceive(Context context, Intent intent) {
+        @Override
+        public void onReceive(Context context, Intent intent) {
             G.helperNotificationAndBadge.cancelNotification();
         }
     }
@@ -816,7 +809,8 @@ public class HelperNotificationAndBadge {
     public static void updateBadgeOnly() {
 
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 Realm realm = Realm.getDefaultInstance();
 

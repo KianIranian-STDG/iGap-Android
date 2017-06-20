@@ -400,10 +400,10 @@ public class FragmentCall extends Fragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
 
-                        // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getlogProto().getPeer().getId(), null, null);
+                        // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getLogProto().getPeer().getId(), null, null);
 
                         if (canclick) {
-                            long userId = realmResults.get(getPosition()).getlogProto().getPeer().getId();
+                            long userId = realmResults.get(getPosition()).getLogProto().getPeer().getId();
 
                             if (userId != 134 && G.userId != userId) {
                                 call(userId, false);
@@ -443,7 +443,7 @@ public class FragmentCall extends Fragment {
 
         @Override public void onBindRealmViewHolder(final CallAdapter.ViewHolder viewHolder, int i) {
 
-            ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = realmResults.get(i).getlogProto();
+            ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = realmResults.get(i).getLogProto();
 
             // set icon and icon color
             switch (item.getStatus()) {
