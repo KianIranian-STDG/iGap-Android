@@ -172,7 +172,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             public void onSmsReceive(final String phoneNumber, final String message) {
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
-                        rg_txt_verify_sms.setText(message);
+                        //rg_txt_verify_sms.setText(message);
                         receiveVerifySms(message);
                     }
                 } catch (Exception e1) {

@@ -16,7 +16,7 @@
         android:layout_height="1dp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/text"
-        android:background="#b3b3b3"
+        android:background="@color/background_log_time"
         />
 
     <TextView
@@ -37,7 +37,7 @@
         android:singleLine="true"
         android:text="Today"
         android:textAllCaps="false"
-        android:textColor="#b3b3b3"
+        android:textColor="@color/text_log_time"
         android:textSize="@dimen/dp12"
 
         />
@@ -47,7 +47,7 @@
         android:layout_height="1dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/text"
-        android:background="#b3b3b3"
+        android:background="@color/background_log_time"
         />
   </RelativeLayout>
 </FrameLayout>
