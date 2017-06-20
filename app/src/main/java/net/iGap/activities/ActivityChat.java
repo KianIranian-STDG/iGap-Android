@@ -48,7 +48,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
@@ -191,6 +190,7 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MessageLoader;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyAppBarLayout;
+import net.iGap.module.MyLinearLayoutManager;
 import net.iGap.module.MyType;
 import net.iGap.module.ResendMessage;
 import net.iGap.module.SHP_SETTING;
@@ -1899,7 +1899,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(ActivityChat.this);
+        MyLinearLayoutManager layoutManager = new MyLinearLayoutManager(ActivityChat.this);
         /**
          * make start messages from bottom, this is exactly what Telegram and other messengers do
          * for their messages list
@@ -1966,7 +1966,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                         mAdapter.add(position, new UnreadMessage(ActivityChat.this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
 
-                        LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        MyLinearLayoutManager linearLayout = (MyLinearLayoutManager) recyclerView.getLayoutManager();
                         linearLayout.scrollToPositionWithOffset(position, 0);
                     } else {
                         resetMessagingValue();
@@ -1982,7 +1982,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         int position1 = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
                         if (position1 > 0) {
-                            LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                            MyLinearLayoutManager linearLayout = (MyLinearLayoutManager) recyclerView.getLayoutManager();
                             linearLayout.scrollToPositionWithOffset(position1 - 1, 0);
                         }
                     }
@@ -2012,7 +2012,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                int lastVisiblePosition = ((MyLinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
                 if (!firsInitScrollPosition) {
                     lastPosition = lastVisiblePosition;
@@ -4258,7 +4258,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void setBtnDownVisible(RealmRoomMessage realmRoomMessage) {
-        LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+        MyLinearLayoutManager llm = (MyLinearLayoutManager) recyclerView.getLayoutManager();
         if (addToView && llm.findLastVisibleItemPosition() + 5 > recyclerView.getAdapter().getItemCount()) {
             scrollToEnd();
         } else {
@@ -4313,7 +4313,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void run() {
 
                 try {
-                    LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    MyLinearLayoutManager llm = (MyLinearLayoutManager) recyclerView.getLayoutManager();
 
                     int lastPosition = llm.findLastVisibleItemPosition();
                     if (lastPosition + 30 > mAdapter.getItemCount()) {
@@ -4358,7 +4358,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private void storingLastPosition() {
         try {
             if (recyclerView != null && mAdapter != null) {
-                int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                int firstVisiblePosition = ((MyLinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
                 if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
                     firstVisiblePosition++;
                 }
@@ -6762,7 +6762,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             switchAddItem(messageInfos, false);
             if (hasSavedState()) {
                 int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
-                LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                MyLinearLayoutManager linearLayout = (MyLinearLayoutManager) recyclerView.getLayoutManager();
                 linearLayout.scrollToPositionWithOffset(position, 0);
                 savedScrollMessageId = 0;
             }
@@ -6777,7 +6777,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 super.onScrolled(recyclerView, dx, dy);
                 visibleItemCount = (recyclerView.getLayoutManager()).getChildCount();
                 totalItemCount = (recyclerView.getLayoutManager()).getItemCount();
-                firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                firstVisiblePosition = ((MyLinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
                 if (firstVisiblePosition < scrollEnd) {
                     /**

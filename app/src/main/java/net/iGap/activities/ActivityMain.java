@@ -432,8 +432,9 @@ public class ActivityMain extends ActivityEnhanced
                 } else if (item == 3) {
                     btnCreateNewChannel.performClick();
                 } else if (item == 4) {
-
-                    ((FragmentCall) pages.get(4)).fabContactList.performClick();
+                    if (((FragmentCall) pages.get(4)).fabContactList != null) {
+                        ((FragmentCall) pages.get(4)).fabContactList.performClick();
+                    }
                 }
             }
         });
