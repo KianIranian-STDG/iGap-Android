@@ -80,7 +80,7 @@ public class FragmentActiveSessions extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.acs_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.acs_toolbar_session).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.stas_prgWaiting);
         AppUtils.setProgresColler(prgWaiting);

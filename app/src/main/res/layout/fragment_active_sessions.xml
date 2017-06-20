@@ -18,7 +18,7 @@
       android:id="@+id/acs_toolbar"
       >
     <android.support.v7.widget.Toolbar
-
+        android:id="@+id/acs_toolbar_session"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="@color/toolbar_background"
