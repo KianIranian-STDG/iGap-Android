@@ -256,7 +256,7 @@
             android:layout_marginTop="@dimen/dp4"
             android:background="@drawable/rg_background_agreement2"
             android:orientation="vertical"
-            android:visibility="gone"
+            android:visibility="visible"
             >
 
           <LinearLayout
@@ -511,5 +511,14 @@
     </LinearLayout>
 
   </LinearLayout>
+
+  <ProgressBar
+      android:id="@+id/prgWaiting"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:indeterminate="true"
+      android:visibility="gone"
+      />
 </FrameLayout>
 

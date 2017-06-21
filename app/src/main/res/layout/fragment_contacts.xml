@@ -213,8 +213,7 @@
           android:scrollbars="vertical"
           android:fadeScrollbars="false"
           android:scrollbarThumbVertical="@color/gray_4c"
-          android:scrollbarSize="@dimen/dp12"
-          android:scrollbarStyle="outsideInset"
+          android:scrollbarStyle="outsideOverlay"
           />
 
 

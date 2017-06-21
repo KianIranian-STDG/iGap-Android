@@ -15,7 +15,7 @@
       android:gravity="start|top"
       android:maxLines="1"
       android:singleLine="true"
-      android:textColor="#2bbfbd"
+      android:textColor="@color/green"
       android:textSize="@dimen/dp13"
       app:emojiSize="@dimen/dp14"
       fontPath="fonts/IRANSansMobile.ttf"

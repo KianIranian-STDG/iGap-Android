@@ -35,6 +35,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -95,6 +96,9 @@ import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
 
+import static net.iGap.G.context;
+import static net.iGap.R.color.black_register;
+
 public class ActivityRegister extends ActivityEnhanced implements OnSecurityCheckPassword, OnRecoverySecurityPassword {
 
     static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
@@ -142,6 +146,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     private boolean isRecoveryByEmail = false;
     private EditText editCheckPassword;
     private TextView txtRecovery;
+    private ProgressBar prgWaiting;
     private TextView txtOk;
     private ViewGroup vgMainLayout;
     private ViewGroup vgCheckPassword;
@@ -238,7 +243,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 }
             }
         }
-        int getHeight = G.context.getResources().getDisplayMetrics().heightPixels;
+        int getHeight = context.getResources().getDisplayMetrics().heightPixels;
 
         txtTitleRegister = (TextView) findViewById(R.id.rg_txt_title_register);
         txtDesc = (TextView) findViewById(R.id.rg_txt_text_descRegister);
@@ -468,8 +473,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
         //=============================================================================================================== click button for start verify
 
-        final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
-        final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
+        final Animation trans_x_in = AnimationUtils.loadAnimation(context, R.anim.rg_tansiton_y_in);
+        final Animation trans_x_out = AnimationUtils.loadAnimation(context, R.anim.rg_tansiton_y_out);
         btnStart = (Button) findViewById(R.id.rg_btn_start); //check phone and internet connection
         btnStart.setBackgroundColor(Color.parseColor(G.appBarColor));
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -894,10 +899,10 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 btnStart.setTextColor(getResources().getColor(R.color.white));
                 btnStart.setEnabled(true);
                 btnChoseCountry.setEnabled(true);
-                btnChoseCountry.setTextColor(getResources().getColor(R.color.black_register));
+                btnChoseCountry.setTextColor(getResources().getColor(black_register));
                 edtPhoneNumber.setEnabled(true);
-                edtPhoneNumber.setTextColor(getResources().getColor(R.color.black_register));
-                edtCodeNumber.setTextColor(getResources().getColor(R.color.black_register));
+                edtPhoneNumber.setTextColor(getResources().getColor(black_register));
+                edtCodeNumber.setTextColor(getResources().getColor(black_register));
                 txtAgreement_register.setVisibility(View.VISIBLE);
                 layout_verify.setVisibility(View.GONE);
                 dialog.dismiss();
@@ -1131,6 +1136,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 vgCheckPassword.setVisibility(View.VISIBLE);
                 editCheckPassword = (EditText) findViewById(R.id.rg_edtCheckPassword);
                 txtRecovery = (TextView) findViewById(R.id.rg_txtForgotPassword);
+                prgWaiting = (ProgressBar) findViewById(R.id.prgWaiting);
+                AppUtils.setProgresColler(prgWaiting);
                 txtOk = (TextView) findViewById(R.id.rg_txtOk);
                 txtOk.setVisibility(View.VISIBLE);
                 txtRecovery.setOnClickListener(new View.OnClickListener() {
@@ -1172,6 +1179,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                     @Override
                     public void onClick(View v) {
                         if (editCheckPassword.length() > 0) {
+                            prgWaiting.setVisibility(View.VISIBLE);
+                            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             new RequestUserTwoStepVerificationVerifyPassword().verifyPassword(editCheckPassword.getText().toString());
                         } else {
                             error(getString(R.string.please_enter_code));
@@ -1215,7 +1224,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                         if (rg_txt_verify_register != null) rg_txt_verify_register.setTextColor(getResources().getColor(R.color.rg_text_verify));
 
                         if (newUser) {
-                            Intent intent = new Intent(G.context, ActivityProfile.class);
+                            Intent intent = new Intent(context, ActivityProfile.class);
                             intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
                             startActivity(intent);
                             finish();
@@ -1277,7 +1286,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                             @Override
                             public void run() {
                                 G.onUserInfoResponse = null;
-                                Intent intent = new Intent(G.context, ActivityMain.class);
+                                Intent intent = new Intent(context, ActivityMain.class);
                                 intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
                                 startActivity(intent);
                                 finish();
@@ -1418,10 +1427,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             @Override
             public void run() {
 
+                prgWaiting.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 token = tokenR;
-                vgCheckPassword.setVisibility(View.GONE);
-                txtOk.setVisibility(View.GONE);
-                vgMainLayout.setVisibility(View.VISIBLE);
                 closeKeyboard(txtOk);
                 userLogin(token);
             }
@@ -1433,6 +1441,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                prgWaiting.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 dialogWaitTimeVerifyPassword(wait);
             }
         });
@@ -1444,6 +1454,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             @Override
             public void run() {
                 closeKeyboard(txtOk);
+                prgWaiting.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 error(getResources().getString(R.string.invalid_password));
             }
         });
@@ -1455,6 +1467,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                prgWaiting.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 token = tokenR;
                 vgCheckPassword.setVisibility(View.GONE);
                 txtOk.setVisibility(View.GONE);
@@ -1475,6 +1489,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                prgWaiting.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 closeKeyboard(txtOk);
                 error(getString(R.string.invalid_email_token));
             }
@@ -1487,6 +1503,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                prgWaiting.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 token = tokenR;
                 vgCheckPassword.setVisibility(View.GONE);
                 txtOk.setVisibility(View.GONE);
@@ -1501,6 +1519,8 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                prgWaiting.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 closeKeyboard(txtOk);
                 error(getString(R.string.invalid_question_token));
             }
@@ -1549,7 +1569,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     }
 
     private void error(String error) {
-        Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator vShort = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
         final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {

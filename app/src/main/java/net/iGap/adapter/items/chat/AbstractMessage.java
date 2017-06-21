@@ -13,6 +13,7 @@ package net.iGap.adapter.items.chat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
@@ -710,8 +711,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (replayView != null) {
                 replayView.setVisibility(View.VISIBLE);
                 TextView replyFrom = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from);
+                replyFrom.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf"));
                 TextView replayMessage = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message);
-
+                replayMessage.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf"));
                 replayView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -790,7 +792,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 forwardView = holder.itemView.findViewById(R.id.cslr_ll_forward);
             }
 
+            TextView txtPrefixForwardFrom = (TextView) holder.itemView.findViewById(R.id.cslr_txt_prefix_forward);
+            txtPrefixForwardFrom.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf"));
             TextView txtForwardFrom = (TextView) holder.itemView.findViewById(R.id.cslr_txt_forward_from);
+            txtForwardFrom.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf"));
             if (forwardView != null) {
                 forwardView.setVisibility(View.VISIBLE);
 
