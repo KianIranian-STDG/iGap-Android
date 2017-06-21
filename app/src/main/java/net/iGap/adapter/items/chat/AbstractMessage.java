@@ -322,6 +322,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
                     if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                         showVote(holder, realm);
+
+                        if (mMessage.isSenderMe()) {
+                            holder.itemView.findViewById(R.id.cslm_view_left_dis).setVisibility(View.VISIBLE);
+                        }
+
+
                     }
                 }
             }
@@ -469,6 +475,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
             voteContainer.addView(voteView);
         }
+
+        LinearLayout lytContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
+        lytContainer.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
+        lytContainer.setMinimumHeight((int) G.context.getResources().getDimension(R.dimen.dp100));
 
         LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
         if (lytVote != null) {

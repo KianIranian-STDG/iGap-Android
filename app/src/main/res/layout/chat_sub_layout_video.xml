@@ -102,15 +102,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/vote_container"
-        android:layout_width="@dimen/dp40"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        >
-
-    </LinearLayout>
+    <include layout="@layout/chat_sub_layout_vote_container" />
 
   </LinearLayout>
 

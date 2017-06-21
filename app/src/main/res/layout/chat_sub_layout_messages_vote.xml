@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lyt_vote"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/dp52"
     android:layout_height="wrap_content"
     android:gravity="bottom"
+    android:background="@drawable/rect_round_light_gray"
     android:layoutDirection="ltr"
+    android:padding="@dimen/dp4"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/dp12"
     >
 
 
@@ -14,13 +15,12 @@
 
   <LinearLayout
       android:id="@+id/lyt_vote_down"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
       android:orientation="horizontal"
-      android:paddingLeft="@dimen/dp4"
-      android:paddingRight="@dimen/dp4"
-      android:layout_marginBottom="@dimen/dp8"
+
+      android:layout_marginBottom="@dimen/dp16"
       >
 
     <TextView
@@ -29,6 +29,7 @@
         android:layout_height="16dp"
         android:layout_weight="1"
         android:gravity="center"
+        android:singleLine="true"
         android:text="0"
         android:textColor="@color/room_message_gray"
         style="@style/ChatMessages.Time"
@@ -49,12 +50,11 @@
 
   <LinearLayout
       android:id="@+id/lyt_vote_up"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
       android:orientation="horizontal"
-      android:paddingLeft="@dimen/dp4"
-      android:paddingRight="@dimen/dp4"
+      android:paddingBottom="@dimen/dp4"
       >
 
     <TextView
@@ -63,6 +63,7 @@
         android:layout_height="16dp"
         android:layout_weight="1"
         android:gravity="center"
+        android:singleLine="true"
         android:text="0"
         android:textColor="@color/room_message_gray"
         style="@style/ChatMessages.Time"

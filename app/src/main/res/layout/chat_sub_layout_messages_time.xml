@@ -10,9 +10,17 @@
     android:orientation="horizontal"
     >
 
+  <View
+      android:id="@+id/cslm_view_left_dis"
+      android:layout_width="@dimen/dp52"
+      android:layout_height="1dp"
+      android:visibility="gone"
+      />
+
   <LinearLayout
       android:id="@+id/lyt_see"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
+      android:layout_weight="1"
       android:layout_height="match_parent"
       android:layout_marginLeft="10dp"
       android:gravity="center_vertical"
@@ -23,12 +31,12 @@
 
       >
 
-
     <LinearLayout
         android:id="@+id/lyt_signature"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
+        android:gravity="center|right"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dp4"
         android:paddingRight="@dimen/dp4"
@@ -40,8 +48,9 @@
           android:id="@+id/txt_signature"
           android:layout_width="wrap_content"
           android:layout_height="18dp"
-          android:layout_weight="1"
+          android:singleLine="true"
           android:gravity="center"
+          android:text=""
           android:maxLength="25"
           android:textColor="@color/room_message_gray"
           style="@style/ChatMessages.Time"
@@ -53,9 +62,9 @@
         android:id="@+id/txt_views_label"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
-        android:layout_weight="1"
         android:gravity="center"
         android:paddingTop="2dp"
+        android:singleLine="true"
         android:text="0"
         android:textColor="@color/room_message_gray"
         style="@style/ChatMessages.Time"
@@ -67,6 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp4"
         android:paddingTop="2dp"
+        android:singleLine="true"
         android:text="@string/md_visibility"
         android:textAppearance="@style/TextIconAppearance_toolbar"
         android:textColor="@color/gray_6c"
@@ -81,6 +91,7 @@
       android:layout_height="wrap_content"
       android:layout_marginRight="@dimen/dp4"
       android:layout_marginTop="4dp"
+      android:singleLine="true"
       android:gravity="center"
       android:text="@string/edited"
       style="@style/ChatMessages.Time"
@@ -92,6 +103,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/dp4"
       android:gravity="center"
+      android:singleLine="true"
       android:paddingLeft="2dp"
       android:paddingRight="2dp"
       android:text="10:21"
@@ -104,6 +116,7 @@
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/dp4"
       android:layout_marginTop="-5dp"
+      android:singleLine="true"
       android:tint="@color/colorOldBlack"
       app:srcCompat="@drawable/ic_double_check"
       style="@style/ChatMessages.MaterialDesignTextView.Tick"
@@ -115,6 +128,7 @@
       android:layout_height="match_parent"
       android:layout_gravity="left|center_vertical"
       android:layout_marginLeft="@dimen/dp4"
+      android:singleLine="true"
       android:gravity="center"
       android:text="@string/md_hearing"
       android:textColor="@color/black90"
@@ -131,4 +145,5 @@
       android:orientation="horizontal"
       android:visibility="gone"
       ></LinearLayout>
+
 </LinearLayout>
