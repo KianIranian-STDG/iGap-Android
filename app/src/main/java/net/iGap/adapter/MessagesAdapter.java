@@ -47,7 +47,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             if (item instanceof TimeItem || item instanceof LogItem) {
                 if (item.isSelected()) v.performLongClick();
             } else {
-                if (iMessageItem != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
+                if (iMessageItem != null && item.mMessage != null && item.mMessage.senderID != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
 
                     if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
 

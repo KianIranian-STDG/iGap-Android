@@ -129,7 +129,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         new RequestSignalingGetLog().signalingGetLog(0, 1);
     }
 
-    @Override public void onBackPressed() {
+    @Override
+    public void onBackPressed() throws IllegalStateException {
         super.onBackPressed();
 
         if (!isSendLeave) {

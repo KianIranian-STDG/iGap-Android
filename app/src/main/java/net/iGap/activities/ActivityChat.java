@@ -723,7 +723,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() throws IllegalStateException {
 
         FragmentShowImage fragment = (FragmentShowImage) getSupportFragmentManager().findFragmentByTag("ShowImageMessage");
         if (fragment != null) {
@@ -1888,7 +1888,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         recyclerView.setItemAnimator(null);
         //following lines make scrolling smoother
         //recyclerView.setHasFixedSize(true);
-        //recyclerView.setItemViewCacheSize(1000);
+        recyclerView.setItemViewCacheSize(1000);
         recyclerView.setDrawingCacheEnabled(false);
 
         mAdapter = new MessagesAdapter<>(this, this, this);
