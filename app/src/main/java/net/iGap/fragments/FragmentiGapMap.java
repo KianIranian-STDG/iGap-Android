@@ -41,6 +41,9 @@ import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapListener;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.MapTile;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -77,6 +80,18 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     //0.011 longitude, 0.009 latitude
     private final double LONGITUDE_LIMIT = 0.011;
     private final double LATITUDE_LIMIT = 0.009;
+
+    double northLimitation;
+    double eastLimitation;
+    double southLimitation;
+    double westLimitation;
+
+    private double lastLatitude;
+    private double lastLongitude;
+
+    private boolean canUpdate = true;
+
+    private long latestUpdateTime = 0;
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -135,7 +150,6 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         });
 
         final ArcMenu arcMap = (ArcMenu) view.findViewById(R.id.arc_map);
-
         FloatingActionButton btnLocation = (FloatingActionButton) view.findViewById(R.id.fab_map_location);
         FloatingActionButton btnOthers = (FloatingActionButton) view.findViewById(R.id.fab_map_others);
         FloatingActionButton btnList = (FloatingActionButton) view.findViewById(R.id.fab_map_list);
@@ -236,15 +250,59 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             map.getController().setZoom(16);
         }
         map.getController().animateTo(startPoint);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initMapListener();
+            }
+        }, 2000);
     }
 
     private void mapBounding(Location location) {
-        double north = location.getLatitude() + LATITUDE_LIMIT;
-        double east = location.getLongitude() + LONGITUDE_LIMIT;
-        double south = location.getLatitude() - LATITUDE_LIMIT;
-        double west = location.getLongitude() - LONGITUDE_LIMIT;
-        BoundingBoxE6 bBox = new BoundingBoxE6(north, east, south, west);
+        double extraBounding = 0.01;
+
+        northLimitation = location.getLatitude() + LATITUDE_LIMIT;
+        eastLimitation = location.getLongitude() + LONGITUDE_LIMIT;
+        southLimitation = location.getLatitude() - LATITUDE_LIMIT;
+        westLimitation = location.getLongitude() - LONGITUDE_LIMIT;
+        BoundingBoxE6 bBox = new BoundingBoxE6(northLimitation + extraBounding, eastLimitation + extraBounding, southLimitation - extraBounding, westLimitation - extraBounding);
         map.setScrollableAreaLimit(bBox);
+    }
+
+    private void initMapListener() {
+        map.setMapListener(new MapListener() {
+            @Override
+            public boolean onScroll(ScrollEvent event) {
+
+                final GeoPoint geoPoint = event.getSource().getBoundingBox().getCenter();
+                if ((geoPoint.getLatitude() < northLimitation) && (geoPoint.getLatitude() > southLimitation) && (geoPoint.getLongitude() < eastLimitation) && geoPoint.getLongitude() > westLimitation) {
+                    lastLatitude = geoPoint.getLatitude();
+                    lastLongitude = geoPoint.getLongitude();
+                    canUpdate = true;
+                } else if (canUpdate) {
+                    canUpdate = false;
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            map.getController().animateTo(new GeoPoint(lastLatitude, lastLongitude));
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    canUpdate = true;
+                                }
+                            }, 2000);
+                        }
+                    }, 100);
+                }
+
+                return false;
+            }
+
+            @Override
+            public boolean onZoom(ZoomEvent event) {
+                return false;
+            }
+        });
     }
 
     /**
