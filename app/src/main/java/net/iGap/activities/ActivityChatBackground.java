@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.ImageView;
 import io.realm.Realm;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
@@ -44,6 +45,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
     private String savePath;
     private RippleView rippleBack;
     private RippleView rippleSet;
+    private RippleView rippleSetDefault;
     private RecyclerView mRecyclerView;
     private ImageView imgFullImage;
     private AdapterChatBackground adapterChatBackgroundSetting;
@@ -109,8 +111,31 @@ public class ActivityChatBackground extends ActivityEnhanced {
 
         imgFullImage = (ImageView) findViewById(R.id.stchf_fullImage);
 
-        rippleSet = (RippleView) findViewById(R.id.stcbf_ripple_set);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+        if (backGroundPath.length() > 0) {
+            File f = new File(backGroundPath);
+            if (f.exists()) {
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(backGroundPath), imgFullImage);
+            }
+        }
 
+        rippleSetDefault = (RippleView) findViewById(R.id.stcbf_ripple_set_default);
+
+        rippleSetDefault.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) throws IOException {
+
+                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+                editor.apply();
+
+                finish();
+            }
+        });
+
+        rippleSet = (RippleView) findViewById(R.id.stcbf_ripple_set);
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
 
@@ -138,6 +163,7 @@ public class ActivityChatBackground extends ActivityEnhanced {
                 savePath = imagePath;
 
                 rippleSet.setVisibility(View.VISIBLE);
+                rippleSetDefault.setVisibility(View.GONE);
             }
         });
         mRecyclerView.setAdapter(adapterChatBackgroundSetting);
