@@ -2989,7 +2989,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         ProtoGlobal.RoomMessageType messageType = message.forwardedFrom != null ? message.forwardedFrom.getMessageType() : message.messageType;
         Realm realm = Realm.getDefaultInstance();
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == VIDEO_TEXT) {
-            showImage(message);
+            showImage(message, view);
         } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
 
             String _filePath = null;
@@ -4283,8 +4283,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     /**
      * open fragment show image and show all image for this room
      */
-    private void showImage(final StructMessageInfo messageInfo) {
+    private void showImage(final StructMessageInfo messageInfo, View view) {
         // for gone app bar
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
         FragmentShowImage.appBarLayout = appBarLayout;
 
         long selectedFileToken = Long.parseLong(messageInfo.messageID);
