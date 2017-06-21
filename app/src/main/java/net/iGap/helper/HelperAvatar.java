@@ -114,7 +114,7 @@ public class HelperAvatar {
         }
     }
 
-    public static void getAvatar(final long ownerId, AvatarType avatarType, boolean showMain, Realm _realm, final OnAvatarGet onAvatarGet) {
+    public static void getAvatar(ProtoGlobal.RegisteredUser registeredUser, final long ownerId, AvatarType avatarType, boolean showMain, Realm _realm, final OnAvatarGet onAvatarGet) {
 
         /**
          * first show user initials and after that show avatar if exist
@@ -124,7 +124,14 @@ public class HelperAvatar {
             onAvatarGet.onShowInitials(initialsStart[0], initialsStart[1]);
         }
 
-        final RealmAvatar realmAvatar = getLastAvatar(ownerId, _realm);
+        RealmAvatar realmAvatar = getLastAvatar(ownerId, _realm);
+
+        if (realmAvatar == null && registeredUser != null) {
+            insertRegisteredInfoToDB(registeredUser, _realm);
+            realmAvatar = getLastAvatar(ownerId, _realm);
+        }
+
+
         if (realmAvatar != null) {
 
             if (showMain && realmAvatar.getFile().isFileExistsOnLocal()) {
@@ -230,7 +237,7 @@ public class HelperAvatar {
 
     public static void getAvatar(final long ownerId, AvatarType avatarType, final OnAvatarGet onAvatarGet) {
         Realm realm = Realm.getDefaultInstance();
-        getAvatar(ownerId, avatarType, false, realm, onAvatarGet);
+        getAvatar(null, ownerId, avatarType, false, realm, onAvatarGet);
         realm.close();
     }
 
@@ -242,8 +249,48 @@ public class HelperAvatar {
 
     public static void getAvatar(final long ownerId, AvatarType avatarType, boolean showMain, final OnAvatarGet onAvatarGet) {
         Realm realm = Realm.getDefaultInstance();
-        getAvatar(ownerId, avatarType, showMain, realm, onAvatarGet);
+        getAvatar(null, ownerId, avatarType, showMain, realm, onAvatarGet);
         realm.close();
+    }
+
+    public static void getAvatar(final ProtoGlobal.RegisteredUser registeredUser, final long ownerId, final AvatarType avatarType, final boolean showMain, final OnAvatarGet onAvatarGet) {
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                getAvatar(registeredUser, ownerId, avatarType, showMain, realm, onAvatarGet);
+                realm.close();
+            }
+        });
+    }
+
+    private static void insertRegisteredInfoToDB(final ProtoGlobal.RegisteredUser registeredUser, Realm realm) {
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredUser.getId()).findFirst();
+                if (realmRegisteredInfo == null) {
+                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, registeredUser.getId());
+                }
+
+                realmRegisteredInfo.setAvatarCount(registeredUser.getAvatarCount());
+                realmRegisteredInfo.setColor(registeredUser.getColor());
+                realmRegisteredInfo.setDisplayName(registeredUser.getDisplayName());
+                realmRegisteredInfo.setFirstName(registeredUser.getFirstName());
+                realmRegisteredInfo.setInitials(registeredUser.getInitials());
+                realmRegisteredInfo.setLastSeen(registeredUser.getLastSeen());
+                realmRegisteredInfo.setPhoneNumber(Long.toString(registeredUser.getPhone()));
+                realmRegisteredInfo.setStatus(registeredUser.getStatus().toString());
+                realmRegisteredInfo.setUsername(registeredUser.getUsername());
+                realmRegisteredInfo.setMutual(registeredUser.getMutual());
+                realmRegisteredInfo.setCacheId(registeredUser.getCacheId());
+
+                RealmAvatar.put(registeredUser.getId(), registeredUser.getAvatar(), true);
+            }
+        });
     }
 
     private static void getAvatarAfterTime(final long ownerId, final AvatarType avatarType, final OnAvatarGet onAvatarGet) {

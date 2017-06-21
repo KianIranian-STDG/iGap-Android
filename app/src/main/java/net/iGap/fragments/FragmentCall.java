@@ -503,7 +503,7 @@ public class FragmentCall extends Fragment {
 
             viewHolder.name.setText(item.getPeer().getDisplayName());
 
-            HelperAvatar.getAvatar(item.getPeer().getId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            HelperAvatar.getAvatar(item.getPeer(), item.getPeer().getId(), HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
                 @Override public void onAvatarGet(final String avatarPath, long ownerId) {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
                 }
