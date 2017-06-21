@@ -122,6 +122,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean isMenuButtonAddShown = false;
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
+    FragmentCall fragmentCall;
 
     Realm mRealm;
 
@@ -507,18 +508,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
-
         pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-        pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
-        pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
-        pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
-        final FragmentCall fragmentCall = FragmentCall.newInstance(true);
-        pages.add(fragmentCall);
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                fragmentCall = FragmentCall.newInstance(true);
+
+                pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
+                pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
+                pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
+                pages.add(fragmentCall);
+
+                mViewPager.getAdapter().notifyDataSetChanged();
+
+                mViewPager.setOffscreenPageLimit(pages.size());
+            }
+        }, 2000);
+
+
+
 
         sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager(), pages);
         mViewPager.setAdapter(sampleFragmentPagerAdapter);
-        mViewPager.setOffscreenPageLimit(pages.size());
-
 
         navigationTabStrip.setViewPager(mViewPager);
 
