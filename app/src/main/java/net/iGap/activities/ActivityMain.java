@@ -607,6 +607,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 });
 
                 pageDrawer = 8;
+                lockNavigation();
             }
         });
 
