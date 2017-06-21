@@ -256,17 +256,15 @@
                                 />
                       </net.iGap.libs.rippleeffect.RippleView>
 
-                      <net.iGap.module.MaterialDesignTextView
+                      <TextView
                             android:id="@+id/chl_txt_number_of_selected"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginRight="@dimen/dp8"
                             android:gravity="center"
-                            android:maxWidth="@dimen/dp60"
-                            android:minWidth="@dimen/dp40"
                             android:singleLine="true"
-                            android:text="0"
-                            android:textAppearance="@style/TextIconAppearance.all"
+                          android:text=""
+                          android:minWidth="@dimen/dp48"
                           android:textSize="@dimen/dp18"
                             />
 

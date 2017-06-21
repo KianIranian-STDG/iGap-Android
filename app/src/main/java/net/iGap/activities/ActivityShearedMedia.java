@@ -95,7 +95,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private RealmResults<RealmRoomMessage> mRealmList;
     private ArrayList<StructShearedMedia> mNewList;
     RealmChangeListener<RealmResults<RealmRoomMessage>> changeListener;
-
+    public ArrayList<Long> SelectedList = new ArrayList<>();
+    private boolean isSelectedMode = false;    // for determine user select some file
+    private int numberOfSelected = 0;
     protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
 
     private RecyclerView recyclerView;
@@ -376,10 +378,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             @Override
             public void onClick(View view) {
 
-                ArrayList<Parcelable> messageInfos = new ArrayList<>(adapter.SelectedList.size());
+                ArrayList<Parcelable> messageInfos = new ArrayList<>(SelectedList.size());
                 RealmRoomMessage rm;
 
-                for (Long Id : adapter.SelectedList) {
+                for (Long Id : SelectedList) {
 
                     rm = mRealmList.where().equalTo(RealmRoomMessageFields.MESSAGE_ID, Id).findFirst();
                     if (rm != null) {
@@ -405,30 +407,30 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                 if (realmRoom != null) {
-                    ActivityChat.deleteSelectedMessages(roomId, adapter.SelectedList, realmRoom.getType());
+                    ActivityChat.deleteSelectedMessages(roomId, SelectedList, realmRoom.getType());
                 }
 
                 switch (mFilter) {
                     case IMAGE:
-                        countOFImage -= adapter.SelectedList.size();
+                        countOFImage -= SelectedList.size();
                         break;
                     case VIDEO:
-                        countOFVIDEO -= adapter.SelectedList.size();
+                        countOFVIDEO -= SelectedList.size();
                         break;
                     case AUDIO:
-                        countOFAUDIO -= adapter.SelectedList.size();
+                        countOFAUDIO -= SelectedList.size();
                         break;
                     case FILE:
-                        countOFFILE -= adapter.SelectedList.size();
+                        countOFFILE -= SelectedList.size();
                         break;
                     case GIF:
-                        countOFGIF -= adapter.SelectedList.size();
+                        countOFGIF -= SelectedList.size();
                         break;
                     case VOICE:
-                        countOFVOICE -= adapter.SelectedList.size();
+                        countOFVOICE -= SelectedList.size();
                         break;
                     case URL:
-                        countOFLink -= adapter.SelectedList.size();
+                        countOFLink -= SelectedList.size();
                         break;
                 }
 
@@ -1038,12 +1040,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     public abstract class mAdapter extends RecyclerView.Adapter {
 
-        private boolean isSelectedMode = false;    // for determine user select some file
-        private int numberOfSelected = 0;
         protected ArrayList<StructShearedMedia> mList;
         protected Context context;
-
-        public ArrayList<Long> SelectedList = new ArrayList<>();
 
         abstract void openSelectedItem(int position, RecyclerView.ViewHolder holder);
 
