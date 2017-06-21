@@ -6680,7 +6680,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         if (results.size() > 0) {
 
-            Object[] object = MessageLoader.getLocalMessage(mRoomId, results.first().getMessageId(), gapMessageId, 10, true, direction);
+            Object[] object = MessageLoader.getLocalMessage(mRoomId, results.first().getMessageId(), gapMessageId, true, direction);
             messageInfos = (ArrayList<StructMessageInfo>) object[0];
             if (messageInfos.size() > 0) {
                 if (direction == UP) {
@@ -6813,7 +6813,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             startFutureMessageId = startFutureMessageIdDown;
         }
         if ((direction == UP && topMore) || (direction == DOWN && bottomMore)) {
-            Object[] object = getLocalMessage(mRoomId, startFutureMessageId, gapMessageId, 10, false, direction);
+            Object[] object = getLocalMessage(mRoomId, startFutureMessageId, gapMessageId, false, direction);
             if (direction == UP) {
                 topMore = (boolean) object[1];
             } else {

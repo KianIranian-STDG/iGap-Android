@@ -769,7 +769,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         setUiIndependentRole();
         initRecycleView();
 
-        //TODO [Saeed Mozaffari] [2016-11-29 3:12 PM] - please impalement this callbacks
         onGroupAddMemberCallback();
         onGroupKickMemberCallback();
     }

@@ -32,6 +32,7 @@ import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Dire
 
 public final class MessageLoader {
 
+    private static final int LOCAL_LIMIT = 100;
 
     /**
      * fetch local message from RealmRoomMessage.
@@ -39,15 +40,13 @@ public final class MessageLoader {
      *
      * @param roomId roomId that want show message for that
      * @param messageId start query with this messageId
-     * @param limit limitation for load message
      * @param duplicateMessage if set true return message for messageId that used in this method (will be used "lessThanOrEqualTo") otherwise just return less or greater than messageId(will be used "lessThan" method)
      * @param direction direction for load message up or down
      * @return Object[] ==> [0] -> ArrayList<StructMessageInfo>, [1] -> boolean hasMore, [2] -> boolean hasGap
      */
-    public static Object[] getLocalMessage(long roomId, long messageId, long gapMessageId, int limit, boolean duplicateMessage, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+    public static Object[] getLocalMessage(long roomId, long messageId, long gapMessageId, boolean duplicateMessage, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
 
         Realm realm = Realm.getDefaultInstance();
-        limit = 100;//TODO [Saeed Mozaffari] [2017-03-01 7:40 PM] - set all of this value to Config
         boolean hasMore = true;
         boolean hasSpaceToGap = true;
         List<RealmRoomMessage> realmRoomMessages;
@@ -57,7 +56,6 @@ public final class MessageLoader {
             realm.close();
             return new Object[]{structMessageInfos, false, false};
         }
-
 
         /**
          * get message from RealmRoomMessage
@@ -100,8 +98,8 @@ public final class MessageLoader {
         /**
          * manage subList
          */
-        if (realmRoomMessages.size() > limit) {
-            realmRoomMessages = realmRoomMessages.subList(0, limit);
+        if (realmRoomMessages.size() > LOCAL_LIMIT) {
+            realmRoomMessages = realmRoomMessages.subList(0, LOCAL_LIMIT);
         } else {
             /**
              * when run this block means that end of message reached

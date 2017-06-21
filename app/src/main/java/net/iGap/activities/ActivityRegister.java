@@ -238,7 +238,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 }
                 regex = extras.getString("REGEX");
                 String body = extras.getString("TERMS_BODY");
-                if (body != null & txtAgreement_register != null) { //TODO [Saeed Mozaffari] [2016-09-01 9:28 AM] - txtAgreement_register !=null is wrong. change it
+                if (body != null & txtAgreement_register != null) {
                     txtAgreement_register.setText(Html.fromHtml(body));
                 }
             }
