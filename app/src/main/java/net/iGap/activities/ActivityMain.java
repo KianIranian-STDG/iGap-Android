@@ -148,6 +148,10 @@ public class ActivityMain extends ActivityEnhanced
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
 
+    private ViewPager mViewPager;
+    private ArrayList<Fragment> pages = new ArrayList<Fragment>();
+    SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
+
     public enum MainAction {
         downScrool, clinetCondition
     }
@@ -173,6 +177,7 @@ public class ActivityMain extends ActivityEnhanced
         if (mRealm != null) {
             mRealm.close();
         }
+
     }
 
     public Realm getRealm() {
@@ -432,9 +437,9 @@ public class ActivityMain extends ActivityEnhanced
                 } else if (item == 3) {
                     btnCreateNewChannel.performClick();
                 } else if (item == 4) {
-                    if (((FragmentCall) pages.get(4)).fabContactList != null) {
-                        ((FragmentCall) pages.get(4)).fabContactList.performClick();
-                    }
+
+                    ((FragmentCall) pages.get(4)).showContactListForCall();
+
                 }
             }
         });
@@ -450,8 +455,7 @@ public class ActivityMain extends ActivityEnhanced
         }
     }
 
-    private ViewPager mViewPager;
-    private ArrayList<Fragment> pages = new ArrayList<Fragment>();
+
 
     private void initTabStrip() {
 
@@ -494,18 +498,25 @@ public class ActivityMain extends ActivityEnhanced
             }
         });
 
+        if (getSupportFragmentManager().getFragments() != null) {
+            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                if (fragment != null && (fragment instanceof FragmentCall || fragment instanceof FragmentMain)) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        }
+
+
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+
 
         pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
         pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
         pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
         pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
-
         final FragmentCall fragmentCall = FragmentCall.newInstance(true);
-
         pages.add(fragmentCall);
 
-        mViewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager()));
+        sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager(), pages);
+        mViewPager.setAdapter(sampleFragmentPagerAdapter);
         mViewPager.setOffscreenPageLimit(pages.size());
 
 
@@ -533,17 +544,20 @@ public class ActivityMain extends ActivityEnhanced
 
     class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 
-        SampleFragmentPagerAdapter(FragmentManager fm) {
+        ArrayList<Fragment> pagesFragment;
+
+        SampleFragmentPagerAdapter(FragmentManager fm, ArrayList<Fragment> pagesFragment) {
             super(fm);
+            this.pagesFragment = pagesFragment;
         }
 
         @Override public Fragment getItem(int i) {
 
-            return pages.get(i);
+            return pagesFragment.get(i);
         }
 
         @Override public int getCount() {
-            return pages.size();
+            return pagesFragment.size();
         }
     }
 

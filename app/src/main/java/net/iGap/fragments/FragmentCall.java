@@ -199,22 +199,7 @@ public class FragmentCall extends Fragment {
         fabContactList.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
 
-                final Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "call");
-                bundle.putBoolean("ACTION", true);
-                fragment.setArguments(bundle);
-
-                try {
-                    mActivity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
+                showContactListForCall();
             }
         });
 
@@ -251,7 +236,24 @@ public class FragmentCall extends Fragment {
         }
     }
 
+    public void showContactListForCall() {
+        final Fragment fragment = RegisteredContactsFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("TITLE", "call");
+        bundle.putBoolean("ACTION", true);
+        fragment.setArguments(bundle);
 
+        try {
+            mActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                .addToBackStack(null)
+                .replace(R.id.fragmentContainer, fragment)
+                .commit();
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
 
     private void getLogListWithOfset() {
 
