@@ -1950,13 +1950,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                      */
 
                     firstUnreadMessage = firstUnreadMessageInChat;
-                    int position = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
-
                     if (!firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
                         resetAndGetFromEnd();
                         return;
                     }
 
+                    int position = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
                     if (position > 0) {
 
                         RealmRoomMessage unreadMessage = new RealmRoomMessage();
