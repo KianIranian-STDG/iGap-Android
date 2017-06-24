@@ -38,9 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp4"
         android:text="@string/md_thumb_up"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
         android:textColor="@color/gray_6c"
-        android:textSize="@dimen/dp18"
+        android:textSize="@dimen/dp16"
         />
 
   </LinearLayout>
@@ -63,7 +62,7 @@
         android:text="@string/md_thumb_down"
         android:textAppearance="@style/TextIconAppearance_toolbar"
         android:textColor="@color/gray_6c"
-        android:textSize="@dimen/dp18"
+        android:textSize="@dimen/dp16"
         />
 
     <TextView

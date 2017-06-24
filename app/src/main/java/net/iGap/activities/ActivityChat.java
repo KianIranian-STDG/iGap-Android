@@ -3093,7 +3093,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         iconShare.setText(getResources().getString(R.string.md_share_button));
 
         TextView iconForward = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
-        iconForward.setText(getResources().getString(R.string.md_right_arrow_button));
+        iconForward.setText(getResources().getString(R.string.md_forward));
 
         TextView iconDelete = (TextView) v.findViewById(R.id.dialog_icon_item5_notification);
         iconDelete.setText(getResources().getString(R.string.md_rubbish_delete_file));
