@@ -660,10 +660,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         ((LinearLayout.LayoutParams) holder.itemView.findViewById(R.id.contentContainer).getLayoutParams()).gravity = Gravity.RIGHT;
 
-        LinearLayout layoutMessageTime = (LinearLayout) holder.itemView.findViewById(R.id.cslmt_layout_message_time);
-        if (layoutMessageTime != null) {
-            ((LinearLayout.LayoutParams) layoutMessageTime.getLayoutParams()).gravity = Gravity.LEFT;
-        }
+        LinearLayout timeLayout = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer).getParent();
+        timeLayout.setGravity(Gravity.RIGHT);
+
 
 
 
