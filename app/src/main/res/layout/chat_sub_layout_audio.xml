@@ -179,7 +179,7 @@
                         android:gravity="center"
                         android:text="@string/md_play_arrow"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@color/green"
+                        android:textColor="@color/toolbar_background"
                         android:textSize="@dimen/dp32"
                         />
 
@@ -203,7 +203,7 @@
                       android:paddingRight="@dimen/dp8"
                       android:singleLine="true"
                       android:text="00:00"
-                      android:textColor="@color/green"
+                      android:textColor="@color/toolbar_background"
                       android:textSize="@dimen/dp10"
                       />
 

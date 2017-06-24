@@ -122,7 +122,7 @@
                       android:gravity="center"
                       android:text="@string/md_play_arrow"
                       android:textAppearance="@style/TextIconAppearance.all"
-                      android:textColor="@color/green"
+                      android:textColor="@color/toolbar_background"
                       android:textSize="@dimen/dp32"
                       />
 
@@ -145,7 +145,7 @@
                     android:layout_marginLeft="@dimen/dp52"
                     android:paddingRight="@dimen/dp8"
                     android:text="00:00"
-                    android:textColor="@color/green"
+                    android:textColor="@color/toolbar_background"
                     android:textSize="@dimen/dp10"
                     />
 

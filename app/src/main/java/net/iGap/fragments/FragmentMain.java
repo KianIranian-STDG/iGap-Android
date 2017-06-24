@@ -704,7 +704,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
                     TextView txtView = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
                     txtView.setText(R.string.txt_draft);
-                    txtView.setTextColor(Color.parseColor("#ff4644"));
+                    txtView.setTextColor(getResources().getColor(R.color.toolbar_background));
                     txtView.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
                     removeView(lytContainer5, R.id.lyt_avi_room);
                     removeView(lytContainer7, R.id.lyt_tic_room);

@@ -174,6 +174,15 @@ public class MusicPlayer {
         if (HelperCalander.isLanguagePersian) {
             txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
         }
+
+        if (MusicPlayer.mp != null) {
+            time = MusicPlayer.mp.getCurrentPosition() - 1;
+            if (time >= 0) {
+                updatePlayerTime();
+            }
+        }
+
+
     }
 
     public static void playAndPause() {
@@ -267,6 +276,11 @@ public class MusicPlayer {
         if (HelperCalander.isLanguagePersian) {
             zeroTime = HelperCalander.convertToUnicodeFarsiNumber(zeroTime);
         }
+
+        if (txt_music_time_counter != null) {
+            txt_music_time_counter.setText(zeroTime + "/");
+        }
+
 
         try {
             btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
