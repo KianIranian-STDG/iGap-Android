@@ -380,14 +380,16 @@ public class HelperError {
 
     public static void showSnackMessage(final String message) {
 
-        if (message.length() > 0) {
+        if (message.length() > 0 && G.currentActivity != null) {
 
             G.currentActivity.runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     final Snackbar snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });

@@ -429,7 +429,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private View makeHeaderTextView(String text) {
 
-        TextView textView = new TextView(G.context);
+        EmojiTextViewE textView = new EmojiTextViewE(G.context);
         textView.setTextColor(Color.BLACK);
         textView.setBackgroundResource(R.drawable.rect_radios_top_gray);
         textView.setId(R.id.messageSenderName);
@@ -453,12 +453,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (view.findViewById(R.id.messageSenderName) == null) {
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(mMessage.senderID)).findFirst();
                     if (realmRegisteredInfo != null) {
-                        TextView _tv = (TextView) makeHeaderTextView(realmRegisteredInfo.getDisplayName());
+                        EmojiTextViewE _tv = (EmojiTextViewE) makeHeaderTextView(realmRegisteredInfo.getDisplayName());
                         mContainer.addView(_tv, 0);
                     }
                 } else {
 
-                    TextView _senderName = (TextView) view.findViewById(R.id.messageSenderName);
+                    EmojiTextViewE _senderName = (EmojiTextViewE) view.findViewById(R.id.messageSenderName);
+
+                    if (mContainer.getChildAt(0) != _senderName) {
+                        mContainer.removeView(_senderName);
+                        mContainer.addView(_senderName, 0);
+                    }
                     _senderName.setVisibility(View.VISIBLE);
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(mMessage.senderID)).findFirst();
                     if (realmRegisteredInfo != null) {
@@ -537,6 +542,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
                 txtSignature.setText(mMessage.channelExtra.signature);
             }
+
+            if (txtSignature.getText().length() > 0) {
+                holder.itemView.findViewById(R.id.lyt_signature).setVisibility(View.VISIBLE);
+            }
+
 
             if (HelperCalander.isLanguagePersian) {
                 txtViewsLabel.setText(HelperCalander.convertToUnicodeFarsiNumber(txtViewsLabel.getText().toString()));

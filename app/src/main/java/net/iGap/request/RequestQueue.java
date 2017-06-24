@@ -92,7 +92,6 @@ public class RequestQueue {
 
             if (G.isSecure) {
                 if (G.userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
-                    Log.i("PPP", "ActionId : " + requestWrapper.actionId + " Request => " + G.lookupMap.get(requestWrapper.actionId + 30000));
                     message = AESCrypt.encrypt(G.symmetricKey, message);
                     WebSocket webSocket = WebSocketClient.getInstance();
                     if (webSocket != null) {
