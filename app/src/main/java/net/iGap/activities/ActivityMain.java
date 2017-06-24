@@ -1044,15 +1044,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void connectionState() {
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
+
+        Typeface typeface = null;
+        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+            typeface = titleTypeface;
+        }
         if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
             txtIgap.setText(R.string.waiting_for_network);
-            txtIgap.setTypeface(null, Typeface.BOLD);
+            txtIgap.setTypeface(typeface, Typeface.BOLD);
         } else if (G.connectionState == ConnectionState.CONNECTING) {
             txtIgap.setText(R.string.connecting);
-            txtIgap.setTypeface(null, Typeface.BOLD);
+            txtIgap.setTypeface(typeface, Typeface.BOLD);
         } else if (G.connectionState == ConnectionState.UPDATING) {
             txtIgap.setText(updating);
-            txtIgap.setTypeface(null, Typeface.BOLD);
+            txtIgap.setTypeface(typeface, Typeface.BOLD);
         } else {
             txtIgap.setText(R.string.app_name);
             txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
@@ -1064,21 +1069,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Typeface typeface = null;
+                        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                            typeface = titleTypeface;
+                        }
                         G.connectionState = connectionStateR;
                         if (connectionStateR == ConnectionState.WAITING_FOR_NETWORK) {
                             txtIgap.setText(R.string.waiting_for_network);
-                            txtIgap.setTypeface(null, Typeface.BOLD);
+                            txtIgap.setTypeface(typeface, Typeface.BOLD);
                         } else if (connectionStateR == ConnectionState.CONNECTING) {
                             txtIgap.setText(R.string.connecting);
-                            txtIgap.setTypeface(null, Typeface.BOLD);
+                            txtIgap.setTypeface(typeface, Typeface.BOLD);
                         } else if (connectionStateR == ConnectionState.UPDATING) {
                             txtIgap.setText(R.string.updating);
-                            txtIgap.setTypeface(null, Typeface.BOLD);
+                            txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
                         } else if (connectionStateR == ConnectionState.IGAP) {
                             txtIgap.setText(R.string.app_name);
                             txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
                         } else {
-                            txtIgap.setTypeface(null, Typeface.BOLD);
+                            txtIgap.setTypeface(typeface, Typeface.BOLD);
                         }
                     }
                 });
@@ -1091,9 +1100,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Typeface typeface = null;
+                        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                            typeface = titleTypeface;
+                        }
                         G.connectionState = ConnectionState.UPDATING;
                         txtIgap.setText(R.string.updating);
-                        txtIgap.setTypeface(null, Typeface.BOLD);
+                        txtIgap.setTypeface(typeface, Typeface.BOLD);
                     }
                 });
             }
