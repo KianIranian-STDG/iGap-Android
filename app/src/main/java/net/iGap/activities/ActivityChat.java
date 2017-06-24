@@ -4041,7 +4041,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
                 AbstractMessage item = mAdapter.getAdapterItem(i);
 
-                if (item.mMessage.messageID.equals(messageId)) {
+                if (item.mMessage != null && item.mMessage.messageID.equals(messageId)) {
                     if (item.mMessage.hasAttachment()) {
                         item.mMessage.attachment.token = struct.token;
                     }

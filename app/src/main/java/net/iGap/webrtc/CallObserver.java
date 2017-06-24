@@ -52,26 +52,32 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         G.iSignalingErrore = this;
     }
 
-    @Override public void onOffer(final long called_userId, ProtoSignalingOffer.SignalingOffer.Type type, final String callerSdp) {
+    @Override
+    public void onOffer(final long called_userId, ProtoSignalingOffer.SignalingOffer.Type type, final String callerSdp) {
         new RequestSignalingRinging().signalingRinging();
 
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
-                    @Override public void onCreateSuccess(SessionDescription sessionDescription) {
+                    @Override
+                    public void onCreateSuccess(SessionDescription sessionDescription) {
 
                     }
 
-                    @Override public void onSetSuccess() {
+                    @Override
+                    public void onSetSuccess() {
 
                         FragmentCall.call(called_userId, true);
                     }
 
-                    @Override public void onCreateFailure(String s) {
+                    @Override
+                    public void onCreateFailure(String s) {
                         Log.i("WWW", "onOffer onCreateFailure : " + s);
                     }
 
-                    @Override public void onSetFailure(String s) {
+                    @Override
+                    public void onSetFailure(String s) {
                         Log.i("WWW", "onOffer onSetFailure : " + s);
                     }
                 }, new SessionDescription(OFFER, callerSdp));
@@ -79,25 +85,31 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         });
     }
 
-    @Override public void onAccept(final String called_sdp) {
+    @Override
+    public void onAccept(final String called_sdp) {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 new WebRTC().setOfferLocalDescription();
 
                 new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
-                    @Override public void onCreateSuccess(SessionDescription sessionDescription) {
+                    @Override
+                    public void onCreateSuccess(SessionDescription sessionDescription) {
 
                     }
 
-                    @Override public void onSetSuccess() {
+                    @Override
+                    public void onSetSuccess() {
                         Log.i("WWW", "onSetSuccess");
                     }
 
-                    @Override public void onCreateFailure(String s) {
+                    @Override
+                    public void onCreateFailure(String s) {
                         Log.i("WWW", "onAccept onCreateFailure : " + s);
                     }
 
-                    @Override public void onSetFailure(String s) {
+                    @Override
+                    public void onSetFailure(String s) {
                         Log.i("WWW", "onAccept onSetFailure : " + s);
                     }
                 }, new SessionDescription(ANSWER, called_sdp));
@@ -105,20 +117,24 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         });
     }
 
-    @Override public void onCandidate(final String peerSdpMId, final int peerSdpMLineIndex, final String peerCandidate) {
+    @Override
+    public void onCandidate(final String peerSdpMId, final int peerSdpMLineIndex, final String peerCandidate) {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 Log.i("WWW_Candidate", "onCandidate server : " + peerCandidate);
                 new WebRTC().peerConnectionInstance().addIceCandidate(new IceCandidate(peerSdpMId, peerSdpMLineIndex, peerCandidate));
             }
         });
     }
 
-    @Override public void onGetList(int size) {
+    @Override
+    public void onGetList(int size) {
 
     }
 
-    @Override public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
+    @Override
+    public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
         new WebRTC().close();
         new WebRTC().dispose();
         /**
@@ -150,22 +166,25 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         }
     }
 
-    @Override public void onRinging() {
-        if (G.iSignalingCallBack != null) {
-            G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+    @Override
+    public void onRinging() {
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.iSignalingCallBack != null) {
                     G.iSignalingCallBack.onStatusChanged(CallState.RINGING);
                 }
-            }, 1000);
-
-        }
+            }
+        }, 1000);
     }
 
-    @Override public void onHold(Boolean hold) {
+    @Override
+    public void onHold(Boolean hold) {
 
     }
 
-    @Override public void onErrore(int major, int minor) {
+    @Override
+    public void onErrore(int major, int minor) {
 
         String message = G.context.getString(R.string.e_call_permision);
 
