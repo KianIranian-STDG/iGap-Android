@@ -44,6 +44,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
@@ -378,7 +379,7 @@ public class FragmentCall extends Fragment {
         public class ViewHolder extends RealmViewHolder {
 
             protected CircleImageView image;
-            protected TextView name;
+            protected EmojiTextViewE name;
             protected MaterialDesignTextView icon;
             //  protected MaterialDesignTextView call_type_icon;
             protected TextView timeAndInfo;
@@ -394,7 +395,7 @@ public class FragmentCall extends Fragment {
                 timeDureation = (TextView) itemView.findViewById(R.id.fcsl_txt_dureation_time);
                 // call_type_icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_call_type_icon);
                 image = (CircleImageView) itemView.findViewById(R.id.fcsl_imv_picture);
-                name = (TextView) itemView.findViewById(R.id.fcsl_txt_name);
+                name = (EmojiTextViewE) itemView.findViewById(R.id.fcsl_txt_name);
                 icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_txt_icon);
                 timeAndInfo = (TextView) itemView.findViewById(R.id.fcsl_txt_time_info);
                 // rippleCall = (RippleView) itemView.findViewById(R.id.fcsl_ripple_call);
