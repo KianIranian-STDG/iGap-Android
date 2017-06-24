@@ -73,7 +73,7 @@ public class AvlDirectCall extends LinearLayout {
         textView.setTextSize(context.getResources().getDimension(R.dimen.dp14));
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setText(R.string.md_expand_arrow);
-        textView.setTypeface(FontCache.get("fonts/MaterialIcons-Regular.ttf", context));
+        textView.setTypeface(FontCache.get("fonts/iGap-Fontico.ttf", context));
 
         return textView;
     }

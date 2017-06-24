@@ -64,7 +64,7 @@
               android:layout_marginRight="@dimen/dp8"
               android:paddingBottom="2dp"
               android:textColor="@android:color/black"
-              android:textSize="@dimen/dp18"
+              android:textSize="@dimen/dp14"
               />
 
           <net.iGap.module.EmojiTextViewE

@@ -69,12 +69,12 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             //holder.txtIcon.setVisibility(View.VISIBLE);
             //holder.txtIcon.setText(G.context.getString(R.string.md_user_shape));
         } else if (item.roomType == ProtoGlobal.Room.Type.GROUP) {
-            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");
+            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
             holder.txtIcon.setTypeface(typeFaceIcon);
             holder.txtIcon.setVisibility(View.VISIBLE);
             holder.txtIcon.setText(G.context.getString(R.string.md_users_social_symbol));
         } else if (item.roomType == ProtoGlobal.Room.Type.CHANNEL) {
-            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
+            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
             holder.txtIcon.setTypeface(typeFaceIcon);
             holder.txtIcon.setVisibility(View.VISIBLE);
             holder.txtIcon.setText(G.context.getString(R.string.md_channel_icon));

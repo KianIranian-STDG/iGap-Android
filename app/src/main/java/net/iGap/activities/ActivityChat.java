@@ -5138,12 +5138,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 listPathString.size();
                 if (listPathString.size() > 0) {
                     //send.setText(R.mipmap.send2);
-                    send.setText(getResources().getString(R.string.icon_send));
+                    send.setText(getResources().getString(R.string.md_send_button));
                     isCheckBottomSheet = true;
                     txtCountItem.setText("" + listPathString.size() + " item");
                 } else {
                     //send.setImageResource(R.mipmap.ic_close);
-                    send.setText(getResources().getString(R.string.icon_keyboard_arrow_down));
+                    send.setText(getResources().getString(R.string.md_downwards_arrow));
                     isCheckBottomSheet = false;
                     txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
                 }
@@ -5175,7 +5175,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 dialog.dismiss();
                 //send.setImageResource(R.mipmap.ic_close);
-                send.setText(getResources().getString(R.string.icon_keyboard_arrow_down));
+                send.setText(getResources().getString(R.string.md_downwards_arrow));
                 txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
             }
         });
@@ -5250,7 +5250,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     fastItemAdapter.clear();
                     //send.setImageResource(R.mipmap.ic_close);
-                    send.setText(getResources().getString(R.string.icon_keyboard_arrow_down));
+                    send.setText(getResources().getString(R.string.md_downwards_arrow));
                     txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
 
                     new Thread(new Runnable() {

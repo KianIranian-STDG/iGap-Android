@@ -128,7 +128,7 @@
                 android:text="@string/md_phone"
                 android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:textColor="@color/whit_background"
-                android:textSize="@dimen/dp26"
+                android:textSize="@dimen/dp20"
                 />
 
 

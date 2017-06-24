@@ -135,7 +135,7 @@
       android:text="@string/md_hearing"
       android:textColor="@color/black90"
       android:visibility="gone"
-      fontPath="fonts/MaterialIcons-Regular.ttf"
+      fontPath="fonts/iGap-Fontico.ttf"
       />
 
 

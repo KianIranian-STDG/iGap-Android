@@ -20,7 +20,7 @@
       android:text="@string/md_circlePin"
       android:textColor="@android:color/black"
       android:textSize="@dimen/dp20"
-      fontPath="fonts/iGap_font2.ttf"
+      fontPath="fonts/iGap-Fontico.ttf"
       />
 
 

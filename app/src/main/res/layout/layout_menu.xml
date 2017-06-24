@@ -89,7 +89,7 @@
             android:text="@string/md_cloud"
             android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="#adffffff"
-            android:textSize="45sp"
+            android:textSize="28sp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/dp8"
             />
@@ -129,9 +129,9 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:minWidth="@dimen/dp32"
-                android:text="@string/md_user_shape"
+                android:text="@string/md_user_account_box"
                 android:textAppearance="@style/TextIconAppearance.menu"
-                android:textSize="@dimen/dp26"
+                android:textSize="@dimen/dp20"
                 android:textStyle="bold"
                 android:textColor="@color/grayNew"
 
@@ -174,7 +174,7 @@
                 android:text="@string/md_users_social_symbol"
                 android:textAppearance="@style/TextIconAppearance.menu"
                 android:textColor="@color/grayNew"
-                android:textSize="@dimen/dp26"
+                android:textSize="@dimen/dp20"
                 />
 
             <TextView
@@ -215,8 +215,8 @@
                 android:minWidth="@dimen/dp32"
                 android:text="@string/md_channel_icon"
                 android:textColor="@color/grayNew"
-                android:textSize="@dimen/dp26"
-                fontPath="fonts/iGap_font.ttf"
+                android:textSize="@dimen/dp20"
+                fontPath="fonts/iGap-Fontico.ttf"
 
                 />
 
@@ -258,7 +258,7 @@
                 android:text="@string/md_searching_magnifying_glass"
                 android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:textColor="@color/grayNew"
-                android:textSize="@dimen/dp32"
+                android:textSize="@dimen/dp20"
                 />
 
 
@@ -307,9 +307,9 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:minWidth="@dimen/dp32"
-                android:text="@string/md_user_account_box"
+                android:text="@string/md_igap_contacts"
                 android:textAppearance="@style/TextIconAppearance.menu"
-                android:textSize="@dimen/dp26"
+                android:textSize="@dimen/dp20"
                 android:textColor="@color/grayNew"
 
                 />
@@ -350,7 +350,7 @@
                 android:minWidth="@dimen/dp32"
                 android:text="@string/md_phone"
                 android:textAppearance="@style/TextIconAppearance.menu"
-                android:textSize="@dimen/dp26"
+                android:textSize="@dimen/dp20"
                 android:textColor="@color/grayNew"
 
                 />
@@ -392,7 +392,7 @@
                 android:paddingRight="@dimen/dp4"
                 android:text="@string/md_add_user_button"
                 android:textAppearance="@style/TextIconAppearance.menu"
-                android:textSize="@dimen/dp26"
+                android:textSize="@dimen/dp20"
                 android:textColor="@color/grayNew"
                 />
 
@@ -433,7 +433,7 @@
                 android:minWidth="@dimen/dp32"
                 android:text="@string/md_settings_cogwheel_button"
                 android:textAppearance="@style/TextIconAppearance.menu"
-                android:textSize="@dimen/dp26"
+                android:textSize="@dimen/dp20"
                 android:textColor="@color/grayNew"
                 />
 
@@ -472,7 +472,7 @@
                 android:minWidth="@dimen/dp32"
                 android:text="@string/md_exit_app"
                 android:textAppearance="@style/TextIconAppearance.menu"
-                android:textSize="@dimen/dp26"
+                android:textSize="@dimen/dp20"
                 android:textColor="@color/grayNew"
                 />
 

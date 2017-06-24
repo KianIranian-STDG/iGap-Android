@@ -45,7 +45,7 @@
           android:text="@string/md_emoticon_with_happy_face"
           android:textAppearance="@style/TextIconAppearance.all"
           android:textColor="@color/gray_6c"
-          android:textSize="@dimen/dp28"
+          android:textSize="@dimen/dp20"
           style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
           />
 
@@ -74,7 +74,7 @@
           android:padding="@dimen/dp8"
           android:text="@string/md_send_button"
           android:textAppearance="@style/TextIconAppearance.all"
-          android:textSize="@dimen/dp28"
+          android:textSize="@dimen/dp20"
           android:visibility="gone"
           style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
           />
@@ -98,7 +98,7 @@
             android:text="@string/md_attachment_clip"
             android:textAppearance="@style/TextIconAppearance.all"
             android:textColor="@color/gray_6c"
-            android:textSize="@dimen/dp28"
+            android:textSize="@dimen/dp20"
             style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
             />
 
@@ -112,7 +112,7 @@
             android:text="@string/md_voice_message_microphone_button"
             android:textAppearance="@style/TextIconAppearance.all"
             android:textColor="@color/gray_6c"
-            android:textSize="@dimen/dp28"
+            android:textSize="@dimen/dp20"
             style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
             />
 

@@ -864,10 +864,10 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                     TextView txtChatIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_chat_icon);
                         if (mInfo.getType() == GROUP) {
-                            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/MaterialIcons-Regular.ttf");
+                            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
                             txtChatIcon.setText(getStringChatIcon(RoomType.GROUP));
                         } else if (mInfo.getType() == CHANNEL) {
-                            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font.ttf");
+                            typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
                             txtChatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
                         }
                         txtChatIcon.setTypeface(typeFaceIcon);
@@ -901,7 +901,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     if (mInfo.isPinned()) {
                         addView(holder, lytContainer6, R.layout.room_layout_pinned, R.id.lyt_pinned_room, lytContainer6.getChildCount());
                         TextView txtPinIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_pinned_message);
-                        txtPinIcon.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap_font2.ttf"));
+                        txtPinIcon.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf"));
                     } else {
                         removeView(lytContainer6, R.id.lyt_pinned_room);
                     }

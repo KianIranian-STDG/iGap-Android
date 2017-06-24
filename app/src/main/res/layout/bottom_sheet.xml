@@ -60,11 +60,11 @@
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_folder"
-              android:textSize="@dimen/dp26"
+              android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
-              fontPath="fonts/iGap_menu_font.ttf"
+              fontPath="fonts/iGap-Fontico.ttf"
               />
 
           <TextView
@@ -95,11 +95,11 @@
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_music"
-              android:textSize="@dimen/dp26"
+              android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
-              fontPath="fonts/iGap_menu_font.ttf"
+              fontPath="fonts/iGap-Fontico.ttf"
               />
 
           <TextView
@@ -128,13 +128,13 @@
 
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
-              android:text="@string/icon_video_camera"
-              android:textSize="@dimen/dp26"
+              android:text="@string/md_videocam"
+              android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
               android:id="@+id/txtVideo"
-              fontPath="fonts/iGap_menu_font.ttf"
+              fontPath="fonts/iGap-Fontico.ttf"
               />
 
           <TextView
@@ -162,12 +162,12 @@
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_photo"
-              android:textSize="@dimen/dp26"
+              android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
               android:id="@+id/textPicture"
-              fontPath="fonts/iGap_menu_font.ttf"
+              fontPath="fonts/iGap-Fontico.ttf"
               />
 
           <TextView
@@ -197,12 +197,12 @@
               android:id="@+id/txtCamera"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
-              android:text="@string/icon_camera"
-              android:textSize="@dimen/dp26"
+              android:text="@string/md_camera_alt"
+              android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
-              fontPath="fonts/iGap_menu_font.ttf"
+              fontPath="fonts/iGap-Fontico.ttf"
               />
           <TextView
               android:layout_width="wrap_content"
@@ -241,12 +241,12 @@
               android:id="@+id/txtContact"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
-              android:text="@string/icon_user"
-              android:textSize="@dimen/dp26"
+              android:text="@string/md_user_account_box"
+              android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
-              fontPath="fonts/iGap_menu_font.ttf"
+              fontPath="fonts/iGap-Fontico.ttf"
               />
 
           <TextView
@@ -276,12 +276,12 @@
               android:id="@+id/txtLocation"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
-              android:text="@string/icon_location"
-              android:textSize="@dimen/dp26"
+              android:text="@string/md_room"
+              android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
-              fontPath="fonts/iGap_menu_font.ttf"
+              fontPath="fonts/iGap-Fontico.ttf"
               />
 
           <TextView
@@ -310,12 +310,12 @@
           <TextView
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
-              android:text="@string/icon_brush"
-              android:textSize="@dimen/dp26"
+              android:text="@string/md_brush"
+              android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
-              fontPath="fonts/iGap_menu_font.ttf"
+              fontPath="fonts/iGap-Fontico.ttf"
               android:id="@+id/txtPaint"
               />
 
@@ -346,11 +346,11 @@
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
               android:text="@string/icon_file_empty"
-              android:textSize="@dimen/dp26"
+              android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
-              fontPath="fonts/iGap_menu_font.ttf"
+              fontPath="fonts/iGap-Fontico.ttf"
               android:id="@+id/txtFile"
               />
 
@@ -380,12 +380,12 @@
               android:id="@+id/txtSend"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
-              android:text="@string/icon_keyboard_arrow_down"
-              android:textSize="@dimen/dp32"
+              android:text="@string/md_downwards_arrow"
+              android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
-              fontPath="fonts/iGap_menu_font.ttf"
+              fontPath="fonts/iGap-Fontico.ttf"
               />
 
           <TextView

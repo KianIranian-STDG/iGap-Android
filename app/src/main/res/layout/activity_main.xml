@@ -121,7 +121,7 @@
                     android:text="@string/md_searching_magnifying_glass"
                     android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/dp28"
+                    android:textSize="@dimen/dp22"
                     />
 
               </net.iGap.libs.rippleeffect.RippleView>
@@ -148,7 +148,7 @@
           app:nts_gravity="bottom"
           app:nts_inactive_color="#adffffff"
           app:nts_type="point"
-          app:nts_typeface="fonts/MaterialIcons-Regular.ttf"
+          app:nts_typeface="fonts/iGap-Fontico.ttf"
           app:nts_weight="3dp"
           tools:ignore="MissingConstraints"
           tools:layout_editor_absoluteX="8dp"

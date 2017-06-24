@@ -198,19 +198,19 @@
 
 
     <style name="TextIconAppearance.menu" parent="android:TextAppearance">
-        <item name="fontPath">fonts/MaterialIcons-Regular.ttf</item>
+      <item name="fontPath">fonts/iGap-Fontico.ttf</item>
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/gray_4c</item>
     </style>
 
     <style name="TextIconAppearance.all" parent="android:TextAppearance">
-        <item name="fontPath">fonts/MaterialIcons-Regular.ttf</item>
-        <item name="android:textSize">@dimen/dp32</item>
+      <item name="fontPath">fonts/iGap-Fontico.ttf</item>
+      <item name="android:textSize">@dimen/dp22</item>
     </style>
 
     <style name="TextIconAppearance_toolbar" parent="android:TextAppearance">
-        <item name="fontPath">fonts/MaterialIcons-Regular.ttf</item>
-        <item name="android:textSize">@dimen/dp32</item>
+      <item name="fontPath">fonts/iGap-Fontico.ttf</item>
+      <item name="android:textSize">@dimen/dp22</item>
     </style>
 
   <style name="NotificationText" parent="android:TextAppearance.StatusBar.EventContent" />

@@ -123,7 +123,7 @@
                         android:gravity="bottom"
                         android:textAppearance="@style/TextIconAppearance.all"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/dp16"
+                        android:textSize="@dimen/dp14"
                         android:visibility="gone"
                         />
                   </LinearLayout>
@@ -182,7 +182,7 @@
                       android:text="@string/md_phone"
                       android:textAppearance="@style/TextIconAppearance_toolbar"
                       android:textColor="@color/whit_background"
-                      android:textSize="@dimen/dp26"
+                      android:textSize="@dimen/dp20"
                       />
 
 
@@ -252,7 +252,7 @@
                                 android:text="@string/md_close_button"
                                 android:textAppearance="@style/TextIconAppearance.all"
                                 android:textColor="@color/gray"
-                            android:textSize="@dimen/dp26"
+                            android:textSize="@dimen/dp20"
                                 />
                       </net.iGap.libs.rippleeffect.RippleView>
 
@@ -297,7 +297,7 @@
                                     android:text="@string/md_back_arrow_reply"
                                     android:textAppearance="@style/TextIconAppearance.all"
                                     android:textColor="@color/gray"
-                                android:textSize="@dimen/dp26"
+                                android:textSize="@dimen/dp20"
                                     />
                           </net.iGap.libs.rippleeffect.RippleView>
 
@@ -322,7 +322,7 @@
                                     android:text="@string/md_copy"
                                     android:textAppearance="@style/TextIconAppearance.all"
                                     android:textColor="@color/gray"
-                                android:textSize="@dimen/dp26"
+                                android:textSize="@dimen/dp20"
                                     />
                           </net.iGap.libs.rippleeffect.RippleView>
 
@@ -347,7 +347,7 @@
                                 android:text="@string/md_right_arrow_button"
                                     android:textAppearance="@style/TextIconAppearance.all"
                                     android:textColor="@color/gray"
-                                android:textSize="@dimen/dp26"
+                                android:textSize="@dimen/dp20"
                                     />
                           </net.iGap.libs.rippleeffect.RippleView>
                         </LinearLayout>
@@ -374,7 +374,7 @@
                                 android:text="@string/md_rubbish_delete_file"
                                 android:textAppearance="@style/TextIconAppearance.all"
                                 android:textColor="@color/gray"
-                            android:textSize="@dimen/dp26"
+                            android:textSize="@dimen/dp20"
                                 />
                       </net.iGap.libs.rippleeffect.RippleView>
 
@@ -538,7 +538,7 @@
                     android:layout_marginTop="@dimen/dp12"
                     android:gravity="center"
                     android:background="@drawable/circle_mic"
-                    android:text="@string/md_arrow_down"
+                  android:text="@string/md_downwards_arrow"
                     android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:textColor="@color/white"
                     />
@@ -669,7 +669,7 @@
                 android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:text="@string/md_expand_arrow"
                 android:textColor="@color/green"
-              android:textSize="@dimen/dp26"
+              android:textSize="@dimen/dp20"
                 />
 
             <TextView
@@ -695,7 +695,7 @@
                 android:textAppearance="@style/TextIconAppearance_toolbar"
                 android:text="@string/md_downwards_arrow"
                 android:textColor="@color/green"
-              android:textSize="@dimen/dp26"
+              android:textSize="@dimen/dp20"
                 />
 
             <LinearLayout
@@ -797,9 +797,9 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
-                    android:text="@string/md_arrow_up"
+                  android:text="@string/md_expand_arrow"
                     android:textColor="@android:color/white"
-                  android:textSize="@dimen/dp20"
+                  android:textSize="@dimen/dp16"
 
                     />
 
@@ -822,9 +822,9 @@
                     android:background="@null"
                     android:gravity="center"
                     android:textAppearance="@style/TextIconAppearance_toolbar"
-                    android:text="@string/md_arrow_down"
+                  android:text="@string/md_downwards_arrow"
                     android:textColor="@android:color/white"
-                  android:textSize="@dimen/dp20"
+                  android:textSize="@dimen/dp16"
                     />
             </LinearLayout>
 

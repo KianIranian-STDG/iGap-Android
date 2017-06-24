@@ -256,7 +256,7 @@
             android:layout_marginTop="@dimen/dp4"
             android:background="@drawable/rg_background_agreement2"
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="gone"
             >
 
           <LinearLayout

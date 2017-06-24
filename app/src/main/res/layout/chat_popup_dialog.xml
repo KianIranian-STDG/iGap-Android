@@ -20,8 +20,8 @@
         android:layout_height="wrap_content"
         android:text="@string/md_pin"
         android:textColor="@color/grayNew"
-        android:textSize="@dimen/dp26"
-        fontPath="fonts/iGap_font2.ttf"
+        android:textSize="@dimen/dp18"
+        fontPath="fonts/iGap-Fontico.ttf"
         />
 
     <TextView
@@ -50,7 +50,7 @@
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
-        android:textSize="@dimen/dp26"
+        android:textSize="@dimen/dp18"
         />
 
     <TextView
@@ -78,7 +78,7 @@
         android:text="@string/md_clearHistory"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
-        android:textSize="@dimen/dp26"
+        android:textSize="@dimen/dp18"
         />
 
     <TextView
@@ -102,10 +102,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/md_rubbish_bin"
+        android:text="@string/md_rubbish_delete_file"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
-        android:textSize="@dimen/dp26"
+        android:textSize="@dimen/dp18"
         />
 
     <TextView

@@ -1041,7 +1041,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         txtTitle.setText(getResources().getString(R.string.delete_account));
 
                         TextView iconTitle = (TextView) v.findViewById(R.id.iconDialogTitle);
-                        iconTitle.setText(R.string.md_remove_circle);
+                        iconTitle.setText(R.string.md_delete_acc);
 
                         TextView txtContent = (TextView) v.findViewById(R.id.txtDialogContent);
                         String text = getResources().getString(R.string.delete_account_text) + "\n" + getResources().getString(R.string.delete_account_text_desc);

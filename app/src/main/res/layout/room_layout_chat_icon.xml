@@ -13,7 +13,7 @@
       android:layout_gravity="center"
       android:paddingBottom="2dp"
       android:textColor="#333"
-      android:textSize="@dimen/dp18"
+      android:textSize="@dimen/dp14"
       />
 
 

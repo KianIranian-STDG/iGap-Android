@@ -461,7 +461,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         final NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
-        navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_rss_feed), getString(R.string.md_phone));
+        navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp24));
         navigationTabStrip.setStripColor(Color.WHITE);

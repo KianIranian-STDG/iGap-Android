@@ -180,7 +180,7 @@
                         android:text="@string/md_play_arrow"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
                         android:textColor="@color/toolbar_background"
-                        android:textSize="@dimen/dp32"
+                        android:textSize="@dimen/dp20"
                         />
 
 
