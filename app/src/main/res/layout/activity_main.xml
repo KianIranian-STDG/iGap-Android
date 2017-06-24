@@ -138,7 +138,6 @@
       <com.gigamole.navigationtabstrip.NavigationTabStrip
           android:id="@+id/nts"
           android:layout_width="wrap_content"
-          android:background="@color/colorEmojiPopupCategoryBottomBorder"
           android:layout_height="@dimen/dp60"
           app:nts_active_color="@color/white"
           app:nts_animation_duration="300"
