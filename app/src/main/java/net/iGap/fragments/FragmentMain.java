@@ -693,6 +693,8 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                     addView(holder, lytContainer5, R.layout.room_layout_avi, R.id.lyt_avi_room, lytContainer5.getChildCount());
                     (holder.itemView.findViewById(R.id.cs_avi)).setVisibility(View.VISIBLE);
+
+                    removeView(lytContainer7, R.id.lyt_tic_room);
                 } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
 
                     addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
