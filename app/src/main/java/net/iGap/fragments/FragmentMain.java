@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -138,7 +137,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     private void initRecycleView(View view) {
 
         mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.cl_recycler_view_contact);
-        //mRecyclerView.setItemViewCacheSize(50);
+        mRecyclerView.setItemViewCacheSize(100);
         mRecyclerView.setDrawingCacheEnabled(true);
 
         PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(getActivity());
@@ -342,7 +341,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             case downScrool:
 
-                ((Activity) getActivity()).runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override public void run() {
                         int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager()).findFirstVisibleItemPosition();
                         if (firstVisibleItem < 5) {

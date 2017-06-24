@@ -114,23 +114,17 @@ public class HelperAvatar {
         }
     }
 
-    public static void getAvatar(ProtoGlobal.RegisteredUser registeredUser, final long ownerId, AvatarType avatarType, boolean showMain, Realm _realm, final OnAvatarGet onAvatarGet) {
+    /**
+     * check avatar in Realm and download if needed
+     */
 
-        /**
-         * first show user initials and after that show avatar if exist
-         */
-        String[] initialsStart = showInitials(ownerId, avatarType);
-        if (initialsStart != null) {
-            onAvatarGet.onShowInitials(initialsStart[0], initialsStart[1]);
-        }
-
+    private static void getAvatarImage(ProtoGlobal.RegisteredUser registeredUser, final long ownerId, AvatarType avatarType, boolean showMain, Realm _realm, final OnAvatarGet onAvatarGet) {
         RealmAvatar realmAvatar = getLastAvatar(ownerId, _realm);
 
         if (realmAvatar == null && registeredUser != null) {
             insertRegisteredInfoToDB(registeredUser, _realm);
             realmAvatar = getLastAvatar(ownerId, _realm);
         }
-
 
         if (realmAvatar != null) {
 
@@ -227,6 +221,28 @@ public class HelperAvatar {
                 getAvatarAfterTime(ownerId, avatarType, onAvatarGet);
             }
         }
+    }
+
+    public static void getAvatar(ProtoGlobal.RegisteredUser registeredUser, final long ownerId, AvatarType avatarType, boolean showMain, Realm _realm, final OnAvatarGet onAvatarGet) {
+
+        /**
+         * first show user initials and after that show avatar if exist
+         */
+        String[] initialsStart = showInitials(ownerId, avatarType);
+        if (initialsStart != null) {
+            onAvatarGet.onShowInitials(initialsStart[0], initialsStart[1]);
+        }
+        getAvatarImage(registeredUser, ownerId, avatarType, false, _realm, onAvatarGet);
+    }
+
+    public static String[] getAvatarSync(ProtoGlobal.RegisteredUser registeredUser, final long ownerId, AvatarType avatarType, boolean showMain, Realm _realm, final OnAvatarGet onAvatarGet) {
+
+        getAvatarImage(registeredUser, ownerId, avatarType, false, _realm, onAvatarGet);
+
+        /**
+         * first show user initials and after that show avatar if exist
+         */
+        return showInitials(ownerId, avatarType);
     }
 
     /**

@@ -166,7 +166,7 @@ public class FragmentCall extends Fragment {
         G.iSignalingGetCallLog = new ISignalingGetCallLog() {
             @Override public void onGetList(final int size) {
 
-                getActivity().runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override public void run() {
                         progressBar.setVisibility(View.GONE);
                     }

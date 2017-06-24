@@ -160,7 +160,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
-        holder.setIsRecyclable(false);
+        //holder.setIsRecyclable(false);
 
         if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogItem.ViewHolder || holder instanceof TimeItem.ViewHolder) {
             return;
@@ -252,7 +252,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     });
 
-                    HelperAvatar.getAvatar(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, realm, new OnAvatarGet() {
+                    String[] initialize = HelperAvatar.getAvatarSync(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, realm, new OnAvatarGet() {
                         @Override
                         public void onAvatarGet(final String avatarPath, long ownerId) {
                             G.handler.post(new Runnable() {
@@ -273,6 +273,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             });
                         }
                     });
+
+                    if (initialize != null && initialize[0] != null && initialize[1] != null) {
+                        ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initialize[0], initialize[1]));
+                    }
                 }
             }
         }
@@ -616,7 +620,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
         setTextcolor(imgTick, R.color.colorOldBlack);
-            timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
 
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.LEFT;
 
@@ -676,15 +680,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
         if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
-                setTextcolor(imgTick, R.color.iGapColor);
-            } else if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
-                iconHearing.setVisibility(View.VISIBLE);
-                setTextcolor(imgTick, R.color.iGapColor);
-                imgTick.setVisibility(View.VISIBLE);
-            } else {
-                setTextcolor(imgTick, R.color.colorOldBlack);
-            }
-            timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+            setTextcolor(imgTick, R.color.iGapColor);
+        } else if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
+            iconHearing.setVisibility(View.VISIBLE);
+            setTextcolor(imgTick, R.color.iGapColor);
+            imgTick.setVisibility(View.VISIBLE);
+        } else {
+            setTextcolor(imgTick, R.color.colorOldBlack);
+        }
+        timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
 
         (holder.itemView.findViewById(R.id.contentContainer)).setBackgroundResource(R.drawable.rectangle_send_round_color);
         /**
