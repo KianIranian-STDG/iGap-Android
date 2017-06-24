@@ -18,10 +18,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -32,6 +31,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 
@@ -235,26 +235,46 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
 
     private void popUpMusicMenu() {
 
-        MaterialDialog dialog = new MaterialDialog.Builder(this).items(R.array.pop_up_media_player).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+        final MaterialDialog dialog = new MaterialDialog.Builder(this).customView(R.layout.chat_popup_dialog_custom, true).build();
+        View v = dialog.getCustomView();
 
-                switch (which) {
-                    case 0:
-                        saveToMusic();
-                        break;
-                    case 1:
-                        shareMusuic();
-                        break;
-                }
+        DialogAnimation.animationUp(dialog);
+        dialog.show();
+
+        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+        ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
+
+        final TextView txtShare = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+        TextView txtSaveToGallery = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
+
+        TextView iconSaveToGallery = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+        iconSaveToGallery.setText(getResources().getString(R.string.md_save));
+
+        txtShare.setText(getResources().getString(R.string.save_to_Music));
+        txtSaveToGallery.setText(getResources().getString(R.string.share_item_dialog));
+
+        root1.setVisibility(View.VISIBLE);
+        root2.setVisibility(View.VISIBLE);
+
+
+        TextView iconShare = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
+        iconShare.setText(getResources().getString(R.string.md_share_button));
+
+        root1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                saveToMusic();
             }
-        }).show();
+        });
 
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        layoutParams.width = (int) getResources().getDimension(R.dimen.dp260);
-        layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-
-        dialog.getWindow().setAttributes(layoutParams);
+        root2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                shareMusuic();
+            }
+        });
     }
 
     private void saveToMusic() {
