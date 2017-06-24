@@ -2490,6 +2490,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onSenderAvatarClick(View view, StructMessageInfo messageInfo, int position) {
+        /**
+         * set null for avoid from clear group room message adapter if user try for clearChatHistory
+         */
+        G.onClearChatHistory = null;
+
         Intent intent = new Intent(G.context, ActivityContactsProfile.class);
         intent.putExtra("peerId", parseLong(messageInfo.senderID));
         intent.putExtra("RoomId", mRoomId);
@@ -2739,7 +2744,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         final Realm realm = Realm.getDefaultInstance();
                         final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
-                        if (realmRoomMessage != null) {
+                        if (realmRoomMessage != null && realmRoomMessage.isValid()) {
                             if (roomMessage.getAuthor().getUser() != null) {
                                 if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
                                     // I'm in the room

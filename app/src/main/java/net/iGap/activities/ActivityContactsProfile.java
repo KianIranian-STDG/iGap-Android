@@ -112,7 +112,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     private String userStatus;
     private boolean isBlockUser = false;
     RealmRegisteredInfo rrg;
-    private long sheardId = -2;
+    private long shearedId = -2;
 
     TextView txtCountOfShearedMedia;
 
@@ -157,7 +157,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         Realm realm = Realm.getDefaultInstance();
 
-        mRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, sheardId).findFirst();
+        mRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, shearedId).findFirst();
         if (mRoom != null) {
 
             if (changeListener == null) {
@@ -224,10 +224,10 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
             if (realmRoom != null) {
-                sheardId = realmRoom.getId();
+                shearedId = realmRoom.getId();
             }
         } else {
-            sheardId = roomId;
+            shearedId = roomId;
         }
 
         rrg = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
@@ -398,223 +398,226 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             txtNickname.setText(R.string.nick_name_not_exist);
         }
 
-        layoutNickname = (ViewGroup) findViewById(R.id.chi_layout_nickname);
-        layoutNickname.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final LinearLayout layoutNickname = new LinearLayout(ActivityContactsProfile.this);
-                layoutNickname.setOrientation(LinearLayout.VERTICAL);
-
-                String splitNickname[] = txtNickname.getText().toString().split(" ");
-                String firsName = "";
-                String lastName = "";
-                StringBuilder stringBuilder = null;
-                if (splitNickname.length > 1) {
-
-                    lastName = splitNickname[splitNickname.length - 1];
-                    stringBuilder = new StringBuilder();
-                    for (int i = 0; i < splitNickname.length - 1; i++) {
-
-                        stringBuilder.append(splitNickname[i]).append(" ");
-                    }
-                    firsName = stringBuilder.toString();
-                } else {
-                    firsName = splitNickname[0];
-                }
-                final View viewFirstName = new View(ActivityContactsProfile.this);
-                viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-
-                LinearLayout.LayoutParams viewParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
-
-                TextInputLayout inputFirstName = new TextInputLayout(ActivityContactsProfile.this);
-                final EmojiEditTextE edtFirstName = new EmojiEditTextE(ActivityContactsProfile.this);
-                edtFirstName.setHint(R.string.first_name);
-                edtFirstName.setText(firsName);
-                edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
-                edtFirstName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
-                edtFirstName.setPadding(0, 8, 0, 8);
-                edtFirstName.setSingleLine(true);
-                inputFirstName.addView(edtFirstName);
-                inputFirstName.addView(viewFirstName, viewParams);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    edtFirstName.setBackground(getResources().getDrawable(android.R.color.transparent));
-                }
-
-                final View viewLastName = new View(ActivityContactsProfile.this);
-                viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-
-                TextInputLayout inputLastName = new TextInputLayout(ActivityContactsProfile.this);
-                final EditText edtLastName = new EditText(ActivityContactsProfile.this);
-                edtLastName.setHint(R.string.last_name);
-                edtLastName.setText(lastName);
-                edtLastName.setTextColor(getResources().getColor(R.color.text_edit_text));
-                edtLastName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
-                edtLastName.setPadding(0, 8, 0, 8);
-                edtLastName.setSingleLine(true);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    edtLastName.setBackground(getResources().getDrawable(android.R.color.transparent));
-                }
-                inputLastName.addView(edtLastName);
-                inputLastName.addView(viewLastName, viewParams);
-
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 0, 0, 15);
-                LinearLayout.LayoutParams lastNameLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                lastNameLayoutParams.setMargins(0, 15, 0, 10);
-
-                layoutNickname.addView(inputFirstName, layoutParams);
-                layoutNickname.addView(inputLastName, lastNameLayoutParams);
-
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivityContactsProfile.this).title(getResources().getString(R.string.pu_nikname_profileUser)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
-
-                final View positive = dialog.getActionButton(DialogAction.POSITIVE);
-                positive.setEnabled(false);
-
-                edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View view, boolean b) {
-                        if (b) {
-                            viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
-                        } else {
-                            viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-                        }
-                    }
-                });
-
-                edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View view, boolean b) {
-                        if (b) {
-                            viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
-                        } else {
-                            viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-                        }
-                    }
-                });
-
-                final String finalFirsName = firsName;
-                edtFirstName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-
-                        if (!edtFirstName.getText().toString().equals(finalFirsName)) {
-                            positive.setEnabled(true);
-                        } else {
-                            positive.setEnabled(false);
-                        }
-                    }
-                });
-
-                final String finalLastName = lastName;
-                edtLastName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-                        if (!edtLastName.getText().toString().equals(finalLastName)) {
-                            positive.setEnabled(true);
-                        } else {
-                            positive.setEnabled(false);
-                        }
-                    }
-                });
-
-                positive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        long po = Long.parseLong(mPhone);
-                        String firstName = edtFirstName.getText().toString();
-                        String lastName = edtLastName.getText().toString();
-                        new RequestUserContactsEdit().contactsEdit(po, firstName, lastName);
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
-                G.onUserContactEdit = new OnUserContactEdit() {
-                    @Override
-                    public void onContactEdit(final String firstName, final String lastName) {
-                        Realm realm1 = Realm.getDefaultInstance();
-                        final RealmContacts realmUser = realm1.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
-                        realm1.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                realmUser.setFirst_name(firstName);
-                                realmUser.setLast_name(lastName);
-
-                                for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
-                                    if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == userId) {
-                                        realmRoom.setTitle(firstName + " " + lastName);
-                                    }
-                                }
-
-                                RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
-                                if (contact != null) {
-                                    contact.setFirst_name(firstName);
-                                    contact.setLast_name(lastName);
-                                    contact.setDisplay_name(firstName + " " + lastName);
-                                }
-
-                                RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
-                                if (registeredInfo != null) {
-                                    registeredInfo.setFirstName(firstName);
-                                    registeredInfo.setLastName(lastName);
-                                    registeredInfo.setDisplayName(firstName + " " + lastName);
-                                    registeredInfo.setInitials(HelperImageBackColor.getFirstAlphabetName(firstName + " " + lastName));
-                                }
-
-                                setAvatar();
-                            }
-                        });
-                        realm1.close();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                txtNickname.setText(firstName + " " + lastName);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onContactEditTimeOut() {
-
-                    }
-
-                    @Override
-                    public void onContactEditError(int majorCode, int minorCode) {
-
-                    }
-                };
-            }
-        });
-
         txtLastSeen = (EmojiTextViewE) findViewById(R.id.chi_txt_lastSeen_title);
         titleToolbar = (TextView) findViewById(R.id.chi_txt_titleToolbar_DisplayName);
         titleLastSeen = (TextView) findViewById(R.id.chi_txt_titleToolbar_LastSeen);
         txtUserName = (TextView) findViewById(R.id.chi_txt_userName);
         txtPhoneNumber = (TextView) findViewById(R.id.chi_txt_phoneNumber);
         vgPhoneNumber = (ViewGroup) findViewById(R.id.chi_layout_phoneNumber);
+        txtClearChat = (TextView) findViewById(R.id.chi_txt_clearChat);
+
         if (!showNumber) {
             vgPhoneNumber.setVisibility(View.GONE);
+            txtClearChat.setVisibility(View.GONE);
+        } else {
+            layoutNickname = (ViewGroup) findViewById(R.id.chi_layout_nickname);
+            layoutNickname.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    final LinearLayout layoutNickname = new LinearLayout(ActivityContactsProfile.this);
+                    layoutNickname.setOrientation(LinearLayout.VERTICAL);
+
+                    String splitNickname[] = txtNickname.getText().toString().split(" ");
+                    String firsName = "";
+                    String lastName = "";
+                    StringBuilder stringBuilder = null;
+                    if (splitNickname.length > 1) {
+
+                        lastName = splitNickname[splitNickname.length - 1];
+                        stringBuilder = new StringBuilder();
+                        for (int i = 0; i < splitNickname.length - 1; i++) {
+
+                            stringBuilder.append(splitNickname[i]).append(" ");
+                        }
+                        firsName = stringBuilder.toString();
+                    } else {
+                        firsName = splitNickname[0];
+                    }
+                    final View viewFirstName = new View(ActivityContactsProfile.this);
+                    viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+
+                    LinearLayout.LayoutParams viewParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
+
+                    TextInputLayout inputFirstName = new TextInputLayout(ActivityContactsProfile.this);
+                    final EmojiEditTextE edtFirstName = new EmojiEditTextE(ActivityContactsProfile.this);
+                    edtFirstName.setHint(R.string.first_name);
+                    edtFirstName.setText(firsName);
+                    edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
+                    edtFirstName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+                    edtFirstName.setPadding(0, 8, 0, 8);
+                    edtFirstName.setSingleLine(true);
+                    inputFirstName.addView(edtFirstName);
+                    inputFirstName.addView(viewFirstName, viewParams);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        edtFirstName.setBackground(getResources().getDrawable(android.R.color.transparent));
+                    }
+
+                    final View viewLastName = new View(ActivityContactsProfile.this);
+                    viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+
+                    TextInputLayout inputLastName = new TextInputLayout(ActivityContactsProfile.this);
+                    final EditText edtLastName = new EditText(ActivityContactsProfile.this);
+                    edtLastName.setHint(R.string.last_name);
+                    edtLastName.setText(lastName);
+                    edtLastName.setTextColor(getResources().getColor(R.color.text_edit_text));
+                    edtLastName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+                    edtLastName.setPadding(0, 8, 0, 8);
+                    edtLastName.setSingleLine(true);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        edtLastName.setBackground(getResources().getDrawable(android.R.color.transparent));
+                    }
+                    inputLastName.addView(edtLastName);
+                    inputLastName.addView(viewLastName, viewParams);
+
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    layoutParams.setMargins(0, 0, 0, 15);
+                    LinearLayout.LayoutParams lastNameLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lastNameLayoutParams.setMargins(0, 15, 0, 10);
+
+                    layoutNickname.addView(inputFirstName, layoutParams);
+                    layoutNickname.addView(inputLastName, lastNameLayoutParams);
+
+                    final MaterialDialog dialog = new MaterialDialog.Builder(ActivityContactsProfile.this).title(getResources().getString(R.string.pu_nikname_profileUser)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+
+                    final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                    positive.setEnabled(false);
+
+                    edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View view, boolean b) {
+                            if (b) {
+                                viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                            } else {
+                                viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                            }
+                        }
+                    });
+
+                    edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View view, boolean b) {
+                            if (b) {
+                                viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                            } else {
+                                viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                            }
+                        }
+                    });
+
+                    final String finalFirsName = firsName;
+                    edtFirstName.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                            if (!edtFirstName.getText().toString().equals(finalFirsName)) {
+                                positive.setEnabled(true);
+                            } else {
+                                positive.setEnabled(false);
+                            }
+                        }
+                    });
+
+                    final String finalLastName = lastName;
+                    edtLastName.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            if (!edtLastName.getText().toString().equals(finalLastName)) {
+                                positive.setEnabled(true);
+                            } else {
+                                positive.setEnabled(false);
+                            }
+                        }
+                    });
+
+                    positive.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            long po = Long.parseLong(mPhone);
+                            String firstName = edtFirstName.getText().toString();
+                            String lastName = edtLastName.getText().toString();
+                            new RequestUserContactsEdit().contactsEdit(po, firstName, lastName);
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                    G.onUserContactEdit = new OnUserContactEdit() {
+                        @Override
+                        public void onContactEdit(final String firstName, final String lastName) {
+                            Realm realm1 = Realm.getDefaultInstance();
+                            final RealmContacts realmUser = realm1.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+                            realm1.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    realmUser.setFirst_name(firstName);
+                                    realmUser.setLast_name(lastName);
+
+                                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
+                                        if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == userId) {
+                                            realmRoom.setTitle(firstName + " " + lastName);
+                                        }
+                                    }
+
+                                    RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+                                    if (contact != null) {
+                                        contact.setFirst_name(firstName);
+                                        contact.setLast_name(lastName);
+                                        contact.setDisplay_name(firstName + " " + lastName);
+                                    }
+
+                                    RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+                                    if (registeredInfo != null) {
+                                        registeredInfo.setFirstName(firstName);
+                                        registeredInfo.setLastName(lastName);
+                                        registeredInfo.setDisplayName(firstName + " " + lastName);
+                                        registeredInfo.setInitials(HelperImageBackColor.getFirstAlphabetName(firstName + " " + lastName));
+                                    }
+
+                                    setAvatar();
+                                }
+                            });
+                            realm1.close();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    txtNickname.setText(firstName + " " + lastName);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onContactEditTimeOut() {
+
+                        }
+
+                        @Override
+                        public void onContactEditError(int majorCode, int minorCode) {
+
+                        }
+                    };
+                }
+            });
         }
 
         txtCountOfShearedMedia = (TextView) findViewById(R.id.chi_txt_count_of_sharedMedia);
@@ -729,7 +732,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             public void onClick(View view) {
 
                 Intent intent = new Intent(ActivityContactsProfile.this, ActivityShearedMedia.class);
-                intent.putExtra("RoomID", sheardId);
+                intent.putExtra("RoomID", shearedId);
                 startActivity(intent);
             }
         });
@@ -743,7 +746,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         });
 
-        txtClearChat = (TextView) findViewById(R.id.chi_txt_clearChat);
+
 
         txtClearChat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -772,7 +775,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
         setAvatar();
 
-        ActivityShearedMedia.getCountOfSharedMedia(sheardId);
+        ActivityShearedMedia.getCountOfSharedMedia(shearedId);
     }
 
     private void setAvatar() {
@@ -1085,7 +1088,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
     }
 
     private void clearHistory() {
-        RealmRoomMessage.clearHistoryMessage(roomId);
+        RealmRoomMessage.clearHistoryMessage(shearedId);
     }
 
     private void deleteContact() {
