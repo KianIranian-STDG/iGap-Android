@@ -605,10 +605,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
-        LinearLayout lytRight = (LinearLayout) holder.itemView.findViewById(R.id.lyt_right);
-        if (lytRight != null) {
-            lytRight.setVisibility(View.GONE);
-        }
+
 
         if (messageText != null) {
             messageText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
@@ -618,7 +615,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         setTextcolor(imgTick, R.color.colorOldBlack);
             timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
 
-        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.START;
+        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.LEFT;
+
 
         (holder.itemView.findViewById(R.id.contentContainer)).setBackgroundResource(R.drawable.rectangel_white_round);
 
@@ -653,15 +651,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout voteLayout = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer).getParent().getParent();
         voteLayout.setGravity(Gravity.RIGHT);
 
+        ((LinearLayout.LayoutParams) holder.itemView.findViewById(R.id.contentContainer).getLayoutParams()).gravity = Gravity.RIGHT;
+
+        LinearLayout layoutMessageTime = (LinearLayout) holder.itemView.findViewById(R.id.cslmt_layout_message_time);
+        if (layoutMessageTime != null) {
+            ((LinearLayout.LayoutParams) layoutMessageTime.getLayoutParams()).gravity = Gravity.LEFT;
+        }
+
+
+
+
 
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageText);
         TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
         TextView iconHearing = (TextView) holder.itemView.findViewById(R.id.cslr_txt_hearing);
-        LinearLayout lytRight = (LinearLayout) holder.itemView.findViewById(R.id.lyt_right);
-        if (lytRight != null) {
-            lytRight.setVisibility(View.VISIBLE);
-        }
 
         if (messageText != null) {
             messageText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
