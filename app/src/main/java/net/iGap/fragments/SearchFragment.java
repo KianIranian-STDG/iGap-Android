@@ -69,15 +69,19 @@ public class SearchFragment extends Fragment {
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
     private FragmentActivity mActivity;
+
     public static SearchFragment newInstance() {
         return new SearchFragment();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.search_fragment_layout, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initComponent(view);
@@ -104,11 +108,13 @@ public class SearchFragment extends Fragment {
 
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
         edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 fillList(charSequence.toString());
 
@@ -124,7 +130,8 @@ public class SearchFragment extends Fragment {
                 }
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
             }
         });
@@ -135,7 +142,8 @@ public class SearchFragment extends Fragment {
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_back);
         final RippleView rippleBack = (RippleView) view.findViewById(R.id.sfl_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
@@ -147,7 +155,8 @@ public class SearchFragment extends Fragment {
         rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
         ((View) rippleDown).setEnabled(false);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 edtSearch.setText("");
             }
         });
@@ -162,7 +171,8 @@ public class SearchFragment extends Fragment {
 
 
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<IItem>() {
-            @Override public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
 
                 if (currentItem instanceof SearchItemHeader) {
 
@@ -320,9 +330,8 @@ public class SearchFragment extends Fragment {
                     item.color = realmRoom.getColor();
                     item.roomType = realmRoom.getType();
                     item.avatar = realmRoom.getAvatar();
+                    list.add(item);
                 }
-
-                list.add(item);
             }
         }
 
@@ -355,9 +364,11 @@ public class SearchFragment extends Fragment {
             mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
-                @Override public void onChatGetRoom(final long roomId) {
+                @Override
+                public void onChatGetRoom(final long roomId) {
                     G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             Realm realm = Realm.getDefaultInstance();
                             Intent intent = new Intent(G.context, ActivityChat.class);
                             intent.putExtra("peerId", id);
@@ -374,15 +385,18 @@ public class SearchFragment extends Fragment {
                     });
                 }
 
-                @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+                @Override
+                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
 
                 }
 
-                @Override public void onChatGetRoomTimeOut() {
+                @Override
+                public void onChatGetRoomTimeOut() {
 
                 }
 
-                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+                @Override
+                public void onChatGetRoomError(int majorCode, int minorCode) {
 
                 }
             };

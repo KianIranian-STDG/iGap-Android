@@ -965,6 +965,7 @@ import org.parceler.Parcel;
                     realmRoom.setLastMessage(null);
                     realmRoom.setFirstUnreadMessage(null);
                     realmRoom.setUpdatedTime(0);
+                    realmRoom.setLastScrollPositionMessageId(0);
 
                     RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
                     realmRoomMessages.deleteAllFromRealm();
