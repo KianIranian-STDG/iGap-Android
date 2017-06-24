@@ -120,7 +120,7 @@
 
   <net.iGap.module.MaterialDesignTextView
       android:id="@+id/cslr_txt_hearing"
-      android:layout_width="16dp"
+      android:layout_width="wrap_content"
       android:layout_height="match_parent"
       android:layout_gravity="left|center_vertical"
       android:layout_marginLeft="@dimen/dp4"
@@ -130,6 +130,7 @@
       android:textColor="@color/black90"
       android:visibility="gone"
       fontPath="fonts/iGap-Fontico.ttf"
+      android:textSize="@dimen/dp12"
       />
 
 
