@@ -88,6 +88,8 @@
   <string name="md_call_missed_outgoing">\uf3fb</string>  <!-- igap_phone-outgoing  -->
   <string name="md_call_end">\uf3f5</string>  <!-- igap_phone-hangup  -->
   <string name="md_stay_current_portrait">\uf1a1</string>   <!-- igap_crop-portrait  -->
+  <string name="md_surround_sound">\uf5c5</string>   <!-- igap_surround_sound  -->
+  <string name="md_emby">\uf6b3</string>   <!-- igap_surround_sound  -->
 
   <string name="md_hearing">\uf5cb</string> <!-- igap_headphones-box  -->
 
@@ -100,6 +102,7 @@
   <string name="md_circlePin">\ue902</string>
 
   <string name="icon_music">\uf759</string>  <!-- igap_music  -->
+  <string name="icon_file">\uf214</string>  <!-- igap_file  -->
   <string name="icon_file_empty">\uf224</string><!--  igap_file-outline  -->
   <string name="icon_folder">\uf76f</string>  <!-- igap_folder-open  -->
   <string name="icon_photo">\uf2ef</string> <!--  igap_image-filter  -->

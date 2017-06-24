@@ -493,19 +493,19 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         iconImage.setText(getResources().getString(R.string.md_photo));
 
         TextView iconVideo = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-        iconVideo.setText(getResources().getString(R.string.md_video_library));
+        iconVideo.setText(getResources().getString(R.string.md_videocam));
 
         TextView iconAudio = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-        iconAudio.setText(getResources().getString(R.string.md_library_music));
+        iconAudio.setText(getResources().getString(R.string.icon_music));
 
         TextView iconVoice = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
-        iconVoice.setText(getResources().getString(R.string.md_perm_camera));
+        iconVoice.setText(getResources().getString(R.string.md_surround_sound));
 
         TextView iconGif = (TextView) v.findViewById(R.id.dialog_icon_item5_notification);
-        iconGif.setText(getResources().getString(R.string.md_gif));
+        iconGif.setText(getResources().getString(R.string.md_emby));
 
         TextView iconFile = (TextView) v.findViewById(R.id.dialog_icon_item6_notification);
-        iconFile.setText(getResources().getString(R.string.md_file_library));
+        iconFile.setText(getResources().getString(R.string.icon_file));
 
         TextView iconLink = (TextView) v.findViewById(R.id.dialog_icon_item7_notification);
         iconLink.setText(getResources().getString(R.string.md_link));
