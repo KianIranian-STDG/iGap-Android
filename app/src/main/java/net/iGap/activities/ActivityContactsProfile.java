@@ -13,11 +13,9 @@ package net.iGap.activities;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,12 +25,10 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -737,15 +733,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             }
         });
 
-        txtBlockContact = (TextView) findViewById(R.id.chi_txt_blockContact);
-
-        txtBlockContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAlertDialog(getString(R.string.block_this_contact), getString(R.string.block), getString(R.string.cancel));
-            }
-        });
-
+        //txtBlockContact = (TextView) findViewById(R.id.chi_txt_blockContact);
+        //
+        //txtBlockContact.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        showAlertDialog(getString(R.string.block_this_contact), getString(R.string.block), getString(R.string.cancel));
+        //    }
+        //});
+        //
 
 
         txtClearChat.setOnClickListener(new View.OnClickListener() {
@@ -1037,35 +1033,13 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
     private void showAlertDialog(String message, String positive, String negitive) { // alert dialog for block or clear user
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(ActivityContactsProfile.this);
-
-        builder.setMessage(message);
-        builder.setPositiveButton(positive, new DialogInterface.OnClickListener() {
+        new MaterialDialog.Builder(ActivityContactsProfile.this).title(R.string.clear_history).content(message).positiveText(positive).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
                 clearHistory();
-                dialogInterface.dismiss();
             }
-        });
-
-        builder.setMessage(message);
-        builder.setNegativeButton(negitive, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                dialogInterface.dismiss();
-            }
-        });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-        Button nButton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        nButton.setTextColor(getResources().getColor(R.color.toolbar_background));
-        nButton.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        Button pButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        pButton.setTextColor(getResources().getColor(R.color.toolbar_background));
-        pButton.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        }).negativeText(negitive).show();
     }
 
     public ArrayList<StructMessageInfo> setItem() {
