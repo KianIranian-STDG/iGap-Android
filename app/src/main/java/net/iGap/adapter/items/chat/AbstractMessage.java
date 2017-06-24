@@ -538,6 +538,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 txtSignature.setText(mMessage.channelExtra.signature);
             }
 
+            if (txtSignature.getText().length() > 0) {
+                holder.itemView.findViewById(R.id.lyt_signature).setVisibility(View.VISIBLE);
+            }
+
+
             if (HelperCalander.isLanguagePersian) {
                 txtViewsLabel.setText(HelperCalander.convertToUnicodeFarsiNumber(txtViewsLabel.getText().toString()));
                 txtVoteDown.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVoteDown.getText().toString()));
