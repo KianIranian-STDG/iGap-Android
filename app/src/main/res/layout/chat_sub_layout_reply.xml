@@ -62,7 +62,7 @@
         android:singleLine="true"
         android:text=""
         android:textColor="@android:color/white"
-        android:textSize="@dimen/dp16"
+        android:textSize="@dimen/dp14"
         style="@style/ChatMessages.EmojiTextView"
         fontPath="fonts/IRANSansMobile.ttf"
         />

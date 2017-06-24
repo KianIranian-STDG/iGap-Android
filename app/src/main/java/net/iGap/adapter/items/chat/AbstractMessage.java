@@ -34,6 +34,7 @@ import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.FontCache;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -426,13 +427,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         TextView textView = new TextView(G.context);
         textView.setTextColor(Color.BLACK);
-        textView.setBackgroundColor(Color.parseColor("#99F4F1F1"));
+        textView.setBackgroundResource(R.drawable.rect_radios_top_gray);
         textView.setId(R.id.messageSenderName);
         textView.setGravity(Gravity.LEFT);
-        textView.setPadding(20, 0, 0, 20);
+        textView.setPadding(20, 0, 20, 5);
         textView.setSingleLine();
+        textView.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setText(text);
+        textView.setTextSize(12);
 
         return textView;
     }
