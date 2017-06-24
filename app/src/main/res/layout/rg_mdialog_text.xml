@@ -22,7 +22,9 @@
         android:text="@string/number"
         android:textColor="@android:color/black"
         android:textSize="@dimen/dp15"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layoutDirection="ltr"
+        />
 
     <TextView
         android:layout_width="match_parent"
