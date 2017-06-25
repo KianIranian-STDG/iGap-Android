@@ -308,8 +308,10 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
             RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
+            boolean isMyCloud = mInfo.getId() == G.userId;
+
             if (mInfo != null && mInfo.isValid() && !mInfo.isDeleted()) {
-                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (!RealmRoom.isCloudRoom(mInfo.getId()) && mInfo.getActionStateUserId() != userId))))) {
+                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || (isMyCloud || (mInfo.getActionStateUserId() != userId)))) {
                     //holder.messageStatus.setVisibility(GONE);
                     holder.lastMessageSender.setVisibility(View.GONE);
                     holder.lastMessage.setVisibility(View.VISIBLE);

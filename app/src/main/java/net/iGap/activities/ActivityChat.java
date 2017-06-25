@@ -404,6 +404,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private boolean isMuteNotification;
     private boolean sendByEnter = false;
     private boolean fromCall = false;
+    private boolean isCloudRoom;
 
     private long replyToMessageId = 0;
     private long userId;
@@ -676,7 +677,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
         }
 
-        setAvatar();
+        if (isCloudRoom) {
+            imvUserPicture.setImageResource(R.mipmap.pu_gallary);
+        } else {
+            setAvatar();
+        }
+
     }
 
     @Override
@@ -1172,6 +1178,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
             }
         }
+
+        isCloudRoom = RealmRoom.isCloudRoom(mRoomId, realm);
 
         realm.close();
     }
@@ -2975,7 +2983,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-        setAvatar();
+
+        if (isCloudRoom) {
+            imvUserPicture.setImageResource(R.mipmap.pu_gallary);
+        } else {
+            setAvatar();
+        }
+
     }
 
     @Override
@@ -3540,7 +3554,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                final boolean isCloudRoom = RealmRoom.isCloudRoom(mRoomId);
+
                 if (mRoomId == roomId && (userId != userIdR || (isCloudRoom))) {
                     final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
 
@@ -3635,7 +3649,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
+
+                        if (!isCloudRoom) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
+                        }
+
                     }
                 });
             }
@@ -3645,7 +3663,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        if (!isCloudRoom) {
+                            imvUserPicture.setImageBitmap(
+                                net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        }
                     }
                 });
             }
@@ -3820,7 +3841,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
+
                     }
                 });
             }
@@ -3830,7 +3853,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+
+                        imvUserPicture.setImageBitmap(
+                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+
                     }
                 });
             }
@@ -3866,7 +3892,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void run() {
                 userStatus = status;
                 userTime = time;
-                if (RealmRoom.isCloudRoom(mRoomId)) {
+                if (isCloudRoom) {
                     txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
                     avi.setVisibility(View.GONE);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -3916,7 +3942,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((RealmRoom.isCloudRoom(mRoomId) || (!RealmRoom.isCloudRoom(mRoomId) && realmRoom.getActionStateUserId() != userId)))) {
+                    if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((isCloudRoom || (!isCloudRoom && realmRoom.getActionStateUserId() != userId)))) {
                         txtLastSeen.setText(realmRoom.getActionState());
                         avi.setVisibility(View.VISIBLE);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -3924,7 +3950,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
                         }
                     } else if (chatType == CHAT) {
-                        if (RealmRoom.isCloudRoom(mRoomId)) {
+                        if (isCloudRoom) {
                             txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
                         } else {
                             if (userStatus != null) {

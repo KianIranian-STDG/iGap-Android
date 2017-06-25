@@ -362,16 +362,16 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
-    public static boolean isCloudRoom(long roomId) {
-        Realm realm = Realm.getDefaultInstance();
+    public static boolean isCloudRoom(long roomId, Realm realm) {
+
+        boolean result = false;
 
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == G.userId) {
-            return true;
+            result = true;
         }
 
-        realm.close();
-        return false;
+        return result;
     }
 
     /**

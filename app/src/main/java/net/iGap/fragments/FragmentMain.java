@@ -681,9 +681,10 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
+            boolean isMyCloud = mInfo.getId() == G.userId;
+
             if (mInfo != null && mInfo.isValid()) {
-                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((RealmRoom.isCloudRoom(mInfo.getId()) || (mInfo.getActionStateUserId()
-                    != userId))))) {
+                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((isMyCloud || (mInfo.getActionStateUserId() != userId))))) {
                     removeView(lytContainer5, R.id.lyt_message_sender_room);
 
                     addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
