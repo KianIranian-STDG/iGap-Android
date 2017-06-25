@@ -1173,7 +1173,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
              * change english number to persian number
              */
             if (HelperCalander.isLanguagePersian) {
-                txtName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtName.getText().toString()));
+                txtName.setText(txtName.getText().toString());
             }
             if (HelperCalander.isLanguagePersian) {
                 txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));

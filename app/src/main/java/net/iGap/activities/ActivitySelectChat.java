@@ -541,7 +541,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
              */
             if (HelperCalander.isLanguagePersian) {
                 holder.lastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.lastMessage.getText().toString()));
-                holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
+                holder.name.setText(holder.name.getText().toString());
                 holder.unreadMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.unreadMessage.getText().toString()));
             }
         }

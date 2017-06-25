@@ -963,7 +963,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(txtUnread.getText().toString()));
                 }
 
-                holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
+                holder.name.setText(holder.name.getText().toString());
             }
 
             TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
