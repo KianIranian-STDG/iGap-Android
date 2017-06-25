@@ -2105,6 +2105,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!addToView) {
+                    resetAndGetFromEnd();
+                }
 
                 final Realm realmMessage = Realm.getDefaultInstance();
 
@@ -3866,6 +3869,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void resetAndGetFromEnd() {
+        llScrollNavigate.setVisibility(View.GONE);
         firstUnreadMessageInChat = null;
         resetMessagingValue();
         countNewMessage = 0;
