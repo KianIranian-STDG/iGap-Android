@@ -826,6 +826,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
                         rg_prg_verify_sms.setVisibility(View.VISIBLE);
                         rg_txt_verify_sms.setTextAppearance(G.context, R.style.RedHUGEText);
+                        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                            rg_txt_verify_sms.setTypeface(titleTypeface);
+                        }
                     }
                 });
             }
@@ -976,7 +979,12 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             }
 
             if (rg_prg_verify_generate != null) rg_prg_verify_generate.setVisibility(View.VISIBLE);
-            if (rg_txt_verify_generate != null) rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
+            if (rg_txt_verify_generate != null) {
+                rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
+                if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                    rg_txt_verify_generate.setTypeface(titleTypeface);
+                }
+            }
 
             userVerifyResponse(verificationCode);
             ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
@@ -1193,7 +1201,12 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
     private void userLogin(final String token) {
         if (rg_prg_verify_register != null) rg_prg_verify_register.setVisibility(View.VISIBLE);
-        if (rg_txt_verify_register != null) rg_txt_verify_register.setTextAppearance(G.context, R.style.RedHUGEText);
+        if (rg_txt_verify_register != null) {
+            rg_txt_verify_register.setTextAppearance(G.context, R.style.RedHUGEText);
+            if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                rg_txt_verify_register.setTypeface(titleTypeface);
+            }
+        }
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
@@ -1368,6 +1381,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         rg_prg_verify_sms.setVisibility(View.GONE);
         rg_img_verify_sms.setVisibility(View.VISIBLE);
         rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
+        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+            rg_txt_verify_sms.setTypeface(titleTypeface);
+        }
         userVerify(userName, verificationCode);
     }
 
