@@ -160,22 +160,22 @@ public class FragmentMain extends Fragment implements OnComplete {
                 //results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                 //    equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
 
-                results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
+                results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
 
 
                 break;
             case chat:
-                results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
+                results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
 
                 break;
             case group:
-                results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
+                results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
 
                 break;
             case channel:
-                results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
+                results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
 
                 break;

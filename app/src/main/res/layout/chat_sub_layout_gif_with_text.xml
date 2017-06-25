@@ -67,16 +67,12 @@
             </FrameLayout>
 
             <LinearLayout
+                android:id="@+id/csliwt_layout_container_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 >
 
-              <net.iGap.module.EmojiTextViewE
-                  android:id="@+id/messageText"
-                  android:text="SAMPLE TEXT"
-                  style="@style/ChatMessages.EmojiTextView"
-                  />
 
             </LinearLayout>
 

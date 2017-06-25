@@ -25,6 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.one.EmojiOneProvider;
 import io.fabric.sdk.android.Fabric;
+import io.realm.Realm;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -175,6 +176,7 @@ public class G extends MultiDexApplication {
     public static Handler handler;
     public static LayoutInflater inflater;
     private Tracker mTracker;
+    public static Realm mRealm;
 
     public static HelperNotificationAndBadge helperNotificationAndBadge;
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
@@ -390,6 +392,9 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
+
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class)
@@ -400,7 +405,7 @@ public class G extends MultiDexApplication {
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
+
 
         new StartupActions();
     }
@@ -418,5 +423,13 @@ public class G extends MultiDexApplication {
             mTracker = analytics.newTracker(R.xml.global_tracker);
         }
         return mTracker;
+    }
+
+    public static Realm getRealm() {
+
+        if (mRealm == null || mRealm.isClosed()) {
+            mRealm = Realm.getDefaultInstance();
+        }
+        return mRealm;
     }
 }

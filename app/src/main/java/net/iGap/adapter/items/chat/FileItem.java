@@ -32,38 +32,49 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutFile;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_file;
     }
 
-    @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
+    @Override
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
         //G.imageLoader.displayImage(suitablePath(localPath), holder.thumbnail);
         //holder.thumbnail.setImageResource(R.drawable.file_icon);
     }
 
-    @Override public void bindView(ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
+
+        String text = "";
 
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
                 holder.cslf_txt_file_name.setText(mMessage.forwardedFrom.getAttachment().getName());
                 holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
             }
-
-            setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
+            text = mMessage.forwardedFrom.getMessage();
         } else {
             if (mMessage.attachment != null) {
                 holder.cslf_txt_file_name.setText(mMessage.attachment.name);
                 holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
             }
 
-            setTextIfNeeded(holder.messageText, mMessage.messageText);
+            text = mMessage.messageText;
+        }
+
+        if (mMessage.hasEmojiInText) {
+            setTextIfNeeded((EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        } else {
+            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
 
         Realm realm = Realm.getDefaultInstance();
@@ -101,13 +112,15 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         realm.close();
     }
 
-    @Override protected void updateLayoutForSend(ViewHolder holder) {
+    @Override
+    protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
         //   holder.cslf_txt_file_name.setTextColor(Color.WHITE);
         //  holder.cslf_txt_file_size.setTextColor(Color.WHITE);
     }
 
-    @Override protected void updateLayoutForReceive(ViewHolder holder) {
+    @Override
+    protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
         holder.cslf_txt_file_name.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         holder.cslf_txt_file_size.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
@@ -117,21 +130,18 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
-        protected EmojiTextViewE messageText;
         protected ImageView thumbnail;
 
         public ViewHolder(View view) {
             super(view);
-
-            messageText = (EmojiTextViewE) view.findViewById(R.id.messageText);
-            messageText.setTextSize(G.userTextSize);
             cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
             cslf_txt_file_size = (TextView) view.findViewById(R.id.fileSize);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
         }
     }
 
-    @Override public ViewHolder getViewHolder(View v) {
+    @Override
+    public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 }

@@ -124,7 +124,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     MusicPlayer musicPlayer;
     FragmentCall fragmentCall;
 
-    Realm mRealm;
+
 
     public static MyAppBarLayout appBarLayout;
     private Typeface titleTypeface;
@@ -174,21 +174,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         activityMain = null;
 
-        if (mRealm != null) {
-            mRealm.close();
+        if (G.getRealm() != null) {
+            G.getRealm().close();
         }
 
     }
 
-    public Realm getRealm() {
-
-        if (mRealm != null && !mRealm.isClosed()) {
-            return mRealm;
-        }
-
-        mRealm = Realm.getDefaultInstance();
-        return mRealm;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -744,7 +735,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ViewGroup itemNavCall = (ViewGroup) findViewById(R.id.lm_ll_call);
 
         // gone or visible view call
-        RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
+        RealmCallConfig callConfig = G.getRealm().where(RealmCallConfig.class).findFirst();
         if (callConfig != null) {
             if (callConfig.isVoice_calling()) {
                 itemNavCall.setVisibility(View.VISIBLE);
@@ -1156,7 +1147,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      * @param updateFromServer if is set true send request to sever for get own info
      */
     private void setDrawerInfo(boolean updateFromServer) {
-        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        RealmUserInfo realmUserInfo = G.getRealm().where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
             String username = realmUserInfo.getUserInfo().getDisplayName();
             String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();

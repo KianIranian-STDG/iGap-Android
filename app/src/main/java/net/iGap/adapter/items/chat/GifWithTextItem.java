@@ -13,11 +13,10 @@ package net.iGap.adapter.items.chat;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.widget.TextView;
 import java.io.File;
 import java.util.List;
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
@@ -37,7 +36,8 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         super(true, type, messageClickListener);
     }
 
-    @Override public void onPlayPauseGIF(ViewHolder holder, String localPath) {
+    @Override
+    public void onPlayPauseGIF(ViewHolder holder, String localPath) {
         super.onPlayPauseGIF(holder, localPath);
 
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
@@ -57,15 +57,18 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         }
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutGifWithText;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_gif_with_text;
     }
 
-    @Override public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+    @Override
+    public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
         holder.image.setImageURI(Uri.fromFile(new File(localPath)));
 
@@ -84,17 +87,27 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         }
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
+        String text = "";
+
         if (mMessage.forwardedFrom != null) {
-            setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
+            text = mMessage.forwardedFrom.getMessage();
         } else {
-            setTextIfNeeded(holder.messageText, mMessage.messageText);
+            text = mMessage.messageText;
+        }
+
+        if (mMessage.hasEmojiInText) {
+            setTextIfNeeded((EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        } else {
+            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
 
         holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (!isSelected()) {
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
@@ -115,28 +128,32 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         });
 
         holder.itemView.findViewById(R.id.progress).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 holder.image.performClick();
             }
         });
 
         holder.image.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View v) {
+            @Override
+            public boolean onLongClick(View v) {
                 holder.itemView.performLongClick();
                 return false;
             }
         });
 
         if (!mMessage.hasLinkInMessage) {
-            holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View v) {
+            messageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
                     holder.itemView.performLongClick();
                     return false;
                 }
             });
 
-            holder.messageText.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+            messageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     if (!isSelected()) {
                         if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return;
@@ -155,19 +172,15 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         protected ReserveSpaceGifImageView image;
-        protected EmojiTextViewE messageText;
 
         public ViewHolder(View view) {
             super(view);
-
             image = (ReserveSpaceGifImageView) view.findViewById(R.id.thumbnail);
-            messageText = (EmojiTextViewE) view.findViewById(R.id.messageText);
-            messageText.setTextSize(G.userTextSize);
-            messageText.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
-    @Override public ViewHolder getViewHolder(View v) {
+    @Override
+    public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 }

@@ -11,11 +11,10 @@
 package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import java.util.List;
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.EmojiTextViewE;
@@ -27,15 +26,18 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutMessage;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_message;
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
         String text;
@@ -44,25 +46,33 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         } else {
             text = mMessage.messageText;
         }
-        setTextIfNeeded(holder.messageText, text);
+
+        if (mMessage.hasEmojiInText) {
+            setTextIfNeeded((EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        } else {
+            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        }
 
         if (mMessage.hasLinkInMessage) {
 
             holder.llTime.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                 }
             });
         } else {
-            holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View v) {
+            messageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
                     holder.itemView.performLongClick();
                     return false;
                 }
             });
 
-            holder.messageText.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+            messageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     if (!isSelected()) {
                         if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return;
@@ -79,20 +89,16 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected EmojiTextViewE messageText;
         protected LinearLayout llTime;
 
         public ViewHolder(View view) {
             super(view);
-
             llTime = (LinearLayout) view.findViewById(R.id.csl_ll_time);
-            messageText = (EmojiTextViewE) view.findViewById(R.id.messageText);
-            messageText.setTextSize(G.userTextSize);
-            messageText.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
-    @Override public ViewHolder getViewHolder(View v) {
+    @Override
+    public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 }

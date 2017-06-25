@@ -11,7 +11,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 import java.util.List;
@@ -35,16 +34,21 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutVideoWithText;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_video_with_text;
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
+
+        String text = "";
 
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
@@ -53,26 +57,33 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
                         AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
             }
 
-            setTextIfNeeded(holder.messageText, mMessage.forwardedFrom.getMessage());
+            text = mMessage.forwardedFrom.getMessage();
         } else {
             if (mMessage.attachment != null) {
                 holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)),
                     AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + mMessage.attachment.compressing));
             }
+            text = mMessage.messageText;
+        }
 
-            setTextIfNeeded(holder.messageText, mMessage.messageText);
+        if (mMessage.hasEmojiInText) {
+            setTextIfNeeded((EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        } else {
+            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
 
         if (!mMessage.hasLinkInMessage) {
-            holder.messageText.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View v) {
+            messageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
                     holder.itemView.performLongClick();
                     return false;
                 }
             });
 
-            holder.messageText.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+            messageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     if (!isSelected()) {
                         if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return;
@@ -88,7 +99,8 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         }
     }
 
-    @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
+    @Override
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
         if (fileType == LocalFileType.THUMBNAIL) {
@@ -109,20 +121,16 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
-        protected EmojiTextViewE messageText;
 
         public ViewHolder(View view) {
             super(view);
-
-            messageText = (EmojiTextViewE) view.findViewById(R.id.messageText);
-            messageText.setTextSize(G.userTextSize);
             image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
             duration = (TextView) view.findViewById(R.id.duration);
-            messageText.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
-    @Override public ViewHolder getViewHolder(View v) {
+    @Override
+    public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 }
