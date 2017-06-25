@@ -111,7 +111,7 @@ public class HelperImageBackColor {
         textPaint.setTextSize(fontSize);
         textPaint.setTypeface(Typeface.create(Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf"), Typeface.BOLD));
         textPaint.setStyle(Paint.Style.FILL);
-        cs.drawText(alphabetName, with / 2, with / 2 + fontSize / 3, textPaint);
+        cs.drawText(alphabetName, with / 2, with / 2 + fontSize / 4, textPaint);
 
         return bitmap;
     }
