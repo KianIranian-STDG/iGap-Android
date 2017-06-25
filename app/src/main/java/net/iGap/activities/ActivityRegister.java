@@ -661,6 +661,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                             rg_img_verify_connect.setVisibility(View.VISIBLE);
                             rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_error_red));
                             rg_txt_verify_connect.setText(R.string.please_check_your_connenction);
+                            if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                                rg_txt_verify_connect.setTypeface(titleTypeface);
+                            }
                         }
                     });
                 }
@@ -729,6 +732,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
         rg_txt_verify_sms.setText(R.string.errore_verification_sms);
         rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_error_red));
+        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+            rg_txt_verify_sms.setTypeface(titleTypeface);
+        }
 
         dialog = new Dialog(ActivityRegister.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -823,6 +829,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                         if (rg_img_verify_sms != null) rg_img_verify_sms.setVisibility(View.GONE);
                         rg_txt_verify_connect.setTextAppearance(G.context, R.style.RedHUGEText);
                         rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                            rg_txt_verify_connect.setTypeface(titleTypeface);
+                        }
 
                         rg_prg_verify_sms.setVisibility(View.VISIBLE);
                         rg_txt_verify_sms.setTextAppearance(G.context, R.style.RedHUGEText);
@@ -1010,6 +1019,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             rg_prg_verify_sms.setVisibility(View.GONE);
             rg_img_verify_sms.setVisibility(View.INVISIBLE);
             rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
+            if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                rg_txt_verify_sms.setTypeface(titleTypeface);
+            }
             //rg_txt_verify_sms.setTextAppearance(G.context, Typeface.NORMAL);
 
             requestRegister();
@@ -1029,6 +1041,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                         rg_img_verify_sms.setImageResource(R.mipmap.check);
                         rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
                         rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                            rg_txt_verify_sms.setTypeface(titleTypeface);
+                        }
 
                         newUser = newUserR;
                         token = tokenR;
@@ -1037,6 +1052,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                             rg_prg_verify_generate.setVisibility(View.GONE);
                             rg_img_verify_generate.setVisibility(View.VISIBLE);
                             rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                            if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                                rg_txt_verify_generate.setTypeface(titleTypeface);
+                            }
                         }
                         userLogin(token);
                     }
@@ -1128,6 +1146,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 rg_img_verify_sms.setImageResource(R.mipmap.check);
                 rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
                 rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                    rg_txt_verify_sms.setTypeface(titleTypeface);
+                }
 
                 //newUser = newUserR;
                 //token = tokenR;
@@ -1135,6 +1156,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                     rg_prg_verify_generate.setVisibility(View.GONE);
                     rg_img_verify_generate.setVisibility(View.VISIBLE);
                     rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                    if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                        rg_txt_verify_generate.setTypeface(titleTypeface);
+                    }
                 }
                 //userLogin(token);
 
@@ -1234,7 +1258,12 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
                         if (rg_prg_verify_register != null) rg_prg_verify_register.setVisibility(View.GONE);
                         if (rg_img_verify_register != null) rg_img_verify_register.setVisibility(View.VISIBLE);
-                        if (rg_txt_verify_register != null) rg_txt_verify_register.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                        if (rg_txt_verify_register != null) {
+                            rg_txt_verify_register.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                            if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                                rg_txt_verify_register.setTypeface(titleTypeface);
+                            }
+                        }
 
                         if (newUser) {
                             Intent intent = new Intent(context, ActivityProfile.class);
