@@ -739,6 +739,12 @@ public class FragmentNotification extends Fragment {
         txtPopupNotification = (TextView) view.findViewById(R.id.ntg_txt_desc_notifications);
         ltPopupNotification = (ViewGroup) view.findViewById(R.id.ntg_layout_notifications);
         root = (ViewGroup) view.findViewById(R.id.ntg_fragment_root);
+        root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         imgLED = (ImageView) view.findViewById(R.id.ntg_img_ledColorMessage);
         ltLedColor = (ViewGroup) view.findViewById(R.id.ntg_layout_ledColorMessage);
