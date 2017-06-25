@@ -678,7 +678,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         if (isCloudRoom) {
-            imvUserPicture.setImageResource(R.mipmap.pu_gallary);
+            findViewById(R.id.ac_txt_cloud).setVisibility(View.VISIBLE);
+            imvUserPicture.setVisibility(View.GONE);
         } else {
             setAvatar();
         }
@@ -2985,7 +2986,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
         if (isCloudRoom) {
-            imvUserPicture.setImageResource(R.mipmap.pu_gallary);
+            findViewById(R.id.ac_txt_cloud).setVisibility(View.VISIBLE);
+            imvUserPicture.setVisibility(View.GONE);
         } else {
             setAvatar();
         }

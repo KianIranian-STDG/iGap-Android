@@ -65,6 +65,22 @@
 
           </net.iGap.libs.rippleeffect.RippleView>
 
+
+          <net.iGap.module.MaterialDesignTextView
+              android:id="@+id/ac_txt_cloud"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:padding="4dp"
+              android:singleLine="true"
+              android:layout_marginTop="@dimen/dp6"
+              android:text="@string/md_cloud"
+              android:textAppearance="@style/TextIconAppearance_toolbar"
+              android:textColor="#adffffff"
+              android:textSize="@dimen/dp32"
+              android:visibility="gone"
+              android:layout_gravity="center"
+              />
+
           <net.iGap.module.CircleImageView
               android:id="@+id/chl_imv_user_picture"
               android:layout_width="@dimen/dp60"
