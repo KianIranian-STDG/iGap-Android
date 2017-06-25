@@ -125,7 +125,7 @@ public class FragmentCall extends Fragment {
 
 
         mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.fc_recycler_view_call);
-        mRecyclerView.setItemViewCacheSize(500);
+        //mRecyclerView.setItemViewCacheSize(500);
         mRecyclerView.setDrawingCacheEnabled(true);
 
         Realm realm = Realm.getDefaultInstance();
