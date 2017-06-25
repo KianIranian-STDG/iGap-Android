@@ -1,10 +1,12 @@
 package net.iGap.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -30,6 +32,7 @@ import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 import io.realm.Sort;
+import java.util.HashMap;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -55,7 +58,7 @@ import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
 
-public class FragmentCall extends Fragment {
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN) public class FragmentCall extends Fragment {
 
     public static final String strGonTitle = "strGonTitle";
     boolean goneTitle = false;
@@ -73,9 +76,8 @@ public class FragmentCall extends Fragment {
     boolean canclick = false;
     int move = 0;
     public FloatingActionButton fabContactList;
-
-
     private RealmRecyclerView mRecyclerView;
+    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
     public static FragmentCall newInstance(boolean goneTitle) {
 
@@ -88,12 +90,15 @@ public class FragmentCall extends Fragment {
         return fragmentCall;
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.fragment_call, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         goneTitle = getArguments().getBoolean(strGonTitle);
@@ -108,7 +113,8 @@ public class FragmentCall extends Fragment {
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_call_ripple_txtBack);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 mActivity.getSupportFragmentManager().popBackStack();
             }
         });
@@ -125,7 +131,7 @@ public class FragmentCall extends Fragment {
 
 
         mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.fc_recycler_view_call);
-        //mRecyclerView.setItemViewCacheSize(500);
+        mRecyclerView.setItemViewCacheSize(500);
         mRecyclerView.setDrawingCacheEnabled(true);
 
         Realm realm = Realm.getDefaultInstance();
@@ -146,7 +152,8 @@ public class FragmentCall extends Fragment {
 
         onScrollListener = new RecyclerView.OnScrollListener() {
 
-            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 if (isThereAnyMoreItemToLoad) {
@@ -165,10 +172,12 @@ public class FragmentCall extends Fragment {
         mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
 
         G.iSignalingGetCallLog = new ISignalingGetCallLog() {
-            @Override public void onGetList(final int size) {
+            @Override
+            public void onGetList(final int size) {
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         progressBar.setVisibility(View.GONE);
                     }
                 });
@@ -198,7 +207,8 @@ public class FragmentCall extends Fragment {
         fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
         fabContactList.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 showContactListForCall();
             }
@@ -213,7 +223,8 @@ public class FragmentCall extends Fragment {
             view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
 
             mRecyclerView.getRecycleView().addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
 
                     if (((ActivityMain) getActivity()).arcMenu.isMenuOpened()) {
@@ -245,12 +256,7 @@ public class FragmentCall extends Fragment {
         fragment.setArguments(bundle);
 
         try {
-            mActivity.getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null)
-                .replace(R.id.fragmentContainer, fragment)
-                .commit();
+            mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
         } catch (Exception e) {
             e.getStackTrace();
         }
@@ -264,7 +270,8 @@ public class FragmentCall extends Fragment {
             progressBar.setVisibility(View.VISIBLE);
         } else {
             new Handler().postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     getLogListWithOfset();
                 }
             }, 1000);
@@ -290,13 +297,15 @@ public class FragmentCall extends Fragment {
         root1.setVisibility(View.VISIBLE);
 
         root1.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 dialog.dismiss();
 
                 if (G.userLogin) {
                     new MaterialDialog.Builder(mActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
-                        positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Realm realm = Realm.getDefaultInstance();
                             try {
                                 RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING).first();
@@ -401,7 +410,8 @@ public class FragmentCall extends Fragment {
                 // rippleCall = (RippleView) itemView.findViewById(R.id.fcsl_ripple_call);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getLogProto().getPeer().getId(), null, null);
 
@@ -416,7 +426,8 @@ public class FragmentCall extends Fragment {
                 });
 
                 itemView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override public boolean onTouch(View v, MotionEvent event) {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
 
                         if (event.getAction() == MotionEvent.ACTION_DOWN) {
                             move = (int) event.getX();
@@ -437,16 +448,18 @@ public class FragmentCall extends Fragment {
             }
         }
 
-        @Override public CallAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup parent, int i) {
+        @Override
+        public CallAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup parent, int i) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null);
             ViewHolder callHolder = new ViewHolder(view);
 
             return callHolder;
         }
 
-        @Override public void onBindRealmViewHolder(final CallAdapter.ViewHolder viewHolder, int i) {
+        @Override
+        public void onBindRealmViewHolder(final CallAdapter.ViewHolder viewHolder, int i) {
 
-            ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = realmResults.get(i).getLogProto();
+            final ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = realmResults.get(i).getLogProto();
 
             // set icon and icon color
             switch (item.getStatus()) {
@@ -504,14 +517,17 @@ public class FragmentCall extends Fragment {
 
             viewHolder.name.setText(item.getPeer().getDisplayName());
 
+            hashMapAvatar.put(item.getId(), viewHolder.image);
+
             HelperAvatar.getAvatar(item.getPeer(), item.getPeer().getId(), HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
-                @Override public void onAvatarGet(final String avatarPath, long ownerId) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
+                @Override
+                public void onAvatarGet(final String avatarPath, long ownerId) {
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(item.getId()));
                 }
 
-                @Override public void onShowInitials(final String initials, final String color) {
-                    viewHolder.image.setImageBitmap(
-                        net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                @Override
+                public void onShowInitials(final String initials, final String color) {
+                    hashMapAvatar.get(item.getId()).setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                 }
             });
         }

@@ -45,6 +45,7 @@ import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -586,7 +587,8 @@ public class FragmentShowMember extends Fragment {
 
         public String mainRole;
         public ProtoGlobal.Room.Type roomType;
-        public long userid;
+        public long userId;
+        private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
         public MemberAdapter(Context context, RealmResults<RealmMember> realmResults, ProtoGlobal.Room.Type roomType, String mainRole, long userid) {
 
@@ -594,7 +596,7 @@ public class FragmentShowMember extends Fragment {
 
             this.roomType = roomType;
             this.mainRole = mainRole;
-            this.userid = userid;
+            this.userId = userid;
         }
 
         @Override
@@ -747,16 +749,17 @@ public class FragmentShowMember extends Fragment {
 
             setRoleStarColor(holder.roleStar, mContact);
 
+            hashMapAvatar.put(mContact.peerId, holder.image);
 
             HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
                 @Override
-                public void onAvatarGet(String avatarPath, long roomId) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                public void onAvatarGet(String avatarPath, long userId) {
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(userId));
                 }
 
                 @Override
                 public void onShowInitials(String initials, String color) {
-                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    hashMapAvatar.get(userId).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                 }
             });
 
@@ -846,7 +849,7 @@ public class FragmentShowMember extends Fragment {
                 s.color = realmRegisteredInfo.getColor();
                 s.lastSeen = realmRegisteredInfo.getLastSeen();
                 s.status = realmRegisteredInfo.getStatus();
-                s.userID = userid;
+                s.userID = userId;
                 return s;
             }
 

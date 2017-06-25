@@ -38,6 +38,7 @@ import io.realm.Realm;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
+import java.util.HashMap;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperAvatar;
@@ -77,6 +78,7 @@ public class RegisteredContactsFragment extends Fragment {
     private FragmentActivity mActivity;
     private EditText edtSearch;
     private boolean isCallAction = false;
+    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
 
     public static RegisteredContactsFragment newInstance() {
@@ -332,7 +334,7 @@ public class RegisteredContactsFragment extends Fragment {
                             mActivity.getSupportFragmentManager().popBackStack();
 
                             long userId = realmResults.get(getPosition()).getId();
-                            if (userId != 134 && G.userId != userId) {
+                            if (userId != 134 && userId != userId) {
                                 FragmentCall.call(userId, false);
                             }
 
@@ -421,20 +423,21 @@ public class RegisteredContactsFragment extends Fragment {
             }
             realm.close();
 
+            hashMapAvatar.put(realmResults.get(i).getId(), viewHolder.image);
             setAvatar(viewHolder, realmResults.get(i).getId());
         }
 
-        private void setAvatar(final ViewHolder holder, long userId) {
+        private void setAvatar(final ViewHolder holder, final long userId) {
 
             HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, long ownerId) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));
                 }
 
                 @Override
                 public void onShowInitials(final String initials, final String color) {
-                    holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    hashMapAvatar.get(userId).setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                 }
             });
         }
