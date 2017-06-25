@@ -235,7 +235,9 @@ public class HelperNotificationAndBadge {
         notification = new NotificationCompat.Builder(context).setSmallIcon(getNotificationIcon()).setLargeIcon(mBitmapIcon).setContentTitle(mHeader).setContentText(mContent).setCategory(NotificationCompat.CATEGORY_MESSAGE).setStyle(getBigStyle()).setContentIntent(pi).build();
 
         if (currentAlarm + delayAlarm < System.currentTimeMillis()) {
-
+            if (isMute) {
+                return;
+            }
             alarmNotification(messageToShow);
         }
 
@@ -243,36 +245,30 @@ public class HelperNotificationAndBadge {
     }
 
     private void alarmNotification(String messageToShow) {
-        if (isMute) {
 
-            Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + R.raw.none);
-            notification.vibrate = new long[]{0, 0, 0};
-        } else {
+        if (G.isAppInFg) {
+            if (!isChatRoomNow) {
 
-            if (G.isAppInFg) {
-                if (!isChatRoomNow) {
-
-                    if (inAppVibrator == 1) {
-                        notification.vibrate = setVibrator(vibrator);
-                    }
-                    if (inAppSound == 1) {
-                        notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
-                    }
-                    if (inAppPreview == 1) {
-                        notification.tickerText = list.get(0).name + " " + messageToShow;
-                    }
-                } else if (inChat_Sound == 1) {
+                if (inAppVibrator == 1) {
+                    notification.vibrate = setVibrator(vibrator);
+                }
+                if (inAppSound == 1) {
                     notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
                 }
-            } else {
-                notification.vibrate = setVibrator(vibrator);
-                notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
-
-                if (messagePeriview == 1) {
+                if (inAppPreview == 1) {
                     notification.tickerText = list.get(0).name + " " + messageToShow;
-                } else {
-                    notification.tickerText = "";
                 }
+            } else if (inChat_Sound == 1) {
+                notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
+            }
+        } else {
+            notification.vibrate = setVibrator(vibrator);
+            notification.sound = Uri.parse("android.resource://" + context.getPackageName() + "/raw/" + setSound(sound));
+
+            if (messagePeriview == 1) {
+                notification.tickerText = list.get(0).name + " " + messageToShow;
+            } else {
+                notification.tickerText = "";
             }
         }
 
