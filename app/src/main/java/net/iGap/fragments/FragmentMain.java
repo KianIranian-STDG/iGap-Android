@@ -708,6 +708,8 @@ public class FragmentMain extends Fragment implements OnComplete {
         @Override
         public void onBindRealmViewHolder(final ViewHolder holder, final int i) {
 
+            holder.setIsRecyclable(false);
+
             LinearLayout lytContainer4 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer4);
             LinearLayout lytContainer5 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer5);
             LinearLayout lytContainer6 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer6);
