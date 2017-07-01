@@ -11,6 +11,7 @@ import net.iGap.interfaces.OnSecuring;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmPhoneContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
@@ -19,6 +20,7 @@ import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
+import net.iGap.request.RequestUserUpdateStatus;
 import net.iGap.request.RequestWrapper;
 
 import static net.iGap.G.context;
@@ -84,6 +86,11 @@ public class LoginActions extends Application {
 
 
                         getUserInfo();
+                        if (G.isAppInFg) {
+                            new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE);
+                        } else {
+                            new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
+                        }
                         //sendWaitingRequestWrappers();
                     }
                 });
