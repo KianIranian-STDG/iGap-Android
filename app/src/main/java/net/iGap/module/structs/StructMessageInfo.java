@@ -32,11 +32,13 @@ import org.parceler.Parcels;
  */
 public class StructMessageInfo implements Parcelable {
     public static final Parcelable.Creator<StructMessageInfo> CREATOR = new Parcelable.Creator<StructMessageInfo>() {
-        @Override public StructMessageInfo createFromParcel(Parcel source) {
+        @Override
+        public StructMessageInfo createFromParcel(Parcel source) {
             return new StructMessageInfo(source);
         }
 
-        @Override public StructMessageInfo[] newArray(int size) {
+        @Override
+        public StructMessageInfo[] newArray(int size) {
             return new StructMessageInfo[size];
         }
     };
@@ -79,8 +81,7 @@ public class StructMessageInfo implements Parcelable {
     public StructMessageInfo() {
     }
 
-    public StructMessageInfo(long roomId, String messageID, String senderID, String messageText, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String fileMime,
-        String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time) {
+    public StructMessageInfo(long roomId, String messageID, String senderID, String messageText, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String fileMime, String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time) {
         this.roomId = roomId;
         this.messageID = messageID;
 
@@ -106,8 +107,7 @@ public class StructMessageInfo implements Parcelable {
         this.time = time;
     }
 
-    public StructMessageInfo(long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String fileMime, String filePic,
-        String localThumbnailPath, String localFilePath, byte[] fileHash, long time, long replayToMessageId) {
+    public StructMessageInfo(long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String fileMime, String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time, long replayToMessageId) {
         this.roomId = roomId;
         this.messageID = messageID;
         Realm realm = Realm.getDefaultInstance();
@@ -132,8 +132,7 @@ public class StructMessageInfo implements Parcelable {
         realm.close();
     }
 
-    public StructMessageInfo(long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath,
-        String localFilePath, long time) {
+    public StructMessageInfo(long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath, String localFilePath, long time) {
         this.roomId = roomId;
         this.messageID = messageID;
 
@@ -155,8 +154,7 @@ public class StructMessageInfo implements Parcelable {
         this.time = time;
     }
 
-    public StructMessageInfo(long roomId, String messageID, String messageText, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType,
-        String localThumbnailPath, String localFilePath, long time) {
+    public StructMessageInfo(long roomId, String messageID, String messageText, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath, String localFilePath, long time) {
         this.roomId = roomId;
         this.messageID = messageID;
 
@@ -179,8 +177,7 @@ public class StructMessageInfo implements Parcelable {
         this.time = time;
     }
 
-    public StructMessageInfo(long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath,
-        String localFilePath, long time, long replayToMessageId) {
+    public StructMessageInfo(long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath, String localFilePath, long time, long replayToMessageId) {
         this.roomId = roomId;
         this.messageID = messageID;
 
@@ -236,8 +233,7 @@ public class StructMessageInfo implements Parcelable {
         this.channelExtra = Parcels.unwrap(in.readParcelable(StructChannelExtra.class.getClassLoader()));
     }
 
-    public static StructMessageInfo buildForAudio(long roomId, long messageID, long senderID, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType,
-        long time, String messageText, String localThumbnailPath, String localFilePath, String songArtist, long songLength, long replayToMessageId) {
+    public static StructMessageInfo buildForAudio(long roomId, long messageID, long senderID, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, long time, String messageText, String localThumbnailPath, String localFilePath, String songArtist, long songLength, long replayToMessageId) {
         StructMessageInfo info = new StructMessageInfo();
 
         info.roomId = roomId;
@@ -267,8 +263,7 @@ public class StructMessageInfo implements Parcelable {
         return info;
     }
 
-    public static StructMessageInfo buildForContact(long roomId, long messageID, long senderID, MyType.SendType sendType, long time, ProtoGlobal.RoomMessageStatus status, String firstName,
-        String lastName, String number, long replayToMessageId) {
+    public static StructMessageInfo buildForContact(long roomId, long messageID, long senderID, MyType.SendType sendType, long time, ProtoGlobal.RoomMessageStatus status, String firstName, String lastName, String number, long replayToMessageId) {
         StructMessageInfo info = new StructMessageInfo();
         info.roomId = roomId;
         info.messageID = Long.toString(messageID);
@@ -358,7 +353,7 @@ public class StructMessageInfo implements Parcelable {
 
         messageInfo.showTime = roomMessage.isShowTime();
 
-        realm.close();
+        //realm.close();
         return messageInfo;
     }
 
@@ -369,7 +364,7 @@ public class StructMessageInfo implements Parcelable {
         try {
             result = Long.parseLong(senderID) == G.userId;
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         return result;
@@ -412,11 +407,13 @@ public class StructMessageInfo implements Parcelable {
         return attachment != null;
     }
 
-    @Override public int describeContents() {
+    @Override
+    public int describeContents() {
         return 0;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
         //dest.writeParcelable(this.view, flags);
         dest.writeLong(this.roomId);
         dest.writeString(this.messageID);
