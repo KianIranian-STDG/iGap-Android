@@ -2642,4 +2642,29 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         }
     };
+
+    protected OnBackPressedListener onBackPressedListener;
+
+    public interface OnBackPressedListener {
+        void doBack();
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener, boolean isDisable) {
+        if (!isDisable) {
+            this.onBackPressedListener = onBackPressedListener;
+        } else {
+            this.onBackPressedListener = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (onBackPressedListener != null) {
+            onBackPressedListener.doBack();
+        } else {
+            super.onBackPressed();
+        }
+
+    }
 }

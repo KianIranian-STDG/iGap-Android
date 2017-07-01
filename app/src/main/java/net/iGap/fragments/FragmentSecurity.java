@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.regex.Pattern;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivitySetting;
 import net.iGap.interfaces.OnTwoStepPassword;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.enums.Security;
@@ -43,7 +44,7 @@ import static net.iGap.R.id.tsv_setRecoveryEmail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSecurity extends Fragment {
+public class FragmentSecurity extends Fragment implements ActivitySetting.OnBackPressedListener {
 
     private static String password;
     private boolean isChabgePassword = false;
@@ -75,8 +76,9 @@ public class FragmentSecurity extends Fragment {
     private TextView txtSetRecoveryEmail;
     private View lineConfirmView;
     private boolean isConfirmedRecoveryEmail;
-    private String mUnconfirmedEmailPattern;
+    private String mUnconfirmedEmailPattern = "";
     private EditText edtConfirmedEmail;
+    private RippleView btnBack;
 
     public FragmentSecurity() {
         // Required empty public constructor
@@ -91,6 +93,8 @@ public class FragmentSecurity extends Fragment {
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ((ActivitySetting) mActivity).setOnBackPressedListener(this, false);
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.tsv_prgWaiting_addContact);
 
@@ -148,11 +152,10 @@ public class FragmentSecurity extends Fragment {
             }
         });
 
-        RippleView btnBack = (RippleView) view.findViewById(R.id.tsv_ripple_back);
+        btnBack = (RippleView) view.findViewById(R.id.tsv_ripple_back);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 switch (page) {
                     case CHANGE_HINT:
                         viewChangeHint();
@@ -264,7 +267,7 @@ public class FragmentSecurity extends Fragment {
             public void onClick(View v) {
 
                 isFirstArrive = false;
-
+                ((ActivitySetting) mActivity).setOnBackPressedListener(FragmentSecurity.this, true);
                 FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
                 Bundle bundle = new Bundle();
                 bundle.putString("OLD_PASSWORD", password);
@@ -346,13 +349,13 @@ public class FragmentSecurity extends Fragment {
                                 txtSetRecoveryEmail.setVisibility(View.VISIBLE);
                                 txtSetConfirmedEmail.setVisibility(View.GONE);
                                 lineConfirmView.setVisibility(View.GONE);
-                                isSetRecoveryEmail = true;
+                                isSetRecoveryEmail = false;
                             } else {
                                 txtSetRecoveryEmail.setVisibility(View.VISIBLE);
                                 view.findViewById(R.id.tsv_viewRecoveryEmail).setVisibility(View.VISIBLE);
                                 txtSetConfirmedEmail.setVisibility(View.VISIBLE);
                                 lineConfirmView.setVisibility(View.VISIBLE);
-                                isSetRecoveryEmail = false;
+                                isSetRecoveryEmail = true;
 
                             }
 
@@ -461,6 +464,7 @@ public class FragmentSecurity extends Fragment {
                     @Override
                     public void run() {
                         mUnconfirmedEmailPattern = unConfirmEmailPatern;
+                        isSetRecoveryEmail = true;
                         viewChangeEmail();
                     }
                 });
@@ -653,7 +657,6 @@ public class FragmentSecurity extends Fragment {
                 rootConfirmedEmail.setVisibility(View.GONE);
                 rootChangeEmail.setVisibility(View.GONE);
                 rippleOk.setVisibility(View.GONE);
-                isSetRecoveryEmail = true;
                 if (mUnconfirmedEmailPattern.length() > 0) {
                     txtSetConfirmedEmail.setVisibility(View.VISIBLE);
                     lineConfirmView.setVisibility(View.VISIBLE);
@@ -765,6 +768,17 @@ public class FragmentSecurity extends Fragment {
 
     private Pattern patternEmail() {
         return Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{2,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,64}" + "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" + ")+");
+    }
+
+    @Override
+    public void doBack() {
+        btnBack.performClick();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((ActivitySetting) mActivity).setOnBackPressedListener(FragmentSecurity.this, true);
     }
 
 }
