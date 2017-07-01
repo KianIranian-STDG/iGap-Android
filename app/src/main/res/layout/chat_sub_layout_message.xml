@@ -50,6 +50,7 @@
                 android:id="@+id/csliwt_layout_container_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp32"
                 android:orientation="horizontal"
                 >
 

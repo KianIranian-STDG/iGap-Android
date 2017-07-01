@@ -154,12 +154,16 @@ public class HelperDownloadFile {
         sq.primaryKey = primaryKey;
 
         for (int i = mQueue.size() - 1; i >= 0; i--) {
-            if (priority > mQueue.get(i).priority) {
-                continue;
-            } else {
-                mQueue.add(i + 1, sq);
-                additem = true;
-                break;
+            try {
+                if (priority > mQueue.get(i).priority) {
+                    continue;
+                } else {
+                    mQueue.add(i + 1, sq);
+                    additem = true;
+                    break;
+                }
+            } catch (NullPointerException e) {
+
             }
         }
 

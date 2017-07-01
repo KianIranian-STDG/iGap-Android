@@ -1583,6 +1583,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     @Override
                     public void run() {
                         mAdapter.clear();
+                        recyclerView.removeAllViews();
                     }
                 });
             }
@@ -1859,6 +1860,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         dialog.dismiss();
                         RealmRoomMessage.ClearAllMessage(false, mRoomId);
                         mAdapter.clear();
+                        recyclerView.removeAllViews();
 
                         llScrollNavigate.setVisibility(View.GONE);
 
@@ -1904,8 +1906,28 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         recyclerView.setItemAnimator(null);
         //following lines make scrolling smoother
         //recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(10000);
+        recyclerView.setItemViewCacheSize(2000);
         recyclerView.setDrawingCacheEnabled(false);
+
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutAudio, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutContact, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutFile, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutGif, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutGifWithText, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutImage, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutImageWithText, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutLocation, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutLog, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutTime, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.cslp_progress_bar_waiting, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.cslum_txt_unread_message, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutVideo, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutVideoWithText, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutVoice, 0);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutMessage, 0);
+
+
+
 
         mAdapter = new MessagesAdapter<>(this, this, this);
 
@@ -3820,6 +3842,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      */
     private void clearAdapterItems() {
         mAdapter.clear();
+        recyclerView.removeAllViews();
     }
 
     /**
