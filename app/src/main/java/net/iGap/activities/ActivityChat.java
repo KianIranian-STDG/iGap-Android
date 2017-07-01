@@ -1180,7 +1180,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         }
 
-        isCloudRoom = RealmRoom.isCloudRoom(mRoomId, realm);
+        /**
+         * hint: don't check isCloudRoom with (( RealmRoom.isCloudRoom(mRoomId, realm); ))
+         * because in first time room not exist in RealmRoom and value is false always.
+         * so just need to check this value with chatPeerId
+         */
+        if (chatPeerId == G.userId) {
+            isCloudRoom = true;
+        }
 
         realm.close();
     }
