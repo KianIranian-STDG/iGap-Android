@@ -160,6 +160,7 @@
                   android:singleLine="true"
                   android:textColor="@android:color/white"
                   android:textSize="@dimen/dp12"
+                  android:maxLength="25"
                   app:emojiSize="@dimen/dp14"
                   />
 
@@ -173,6 +174,7 @@
                   app:indicatorColor="@color/white"
                   app:indicatorName="BallPulseIndicator"
                   style="@style/AVLoadingIndicatorView.Small"
+                  android:layout_marginTop="@dimen/dp4"
                   />
 
             </LinearLayout>

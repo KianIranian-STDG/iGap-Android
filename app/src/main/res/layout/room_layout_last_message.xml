@@ -20,6 +20,7 @@
       android:textSize="@dimen/dp13"
       app:emojiSize="@dimen/dp14"
       android:layout_marginBottom="2dp"
+      android:maxLength="30"
       fontPath="fonts/IRANSansMobile.ttf"
       />
 

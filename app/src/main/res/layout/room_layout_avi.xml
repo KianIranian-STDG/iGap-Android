@@ -13,13 +13,14 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
+      android:minWidth="@dimen/dp26"
       android:layout_marginLeft="@dimen/dp8"
       android:layout_marginStart="@dimen/dp8"
       android:visibility="gone"
       app:indicatorColor="@color/room_message_blue"
       app:indicatorName="BallPulseIndicator"
       style="@style/AVLoadingIndicatorView.Small"
-      android:layout_marginTop="@dimen/dp8"
+      android:layout_marginTop="@dimen/dp4"
       />
 
 </LinearLayout>
