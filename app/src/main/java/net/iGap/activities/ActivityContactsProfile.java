@@ -550,8 +550,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                         @Override
                         public void onClick(View view) {
                             long po = Long.parseLong(mPhone);
-                            String firstName = edtFirstName.getText().toString();
-                            String lastName = edtLastName.getText().toString();
+                            String firstName = edtFirstName.getText().toString().trim();
+                            String lastName = edtLastName.getText().toString().trim();
                             new RequestUserContactsEdit().contactsEdit(po, firstName, lastName);
                             dialog.dismiss();
                         }
@@ -569,9 +569,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                     realmUser.setFirst_name(firstName);
                                     realmUser.setLast_name(lastName);
 
+                                    String displayName = firstName + " " + lastName;
+
                                     for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
                                         if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == userId) {
-                                            realmRoom.setTitle(firstName + " " + lastName);
+                                            realmRoom.setTitle(displayName.trim());
                                         }
                                     }
 
@@ -579,15 +581,15 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                     if (contact != null) {
                                         contact.setFirst_name(firstName);
                                         contact.setLast_name(lastName);
-                                        contact.setDisplay_name(firstName + " " + lastName);
+                                        contact.setDisplay_name(displayName.trim());
                                     }
 
                                     RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
                                     if (registeredInfo != null) {
                                         registeredInfo.setFirstName(firstName);
                                         registeredInfo.setLastName(lastName);
-                                        registeredInfo.setDisplayName(firstName + " " + lastName);
-                                        registeredInfo.setInitials(HelperImageBackColor.getFirstAlphabetName(firstName + " " + lastName));
+                                        registeredInfo.setDisplayName(displayName.trim());
+                                        registeredInfo.setInitials(HelperImageBackColor.getFirstAlphabetName(displayName.trim()));
                                     }
 
                                     setAvatar();

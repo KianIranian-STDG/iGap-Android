@@ -2154,14 +2154,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         realmMessage.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                RealmRoomMessage roomMessage = realmMessage.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
+                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
-                                RealmClientCondition realmClientCondition = realmMessage.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
 
-                                RealmOfflineEdited realmOfflineEdited = realmMessage.createObject(RealmOfflineEdited.class, SUID.id().get());
+                                RealmOfflineEdited realmOfflineEdited = realm.createObject(RealmOfflineEdited.class, SUID.id().get());
                                 realmOfflineEdited.setMessageId(parseLong(messageInfo.messageID));
                                 realmOfflineEdited.setMessage(message);
-                                realmOfflineEdited = realmMessage.copyToRealm(realmOfflineEdited);
+                                realmOfflineEdited = realm.copyToRealm(realmOfflineEdited);
 
                                 realmClientCondition.getOfflineEdited().add(realmOfflineEdited);
 
@@ -2174,7 +2174,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                                 }
 
-                                RealmRoom rm = realmMessage.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                RealmRoom rm = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                 if (rm != null) {
                                     rm.setUpdatedTime(TimeUtils.currentLocalTime());
                                 }
@@ -2229,7 +2229,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 realmMessage.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
-                                        RealmRoomMessage roomMessage = realmMessage.createObject(RealmRoomMessage.class, parseLong(identity));
+                                        RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, parseLong(identity));
 
                                         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                                         roomMessage.setMessage(message);
@@ -2248,7 +2248,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                          *  user wants to replay to a message
                                          */
                                         if (userTriesReplay()) {
-                                            RealmRoomMessage messageToReplay = realmMessage.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
+                                            RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
                                             if (messageToReplay != null) {
                                                 roomMessage.setReplyTo(messageToReplay);
                                             }
@@ -2273,7 +2273,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     realmMessage.executeTransaction(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
-                                            RealmChannelExtra realmChannelExtra = realmMessage.createObject(RealmChannelExtra.class);
+                                            RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
                                             realmChannelExtra.setMessageId(parseLong(identity));
                                             realmChannelExtra.setThumbsUp("0");
                                             realmChannelExtra.setThumbsDown("0");
@@ -3669,8 +3669,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     @Override
                     public void run() {
                         if (!isCloudRoom) {
-                            imvUserPicture.setImageBitmap(
-                                net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }
                     }
                 });
@@ -3859,8 +3858,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     @Override
                     public void run() {
 
-                        imvUserPicture.setImageBitmap(
-                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
 
                     }
                 });
