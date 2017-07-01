@@ -759,7 +759,13 @@ public class FragmentShowMember extends Fragment {
 
                 @Override
                 public void onShowInitials(String initials, String color) {
-                    hashMapAvatar.get(userId).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    CircleImageView imageView;
+                    if (hashMapAvatar.get(userId) != null) {
+                        imageView = hashMapAvatar.get(userId);
+                    } else {
+                        imageView = holder.image;
+                    }
+                    imageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                 }
             });
 

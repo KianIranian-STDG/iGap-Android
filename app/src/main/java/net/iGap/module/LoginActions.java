@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.helper.HelperClientCondition;
+import net.iGap.helper.HelperLogout;
 import net.iGap.interfaces.OnSecuring;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
@@ -126,7 +127,12 @@ public class LoginActions extends Application {
 
     private static void getUserInfo() {
         Realm realm = Realm.getDefaultInstance();
-        final long userId = realm.where(RealmUserInfo.class).findFirst().getUserId();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo == null) {
+            HelperLogout.logout();
+            return;
+        }
+        final long userId = realmUserInfo.getUserId();
         realm.close();
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
