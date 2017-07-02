@@ -13,12 +13,14 @@ package net.iGap.activities;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -50,8 +52,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.protobuf.ByteString;
 import com.vicmikhailau.maskededittext.MaskedEditText;
 import io.realm.Realm;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,9 +69,13 @@ import net.iGap.fragments.FragmentSecurityRecovery;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnInfoCountryResponse;
+import net.iGap.interfaces.OnPushLoginToken;
+import net.iGap.interfaces.OnPushTwoStepVerification;
+import net.iGap.interfaces.OnQrCodeNewDevice;
 import net.iGap.interfaces.OnRecoverySecurityPassword;
 import net.iGap.interfaces.OnSecurityCheckPassword;
 import net.iGap.interfaces.OnSmsReceive;
@@ -75,6 +83,7 @@ import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.interfaces.OnUserVerification;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
@@ -89,6 +98,7 @@ import net.iGap.proto.ProtoUserVerify;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoCountry;
+import net.iGap.request.RequestQrCodeNewDevice;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
@@ -117,10 +127,14 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private SoftKeyboard softKeyboard;
     private Button btnStart;
-    private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc;
+    private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc, txtQrCode;
     private ProgressBar rg_prg_verify_connect, rg_prg_verify_sms, rg_prg_verify_generate, rg_prg_verify_register;
     private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate, rg_txt_verify_register, txtTimer;
     private ImageView rg_img_verify_connect, rg_img_verify_sms, rg_img_verify_generate, rg_img_verify_register;
+    private ImageView imgQrCodeNewDevice;
+    private ProgressBar prgQrCodeNewDevice;
+    private Uri image_uriQrCode;
+    private String _resultQrCode;
     private ViewGroup layout_verify;
     private String phoneNumber;
     //Array List for Store List of StructCountry Object
@@ -135,6 +149,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     private AdapterDialog adapterDialog;
     private Dialog dialogVerifyLandScape;
     private IncomingSms smsReceiver;
+    private CountDownTimer CountDownTimerQrCode;
     private CountDownTimer countDownTimer;
     private SearchView edtSearchView;
     private Dialog dialog;
@@ -157,6 +172,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     private boolean hasConfirmedRecoveryEmail;
     private String unconfirmedEmailPattern;
     private boolean isConfirmedRecoveryEmail;
+    private MaterialDialog dialogQrCode;
 
     public enum Reason {
         SOCKET, TIME_OUT, INVALID_CODE
@@ -209,6 +225,130 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
         edtPhoneNumber = (MaskedEditText) findViewById(R.id.rg_edt_PhoneNumber);
         txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
+        txtQrCode = (TextView) findViewById(R.id.rg_qrCode);
+
+        txtQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RequestQrCodeNewDevice().qrCodeNewDevice();
+                dialogQrCode = new MaterialDialog.Builder(ActivityRegister.this).title(getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true).positiveText(R.string.share_item_dialog).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        File file = new File(_resultQrCode);
+                        if (file.exists()) {
+                            Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.setType("image/*");
+                            try {
+                                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
+                        }
+                    }
+                }).negativeText(R.string.save).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        File file = new File(_resultQrCode);
+                        if (file.exists()) {
+                            HelperSaveFile.savePicToGallary(_resultQrCode, true);
+                        }
+                    }
+                }).neutralText(R.string.cancel).onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        dialog.dismiss();
+                    }
+                }).build();
+                View view = dialogQrCode.getView();
+                imgQrCodeNewDevice = (ImageView) view.findViewById(R.id.imgQrCodeNewDevice);
+                prgQrCodeNewDevice = (ProgressBar) view.findViewById(R.id.prgWaitQrCode);
+                prgQrCodeNewDevice.setVisibility(View.VISIBLE);
+                dialogQrCode.show();
+
+                dialogQrCode.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if (CountDownTimerQrCode != null) {
+                            CountDownTimerQrCode.cancel();
+                        }
+                    }
+                });
+            }
+        });
+
+
+        G.onQrCodeNewDevice = new OnQrCodeNewDevice() {
+            @Override
+            public void getQrCode(ByteString codeImage, final int expireTime) {
+
+                _resultQrCode = G.DIR_TEMP + "/" + "QrCode" + ".jpg";
+
+                File f = new File(_resultQrCode);
+                if (f.exists()) {
+                    f.delete();
+                }
+                AndroidUtils.writeBytesToFile(_resultQrCode, codeImage.toByteArray());
+                image_uriQrCode = Uri.parse("file://" + _resultQrCode);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        //if (CountDownTimerQrCode !=null){
+                        //    CountDownTimerQrCode.onFinish();
+                        //}
+
+                        checkExpireTime(expireTime);
+                        prgQrCodeNewDevice.setVisibility(View.GONE);
+
+                        G.imageLoader.clearMemoryCache();
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(_resultQrCode), imgQrCodeNewDevice);
+                    }
+                });
+
+            }
+        };
+
+        G.onPushLoginToken = new OnPushLoginToken() {
+            @Override
+            public void pushLoginToken(final String tokenQrCode, String userNameR, long userIdR, String authorHashR) {
+
+                token = tokenQrCode;
+                userName = userNameR;
+                userId = userIdR;
+                authorHash = authorHashR;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialogQrCode != null && dialogQrCode.isShowing()) dialogQrCode.dismiss();
+
+                        userLogin(token);
+                    }
+                });
+
+            }
+        };
+
+        G.onPushTwoStepVerification = new OnPushTwoStepVerification() {
+            @Override
+            public void pushTwoStepVerification(String userNameR, long userIdR, String authorHashR) {
+
+                userName = userNameR;
+                userId = userIdR;
+                authorHash = authorHashR;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialogQrCode != null && dialogQrCode.isShowing()) dialogQrCode.dismiss();
+                    }
+                });
+                checkPassword("", true);
+            }
+        };
+
 
         findViewById(R.id.ar_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -579,6 +719,29 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 btnStart.setLayoutParams(params2);
             }
         }
+    }
+
+    private void checkExpireTime(int expireTime) {
+
+        int time = (expireTime - 100) * 1000;
+        if (CountDownTimerQrCode != null) {
+            CountDownTimerQrCode.cancel();
+        }
+        CountDownTimerQrCode = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
+            public void onTick(long millisUntilFinished) {
+
+                //int seconds = (int) ((millisUntilFinished) / 1000);
+                //int minutes = seconds / 60;
+                //seconds = seconds % 60;
+            }
+
+            public void onFinish() {
+                new RequestQrCodeNewDevice().qrCodeNewDevice();
+            }
+        };
+
+        CountDownTimerQrCode.start();
+
     }
 
     //======= process verify : check internet and sms
@@ -1066,7 +1229,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
 
                 if (majorCode == 184 && minorCode == 1) {
 
-                    checkPassword(verificationCode);
+                    checkPassword(verificationCode, false);
 
                 } else if (majorCode == 102 && minorCode == 1) {
                     runOnUiThread(new Runnable() {
@@ -1133,35 +1296,37 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         };
     }
 
-    private void checkPassword(final String verificationCode) {
+    private void checkPassword(final String verificationCode, final boolean isQrCode) {
         new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail();
         G.handler.post(new Runnable() {
             @Override
             public void run() {
 
+                if (!isQrCode) {
 
-                rg_txt_verify_sms.setText((getResources().getString(R.string.rg_verify_register2)));
-                rg_prg_verify_sms.setVisibility(View.GONE);
-                rg_img_verify_sms.setVisibility(View.VISIBLE);
-                rg_img_verify_sms.setImageResource(R.mipmap.check);
-                rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
-                rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
-                if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
-                    rg_txt_verify_sms.setTypeface(titleTypeface);
-                }
-
-                //newUser = newUserR;
-                //token = tokenR;
-                if (rg_prg_verify_generate != null) {
-                    rg_prg_verify_generate.setVisibility(View.GONE);
-                    rg_img_verify_generate.setVisibility(View.VISIBLE);
-                    rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                    rg_txt_verify_sms.setText((getResources().getString(R.string.rg_verify_register2)));
+                    rg_prg_verify_sms.setVisibility(View.GONE);
+                    rg_img_verify_sms.setVisibility(View.VISIBLE);
+                    rg_img_verify_sms.setImageResource(R.mipmap.check);
+                    rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
+                    rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
                     if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
-                        rg_txt_verify_generate.setTypeface(titleTypeface);
+                        rg_txt_verify_sms.setTypeface(titleTypeface);
                     }
-                }
-                //userLogin(token);
 
+                    //newUser = newUserR;
+                    //token = tokenR;
+                    if (rg_prg_verify_generate != null) {
+                        rg_prg_verify_generate.setVisibility(View.GONE);
+                        rg_img_verify_generate.setVisibility(View.VISIBLE);
+                        rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
+                            rg_txt_verify_generate.setTypeface(titleTypeface);
+                        }
+                    }
+                    //userLogin(token);
+
+                }
                 vgMainLayout = (ViewGroup) findViewById(R.id.rg_rootMainLayout);
                 vgMainLayout.setVisibility(View.GONE);
                 vgCheckPassword = (ViewGroup) findViewById(R.id.rg_rootCheckPassword);
@@ -1172,6 +1337,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 AppUtils.setProgresColler(prgWaiting);
                 txtOk = (TextView) findViewById(R.id.rg_txtOk);
                 txtOk.setVisibility(View.VISIBLE);
+                txtQrCode.setVisibility(View.GONE);
                 txtRecovery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -967,4 +967,7 @@
   <string name="not_answerd_call">"به تماس شما پاسخ نداد و یا تماس شما ناموفق بود"</string>
   <string name="recorded_by">"ضبط شده توسط " </string>
 
+  <string name="Login_with_QrCode">وررود با QrCode</string>
+  <string name="Input_device_specification">مشخصات دستگاه ورودی</string>
+
 </resources>

@@ -317,6 +317,7 @@ public final class StartupActions {
         unLogin.add("138");
         unLogin.add("139");
         unLogin.add("140");
+        unLogin.add("802");
     }
 
     /**

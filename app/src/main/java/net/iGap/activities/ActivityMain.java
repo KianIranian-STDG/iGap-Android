@@ -86,6 +86,7 @@ import net.iGap.interfaces.OnUpdateAvatar;
 import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnUserSessionLogout;
+import net.iGap.interfaces.OnVerifyNewDevice;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
@@ -200,7 +201,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         activityMain = this;
 
-        G application = (G) getApplication();
+        final G application = (G) getApplication();
         Tracker mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RoomList");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
@@ -329,6 +330,36 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }, 5000);
         }
+
+        G.onVerifyNewDevice = new OnVerifyNewDevice() {
+            @Override
+            public void verifyNewDevice(String appName, int appId, int appBuildVersion, String appVersion, ProtoGlobal.Platform platform, String platformVersion, ProtoGlobal.Device device, String deviceName, boolean twoStepVerification) {
+                String txtTwoStepVerification = "";
+                if (twoStepVerification) {
+                    txtTwoStepVerification = "\n" + "please Enter your password on another device";
+                }
+
+                final String content = "" + "App name: " + appName + "\n" + "app Id: " + appId + "\n" + "App build version: " + appBuildVersion + "\n" + "app version: " + appVersion + "\n" + "platform: " + platform + "\n" + "platform version: " + platformVersion + "\n" + "device: " + device + "\n" + "device name: " + deviceName + txtTwoStepVerification;
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).content(content).positiveText(R.string.B_ok).show();
+                    }
+                });
+
+            }
+
+            @Override
+            public void errorVerifyNewDevice(final int majorCode, final int minCode) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+        };
     }
 
 
@@ -789,6 +820,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 pageDrawer = 9;
             }
         });
+        ViewGroup itemQrCode = (ViewGroup) findViewById(R.id.lm_ll_qrCode);
+        itemQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                });
+
+                pageDrawer = 10;
+            }
+        });
 
         ViewGroup itemNavOut = (ViewGroup) findViewById(R.id.lm_ll_igap_faq);
         itemNavOut.setOnClickListener(new View.OnClickListener() {
@@ -801,7 +846,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
 
-                pageDrawer = 10;
+                pageDrawer = 11;
             }
         });
 
@@ -933,69 +978,74 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         break;
                     }
                     case 10: {
-                        new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                                .content(R.string.content_log_out)
-                                .positiveText(getResources().getString(R.string.B_ok))
-                                .negativeText(getResources().getString(R.string.B_cancel))
-                                .iconRes(R.mipmap.exit_to_app_button)
-                                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        G.onUserSessionLogout = new OnUserSessionLogout() {
-                                            @Override
-                                            public void onUserSessionLogout() {
 
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        HelperLogout.logout();
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onError() {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                snack.dismiss();
-                                                            }
-                                                        });
-                                                        snack.show();
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onTimeOut() {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                snack.dismiss();
-                                                            }
-                                                        });
-                                                        snack.show();
-                                                    }
-                                                });
-                                            }
-                                        };
-                                        new RequestUserSessionLogout().userSessionLogout();
-                                    }
-                                })
-                                .show();
-
+                        startActivity(new Intent(ActivityMain.this, ActivityQrCodeNewDevice.class));
                         pageDrawer = 0;
                         break;
                     }
+                    case 11: {
+                        new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
+                            .content(R.string.content_log_out)
+                            .positiveText(getResources().getString(R.string.B_ok))
+                            .negativeText(getResources().getString(R.string.B_cancel))
+                            .iconRes(R.mipmap.exit_to_app_button)
+                            .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    G.onUserSessionLogout = new OnUserSessionLogout() {
+                                        @Override
+                                        public void onUserSessionLogout() {
+
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    HelperLogout.logout();
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onError() {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            snack.dismiss();
+                                                        }
+                                                    });
+                                                    snack.show();
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onTimeOut() {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            snack.dismiss();
+                                                        }
+                                                    });
+                                                    snack.show();
+                                                }
+                                            });
+                                        }
+                                    };
+                                    new RequestUserSessionLogout().userSessionLogout();
+                                }
+                            })
+                            .show();
+                        pageDrawer = 0;
+                    }
+                    break;
                 }
             }
 

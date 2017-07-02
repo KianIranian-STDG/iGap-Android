@@ -75,6 +75,21 @@
                 android:visibility="gone"
                 />
           </net.iGap.libs.rippleeffect.RippleView>
+
+
+          <net.iGap.module.MaterialDesignTextView
+              android:id="@+id/rg_qrCode"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="match_parent"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_alignParentTop="true"
+              android:gravity="center"
+              android:text="@string/md_qrCode"
+              android:textAppearance="@style/TextIconAppearance_toolbar"
+              android:textColor="@color/whit_background"
+              android:visibility="visible"
+              />
         </RelativeLayout>
       </android.support.v7.widget.Toolbar>
 
