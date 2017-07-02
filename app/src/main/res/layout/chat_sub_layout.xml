@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp68"
+    android:layout_height="68dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_chat_sub_layout"
     >
-
-  <FrameLayout
-      android:layout_width="@dimen/dp68"
-      android:layout_height="match_parent"
-      >
-
-    <net.iGap.module.CircleImageView
-        android:id="@+id/cs_img_contact_picture"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="@dimen/dp52"
-        android:layout_gravity="center"
-        />
-  </FrameLayout>
 
   <LinearLayout
       android:id="@+id/lytContainer1"

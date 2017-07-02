@@ -18,6 +18,7 @@ import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -709,6 +710,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             holder.setIsRecyclable(false);
 
+            LinearLayout lytContainerRoot = (LinearLayout) holder.itemView.findViewById(R.id.root_chat_sub_layout);
             LinearLayout lytContainer4 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer4);
             LinearLayout lytContainer5 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer5);
             LinearLayout lytContainer6 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer6);
@@ -716,9 +718,44 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             final RealmRoom mInfo = holder.mInfo = realmResults.get(i);
 
-            boolean isMyCloud = mInfo.getId() == G.userId;
+            final boolean isMyCloud = RealmRoom.isCloudRoom(mInfo.getId());
 
             if (mInfo != null && mInfo.isValid()) {
+
+                CircleImageView image = null;
+
+                if (isMyCloud) {
+                    addView(holder, lytContainerRoot, R.layout.room_layout_initials, R.id.lyt_initials, 0);
+
+                    TextView txtInitials = (TextView) holder.itemView.findViewById(R.id.cs_txt_contact_initials);
+                    txtInitials.setText(G.context.getString(R.string.md_cloud));
+                    txtInitials.setTypeface(G.typeface_Fontico);
+                    txtInitials.setGravity(Gravity.CENTER);
+                    ViewGroup.LayoutParams paramsText = txtInitials.getLayoutParams();
+                    paramsText.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    paramsText.width = (int) G.context.getResources().getDimension(R.dimen.dp68);
+                    txtInitials.setLayoutParams(paramsText);
+
+                    LinearLayout linearLayout = (LinearLayout) holder.itemView.findViewById(R.id.lyt_initials);
+                    ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    params.width = (int) G.context.getResources().getDimension(R.dimen.dp68);
+                    linearLayout.setLayoutParams(params);
+
+                    removeView(lytContainer5, R.id.lyt_avatar);
+                } else {
+                    addView(holder, lytContainerRoot, R.layout.room_layout_avatar, R.id.lyt_avatar, 0);
+                    image = (CircleImageView) holder.itemView.findViewById(R.id.cs_img_contact_picture);
+
+                    LinearLayout linearLayout = (LinearLayout) holder.itemView.findViewById(R.id.lyt_avatar);
+                    ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    params.width = (int) G.context.getResources().getDimension(R.dimen.dp68);
+                    linearLayout.setLayoutParams(params);
+
+                    removeView(lytContainer5, R.id.lyt_initials);
+                }
+
                 if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((isMyCloud || (mInfo.getActionStateUserId() != userId))))) {
                     removeView(lytContainer5, R.id.lyt_message_sender_room);
 
@@ -872,11 +909,16 @@ public class FragmentMain extends Fragment implements OnComplete {
                     avatarType = HelperAvatar.AvatarType.ROOM;
                 }
 
-                hashMapAvatar.put(idForGetAvatar, holder.image);
+                if (!isMyCloud) {
+                    hashMapAvatar.put(idForGetAvatar, image);
+                }
+
                 HelperAvatar.getAvatar(idForGetAvatar, avatarType, new OnAvatarGet() {
                     @Override
                     public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(idForGetAvatar));
+                        if (hashMapAvatar.get(idForGetAvatar) != null) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(idForGetAvatar));
+                        }
                     }
 
                     @Override
@@ -887,7 +929,9 @@ public class FragmentMain extends Fragment implements OnComplete {
                         } else {
                             idForGetAvatar = mInfo.getId();
                         }
-                        hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp52), initials, color));
+                        if (hashMapAvatar.get(idForGetAvatar) != null) {
+                            hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp52), initials, color));
+                        }
                     }
                 });
 
@@ -1060,14 +1104,14 @@ public class FragmentMain extends Fragment implements OnComplete {
         public class ViewHolder extends RealmViewHolder {
 
             RealmRoom mInfo;
-            protected CircleImageView image;
+            //protected CircleImageView image;
             protected EmojiTextViewE name;
             protected ViewGroup rootChat;
 
             public ViewHolder(View view) {
                 super(view);
 
-                image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
+                //image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
                 name = (EmojiTextViewE) view.findViewById(R.id.cs_txt_contact_name);
                 rootChat = (ViewGroup) view.findViewById(R.id.root_chat_sub_layout);
 
