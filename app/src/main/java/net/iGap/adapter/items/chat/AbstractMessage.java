@@ -193,15 +193,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         mMessage.view = holder.itemView;
 
-        ///**
-        // * noinspection RedundantCast
-        // */
-        //if (!isSelected() && ((FrameLayout) holder.itemView).getForeground() != null) {
-        //    /**
-        //     * noinspection RedundantCast
-        //     */
-        //    ((FrameLayout) holder.itemView).setForeground(null);
-        //}
+        /**
+         * noinspection RedundantCast
+         */
+        if (!isSelected() && ((FrameLayout) holder.itemView).getForeground() != null) {
+            /**
+             * noinspection RedundantCast
+             */
+            ((FrameLayout) holder.itemView).setForeground(null);
+        }
 
 
         /**
