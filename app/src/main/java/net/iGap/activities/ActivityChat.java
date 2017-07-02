@@ -3078,7 +3078,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             try {
                 AbstractMessage item = mAdapter.getAdapterItem(i);
                 if (item.mMessage.hasAttachment()) {
-                    if (item.mMessage.getAttachment().cashID.equals(cashId) && (!item.mMessage.messageID.equals(messageID))) {
+                    if (item.mMessage.getAttachment().cashID != null && item.mMessage.getAttachment().cashID.equals(cashId) && (!item.mMessage.messageID.equals(messageID))) {
                         mAdapter.notifyItemChanged(i);
                     }
                 }
