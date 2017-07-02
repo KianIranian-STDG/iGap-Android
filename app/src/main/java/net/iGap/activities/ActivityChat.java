@@ -6894,11 +6894,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     startFutureMessageIdDown = Long.parseLong(structMessageInfos.get(structMessageInfos.size() - 1).messageID);
                 }
             } else {
-                if (direction == UP) {
-                    startFutureMessageIdUp = 0;
-                } else {
-                    startFutureMessageIdDown = 0;
-                }
+                /**
+                 * don't set zero. when user come to room for first time with -@roomId-
+                 * for example : @public ,this block will be called and set zero this value and finally
+                 * don't allow to user for get top history, also that sounds this block isn't helpful
+                 */
+                //if (direction == UP) {
+                //    startFutureMessageIdUp = 0;
+                //} else {
+                //    startFutureMessageIdDown = 0;
+                //}
             }
 
             recyclerView.post(new Runnable() {

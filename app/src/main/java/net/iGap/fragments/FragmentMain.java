@@ -289,7 +289,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     @Override
                     public void onError(int majorCode, int minorCode) {
 
-                        getActivity().runOnUiThread(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
@@ -309,7 +309,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     @Override
                     public void onTimeout() {
 
-                        getActivity().runOnUiThread(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 progressBar.setVisibility(View.GONE);
@@ -367,7 +367,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 break;
             case clinetCondition:
-                getActivity().runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
@@ -423,7 +423,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
         mOffset += roomList.size();
 
-        getActivity().runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 progressBar.setVisibility(View.GONE);
@@ -437,7 +437,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             isSendRequestForLoading = true;
             new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
 
-            getActivity().runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     progressBar.setVisibility(View.VISIBLE);
