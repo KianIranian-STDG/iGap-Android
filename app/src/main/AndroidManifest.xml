@@ -137,6 +137,7 @@
 
     <activity
         android:name=".activities.ActivityQrCodeNewDevice"
+        android:theme="@style/Theme.AppCompat.Translucent"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
 
     <activity

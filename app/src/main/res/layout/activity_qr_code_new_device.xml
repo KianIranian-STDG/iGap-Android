@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<RelativeLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_qrCoderView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".activities.ActivityQrCodeNewDevice"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
-  <com.dlazaro66.qrcodereaderview.QRCodeReaderView
-      android:id="@+id/apvq_qrdecoderview"
+  <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_alignParentLeft="true"
-      android:layout_alignParentTop="true"
-      />
+      android:background="@color/background_qrcode"
+      >
 
-  <net.iGap.module.PointsOverlayView
-      android:id="@+id/points_overlay_view"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      />
+    <com.dlazaro66.qrcodereaderview.QRCodeReaderView
+        android:id="@+id/apvq_qrdecoderview"
+        android:layout_width="@dimen/dp300"
+        android:layout_height="@dimen/dp300"
+        android:layout_centerInParent="true"
+        />
 
+    <net.iGap.module.PointsOverlayView
+        android:id="@+id/points_overlay_view"
+        android:layout_width="@dimen/dp300"
+        android:layout_height="@dimen/dp300"
+        android:layout_centerInParent="true"
+        />
+  </RelativeLayout>
 </RelativeLayout>
 

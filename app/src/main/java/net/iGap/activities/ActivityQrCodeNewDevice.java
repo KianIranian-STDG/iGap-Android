@@ -11,10 +11,14 @@ package net.iGap.activities;
 
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.RelativeLayout;
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
 import net.iGap.R;
 import net.iGap.module.PointsOverlayView;
 import net.iGap.request.RequestUserVerifyNewDevice;
+
+import static net.iGap.R.id.apvq_qrdecoderview;
 
 public class ActivityQrCodeNewDevice extends ActivityEnhanced implements QRCodeReaderView.OnQRCodeReadListener {
 
@@ -28,7 +32,7 @@ public class ActivityQrCodeNewDevice extends ActivityEnhanced implements QRCodeR
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_code_new_device);
 
-        myDecoderView = (QRCodeReaderView) findViewById(R.id.apvq_qrdecoderview);
+        myDecoderView = (QRCodeReaderView) findViewById(apvq_qrdecoderview);
         myDecoderView.setOnQRCodeReadListener(this);
 
         // Use this function to enable/disable decoding
@@ -49,6 +53,23 @@ public class ActivityQrCodeNewDevice extends ActivityEnhanced implements QRCodeR
         pointsOverlayView = (PointsOverlayView) findViewById(R.id.points_overlay_view);
 
 
+        myDecoderView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        RelativeLayout root = (RelativeLayout) findViewById(R.id.root_qrCoderView);
+
+        root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(0, 0);
+            }
+        });
+
     }
 
     @Override
@@ -62,5 +83,11 @@ public class ActivityQrCodeNewDevice extends ActivityEnhanced implements QRCodeR
         pointsOverlayView.setPoints(points);
         finish();
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
     }
 }
