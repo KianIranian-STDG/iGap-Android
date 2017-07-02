@@ -175,7 +175,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             || holder instanceof GifWithTextItem.ViewHolder) {
 
             LinearLayout layoutMesageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
-            layoutMesageContainer.removeAllViews();
+            // layoutMesageContainer.removeAllViews();
             messageView = makeTextViewMessage();
             layoutMesageContainer.addView(messageView);
         }
@@ -193,15 +193,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         mMessage.view = holder.itemView;
 
-        /**
-         * noinspection RedundantCast
-         */
-        if (!isSelected() && ((FrameLayout) holder.itemView).getForeground() != null) {
-            /**
-             * noinspection RedundantCast
-             */
-            ((FrameLayout) holder.itemView).setForeground(null);
-        }
+        ///**
+        // * noinspection RedundantCast
+        // */
+        //if (!isSelected() && ((FrameLayout) holder.itemView).getForeground() != null) {
+        //    /**
+        //     * noinspection RedundantCast
+        //     */
+        //    ((FrameLayout) holder.itemView).setForeground(null);
+        //}
+
+
         /**
          * only will be called when message layout is directional-base (e.g. single chat)
          */
@@ -233,19 +235,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.GONE);
             }
         }
-        /**
-         * display user avatar only if chat type is GROUP
-         */
-        if (holder.itemView.findViewById(R.id.messageSenderAvatar) != null) {
-            holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
-        }
+        ///**
+        // * display user avatar only if chat type is GROUP
+        // */
+        //if (holder.itemView.findViewById(R.id.messageSenderAvatar) != null) {
+        //    holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
+        //}
 
         replyMessageIfNeeded(holder, G.getRealm());
         forwardMessageIfNeeded(holder, G.getRealm());
 
-        if (holder.itemView.findViewById(R.id.messageSenderName) != null) {
-            holder.itemView.findViewById(R.id.messageSenderName).setVisibility(View.GONE);
-        }
+        //if (holder.itemView.findViewById(R.id.messageSenderName) != null) {
+        //    holder.itemView.findViewById(R.id.messageSenderName).setVisibility(View.GONE);
+        //}
 
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
@@ -322,14 +324,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        /**
-         * show vote layout for channel otherwise hide layout
-         * also get message state for channel
-         */
-
-        if (holder.itemView.findViewById(R.id.lyt_vote) != null) {
-            holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.GONE);
-        }
+        ///**
+        // * show vote layout for channel otherwise hide layout
+        // * also get message state for channel
+        // */
+        //
+        //if (holder.itemView.findViewById(R.id.lyt_vote) != null) {
+        //    holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.GONE);
+        //}
 
         if (G.showVoteChannelLayout) {
 
@@ -713,13 +715,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void replyMessageIfNeeded(VH holder, Realm realm) {
-        /**
-         * set replay container visible if message was replayed, otherwise, gone it
-         */
-
-        if (holder.itemView.findViewById(R.id.cslr_replay_layout) != null) {
-            holder.itemView.findViewById(R.id.cslr_replay_layout).setVisibility(View.GONE);
-        }
+        ///**
+        // * set replay container visible if message was replayed, otherwise, gone it
+        // */
+        //
+        //if (holder.itemView.findViewById(R.id.cslr_replay_layout) != null) {
+        //    holder.itemView.findViewById(R.id.cslr_replay_layout).setVisibility(View.GONE);
+        //}
 
         if (mMessage.replayTo != null) {
             LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
@@ -789,13 +791,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void forwardMessageIfNeeded(VH holder, Realm realm) {
-        /**
-         * set forward container visible if message was forwarded, otherwise, gone it
-         */
-
-        if (holder.itemView.findViewById(R.id.cslr_ll_forward) != null) {
-            holder.itemView.findViewById(R.id.cslr_ll_forward).setVisibility(View.GONE);
-        }
+        ///**
+        // * set forward container visible if message was forwarded, otherwise, gone it
+        // */
+        //
+        //if (holder.itemView.findViewById(R.id.cslr_ll_forward) != null) {
+        //    holder.itemView.findViewById(R.id.cslr_ll_forward).setVisibility(View.GONE);
+        //}
 
         if (mMessage.forwardedFrom != null) {
 
