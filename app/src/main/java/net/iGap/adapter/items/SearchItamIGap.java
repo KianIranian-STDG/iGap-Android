@@ -118,12 +118,12 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
             }
 
             if (item.getRoom().getType() == ProtoGlobal.Room.Type.GROUP) {
-                typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
+                typeFaceIcon = G.typeface_Fontico;
                 holder.txtIcon.setTypeface(typeFaceIcon);
                 holder.txtIcon.setVisibility(View.VISIBLE);
                 holder.txtIcon.setText(G.context.getString(R.string.md_users_social_symbol));
             } else if (item.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
+                typeFaceIcon = G.typeface_Fontico;
                 holder.txtIcon.setTypeface(typeFaceIcon);
                 holder.txtIcon.setVisibility(View.VISIBLE);
                 holder.txtIcon.setText(G.context.getString(R.string.md_channel_icon));

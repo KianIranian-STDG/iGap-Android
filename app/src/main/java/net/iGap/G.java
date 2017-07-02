@@ -12,6 +12,7 @@ package net.iGap;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
@@ -389,6 +390,12 @@ public class G extends MultiDexApplication {
     public static ISignalingCallBack iSignalingCallBack;
     public static ISignalingErrore iSignalingErrore;
 
+    public static Typeface typeface_IRANSansMobile;
+    public static Typeface typeface_IRANSansMobile_Bold;
+    public static Typeface typeface_Fontico;
+    public static Typeface typeface_neuropolitical;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -404,7 +411,6 @@ public class G extends MultiDexApplication {
         context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
 
 
         new StartupActions();

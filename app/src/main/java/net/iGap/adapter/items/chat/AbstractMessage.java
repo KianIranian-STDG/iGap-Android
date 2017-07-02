@@ -13,7 +13,6 @@ package net.iGap.adapter.items.chat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
@@ -36,7 +35,6 @@ import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.FontCache;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -163,7 +161,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
-        holder.setIsRecyclable(false);
+        // holder.setIsRecyclable(false);
 
         if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogItem.ViewHolder || holder instanceof TimeItem.ViewHolder) {
             return;
@@ -290,7 +288,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             });
                         }
                     });
-
                     if (initialize != null && initialize[0] != null && initialize[1] != null) {
                         ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
                             net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initialize[0], initialize[1]));
@@ -448,7 +445,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         textView.setGravity(Gravity.LEFT);
         textView.setPadding(20, 0, 20, 5);
         textView.setSingleLine();
-        textView.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
+        textView.setTypeface(G.typeface_IRANSansMobile);
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setText(text);
         textView.setTextSize(12);
@@ -741,9 +738,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (replayView != null) {
                 replayView.setVisibility(View.VISIBLE);
                 TextView replyFrom = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from);
-                replyFrom.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf"));
+                replyFrom.setTypeface(G.typeface_IRANSansMobile);
                 TextView replayMessage = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message);
-                replayMessage.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf"));
+                replayMessage.setTypeface(G.typeface_IRANSansMobile);
                 replayView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -774,7 +771,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 String forwardMessage = AppUtils.replyTextMessage(mMessage.replayTo, holder.itemView.getResources());
                 ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
-                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf"));
+                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setTypeface(G.typeface_IRANSansMobile);
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
                     replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
                     //holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_sendColor));
@@ -825,9 +822,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             TextView txtPrefixForwardFrom = (TextView) holder.itemView.findViewById(R.id.cslr_txt_prefix_forward);
-            txtPrefixForwardFrom.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf"));
+            txtPrefixForwardFrom.setTypeface(G.typeface_IRANSansMobile);
             TextView txtForwardFrom = (TextView) holder.itemView.findViewById(R.id.cslr_txt_forward_from);
-            txtForwardFrom.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf"));
+            txtForwardFrom.setTypeface(G.typeface_IRANSansMobile);
             if (forwardView != null) {
                 forwardView.setVisibility(View.VISIBLE);
 
@@ -1544,7 +1541,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             emojiTextViewE.setTextColor(Color.parseColor("#333333"));
             emojiTextViewE.setId(R.id.messageSenderTextMessage);
             emojiTextViewE.setPadding(10, 0, 10, 0);
-            emojiTextViewE.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
+            emojiTextViewE.setTypeface(G.typeface_IRANSansMobile);
             emojiTextViewE.setTextSize(G.userTextSize);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 emojiTextViewE.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
@@ -1559,7 +1556,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             textView.setTextColor(Color.parseColor("#333333"));
             textView.setId(R.id.messageSenderTextMessage);
             textView.setPadding(10, 0, 10, 0);
-            textView.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
+            textView.setTypeface(G.typeface_IRANSansMobile);
             textView.setTextSize(G.userTextSize);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 textView.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);

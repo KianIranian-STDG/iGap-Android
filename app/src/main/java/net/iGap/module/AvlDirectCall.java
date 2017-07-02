@@ -22,8 +22,8 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.FontCache;
 
 public class AvlDirectCall extends LinearLayout {
 
@@ -73,7 +73,7 @@ public class AvlDirectCall extends LinearLayout {
         textView.setTextSize(context.getResources().getDimension(R.dimen.dp14));
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setText(R.string.md_expand_arrow);
-        textView.setTypeface(FontCache.get("fonts/iGap-Fontico.ttf", context));
+        textView.setTypeface(G.typeface_Fontico);
 
         return textView;
     }

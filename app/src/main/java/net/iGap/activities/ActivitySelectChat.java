@@ -125,9 +125,9 @@ public class ActivitySelectChat extends ActivityEnhanced {
         TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
 
         if (!HelperCalander.isLanguagePersian) {
-            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+            titleTypeface = G.typeface_neuropolitical;
         } else {
-            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+            titleTypeface = G.typeface_IRANSansMobile;
         }
 
         txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
@@ -495,12 +495,12 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
                     holder.chatIcon.setVisibility(GONE);
                 } else if (mInfo.getType() == ProtoGlobal.Room.Type.GROUP) {
-                    typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
+                    typeFaceIcon = G.typeface_Fontico;
                     holder.chatIcon.setTypeface(typeFaceIcon);
                     holder.chatIcon.setVisibility(View.VISIBLE);
                     holder.chatIcon.setText(getStringChatIcon(RoomType.GROUP));
                 } else if (mInfo.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                    typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
+                    typeFaceIcon = G.typeface_Fontico;
                     holder.chatIcon.setTypeface(typeFaceIcon);
                     holder.chatIcon.setVisibility(View.VISIBLE);
                     holder.chatIcon.setText(getStringChatIcon(RoomType.CHANNEL));

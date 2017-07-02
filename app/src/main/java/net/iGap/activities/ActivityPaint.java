@@ -128,7 +128,7 @@ public class ActivityPaint extends ActivityEnhanced {
                 setPaintClear();
             }
         });
-        Typeface typefaceEraser = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
+        Typeface typefaceEraser = G.typeface_Fontico;
         tvEraser.setTypeface(typefaceEraser);
 
         TextView tvPaint = (TextView) findViewById(R.id.textView_paintsize);

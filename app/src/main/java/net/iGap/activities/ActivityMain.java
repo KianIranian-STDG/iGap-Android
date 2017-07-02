@@ -1027,9 +1027,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         if (!HelperCalander.isLanguagePersian) {
-            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+            titleTypeface = G.typeface_neuropolitical;
         } else {
-            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+            titleTypeface = G.typeface_IRANSansMobile;
         }
     }
 

@@ -40,7 +40,6 @@ import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityProfile;
 import net.iGap.activities.MyDialog;
-import net.iGap.helper.FontCache;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperClientCondition;
@@ -743,7 +742,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     TextView txtView = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
                     txtView.setText(R.string.txt_draft);
                     txtView.setTextColor(getResources().getColor(R.color.toolbar_background));
-                    txtView.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
+                    txtView.setTypeface(G.typeface_IRANSansMobile);
                     removeView(lytContainer5, R.id.lyt_avi_room);
                     removeView(lytContainer7, R.id.lyt_tic_room);
                 } else {
@@ -810,7 +809,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 TextView txtMessageSender = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
                                 txtMessageSender.setText(lastMessageSender);
                                 txtMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
-                                txtMessageSender.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
+                                txtMessageSender.setTypeface(G.typeface_IRANSansMobile);
                             } else {
                                 removeView(lytContainer5, R.id.lyt_message_sender_room);
                             }
@@ -909,10 +908,10 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                     TextView txtChatIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_chat_icon);
                     if (mInfo.getType() == GROUP) {
-                        typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
+                        typeFaceIcon = G.typeface_Fontico;
                         txtChatIcon.setText(getStringChatIcon(RoomType.GROUP));
                     } else if (mInfo.getType() == CHANNEL) {
-                        typeFaceIcon = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
+                        typeFaceIcon = G.typeface_Fontico;
                         txtChatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
                     }
                     txtChatIcon.setTypeface(typeFaceIcon);
@@ -924,7 +923,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     addView(holder, lytContainer7, R.layout.room_layout_time, R.id.lyt_time_room, lytContainer7.getChildCount());
                     TextView txtTime = ((TextView) holder.itemView.findViewById(R.id.cs_txt_contact_time));
                     txtTime.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
-                    txtTime.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
+                    txtTime.setTypeface(G.typeface_IRANSansMobile);
                 } else {
                     removeView(lytContainer7, R.id.lyt_time_room);
                 }
@@ -941,21 +940,19 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 if (mInfo.getUnreadCount() < 1) {
                     removeView(lytContainer6, R.id.lyt_unread_room);
-                    holder.name.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
+                    holder.name.setTypeface(G.typeface_IRANSansMobile);
 
                     if (mInfo.isPinned()) {
                         addView(holder, lytContainer6, R.layout.room_layout_pinned, R.id.lyt_pinned_room, lytContainer6.getChildCount());
                         TextView txtPinIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_pinned_message);
-                        txtPinIcon.setTypeface(Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf"));
+                        txtPinIcon.setTypeface(G.typeface_Fontico);
                     } else {
                         removeView(lytContainer6, R.id.lyt_pinned_room);
                     }
 
                 } else {
 
-
-
-                    holder.name.setTypeface(FontCache.get("fonts/IRANSansMobile_Bold.ttf", G.context));
+                    holder.name.setTypeface(G.typeface_IRANSansMobile_Bold);
 
                     addView(holder, lytContainer6, R.layout.room_layout_unread, R.id.lyt_unread_room, lytContainer6.getChildCount());
                     removeView(lytContainer6, R.id.lyt_pinned_room);
@@ -1010,7 +1007,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
             if (txtLastMessage != null) {
-                txtLastMessage.setTypeface(FontCache.get("fonts/IRANSansMobile.ttf", G.context));
+                txtLastMessage.setTypeface(G.typeface_IRANSansMobile);
             }
         }
 

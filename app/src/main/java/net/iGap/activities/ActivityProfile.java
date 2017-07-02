@@ -105,9 +105,9 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
         txtTitle = (TextView) findViewById(R.id.pu_titleToolbar);
 
         if (!HelperCalander.isLanguagePersian) {
-            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+            titleTypeface = G.typeface_neuropolitical;
         } else {
-            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+            titleTypeface = G.typeface_IRANSansMobile;
         }
         txtTitle.setTypeface(titleTypeface);
 

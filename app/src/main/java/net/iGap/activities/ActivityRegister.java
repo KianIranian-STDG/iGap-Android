@@ -251,9 +251,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         txtTitleToolbar = (TextView) findViewById(R.id.rg_txt_titleToolbar);
 
         if (!HelperCalander.isLanguagePersian) {
-            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+            titleTypeface = G.typeface_neuropolitical;
         } else {
-            titleTypeface = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+            titleTypeface = G.typeface_IRANSansMobile;
         }
 
         txtTitleToolbar.setTypeface(titleTypeface);
