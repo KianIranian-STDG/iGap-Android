@@ -107,7 +107,7 @@
   <string name="icon_folder">\uf76f</string>  <!-- igap_folder-open  -->
   <string name="icon_photo">\uf2ef</string> <!--  igap_image-filter  -->
   <string name="md_eraser">\uf1fe</string> <!-- igap_eraser  -->
-  <string name="md_qrCode">\ue905</string> <!-- igap_eraser  -->
+  <string name="md_qrCode">\uf433</string> <!-- igap_eraser  -->
 
 
 </resources>

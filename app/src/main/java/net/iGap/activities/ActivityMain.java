@@ -334,12 +334,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.onVerifyNewDevice = new OnVerifyNewDevice() {
             @Override
             public void verifyNewDevice(String appName, int appId, int appBuildVersion, String appVersion, ProtoGlobal.Platform platform, String platformVersion, ProtoGlobal.Device device, String deviceName, boolean twoStepVerification) {
-                String txtTwoStepVerification = "";
-                if (twoStepVerification) {
-                    txtTwoStepVerification = "\n" + "please Enter your password on another device";
-                }
 
-                final String content = "" + "App name: " + appName + "\n" + "app Id: " + appId + "\n" + "App build version: " + appBuildVersion + "\n" + "app version: " + appVersion + "\n" + "platform: " + platform + "\n" + "platform version: " + platformVersion + "\n" + "device: " + device + "\n" + "device name: " + deviceName + txtTwoStepVerification;
+                final String content = "" + "App name: " + appName + "\n" + "Build version: " + appBuildVersion + "\n" + "App version: " + appVersion + "\n" + "Platform: " + platform + "\n" + "Platform version: " + platformVersion + "\n" + "Device: " + device + "\n" + "Device name: " + deviceName;
 
                 runOnUiThread(new Runnable() {
                     @Override
