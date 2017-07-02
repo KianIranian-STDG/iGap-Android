@@ -11,7 +11,7 @@
   <string name="md_show_more_button">\uf1d9</string>  <!-- igap_dots-vertical  -->
   <string name="md_close_button">\uf156</string>  <!-- igap_close  -->
   <string name="md_right_arrow_button">\uf28d</string>  <!-- igap_forward  -->
-  <string name="md_forward">\ue904</string>  <!-- igap_forward  -->
+  <string name="md_forward">\ue969</string>  <!-- igap_forward  -->
   <string name="md_right_arrow_button1">\uf142</string> <!-- igap_chevron-right  -->
   <string name="md_refresh_button">\uf0e8</string> <!-- igap_cached  -->
   <string name="md_round_info_button">\uf2fd</string>  <!-- igap_information-outline  -->
@@ -31,7 +31,7 @@
   <string name="md_rubbish_delete_file">\uf1c0</string> <!-- igap_delete  -->
   <string name="md_right_arrow_forward">\uf054</string>  <!-- igap_arrow-right  -->
   <string name="md_copy">\uf18f</string>  <!-- igap_content-copy  -->
-  <string name="md_back_arrow_reply">\ue906</string>  <!-- igap_reply  -->
+  <string name="md_back_arrow_reply">\ue96a</string>  <!-- igap_reply  -->
   <string name="md_play_rounded_button">\uf40c</string>  <!-- igap_play-circle  -->
   <string name="md_round_pause_button">\uf3e5</string>  <!-- igap_pause-circle  -->
   <string name="md_play_next_button">\uf4ad</string>  <!-- igap_skip-next  -->
@@ -98,7 +98,7 @@
   <string name="md_chat">\uf369</string>  <!-- igap_message-text  -->
 
   <string name="md_pin">\ue901</string>
-  <string name="md_unpin">\ue903</string>
+  <string name="md_unpin">\ue904</string>
   <string name="md_circlePin">\ue902</string>
 
   <string name="icon_music">\uf759</string>  <!-- igap_music  -->
