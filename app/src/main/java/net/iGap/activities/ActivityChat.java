@@ -1905,7 +1905,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         recyclerView.setItemAnimator(null);
         //following lines make scrolling smoother
         //recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(2000);
+        recyclerView.setItemViewCacheSize(0);
         recyclerView.setDrawingCacheEnabled(false);
 
         recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutAudio, 0);

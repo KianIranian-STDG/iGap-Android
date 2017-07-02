@@ -13,6 +13,7 @@ package net.iGap.adapter.items.chat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
@@ -196,13 +197,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * noinspection RedundantCast
          */
-        if (!isSelected() && ((FrameLayout) holder.itemView).getForeground() != null) {
-            /**
-             * noinspection RedundantCast
-             */
-            ((FrameLayout) holder.itemView).setForeground(null);
-        }
 
+        if (isSelected()) {
+            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+        } else {
+            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(Color.TRANSPARENT));
+        }
 
         /**
          * only will be called when message layout is directional-base (e.g. single chat)
