@@ -50,7 +50,7 @@
     <activity
         android:name=".activities.ActivityChat"
         android:screenOrientation="portrait"
-        android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
     <activity
         android:name=".activities.ActivityChatBackground"
