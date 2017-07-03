@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_qrCoderView"
     android:layout_width="match_parent"
@@ -11,21 +12,45 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:background="@color/background_qrcode"
+
       >
-
-    <com.dlazaro66.qrcodereaderview.QRCodeReaderView
-        android:id="@+id/apvq_qrdecoderview"
-        android:layout_width="@dimen/dp300"
-        android:layout_height="@dimen/dp300"
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/dp6"
         android:layout_centerInParent="true"
-        />
+        android:background="@color/white"
+        android:layout_margin="@dimen/dp16"
+        app:cardBackgroundColor="@color/white"
+        >
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="start"
+          android:text="@string/QrCode_Scan"
+          android:textColor="@color/black90"
+          android:textSize="@dimen/dp20"
+          android:layout_margin="@dimen/dp8"
+          />
 
-    <net.iGap.module.PointsOverlayView
-        android:id="@+id/points_overlay_view"
-        android:layout_width="@dimen/dp300"
-        android:layout_height="@dimen/dp300"
-        android:layout_centerInParent="true"
-        />
+      <com.dlazaro66.qrcodereaderview.QRCodeReaderView
+          android:id="@+id/apvq_qrdecoderview"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp260"
+          android:layout_marginTop="@dimen/dp32"
+          android:layout_margin="@dimen/dp8"
+          android:layout_gravity="bottom"
+          />
+
+      <net.iGap.module.PointsOverlayView
+          android:id="@+id/points_overlay_view"
+          android:layout_width="@dimen/dp300"
+          android:layout_height="@dimen/dp300"
+          android:layout_centerInParent="true"
+          android:layout_margin="@dimen/dp8"
+          />
+
+    </android.support.v7.widget.CardView>
   </RelativeLayout>
 </RelativeLayout>
 
