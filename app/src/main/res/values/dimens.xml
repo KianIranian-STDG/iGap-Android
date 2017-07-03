@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <item name="messageSenderAvatar" type="id" />
   <item name="messageSenderName" type="id" />
@@ -64,5 +64,8 @@
   <dimen name="dp105">105dp</dimen>
   <dimen name="dp110">110dp</dimen>
   <dimen name="dp95">95dp</dimen>
+
+  <dimen name="md_action_corner_radius" tools:override="true">6dp</dimen>
+  <dimen name="md_bg_corner_radius" tools:override="true">6dp</dimen>
 
 </resources>

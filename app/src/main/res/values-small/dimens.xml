@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!-- Default screen margins, per the Android Design guidelines. -->
 
   <bool name="isTablet">false</bool>
@@ -62,5 +62,8 @@
   <dimen name="dp110">110dp</dimen>
   <dimen name="dp95">72dp</dimen>
 
+
+  <dimen name="md_action_corner_radius" tools:override="true">4dp</dimen>
+  <dimen name="md_bg_corner_radius" tools:override="true">4dp</dimen>
 
 </resources>
