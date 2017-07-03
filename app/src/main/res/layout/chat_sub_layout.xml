@@ -76,6 +76,7 @@
           android:layout_height="match_parent"
           android:gravity="top|center_horizontal"
           android:orientation="vertical"
+          android:minWidth="@dimen/dp28"
           >
 
         <LinearLayout
