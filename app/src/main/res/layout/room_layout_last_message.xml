@@ -11,6 +11,7 @@
       android:id="@+id/cs_txt_last_message"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:maxWidth="@dimen/dp180"
       android:layout_gravity="start"
       android:gravity="start|top"
       android:maxLines="1"
@@ -20,8 +21,8 @@
       android:textSize="@dimen/dp13"
       app:emojiSize="@dimen/dp14"
       android:layout_marginBottom="2dp"
-      android:maxLength="25"
       fontPath="fonts/IRANSansMobile.ttf"
+      android:ellipsize="middle"
       />
 
 </LinearLayout>
