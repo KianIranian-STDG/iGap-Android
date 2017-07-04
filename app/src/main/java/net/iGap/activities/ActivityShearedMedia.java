@@ -43,7 +43,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import io.realm.Sort;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -1332,7 +1331,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             return result;
         }
 
-        public class ViewHolderTime extends RealmViewHolder {
+        public class ViewHolderTime extends RecyclerView.ViewHolder {
             public TextView txtTime;
 
             public ViewHolderTime(View view, int position) {
