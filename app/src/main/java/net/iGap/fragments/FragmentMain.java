@@ -26,9 +26,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
+import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
-import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
 import io.realm.Sort;
@@ -50,7 +50,6 @@ import net.iGap.interfaces.OnComplete;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.DeviceUtils;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
@@ -73,6 +72,7 @@ import net.iGap.request.RequestGroupLeft;
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
 import static net.iGap.G.firstTimeEnterToApp;
+import static net.iGap.G.inflater;
 import static net.iGap.G.userId;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -94,7 +94,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
 
-    private RealmRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private MainType mainType;
 
 
@@ -140,16 +140,9 @@ public class FragmentMain extends Fragment implements OnComplete {
 
     private void initRecycleView(View view) {
 
-        mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.cl_recycler_view_contact);
-        mRecyclerView.setItemViewCacheSize(100);
-        mRecyclerView.setDrawingCacheEnabled(true);
-
-        PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(getActivity());
-        mRecyclerView.getRecycleView().setLayoutManager(preCachingLayoutManager);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.getRecycleView().setLayoutManager(mLayoutManager);
-
-        preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(getActivity()));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.cl_recycler_view_contact);
+        mRecyclerView.setItemAnimator(null);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         RealmResults<RealmRoom> results = null;
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.UPDATED_TIME};
@@ -181,7 +174,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                 break;
         }
 
-        RoomAdapter roomAdapter = new RoomAdapter(getActivity(), results, this);
+        RoomAdapter roomAdapter = new RoomAdapter(results, this);
         mRecyclerView.setAdapter(roomAdapter);
 
         if (mainType == MainType.all) {
@@ -236,7 +229,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
         swipeRefreshLayout.setColorSchemeColors(Color.parseColor(G.progressColor));*/
 
-        mRecyclerView.getRecycleView().addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -358,9 +351,9 @@ public class FragmentMain extends Fragment implements OnComplete {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager()).findFirstVisibleItemPosition();
+                        int firstVisibleItem = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
                         if (firstVisibleItem < 5) {
-                            mRecyclerView.getRecycleView().scrollToPosition(0);
+                            mRecyclerView.scrollToPosition(0);
                         }
                     }
                 });
@@ -687,28 +680,26 @@ public class FragmentMain extends Fragment implements OnComplete {
         }
     }
 
-    public class RoomAdapter extends RealmBasedRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
+    public class RoomAdapter extends RealmRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
 
         public OnComplete mComplete;
         public String action;
         private Typeface typeFaceIcon;
         private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
-        public RoomAdapter(Context context, RealmResults<RealmRoom> realmResults, OnComplete complete) {
-            super(context, realmResults, true, false, false, "");
+        public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete) {
+            super(data, true);
             this.mComplete = complete;
         }
 
         @Override
-        public RoomAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
-            View v = inflater.inflate(R.layout.chat_sub_layout, viewGroup, false);
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
             return new RoomAdapter.ViewHolder(v);
         }
 
         @Override
-        public void onBindRealmViewHolder(final ViewHolder holder, final int i) {
-
-            holder.setIsRecyclable(false);
+        public void onBindViewHolder(final ViewHolder holder, final int i) {
 
             LinearLayout lytContainerRoot = (LinearLayout) holder.itemView.findViewById(R.id.root_chat_sub_layout);
             LinearLayout lytContainer4 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer4);
@@ -716,7 +707,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             LinearLayout lytContainer6 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer6);
             LinearLayout lytContainer7 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer7);
 
-            final RealmRoom mInfo = holder.mInfo = realmResults.get(i);
+            final RealmRoom mInfo = holder.mInfo = getItem(i);
 
             final boolean isMyCloud = RealmRoom.isCloudRoom(mInfo.getId());
 
