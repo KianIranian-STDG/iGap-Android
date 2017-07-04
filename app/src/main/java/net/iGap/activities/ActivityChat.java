@@ -2118,7 +2118,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                goToProfile();
+            }
+        });
 
+        findViewById(R.id.ac_txt_cloud).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 goToProfile();
             }
         });

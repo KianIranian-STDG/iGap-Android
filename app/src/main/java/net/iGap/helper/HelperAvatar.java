@@ -143,7 +143,7 @@ public class HelperAvatar {
                     onAvatarGetHashMap.put(ownerId, listeners);
                 }
 
-                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
+                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL, new OnDownload() {
                     @Override
                     public void onDownload(final String filepath, final String token) {
 
@@ -232,7 +232,7 @@ public class HelperAvatar {
         if (initialsStart != null) {
             onAvatarGet.onShowInitials(initialsStart[0], initialsStart[1]);
         }
-        getAvatarImage(registeredUser, ownerId, avatarType, false, _realm, onAvatarGet);
+        getAvatarImage(registeredUser, ownerId, avatarType, showMain, _realm, onAvatarGet);
     }
 
     public static String[] getAvatarSync(ProtoGlobal.RegisteredUser registeredUser, final long ownerId, AvatarType avatarType, boolean showMain, Realm _realm, final OnAvatarGet onAvatarGet) {
