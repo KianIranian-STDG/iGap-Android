@@ -1,22 +1,22 @@
 package net.iGap.activities;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.request.RequestSignalingRate;
-
-/**
- * Created by android3 on 5/30/2017.
- */
 
 public class ActivityRatingBar extends ActivityEnhanced {
 
@@ -49,39 +49,39 @@ public class ActivityRatingBar extends ActivityEnhanced {
     }
 
     private void initComponent() {
+        openDialogForRating();
 
-        ratingBar = (RatingBar) findViewById(R.id.arb_ratingBar_call);
-        edtResone = (EditText) findViewById(R.id.arb_edt_resone);
         LinearLayout layotRoot = (LinearLayout) findViewById(R.id.arb_layout_root);
-        Button btnCancel = (Button) findViewById(R.id.arb_btn_cancel);
-        final Button btnOk = (Button) findViewById(R.id.arb_btn_ok);
-
         layotRoot.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                closeDialog();
+
             }
         });
 
-        findViewById(R.id.arb_layout_rate).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                // no action
-            }
-        });
+    }
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                closeDialog();
-            }
-        });
+    private void openDialogForRating() {
 
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-
+        MaterialDialog dialog = new MaterialDialog.Builder(ActivityRatingBar.this).title("Call Quality").customView(R.layout.dialog_rating_call, true).theme(Theme.LIGHT).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 sendRateToServer();
                 closeDialog();
-            }
-        });
 
+            }
+        }).negativeText(R.string.cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                closeDialog();
+            }
+        }).build();
+        View view = dialog.getView();
+
+        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+        positive.setEnabled(false);
+
+        ratingBar = (RatingBar) view.findViewById(R.id.arb_ratingBar_call);
+        edtResone = (EditText) view.findViewById(R.id.arb_edt_resone);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
 
@@ -92,14 +92,14 @@ public class ActivityRatingBar extends ActivityEnhanced {
                     edtResone.setVisibility(View.VISIBLE);
 
                     if (edtResone.getText().length() > 0) {
-                        btnOk.setEnabled(true);
+                        positive.setEnabled(true);
                     } else {
-                        btnOk.setEnabled(false);
+                        positive.setEnabled(false);
                     }
                 } else {
 
                     edtResone.setVisibility(View.INVISIBLE);
-                    btnOk.setEnabled(true);
+                    positive.setEnabled(true);
                 }
             }
         });
@@ -112,9 +112,9 @@ public class ActivityRatingBar extends ActivityEnhanced {
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if (edtResone.getText().length() > 0) {
-                    btnOk.setEnabled(true);
+                    positive.setEnabled(true);
                 } else {
-                    btnOk.setEnabled(false);
+                    positive.setEnabled(false);
                 }
             }
 
@@ -122,6 +122,23 @@ public class ActivityRatingBar extends ActivityEnhanced {
 
             }
         });
+
+        view.findViewById(R.id.arb_layout_rate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // no action
+            }
+        });
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                closeDialog();
+            }
+        });
+
+        dialog.show();
+
+
     }
 
     private void sendRateToServer() {
