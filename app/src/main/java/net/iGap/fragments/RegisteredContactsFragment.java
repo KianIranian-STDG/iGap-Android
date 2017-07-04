@@ -337,7 +337,7 @@ public class RegisteredContactsFragment extends Fragment {
                             mActivity.getSupportFragmentManager().popBackStack();
 
                             long userId = realmContacts.getId();
-                            if (userId != 134 && userId != userId) {
+                            if (userId != 134 && G.userId != userId) {
                                 FragmentCall.call(userId, false);
                             }
 
