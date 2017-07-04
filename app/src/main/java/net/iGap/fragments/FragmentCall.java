@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -24,13 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
-import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import io.realm.Sort;
 import java.util.HashMap;
 import net.iGap.G;
@@ -76,7 +73,7 @@ import net.iGap.request.RequestSignalingGetLog;
     boolean canclick = false;
     int move = 0;
     public FloatingActionButton fabContactList;
-    private RealmRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
     public static FragmentCall newInstance(boolean goneTitle) {
@@ -130,9 +127,10 @@ import net.iGap.request.RequestSignalingGetLog;
         });
 
 
-        mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.fc_recycler_view_call);
-        mRecyclerView.setItemViewCacheSize(500);
-        mRecyclerView.setDrawingCacheEnabled(true);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
+        mRecyclerView.setItemViewCacheSize(100);
+        mRecyclerView.setItemAnimator(null);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -147,7 +145,7 @@ import net.iGap.request.RequestSignalingGetLog;
             empty_call.setVisibility(View.VISIBLE);
         }
 
-        CallAdapter callAdapter = new CallAdapter(mActivity, results);
+        CallAdapter callAdapter = new CallAdapter(results);
         mRecyclerView.setAdapter(callAdapter);
 
         onScrollListener = new RecyclerView.OnScrollListener() {
@@ -162,14 +160,14 @@ import net.iGap.request.RequestSignalingGetLog;
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
                         if (lastVisiblePosition + 10 >= mOffset) {
-                            getLogListWithOfset();
+                            getLogListWithOffset();
                         }
                     }
                 }
             }
         };
 
-        mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
+        mRecyclerView.addOnScrollListener(onScrollListener);
 
         G.iSignalingGetCallLog = new ISignalingGetCallLog() {
             @Override
@@ -189,11 +187,11 @@ import net.iGap.request.RequestSignalingGetLog;
                         attampOnError++;
                     } else {
                         isThereAnyMoreItemToLoad = false;
-                        mRecyclerView.getRecycleView().removeOnScrollListener(onScrollListener);
+                        mRecyclerView.removeOnScrollListener(onScrollListener);
                     }
                 } else if (size == 0) {
                     isThereAnyMoreItemToLoad = false;
-                    mRecyclerView.getRecycleView().removeOnScrollListener(onScrollListener);
+                    mRecyclerView.removeOnScrollListener(onScrollListener);
                 } else {
                     isSendRequestForLoading = false;
                     mOffset += size;
@@ -214,7 +212,7 @@ import net.iGap.request.RequestSignalingGetLog;
             }
         });
 
-        getLogListWithOfset();
+        getLogListWithOffset();
 
         if (goneTitle) {
 
@@ -222,7 +220,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
             view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
 
-            mRecyclerView.getRecycleView().addOnScrollListener(new RecyclerView.OnScrollListener() {
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
@@ -262,7 +260,7 @@ import net.iGap.request.RequestSignalingGetLog;
         }
     }
 
-    private void getLogListWithOfset() {
+    private void getLogListWithOffset() {
 
         if (G.isSecure && G.userLogin) {
             isSendRequestForLoading = true;
@@ -272,7 +270,7 @@ import net.iGap.request.RequestSignalingGetLog;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    getLogListWithOfset();
+                    getLogListWithOffset();
                 }
             }, 1000);
         }
@@ -377,23 +375,24 @@ import net.iGap.request.RequestSignalingGetLog;
         call_made, call_received, call_missed, call_missed_outgoing
     }
 
-    //***************************************** adapater call ***************************************************
+    /**
+     * ***************************************** adapter call ***************************************************
+     */
 
-    public class CallAdapter extends RealmBasedRecyclerViewAdapter<RealmCallLog, CallAdapter.ViewHolder> {
+    public class CallAdapter extends RealmRecyclerViewAdapter<RealmCallLog, CallAdapter.ViewHolder> {
 
-        public CallAdapter(Context context, RealmResults<RealmCallLog> realmResults) {
-            super(context, realmResults, true, false, false, "");
+        public CallAdapter(RealmResults<RealmCallLog> realmResults) {
+            super(realmResults, true);
         }
 
-        public class ViewHolder extends RealmViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
-            protected CircleImageView image;
-            protected EmojiTextViewE name;
-            protected MaterialDesignTextView icon;
-            //  protected MaterialDesignTextView call_type_icon;
-            protected TextView timeAndInfo;
-            // protected RippleView rippleCall;
-            protected TextView timeDureation;
+            private ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog;
+            private CircleImageView image;
+            private EmojiTextViewE name;
+            private MaterialDesignTextView icon;
+            private TextView timeAndInfo;
+            private TextView timeDuration;
 
             public ViewHolder(View view) {
                 super(view);
@@ -401,13 +400,11 @@ import net.iGap.request.RequestSignalingGetLog;
                 imgCallEmpty.setVisibility(View.GONE);
                 empty_call.setVisibility(View.GONE);
 
-                timeDureation = (TextView) itemView.findViewById(R.id.fcsl_txt_dureation_time);
-                // call_type_icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_call_type_icon);
+                timeDuration = (TextView) itemView.findViewById(R.id.fcsl_txt_dureation_time);
                 image = (CircleImageView) itemView.findViewById(R.id.fcsl_imv_picture);
                 name = (EmojiTextViewE) itemView.findViewById(R.id.fcsl_txt_name);
                 icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_txt_icon);
                 timeAndInfo = (TextView) itemView.findViewById(R.id.fcsl_txt_time_info);
-                // rippleCall = (RippleView) itemView.findViewById(R.id.fcsl_ripple_call);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -416,7 +413,7 @@ import net.iGap.request.RequestSignalingGetLog;
                         // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getLogProto().getPeer().getId(), null, null);
 
                         if (canclick) {
-                            long userId = realmResults.get(getPosition()).getLogProto().getPeer().getId();
+                            long userId = callLog.getPeer().getId();
 
                             if (userId != 134 && G.userId != userId) {
                                 call(userId, false);
@@ -449,41 +446,38 @@ import net.iGap.request.RequestSignalingGetLog;
         }
 
         @Override
-        public CallAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup parent, int i) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null);
-            ViewHolder callHolder = new ViewHolder(view);
-
-            return callHolder;
+        public CallAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null));
         }
 
         @Override
-        public void onBindRealmViewHolder(final CallAdapter.ViewHolder viewHolder, int i) {
+        public void onBindViewHolder(final CallAdapter.ViewHolder viewHolder, int i) {
 
-            final ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = realmResults.get(i).getLogProto();
+            final ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = viewHolder.callLog = getItem(i).getLogProto();
 
             // set icon and icon color
             switch (item.getStatus()) {
                 case OUTGOING:
                     viewHolder.icon.setText(R.string.md_call_made);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
                     break;
                 case MISSED:
                     viewHolder.icon.setText(R.string.md_call_missed);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
-                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.red));
-                    viewHolder.timeDureation.setText(R.string.miss);
+                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.red));
+                    viewHolder.timeDuration.setText(R.string.miss);
                     break;
                 case CANCELED:
 
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.green));
-                    viewHolder.timeDureation.setText(R.string.not_answer);
+                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.timeDuration.setText(R.string.not_answer);
                     break;
                 case INCOMING:
                     viewHolder.icon.setText(R.string.md_call_received);
                     viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
-                    viewHolder.timeDureation.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
+                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
                     break;
             }
 
@@ -507,12 +501,12 @@ import net.iGap.request.RequestSignalingGetLog;
             }
 
             if (item.getDuration() > 0) {
-                viewHolder.timeDureation.setText(DateUtils.formatElapsedTime(item.getDuration()));
+                viewHolder.timeDuration.setText(DateUtils.formatElapsedTime(item.getDuration()));
             }
 
             if (HelperCalander.isLanguagePersian) {
                 viewHolder.timeAndInfo.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeAndInfo.getText().toString()));
-                viewHolder.timeDureation.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDureation.getText().toString()));
+                viewHolder.timeDuration.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDuration.getText().toString()));
             }
 
             viewHolder.name.setText(item.getPeer().getDisplayName());

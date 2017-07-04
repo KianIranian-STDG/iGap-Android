@@ -35,14 +35,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import io.realm.Case;
 import io.realm.Realm;
-import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmList;
 import io.realm.RealmQuery;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,6 +85,8 @@ import net.iGap.request.RequestChannelGetMemberList;
 import net.iGap.request.RequestGroupGetMemberList;
 import net.iGap.request.RequestUserInfo;
 
+import static net.iGap.G.inflater;
+
 public class FragmentShowMember extends Fragment {
 
     public static final String ROOMIDARGUMENT = "ROOMID_ARGUMENT";
@@ -97,7 +97,7 @@ public class FragmentShowMember extends Fragment {
 
     private long mRoomID = 0;
 
-    private RealmRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private MemberAdapter mAdapter;
     private String mMainRole = "";
     private ProgressBar progressBar;
@@ -161,7 +161,7 @@ public class FragmentShowMember extends Fragment {
                             if (progressBar != null) {
                                 progressBar.setVisibility(View.VISIBLE);
                             }
-                            new getAcynkMember().execute();
+                            new AsyncMember().execute();
                         }
                     }, 100);
                 }
@@ -169,13 +169,11 @@ public class FragmentShowMember extends Fragment {
         }
     }
 
-    class getAcynkMember extends AsyncTask {
+    class AsyncMember extends AsyncTask {
 
         @Override
         protected Object doInBackground(Object[] params) {
-
             getMemberList();
-
             return null;
         }
     }
@@ -469,7 +467,7 @@ public class FragmentShowMember extends Fragment {
                     query = query.equalTo(RealmMemberFields.PEER_ID, findMember.get(i).getId());
                 }
                 RealmResults<RealmMember> searchMember = query.findAll();
-                mAdapter = new MemberAdapter(mActivity, searchMember, realmRoom.getType(), mMainRole, userID);
+                mAdapter = new MemberAdapter(searchMember, realmRoom.getType(), mMainRole, userID);
                 mRecyclerView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
 
@@ -477,11 +475,13 @@ public class FragmentShowMember extends Fragment {
             }
         });
 
-        mRecyclerView = (RealmRecyclerView) view.findViewById(R.id.fcm_recycler_view_show_member);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.fcm_recycler_view_show_member);
         mRecyclerView.setItemViewCacheSize(100);
+        mRecyclerView.setItemAnimator(null);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(mActivity);
-        mRecyclerView.getRecycleView().setLayoutManager(preCachingLayoutManager);
+        mRecyclerView.setLayoutManager(preCachingLayoutManager);
         preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(mActivity));
 
         progressBar = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
@@ -522,7 +522,7 @@ public class FragmentShowMember extends Fragment {
             }
         };
 
-        mRecyclerView.getRecycleView().addOnScrollListener(scrollListener);
+        mRecyclerView.addOnScrollListener(scrollListener);
     }
 
     private boolean isOne = true;
@@ -567,14 +567,14 @@ public class FragmentShowMember extends Fragment {
             if (memberList != null && memberList.size() > 0) {
                 RealmResults<RealmMember> mList;
 
-                if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
+                if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
                     mList = memberList.where().findAll();
                 } else {
                     mList = memberList.where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll();
                 }
 
                 if (mList.size() > 0 && mActivity != null) {
-                    mAdapter = new MemberAdapter(mActivity, mList, realmRoom.getType(), mMainRole, userID);
+                    mAdapter = new MemberAdapter(mList, realmRoom.getType(), mMainRole, userID);
                     mRecyclerView.setAdapter(mAdapter);
                 }
             }
@@ -583,29 +583,27 @@ public class FragmentShowMember extends Fragment {
         realm.close();
     }
 
-    private class MemberAdapter extends RealmBasedRecyclerViewAdapter<RealmMember, FragmentShowMember.MemberAdapter.ViewHolder> {
+    private class MemberAdapter extends RealmRecyclerViewAdapter<RealmMember, MemberAdapter.ViewHolder> {
 
         public String mainRole;
         public ProtoGlobal.Room.Type roomType;
         public long userId;
         private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
-        public MemberAdapter(Context context, RealmResults<RealmMember> realmResults, ProtoGlobal.Room.Type roomType, String mainRole, long userid) {
-
-            super(context, realmResults, true, false, false, "");
-
+        public MemberAdapter(RealmResults<RealmMember> realmResults, ProtoGlobal.Room.Type roomType, String mainRole, long userId) {
+            super(realmResults, true);
             this.roomType = roomType;
             this.mainRole = mainRole;
-            this.userId = userid;
+            this.userId = userId;
         }
 
         @Override
-        public MemberAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        public MemberAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = inflater.inflate(R.layout.contact_item_group_profile, viewGroup, false);
             return new ViewHolder(v);
         }
 
-        public class ViewHolder extends RealmViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             protected CircleImageView image;
             protected CustomTextViewMedium title;
@@ -629,9 +627,9 @@ public class FragmentShowMember extends Fragment {
         }
 
         @Override
-        public void onBindRealmViewHolder(final MemberAdapter.ViewHolder holder, int i) {
+        public void onBindViewHolder(final MemberAdapter.ViewHolder holder, int i) {
 
-            final StructContactInfo mContact = convertRealmToStruct(realmResults.get(i));
+            final StructContactInfo mContact = convertRealmToStruct(getItem(i));
 
             if (mContact == null) {
                 return;
@@ -759,13 +757,13 @@ public class FragmentShowMember extends Fragment {
 
                 @Override
                 public void onShowInitials(String initials, String color) {
-                    CircleImageView imageView;
-                    if (hashMapAvatar.get(userId) != null) {
-                        imageView = hashMapAvatar.get(userId);
-                    } else {
-                        imageView = holder.image;
-                    }
-                    imageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    //CircleImageView imageView;
+                    //if (hashMapAvatar.get(userId) != null) {
+                    //    imageView = hashMapAvatar.get(userId);
+                    //} else {
+                    //    imageView = holder.image;
+                    //}
+                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                 }
             });
 

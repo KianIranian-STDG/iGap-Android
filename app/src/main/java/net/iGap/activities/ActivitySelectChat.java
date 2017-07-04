@@ -10,7 +10,6 @@
 
 package net.iGap.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -30,13 +29,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.wang.avi.AVLoadingIndicatorView;
 import io.realm.Realm;
-import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +44,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnClientGetRoomListResponse;
-import net.iGap.interfaces.OnComplete;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -66,6 +62,7 @@ import net.iGap.request.RequestClientGetRoomList;
 
 import static android.view.View.GONE;
 import static net.iGap.G.context;
+import static net.iGap.G.inflater;
 import static net.iGap.G.userId;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -75,7 +72,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
     public static final String ARG_FORWARD_MESSAGE = "arg_forward_msg";
     public static final String ARG_FORWARD_MESSAGE_COUNT = "arg_forward_msg_count";
-    private RealmRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private RoomAdapter roomAdapter;
     private ArrayList<Parcelable> mForwardMessages;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -206,20 +203,18 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
     private void initRecycleView() {
 
-        mRecyclerView = (RealmRecyclerView) findViewById(R.id.cl_recycler_view_contact);
-
-        mRecyclerView.setItemViewCacheSize(100);
-        mRecyclerView.setDrawingCacheEnabled(true);
+        mRecyclerView = (RecyclerView) findViewById(R.id.cl_recycler_view_contact);
+        mRecyclerView.setItemAnimator(null);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoom> results =
-            realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
-        roomAdapter = new RoomAdapter(ActivitySelectChat.this, results, null);
+        RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
+        roomAdapter = new RoomAdapter(results);
         mRecyclerView.setAdapter(roomAdapter);
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
-        params.setBehavior(new ShouldScrolledBehavior((LinearLayoutManager) mRecyclerView.getRecycleView().getLayoutManager(), roomAdapter));
-        mRecyclerView.getRecycleView().setLayoutParams(params);
+        params.setBehavior(new ShouldScrolledBehavior((LinearLayoutManager) mRecyclerView.getLayoutManager(), roomAdapter));
+        mRecyclerView.setLayoutParams(params);
 
         onScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -235,7 +230,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
                         if (lastVisiblePosition + 10 >= mOffset) {
                             isSendRequestForLoading = true;
 
-                            //  mOffset = mRecyclerView.getRecycleView().getAdapter().getItemCount();
+                            //  mOffset = mRecyclerView.getAdapter().getItemCount();
                             new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
                             progressBar.setVisibility(View.VISIBLE);
                         }
@@ -251,7 +246,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
             }
         };
 
-        mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);
+        mRecyclerView.addOnScrollListener(onScrollListener);
 
         realm.close();
     }
@@ -286,31 +281,32 @@ public class ActivitySelectChat extends ActivityEnhanced {
         }
     }
 
-    public class RoomAdapter extends RealmBasedRecyclerViewAdapter<RealmRoom, ActivitySelectChat.RoomAdapter.ViewHolder> {
+    public class RoomAdapter extends RealmRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
 
-        public OnComplete mComplete;
         public String action;
         private Typeface typeFaceIcon;
 
-        public RoomAdapter(Context context, RealmResults<RealmRoom> realmResults, OnComplete complete) {
-            super(context, realmResults, true, false, false, "");
-            this.mComplete = complete;
+        RoomAdapter(RealmResults<RealmRoom> realmResults) {
+            super(realmResults, true);
         }
 
         @Override
-        public ActivitySelectChat.RoomAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        public ActivitySelectChat.RoomAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = inflater.inflate(R.layout.chat_sub_layout_select_chat, viewGroup, false);
             return new ActivitySelectChat.RoomAdapter.ViewHolder(v);
         }
 
         @Override
-        public void onBindRealmViewHolder(final ActivitySelectChat.RoomAdapter.ViewHolder holder, int i) {
+        public void onBindViewHolder(final ActivitySelectChat.RoomAdapter.ViewHolder holder, int i) {
 
-            RealmRoom mInfo = holder.mInfo = realmResults.get(i);
+            RealmRoom mInfo = holder.mInfo = getItem(i);
+            if (mInfo == null) {
+                return;
+            }
 
             boolean isMyCloud = mInfo.getId() == G.userId;
 
-            if (mInfo != null && mInfo.isValid() && !mInfo.isDeleted()) {
+            if (mInfo.isValid() && !mInfo.isDeleted()) {
                 if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || (isMyCloud || (mInfo.getActionStateUserId() != userId)))) {
                     //holder.messageStatus.setVisibility(GONE);
                     holder.lastMessageSender.setVisibility(View.GONE);
@@ -546,7 +542,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
             }
         }
 
-        public class ViewHolder extends RealmViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             public RealmRoom mInfo;
             protected CircleImageView image;
@@ -583,9 +579,9 @@ public class ActivitySelectChat extends ActivityEnhanced {
                     @Override
                     public void onClick(View v) {
 
-                        if (!realmResults.get(getPosition()).getReadOnly()) {
+                        if (!mInfo.getReadOnly()) {
                             Intent intent = new Intent(ActivitySelectChat.this, ActivityChat.class);
-                            intent.putExtra("RoomId", realmResults.get(getPosition()).getId());
+                            intent.putExtra("RoomId", mInfo.getId());
                             intent.putParcelableArrayListExtra(ARG_FORWARD_MESSAGE, mForwardMessages);
                             intent.putExtra(ARG_FORWARD_MESSAGE_COUNT, mForwardMessages.size());
                             startActivity(intent);

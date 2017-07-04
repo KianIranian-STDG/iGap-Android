@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical"
     tools:ignore="MissingPrefix"
@@ -58,8 +58,8 @@
           android:textAppearance="?android:attr/textAppearanceMedium"
           android:textColor="@android:color/white"
           android:textSize="@dimen/dp18"
-          fontPath="fonts/IRANSansMobile_Bold.ttf"
           android:visibility="visible"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
 
       <net.iGap.libs.rippleeffect.RippleView
@@ -112,11 +112,11 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
+          android:visibility="gone"
           app:rv_alpha="200"
           app:rv_centered="true"
           app:rv_rippleDuration="100"
           rv_centered="true"
-          android:visibility="gone"
           >
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/menu_btn_close"
@@ -141,7 +141,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       >
-    <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/fcm_recycler_view_show_member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -150,7 +150,6 @@
         android:scrollbarSize="5dp"
         android:scrollbarThumbVertical="@color/toolbar_background"
         android:scrollbars="vertical"
-        app:rrvLayoutType="LinearLayout"
         />
 
     <ProgressBar

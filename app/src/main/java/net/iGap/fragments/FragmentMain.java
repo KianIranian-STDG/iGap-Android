@@ -30,7 +30,6 @@ import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import io.realm.Sort;
 import java.util.HashMap;
 import java.util.List;
@@ -1083,7 +1082,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             }
         }
 
-        public class ViewHolder extends RealmViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             RealmRoom mInfo;
             //protected CircleImageView image;
