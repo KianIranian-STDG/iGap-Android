@@ -113,8 +113,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.activity_main_rooms, container, false);
-        return fragmentView;
+        return inflater.inflate(R.layout.activity_main_rooms, container, false);
     }
 
     @Override
@@ -150,27 +149,19 @@ public class FragmentMain extends Fragment implements OnComplete {
         switch (mainType) {
 
             case all:
-                //results = ((ActivityMain) getActivity()).getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                //    equalTo(RealmRoomFields.IS_DELETED, false).findAllSorted(RealmRoomFields.UPDATED_TIME, Sort.DESCENDING);
-
                 results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
-
-
                 break;
             case chat:
                 results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
-
                 break;
             case group:
                 results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
-
                 break;
             case channel:
                 results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
-
                 break;
         }
 
@@ -1052,10 +1043,10 @@ public class FragmentMain extends Fragment implements OnComplete {
                 return "";
             }
 
-            int subLengh = 50;
+            int subLenght = 50;
 
-            if (text.length() > subLengh) {
-                return text.substring(0, subLengh);
+            if (text.length() > subLenght) {
+                return text.substring(0, subLenght);
             } else {
                 return text;
             }
@@ -1179,10 +1170,4 @@ public class FragmentMain extends Fragment implements OnComplete {
             }
         }
     }
-
-
-
-
-
-
 }
