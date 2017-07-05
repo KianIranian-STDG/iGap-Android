@@ -29,6 +29,7 @@ public final class HelperLogout {
         G.handler.post(new Runnable() {
             @Override public void run() {
                 HelperRealm.realmTruncate();
+                HelperNotificationAndBadge.updateBadgeOnly();
                 Intent intent = new Intent(G.context, ActivityIntroduce.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 new LoginActions();

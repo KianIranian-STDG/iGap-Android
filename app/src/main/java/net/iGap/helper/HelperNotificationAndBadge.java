@@ -813,12 +813,13 @@ public class HelperNotificationAndBadge {
                 int unreadMessageCount = 0;
 
                 RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-                for (RealmRoom realmRoom1 : realmRooms) {
-                    if (realmRoom1.getUnreadCount() > 0) {
-                        unreadMessageCount += realmRoom1.getUnreadCount();
+                if (realmRooms != null) {
+                    for (RealmRoom realmRoom1 : realmRooms) {
+                        if (realmRoom1.getUnreadCount() > 0) {
+                            unreadMessageCount += realmRoom1.getUnreadCount();
+                        }
                     }
                 }
-
                 realm.close();
 
                 try {
