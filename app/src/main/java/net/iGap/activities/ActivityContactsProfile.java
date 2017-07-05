@@ -50,7 +50,6 @@ import net.iGap.fragments.FragmentNotification;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChatGetRoom;
@@ -560,7 +559,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     dialog.show();
                     G.onUserContactEdit = new OnUserContactEdit() {
                         @Override
-                        public void onContactEdit(final String firstName, final String lastName) {
+                        public void onContactEdit(final String firstName, final String lastName, final String initials) {
                             Realm realm1 = Realm.getDefaultInstance();
                             final RealmContacts realmUser = realm1.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
                             realm1.executeTransaction(new Realm.Transaction() {
@@ -589,7 +588,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                         registeredInfo.setFirstName(firstName);
                                         registeredInfo.setLastName(lastName);
                                         registeredInfo.setDisplayName(displayName.trim());
-                                        registeredInfo.setInitials(HelperImageBackColor.getFirstAlphabetName(displayName.trim()));
+                                        registeredInfo.setInitials(initials);
                                     }
 
                                     setAvatar();

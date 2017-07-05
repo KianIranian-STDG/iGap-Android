@@ -54,7 +54,6 @@ import net.iGap.module.EditTextAdjustPan;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.IntentRequests;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmUserInfo;
@@ -187,7 +186,8 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
     private void setNickName() {
 
         G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
-            @Override public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+            @Override
+            public void onUserProfileNickNameResponse(final String nickName, String initials) {
                 getUserInfo();
             }
 

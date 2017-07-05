@@ -438,7 +438,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                         showProgressBar();
                         G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
                             @Override
-                            public void onUserProfileNickNameResponse(final String nickName, ProtoResponse.Response response) {
+                            public void onUserProfileNickNameResponse(final String nickName, String initials) {
                                 setAvatar();
 
                                 /**

@@ -12,7 +12,6 @@ package net.iGap.response;
 
 import io.realm.Realm;
 import net.iGap.G;
-import net.iGap.helper.HelperImageBackColor;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileNickname;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -45,7 +44,7 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmUserInfo.class).findFirst().getUserInfo();
                 if (realmRegisteredInfo != null) {
                     realmRegisteredInfo.setDisplayName(userProfileNickNameResponse.getNickname());
-                    realmRegisteredInfo.setInitials(HelperImageBackColor.getFirstAlphabetName(userProfileNickNameResponse.getNickname()));
+                    realmRegisteredInfo.setInitials(userProfileNickNameResponse.getInitials());
                     G.displayName = userProfileNickNameResponse.getNickname();
                 }
             }
@@ -54,7 +53,7 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
         realm.close();
 
         if (G.onUserProfileSetNickNameResponse != null) {
-            G.onUserProfileSetNickNameResponse.onUserProfileNickNameResponse(userProfileNickNameResponse.getNickname(), userProfileNickNameResponse.getResponse());
+            G.onUserProfileSetNickNameResponse.onUserProfileNickNameResponse(userProfileNickNameResponse.getNickname(), userProfileNickNameResponse.getInitials());
         }
     }
 
