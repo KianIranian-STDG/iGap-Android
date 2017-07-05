@@ -34,7 +34,7 @@
           app:lineColor="#fff"
           app:lineWidth="1.2dp"
           android:background="@drawable/background_check"
-          app:unCheckColor="@color/transparent"
+          app:unCheckColor="@color/background_checkbox_bottomSheet"
           />
     </android.support.v7.widget.CardView>
   </RelativeLayout>
