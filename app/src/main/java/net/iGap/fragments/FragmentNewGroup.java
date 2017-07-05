@@ -148,7 +148,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
     }
 
     private void showDialogSelectGallery() {
-        new MaterialDialog.Builder(getActivity()).title(getString(R.string.choose_picture)).negativeText(getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(mActivity).title(getString(R.string.choose_picture)).negativeText(getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -183,10 +183,10 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                             try {
 
-                                HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
+                                HelperPermision.getStoragePermision(mActivity, new OnGetPermission() {
                                     @Override
                                     public void Allow() throws IOException {
-                                        HelperPermision.getCameraPermission(getActivity(), new OnGetPermission() {
+                                        HelperPermision.getCameraPermission(mActivity, new OnGetPermission() {
                                             @Override
                                             public void Allow() {
                                                 // this dialog show 2 way for choose image : gallery and camera
@@ -225,10 +225,10 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
-                //                                            new AttachFile(FragmentNewGroup.this.getActivity()).dispatchTakePictureIntent();
+                //                                            new AttachFile(FragmentNewGroup.this.mActivity).dispatchTakePictureIntent();
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 // Ensure that there's a camera activity to handle the intent
-                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                if (takePictureIntent.resolveActivity(mActivity.getPackageManager()) != null) {
                     // Create the File where the photo should go
                     File photoFile = null;
                     try {
@@ -239,7 +239,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                     }
                     // Continue only if the File was successfully created
                     if (photoFile != null) {
-                        uriIntent = FileProvider.getUriForFile(getActivity(), getActivity().getApplicationContext().getPackageName() + ".provider", createImageFile());
+                        uriIntent = FileProvider.getUriForFile(mActivity, mActivity.getApplicationContext().getPackageName() + ".provider", createImageFile());
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
                         startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
                     }
@@ -271,7 +271,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         view.findViewById(R.id.ng_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         prgWaiting.setVisibility(View.GONE);
-        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         txtBack = (MaterialDesignTextView) view.findViewById(R.id.ng_txt_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.ng_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -285,8 +285,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 } else {
                     G.IMAGE_NEW_CHANEL.delete();
                 }
-                //getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                getActivity().onBackPressed();
+                //mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                mActivity.onBackPressed();
             }
         });
 
@@ -314,7 +314,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
             @Override
             public void onComplete(RippleView rippleView) throws IOException {
 
-                HelperPermision.getStoragePermision(getActivity(), new OnGetPermission() {
+                HelperPermision.getStoragePermision(mActivity, new OnGetPermission() {
                     @Override
                     public void Allow() {
                         showDialogSelectGallery();
@@ -408,14 +408,14 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
                 if (edtGroupName.getText().toString().length() > 0) {
                     prgWaiting.setVisibility(View.VISIBLE);
-                    getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                     String newName = edtGroupName.getText().toString().replace(" ", "_");
                     //  File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
                     if (prefix.equals("NewChanel")) {
-                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         isChannel = true;
                         createChannel();
                     } else if (prefix.equals("ConvertToGroup")) {
@@ -447,7 +447,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                     G.IMAGE_NEW_CHANEL.delete();
                 }
                 try {
-                    getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                    mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -477,7 +477,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                             bundle.putString("TOKEN", token);
                             fragmentCreateChannel.setArguments(bundle);
                             mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment").commitAllowingStateLoss();
-                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                         }
                     }
                 });
@@ -519,7 +519,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
                 //                if (existAvatar) {
                 //                    new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
-                ////                    getActivity().runOnUiThread(new Runnable() {
+                ////                    mActivity.runOnUiThread(new Runnable() {
                 ////                        @Override
                 ////                        public void run() {
                 ////                            Realm realm = Realm.getDefaultInstance();
@@ -545,7 +545,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 //                    G.handler.post(new Runnable() {
                 //                        @Override
                 //                        public void run() {
-                //                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                //                            mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 //                        }
                 //                    });
                 //                    getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
@@ -583,13 +583,13 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                     }
                 });
 
-               /* getActivity().runOnUiThread(new Runnable() {
+               /* mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (avatarExist) {
                             new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
                         } else {
-                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
                         }
                     }
@@ -628,8 +628,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 if (!identity.equals(RequestClientGetRoom.CreateRoomMode.requestFromOwner.toString())) return;
 
                 try {
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
+                    if (mActivity != null) {
+                        mActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
 
@@ -653,8 +653,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                                     bundle.putString("TYPE", typeCreate.toString());
                                     bundle.putBoolean("NewRoom", true);
                                     fragment.setArguments(bundle);
-                                    getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragment, "contactGroup_fragment").commitAllowingStateLoss();
-                                    getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                                    mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragment, "contactGroup_fragment").commitAllowingStateLoss();
+                                    mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                                     //ActivityMain.mLeftDrawerLayout.closeDrawer();
                                 }
                             }
@@ -782,8 +782,8 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         bundle.putString("INVITE_LINK", mInviteLink);
         bundle.putString("TOKEN", token);
         fragmentCreateChannel.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment").commitAllowingStateLoss();
-        getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+        mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment").commitAllowingStateLoss();
+        mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
     }
 
     //=======================result for picture
@@ -794,7 +794,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         if (requestCode == request_code_TAKE_PICTURE && resultCode == Activity.RESULT_OK) {// result for camera
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Intent intent = new Intent(getActivity(), ActivityCrop.class);
+                Intent intent = new Intent(mActivity, ActivityCrop.class);
                 ImageHelper.correctRotateImage(mCurrentPhotoPath, true);
                 intent.putExtra("IMAGE_CAMERA", mCurrentPhotoPath);
                 intent.putExtra("TYPE", "camera");
@@ -802,7 +802,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             } else {
 
-                Intent intent = new Intent(getActivity(), ActivityCrop.class);
+                Intent intent = new Intent(mActivity, ActivityCrop.class);
                 if (uriIntent != null) {
                     intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
                     intent.putExtra("TYPE", "camera");
@@ -815,7 +815,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == Activity.RESULT_OK) {// result for gallery
             if (data != null) {
 
-                Intent intent = new Intent(getActivity(), ActivityCrop.class);
+                Intent intent = new Intent(mActivity, ActivityCrop.class);
                 intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", prefix);
@@ -864,7 +864,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
             public void run() {
                 txtNextStep.setEnabled(false);
                 prgWaiting.setVisibility(View.VISIBLE);
-                if (getActivity() != null) getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (mActivity != null) mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
     }
@@ -875,7 +875,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
             public void run() {
                 txtNextStep.setEnabled(true);
                 prgWaiting.setVisibility(View.GONE);
-                if (getActivity() != null) getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (mActivity != null) mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
     }
