@@ -1,6 +1,5 @@
 package net.iGap.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,10 +10,10 @@ import cat.ereza.customactivityoncrash.config.CaocConfig;
 import net.iGap.G;
 import net.iGap.R;
 
-public class ActivityCustomError extends Activity {
+public class ActivityCustomError extends ActivityEnhanced {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_custom_error);

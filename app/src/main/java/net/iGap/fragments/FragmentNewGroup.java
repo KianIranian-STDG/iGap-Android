@@ -135,6 +135,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
         getIntentData(this.getArguments());
         initComponent(view);
+        throw new RuntimeException("Boom!");
     }
 
     private void getIntentData(Bundle bundle) {
