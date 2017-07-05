@@ -192,26 +192,13 @@ public class FragmentMain extends Fragment implements OnComplete {
         mRecyclerView.setAdapter(roomAdapter);
 
         roomAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-            }
-
-            @Override
-            public void onItemRangeChanged(int positionStart, int itemCount) {
-                super.onItemRangeChanged(positionStart, itemCount);
-            }
-
-            @Override
-            public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
-                super.onItemRangeChanged(positionStart, itemCount, payload);
-            }
 
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
                 if (roomAdapter.getItemCount() > 0) {
                     viewById.setVisibility(View.GONE);
+                    goToTop();
                 } else {
                     viewById.setVisibility(View.VISIBLE);
                 }
@@ -220,18 +207,12 @@ public class FragmentMain extends Fragment implements OnComplete {
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onItemRangeRemoved(positionStart, itemCount);
-                roomAdapter.getItemCount();
                 if (roomAdapter.getItemCount() > 0) {
                     viewById.setVisibility(View.GONE);
                 } else {
                     viewById.setVisibility(View.VISIBLE);
                 }
 
-            }
-
-            @Override
-            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
-                super.onItemRangeMoved(fromPosition, toPosition, itemCount);
             }
         });
 
@@ -653,12 +634,23 @@ public class FragmentMain extends Fragment implements OnComplete {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
                 realmRoom.setPinned(!isPinned);
+                goToTop();
             }
         });
         realm.close();
+    }
+
+    private void goToTop() {
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition() <= 1) {
+                    mRecyclerView.smoothScrollToPosition(0);
+                }
+            }
+        }, 50);
     }
 
     private boolean checkValidationForRealm(RealmRoom realmRoom) {
