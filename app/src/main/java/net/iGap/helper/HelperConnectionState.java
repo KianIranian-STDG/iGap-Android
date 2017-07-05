@@ -47,8 +47,7 @@ public class HelperConnectionState {
             }
             G.connectionState = ConnectionState.WAITING_FOR_NETWORK;
         }
-
-        if (G.currentActivity != G.latestActivity) {
+        if (G.currentActivity != null && !G.currentActivity.getLocalClassName().equals(G.latestActivityName)) {
             G.latestConnectionState = ConnectionState.UPDATING;
         }
 
@@ -64,7 +63,9 @@ public class HelperConnectionState {
 
             if (G.latestConnectionState != G.connectionState) {
 
-                G.latestActivity = G.currentActivity;
+                if (G.currentActivity != null) {
+                    G.latestActivityName = G.currentActivity.getLocalClassName();
+                }
                 G.latestConnectionState = G.connectionState;
                 String message = G.context.getResources().getString(R.string.waiting_for_network);
 

@@ -203,7 +203,7 @@ public class G extends MultiDexApplication {
     public static HashMap<Long, HelperLogMessage.StructLog> logMessageUpdatList = new HashMap<>();
 
     public static Activity currentActivity;
-    public static Activity latestActivity;
+    public static String latestActivityName;
 
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;
