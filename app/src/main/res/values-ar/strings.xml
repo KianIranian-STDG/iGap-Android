@@ -954,6 +954,10 @@
   <string name="invalid_question_token">"Your answer is invalid"</string>
 
   <string name="not_answerd_call">"تماس بدون جواب"</string>
-  <string name="recorded_by">Recorded By</string>
+  <string name="recorded_by">"ضبط شده توسط "</string>
+  <string name="Login_with_QrCode">ورود با کیوآر</string>
+  <string name="Input_device_specification">ورود موفق دستگاه</string>
+  <string name="QrCode_Scan">کیوآر اسکن</string>
+  <string name="Call_Quality">کیفیت تماس</string>
 
 </resources>
