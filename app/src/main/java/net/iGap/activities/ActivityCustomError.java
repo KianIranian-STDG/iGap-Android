@@ -1,6 +1,7 @@
 package net.iGap.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -24,24 +25,16 @@ public class ActivityCustomError extends Activity {
         Button restartButton = (Button) findViewById(R.id.restart_button);
         restartButton.setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        //
+        final Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         final CaocConfig config = CustomActivityOnCrash.getConfigFromIntent(getIntent());
 
-        if (config.isShowRestartButton() && config.getRestartActivityClass() != null) {
-            restartButton.setText(R.string.st_title_reset);
             restartButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CustomActivityOnCrash.restartApplication(ActivityCustomError.this, config);
+                    CustomActivityOnCrash.restartApplicationWithIntent(ActivityCustomError.this, i, config);
                 }
             });
-        } else {
-            restartButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CustomActivityOnCrash.closeApplication(ActivityCustomError.this, config);
-                }
-            });
-        }
     }
 }
