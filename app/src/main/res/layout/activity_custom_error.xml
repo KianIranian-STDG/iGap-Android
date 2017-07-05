@@ -5,10 +5,10 @@
     android:background="@color/gray_3c"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/dp20"
+    android:paddingBottom="@dimen/dp10"
     android:paddingLeft="@dimen/dp20"
     android:paddingRight="@dimen/dp20"
-    android:paddingTop="@dimen/dp20"
+    android:paddingTop="@dimen/dp10"
     >
 
   <ScrollView
@@ -26,8 +26,8 @@
         >
 
       <android.support.v7.widget.AppCompatImageView
-          android:layout_width="@dimen/dp160"
-          android:layout_height="@dimen/dp160"
+          android:layout_width="@dimen/dp140"
+          android:layout_height="@dimen/dp140"
           android:contentDescription="@null"
           app:srcCompat="@drawable/ic_crash"
           />
@@ -35,7 +35,7 @@
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/dp36"
+          android:layout_marginTop="@dimen/dp20"
           android:text="@string/iGap_has_crashed"
           android:textSize="18sp"
           android:textStyle="bold"
@@ -44,10 +44,10 @@
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="20dp"
+          android:layout_marginTop="10dp"
           android:gravity="center"
           android:lineSpacingExtra="1.0mm"
-          android:padding="@dimen/dp12"
+          android:padding="@dimen/dp8"
           android:text="@string/iGap_has_crashed_desc"
           android:textStyle="bold"
           />
@@ -64,7 +64,7 @@
           android:id="@+id/restart_button"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="60dp"
+          android:layout_marginTop="20dp"
           android:layout_weight="0"
           android:background="@color/green"
           android:paddingBottom="@dimen/dp12"

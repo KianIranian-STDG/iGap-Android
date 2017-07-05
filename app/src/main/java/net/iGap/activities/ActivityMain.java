@@ -975,10 +975,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                     case 10: {
 
-                        startActivity(new Intent(ActivityMain.this, ActivityQrCodeNewDevice.class));
+
+                        try {
+                            HelperPermision.getCameraPermission(ActivityMain.this, new OnGetPermission() {
+                                @Override
+                                public void Allow() throws IOException {
+                                    startActivity(new Intent(ActivityMain.this, ActivityQrCodeNewDevice.class));
+                                }
+
+                                @Override
+                                public void deny() {
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         pageDrawer = 0;
-                        break;
                     }
+                    break;
+
                     case 11: {
                         new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
                             .content(R.string.content_log_out)
