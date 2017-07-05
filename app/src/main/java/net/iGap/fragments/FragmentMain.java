@@ -92,6 +92,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     private int mLimit = 50;
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
+    private View viewById;
 
     private RecyclerView mRecyclerView;
     private MainType mainType;
@@ -129,6 +130,8 @@ public class FragmentMain extends Fragment implements OnComplete {
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setEnabled(false);
 
+        viewById = view.findViewById(R.id.empty_icon);
+
         initRecycleView(view);
         initListener();
 
@@ -150,23 +153,87 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             case all:
                 results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
+                if (results.size() > 0) {
+                    viewById.setVisibility(View.GONE);
+                } else {
+                    viewById.setVisibility(View.VISIBLE);
+                }
                 break;
             case chat:
                 results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
+                if (results.size() > 0) {
+                    viewById.setVisibility(View.GONE);
+                } else {
+                    viewById.setVisibility(View.VISIBLE);
+                }
                 break;
             case group:
                 results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
+                if (results.size() > 0) {
+                    viewById.setVisibility(View.GONE);
+                } else {
+                    viewById.setVisibility(View.VISIBLE);
+                }
                 break;
             case channel:
                 results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
+                if (results.size() > 0) {
+                    viewById.setVisibility(View.GONE);
+                } else {
+                    viewById.setVisibility(View.VISIBLE);
+                }
                 break;
         }
 
-        RoomAdapter roomAdapter = new RoomAdapter(results, this);
+        final RoomAdapter roomAdapter = new RoomAdapter(results, this);
         mRecyclerView.setAdapter(roomAdapter);
+
+        roomAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                super.onItemRangeChanged(positionStart, itemCount);
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+                super.onItemRangeChanged(positionStart, itemCount, payload);
+            }
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                if (roomAdapter.getItemCount() > 0) {
+                    viewById.setVisibility(View.GONE);
+                } else {
+                    viewById.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                roomAdapter.getItemCount();
+                if (roomAdapter.getItemCount() > 0) {
+                    viewById.setVisibility(View.GONE);
+                } else {
+                    viewById.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                super.onItemRangeMoved(fromPosition, toPosition, itemCount);
+            }
+        });
 
         if (mainType == MainType.all) {
 

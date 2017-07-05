@@ -38,6 +38,11 @@
       android:visibility="gone"
       />
 
+  <include
+      layout="@layout/empty_layout"
+      android:id="@+id/empty_icon"
+      android:visibility="visible"
+      />
 
 
 </net.iGap.module.NotTouchableCoordinatorLayout>
