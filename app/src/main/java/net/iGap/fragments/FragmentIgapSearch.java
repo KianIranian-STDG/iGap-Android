@@ -62,6 +62,7 @@ public class FragmentIgapSearch extends Fragment {
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private TextView txtEmptyListComment;
+
     //private TextView txtNothing;
     private ContentLoadingProgressBar loadingProgressBar;
     private ImageView imvNothingFound;
@@ -291,7 +292,7 @@ public class FragmentIgapSearch extends Fragment {
 
                             items.add(new SearchItamIGap().setItem(item).withIdentifier(100 + i++));
                         }
-
+                        itemAdapter.clear();
                         itemAdapter.add(items);
 
                         realm.close();

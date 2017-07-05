@@ -169,12 +169,12 @@ public class HelperUrl {
                         openLocalWebPage = false;
                     }
 
-                    String url = strBuilder.toString().substring(start, end);
+                    String url = strBuilder.toString().toLowerCase().substring(start, end).trim();
+                    url = url.replaceAll("[^\\x00-\\x7F]", "");
 
                     if (!url.startsWith("https://") && !url.startsWith("http://")) {
                         url = "http://" + url;
                     }
-
                     openBrowser(url);
                 }
             }
