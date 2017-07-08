@@ -1218,7 +1218,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
     public void kickMember(final Long peerId) {
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 new RequestChannelKickMember().channelKickMember(roomId, peerId);
@@ -1231,7 +1231,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
     public void kickModerator(final Long peerId) {
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 new RequestChannelKickModerator().channelKickModerator(roomId, peerId);
@@ -1241,7 +1241,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
     public void kickAdmin(final Long peerId) {
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1524,25 +1524,25 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             }
         };
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_private)).content(getString(R.string.channel_text_convert_to_private)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_private)).content(getString(R.string.channel_text_convert_to_private)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 new RequestChannelRemoveUsername().channelRemoveUsername(roomId);
             }
-        }).negativeText(R.string.B_cancel).show();
+        }).negativeText(R.string.no).show();
     }
 
     private void convertToPublic() {
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_public)).content(getString(R.string.channel_text_convert_to_public)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(getString(R.string.channel_title_convert_to_public)).content(getString(R.string.channel_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 dialog.dismiss();
                 setUsername();
             }
-        }).negativeText(R.string.B_cancel).show();
+        }).negativeText(R.string.no).show();
     }
 
     private void setUsername() {
@@ -1740,7 +1740,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             title = R.string.channel_left;
         }
 
-        new MaterialDialog.Builder(ActivityChannelProfile.this).title(title).content(deleteText).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityChannelProfile.this).title(title).content(deleteText).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1753,7 +1753,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                 prgWait.setVisibility(View.VISIBLE);
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
-        }).negativeText(R.string.B_cancel).show();
+        }).negativeText(R.string.no).show();
     }
 
     //*** set avatar image

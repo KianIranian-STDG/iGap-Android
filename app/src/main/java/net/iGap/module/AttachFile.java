@@ -588,9 +588,7 @@ public class AttachFile {
 
     void showSettingsAlert() {
 
-        new MaterialDialog.Builder(context).title(context.getString(R.string.do_you_want_to_turn_on_gps))
-            .positiveText(R.string.ok)
-            .negativeText(R.string.cancel)
+        new MaterialDialog.Builder(context).title(context.getString(R.string.do_you_want_to_turn_on_gps)).positiveText(R.string.yes).negativeText(R.string.no)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override public void onPositive(MaterialDialog dialog) {
                     super.onPositive(dialog);

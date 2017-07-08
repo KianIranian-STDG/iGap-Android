@@ -1810,24 +1810,24 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     public void onClick(View view) {
                         dialog.dismiss();
 
-                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 onSelectRoomMenu("txtClearHistory", (int) mRoomId);
                             }
-                        }).negativeText(R.string.B_cancel).show();
+                        }).negativeText(R.string.no).show();
                     }
                 });
                 root3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
                             }
-                        }).negativeText(R.string.B_cancel).show();
+                        }).negativeText(R.string.no).show();
                     }
                 });
                 root4.setOnClickListener(new View.OnClickListener() {
@@ -1842,7 +1842,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(ActivityChat.this).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 finish();

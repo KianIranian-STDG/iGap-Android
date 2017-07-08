@@ -448,7 +448,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     public void onClick(View view) {
 
                         dialog.dismiss();
-                        new MaterialDialog.Builder(ActivityGroupProfile.this).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(ActivityGroupProfile.this).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -456,7 +456,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                     ActivityChat.onComplete.complete(false, roomId + "", "");
                                 }
                             }
-                        }).negativeText(R.string.B_cancel).show();
+                        }).negativeText(R.string.no).show();
 
                         dialog.dismiss();
                     }
@@ -809,7 +809,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         layoutGroupLink.addView(txtLink, layoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutGroupLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+            new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutGroupLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.no)).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String copy;
@@ -912,13 +912,13 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         };
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_private)).content(getString(R.string.group_text_convert_to_private)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_private)).content(getString(R.string.group_text_convert_to_private)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 new RequestGroupRemoveUsername().groupRemoveUsername(roomId);
             }
-        }).negativeText(R.string.B_cancel).show();
+        }).negativeText(R.string.no).show();
     }
 
     private void setTextGroupLik() {
@@ -933,14 +933,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     private void convertToPublic() {
-        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_public)).content(getString(R.string.group_text_convert_to_public)).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(getString(R.string.group_title_convert_to_public)).content(getString(R.string.group_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 dialog.dismiss();
                 setUsername();
             }
-        }).negativeText(R.string.B_cancel).show();
+        }).negativeText(R.string.no).show();
     }
 
     private void setUsername() {
@@ -1726,7 +1726,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             text = getString(R.string.do_you_want_to_leave_this_group);
         }
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(text).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1841,7 +1841,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
      */
     public void kickAdmin(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1855,7 +1855,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
      */
     public void kickMember(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 new RequestGroupKickMember().groupKickMember(roomId, memberID);
@@ -1911,7 +1911,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     public void kickModerator(final long memberID) {
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 new RequestGroupKickModerator().groupKickModerator(roomId, memberID);

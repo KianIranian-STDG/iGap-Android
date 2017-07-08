@@ -21,12 +21,12 @@
 
   <!-- Page 5 introduce app -->
   <string name="text_line_1_introduce_page5">Voice Call</string>
-  <string name="text_line_2_introduce_page5">Your power is summarized in having a thoroughly free and secure voice call with all others using iGap and save your money as well! As iGap voice call is P2P-based.</string>
+  <string name="text_line_2_introduce_page5">>You can make thoroughly free and secure voice calls to anyone on iGap and save your money. As it is P2P-based, no worries about servers interference in voice transmission.</string>
 
   <!-- Page 6 introduce app -->
   <string name="btn_start_page6">Start Now</string>
   <string name="text_line_1_introduce_page6">Everything for Free in iGap!</string>
-  <string name="text_line_2_introduce_page6">Let’s stop boring you! \n iGap is thoroughly free. So, just now build your own world freely</string>
+  <string name="text_line_2_introduce_page6">Let’s stop waiting! \n iGap is thoroughly free. So, just now build your own world freely</string>
 
 
   <!--Fill Profile User -->
@@ -272,7 +272,7 @@
   <string name="edited">Edited</string>
   <string name="today">Today</string>
   <string name="yesterday">Yesterday</string>
-  <string name="clean_log">Clear Call logs</string>
+  <string name="clean_log">Clear Call log</string>
 
 
   <!-- array -->
@@ -729,8 +729,8 @@
   <string name="prefix">""</string>  <!-- have to empty -->
   <string name="MEMBER_KICKED">"Kicked out"</string>
   <string name="MEMBER_LEFT">"Left Page"</string>
-  <string name="ROOM_CONVERTED_TO_PUBLIC">"The Private Page Converted to Public"</string>
-  <string name="ROOM_CONVERTED_TO_PRIVATE">"The Public Page Converted to Private"</string>
+  <string name="ROOM_CONVERTED_TO_PUBLIC">"Converted the Private Page to Public"</string>
+  <string name="ROOM_CONVERTED_TO_PRIVATE">"Converted the Public Page"</string>
   <string name="MEMBER_JOINED_BY_INVITE_LINK">"Join by Invitation Link"</string>
   <string name="MEMBER_JOINED_BY_INVITE_LINK_2">"اضافه شد"</string>
   <string name="Room_Deleted">"Deleted Room"</string>
@@ -930,7 +930,7 @@
   <string name="not_answer">Not Answer</string>
 
   <string name="nothing">Nothing</string>
-  <string name="are_you_sure_clear_call_logs">Are you sure you want to clear voice call logs ?</string>
+  <string name="are_you_sure_clear_call_logs">Are you sure you want to clear voice call log?</string>
   <string name="please_write_your_reasons">Please write your reasons</string>
   <string name="your_confirm_email">Enter Your confirm Email code</string>
   <string name="your_confirm_email_skip">Skip</string>
@@ -968,6 +968,6 @@
   <string name="Input_device_specification">Device login success</string>
   <string name="QrCode_Scan">QrCode Scan</string>
   <string name="Call_Quality">Call Quality</string>
-
+  <string name="desc_self_destroy">"If you choose one of the periods in the following and never use your iGap account during the certain time, your account will be destructed and deleted spontaneously."</string>
 
 </resources>
