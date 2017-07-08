@@ -130,7 +130,7 @@ import net.iGap.request.RequestSignalingGetLog;
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemViewCacheSize(100);
         mRecyclerView.setItemAnimator(null);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -225,19 +225,19 @@ import net.iGap.request.RequestSignalingGetLog;
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
 
-                    if (((ActivityMain) getActivity()).arcMenu.isMenuOpened()) {
-                        ((ActivityMain) getActivity()).arcMenu.toggleMenu();
+                    if (((ActivityMain) mActivity).arcMenu.isMenuOpened()) {
+                        ((ActivityMain) mActivity).arcMenu.toggleMenu();
                     }
 
                     if (dy > 0) {
                         // Scroll Down
-                        if (((ActivityMain) getActivity()).arcMenu.fabMenu.isShown()) {
-                            ((ActivityMain) getActivity()).arcMenu.fabMenu.hide();
+                        if (((ActivityMain) mActivity).arcMenu.fabMenu.isShown()) {
+                            ((ActivityMain) mActivity).arcMenu.fabMenu.hide();
                         }
                     } else if (dy < 0) {
                         // Scroll Up
-                        if (!((ActivityMain) getActivity()).arcMenu.fabMenu.isShown()) {
-                            ((ActivityMain) getActivity()).arcMenu.fabMenu.show();
+                        if (!((ActivityMain) mActivity).arcMenu.fabMenu.isShown()) {
+                            ((ActivityMain) mActivity).arcMenu.fabMenu.show();
                         }
                     }
                 }

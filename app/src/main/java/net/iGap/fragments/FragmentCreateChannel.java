@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.Selection;
@@ -446,7 +447,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
 
     @Override public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = activity;
+        mActivity = (FragmentActivity) activity;
     }
 
     @Override public void onDetach() {

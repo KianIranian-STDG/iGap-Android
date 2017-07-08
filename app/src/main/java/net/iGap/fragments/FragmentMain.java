@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -96,7 +98,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
     private RecyclerView mRecyclerView;
     private MainType mainType;
-
+    private Activity mActivity;
 
     public enum MainType {
         all, chat, group, channel
@@ -144,7 +146,7 @@ public class FragmentMain extends Fragment implements OnComplete {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
         mRecyclerView.setItemAnimator(null);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         RealmResults<RealmRoom> results = null;
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.UPDATED_TIME};
@@ -273,19 +275,19 @@ public class FragmentMain extends Fragment implements OnComplete {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (((ActivityMain) getActivity()).arcMenu.isMenuOpened()) {
-                    ((ActivityMain) getActivity()).arcMenu.toggleMenu();
+                if (((ActivityMain) mActivity).arcMenu.isMenuOpened()) {
+                    ((ActivityMain) mActivity).arcMenu.toggleMenu();
                 }
 
                 if (dy > 0) {
                     // Scroll Down
-                    if (((ActivityMain) getActivity()).arcMenu.fabMenu.isShown()) {
-                        ((ActivityMain) getActivity()).arcMenu.fabMenu.hide();
+                    if (((ActivityMain) mActivity).arcMenu.fabMenu.isShown()) {
+                        ((ActivityMain) mActivity).arcMenu.fabMenu.hide();
                     }
                 } else if (dy < 0) {
                     // Scroll Up
-                    if (!((ActivityMain) getActivity()).arcMenu.fabMenu.isShown()) {
-                        ((ActivityMain) getActivity()).arcMenu.fabMenu.show();
+                    if (!((ActivityMain) mActivity).arcMenu.fabMenu.isShown()) {
+                        ((ActivityMain) mActivity).arcMenu.fabMenu.show();
                     }
                 }
             }
@@ -304,14 +306,14 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             case all:
 
-                ((ActivityMain) getActivity()).mainActionApp = new ActivityMain.MainInterface() {
+                ((ActivityMain) mActivity).mainActionApp = new ActivityMain.MainInterface() {
                     @Override
                     public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
                     }
                 };
 
-                ((ActivityMain) getActivity()).mainInterfaceGetRoomList = new ActivityMain.MainInterfaceGetRoomList() {
+                ((ActivityMain) mActivity).mainInterfaceGetRoomList = new ActivityMain.MainInterfaceGetRoomList() {
                     @Override
                     public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
 
@@ -355,7 +357,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 break;
             case chat:
-                ((ActivityMain) getActivity()).mainActionChat = new ActivityMain.MainInterface() {
+                ((ActivityMain) mActivity).mainActionChat = new ActivityMain.MainInterface() {
                     @Override
                     public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
@@ -363,7 +365,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                 };
                 break;
             case group:
-                ((ActivityMain) getActivity()).mainActionGroup = new ActivityMain.MainInterface() {
+                ((ActivityMain) mActivity).mainActionGroup = new ActivityMain.MainInterface() {
                     @Override
                     public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
@@ -371,7 +373,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                 };
                 break;
             case channel:
-                ((ActivityMain) getActivity()).mainActionChannel = new ActivityMain.MainInterface() {
+                ((ActivityMain) mActivity).mainActionChannel = new ActivityMain.MainInterface() {
                     @Override
                     public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
@@ -669,7 +671,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     @Override
     public void complete(boolean result, String messageOne, String MessageTow) {
         if (messageOne.equals("closeMenuButton")) {
-            ((ActivityMain) getActivity()).arcMenu.toggleMenu();
+            ((ActivityMain) mActivity).arcMenu.toggleMenu();
         }
     }
     //**************************************************************************************************************************************
@@ -1167,14 +1169,14 @@ public class FragmentMain extends Fragment implements OnComplete {
                         } else {
                             if (mInfo.isValid()) {
 
-                                Intent intent = new Intent(getActivity(), ActivityChat.class);
+                                Intent intent = new Intent(mActivity, ActivityChat.class);
                                 intent.putExtra("RoomId", mInfo.getId());
 
                                 startActivity(intent);
-                                getActivity().overridePendingTransition(0, 0);
+                                mActivity.overridePendingTransition(0, 0);
 
-                                if (((ActivityMain) getActivity()).arcMenu != null && ((ActivityMain) getActivity()).arcMenu.isMenuOpened()) {
-                                    ((ActivityMain) getActivity()).arcMenu.toggleMenu();
+                                if (((ActivityMain) mActivity).arcMenu != null && ((ActivityMain) mActivity).arcMenu.isMenuOpened()) {
+                                    ((ActivityMain) mActivity).arcMenu.toggleMenu();
                                 }
                             }
                         }
@@ -1196,7 +1198,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                                     role = mInfo.getChannelRoom().getRole().toString();
                                 }
 
-                                MyDialog.showDialogMenuItemRooms(getActivity(), mInfo.getType(), mInfo.getMute(), role, new OnComplete() {
+                                MyDialog.showDialogMenuItemRooms(mActivity, mInfo.getType(), mInfo.getMute(), role, new OnComplete() {
                                     @Override
                                     public void complete(boolean result, String messageOne, String MessageTow) {
                                         onSelectRoomMenu(messageOne, mInfo);
@@ -1228,5 +1230,11 @@ public class FragmentMain extends Fragment implements OnComplete {
                     return null;
             }
         }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity = (FragmentActivity) activity;
     }
 }

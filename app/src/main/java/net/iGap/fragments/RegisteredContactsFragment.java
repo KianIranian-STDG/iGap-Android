@@ -247,7 +247,7 @@ public class RegisteredContactsFragment extends Fragment {
         realmRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         realmRecyclerView.setItemViewCacheSize(100);
         realmRecyclerView.setItemAnimator(null);
-        realmRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        realmRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         results = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
         realmRecyclerView.setAdapter(new ContactListAdapter(results));

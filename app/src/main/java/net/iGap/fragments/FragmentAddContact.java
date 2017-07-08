@@ -179,7 +179,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(final RippleView rippleView) {
 
-                new MaterialDialog.Builder(getActivity()).title(R.string.add_to_list_contact)
+                new MaterialDialog.Builder(mActivity).title(R.string.add_to_list_contact)
                     .content(R.string.text_add_to_list_contact)
                     .positiveText(R.string.B_ok)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -188,7 +188,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                             final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
                             if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
                                 try {
-                                    HelperPermision.getContactPermision(getActivity(), null);
+                                    HelperPermision.getContactPermision(mActivity, null);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }

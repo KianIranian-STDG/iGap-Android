@@ -273,7 +273,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
     private void selfDestructs() {
 
-        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.self_destructs)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
+        new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.self_destructs)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -333,7 +333,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
 
     private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType, int position) {
 
-        new MaterialDialog.Builder(getActivity()).title(getResources().getString(R.string.privacy_setting)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.privacy_setting_array).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
+        new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.privacy_setting)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.privacy_setting_array).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 

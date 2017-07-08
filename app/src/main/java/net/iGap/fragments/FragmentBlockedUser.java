@@ -102,7 +102,7 @@ public class FragmentBlockedUser extends Fragment {
         RecyclerView realmRecyclerView = (RecyclerView) view.findViewById(R.id.fbu_realm_recycler_view);
         realmRecyclerView.setItemViewCacheSize(100);
         realmRecyclerView.setItemAnimator(null);
-        realmRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        realmRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         Realm realm = Realm.getDefaultInstance();
 

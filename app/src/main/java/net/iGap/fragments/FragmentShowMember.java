@@ -478,7 +478,7 @@ public class FragmentShowMember extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fcm_recycler_view_show_member);
         mRecyclerView.setItemViewCacheSize(100);
         mRecyclerView.setItemAnimator(null);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(mActivity);
         mRecyclerView.setLayoutManager(preCachingLayoutManager);

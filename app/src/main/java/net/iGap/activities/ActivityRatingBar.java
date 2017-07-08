@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -62,7 +61,7 @@ public class ActivityRatingBar extends ActivityEnhanced {
 
     private void openDialogForRating() {
 
-        MaterialDialog dialog = new MaterialDialog.Builder(ActivityRatingBar.this).title("Call Quality").customView(R.layout.dialog_rating_call, true).theme(Theme.LIGHT).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+        MaterialDialog dialog = new MaterialDialog.Builder(ActivityRatingBar.this).title(R.string.Call_Quality).customView(R.layout.dialog_rating_call, true).theme(Theme.LIGHT).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 sendRateToServer();
@@ -84,8 +83,6 @@ public class ActivityRatingBar extends ActivityEnhanced {
         edtResone = (EditText) view.findViewById(R.id.arb_edt_resone);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-
-                Log.e("dddddd", ratingBar.getRating() + "");
 
                 if (rating < 3) {
 

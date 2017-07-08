@@ -416,7 +416,7 @@ public class ContactGroupFragment extends Fragment {
         G.handler.post(new Runnable() {
             @Override public void run() {
                 //                prgWaiting.setVisibility(View.VISIBLE);
-                if (getActivity() != null) {
+                if (mActivity != null) {
                     mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
@@ -428,7 +428,7 @@ public class ContactGroupFragment extends Fragment {
             @Override public void run() {
 
                 //                prgWaiting.setVisibility(View.GONE);
-                if (getActivity() != null) {
+                if (mActivity != null) {
                     mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
