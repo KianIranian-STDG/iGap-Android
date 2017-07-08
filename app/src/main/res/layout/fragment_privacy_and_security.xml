@@ -12,9 +12,9 @@
 
 
   <android.support.design.widget.AppBarLayout
+      android:id="@+id/stps_backgroundToolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/stps_backgroundToolbar"
       >
     <android.support.v7.widget.Toolbar
 
@@ -38,15 +38,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/stps_ripple_back"
+            android:layout_toRightOf="@+id/stps_ripple_back"
             android:gravity="center"
             android:text="@string/st_title_Privacy_Security"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18"
             android:visibility="visible"
             fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/stps_ripple_back"
-            android:layout_toEndOf="@+id/stps_ripple_back"
             />
 
         <net.iGap.libs.rippleeffect.RippleView
@@ -614,13 +614,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|top"
+            android:padding="@dimen/dp8"
             android:text="@string/desc_self_destroy"
             android:textColor="@color/cardview_dark_background"
             android:textSize="@dimen/dp13"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp8"
-            android:paddingTop="@dimen/dp8"
-            android:paddingBottom="@dimen/dp8"
             android:textStyle="normal"
             fontPath="fonts/IRANSansMobile.ttf"
             />
