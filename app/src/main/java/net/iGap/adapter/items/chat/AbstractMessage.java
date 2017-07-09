@@ -184,11 +184,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         addLayoutTime(holder);
 
-        if (holder instanceof TextItem.ViewHolder || holder instanceof ImageWithTextItem.ViewHolder || holder instanceof AudioItem.ViewHolder || holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder || holder instanceof GifWithTextItem.ViewHolder) {
-
-            LinearLayout layoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
+        // remove text view if exist in view
+        LinearLayout layoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
+        if (layoutMessageContainer != null) {
             layoutMessageContainer.removeAllViews();
+        }
 
+        if (holder instanceof TextItem.ViewHolder
+            || holder instanceof ImageWithTextItem.ViewHolder
+            || holder instanceof AudioItem.ViewHolder
+            || holder instanceof FileItem.ViewHolder
+            || holder instanceof VideoWithTextItem.ViewHolder
+            || holder instanceof GifWithTextItem.ViewHolder) {
             int maxsize = 0;
 
             if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {
@@ -838,7 +845,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (mMessage.forwardedFrom != null) {
 
-            LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
+            final LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
             if (mContainer == null) {
                 return;
             }
@@ -859,6 +866,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else {
                 forwardView = holder.itemView.findViewById(R.id.cslr_ll_forward);
             }
+
+            final View finalForwardView = forwardView;
+            forwardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        finalForwardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    } else {
+                        finalForwardView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    }
+
+                    if (finalForwardView.getWidth() < mContainer.getWidth()) {
+                        finalForwardView.setMinimumWidth(mContainer.getWidth());
+                    }
+                }
+            });
+
+
 
             TextView txtPrefixForwardFrom = (TextView) holder.itemView.findViewById(R.id.cslr_txt_prefix_forward);
             txtPrefixForwardFrom.setTypeface(G.typeface_IRANSansMobile);
