@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -55,7 +56,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     }
 
     @Override public int getLayoutRes() {
-        return R.layout.chat_sub_layout_voice;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override public void onLoadThumbnailFromLocal(ViewHolder holder, final String localPath, LocalFileType fileType) {
@@ -70,6 +71,107 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     }
 
     @Override public void bindView(final ViewHolder holder, List payloads) {
+
+        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getVoiceItem());
+
+            holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
+            holder.author = (TextView) holder.itemView.findViewById(R.id.cslv_txt_author);
+            holder.btnPlayMusic = (TextView) holder.itemView.findViewById(R.id.csla_btn_play_music);
+            holder.txt_Timer = (TextView) holder.itemView.findViewById(R.id.csla_txt_timer);
+            holder.musicSeekbar = (SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1);
+            //tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
+
+            holder.complete = new OnComplete() {
+                @Override
+                public void complete(boolean result, String messageOne, final String MessageTow) {
+
+                    if (messageOne.equals("play")) {
+                        holder.btnPlayMusic.setText(R.string.md_play_arrow);
+                    } else if (messageOne.equals("pause")) {
+                        holder.btnPlayMusic.setText(R.string.md_pause_button);
+                    } else if (messageOne.equals("updateTime")) {
+                        holder.txt_Timer.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
+
+                                if (HelperCalander.isLanguagePersian) holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+
+                                holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
+                            }
+                        });
+                    }
+                }
+            };
+
+            holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (holder.mFilePath.length() < 1) return;
+
+                    G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, Long.parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
+
+                    final Realm realm = Realm.getDefaultInstance();
+
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, holder.mRoomId).findFirst();
+
+                            if (realmClientCondition != null) {
+
+                                RealmOfflineListen realmOfflineListen = realm.createObject(RealmOfflineListen.class, SUID.id().get());
+                                realmOfflineListen.setOfflineListen(Long.parseLong(holder.mMessageID));
+                                if (realmClientCondition.getOfflineListen() != null) {
+                                    realmClientCondition.getOfflineListen().add(realmOfflineListen);
+                                } else {
+                                    RealmList<RealmOfflineListen> offlineSeenListen = new RealmList<>();
+                                    offlineSeenListen.add(realmOfflineListen);
+                                    realmClientCondition.setOfflineListen(offlineSeenListen);
+                                }
+                            }
+                        }
+                    });
+
+                    realm.close();
+
+                    if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+                        MusicPlayer.onCompleteChat = holder.complete;
+
+                        if (MusicPlayer.mp != null) {
+                            MusicPlayer.playAndPause();
+                        } else {
+                            MusicPlayer.startPlayer(holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+                        }
+                    } else {
+
+                        MusicPlayer.stopSound();
+                        MusicPlayer.onCompleteChat = holder.complete;
+                        MusicPlayer.startPlayer(holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+
+                        holder.mTimeMusic = MusicPlayer.musicTime;
+                    }
+                }
+            });
+
+            holder.musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+                            MusicPlayer.setMusicProgress(holder.musicSeekbar.getProgress());
+                        }
+                    }
+                    return false;
+                }
+            });
+        }
+
+
         super.bindView(holder, payloads);
 
         ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
@@ -176,96 +278,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         public ViewHolder(View view) {
             super(view);
 
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            author = (TextView) view.findViewById(R.id.cslv_txt_author);
-            btnPlayMusic = (TextView) view.findViewById(R.id.csla_btn_play_music);
-            txt_Timer = (TextView) view.findViewById(R.id.csla_txt_timer);
-            musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);
-            //tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
-            complete = new OnComplete() {
-                @Override public void complete(boolean result, String messageOne, final String MessageTow) {
-
-                    if (messageOne.equals("play")) {
-                        btnPlayMusic.setText(R.string.md_play_arrow);
-                    } else if (messageOne.equals("pause")) {
-                        btnPlayMusic.setText(R.string.md_pause_button);
-                    } else if (messageOne.equals("updateTime")) {
-                        txt_Timer.post(new Runnable() {
-                            @Override public void run() {
-                                txt_Timer.setText(MessageTow + "/" + mTimeMusic);
-
-                                if (HelperCalander.isLanguagePersian) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
-
-                                musicSeekbar.setProgress(MusicPlayer.musicProgress);
-                            }
-                        });
-                    }
-                }
-            };
-
-            btnPlayMusic.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-
-                    if (mFilePath.length() < 1) return;
-
-                    G.chatUpdateStatusUtil.sendUpdateStatus(mType, mRoomId, Long.parseLong(mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
-
-                    final Realm realm = Realm.getDefaultInstance();
-
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
-
-                            if (realmClientCondition != null) {
-
-                                RealmOfflineListen realmOfflineListen = realm.createObject(RealmOfflineListen.class, SUID.id().get());
-                                realmOfflineListen.setOfflineListen(Long.parseLong(mMessageID));
-                                if (realmClientCondition.getOfflineListen() != null) {
-                                    realmClientCondition.getOfflineListen().add(realmOfflineListen);
-                                } else {
-                                    RealmList<RealmOfflineListen> offlineSeenListen = new RealmList<>();
-                                    offlineSeenListen.add(realmOfflineListen);
-                                    realmClientCondition.setOfflineListen(offlineSeenListen);
-                                }
-                            }
-                        }
-                    });
-
-                    realm.close();
-
-                    if (mMessageID.equals(MusicPlayer.messageId)) {
-                        MusicPlayer.onCompleteChat = complete;
-
-                        if (MusicPlayer.mp != null) {
-                            MusicPlayer.playAndPause();
-                        } else {
-                            MusicPlayer.startPlayer(mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, mMessageID);
-                        }
-                    } else {
-
-                        MusicPlayer.stopSound();
-                        MusicPlayer.onCompleteChat = complete;
-                        MusicPlayer.startPlayer(mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, mMessageID);
-
-                        mTimeMusic = MusicPlayer.musicTime;
-                    }
-                }
-            });
-
-            musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
-
-                @Override public boolean onTouch(View v, MotionEvent event) {
-
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                        if (mMessageID.equals(MusicPlayer.messageId)) {
-                            MusicPlayer.setMusicProgress(musicSeekbar.getProgress());
-                        }
-                    }
-                    return false;
-                }
-            });
         }
     }
 

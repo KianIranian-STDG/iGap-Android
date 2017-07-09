@@ -7,6 +7,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -81,6 +82,129 @@ public class ViewMaker {
         linearLayout_683.addView(contentContainer);
 
         mainContainer.addView(linearLayout_683);
+
+        return mainContainer;
+    }
+
+    public static View getVoiceItem() {
+
+        LinearLayout mainContainer = new LinearLayout(G.context);
+        mainContainer.setId(R.id.mainContainer);
+        mainContainer.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams layout_477 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mainContainer.setLayoutParams(layout_477);
+
+        LinearLayout linearLayout_349 = new LinearLayout(G.context);
+        linearLayout_349.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layout_105 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_349.setLayoutParams(layout_105);
+
+        LinearLayout contentContainer = new LinearLayout(G.context);
+        contentContainer.setId(R.id.contentContainer);
+        LinearLayout.LayoutParams layout_942 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        contentContainer.setPadding(5, 5, 5, 5);
+        contentContainer.setLayoutParams(layout_942);
+
+        LinearLayout m_container = new LinearLayout(G.context);
+        m_container.setId(R.id.m_container);
+        m_container.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layout_148 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_148);
+
+        LinearLayout linearLayout_197 = new LinearLayout(G.context);
+        linearLayout_197.setGravity(Gravity.CENTER_VERTICAL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            linearLayout_197.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+        linearLayout_197.setMinimumHeight(i_Dp(R.dimen.dp95));
+        linearLayout_197.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams layout_80 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_197.setLayoutParams(layout_80);
+
+        LinearLayout audioPlayerViewContainer = new LinearLayout(G.context);
+        audioPlayerViewContainer.setId(R.id.audioPlayerViewContainer);
+        audioPlayerViewContainer.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layout_868 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        audioPlayerViewContainer.setLayoutParams(layout_868);
+
+        LinearLayout linearLayout_153 = new LinearLayout(G.context);
+        LinearLayout.LayoutParams layout_928 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_153.setLayoutParams(layout_928);
+
+        //****************************
+        FrameLayout frameLayout_161 = new FrameLayout(G.context);
+
+        int pading = i_Dp(R.dimen.dp4);
+        frameLayout_161.setPadding(pading, pading, pading, pading);
+
+        LinearLayout.LayoutParams layout_1488 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp40), i_Dp(R.dimen.dp40));
+        layout_1488.gravity = Gravity.CENTER;
+        frameLayout_161.setLayoutParams(layout_1488);
+
+        ImageView thumbnail = new ImageView(G.context);
+        thumbnail.setId(R.id.thumbnail);
+        FrameLayout.LayoutParams layout_152 = new FrameLayout.LayoutParams(i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp20));
+        layout_152.gravity = Gravity.CENTER;
+        AppUtils.setImageDrawable(thumbnail, R.drawable.microphone_icon);
+        thumbnail.setLayoutParams(layout_152);
+        frameLayout_161.addView(thumbnail);
+
+        frameLayout_161.addView(getProgressBar(i_Dp(R.dimen.dp36)));
+        linearLayout_153.addView(frameLayout_161);
+
+        //******************************
+
+        TextView cslv_txt_author = new TextView(G.context);
+        cslv_txt_author.setId(R.id.cslv_txt_author);
+        cslv_txt_author.setText("recored audio");
+        cslv_txt_author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_799.topMargin = i_Dp(R.dimen.dp12);
+        cslv_txt_author.setLayoutParams(layout_799);
+        linearLayout_153.addView(cslv_txt_author);
+        audioPlayerViewContainer.addView(linearLayout_153);
+
+        LinearLayout linearLayout_503 = new LinearLayout(G.context);
+        linearLayout_503.setGravity(Gravity.LEFT | Gravity.CENTER);
+        LinearLayout.LayoutParams layout_669 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
+        linearLayout_503.setLayoutParams(layout_669);
+
+        TextView csla_btn_play_music = new TextView(G.context);
+        csla_btn_play_music.setId(R.id.csla_btn_play_music);
+        csla_btn_play_music.setBackgroundResource(0);
+        csla_btn_play_music.setGravity(Gravity.CENTER);
+        csla_btn_play_music.setText(G.context.getResources().getString(R.string.md_play_arrow));
+        csla_btn_play_music.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+        csla_btn_play_music.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        csla_btn_play_music.setTypeface(G.typeface_Fontico);
+        LinearLayout.LayoutParams layout_978 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp40), ViewGroup.LayoutParams.MATCH_PARENT);
+        csla_btn_play_music.setLayoutParams(layout_978);
+        linearLayout_503.addView(csla_btn_play_music);
+
+        SeekBar csla_seekBar1 = new SeekBar(G.context);
+        csla_seekBar1.setId(R.id.csla_seekBar1);
+        LinearLayout.LayoutParams layout_652 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+        csla_seekBar1.setLayoutParams(layout_652);
+        linearLayout_503.addView(csla_seekBar1);
+        audioPlayerViewContainer.addView(linearLayout_503);
+
+        TextView csla_txt_timer = new TextView(G.context);
+        csla_txt_timer.setId(R.id.csla_txt_timer);
+        csla_txt_timer.setPadding(0, 0, i_Dp(R.dimen.dp8), 0);
+        csla_txt_timer.setText("00:00");
+        csla_txt_timer.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+        csla_txt_timer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_758.gravity = Gravity.RIGHT;
+        layout_758.leftMargin = i_Dp(R.dimen.dp52);
+        csla_txt_timer.setLayoutParams(layout_758);
+
+        audioPlayerViewContainer.addView(csla_txt_timer);
+        linearLayout_197.addView(audioPlayerViewContainer);
+        m_container.addView(linearLayout_197);
+        contentContainer.addView(m_container);
+        linearLayout_349.addView(contentContainer);
+        mainContainer.addView(linearLayout_349);
 
         return mainContainer;
     }
@@ -672,6 +796,155 @@ public class ViewMaker {
 
         return circleImageView;
     }
+
+    public static View getProgressBar(int size) {
+
+        //MessageProgress messageProgress=new MessageProgress(G.context);
+        //messageProgress.setId(R.id.progress);
+        //FrameLayout.LayoutParams layout_189 = new FrameLayout.LayoutParams(size, size);
+        //messageProgress.setLayoutParams(layout_189);
+        //
+        //
+        //ContentLoadingProgressBar contentLoadingProgressBar=new ContentLoadingProgressBar(G.context);
+        //contentLoadingProgressBar.setId(R.id.ch_progress_loadingContent);
+        //FrameLayout.LayoutParams layout_256 = new FrameLayout.LayoutParams(size, size);
+        //contentLoadingProgressBar.setLayoutParams(layout_256);
+        //contentLoadingProgressBar.setVisibility(View.VISIBLE);
+        //
+        //messageProgress.addView(contentLoadingProgressBar);
+        //
+        //
+        //
+        //
+        //return messageProgress;
+
+        View v = G.inflater.inflate(R.layout.msg_progress_item, null, false);
+
+        //FrameLayout.LayoutParams params =new FrameLayout.LayoutParams(size,size);
+        //params.setMargins(4,4,4,4);
+        //
+        //v.setLayoutParams(params);
+
+        return v;
+    }
+
+    public static AttributeSet getAttribuit(int attr) {
+
+        AttributeSet at = new AttributeSet() {
+            @Override
+            public int getAttributeCount() {
+                return 0;
+            }
+
+            @Override
+            public String getAttributeName(int index) {
+                return null;
+            }
+
+            @Override
+            public String getAttributeValue(int index) {
+                return null;
+            }
+
+            @Override
+            public String getAttributeValue(String namespace, String name) {
+                return null;
+            }
+
+            @Override
+            public String getPositionDescription() {
+                return null;
+            }
+
+            @Override
+            public int getAttributeNameResource(int index) {
+                return 0;
+            }
+
+            @Override
+            public int getAttributeListValue(String namespace, String attribute, String[] options, int defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public boolean getAttributeBooleanValue(String namespace, String attribute, boolean defaultValue) {
+                return false;
+            }
+
+            @Override
+            public int getAttributeResourceValue(String namespace, String attribute, int defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public int getAttributeIntValue(String namespace, String attribute, int defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public int getAttributeUnsignedIntValue(String namespace, String attribute, int defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public float getAttributeFloatValue(String namespace, String attribute, float defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public int getAttributeListValue(int index, String[] options, int defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public boolean getAttributeBooleanValue(int index, boolean defaultValue) {
+                return false;
+            }
+
+            @Override
+            public int getAttributeResourceValue(int index, int defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public int getAttributeIntValue(int index, int defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public int getAttributeUnsignedIntValue(int index, int defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public float getAttributeFloatValue(int index, float defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public String getIdAttribute() {
+                return null;
+            }
+
+            @Override
+            public String getClassAttribute() {
+                return null;
+            }
+
+            @Override
+            public int getIdAttributeResourceValue(int defaultValue) {
+                return 0;
+            }
+
+            @Override
+            public int getStyleAttribute() {
+                return 0;
+            }
+        };
+
+        return at;
+    }
+
 
     //*********************************************************************************************
     private static int dpToPixel(int dp) {
