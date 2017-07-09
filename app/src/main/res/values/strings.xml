@@ -927,7 +927,7 @@
   <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop. We are aware of this error. Please be sure we are fixing this problem, all you have to do is only click "Reset".</string>
   <string name="who_is_allowed_to_call">Who can call me ?</string>
   <string name="miss">Missed Call</string>
-  <string name="not_answer">No Answer</string>
+  <string name="not_answer">Unanswered Call</string>
 
   <string name="nothing">Nothing</string>
   <string name="are_you_sure_clear_call_logs">Are you sure you want to clear all incoming and outgoing calls?</string>
