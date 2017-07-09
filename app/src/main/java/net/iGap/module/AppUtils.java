@@ -337,7 +337,7 @@ public final class AppUtils {
         }
     }
 
-    private static void setImageDrawable(ImageView view, int res) {
+    public static void setImageDrawable(ImageView view, int res) {
         view.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, res));
 
         // view.setImageResource(res);

@@ -12,7 +12,7 @@ package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.List;
 import net.iGap.R;
@@ -38,6 +38,12 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
+
+        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getTextItem());
+        }
+
+
         super.bindView(holder, payloads);
 
         String text;
@@ -55,7 +61,7 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
         if (mMessage.hasLinkInMessage) {
 
-            holder.llTime.setOnClickListener(new View.OnClickListener() {
+            holder.itemView.findViewById(R.id.csl_ll_time).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -89,11 +95,11 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-        protected LinearLayout llTime;
+        //  protected LinearLayout llTime;
 
         public ViewHolder(View view) {
             super(view);
-            llTime = (LinearLayout) view.findViewById(R.id.csl_ll_time);
+            // llTime = (LinearLayout) view.findViewById(R.id.csl_ll_time);
         }
     }
 

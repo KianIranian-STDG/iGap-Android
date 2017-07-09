@@ -167,7 +167,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         protected OnComplete complete;
         protected TextView txt_Timer;
         protected TextView author;
-        protected TextView iconHearing;
         protected String mFilePath = "";
         protected String mMessageID = "";
         protected String mTimeMusic = "";
@@ -181,7 +180,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             author = (TextView) view.findViewById(R.id.cslv_txt_author);
             btnPlayMusic = (TextView) view.findViewById(R.id.csla_btn_play_music);
             txt_Timer = (TextView) view.findViewById(R.id.csla_txt_timer);
-            iconHearing = (TextView) view.findViewById(R.id.cslr_txt_hearing);
             musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);
             //tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 

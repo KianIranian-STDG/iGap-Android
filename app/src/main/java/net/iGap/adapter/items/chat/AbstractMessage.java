@@ -14,19 +14,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -54,7 +51,6 @@ import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MyType;
@@ -157,6 +153,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return super.withIdentifier(identifier);
     }
 
+    private void addLayoutTime(VH holder) {
+
+        LinearLayout ll_containerTime = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer).getParent();
+
+        if (holder.itemView.findViewById(R.id.csl_ll_time) != null) {
+            ll_containerTime.removeView(holder.itemView.findViewById(R.id.csl_ll_time));
+        }
+
+        boolean addHearing = false;
+
+        if (mMessage.isSenderMe() && ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
+            addHearing = true;
+        }
+
+        ll_containerTime.addView(ViewMaker.getViewTime(addHearing), new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+    }
+
+
     @Override
     @CallSuper
     public void bindView(final VH holder, List<Object> payloads) {
@@ -168,6 +182,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
+        addLayoutTime(holder);
+
         if (holder instanceof TextItem.ViewHolder
             || holder instanceof ImageWithTextItem.ViewHolder
             || holder instanceof AudioItem.ViewHolder
@@ -176,8 +192,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             || holder instanceof GifWithTextItem.ViewHolder) {
 
             LinearLayout layoutMesageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
-            // layoutMesageContainer.removeAllViews();
-            messageView = makeTextViewMessage();
+            layoutMesageContainer.removeAllViews();
+
+            int maxsize = 0;
+
+            if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {
+                maxsize = (int) G.context.getResources().getDimension(R.dimen.dp220);
+            }
+
+            messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText);
             layoutMesageContainer.addView(messageView);
         }
 
@@ -235,19 +258,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.GONE);
             }
         }
-        ///**
-        // * display user avatar only if chat type is GROUP
-        // */
-        //if (holder.itemView.findViewById(R.id.messageSenderAvatar) != null) {
-        //    holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
-        //}
+        /**
+         * display user avatar only if chat type is GROUP
+         */
+        if (holder.itemView.findViewById(R.id.messageSenderAvatar) != null) {
+            holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
+        }
 
         replyMessageIfNeeded(holder, G.getRealm());
         forwardMessageIfNeeded(holder, G.getRealm());
 
-        //if (holder.itemView.findViewById(R.id.messageSenderName) != null) {
-        //    holder.itemView.findViewById(R.id.messageSenderName).setVisibility(View.GONE);
-        //}
+        if (holder.itemView.findViewById(R.id.messageSenderName) != null) {
+            holder.itemView.findViewById(R.id.messageSenderName).setVisibility(View.GONE);
+        }
 
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
@@ -257,7 +280,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     addSenderNameToGroupIfNeed(holder.itemView, G.getRealm());
 
-                    if (holder.itemView.findViewById(R.id.messageSenderAvatar) == null) mainContainer.addView(makeCircleImageView(), 0);
+                    if (holder.itemView.findViewById(R.id.messageSenderAvatar) == null) {
+                        mainContainer.addView(ViewMaker.makeCircleImageView(), 0);
+                    }
 
                     holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
 
@@ -268,7 +293,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     });
 
-                    String[] initialize = HelperAvatar.getAvatarSync(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, G.getRealm(), new OnAvatarGet() {
+                    //  String[] initialize =
+                    HelperAvatar.getAvatar(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, G.getRealm(), new OnAvatarGet() {
                         @Override
                         public void onAvatarGet(final String avatarPath, long ownerId) {
                             G.handler.post(new Runnable() {
@@ -290,10 +316,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             });
                         }
                     });
-                    if (initialize != null && initialize[0] != null && initialize[1] != null) {
-                        ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
-                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initialize[0], initialize[1]));
-                    }
+                    //if (initialize != null && initialize[0] != null && initialize[1] != null) {
+                    //    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
+                    //        net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initialize[0], initialize[1]));
+                    //}
                 }
             }
         }
@@ -303,6 +329,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         TextView txtTime = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
         if (txtTime != null) {
+            txtTime.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
             txtTime.setText(HelperCalander.getClocktime(mMessage.time, false));
 
             if (HelperCalander.isLanguagePersian) {
@@ -324,14 +351,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        ///**
-        // * show vote layout for channel otherwise hide layout
-        // * also get message state for channel
-        // */
-        //
-        //if (holder.itemView.findViewById(R.id.lyt_vote) != null) {
-        //    holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.GONE);
-        //}
+
+     /*    * show vote layout for channel otherwise hide layout
+         * also get message state for channel*/
+
+        if (holder.itemView.findViewById(R.id.lyt_vote) != null) {
+            holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.GONE);
+        }
+
+        if (holder.itemView.findViewById(R.id.lyt_see) != null) {
+            holder.itemView.findViewById(R.id.lyt_see).setVisibility(View.GONE);
+        }
 
         if (G.showVoteChannelLayout) {
 
@@ -351,7 +381,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         } else if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
 
-            holder.itemView.findViewById(R.id.lyt_see).setVisibility(View.VISIBLE);
             TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
 
             if ((mMessage.forwardedFrom != null)) {
@@ -382,19 +411,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 txtViewsLabel.setText(HelperCalander.convertToUnicodeFarsiNumber(txtViewsLabel.getText().toString()));
             }
         }
-
-
     }
 
     /**
      * show vote views
      */
     private void showVote(VH holder, Realm realm) {
+
+        // add layout seen in channel
+        if (holder.itemView.findViewById(R.id.lyt_see) == null) {
+            LinearLayout ll_time_layout = (LinearLayout) holder.itemView.findViewById(R.id.csl_ll_time);
+            ll_time_layout.addView(ViewMaker.getViewSeen(), 0);
+        }
+
         voteAction(holder, realm);
         /**
          * userId != 0 means that this message is from channel
          * because for chat and group userId will be set
          */
+
 
         if ((mMessage.forwardedFrom != null)) {
 
@@ -423,79 +458,73 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private View makeCircleImageView() {
-
-        CircleImageView circleImageView = new CircleImageView(G.context);
-        circleImageView.setId(R.id.messageSenderAvatar);
-
-        int size = (int) G.context.getResources().getDimension(R.dimen.dp48);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
-        params.setMargins(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
-
-        circleImageView.setLayoutParams(params);
-
-        return circleImageView;
-    }
-
-    private View makeHeaderTextView(String text) {
-
-        EmojiTextViewE textView = new EmojiTextViewE(G.context);
-        textView.setTextColor(Color.BLACK);
-        textView.setBackgroundResource(R.drawable.rect_radios_top_gray);
-        textView.setId(R.id.messageSenderName);
-        textView.setGravity(Gravity.LEFT);
-        textView.setPadding(20, 0, 20, 5);
-        textView.setSingleLine();
-        textView.setTypeface(G.typeface_IRANSansMobile);
-        textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        textView.setText(text);
-        textView.setTextSize(12);
-
-        return textView;
-    }
-
-    private void addSenderNameToGroupIfNeed(View view, Realm realm) {
+    private void addSenderNameToGroupIfNeed(final View view, Realm realm) {
 
         if (G.showSenderNameInGroup) {
-            LinearLayout mContainer = (LinearLayout) view.findViewById(R.id.m_container);
+            final LinearLayout mContainer = (LinearLayout) view.findViewById(R.id.m_container);
             if (mContainer != null) {
+
+                if (view.findViewById(R.id.messageSenderName) != null) {
+                    mContainer.removeView(view.findViewById(R.id.messageSenderName));
+                }
 
                 if (view.findViewById(R.id.messageSenderName) == null) {
                     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(mMessage.senderID)).findFirst();
                     if (realmRegisteredInfo != null) {
-                        EmojiTextViewE _tv = (EmojiTextViewE) makeHeaderTextView(realmRegisteredInfo.getDisplayName());
-                        mContainer.addView(_tv, 0);
-                    }
-                } else {
+                        final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(realmRegisteredInfo.getDisplayName());
 
-                    EmojiTextViewE _senderName = (EmojiTextViewE) view.findViewById(R.id.messageSenderName);
+                        _tv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                            @Override
+                            public void onGlobalLayout() {
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                                    _tv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                } else {
+                                    _tv.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                                }
 
-                    if (mContainer.getChildAt(0) != _senderName) {
-                        mContainer.removeView(_senderName);
-                        mContainer.addView(_senderName, 0);
-                    }
-                    _senderName.setVisibility(View.VISIBLE);
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(mMessage.senderID)).findFirst();
-                    if (realmRegisteredInfo != null) {
-                        _senderName.setText(realmRegisteredInfo.getDisplayName());
+                                if (_tv.getWidth() < mContainer.getWidth()) {
+                                    _tv.setWidth(mContainer.getWidth());
+                                }
+                            }
+                        });
+
+                        mContainer.addView(_tv, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+
                     }
                 }
+                //else {
+                //
+                //    EmojiTextViewE _senderName = (EmojiTextViewE) view.findViewById(R.id.messageSenderName);
+                //
+                //    if (mContainer.getChildAt(0) != _senderName) {
+                //        mContainer.removeView(_senderName);
+                //        mContainer.addView(_senderName, 0 , new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                //    }
+                //    _senderName.setVisibility(View.VISIBLE);
+                //    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(mMessage.senderID)).findFirst();
+                //    if (realmRegisteredInfo != null) {
+                //        _senderName.setText(realmRegisteredInfo.getDisplayName());
+                //    }
+                //}
             }
         }
     }
 
     protected void voteAction(VH holder, Realm realm) {
 
-        LinearLayout voteContainer = (LinearLayout) holder.itemView.findViewById(R.id.vote_container);
-        if (voteContainer == null) {
+        LinearLayout mainContainer = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
+        if (mainContainer == null) {
             return;
         }
-        voteContainer.setVisibility(View.VISIBLE);
 
         if (holder.itemView.findViewById(R.id.lyt_vote) == null) {
-            View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
-            voteContainer.addView(voteView);
+            //   View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
+
+            View voteView = ViewMaker.getViewVote();
+
+            mainContainer.addView(voteView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            voteView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         }
 
         LinearLayout lytContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
@@ -511,7 +540,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             TextView txtVoteDown = (TextView) holder.itemView.findViewById(R.id.txt_vote_down);
             TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
             TextView txtSignature = (TextView) holder.itemView.findViewById(R.id.txt_signature);
-            holder.itemView.findViewById(R.id.lyt_see).setVisibility(View.VISIBLE);
 
             lytVote.setVisibility(View.VISIBLE);
 
@@ -631,7 +659,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
-        TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
+
 
         if (messageText != null) {
             messageText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
@@ -639,7 +667,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
         setTextcolor(imgTick, R.color.colorOldBlack);
-        timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+
 
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.LEFT;
 
@@ -682,8 +710,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
-        TextView timeText = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
-        TextView iconHearing = (TextView) holder.itemView.findViewById(R.id.cslr_txt_hearing);
+        //  TextView iconHearing = (TextView) holder.itemView.findViewById(R.id.cslr_txt_hearing);
 
         if (messageText != null) {
             messageText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
@@ -693,13 +720,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
             setTextcolor(imgTick, R.color.iGapColor);
         } else if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
-            iconHearing.setVisibility(View.VISIBLE);
+            // iconHearing.setVisibility(View.VISIBLE);
             setTextcolor(imgTick, R.color.iGapColor);
             imgTick.setVisibility(View.VISIBLE);
         } else {
             setTextcolor(imgTick, R.color.colorOldBlack);
         }
-        timeText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+
 
         (holder.itemView.findViewById(R.id.contentContainer)).setBackgroundResource(R.drawable.rectangle_send_round_color);
         /**
@@ -715,27 +742,49 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void replyMessageIfNeeded(VH holder, Realm realm) {
-        ///**
-        // * set replay container visible if message was replayed, otherwise, gone it
-        // */
-        //
-        //if (holder.itemView.findViewById(R.id.cslr_replay_layout) != null) {
-        //    holder.itemView.findViewById(R.id.cslr_replay_layout).setVisibility(View.GONE);
-        //}
+        /**
+         * set replay container visible if message was replayed, otherwise, gone it
+         */
+
+        if (holder.itemView.findViewById(R.id.cslr_replay_layout) != null) {
+            holder.itemView.findViewById(R.id.cslr_replay_layout).setVisibility(View.GONE);
+        }
 
         if (mMessage.replayTo != null) {
-            LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
+            final LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
             if (mContainer == null) {
                 return;
             }
 
-            View replayView = null;
-            if (holder.itemView.findViewById(R.id.chslr_txt_replay_from) == null) {
-                replayView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_reply, null);
-                mContainer.addView(replayView, 0);
-            } else {
+            final View replayView;
+
+            if (holder.itemView.findViewById(R.id.cslr_replay_layout) != null) {
+
                 replayView = holder.itemView.findViewById(R.id.cslr_replay_layout);
+            } else {
+                replayView = ViewMaker.getViewReplay();
+                mContainer.addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             }
+
+            replayView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        replayView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    } else {
+                        replayView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    }
+
+                    if (replayView.getWidth() < mContainer.getWidth()) {
+                        replayView.setMinimumWidth(mContainer.getWidth());
+                    }
+                }
+            });
+
+
+
+
+
 
             if (replayView != null) {
                 replayView.setVisibility(View.VISIBLE);
@@ -791,13 +840,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void forwardMessageIfNeeded(VH holder, Realm realm) {
-        ///**
-        // * set forward container visible if message was forwarded, otherwise, gone it
-        // */
-        //
-        //if (holder.itemView.findViewById(R.id.cslr_ll_forward) != null) {
-        //    holder.itemView.findViewById(R.id.cslr_ll_forward).setVisibility(View.GONE);
-        //}
+        /**
+         * set forward container visible if message was forwarded, otherwise, gone it
+         */
+
+        if (holder.itemView.findViewById(R.id.cslr_ll_forward) != null) {
+            holder.itemView.findViewById(R.id.cslr_ll_forward).setVisibility(View.GONE);
+        }
 
         if (mMessage.forwardedFrom != null) {
 
@@ -808,7 +857,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             View forwardView = null;
             if (holder.itemView.findViewById(R.id.cslr_txt_forward_from) == null) {
-                forwardView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_forward, null);
+                forwardView = ViewMaker.getViewForward();
                 forwardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -818,7 +867,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     }
                 });
-                mContainer.addView(forwardView, 0);
+                mContainer.addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             } else {
                 forwardView = holder.itemView.findViewById(R.id.cslr_ll_forward);
             }
@@ -1535,40 +1584,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    public View makeTextViewMessage() {
 
-        if (mMessage.hasEmojiInText) {
-            EmojiTextViewE emojiTextViewE = new EmojiTextViewE(G.context);
-            emojiTextViewE.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            emojiTextViewE.setTextColor(Color.parseColor("#333333"));
-            emojiTextViewE.setId(R.id.messageSenderTextMessage);
-            emojiTextViewE.setPadding(10, 0, 10, 0);
-            emojiTextViewE.setTypeface(G.typeface_IRANSansMobile);
-            emojiTextViewE.setTextSize(G.userTextSize);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                emojiTextViewE.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
-                emojiTextViewE.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
-            }
-            emojiTextViewE.setMovementMethod(LinkMovementMethod.getInstance());
-
-            return emojiTextViewE;
-        } else {
-            TextView textView = new TextView(G.context);
-            textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            textView.setTextColor(Color.parseColor("#333333"));
-            textView.setId(R.id.messageSenderTextMessage);
-            textView.setPadding(10, 0, 10, 0);
-            textView.setTypeface(G.typeface_IRANSansMobile);
-            textView.setTextSize(G.userTextSize);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                textView.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
-                textView.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
-            }
-            textView.setMovementMethod(LinkMovementMethod.getInstance());
-
-            return textView;
-        }
-    }
 
 
 }

@@ -6,7 +6,7 @@
     android:id="@+id/chatSubLayoutFile"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp4"
+    android:paddingBottom="@dimen/dp4"
     >
 
   <LinearLayout
@@ -16,14 +16,6 @@
       android:orientation="horizontal"
       tools:ignore="UselessParent"
       >
-
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        >
 
       <LinearLayout
           android:layout_width="wrap_content"
@@ -90,6 +82,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="middle"
                     android:maxLines="1"
+                    android:maxWidth="@dimen/dp180"
                     android:singleLine="true"
                     android:text="file_name.ext"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
@@ -130,13 +123,9 @@
 
           </LinearLayout>
         </LinearLayout>
-        <include layout="@layout/chat_sub_layout_messages_time" />
+
       </LinearLayout>
 
-
-    </LinearLayout>
-
-    <include layout="@layout/chat_sub_layout_vote_container" />
 
   </LinearLayout>
 

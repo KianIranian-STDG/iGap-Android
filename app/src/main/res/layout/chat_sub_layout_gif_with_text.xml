@@ -5,7 +5,7 @@
     android:id="@+id/chatSubLayoutGifWithText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp4"
+    android:paddingBottom="@dimen/dp4"
 
     android:textDirection="firstStrong"
     >
@@ -17,14 +17,6 @@
       android:orientation="horizontal"
       tools:ignore="UselessParent"
       >
-
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        >
 
 
       <LinearLayout
@@ -79,12 +71,10 @@
 
           </LinearLayout>
         </LinearLayout>
-        <include layout="@layout/chat_sub_layout_messages_time" />
+
 
       </LinearLayout>
-    </LinearLayout>
 
-    <include layout="@layout/chat_sub_layout_vote_container" />
 
   </LinearLayout>
 </FrameLayout>

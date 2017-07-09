@@ -78,6 +78,7 @@
             android:layout_alignParentBottom="true"
             android:gravity="bottom|start"
             android:singleLine="true"
+            android:textSize="@dimen/dp14"
             android:text="@string/last_seen_recently"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
             android:textColor="#bbbbbb"

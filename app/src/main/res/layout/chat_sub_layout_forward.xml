@@ -47,7 +47,6 @@
             android:minWidth="@dimen/dp100"
             android:textColor="@color/newBlack"
             android:textSize="@dimen/dp12"
-            android:maxLength="20"
             fontPath="fonts/IRANSansMobile.ttf"
             android:textStyle="bold"/>
     </LinearLayout>

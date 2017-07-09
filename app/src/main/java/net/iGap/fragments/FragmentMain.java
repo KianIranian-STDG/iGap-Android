@@ -676,7 +676,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     }
     //**************************************************************************************************************************************
 
-    public class PreCachingLayoutManager extends LinearLayoutManager {
+    public static class PreCachingLayoutManager extends LinearLayoutManager {
         private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 600;
         private int extraLayoutSpace = -1;
         private Context context;
@@ -701,6 +701,12 @@ public class FragmentMain extends Fragment implements OnComplete {
             this.extraLayoutSpace = extraLayoutSpace;
         }
 
+
+        @Override
+        public boolean supportsPredictiveItemAnimations() {
+            return false;
+        }
+
         @Override
         protected int getExtraLayoutSpace(RecyclerView.State state) {
             if (extraLayoutSpace > 0) {
@@ -709,7 +715,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             return DEFAULT_EXTRA_LAYOUT_SPACE;
         }
 
-        private static final float MILLISECONDS_PER_INCH = 2000f; //default is 25f (bigger = slower)
+        private static final float MILLISECONDS_PER_INCH = 50f; //default is 25f (bigger = slower)
 
         @Override
         public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
