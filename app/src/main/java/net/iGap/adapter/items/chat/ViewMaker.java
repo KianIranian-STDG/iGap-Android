@@ -617,7 +617,6 @@ public class ViewMaker {
         return lyt_vote;
     }
 
-    //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static View getAudioItem() {
 
         LinearLayout mainContainer = new LinearLayout(context);
@@ -792,6 +791,77 @@ public class ViewMaker {
 
         return mainContainer;
     }
+
+
+    public static View getContactItem() {
+        LinearLayout lytMainContainer = new LinearLayout(context);
+        LinearLayout.LayoutParams layoutParamsMainContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lytMainContainer.setId(R.id.mainContainer);
+        lytMainContainer.setOrientation(HORIZONTAL);
+        lytMainContainer.setLayoutParams(layoutParamsMainContainer);
+
+        LinearLayout lytContainer1 = new LinearLayout(context);
+        LinearLayout.LayoutParams layoutParamsContainer1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lytContainer1.setId(R.id.lytContainer1);
+        lytContainer1.setOrientation(VERTICAL);
+        lytContainer1.setLayoutParams(layoutParamsContainer1);
+        lytMainContainer.addView(lytContainer1);
+
+        LinearLayout contentContainer = new LinearLayout(context, null, R.style.ChatMessages_CardView);
+        contentContainer.setId(R.id.contentContainer);
+        lytContainer1.addView(contentContainer);
+
+        LinearLayout m_container = new LinearLayout(context);
+        LinearLayout.LayoutParams layoutParamsM_container = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setId(R.id.m_container);
+        m_container.setOrientation(VERTICAL);
+        m_container.setLayoutParams(layoutParamsM_container);
+        contentContainer.addView(m_container);
+
+        LinearLayout container2 = new LinearLayout(context);
+        LinearLayout.LayoutParams layoutParamsContainer2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParamsContainer1.gravity = Gravity.CENTER_VERTICAL;
+        container2.setOrientation(HORIZONTAL);
+        container2.setPadding((int) G.context.getResources().getDimension(R.dimen.messageContainerPadding), 0, 5, 2);
+        container2.setLayoutParams(layoutParamsContainer2);
+        m_container.addView(container2);
+
+        ImageView image = new ImageView(G.context);
+        LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp52), i_Dp(R.dimen.dp52));
+        layoutParamsImage.rightMargin = 14;
+        image.setId(R.id.image);
+        image.setContentDescription(null);
+        image.setImageResource(R.drawable.user);
+        image.setLayoutParams(layoutParamsImage);
+        container2.addView(image);
+
+        LinearLayout container3 = new LinearLayout(context);
+        LinearLayout.LayoutParams layoutParamsContainer3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        container3.setOrientation(VERTICAL);
+        container3.setLayoutParams(layoutParamsContainer3);
+        container2.addView(container3);
+
+        TextView name = new TextView(G.context);
+        LinearLayout.LayoutParams layoutParamsName = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        name.setId(R.id.name);
+        name.setTextAppearance(context, android.R.style.TextAppearance_Medium);
+        name.setTextColor(G.context.getResources().getColor(R.color.black90));
+        name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        name.setLayoutParams(layoutParamsName);
+        container3.addView(name);
+
+        TextView number = new TextView(G.context);
+        LinearLayout.LayoutParams layoutParamsNumber = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        number.setId(R.id.number);
+        number.setTextAppearance(context, android.R.style.TextAppearance_Small);
+        number.setTextColor(G.context.getResources().getColor(R.color.black90));
+        number.setText("number");
+        number.setLayoutParams(layoutParamsNumber);
+        container3.addView(number);
+
+        return lytMainContainer;
+    }
+
 
     public static View makeTextViewMessage(int maxsize, boolean hasEmoji) {
 

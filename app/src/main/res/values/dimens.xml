@@ -4,6 +4,10 @@
   <item name="audioBox" type="id" />
   <item name="txt_play_music" type="id" />
 
+  <!-- Contact Item -->
+  <item name="name" type="id" />
+  <item name="number" type="id" />
+
 
   <item name="messageSenderAvatar" type="id" />
   <item name="messageSenderName" type="id" />
