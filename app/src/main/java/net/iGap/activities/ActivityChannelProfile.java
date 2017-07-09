@@ -32,6 +32,7 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -652,6 +653,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         edtRevoke = new EditText(ActivityChannelProfile.this);
         edtRevoke.setHint(getResources().getString(R.string.channel_link_hint_revoke));
         edtRevoke.setText(link);
+        edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtRevoke.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtRevoke.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
         edtRevoke.setPadding(0, 8, 0, 8);
@@ -710,6 +712,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         EditText edtLink = new EditText(ActivityChannelProfile.this);
         edtLink.setHint(getResources().getString(R.string.channel_public_hint_revoke));
         edtLink.setText(link);
+        edtLink.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
         edtLink.setPadding(0, 8, 0, 8);
@@ -1083,6 +1086,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
         final EmojiEditTextE edtNameChannel = new EmojiEditTextE(ActivityChannelProfile.this);
         edtNameChannel.setHint(getResources().getString(R.string.st_username));
+        edtNameChannel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtNameChannel.setText(txtChannelNameInfo.getText().toString());
         edtNameChannel.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtNameChannel.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -1555,6 +1559,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
         final EditText edtUserName = new EditText(ActivityChannelProfile.this);
         edtUserName.setHint(getResources().getString(R.string.channel_title_channel_set_username));
+        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
 
         if (isPopup) {
             edtUserName.setText("iGap.net/");

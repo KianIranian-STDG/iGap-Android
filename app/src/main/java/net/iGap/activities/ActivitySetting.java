@@ -33,6 +33,7 @@ import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -326,6 +327,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final EmojiEditTextE edtFirstName = new EmojiEditTextE(ActivitySetting.this);
                 edtFirstName.setHint(getResources().getString(R.string.fac_First_Name));
                 edtFirstName.setText(firsName);
+                edtFirstName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
                 edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtFirstName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtFirstName.setPadding(0, 8, 0, 8);
@@ -342,6 +344,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final EmojiEditTextE edtLastName = new EmojiEditTextE(ActivitySetting.this);
                 edtLastName.setHint(getResources().getString(R.string.fac_Last_Name));
                 edtLastName.setText(lastName);
+                edtLastName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
                 edtLastName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtLastName.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtLastName.setPadding(0, 8, 0, 8);
@@ -588,6 +591,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final TextInputLayout inputEmail = new TextInputLayout(ActivitySetting.this);
                 final EditText edtEmail = new EditText(ActivitySetting.this);
                 edtEmail.setHint(getResources().getString(R.string.set_email));
+                edtEmail.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
 
                 if (txtEmail == null || txtEmail.getText().toString().equals(getResources().getString(R.string.set_email))) {
                     edtEmail.setText("");
@@ -717,6 +721,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final EditText edtUserName = new EditText(ActivitySetting.this);
                 edtUserName.setHint(getResources().getString(R.string.st_username));
                 edtUserName.setText(txtUserName.getText().toString());
+                edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
                 edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtUserName.setPadding(0, 8, 0, 8);

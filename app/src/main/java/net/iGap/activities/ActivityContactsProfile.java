@@ -27,6 +27,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -438,6 +439,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     final EmojiEditTextE edtFirstName = new EmojiEditTextE(ActivityContactsProfile.this);
                     edtFirstName.setHint(R.string.first_name);
                     edtFirstName.setText(firsName);
+                    edtFirstName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
                     edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
                     edtFirstName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                     edtFirstName.setPadding(0, 8, 0, 8);
@@ -455,6 +457,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     final EditText edtLastName = new EditText(ActivityContactsProfile.this);
                     edtLastName.setHint(R.string.last_name);
                     edtLastName.setText(lastName);
+                    edtLastName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
                     edtLastName.setTextColor(getResources().getColor(R.color.text_edit_text));
                     edtLastName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                     edtLastName.setPadding(0, 8, 0, 8);

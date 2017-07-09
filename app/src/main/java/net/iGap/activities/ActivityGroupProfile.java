@@ -39,6 +39,7 @@ import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -786,6 +787,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final TextInputLayout inputGroupLink = new TextInputLayout(ActivityGroupProfile.this);
         EditText edtLink = new EditText(ActivityGroupProfile.this);
         edtLink.setHint(getResources().getString(R.string.group_link_hint_revoke));
+        edtLink.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtLink.setText(link);
         edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -837,6 +839,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         EditText edtRevoke = new EditText(ActivityGroupProfile.this);
         edtRevoke.setHint(getResources().getString(R.string.group_link_hint_revoke));
         edtRevoke.setText(link);
+        edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtRevoke.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtRevoke.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
         edtRevoke.setPadding(0, 8, 0, 8);
@@ -953,6 +956,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
         final EditText edtUserName = new EditText(ActivityGroupProfile.this);
         edtUserName.setHint(getResources().getString(R.string.group_title_set_username));
+        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
 
         if (isPopup) {
             edtUserName.setText("iGap.net/");
@@ -1571,6 +1575,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
         final EmojiEditTextE edtUserName = new EmojiEditTextE(ActivityGroupProfile.this);
         edtUserName.setHint(getResources().getString(R.string.st_username));
+        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtUserName.setText(txtGroupNameTitle.getText().toString());
         edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));

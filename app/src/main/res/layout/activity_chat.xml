@@ -575,7 +575,8 @@
           android:paddingTop="@dimen/dp4"
           android:text="@string/No_messages_here_yet"
           android:textColor="@color/black90"
-          android:visibility="gone"
+          android:visibility="visible"
+          android:textSize="@dimen/dp14"
           />
 
 
