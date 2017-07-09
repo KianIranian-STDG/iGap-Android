@@ -1087,7 +1087,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             if (HelperCalander.isLanguagePersian) {
                 TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
                 if (txtLastMessage != null) {
-                    txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastMessage.getText().toString()));
+                    txtLastMessage.setText(txtLastMessage.getText().toString());
                 }
 
                 TextView txtUnread = (TextView) holder.itemView.findViewById(R.id.cs_txt_unread_message);

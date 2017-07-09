@@ -133,7 +133,7 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
         holder.txtTime.setText("");
 
         if (HelperCalander.isLanguagePersian) {
-            holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
+            holder.name.setText(holder.name.getText().toString());
             holder.lastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.lastSeen.getText().toString()));
             holder.txtTime.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtTime.getText().toString()));
         }

@@ -2268,7 +2268,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
     private void showSetDefaultColorDialog() {
 
-        new MaterialDialog.Builder(ActivitySetting.this).title(R.string.set_color_to_default).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivitySetting.this).title(R.string.set_color_to_default).content(R.string.color_default).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 notificationColorClick(Color.parseColor(Config.default_notificationColor), false);

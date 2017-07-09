@@ -5,30 +5,30 @@
   <string name="text_line_1_introduce_page1">"آی"</string>
   <string name="text_line_2_introduce_page1">"ارتباطی بی حد و مرز"</string>
   <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آی گپ بسازید."</string>
-  <string name="text_line_4_introduce_page1">"فقط چند دقیقه وقت میبرد تا شما هم به جمع آی گپی ها بپیوندید."</string>
+  <string name="text_line_4_introduce_page1">"فقط چند دقیقه زمان میبرد تا شما هم به جمع آی گپی ها بپیوندید."</string>
 
   <!-- Page 2 introduce app -->
   <string name="text_line_1_introduce_page2">"امنیت در آی گپ"</string>
-  <string name="text_line_2_introduce_page2">" آی گپ یک ارتباط امن و مطمئن را بین شما ، دوستان و خانوادتان برقرار میکند. آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است .  "</string>
+  <string name="text_line_2_introduce_page2">"آی گپ یک ارتباط امن و مطمئن را بین شما، دوستان و خانوادتان برقرار میکند. پیام رسانِ آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است."</string>
 
 
   <!-- Page 3 introduce app -->
   <string name="text_line_1_introduce_page3">"گفتگو در آی گپ"</string>
-  <string name="text_line_2_introduce_page3">"شما میتوانید در آی گپ بصورت دونفره و یا گروهی به گفتگو بپردازید و خیالتان راحت باشد که همیشه به گفتگو های خود دسترسی دارید ، همچنین میتوانید کانال بسازید و در آن عضو بگیرید و اطلاعات خود را بین میلیون ها انسان به اشتراک بگذارید ."</string>
+  <string name="text_line_2_introduce_page3">"شما میتوانید در آی گپ بصورت دونفره و یا گروهی به گفتگو بپردازید و خیالتان راحت باشد که همیشه به گفتگو های خود دسترسی دارید، همچنین میتوانید کانال بسازید و در آن عضو بگیرید و اطلاعات خود را بین میلیون ها کاربر دیگر نیز به اشتراک بگذارید."</string>
 
   <!-- Page 4 introduce app -->
   <string name="text_line_1_introduce_page4">"انتقال فایل در آی گپ"</string>
-  <string name="text_line_2_introduce_page4">"شما می توانید هر فایلی را با هر پسوند و حجمی انتقال دهید و یا در بستر ابری خود ذخیره کنید . هر آنچه دوست دارید را بدون محدودیت با هر کس که می خواهید به اشتراک بگذارید."</string>
+  <string name="text_line_2_introduce_page4">"شما می توانید هر فایلی را با هر پسوند و حجمی انتقال دهید و یا در بستر ابری خود ذخیره کنید. هر آنچه دوست دارید را بدون محدودیت با هر کس که می خواهید به اشتراک بگذارید."</string>
 
 
   <!-- Page 5 introduce app -->
   <string name="text_line_1_introduce_page5">"تماس صوتی در آی گپ"</string>
-  <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آی گپ با سایر افرادی که آی گپ دارند تماس صوتی بصورت کاملا رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی کنید ، تماس صوتی آی گپ P2P بوده و حتی سرور های آی گپ هم در جابجایی صدای شما دخالت ندارند."</string>
+  <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آی گپ با سایر کاربرانِ آی گپ تماس صوتیِ کاملاً رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی نمایید، همچنین تماس صوتی آی گپ P2P بوده و حتی سرور های آی گپ هم در جابجایی صدای شما دخالت ندارند."</string>
 
   <!-- Page 6 introduce app -->
   <string name="btn_start_page6">"همین حالا شروع کنید"</string>
-  <string name="text_line_1_introduce_page6">"آی گپ رایگان بوده و هست !"</string>
-  <string name="text_line_2_introduce_page6">"بیش از این شما را خسته نمی کنیم! \n آی ‌گپ کاملاً رایگان بوده و هست! همین حالا دنیای خود را در آی گپ بسازید."</string>
+  <string name="text_line_1_introduce_page6">"همه چیز رایگان در آی گپ!"</string>
+  <string name="text_line_2_introduce_page6">"آی گپ همیشه رایگان بوده و هست. پس بیش از این منتظر نمی مانیم. همین حالا دنیای خود را در آی گپ بسازید."</string>
 
 
   <!-- Fill Profile User  -->
@@ -55,7 +55,7 @@
   <string name="Re_Enter_Verify_Code_Please">"لطفا کد تایید را دستی وارد کنید"</string>
   <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید ، آی گپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به اکانت شما ارسال کرد ، لطفا دستگاه دیگر را چک کرده و کد را بصورت دستی وارد کنید.</string>
   ‬‬‬‬‬‬
-  <string name="verify_time_out_message">"آی گپ بصورت خودکار پیام تایید را تشخیص میدهد و یا ممکن است شما آن را دریافت کرده و میخواهید به صورت دستی وارد نمایید، لطفا کد را دستی وارد کرده و یا در صورتی که دریافت نکردید درخواست ارسال مجدد کنید."</string>
+  <string name="verify_time_out_message">"آی گپ بصورت خودکار پیام تأیید را تشخیص داده و وارد می کند، در غیر اینصورت شما آن را دریافت کرده و می توانید به صورت دستی وارد نمایید، در صورت عدم دریافت کد تأیید، درخواست ارسال مجدد را انتخاب کنید."</string>
   <string name="verify_invalid_code_message">متاسفیم ، کد تایید شما نامعتبر است ، لطفا کد صحیح را مجدد وارد نمایید.</string>
   <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
   <string name="phone_number">"شماره تلفن"</string>
@@ -73,7 +73,7 @@
 
   <!-- Destruction -->
   <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
-  <string name="delete_account_text_desc">( در صورتیکه اکانت خود را حذف دائم (پاک) کنید، همه فایل هایی که به صورت پیام دریافت کرده اید نیز به طور دائم پاک (حذف) خواهند شد. )</string>
+  <string name="delete_account_text_desc">(در صورتیکه اکانت خود را حذف کنید، همه فایل هایی که به صورت پیام دریافت کرده اید نیز به طور دائم حذف خواهند شد.)</string>
   <string name="Destruction_Code">تخریب</string>
   <string name="Destruction_Des">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
   <string name="iGap_autofill_Destruction_Code">آی گپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست به صورت دستی وارد کنید.</string>
@@ -145,7 +145,7 @@
 
   <string name="clear_history_content">"آیا از پاکسازی تاریخچه اطمینان دارید؟"</string>
 
-  <string name="delete_chat_content">"آیا از حذف کامل این گفتگو مطمئنید؟"</string>
+  <string name="delete_chat_content">"آیا از حذف کامل این گفتگو اطمینان دارید؟"</string>
   <string name="to_delete_contact">"حذف مخاطب"</string>
   <string name="delete_text">"آیا از حذف این مخاطب مطمئنید؟"</string>
 
@@ -196,7 +196,7 @@
   <string name="st_About_iGap">"دربارهٔ آی‌گپ"</string>
   <string name="st_privacy_policy">"سیاست های حریم خصوصی"</string>
   <string name="st_keepMedia">"فایل‌های چند رسانه‌ای را نگه دار"</string>
-  <string name="st_dialog_content_keepMedia">"‫تصاویر، ویدئوها و دیگر فایل‌های ذخیره شده در فضای ابری که شما به آنها دسترسی داشته اید، به منظور ایجاد فضای خالی از دستگاه پاک می شوند. همه ی رسانه ها در بخش ذخیره سازی فضای ابری نگه داری می شوند و در صورت نیاز می توان آنها را مجدداً دانلود کرد.‬‬‬‬‬‬
+  <string name="st_dialog_content_keepMedia">"‫تصاویر، ویدئوها و دیگر فایل‌های ذخیره شده در فضای ابری که شما به آنها دسترسی داشته اید، به منظور ایجاد فضای خالی از دستگاه پاک می شوند. همه ی رسانه ها در بخش ذخیره سازی فضای ابری نگه داری شده که در صورت نیاز می توانید  مجدداً آنها را دانلود کنید.‬‬‬‬‬‬
 "</string>
   <string name="st_titleToolbar_page_Notification_and_sounds">"اعلانات و صداها"</string>
   <string name="st_title_messageNotification">"اعلانات پیام"</string>
@@ -341,9 +341,9 @@
   <string name="group_description">"توضیح مختصر گروه"</string>
   <string name="please_enter_group_description">"لطفاً توضیح مختصری برای گروه وارد کنید."</string>
   <string name="do_you_want_to_delete_this_group">"آیا از حذف این گفتگو اطمینان دارید؟"</string>
-  <string name="do_you_want_to_set_admin_role_to_member">"آیا از تعیین کردن این عضو(ها) به عنوان مدیر اطمینان دارید؟"</string>
+  <string name="do_you_want_to_set_admin_role_to_member">"آیا از گرقتن نقش مدیر از این عضو اطمینان دارید؟"</string>
   <string name="do_you_want_to_kick_this_member">"آیا از بیرون انداختن این عضو(ها) اطمینان دارید؟"</string>
-  <string name="do_you_want_to_set_modereator_role_to_member">"آیا از تعیین کردن این عضو(ها) به عنوان ناظر اطمینان دارید؟"</string>
+  <string name="do_you_want_to_set_modereator_role_to_member">"آیا از گرقتن نقش ناظر از این عضو اطمینان دارید؟"</string>
   <string name="waiting_for_network">"در انتظار اتصال به اینترنت"</string>
   <string name="connecting">"در حال برقراری ارتباط"</string>
   <string name="updating">"در حال به‌روزرسانی"</string>
@@ -378,7 +378,7 @@
   <string name="your_link">"پیوند شما"</string>
   <string name="public_channel">"کانال عمومی"</string>
   <string name="private_channel">"کانال خصوصی"</string>
-  <string name="desc_private_channel">"هر کاربری نمی تواند عضو این کانال شود. کاربران تنها زمانی می توانند عضو این کانال شوند که مدیر(ان) آنها را به عنوان عضو به گروه اضافه کنند."</string>
+  <string name="desc_private_channel">"کاربران تنها زمانی می توانند به این کانال بپیوندند که توسط مدیر(ان) به عنوان اعضای کانال اضافه شوند."</string>
   <string name="desc_public_channel">"کاربران می توانند با جستوجوی نام کاربری یا دریافت لینک دعوت به این کانال بپیوندند."</string>
   <string formatted="false" name="last_msg_format_chat">"%s"</string>
 
@@ -552,7 +552,7 @@
   <string name="do_you_want_clear_history_this">آیا از پاک کردن تاریخچه آیتم انتخاب شده اطمینان دارید ؟</string>
   <string name="active_session_title">لغو و بستن جلسه</string>
   <string name="active_session_all_title">لغو و بستن جلسات</string>
-  <string name="active_session_content">آیا مطمئنید که می‌خواهید این جلسه را غیرفعال کنید؟</string>
+  <string name="active_session_content">آیا از غیر فعال کردنِ این جلسۀ فعال اطمینان دارید؟</string>
   <string name="active_session_all_content">آیا از لغو همهٔ جلسات فعال اطمینان دارید؟</string>
   <string name="USER_VERIFY_GIVEN_USERNAME">هیچ کاربری با نام کابری ارائه شده ثبت نام نکرده است.</string>
   <string name="USER_VERIFY_MANY_TRIES">کد تأییدیه به دلیل چندین مرتبه وارد کردن برای مدتی مسدود می‌باشد.</string>
@@ -790,7 +790,7 @@
   <string name="you_have_to_get_storage_permision_for_continue">برای ادامه کار نیاز به مجوز ذخیره سازی می باشد</string>
   <string name="clean_up_chat_rooms">پاک سازی کلی</string>
   <string name="clean_up">پاک سازی</string>
-  <string name="do_you_want_to_clean_all_data_in_chat_rooms">آیا مطمئن هستید که میخواهید کلیه اطلاعات چت ها را از دیتابیس داخلی حذف کنید ؟</string>
+  <string name="do_you_want_to_clean_all_data_in_chat_rooms">آیا از حذف کلیۀ اطلاعات چت ها از پایگاه دادۀ داخلی اطمینان دارید؟</string>
   <string name="pm">ب ظ</string>
   <string name="am">ق ظ</string>
   <string name="forward_message">ارسال پیام</string>
@@ -861,11 +861,11 @@
 
   <string name="set_additional_password">رمزعبور را تعیین کنید </string>
   <string name="two_step_verification_title">فعال سازی دو مرحله ای </string>
-  <string name="two_step_verification_description">شما می توانید رمزعبوری را در نظر بگیرید، این رمز زمانی مورد نیاز است که بخواهید جهت ورود به حساب کاربریتان از دستگاه دیگری استفاده نمایید. بعلاوهٔ این رمز شما زمان ورود به حساب کاربری کد تأییدی نیز به صورت پیامک دریافت میکنید. </string>
+  <string name="two_step_verification_description">شما می توانید رمزعبوری برای حساب کاربری خود تعیین کنید، این رمز زمانی مورد نیاز است که بخواهید جهت ورود به حساب کاربریتان از دستگاه دیگری استفاده نمایید. بعلاوهٔ این رمز شما زمان ورود به حساب کاربری کد تأییدی نیز به صورت پیامک دریافت خواهید کرد. </string>
   <string name="enter_a_password"> رمز عبور را وارد کنید</string>
   <string name="please_enter_your_password"> لطفاً رمز عبور خود را وارد نمایید</string>
   <string name="your_password">رمزعبور </string>
-  <string name="please_re_enter_your_password">لطفاً رمزعبور خود را بار دیگر وارد نمایید </string>
+  <string name="please_re_enter_your_password">لطفاً رمزعبور خود را یک بار دیگر وارد نمایید</string>
   <string name="please_create_hint_for_your_password">لطفاً برای رمزعبورتان یک نشانه در نظر بگیرید </string>
   <string name="password_hint">نشانهٔ رمزعبور </string>
   <string name="password_Question_title_one">سؤال امنیتی شماره ۱ (الزامی) </string>
@@ -886,7 +886,7 @@
   <string name="Change_hint">تغییر نشانهٔ رمزعبور </string>
   <string name="turn_Password_off">غیرفعال سازی درخواست رمزعبور </string>
   <string name="turn_Password_off_desc">آیا قطعاً می خواهید  رمز عبور را غیرفعال نمایید؟ </string>
-  <string name="change_email_recovery">تغییر پست الکترونیکی</string>
+  <string name="change_email_recovery">تعیین یا تغییر پست الکترونیکی</string>
   <string name="Change_question_recovery">تغییر سؤال امنیتی</string>
   <string name="set_unconfirmed_email">وارد کردن کد تایید پست الکترونیکی</string>
 
@@ -930,7 +930,7 @@
   <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، ‫ تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
 
   <string name="nothing">چیزی نیست!</string>
-  <string name="are_you_sure_clear_call_logs">آیا شما مطمئن هستید که میخواهید تاریخچه تماس صوتی را پاک کنید ؟</string>
+  <string name="are_you_sure_clear_call_logs">آیا از حذف  تمامی تماس های ورودی و خروجی اطمینان دارید؟</string>
   <string name="please_write_your_reasons">لطفا دلیل خود را بنویسید</string>
   <string name="error_check_password">به دلیل تلاش پیاپی، رمزعبور برای مدتی غیرفعال است.</string>
 
@@ -969,7 +969,8 @@
 
   <string name="Login_with_QrCode">ورود با کیوآر</string>
   <string name="Input_device_specification">ورود موفق دستگاه</string>
-  <string name="QrCode_Scan">اسکن بارکد</string>
+  <string name="QrCode_Scan">اسکنر بارکد</string>
   <string name="Call_Quality">کیفیت تماس</string>
-  <string name="desc_self_destroy">"درصورتی که از حساب کاربری خود در طول یکی از مدت زمان های ارائه شده به هیچ وجه استفاده نکنید، حساب شما پس از مدت تعیین شده به صورت خودکار تخریب و برای همیشه حذف می شود."</string>
+  <string name="desc_self_destroy">"درصورتی که از حساب کاربری خود در طول یکی از مدت زمان های تعیین شده به هیچ وجه استفاده نکنید، حساب شما پس از آن زمان به صورت خودکار تخریب و برای همیشه حذف می شود."</string>
+  <string name="color_default">آیا مایلید رنگ بندی همه قسمت های برنامه به حالت اولیه و پیش فرض باز گردد؟</string>
 </resources>
