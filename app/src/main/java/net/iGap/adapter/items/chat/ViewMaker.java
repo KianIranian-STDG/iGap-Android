@@ -3,7 +3,6 @@ package net.iGap.adapter.items.chat;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -25,7 +24,6 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 
 import static android.R.attr.left;
-import static android.graphics.Typeface.BOLD;
 import static android.support.design.R.id.center;
 import static android.support.design.R.id.center_horizontal;
 import static android.view.Gravity.BOTTOM;
@@ -550,7 +548,7 @@ public class ViewMaker {
         return lyt_vote;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     static View getAudioItem() {
 
         LinearLayout mainContainer = new LinearLayout(context);
@@ -577,10 +575,12 @@ public class ViewMaker {
 
         LinearLayout audioBox = new LinearLayout(G.context);
         audioBox.setId(R.id.audioBox);
-        audioBox.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            audioBox.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
         audioBox.setMinimumHeight((int) context.getResources().getDimension(R.dimen.dp130));
         audioBox.setOrientation(HORIZONTAL);
-        audioBox.setPaddingRelative(0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPadding), 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPaddingBottom));
+        audioBox.setPadding(0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPadding), 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPaddingBottom));
         LinearLayout.LayoutParams layout_262 = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp200), LinearLayout.LayoutParams.WRAP_CONTENT);
         audioBox.setLayoutParams(layout_262);
 
@@ -641,7 +641,7 @@ public class ViewMaker {
         fileName.setText("file_name.ext");
         fileName.setTextColor(Color.BLACK);
         fileName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        fileName.setTypeface(G.typeface_IRANSansMobile_Bold, BOLD);
+        fileName.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_298 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         fileName.setLayoutParams(layout_298);
         linearLayout_222.addView(fileName);
@@ -669,28 +669,29 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_353 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) G.context.getResources().getDimension(R.dimen.dp36));
         linearLayout_511.setLayoutParams(layout_353);
 
-        TextView csla_btn_play_music = new TextView(G.context);
-        csla_btn_play_music.setId(R.id.txt_play_music);
-        csla_btn_play_music.setBackgroundResource(0); //csla_btn_play_music.setBackgroundResource(@null);
-        csla_btn_play_music.setTypeface(G.typeface_Fontico);
-        csla_btn_play_music.setGravity(CENTER);
-        csla_btn_play_music.setText(G.context.getResources().getString(R.string.md_play_arrow));
-        csla_btn_play_music.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
-        csla_btn_play_music.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        final MaterialDesignTextView txt_play_music = new MaterialDesignTextView(G.context);
+        txt_play_music.setId(R.id.txt_play_music);
+        txt_play_music.setBackgroundResource(0); //txt_play_music.setBackgroundResource(@null);
+        txt_play_music.setTypeface(G.typeface_Fontico);
+        txt_play_music.setGravity(CENTER);
+        txt_play_music.setText(G.context.getResources().getString(R.string.md_play_arrow));
+        txt_play_music.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+        txt_play_music.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         LinearLayout.LayoutParams layout_326 = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp32), LinearLayout.LayoutParams.MATCH_PARENT);
-        csla_btn_play_music.setLayoutParams(layout_326);
-        linearLayout_511.addView(csla_btn_play_music);
+        txt_play_music.setLayoutParams(layout_326);
+        linearLayout_511.addView(txt_play_music);
 
-        SeekBar csla_seekBar1 = new SeekBar(G.context);
+        final SeekBar csla_seekBar1 = new SeekBar(G.context);
         csla_seekBar1.setId(R.id.csla_seekBar1);
         LinearLayout.LayoutParams layout_990 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
         layout_990.weight = 1;
         layout_990.gravity = CENTER;
         csla_seekBar1.setLayoutParams(layout_990);
+        csla_seekBar1.setProgress(0);
         linearLayout_511.addView(csla_seekBar1);
         audioPlayerViewContainer.addView(linearLayout_511);
 
-        TextView csla_txt_timer = new TextView(G.context);
+        final TextView csla_txt_timer = new TextView(G.context);
         csla_txt_timer.setId(R.id.csla_txt_timer);
         csla_txt_timer.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
         csla_txt_timer.setText("00:00");
