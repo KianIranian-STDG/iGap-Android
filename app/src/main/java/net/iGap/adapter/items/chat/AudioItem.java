@@ -144,9 +144,9 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         super.bindView(holder, payloads);
 
         if (mMessage.isSenderMe()) {
-            ((ImageView) holder.itemView.findViewById(R.id.audio_thumbnail)).setImageResource(R.drawable.white_music_note);
+            ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageResource(R.drawable.white_music_note);
         } else {
-            ((ImageView) holder.itemView.findViewById(R.id.audio_thumbnail)).setImageResource(R.drawable.green_music_note);
+            ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageResource(R.drawable.green_music_note);
         }
 
         String text = "";

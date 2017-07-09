@@ -549,7 +549,7 @@ public class ViewMaker {
     }
 
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    static View getAudioItem() {
+    public static View getAudioItem() {
 
         LinearLayout mainContainer = new LinearLayout(context);
         mainContainer.setId(R.id.mainContainer);
@@ -604,7 +604,7 @@ public class ViewMaker {
         frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
         ImageView imgThumbnail = new ImageView(G.context);
-        imgThumbnail.setId(R.id.audio_thumbnail);
+        imgThumbnail.setId(R.id.thumbnail);
         LinearLayout.LayoutParams thumbnailParams = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp48), (int) G.context.getResources().getDimension(R.dimen.dp48));
         imgThumbnail.setAdjustViewBounds(true);
         imgThumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -718,6 +718,7 @@ public class ViewMaker {
         linearLayout_916.addView(frameLayout);
         linearLayout_916.addView(fileSize);
         frameLayout.addView(imgThumbnail);
+        frameLayout.addView(getProgressBar(R.dimen.dp48));
         mainContainer.addView(linearLayout_880);
 
         return mainContainer;
@@ -820,12 +821,8 @@ public class ViewMaker {
         //return messageProgress;
 
         View v = G.inflater.inflate(R.layout.msg_progress_item, null, false);
-
-        //FrameLayout.LayoutParams params =new FrameLayout.LayoutParams(size,size);
-        //params.setMargins(4,4,4,4);
-        //
-        //v.setLayoutParams(params);
-
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(i_Dp(size), i_Dp(size));
+        v.setLayoutParams(params);
         return v;
     }
 
