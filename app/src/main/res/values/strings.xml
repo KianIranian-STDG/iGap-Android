@@ -930,7 +930,7 @@
   <string name="not_answer">No Answer</string>
 
   <string name="nothing">Nothing</string>
-  <string name="are_you_sure_clear_call_logs">Are you sure you want to clear call history wholly?</string>
+  <string name="are_you_sure_clear_call_logs">Are you sure you want to clear all incoming and outgoing calls?</string>
   <string name="please_write_your_reasons">Please write your reasons</string>
   <string name="your_confirm_email">Enter the confirmation code sent to Email</string>
   <string name="your_confirm_email_skip">Skip</string>
