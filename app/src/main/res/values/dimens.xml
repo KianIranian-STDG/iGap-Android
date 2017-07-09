@@ -1,5 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+  <!-- Audio Item Id -->
+  <item name="audioBox" type="id" />
+  <item name="txt_play_music" type="id" />
+  <item name="audio_thumbnail" type="id" />
+
+
   <item name="messageSenderAvatar" type="id" />
   <item name="messageSenderName" type="id" />
   <item name="messageSenderTextMessage" type="id" />
