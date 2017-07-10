@@ -30,6 +30,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
@@ -144,9 +145,9 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         super.bindView(holder, payloads);
 
         if (mMessage.isSenderMe()) {
-            ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageResource(R.drawable.white_music_note);
+            AppUtils.setImageDrawable(((ImageView) holder.itemView.findViewById(R.id.thumbnail)), R.drawable.white_music_note);
         } else {
-            ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageResource(R.drawable.green_music_note);
+            AppUtils.setImageDrawable(((ImageView) holder.itemView.findViewById(R.id.thumbnail)), R.drawable.green_music_note);
         }
 
         String text = "";

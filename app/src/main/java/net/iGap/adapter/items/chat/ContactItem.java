@@ -18,6 +18,7 @@ import android.widget.TextView;
 import java.util.List;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
+import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
@@ -29,7 +30,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        ((ImageView) holder.itemView.findViewById(R.id.image)).setImageResource(R.drawable.black_contact);
+        AppUtils.setImageDrawable(((ImageView) holder.itemView.findViewById(R.id.image)), R.drawable.black_contact);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         super.updateLayoutForReceive(holder);
         ((TextView) holder.itemView.findViewById(R.id.name)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         ((TextView) holder.itemView.findViewById(R.id.name)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-        ((ImageView) holder.itemView.findViewById(R.id.image)).setImageResource(R.drawable.green_contact);
+        AppUtils.setImageDrawable(((ImageView) holder.itemView.findViewById(R.id.image)), R.drawable.green_contact);
     }
 
     @Override

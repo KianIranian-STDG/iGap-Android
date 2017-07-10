@@ -868,7 +868,7 @@ public class ViewMaker {
         LinearLayout.LayoutParams thumbnailParams = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp48), (int) G.context.getResources().getDimension(R.dimen.dp48));
         imgThumbnail.setAdjustViewBounds(true);
         imgThumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
-        imgThumbnail.setImageResource(R.drawable.green_music_note);
+        AppUtils.setImageDrawable(imgThumbnail, R.drawable.green_music_note);
         imgThumbnail.setLayoutParams(thumbnailParams);
 
         TextView fileSize = new TextView(G.context);
@@ -1020,7 +1020,7 @@ public class ViewMaker {
         layoutParamsImage.rightMargin = 14;
         image.setId(R.id.image);
         image.setContentDescription(null);
-        image.setImageResource(R.drawable.user);
+        AppUtils.setImageDrawable(image, R.drawable.user);
         image.setLayoutParams(layoutParamsImage);
 
         LinearLayout container3 = new LinearLayout(context);
