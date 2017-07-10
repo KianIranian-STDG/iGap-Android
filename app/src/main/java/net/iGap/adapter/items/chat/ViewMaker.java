@@ -1117,7 +1117,8 @@ public class ViewMaker {
         TextView songArtist = new TextView(G.context);
         songArtist.setId(R.id.songArtist);
         songArtist.setEllipsize(TextUtils.TruncateAt.MIDDLE);
-        songArtist.setMaxLines(1);
+        songArtist.setSingleLine(true);
+
         songArtist.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp180));
         songArtist.setText("file_name.ext");
         songArtist.setTextColor(G.context.getResources().getColor(R.color.black90));
@@ -1129,7 +1130,7 @@ public class ViewMaker {
 
         TextView fileSize = new TextView(G.context);
         fileSize.setId(R.id.fileSize);
-        fileSize.setMaxLines(1);
+        fileSize.setSingleLine(true);
         fileSize.setText("3.2 mb");
         fileSize.setAllCaps(TRUE);
         fileSize.setTextColor(G.context.getResources().getColor(R.color.black90));
