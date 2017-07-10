@@ -86,7 +86,7 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
 
 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getGifItem());
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getGifItem(false));
             holder.image = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
         }
 
