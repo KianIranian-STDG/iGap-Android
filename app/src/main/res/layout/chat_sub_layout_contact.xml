@@ -6,4 +6,4 @@
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/dp4"
     android:textDirection="firstStrong"
-    ></FrameLayout>
+    />

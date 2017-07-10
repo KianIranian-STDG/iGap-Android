@@ -805,18 +805,18 @@ public class ViewMaker {
         lytContainer1.setId(R.id.lytContainer1);
         lytContainer1.setOrientation(VERTICAL);
         lytContainer1.setLayoutParams(layoutParamsContainer1);
-        lytMainContainer.addView(lytContainer1);
 
-        LinearLayout contentContainer = new LinearLayout(context, null, R.style.ChatMessages_CardView);
+        LinearLayout contentContainer = new LinearLayout(context, null, R.style.ChatMessages_CardView); // hint : R.style.ChatMessages_CardView not worked, so layoutParams and padding added here
         contentContainer.setId(R.id.contentContainer);
-        lytContainer1.addView(contentContainer);
+        LinearLayout.LayoutParams layoutParamsContentContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        contentContainer.setLayoutParams(layoutParamsContentContainer);
+        contentContainer.setPadding(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
 
         LinearLayout m_container = new LinearLayout(context);
         LinearLayout.LayoutParams layoutParamsM_container = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         m_container.setId(R.id.m_container);
         m_container.setOrientation(VERTICAL);
         m_container.setLayoutParams(layoutParamsM_container);
-        contentContainer.addView(m_container);
 
         LinearLayout container2 = new LinearLayout(context);
         LinearLayout.LayoutParams layoutParamsContainer2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -824,28 +824,26 @@ public class ViewMaker {
         container2.setOrientation(HORIZONTAL);
         container2.setPadding((int) G.context.getResources().getDimension(R.dimen.messageContainerPadding), 0, 5, 2);
         container2.setLayoutParams(layoutParamsContainer2);
-        m_container.addView(container2);
 
         ImageView image = new ImageView(G.context);
-        LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp52), i_Dp(R.dimen.dp52));
+        LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48));
         layoutParamsImage.rightMargin = 14;
         image.setId(R.id.image);
         image.setContentDescription(null);
         image.setImageResource(R.drawable.user);
         image.setLayoutParams(layoutParamsImage);
-        container2.addView(image);
 
         LinearLayout container3 = new LinearLayout(context);
         LinearLayout.LayoutParams layoutParamsContainer3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         container3.setOrientation(VERTICAL);
         container3.setLayoutParams(layoutParamsContainer3);
-        container2.addView(container3);
 
         TextView name = new TextView(G.context);
         LinearLayout.LayoutParams layoutParamsName = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         name.setId(R.id.name);
         name.setTextAppearance(context, android.R.style.TextAppearance_Medium);
         name.setTextColor(G.context.getResources().getColor(R.color.black90));
+        name.setText("Contact Name");
         name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         name.setLayoutParams(layoutParamsName);
         container3.addView(name);
@@ -855,9 +853,15 @@ public class ViewMaker {
         number.setId(R.id.number);
         number.setTextAppearance(context, android.R.style.TextAppearance_Small);
         number.setTextColor(G.context.getResources().getColor(R.color.black90));
-        number.setText("number");
+        number.setText("Contact Number");
         number.setLayoutParams(layoutParamsNumber);
         container3.addView(number);
+        container2.addView(image);
+        container2.addView(container3);
+        m_container.addView(container2);
+        contentContainer.addView(m_container);
+        lytContainer1.addView(contentContainer);
+        lytMainContainer.addView(lytContainer1);
 
         return lytMainContainer;
     }
