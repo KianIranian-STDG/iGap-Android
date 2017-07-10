@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import io.realm.Realm;
 import java.io.File;
 import java.io.IOException;
@@ -42,10 +43,18 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     }
 
     @Override public int getLayoutRes() {
-        return R.layout.chat_sub_layout_location;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override public void bindView(final ViewHolder holder, List payloads) {
+
+        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getLocationItem());
+
+            holder.imgMapPosition = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
+        }
+
+
         super.bindView(holder, payloads);
 
         holder.imgMapPosition.reserveSpace(G.context.getResources().getDimension(R.dimen.dp240), G.context.getResources().getDimension(R.dimen.dp120), getRoomType());
@@ -138,7 +147,6 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
         public ViewHolder(View view) {
             super(view);
-            imgMapPosition = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
         }
     }
 }

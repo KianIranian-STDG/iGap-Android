@@ -378,7 +378,7 @@ public class ViewMaker {
         return text;
     }
 
-   /* public static View getLocationItem(){
+    public static View getLocationItem() {
 
         LinearLayout mainContainer = new LinearLayout(G.context);
         mainContainer.setId(R.id.mainContainer);
@@ -416,15 +416,11 @@ public class ViewMaker {
         linearLayout_532.addView(contentContainer);
         contentContainer.addView(m_container);
         m_container.addView(frameLayout);
-        if (withText) {
-            m_container.addView(getTextView());
-        }
+
         frameLayout.addView(reserveSpaceRoundedImageView);
-        frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
 
         return mainContainer;
-
-    }*/
+    }
 
     //********************************************************************************************
 
