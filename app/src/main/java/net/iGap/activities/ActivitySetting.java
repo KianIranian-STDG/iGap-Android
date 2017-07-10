@@ -327,6 +327,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final EmojiEditTextE edtFirstName = new EmojiEditTextE(ActivitySetting.this);
                 edtFirstName.setHint(getResources().getString(R.string.fac_First_Name));
                 edtFirstName.setText(firsName);
+                edtFirstName.setTypeface(G.typeface_IRANSansMobile);
                 edtFirstName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
                 edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtFirstName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -344,6 +345,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final EmojiEditTextE edtLastName = new EmojiEditTextE(ActivitySetting.this);
                 edtLastName.setHint(getResources().getString(R.string.fac_Last_Name));
                 edtLastName.setText(lastName);
+                edtLastName.setTypeface(G.typeface_IRANSansMobile);
                 edtLastName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
                 edtLastName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtLastName.setTextColor(getResources().getColor(R.color.text_edit_text));

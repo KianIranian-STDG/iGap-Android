@@ -60,6 +60,7 @@
                 android:singleLine="true"
                 android:text="@string/last_seen_recently"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+            android:textSize="@dimen/dp14"
                 android:textColor="#bbbbbb" />
 
         <View

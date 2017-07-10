@@ -21,7 +21,7 @@
 
   <!-- Page 5 introduce app -->
   <string name="text_line_1_introduce_page5">Voice Call</string>
-  <string name="text_line_2_introduce_page5">>You can make thoroughly free and secure voice calls to anyone on iGap and save your money. iGap voice call is P2P-based with no server\'s interference in voice transmission.</string>
+  <string name="text_line_2_introduce_page5">You can make thoroughly free and secure voice calls to anyone on iGap and save your money. iGap voice call is P2P-based with no server\'s interference in voice transmission.</string>
 
   <!-- Page 6 introduce app -->
   <string name="btn_start_page6">Start Now</string>
@@ -627,7 +627,7 @@
   <string name="iGap_version">"iGap Android Client V"</string>
 
   <string name="do_you_want_to_delete_this_group">Are you sure you want to delete this group?</string>
-  <string name="do_you_want_to_leave_this_group">Are you sure you want to left this group?</string>
+  <string name="do_you_want_to_leave_this_group">Are you sure you want to leave this group?</string>
   <string name="waiting_for_connection">Waiting for Connecting to Server</string>
   <string name="array_delete_photo_group">Delete Photo</string>
   <string name="to_delete_chat">Delete Chat</string>
@@ -751,9 +751,9 @@
   <string name="group_link_hint_revoke">Group Invitation Link</string>
   <string name="self_destructs">Self-destruct</string>
   <string name="channel_title_convert_to_private">Convert channel to private</string>
-  <string name="channel_text_convert_to_private">Do you want Convert this channel to private?</string>
+  <string name="channel_text_convert_to_private">Do you want to convert this channel to private?</string>
   <string name="channel_title_convert_to_public">Convert channel to public</string>
-  <string name="channel_text_convert_to_public">Do you want Convert this channel to public?</string>
+  <string name="channel_text_convert_to_public">Do you want to convert this channel to public?</string>
   <string name="channel_title_channel_set_username">Set Username</string>
 
   <string name="group_title_convert_to_private">Convert to Private</string>
@@ -936,7 +936,7 @@
   <string name="your_confirm_email_skip">Skip</string>
   <string name="your_resend_email_skip">Resend confirmation code</string>
   <string name="invalid_verify_email_code">Invalid verify email code</string>
-  <string name="resend_verify_email_code">We\'re resend verify email code on your email</string>
+  <string name="resend_verify_email_code">We\'ve resent the confirmation code to your email</string>
   <string name="enter_verify_email_code">Please enter verify email code</string>
   <string name="invalid_password">Password is invalid</string>
   <string name="please_set_password">"Please set password"</string>
