@@ -6,7 +6,7 @@
     >
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/csll_txt_log_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -18,7 +18,7 @@
         android:paddingTop="@dimen/dp4"
         android:gravity="center"
         android:singleLine="false"
-        android:text="Today"
+        android:text="Log"
         android:textColor="#4a5d5c"
         android:textSize="@dimen/dp12"
         android:textAllCaps="false"

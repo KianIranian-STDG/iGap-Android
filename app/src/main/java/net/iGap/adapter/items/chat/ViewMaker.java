@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import net.iGap.G;
@@ -306,6 +307,78 @@ public class ViewMaker {
         return cslum_txt_unread_message;
 
     }
+
+    public static View getTimeItem() {
+
+        LinearLayout linearLayout_33 = new LinearLayout(G.context);
+        linearLayout_33.setOrientation(HORIZONTAL);
+        linearLayout_33.setGravity(CENTER);
+        LinearLayout.LayoutParams layout_509 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_33.setLayoutParams(layout_509);
+        linearLayout_33.setPadding(0, i_Dp(R.dimen.dp12), 0, i_Dp(R.dimen.dp12));
+
+        View view_12 = new View(G.context);
+        view_12.setBackgroundColor(G.context.getResources().getColor(R.color.background_log_time));
+        LinearLayout.LayoutParams layout_522 = new LinearLayout.LayoutParams(0, 1, 1);
+        view_12.setLayoutParams(layout_522);
+        linearLayout_33.addView(view_12);
+
+        TextView text = new TextView(G.context);
+        text.setId(R.id.cslt_txt_time_date);
+        text.setSingleLine(true);
+        text.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
+        text.setBackgroundResource(R.drawable.background_log_time);
+        text.setText("Today");
+        text.setAllCaps(false);
+        text.setTextColor(G.context.getResources().getColor(R.color.text_log_time));
+        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        LinearLayout.LayoutParams layout_835 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_835.gravity = Gravity.CENTER_HORIZONTAL;
+        text.setLayoutParams(layout_835);
+        linearLayout_33.addView(text);
+
+        View vew_147 = new View(G.context);
+        vew_147.setBackgroundColor(G.context.getResources().getColor(R.color.background_log_time));
+        LinearLayout.LayoutParams layout_270 = new LinearLayout.LayoutParams(0, 1, 1);
+        vew_147.setLayoutParams(layout_270);
+        linearLayout_33.addView(vew_147);
+
+        return linearLayout_33;
+    }
+
+    public static View getProgressWaitingItem() {
+
+        ProgressBar cslp_progress_bar_waiting = new ProgressBar(G.context);
+        cslp_progress_bar_waiting.setId(R.id.cslp_progress_bar_waiting);
+        cslp_progress_bar_waiting.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
+        cslp_progress_bar_waiting.setVisibility(View.VISIBLE);
+        FrameLayout.LayoutParams layout_842 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_842.gravity = Gravity.CENTER;
+        cslp_progress_bar_waiting.setIndeterminate(true);
+        cslp_progress_bar_waiting.setLayoutParams(layout_842);
+
+        return cslp_progress_bar_waiting;
+    }
+
+    public static View getLogItem() {
+
+        TextView text = new TextView(G.context);
+        text.setId(R.id.csll_txt_log_text);
+        text.setBackgroundResource(R.drawable.recangle_gray_tranceparent);
+        text.setPadding(i_Dp(R.dimen.dp24), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp24), i_Dp(R.dimen.dp4));
+        text.setGravity(CENTER);
+        text.setText("Log");
+        text.setTextColor(Color.parseColor("#4a5d5c"));
+        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        text.setAllCaps(false);
+        FrameLayout.LayoutParams layout_138 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_138.gravity = Gravity.CENTER_HORIZONTAL;
+        text.setLayoutParams(layout_138);
+
+        return text;
+    }
+
+    //********************************************************************************************
 
     public static View getGifItem(boolean withText) {
 
