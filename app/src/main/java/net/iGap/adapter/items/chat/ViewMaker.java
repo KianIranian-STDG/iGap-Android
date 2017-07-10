@@ -260,7 +260,7 @@ public class ViewMaker {
         duration.setBackgroundResource(R.drawable.bg_message_image_time);
         duration.setGravity(Gravity.CENTER_VERTICAL);
         duration.setSingleLine(true);
-        duration.setPadding(i_Dp(R.dimen.dp4), dpToPixel(1), i_Dp(R.dimen.dp4), 0);
+        duration.setPadding(i_Dp(R.dimen.dp4), dpToPixel(1), i_Dp(R.dimen.dp4), dpToPixel(1));
         duration.setText("3:48 (4.5 MB)");
         duration.setAllCaps(TRUE);
         duration.setTextColor(G.context.getResources().getColor(R.color.gray10));
@@ -326,7 +326,7 @@ public class ViewMaker {
         TextView text = new TextView(G.context);
         text.setId(R.id.cslt_txt_time_date);
         text.setSingleLine(true);
-        text.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
+        text.setPadding(i_Dp(R.dimen.dp16), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp16), i_Dp(R.dimen.dp4));
         text.setBackgroundResource(R.drawable.background_log_time);
         text.setText("Today");
         text.setAllCaps(false);
@@ -377,6 +377,54 @@ public class ViewMaker {
 
         return text;
     }
+
+   /* public static View getLocationItem(){
+
+        LinearLayout mainContainer = new LinearLayout(G.context);
+        mainContainer.setId(R.id.mainContainer);
+        LinearLayout.LayoutParams layout_761 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mainContainer.setLayoutParams(layout_761);
+
+        LinearLayout linearLayout_532 = new LinearLayout(G.context);
+        linearLayout_532.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_639 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_532.setLayoutParams(layout_639);
+
+        LinearLayout contentContainer = new LinearLayout(G.context);
+        contentContainer.setId(R.id.contentContainer);
+        LinearLayout.LayoutParams layoutParamsContentContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
+        contentContainer.setLayoutParams(layoutParamsContentContainer);
+
+        LinearLayout m_container = new LinearLayout(G.context);
+        m_container.setId(R.id.m_container);
+        m_container.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_788 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_788);
+
+        FrameLayout frameLayout = new FrameLayout(G.context);
+        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+        ReserveSpaceRoundedImageView reserveSpaceRoundedImageView = new ReserveSpaceRoundedImageView(G.context);
+        reserveSpaceRoundedImageView.setId(R.id.thumbnail);
+        reserveSpaceRoundedImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        reserveSpaceRoundedImageView.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
+        LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        reserveSpaceRoundedImageView.setLayoutParams(layout_758);
+
+        mainContainer.addView(linearLayout_532);
+        linearLayout_532.addView(contentContainer);
+        contentContainer.addView(m_container);
+        m_container.addView(frameLayout);
+        if (withText) {
+            m_container.addView(getTextView());
+        }
+        frameLayout.addView(reserveSpaceRoundedImageView);
+        frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+
+        return mainContainer;
+
+    }*/
 
     //********************************************************************************************
 
@@ -832,7 +880,6 @@ public class ViewMaker {
         fileSize.setTextAppearance(context, android.R.style.TextAppearance_Small);
         fileSize.setGravity(BOTTOM | CENTER_HORIZONTAL);
         fileSize.setSingleLine();
-        fileSize.setMaxLines(1);
         fileSize.setText("3.2 mb");
         fileSize.setAllCaps(TRUE);
         fileSize.setTextColor(G.context.getResources().getColor(R.color.black90));
@@ -851,7 +898,7 @@ public class ViewMaker {
         fileName.setId(R.id.fileName);
         fileName.setEllipsize(TextUtils.TruncateAt.MIDDLE);
         fileName.setGravity(LEFT);
-        fileName.setMaxLines(1);
+        fileName.setSingleLine(true);
         fileName.setTextAppearance(context, android.R.style.TextAppearance_Medium);
         fileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
         fileName.setText("file_name.ext");
@@ -865,7 +912,7 @@ public class ViewMaker {
         TextView songArtist = new TextView(G.context);
         songArtist.setId(R.id.songArtist);
         songArtist.setTextAppearance(context, android.R.style.TextAppearance_Small);
-        songArtist.setMaxLines(1);
+        songArtist.setSingleLine(true);
         songArtist.setText("Artist");
         songArtist.setTextColor(G.context.getResources().getColor(R.color.black90));
         LinearLayout.LayoutParams layout_757 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
