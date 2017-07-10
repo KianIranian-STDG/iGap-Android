@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import java.io.File;
 import java.util.List;
 import net.iGap.R;
@@ -59,7 +60,7 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     }
 
     @Override public int getLayoutRes() {
-        return R.layout.chat_sub_layout_gif;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
@@ -82,6 +83,13 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
     }
 
     @Override public void bindView(final ViewHolder holder, List payloads) {
+
+
+        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getGifItem());
+            holder.image = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
+        }
+
         super.bindView(holder, payloads);
 
         holder.itemView.findViewById(R.id.progress).setOnClickListener(new View.OnClickListener() {
@@ -129,7 +137,7 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         public ViewHolder(View view) {
             super(view);
 
-            image = (ReserveSpaceGifImageView) view.findViewById(R.id.thumbnail);
+            //image = (ReserveSpaceGifImageView) view.findViewById(R.id.thumbnail);
         }
     }
 }

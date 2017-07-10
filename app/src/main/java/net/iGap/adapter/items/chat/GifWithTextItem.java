@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import java.io.File;
 import java.util.List;
@@ -64,7 +65,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
     @Override
     public int getLayoutRes() {
-        return R.layout.chat_sub_layout_gif_with_text;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override
@@ -89,6 +90,12 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
+
+        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getGifItemWithText());
+            holder.image = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
+        }
+
         super.bindView(holder, payloads);
 
         String text = "";
@@ -175,7 +182,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
         public ViewHolder(View view) {
             super(view);
-            image = (ReserveSpaceGifImageView) view.findViewById(R.id.thumbnail);
+            //image = (ReserveSpaceGifImageView) view.findViewById(R.id.thumbnail);
         }
     }
 

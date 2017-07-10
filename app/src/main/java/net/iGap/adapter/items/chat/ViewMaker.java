@@ -22,6 +22,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 
 import static android.R.attr.left;
@@ -275,6 +276,105 @@ public class ViewMaker {
 
         return mainContainer;
     }
+
+    //********************************************************************************************
+
+    public static View getGifItem() {
+
+
+        LinearLayout mainContainer = new LinearLayout(G.context);
+        mainContainer.setId(R.id.mainContainer);
+        LinearLayout.LayoutParams layout_761 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mainContainer.setLayoutParams(layout_761);
+
+        LinearLayout linearLayout_532 = new LinearLayout(G.context);
+        linearLayout_532.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_639 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_532.setLayoutParams(layout_639);
+
+        LinearLayout contentContainer = new LinearLayout(G.context);
+        contentContainer.setId(R.id.contentContainer);
+        LinearLayout.LayoutParams layout_893 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        contentContainer.setLayoutParams(layout_893);
+
+        LinearLayout m_container = new LinearLayout(G.context);
+        m_container.setId(R.id.m_container);
+        m_container.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_788 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_788);
+
+        FrameLayout frameLayout = new FrameLayout(G.context);
+        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+        ReserveSpaceGifImageView reserveSpaceGifImageView = new ReserveSpaceGifImageView(G.context);
+        reserveSpaceGifImageView.setId(R.id.thumbnail);
+        LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        reserveSpaceGifImageView.setLayoutParams(layout_758);
+
+
+        mainContainer.addView(linearLayout_532);
+        linearLayout_532.addView(contentContainer);
+        contentContainer.addView(m_container);
+        m_container.addView(frameLayout);
+        frameLayout.addView(reserveSpaceGifImageView);
+        frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+
+
+        return mainContainer;
+
+    }
+
+    public static View getGifItemWithText() {
+
+        LinearLayout mainContainer = new LinearLayout(G.context);
+        mainContainer.setId(R.id.mainContainer);
+        LinearLayout.LayoutParams layout_761 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mainContainer.setLayoutParams(layout_761);
+
+        LinearLayout linearLayout_532 = new LinearLayout(G.context);
+        linearLayout_532.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_639 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_532.setLayoutParams(layout_639);
+
+        LinearLayout contentContainer = new LinearLayout(G.context);
+        contentContainer.setId(R.id.contentContainer);
+        LinearLayout.LayoutParams layout_893 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        contentContainer.setLayoutParams(layout_893);
+
+        LinearLayout m_container = new LinearLayout(G.context);
+        m_container.setId(R.id.m_container);
+        m_container.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_788 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_788);
+
+        FrameLayout frameLayout = new FrameLayout(G.context);
+        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+        ReserveSpaceGifImageView reserveSpaceGifImageView = new ReserveSpaceGifImageView(G.context);
+        reserveSpaceGifImageView.setId(R.id.thumbnail);
+        LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        reserveSpaceGifImageView.setLayoutParams(layout_758);
+
+        LinearLayout container_message = new LinearLayout(G.context);
+        container_message.setId(R.id.csliwt_layout_container_message);
+        container_message.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_789 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        container_message.setLayoutParams(layout_789);
+
+        frameLayout.addView(reserveSpaceGifImageView);
+        frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+        m_container.addView(frameLayout);
+        m_container.addView(container_message);
+        contentContainer.addView(m_container);
+        linearLayout_532.addView(contentContainer);
+        mainContainer.addView(linearLayout_532);
+
+        return mainContainer;
+
+    }
+
+
+
 
     //********************************************************************************************
 
