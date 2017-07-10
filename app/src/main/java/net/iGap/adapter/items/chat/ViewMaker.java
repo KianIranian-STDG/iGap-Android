@@ -213,7 +213,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    public static View getVedioItem(boolean withText) {
+    public static View getVideoItem(boolean withText) {
 
         LinearLayout mainContainer = new LinearLayout(G.context);
         mainContainer.setId(R.id.mainContainer);
@@ -291,8 +291,6 @@ public class ViewMaker {
         contentContainer.addView(m_container);
         linearLayout_223.addView(contentContainer);
         mainContainer.addView(linearLayout_223);
-
-
 
         return mainContainer;
     }
@@ -412,11 +410,6 @@ public class ViewMaker {
         return mainContainer;
 
     }
-
-
-
-
-    //********************************************************************************************
 
     public static View getViewTime(Boolean addHearing) {
 
@@ -932,7 +925,6 @@ public class ViewMaker {
         return mainContainer;
     }
 
-
     public static View getContactItem() {
         LinearLayout lytMainContainer = new LinearLayout(context);
         LinearLayout.LayoutParams layoutParamsMainContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1108,6 +1100,51 @@ public class ViewMaker {
         return mainContainer;
     }
 
+    public static View getImageItem() {
+
+        LinearLayout mainContainer = new LinearLayout(G.context);
+        mainContainer.setId(R.id.mainContainer);
+        LinearLayout.LayoutParams layout_761 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mainContainer.setLayoutParams(layout_761);
+
+        LinearLayout linearLayout_532 = new LinearLayout(G.context);
+        linearLayout_532.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_639 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_532.setLayoutParams(layout_639);
+
+        LinearLayout contentContainer = new LinearLayout(G.context);
+        contentContainer.setId(R.id.contentContainer);
+        LinearLayout.LayoutParams layoutParamsContentContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
+        contentContainer.setLayoutParams(layoutParamsContentContainer);
+
+        LinearLayout m_container = new LinearLayout(G.context);
+        m_container.setId(R.id.m_container);
+        m_container.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_788 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_788);
+
+        FrameLayout frameLayout = new FrameLayout(G.context);
+        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+        ReserveSpaceRoundedImageView reserveSpaceRoundedImageView = new ReserveSpaceRoundedImageView(G.context);
+        reserveSpaceRoundedImageView.setId(R.id.thumbnail);
+        reserveSpaceRoundedImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        reserveSpaceRoundedImageView.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
+        LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        reserveSpaceRoundedImageView.setLayoutParams(layout_758);
+
+        mainContainer.addView(linearLayout_532);
+        linearLayout_532.addView(contentContainer);
+        contentContainer.addView(m_container);
+        m_container.addView(frameLayout);
+        frameLayout.addView(reserveSpaceRoundedImageView);
+        frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+
+        return mainContainer;
+
+    }
+
     public static View makeTextViewMessage(int maxsize, boolean hasEmoji) {
 
         if (hasEmoji) {
@@ -1213,6 +1250,23 @@ public class ViewMaker {
 
 
         return v;
+    }
+
+
+    /**
+     * ***************** Common Methods *****************
+     */
+    private static int dpToPixel(int dp) {
+        Resources r = context.getResources();
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+        return px;
+
+        //  (2/getApplicationContext().getResources().getDisplayMetrics().density)
+    }
+
+    private static int i_Dp(int dpSrc) {
+
+        return (int) context.getResources().getDimension(dpSrc);
     }
 
     public static AttributeSet getAttribuit(int attr) {
@@ -1331,21 +1385,4 @@ public class ViewMaker {
 
         return at;
     }
-
-
-    //*********************************************************************************************
-    private static int dpToPixel(int dp) {
-        Resources r = context.getResources();
-        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-        return px;
-
-        //  (2/getApplicationContext().getResources().getDisplayMetrics().density)
-    }
-
-    private static int i_Dp(int dpSrc) {
-
-        return (int) context.getResources().getDimension(dpSrc);
-    }
-
-    //****************************************************************************************************
 }
