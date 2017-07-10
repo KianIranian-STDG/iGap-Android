@@ -8,6 +8,10 @@
   <item name="name" type="id" />
   <item name="number" type="id" />
 
+  <!-- Video Item -->
+  <item name="songArtist" type="id" />
+  <item name="fileSize" type="id" />
+
 
   <item name="messageSenderAvatar" type="id" />
   <item name="messageSenderName" type="id" />

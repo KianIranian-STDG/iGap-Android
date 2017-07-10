@@ -26,8 +26,10 @@ import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 
 import static android.R.attr.left;
+import static android.graphics.Typeface.BOLD;
 import static android.support.design.R.id.center;
 import static android.support.design.R.id.center_horizontal;
+import static android.support.design.R.id.center_vertical;
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER;
 import static android.view.Gravity.CENTER_HORIZONTAL;
@@ -41,6 +43,7 @@ import static net.iGap.R.dimen.dp32;
 import static net.iGap.R.dimen.dp4;
 import static net.iGap.R.dimen.dp52;
 import static net.iGap.R.dimen.dp8;
+import static net.iGap.R.dimen.messageContainerPadding;
 
 
 public class ViewMaker {
@@ -587,7 +590,7 @@ public class ViewMaker {
         cslr_ll_forward.setId(R.id.cslr_ll_forward);
         cslr_ll_forward.setClickable(true);
         cslr_ll_forward.setOrientation(HORIZONTAL);
-        cslr_ll_forward.setPadding(i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPadding), i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPadding));
+        cslr_ll_forward.setPadding(i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(messageContainerPadding), i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(messageContainerPadding));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             cslr_ll_forward.setTextDirection(View.TEXT_DIRECTION_LOCALE);
             cslr_ll_forward.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
@@ -748,7 +751,7 @@ public class ViewMaker {
         }
         audioBox.setMinimumHeight((int) context.getResources().getDimension(R.dimen.dp130));
         audioBox.setOrientation(HORIZONTAL);
-        audioBox.setPadding(0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPadding), 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPaddingBottom));
+        audioBox.setPadding(0, (int) G.context.getResources().getDimension(messageContainerPadding), 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPaddingBottom));
         LinearLayout.LayoutParams layout_262 = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp200), LinearLayout.LayoutParams.WRAP_CONTENT);
         audioBox.setLayoutParams(layout_262);
 
@@ -922,7 +925,7 @@ public class ViewMaker {
         LinearLayout.LayoutParams layoutParamsContainer2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParamsContainer1.gravity = Gravity.CENTER_VERTICAL;
         container2.setOrientation(HORIZONTAL);
-        container2.setPadding((int) G.context.getResources().getDimension(R.dimen.messageContainerPadding), 0, 5, 2);
+        container2.setPadding((int) G.context.getResources().getDimension(messageContainerPadding), 0, 5, 2);
         container2.setLayoutParams(layoutParamsContainer2);
 
         ImageView image = new ImageView(G.context);
@@ -966,6 +969,107 @@ public class ViewMaker {
         return lytMainContainer;
     }
 
+    public static View getFileItem() {
+
+        LinearLayout mainContainer = new LinearLayout(G.context);
+        mainContainer.setId(R.id.mainContainer);
+        mainContainer.setOrientation(HORIZONTAL);
+        LinearLayout.LayoutParams layout_106 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mainContainer.setLayoutParams(layout_106);
+
+        LinearLayout linearLayout_768 = new LinearLayout(G.context);
+        linearLayout_768.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_577 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        linearLayout_768.setLayoutParams(layout_577);
+
+        LinearLayout contentContainer = new LinearLayout(G.context);
+        LinearLayout.LayoutParams layoutParamsContentContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        contentContainer.setId(R.id.contentContainer);
+        contentContainer.setLayoutParams(layoutParamsContentContainer);
+        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
+        contentContainer.setLayoutParams(layoutParamsContentContainer);
+
+        LinearLayout m_container = new LinearLayout(G.context);
+        m_container.setId(R.id.m_container);
+        m_container.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_346 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_346);
+
+        LinearLayout linearLayout_784 = new LinearLayout(G.context);
+        linearLayout_784.setGravity(center_vertical);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            linearLayout_784.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
+        linearLayout_784.setOrientation(HORIZONTAL);
+        linearLayout_784.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPadding), 0);
+        LinearLayout.LayoutParams layout_419 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout_419.gravity = CENTER;
+        linearLayout_784.setLayoutParams(layout_419);
+
+        FrameLayout frameLayout = new FrameLayout(G.context);
+        FrameLayout.LayoutParams layoutParamsFrameLayout = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        layoutParamsFrameLayout.gravity = CENTER;
+        frameLayout.setPadding(10, 10, 10, 10);
+        frameLayout.setLayoutParams(layoutParamsFrameLayout);
+
+        ImageView imgThumbnail = new ImageView(G.context);
+        imgThumbnail.setId(R.id.thumbnail);
+        LinearLayout.LayoutParams thumbnailParams = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp48), (int) G.context.getResources().getDimension(R.dimen.dp48));
+        thumbnailParams.gravity = CENTER;
+        imgThumbnail.setBackgroundColor(Color.TRANSPARENT);
+        imgThumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imgThumbnail.setImageResource(R.drawable.file_icon);
+        imgThumbnail.setLayoutParams(thumbnailParams);
+
+        LinearLayout linearLayout_780 = new LinearLayout(G.context);
+        linearLayout_780.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_752 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout_752.gravity = CENTER;
+        linearLayout_780.setLayoutParams(layout_752);
+
+        TextView songArtist = new TextView(G.context);
+        songArtist.setId(R.id.songArtist);
+        songArtist.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+        songArtist.setMaxLines(1);
+        songArtist.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp180));
+        songArtist.setText("file_name.ext");
+        songArtist.setTextColor(G.context.getResources().getColor(R.color.black90));
+        songArtist.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        songArtist.setTypeface(G.typeface_IRANSansMobile_Bold, BOLD);
+        LinearLayout.LayoutParams layout_1000 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        songArtist.setLayoutParams(layout_1000);
+        linearLayout_780.addView(songArtist);
+
+        TextView fileSize = new TextView(G.context);
+        fileSize.setId(R.id.fileSize);
+        fileSize.setMaxLines(1);
+        fileSize.setText("3.2 mb");
+        fileSize.setAllCaps(TRUE);
+        fileSize.setTextColor(G.context.getResources().getColor(R.color.black90));
+        fileSize.setTextSize(TypedValue.COMPLEX_UNIT_DIP, (11));
+        LinearLayout.LayoutParams layout_958 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout_958.topMargin = 3;
+        fileSize.setLayoutParams(layout_958);
+        linearLayout_780.addView(fileSize);
+        linearLayout_784.addView(frameLayout);
+        linearLayout_784.addView(linearLayout_780);
+        m_container.addView(linearLayout_784);
+
+        LinearLayout csliwt_layout_container_message = new LinearLayout(G.context);
+        csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
+        csliwt_layout_container_message.setOrientation(HORIZONTAL);
+        LinearLayout.LayoutParams layout_312 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        csliwt_layout_container_message.setLayoutParams(layout_312);
+        m_container.addView(csliwt_layout_container_message);
+        contentContainer.addView(m_container);
+        linearLayout_768.addView(contentContainer);
+
+        frameLayout.addView(imgThumbnail);
+        frameLayout.addView(getProgressBar(R.dimen.dp52));
+        mainContainer.addView(linearLayout_768);
+
+        return mainContainer;
+    }
 
     public static View makeTextViewMessage(int maxsize, boolean hasEmoji) {
 
