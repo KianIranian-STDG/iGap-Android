@@ -2,6 +2,7 @@ package net.iGap.adapter.items.chat;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
@@ -294,6 +295,26 @@ public class ViewMaker {
 
 
         return mainContainer;
+    }
+
+    public static View getUnreadMessageItem() {
+
+        TextView cslum_txt_unread_message = new TextView(G.context);
+        cslum_txt_unread_message.setId(R.id.cslum_txt_unread_message);
+        cslum_txt_unread_message.setPadding(0, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
+        cslum_txt_unread_message.setBackgroundColor(G.context.getResources().getColor(R.color.green));
+        cslum_txt_unread_message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        cslum_txt_unread_message.setGravity(CENTER);
+        cslum_txt_unread_message.setTypeface(cslum_txt_unread_message.getTypeface(), Typeface.BOLD);
+        cslum_txt_unread_message.setText(G.context.getResources().getString(R.string.unread_message));
+        cslum_txt_unread_message.setTextColor(G.context.getResources().getColor(R.color.white));
+        LinearLayout.LayoutParams layout_692 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_692.bottomMargin = i_Dp(R.dimen.dp8);
+        layout_692.topMargin = i_Dp(R.dimen.dp8);
+        cslum_txt_unread_message.setLayoutParams(layout_692);
+
+        return cslum_txt_unread_message;
+
     }
 
     //********************************************************************************************
