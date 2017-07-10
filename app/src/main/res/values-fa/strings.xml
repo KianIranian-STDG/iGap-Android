@@ -973,4 +973,16 @@
   <string name="Call_Quality">کیفیت تماس</string>
   <string name="desc_self_destroy">"درصورتی که از حساب کاربری خود در طول یکی از مدت زمان های تعیین شده به هیچ وجه استفاده نکنید، حساب شما پس از آن زمان به صورت خودکار تخریب و برای همیشه حذف می شود."</string>
   <string name="color_default">آیا مایلید رنگ بندی همه قسمت های برنامه به حالت اولیه و پیش فرض باز گردد؟</string>
+
+  <string name="crop_image_menu_rotate_right">چرخاندن</string>
+  <string name="crop_image_menu_crop">برش</string>
+  <string name="crop_image_menu_flip">برگرداندن تصویر</string>
+  <string name="crop_image_menu_flip_horizontally">برگرداندن افقی تصویر</string>
+  <string name="crop_image_menu_flip_vertically">برگرداندن عمودی تصویر</string>
+
+  <string name="title_who_can_see_my_avatar">دیده شدن آواتارهای من توسط</string>
+  <string name="title_who_can_invite_you_to_channel_s">دریافت لینک دعوت کانال از</string>
+  <string name="title_who_can_invite_you_to_group_s">دریافت لینک دعوت گروه از</string>
+  <string name="title_who_is_allowed_to_call">دریافت تماس از</string>
+  <string name="title_Last_Seen"> چک شدن آخرین بازدید من توسط</string>
 </resources>

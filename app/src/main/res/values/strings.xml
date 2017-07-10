@@ -152,7 +152,7 @@
   <string name="select_picture_en">Select Picture</string>
   <string name="cannot_load_data_en">Unable to load data.</string>
   <string name="do_you_want_exit">Do you want to exit?</string>
-  <string name="slide_to_cancel_en">Drag and release to cancel.</string>
+  <string name="slide_to_cancel_en">Slide to Cancel</string>
   <string formatted="false" name="video_duration">%s (%s)</string>
 
   <!-- setting -->
@@ -545,8 +545,8 @@
   <string name="set_email">Set Email</string>
   <string name="delete_contact">Delete Contact</string>
   <string name="error_email">Wrong Email Address</string>
-  <string name="active_session_title">Terminating the Active Session</string>
-  <string name="active_session_all_title">Terminating All Active Sessions</string>
+  <string name="active_session_title">Terminate the Active Session</string>
+  <string name="active_session_all_title">Terminate all Active Sessions</string>
   <string name="active_session_content">Are you sure you want to terminate this active session?</string>
   <string name="active_session_all_content">Are you sure you want to terminate all active sessions?</string>
   <string name="USER_VERIFY_GIVEN_USERNAME">There is no registered user with given username.</string>
@@ -925,7 +925,7 @@
   <string name="iGap_has_crashed">iGap has crashed !</string>
   <string name="iGap_has_crashed_reload">Reset</string>
   <string name="iGap_has_crashed_desc">An unexpected error occurred forcing the application to stop. We are aware of this error. Please be sure we are fixing this problem, all you have to do is only click "Reset".</string>
-  <string name="who_is_allowed_to_call">Who can call me ?</string>
+  <string name="who_is_allowed_to_call">Who can call me?</string>
   <string name="miss">Missed Call</string>
   <string name="not_answer">Unanswered Call</string>
 
@@ -970,5 +970,17 @@
   <string name="Call_Quality">Call Quality</string>
   <string name="desc_self_destroy">"If you choose one of the periods in the following and never use your iGap account during the certain time, your account will be destructed and deleted spontaneously."</string>
   <string name="color_default">Are you sure you want to reset all changes with color to default?</string>
+
+  <string name="crop_image_menu_rotate_right">Rotate</string>
+  <string name="crop_image_menu_crop">Crop</string>
+  <string name="crop_image_menu_flip">Flip</string>
+  <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
+  <string name="crop_image_menu_flip_vertically">Flip vertically</string>
+
+  <string name="title_who_can_see_my_avatar">My Avatars get seen by</string>
+  <string name="title_who_can_invite_you_to_channel_s">Channels Invite Link received from</string>
+  <string name="title_who_can_invite_you_to_group_s">Groups Invite Link received from</string>
+  <string name="title_who_is_allowed_to_call">Calls received from</string>
+  <string name="title_Last_Seen">My Last Seen checked by</string>
 
 </resources>
