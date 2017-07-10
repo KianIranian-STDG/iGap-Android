@@ -52,7 +52,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     public void bindView(final ViewHolder holder, List payloads) {
 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getImageItem());
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getImageItem(false));
         }
 
         super.bindView(holder, payloads);

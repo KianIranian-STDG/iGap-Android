@@ -278,14 +278,7 @@ public class ViewMaker {
         m_container.addView(frameLayout_642);
 
         if (withText) {
-
-            LinearLayout csliwt_layout_container_message = new LinearLayout(G.context);
-            csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
-            csliwt_layout_container_message.setOrientation(HORIZONTAL);
-            LinearLayout.LayoutParams layout_327 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            csliwt_layout_container_message.setLayoutParams(layout_327);
-
-            m_container.addView(csliwt_layout_container_message);
+            m_container.addView(getTextView());
         }
 
         contentContainer.addView(m_container);
@@ -314,8 +307,6 @@ public class ViewMaker {
         return cslum_txt_unread_message;
 
     }
-
-    //********************************************************************************************
 
     public static View getGifItem() {
 
@@ -1100,7 +1091,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    public static View getImageItem() {
+    public static View getImageItem(boolean withText) {
 
         LinearLayout mainContainer = new LinearLayout(G.context);
         mainContainer.setId(R.id.mainContainer);
@@ -1138,6 +1129,9 @@ public class ViewMaker {
         linearLayout_532.addView(contentContainer);
         contentContainer.addView(m_container);
         m_container.addView(frameLayout);
+        if (withText) {
+            m_container.addView(getTextView());
+        }
         frameLayout.addView(reserveSpaceRoundedImageView);
         frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
 
@@ -1220,7 +1214,19 @@ public class ViewMaker {
         return circleImageView;
     }
 
-    public static View getProgressBar(int sizeSrc) {
+    /**
+     * return text view for items that have text (for example : image_text, video_text , ...)
+     */
+    private static View getTextView() {
+        LinearLayout csliwt_layout_container_message = new LinearLayout(G.context);
+        csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
+        csliwt_layout_container_message.setOrientation(HORIZONTAL);
+        LinearLayout.LayoutParams layout_327 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        csliwt_layout_container_message.setLayoutParams(layout_327);
+        return csliwt_layout_container_message;
+    }
+
+    private static View getProgressBar(int sizeSrc) {
 
         //MessageProgress messageProgress=new MessageProgress(G.context);
         //messageProgress.setId(R.id.progress);
@@ -1251,7 +1257,6 @@ public class ViewMaker {
 
         return v;
     }
-
 
     /**
      * ***************** Common Methods *****************

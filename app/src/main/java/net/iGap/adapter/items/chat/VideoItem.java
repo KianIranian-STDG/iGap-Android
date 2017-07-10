@@ -73,7 +73,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     @Override public void bindView(final ViewHolder holder, List payloads) {
 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getVedioItem(false));
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getVideoItem(false));
 
             holder.image = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
             holder.duration = (TextView) holder.itemView.findViewById(R.id.duration);
