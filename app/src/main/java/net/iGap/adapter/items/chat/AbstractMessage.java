@@ -1140,7 +1140,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight, type);
                     if (dimens[0] != 0 && dimens[1] != 0) {
-                        ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
+                        ((ViewGroup) holder.itemView.findViewById(R.id.m_container)).getLayoutParams().width = dimens[0];
                     }
 
                     if (setDefualtImage) {
@@ -1160,7 +1160,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
 
                     int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight, type);
-                    ((ViewGroup) holder.itemView.findViewById(R.id.contentContainer)).getChildAt(0).getLayoutParams().width = dimens[0];
+                    ((ViewGroup) holder.itemView.findViewById(R.id.m_container)).getLayoutParams().width = dimens[0];
                 }
             }
 
@@ -1371,7 +1371,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        final String _path = AndroidUtils.getFilePathWithCashId(attachment.getCacheId(), name, G.DIR_TEMP, true);
+        //  final String _path = AndroidUtils.getFilePathWithCashId(attachment.getCacheId(), name, G.DIR_TEMP, true);
 
         if (token != null && token.length() > 0 && size > 0) {
 

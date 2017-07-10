@@ -113,9 +113,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
                     G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, Long.parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
 
-                    final Realm realm = Realm.getDefaultInstance();
-
-                    realm.executeTransaction(new Realm.Transaction() {
+                    G.getRealm().executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
                             final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, holder.mRoomId).findFirst();
@@ -135,7 +133,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                         }
                     });
 
-                    realm.close();
+
 
                     if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                         MusicPlayer.onCompleteChat = holder.complete;
@@ -178,11 +176,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         holder.mType = type;
         AppUtils.rightFileThumbnailIcon(holder.thumbnail, _type, null);
 
-        Realm realm = Realm.getDefaultInstance();
-
         holder.mRoomId = mMessage.roomId;
 
-        RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class)
+        RealmRegisteredInfo registeredInfo = G.getRealm().where(RealmRegisteredInfo.class)
             .equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID))
             .findFirst();
 
@@ -191,8 +187,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         } else {
             holder.author.setText("");
         }
-
-        realm.close();
 
         final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000);
 

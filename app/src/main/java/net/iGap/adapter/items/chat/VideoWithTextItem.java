@@ -49,7 +49,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     public void bindView(final ViewHolder holder, List payloads) {
 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getVedioItem());
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getVedioItem(true));
 
             holder.image = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
             holder.duration = (TextView) holder.itemView.findViewById(R.id.duration);

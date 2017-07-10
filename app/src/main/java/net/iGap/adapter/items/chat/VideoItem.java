@@ -13,6 +13,7 @@ package net.iGap.adapter.items.chat;
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import com.mikepenz.fastadapter.FastAdapter;
 import java.util.List;
@@ -40,7 +41,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     }
 
     @Override public int getLayoutRes() {
-        return R.layout.chat_sub_layout_video;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
@@ -70,6 +71,15 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     }
 
     @Override public void bindView(final ViewHolder holder, List payloads) {
+
+        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getVedioItem(false));
+
+            holder.image = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
+            holder.duration = (TextView) holder.itemView.findViewById(R.id.duration);
+        }
+
+
         super.bindView(holder, payloads);
 
         if (mMessage.forwardedFrom != null) {
@@ -92,8 +102,6 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
 
         public ViewHolder(View view) {
             super(view);
-            image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
-            duration = (TextView) view.findViewById(R.id.duration);
         }
     }
 }

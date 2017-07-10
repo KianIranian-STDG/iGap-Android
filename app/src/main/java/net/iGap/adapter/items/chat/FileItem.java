@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -80,8 +79,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(mMessage.messageID)).findFirst();
+        RealmRoomMessage roomMessage = G.getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(mMessage.messageID)).findFirst();
         if (roomMessage != null) {
             (holder.itemView.findViewById(R.id.thumbnail)).setVisibility(View.VISIBLE);
             if (roomMessage.getForwardMessage() != null) {
@@ -110,7 +108,6 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
                 }
             }
         }
-        realm.close();
     }
 
     @Override

@@ -212,7 +212,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    public static View getVedioItem() {
+    public static View getVedioItem(boolean withText) {
 
         LinearLayout mainContainer = new LinearLayout(G.context);
         mainContainer.setId(R.id.mainContainer);
@@ -225,7 +225,11 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_509 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayout_223.setLayoutParams(layout_509);
 
-        LinearLayout contentContainer = new LinearLayout(G.context, null, R.style.ChatMessages_CardView);
+        LinearLayout contentContainer = new LinearLayout(G.context);
+        LinearLayout.LayoutParams layout_5095 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        int pading = dpToPixel(5);
+        contentContainer.setPadding(pading, pading, pading, pading);
+        contentContainer.setLayoutParams(layout_5095);
         contentContainer.setId(R.id.contentContainer);
 
         LinearLayout m_container = new LinearLayout(G.context);
@@ -234,15 +238,21 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_518 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         m_container.setLayoutParams(layout_518);
 
-        FrameLayout linearLayout_642 = new FrameLayout(G.context);
+        FrameLayout frameLayout_642 = new FrameLayout(G.context);
         LinearLayout.LayoutParams layout_535 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayout_642.setLayoutParams(layout_535);
+        frameLayout_642.setLayoutParams(layout_535);
 
         ReserveSpaceRoundedImageView thumbnail = new ReserveSpaceRoundedImageView(G.context);
         thumbnail.setId(R.id.thumbnail);
-        LinearLayout.LayoutParams layout_679 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        FrameLayout.LayoutParams layout_679 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         thumbnail.setLayoutParams(layout_679);
-        linearLayout_642.addView(thumbnail);
+        thumbnail.setScaleType(ImageView.ScaleType.CENTER);
+
+        thumbnail.setBorderColor(Color.parseColor("#9e9e9e"));
+        thumbnail.setBorderWidth(1f);
+        thumbnail.setCornerRadiusDimen(R.dimen.messageBox_cornerRadius);
+
+        frameLayout_642.addView(thumbnail);
 
         TextView duration = new TextView(G.context);
         duration.setId(R.id.duration);
@@ -254,23 +264,29 @@ public class ViewMaker {
         duration.setAllCaps(TRUE);
         duration.setTextColor(G.context.getResources().getColor(R.color.gray10));
         duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-        LinearLayout.LayoutParams layout_49 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams layout_49 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_49.gravity = Gravity.LEFT | Gravity.TOP;
         layout_49.bottomMargin = -dpToPixel(2);
         layout_49.leftMargin = dpToPixel(5);
         layout_49.topMargin = dpToPixel(7);
         duration.setLayoutParams(layout_49);
-        linearLayout_642.addView(duration);
+        frameLayout_642.addView(duration);
 
-        linearLayout_642.addView(getProgressBar(R.dimen.dp48));
-        m_container.addView(linearLayout_642);
+        frameLayout_642.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48), Gravity.CENTER));
 
-        LinearLayout csliwt_layout_container_message = new LinearLayout(G.context);
-        csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
-        csliwt_layout_container_message.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams layout_327 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        csliwt_layout_container_message.setLayoutParams(layout_327);
-        m_container.addView(csliwt_layout_container_message);
+        m_container.addView(frameLayout_642);
+
+        if (withText) {
+
+            LinearLayout csliwt_layout_container_message = new LinearLayout(G.context);
+            csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
+            csliwt_layout_container_message.setOrientation(HORIZONTAL);
+            LinearLayout.LayoutParams layout_327 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            csliwt_layout_container_message.setLayoutParams(layout_327);
+
+            m_container.addView(csliwt_layout_container_message);
+        }
+
         contentContainer.addView(m_container);
         linearLayout_223.addView(contentContainer);
         mainContainer.addView(linearLayout_223);
