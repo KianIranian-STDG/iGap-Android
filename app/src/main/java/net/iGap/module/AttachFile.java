@@ -400,7 +400,7 @@ public class AttachFile {
                     outputUri = Uri.fromFile(new File(videoPath));
                 }
 
-                videoPath = outputUri.getPath();
+                //videoPath = outputUri.getPath();
 
                 Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
