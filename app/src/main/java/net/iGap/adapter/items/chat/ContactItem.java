@@ -48,7 +48,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
     @Override
     public int getLayoutRes() {
-        return R.layout.chat_sub_layout_contact;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override
@@ -74,8 +74,19 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * this commented code used with xml layout
+         */
+        //protected TextView name;
+        //protected TextView number;
+        //protected ImageView image;
+
         public ViewHolder(View view) {
             super(view);
+            //name = (TextView) view.findViewById(R.id.name);
+            //number = (TextView) view.findViewById(R.id.number);
+            //image = (ImageView) view.findViewById(R.id.image);
         }
     }
 

@@ -53,6 +53,10 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
+            /**
+             *  this commented code used with xml layout
+             */
+            //text = (TextView) view.findViewById(R.id.cslt_txt_time_date);
         }
     }
 

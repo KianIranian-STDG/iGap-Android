@@ -39,7 +39,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.chat_sub_layout_file;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override
@@ -123,8 +123,19 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * this commented code used with xml layout
+         */
+        //protected TextView cslf_txt_file_name;
+        //protected TextView cslf_txt_file_size;
+        //protected ImageView thumbnail;
+
         public ViewHolder(View view) {
             super(view);
+            //cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
+            //cslf_txt_file_size = (TextView) view.findViewById(R.id.fileSize);
+            //thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
         }
     }
 

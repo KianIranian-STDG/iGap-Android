@@ -66,6 +66,11 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
+            /**
+             *  this commented code used with xml layout
+             */
+            //text = (TextView) view.findViewById(R.id.csll_txt_log_text);
+            //text.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 

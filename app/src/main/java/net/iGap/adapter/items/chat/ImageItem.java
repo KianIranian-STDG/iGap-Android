@@ -37,7 +37,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
 
     @Override
     public int getLayoutRes() {
-        return R.layout.chat_sub_layout_image;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override
@@ -84,8 +84,14 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
+        /**
+         * this commented code used with xml layout
+         */
+        //protected ReserveSpaceRoundedImageView image;
+
         public ViewHolder(View view) {
             super(view);
+            //image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
         }
     }
 

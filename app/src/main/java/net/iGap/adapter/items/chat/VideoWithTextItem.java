@@ -133,6 +133,11 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
         public ViewHolder(View view) {
             super(view);
+            /**
+             *  this commented code used with xml layout
+             */
+            //image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
+            //duration = (TextView) view.findViewById(R.id.duration);
         }
     }
 
