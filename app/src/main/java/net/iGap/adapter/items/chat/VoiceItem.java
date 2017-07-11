@@ -64,8 +64,10 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
             holder.mFilePath = localPath;
+            holder.musicSeekbar.setEnabled(true);
             holder.btnPlayMusic.setEnabled(true);
         } else {
+            holder.musicSeekbar.setEnabled(false);
             holder.btnPlayMusic.setEnabled(false);
         }
     }

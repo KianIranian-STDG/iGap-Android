@@ -65,8 +65,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
 
             holder.mFilePath = localPath;
+            holder.itemView.findViewById(R.id.csla_seekBar1).setEnabled(true);
             holder.itemView.findViewById(R.id.txt_play_music).setEnabled(true);
         } else {
+            holder.itemView.findViewById(R.id.csla_seekBar1).setEnabled(false);
             holder.itemView.findViewById(R.id.txt_play_music).setEnabled(false);
         }
     }

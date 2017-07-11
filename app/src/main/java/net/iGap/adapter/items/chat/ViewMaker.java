@@ -50,7 +50,7 @@ import static net.iGap.R.dimen.messageContainerPadding;
 
 public class ViewMaker {
 
-    public static View getTextItem() {
+    static View getTextItem() {
 
         LinearLayout mainContainer = new LinearLayout(context);
         mainContainer.setId(R.id.mainContainer);
@@ -91,7 +91,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    public static View getVoiceItem() {
+    static View getVoiceItem() {
 
         LinearLayout mainContainer = new LinearLayout(G.context);
         mainContainer.setId(R.id.mainContainer);
@@ -157,11 +157,9 @@ public class ViewMaker {
         frameLayout_161.addView(getProgressBar(0));
         linearLayout_153.addView(frameLayout_161);
 
-        //******************************
-
         TextView cslv_txt_author = new TextView(G.context);
         cslv_txt_author.setId(R.id.cslv_txt_author);
-        cslv_txt_author.setText("recored audio");
+        cslv_txt_author.setText("recorded voice");
         cslv_txt_author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_799.topMargin = i_Dp(R.dimen.dp12);
@@ -178,6 +176,7 @@ public class ViewMaker {
         csla_btn_play_music.setId(R.id.csla_btn_play_music);
         csla_btn_play_music.setBackgroundResource(0);
         csla_btn_play_music.setGravity(Gravity.CENTER);
+        csla_btn_play_music.setEnabled(false);
         csla_btn_play_music.setText(G.context.getResources().getString(R.string.md_play_arrow));
         csla_btn_play_music.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
         csla_btn_play_music.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
@@ -214,7 +213,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    public static View getVideoItem(boolean withText) {
+    static View getVideoItem(boolean withText) {
 
         LinearLayout mainContainer = new LinearLayout(G.context);
         mainContainer.setId(R.id.mainContainer);
@@ -288,7 +287,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    public static View getUnreadMessageItem() {
+    static View getUnreadMessageItem() {
 
         TextView cslum_txt_unread_message = new TextView(G.context);
         cslum_txt_unread_message.setId(R.id.cslum_txt_unread_message);
@@ -308,7 +307,7 @@ public class ViewMaker {
 
     }
 
-    public static View getTimeItem() {
+    static View getTimeItem() {
 
         LinearLayout linearLayout_33 = new LinearLayout(G.context);
         linearLayout_33.setOrientation(HORIZONTAL);
@@ -346,7 +345,7 @@ public class ViewMaker {
         return linearLayout_33;
     }
 
-    public static View getProgressWaitingItem() {
+    static View getProgressWaitingItem() {
 
         ProgressBar cslp_progress_bar_waiting = new ProgressBar(G.context);
         cslp_progress_bar_waiting.setId(R.id.cslp_progress_bar_waiting);
@@ -360,7 +359,7 @@ public class ViewMaker {
         return cslp_progress_bar_waiting;
     }
 
-    public static View getLogItem() {
+    static View getLogItem() {
 
         TextView text = new TextView(G.context);
         text.setId(R.id.csll_txt_log_text);
@@ -378,7 +377,7 @@ public class ViewMaker {
         return text;
     }
 
-    public static View getLocationItem() {
+    static View getLocationItem() {
 
         LinearLayout mainContainer = new LinearLayout(G.context);
         mainContainer.setId(R.id.mainContainer);
@@ -422,9 +421,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    //********************************************************************************************
-
-    public static View getGifItem(boolean withText) {
+    static View getGifItem(boolean withText) {
 
         LinearLayout mainContainer = new LinearLayout(G.context);
         mainContainer.setId(R.id.mainContainer);
@@ -470,7 +467,7 @@ public class ViewMaker {
 
     }
 
-    public static View getViewTime(Boolean addHearing) {
+    static View getViewTime(Boolean addHearing) {
 
         LinearLayout csl_ll_time = new LinearLayout(context);
         csl_ll_time.setId(R.id.csl_ll_time);
@@ -538,7 +535,7 @@ public class ViewMaker {
         return csl_ll_time;
     }
 
-    public static View getViewSeen() {
+    static View getViewSeen() {
 
         LinearLayout lyt_see = new LinearLayout(context);
         lyt_see.setId(R.id.lyt_see);
@@ -604,7 +601,7 @@ public class ViewMaker {
         return lyt_see;
     }
 
-    public static View getViewReplay() {
+    static View getViewReplay() {
 
         LinearLayout cslr_replay_layout = new LinearLayout(context);
         cslr_replay_layout.setId(R.id.cslr_replay_layout);
@@ -673,7 +670,7 @@ public class ViewMaker {
         return cslr_replay_layout;
     }
 
-    public static View getViewForward() {
+    static View getViewForward() {
 
         LinearLayout cslr_ll_forward = new LinearLayout(context);
         cslr_ll_forward.setId(R.id.cslr_ll_forward);
@@ -728,7 +725,7 @@ public class ViewMaker {
         return cslr_ll_forward;
     }
 
-    public static View getViewVote() {
+    static View getViewVote() {
 
         LinearLayout lyt_vote = new LinearLayout(context);
         lyt_vote.setId(R.id.lyt_vote);
@@ -809,7 +806,7 @@ public class ViewMaker {
         return lyt_vote;
     }
 
-    public static View getAudioItem() {
+    static View getAudioItem() {
 
         LinearLayout mainContainer = new LinearLayout(context);
         mainContainer.setId(R.id.mainContainer);
@@ -945,6 +942,7 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_990 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
         layout_990.weight = 1;
         layout_990.gravity = CENTER;
+        csla_seekBar1.setEnabled(false);
         csla_seekBar1.setLayoutParams(layout_990);
         csla_seekBar1.setProgress(0);
         linearLayout_511.addView(csla_seekBar1);
@@ -983,7 +981,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    public static View getContactItem() {
+    static View getContactItem() {
         LinearLayout lytMainContainer = new LinearLayout(context);
         LinearLayout.LayoutParams layoutParamsMainContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lytMainContainer.setId(R.id.mainContainer);
@@ -1056,7 +1054,7 @@ public class ViewMaker {
         return lytMainContainer;
     }
 
-    public static View getFileItem() {
+    static View getFileItem() {
 
         LinearLayout mainContainer = new LinearLayout(G.context);
         mainContainer.setId(R.id.mainContainer);
@@ -1159,7 +1157,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    public static View getImageItem(boolean withText) {
+    static View getImageItem(boolean withText) {
 
         LinearLayout mainContainer = new LinearLayout(G.context);
         mainContainer.setId(R.id.mainContainer);
@@ -1207,7 +1205,7 @@ public class ViewMaker {
 
     }
 
-    public static View makeTextViewMessage(int maxsize, boolean hasEmoji) {
+    static View makeTextViewMessage(int maxsize, boolean hasEmoji) {
 
         if (hasEmoji) {
             EmojiTextViewE emojiTextViewE = new EmojiTextViewE(context);
@@ -1249,7 +1247,7 @@ public class ViewMaker {
         }
     }
 
-    public static View makeHeaderTextView(String text) {
+    static View makeHeaderTextView(String text) {
 
         EmojiTextViewE textView = new EmojiTextViewE(context);
         textView.setTextColor(Color.BLACK);
@@ -1267,7 +1265,7 @@ public class ViewMaker {
         return textView;
     }
 
-    public static View makeCircleImageView() {
+    static View makeCircleImageView() {
 
         CircleImageView circleImageView = new CircleImageView(context);
         circleImageView.setId(R.id.messageSenderAvatar);
@@ -1342,7 +1340,7 @@ public class ViewMaker {
         return (int) context.getResources().getDimension(dpSrc);
     }
 
-    public static AttributeSet getAttribuit(int attr) {
+    static AttributeSet getAttribuit(int attr) {
 
         AttributeSet at = new AttributeSet() {
             @Override
