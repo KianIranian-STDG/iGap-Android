@@ -791,18 +791,19 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     private void playSound(final int resSound) {
 
         final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if (audioManager.getStreamVolume(AudioManager.STREAM_RING) != 0 || audioManager.isWiredHeadsetOn()) {
+
 
             if (player == null) {
                 try {
                     player = new MediaPlayer();
                     player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
 
-                    if (audioManager.isWiredHeadsetOn()) {
-                        player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                    } else {
-                        player.setAudioStreamType(AudioManager.STREAM_RING);
-                    }
+                    //if (audioManager.isWiredHeadsetOn()) {
+                    //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                    //} else {
+                    //   player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                    //}
+                    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 
                     player.setLooping(true);
                     player.prepare();
@@ -815,11 +816,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                     player.reset();
                     player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
 
-                    if (audioManager.isWiredHeadsetOn()) {
-                        player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                    } else {
-                        player.setAudioStreamType(AudioManager.STREAM_RING);
-                    }
+                    //if (audioManager.isWiredHeadsetOn()) {
+                    //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                    //} else {
+                    //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                    //}
+                    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 
                     player.prepare();
                     player.setLooping(true);
@@ -827,7 +829,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 } catch (Exception e) {
                 }
             }
-        }
     }
 
     private void cancelRingtone() {
