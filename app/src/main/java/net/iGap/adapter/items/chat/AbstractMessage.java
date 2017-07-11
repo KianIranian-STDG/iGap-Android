@@ -161,13 +161,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             ll_containerTime.removeView(holder.itemView.findViewById(R.id.csl_ll_time));
         }
 
-        boolean addHearing = false;
-
-        if (mMessage.isSenderMe() && ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
-            addHearing = true;
-        }
-
-        ll_containerTime.addView(ViewMaker.getViewTime(addHearing), new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        ll_containerTime.addView(ViewMaker.getViewTime(), new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
 

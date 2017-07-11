@@ -467,7 +467,7 @@ public class ViewMaker {
 
     }
 
-    static View getViewTime(Boolean addHearing) {
+    static View getViewTime() {
 
         LinearLayout csl_ll_time = new LinearLayout(context);
         csl_ll_time.setId(R.id.csl_ll_time);
@@ -476,8 +476,6 @@ public class ViewMaker {
         layout_189.bottomMargin = dpToPixel(4);
         layout_189.topMargin = dpToPixel(-1);
         csl_ll_time.setLayoutParams(layout_189);
-
-        //******************************************************************************************************
 
         TextView txtEditedIndicator = new TextView(context);
         txtEditedIndicator.setId(R.id.txtEditedIndicator);
@@ -515,22 +513,6 @@ public class ViewMaker {
         csl_ll_time.addView(txtEditedIndicator);
         csl_ll_time.addView(cslr_txt_time);
         csl_ll_time.addView(cslr_txt_tic);
-
-        if (addHearing) {
-            MaterialDesignTextView cslr_txt_hearing = new MaterialDesignTextView(context);
-            cslr_txt_hearing.setId(R.id.cslr_txt_hearing);
-            cslr_txt_hearing.setGravity(CENTER);
-            cslr_txt_hearing.setText(context.getResources().getString(R.string.md_hearing));
-            cslr_txt_hearing.setTextColor(context.getResources().getColor(R.color.room_message_gray));
-            cslr_txt_hearing.setSingleLine(true);
-            cslr_txt_hearing.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 8);
-            cslr_txt_hearing.setTypeface(G.typeface_Fontico);
-            LinearLayout.LayoutParams layout_899 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            layout_899.gravity = LEFT | Gravity.CENTER_VERTICAL;
-            layout_899.leftMargin = 14;
-            cslr_txt_hearing.setLayoutParams(layout_899);
-            csl_ll_time.addView(cslr_txt_hearing);
-        }
 
         return csl_ll_time;
     }

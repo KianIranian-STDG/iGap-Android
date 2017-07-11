@@ -309,6 +309,7 @@ public final class AppUtils {
                     DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
                 }
                 break;
+            case LISTENED:
             case SEEN:
                 setImageDrawable(view, R.drawable.ic_double_check);
                 final Drawable originalDrawable = view.getDrawable();

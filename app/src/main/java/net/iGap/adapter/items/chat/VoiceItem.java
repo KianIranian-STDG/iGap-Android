@@ -51,15 +51,18 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutVoice;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_message;
     }
 
-    @Override public void onLoadThumbnailFromLocal(ViewHolder holder, final String localPath, LocalFileType fileType) {
+    @Override
+    public void onLoadThumbnailFromLocal(ViewHolder holder, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
         if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
@@ -72,7 +75,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         }
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getVoiceItem());
@@ -180,9 +184,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.mRoomId = mMessage.roomId;
 
-        RealmRegisteredInfo registeredInfo = G.getRealm().where(RealmRegisteredInfo.class)
-            .equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID))
-            .findFirst();
+        RealmRegisteredInfo registeredInfo = G.getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID)).findFirst();
 
         if (registeredInfo != null) {
             holder.author.setText(G.context.getString(R.string.recorded_by) + registeredInfo.getDisplayName());
@@ -219,20 +221,29 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         if (HelperCalander.isLanguagePersian) holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
     }
 
-    @Override protected void updateLayoutForSend(ViewHolder holder) {
+    @Override
+    protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
 
-        if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-            holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
+        if (mMessage.isSenderMe() && ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
+            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
+                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.iGapColor), PorterDuff.Mode.SRC_IN);
+            }
+            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.iGapColor), android.graphics.PorterDuff.Mode.SRC_IN);
+        } else {
+            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
+                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
+            }
+            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
         }
 
-        holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
         holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
         holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.black90));
         holder.author.setTextColor(holder.itemView.getResources().getColor(R.color.black90));
     }
 
-    @Override protected void updateLayoutForReceive(ViewHolder holder) {
+    @Override
+    protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
@@ -342,7 +353,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         }
     }
 
-    @Override public ViewHolder getViewHolder(View v) {
+    @Override
+    public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 }
