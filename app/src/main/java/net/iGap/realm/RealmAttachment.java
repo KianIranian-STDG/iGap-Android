@@ -92,6 +92,14 @@ import org.parceler.Parcel;
             realmAttachment.setWidth(file.getWidth());
         } else {
 
+            if (realmAttachment.height != file.getHeight()) {
+                realmAttachment.setHeight(file.getHeight());
+            }
+
+            if (realmAttachment.width != file.getWidth()) {
+                realmAttachment.setWidth(file.getWidth());
+            }
+
             String _filePath = realmAttachment.getLocalFilePath();
 
             if (_filePath != null && _filePath.length() > 0) {

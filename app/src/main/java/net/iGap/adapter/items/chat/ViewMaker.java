@@ -446,11 +446,11 @@ public class ViewMaker {
         m_container.setLayoutParams(layout_788);
 
         FrameLayout frameLayout = new FrameLayout(G.context);
-        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        frameLayout.setLayoutParams(new LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
         ReserveSpaceGifImageView reserveSpaceGifImageView = new ReserveSpaceGifImageView(G.context);
         reserveSpaceGifImageView.setId(R.id.thumbnail);
-        LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        FrameLayout.LayoutParams layout_758 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         reserveSpaceGifImageView.setLayoutParams(layout_758);
 
         frameLayout.addView(reserveSpaceGifImageView);
@@ -819,8 +819,9 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_525 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         linearLayout_880.setLayoutParams(layout_525);
 
-        LinearLayout contentContainer = new LinearLayout(G.context, null, R.style.ChatMessages_CardView);
+        LinearLayout contentContainer = new LinearLayout(G.context);
         contentContainer.setId(R.id.contentContainer);
+        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
         LinearLayout.LayoutParams layout_256 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         contentContainer.setLayoutParams(layout_256);
 
@@ -994,7 +995,7 @@ public class ViewMaker {
         lytContainer1.setOrientation(VERTICAL);
         lytContainer1.setLayoutParams(layoutParamsContainer1);
 
-        LinearLayout contentContainer = new LinearLayout(context, null, R.style.ChatMessages_CardView); // hint : R.style.ChatMessages_CardView not worked, so layoutParams and padding added here
+        LinearLayout contentContainer = new LinearLayout(context);
         contentContainer.setId(R.id.contentContainer);
         LinearLayout.LayoutParams layoutParamsContentContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         contentContainer.setLayoutParams(layoutParamsContentContainer);
