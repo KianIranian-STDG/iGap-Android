@@ -553,7 +553,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            txtLastSeen.setText(finalMembers + " " + getResources().getString(R.string.member_chat));
+                                            if (finalMembers != null && Integer.parseInt(finalMembers) == 1) {
+                                                txtLastSeen.setText(finalMembers + " " + getResources().getString(R.string.one_member_chat));
+                                            } else {
+                                                txtLastSeen.setText(finalMembers + " " + getResources().getString(R.string.member_chat));
+                                            }
                                             avi.setVisibility(View.GONE);
 
                                             if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
@@ -1145,7 +1149,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     setUserStatus(userStatus, lastSeen);
                 } else if ((chatType == GROUP) || (chatType == CHANNEL)) {
                     if (groupParticipantsCountLabel != null) {
-                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member_chat));
+
+                        if (Integer.parseInt(groupParticipantsCountLabel) == 1) {
+                            txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.one_member_chat));
+                        } else {
+                            txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member_chat));
+                        }
                         avi.setVisibility(View.GONE);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                             viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
@@ -1509,7 +1518,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 if (result) {
 
-                    txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member_chat));
+
+                    if (messageOne != null && Integer.parseInt(messageOne) == 1) {
+                        txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.one_member_chat));
+                    } else {
+                        txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member_chat));
+                    }
 
                     avi.setVisibility(View.GONE);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -3640,7 +3654,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                                     //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
                                 }
-                                txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member_chat));
+
+
+                                if (groupParticipantsCountLabel != null && Integer.parseInt(groupParticipantsCountLabel) == 1) {
+                                    txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.one_member_chat));
+                                } else {
+                                    txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member_chat));
+                                }
                             }
 
                             // change english number to persian number
@@ -4016,7 +4036,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                         }
 
-                        txtLastSeen.setText(groupParticipantsCountLabel + " " + getString(R.string.member_chat));
+                        if (groupParticipantsCountLabel != null && Integer.parseInt(groupParticipantsCountLabel) == 1) {
+                            txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.one_member_chat));
+                        } else {
+                            txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member_chat));
+                        }
 
                     }
                     // change english number to persian number

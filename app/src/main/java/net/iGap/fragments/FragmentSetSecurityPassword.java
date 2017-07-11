@@ -243,6 +243,7 @@ public class FragmentSetSecurityPassword extends Fragment {
             public void onClick(View v) {
                 page = 5;
                 FragmentSecurity.isSetRecoveryEmail = false;
+                edtSetEmail.setText("");
                 btnOk.performClick();
             }
         });
@@ -276,7 +277,7 @@ public class FragmentSetSecurityPassword extends Fragment {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        error(getString(R.string.invalid_verify_email_code));
+                        if (isAdded()) error(getString(R.string.invalid_verify_email_code));
                     }
                 });
             }

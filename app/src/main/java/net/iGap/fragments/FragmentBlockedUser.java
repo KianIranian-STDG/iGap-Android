@@ -175,7 +175,7 @@ public class FragmentBlockedUser extends Fragment {
             viewHolder.title.setText(registeredInfo.getDisplayName());
             viewHolder.subtitle.setText(registeredInfo.getPhoneNumber());
             if (HelperCalander.isLanguagePersian) {
-                viewHolder.subtitle.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.subtitle.getText().toString()));
+                viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
             }
 
             HelperAvatar.getAvatar(registeredInfo.getId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {

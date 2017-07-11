@@ -70,7 +70,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
             }
 
             if (HelperCalander.isLanguagePersian) {
-                holder.subtitle.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.subtitle.getText().toString()));
+                holder.subtitle.setText(holder.subtitle.getText().toString());
             }
         }
         realm.close();

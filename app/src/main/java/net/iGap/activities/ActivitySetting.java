@@ -593,6 +593,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final TextInputLayout inputEmail = new TextInputLayout(ActivitySetting.this);
                 final EditText edtEmail = new EditText(ActivitySetting.this);
                 edtEmail.setHint(getResources().getString(R.string.set_email));
+                edtEmail.setTypeface(G.typeface_IRANSansMobile);
                 edtEmail.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
 
                 if (txtEmail == null || txtEmail.getText().toString().equals(getResources().getString(R.string.set_email))) {
@@ -724,6 +725,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 edtUserName.setHint(getResources().getString(R.string.st_username));
                 edtUserName.setText(txtUserName.getText().toString());
                 edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
+                edtUserName.setTypeface(G.typeface_IRANSansMobile);
                 edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtUserName.setPadding(0, 8, 0, 8);

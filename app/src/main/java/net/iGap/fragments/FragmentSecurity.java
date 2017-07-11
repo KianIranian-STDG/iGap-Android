@@ -542,7 +542,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
 
                 //change email
                 if (rootChangeEmail.getVisibility() == View.VISIBLE) {
-                    if (edtSetEmail.length() > 0 && edtCheckPassword.length() > 1) {
+                    if (edtSetEmail.length() > 0 && password.length() > 1) {
 
                         Pattern EMAIL_ADDRESS = patternEmail();
                         if (EMAIL_ADDRESS.matcher(edtSetEmail.getText().toString()).matches()) {

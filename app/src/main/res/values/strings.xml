@@ -345,6 +345,7 @@
   <string name="last_seen_recently">Just Now</string>
   <string name="member">Members</string>
   <string name="member_chat">Members</string>
+  <string name="one_member_chat">Member</string>
   <string name="save_ok">Saved</string>
   <string name="exception">Exception:</string>
   <string name="please_enter_phone_number">Please enter your phone number</string>
@@ -933,6 +934,8 @@
   <string name="are_you_sure_clear_call_logs">Are you sure you want to clear all incoming and outgoing calls?</string>
   <string name="please_write_your_reasons">Please write your reasons</string>
   <string name="your_confirm_email">Enter the confirmation code sent to Email</string>
+  <string name="confirm_email_title">Confirmation email</string>
+  <string name="confirm_email_text">A code has been sent to your email in order that your email address will be verified and confirmed then</string>
   <string name="your_confirm_email_skip">Skip</string>
   <string name="your_resend_email_skip">Resend confirmation code</string>
   <string name="invalid_verify_email_code">Invalid verify email code</string>

@@ -652,6 +652,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         final TextInputLayout inputRevoke = new TextInputLayout(ActivityChannelProfile.this);
         edtRevoke = new EditText(ActivityChannelProfile.this);
         edtRevoke.setHint(getResources().getString(R.string.channel_link_hint_revoke));
+        edtRevoke.setTypeface(G.typeface_IRANSansMobile);
         edtRevoke.setText(link);
         edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtRevoke.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -711,6 +712,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         final TextInputLayout inputChannelLink = new TextInputLayout(ActivityChannelProfile.this);
         EditText edtLink = new EditText(ActivityChannelProfile.this);
         edtLink.setHint(getResources().getString(R.string.channel_public_hint_revoke));
+        edtLink.setTypeface(G.typeface_IRANSansMobile);
         edtLink.setText(link);
         edtLink.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -1086,6 +1088,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
         final EmojiEditTextE edtNameChannel = new EmojiEditTextE(ActivityChannelProfile.this);
         edtNameChannel.setHint(getResources().getString(R.string.st_username));
+        edtNameChannel.setTypeface(G.typeface_IRANSansMobile);
         edtNameChannel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtNameChannel.setText(txtChannelNameInfo.getText().toString());
         edtNameChannel.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -1559,6 +1562,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
         final EditText edtUserName = new EditText(ActivityChannelProfile.this);
         edtUserName.setHint(getResources().getString(R.string.channel_title_channel_set_username));
+        edtUserName.setTypeface(G.typeface_IRANSansMobile);
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
 
         if (isPopup) {

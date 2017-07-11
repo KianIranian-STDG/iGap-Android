@@ -80,7 +80,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
             }
 
             if (HelperCalander.isLanguagePersian) {
-                holder.subtitle.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.subtitle.getText().toString()));
+                holder.subtitle.setText(holder.subtitle.getText().toString());
             }
         }
 

@@ -422,7 +422,7 @@ public class RegisteredContactsFragment extends Fragment {
                 }
 
                 if (HelperCalander.isLanguagePersian) {
-                    viewHolder.subtitle.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.subtitle.getText().toString()));
+                    viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
                 }
             }
             realm.close();

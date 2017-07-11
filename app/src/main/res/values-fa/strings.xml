@@ -40,23 +40,23 @@
 
   <!-- Register Page -->
   <string name="rg_title_register">"ثبت نام"</string>
-  <string name="rg_confirm_text_register">"لطفا نام و کد کشور خود را تایید کرده سپس شماره تلفن همراه خود را بدون صفر ابتدای آن وارد نمایید."</string>
+  <string name="rg_confirm_text_register">"لطفاً نام و کد کشور خود را تأیید کرده سپس شماره تلفن همراه خود را بدون صفر ابتدای آن وارد نمایید."</string>
   <string name="rg_Start">"بزن بریم"</string>
   <string name="rg_Select_Country">"کشور خود را انتخاب کنید"</string>
-  <string name="rg_agreement_text_register">"تایید نهایی شماره تلفن شما، ما قصد داریم کد فعال سازی را برای این شماره ارسال کنیم."</string>
+  <string name="rg_agreement_text_register">"تأیید نهایی شماره تلفن شما، ما قصد داریم کد فعال سازی را برای این شماره ارسال کنیم."</string>
   <string name="rg_verify_register1">"در حال اتصال"</string>
-  <string name="rg_verify_register2">"منتظر دریافت کد تایید"</string>
+  <string name="rg_verify_register2">"منتظر دریافت کد تأیید"</string>
   <string name="rg_verify_register3">"در حال تولید کلید امنیتی"</string>
   <string name="rg_verify_register4">"نهایی سازی ثبت نام"</string>
   <string name="rg_verify_dialog_try_code">"دستی وارد کردم"</string>
-  <string name="rg_verify_dialog_resend_code">"ارسال مجدد کد تایید"</string>
+  <string name="rg_verify_dialog_resend_code">"ارسال مجدد کد تأیید"</string>
   <string name="Re_dialog_verify_number_part1">"شما شماره زیر را وارد کردید:</string>
-  <string name="Re_dialog_verify_number_part2">"اگر شماره تلفن صحیح است تایید کرده و در غیر اینصورت براحتی تغییرش دهید"</string>
-  <string name="Re_Enter_Verify_Code_Please">"لطفا کد تایید را دستی وارد کنید"</string>
-  <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید ، آی گپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به اکانت شما ارسال کرد ، لطفا دستگاه دیگر را چک کرده و کد را بصورت دستی وارد کنید.</string>
+  <string name="Re_dialog_verify_number_part2">"اگر شماره تلفن صحیح است تأیید کرده و در غیر اینصورت براحتی تغییرش دهید"</string>
+  <string name="Re_Enter_Verify_Code_Please">"لطفاً کد تأیید را دستی وارد کنید"</string>
+  <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید ، آی گپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به اکانت شما ارسال کرد، لطفاً دستگاه دیگر را چک کرده و کد را بصورت دستی وارد کنید.</string>
   ‬‬‬‬‬‬
   <string name="verify_time_out_message">"آی گپ بصورت خودکار پیام تأیید را تشخیص داده و وارد می کند، در غیر اینصورت شما آن را دریافت کرده و می توانید به صورت دستی وارد نمایید، در صورت عدم دریافت کد تأیید، درخواست ارسال مجدد را انتخاب کنید."</string>
-  <string name="verify_invalid_code_message">متاسفیم ، کد تایید شما نامعتبر است ، لطفا کد صحیح را مجدد وارد نمایید.</string>
+  <string name="verify_invalid_code_message">متأسفیم، کد تأیید شما نامعتبر است، لطفاً کد صحیح را مجدد وارد نمایید.</string>
   <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
   <string name="phone_number">"شماره تلفن"</string>
   <string name="Re_Phone_Verification">"تأیید شماره تلفن"</string>
@@ -65,8 +65,8 @@
   <string name="Toast_waiting_fot_get_info">"در انتظار اتصال و موقعیت یابی"</string>
   <string name="Toast_Location_Not_Found">"موقعیت شما یافت نشد"</string>
   <string name="Toast_First_0">"در ابتدای شماره نیاز به 0 نیست"</string>
-  <string name="Toast_Enter_Phone_Number">"لطفا شماره تلفن خود را بدون صفر ابتدای آن وارد کنید"</string>
-  <string name="Toast_Enter_Code">"لطفا کد تایید را وارد نمایید"</string>
+  <string name="Toast_Enter_Phone_Number">"لطفاً شماره تلفن خود را بدون صفر ابتدای آن وارد کنید"</string>
+  <string name="Toast_Enter_Code">"لطفاً کد تأیید را وارد نمایید"</string>
   <string name="Toast_Number_Block">"شماره وارد شده مسدود شده است"</string>
   <string name="Toast_Invalid_nickname">"نام مستعار نامعتبر است. لطفاً نام مستعار را تغییر دهید."</string>
   <string name="Toast_Write_NickName">"لطفاً نام مستعار خود را وارد کنید"</string>
@@ -150,7 +150,7 @@
   <string name="delete_text">"آیا از حذف این مخاطب مطمئنید؟"</string>
 
 
-  <string name="just_wait_en">"لطفا منتظر باشید."</string>
+  <string name="just_wait_en">"لطفاً منتظر باشید."</string>
   <string name="device_dosenot_camera_en">"این دستگاه دوربین ندارد."</string>
   <string name="do_you_want_to_turn_on_gps">"سیستم مکان‌یاب جهانی (GPS) شما خاموش است، آیا مایلید آن را روشن کنید؟"</string>
   <string name="picture_is_saved_en">"تصویر ذخیره شده است."</string>
@@ -196,7 +196,7 @@
   <string name="st_About_iGap">"دربارهٔ آی‌گپ"</string>
   <string name="st_privacy_policy">"سیاست های حریم خصوصی"</string>
   <string name="st_keepMedia">"فایل‌های چند رسانه‌ای را نگه دار"</string>
-  <string name="st_dialog_content_keepMedia">"‫تصاویر، ویدئوها و دیگر فایل‌های ذخیره شده در فضای ابری که شما به آنها دسترسی داشته اید، به منظور ایجاد فضای خالی از دستگاه پاک می شوند. همه ی رسانه ها در بخش ذخیره سازی فضای ابری نگه داری شده که در صورت نیاز می توانید  مجدداً آنها را دانلود کنید.‬‬‬‬‬‬
+  <string name="st_dialog_content_keepMedia">"‫تصاویر، ویدئوها و دیگر فایل‌های ذخیره شده در فضای ابری که شما به آنها دسترسی داشته اید، به منظور ایجاد فضای خالی از دستگاه پاک می شوند. همه ی رسانه ها در بخش ذخیره سازی فضای ابری نگه داری شده که در صورت نیاز می توانید مجدداً آنها را دانلود کنید.‬‬‬‬‬‬
 "</string>
   <string name="st_titleToolbar_page_Notification_and_sounds">"اعلانات و صداها"</string>
   <string name="st_title_messageNotification">"اعلانات پیام"</string>
@@ -350,9 +350,12 @@
   <string name="last_seen_recently">"همین حالا"</string>
   <string name="member">"اعضا"</string>
   <string name="member_chat">عضو</string>
+  <string name="one_member_chat">عضو</string>
   <string name="exception">"خطا:"</string>
   <string name="please_enter_phone_number">"لطفاً شماره تماس را وارد کنید."</string>
   <string name="please_enter_firstname_or_lastname">"لطفاً نام یا نام خانوادگی را وارد کنید."</string>
+  <string name="confirm_email_title">کد تأیید</string>
+  <string name="confirm_email_text">به منظور تشخیص و تأیید پست الکترونیکی، کد تأییدی برای ایمیل شما ارسال شده است</string>
   <string name="new_chanel">"کانال جدید"</string>
   <string name="can_not_save_picture_pleas_try_again">"عدم توانایی در ذخیرهٔ تصویر، لطفاً دوباره تلاش کنید."</string>
   <string name="chats">"گفتگو"</string>
@@ -773,7 +776,7 @@
   <string name="self_destructs">خود تخریبی</string>
   <string name="save_ok">ذخیره شد</string>
 
-  <string name="Toast_time_wait">لطفا منتظر بمانید تا :</string>
+  <string name="Toast_time_wait">لطفاً منتظر بمانید تا :</string>
   <string name="array_delete_photo_group">حذف عکس</string>
   <string name="group_link_hint_revoke">لینک دعوت گروه</string>
   <string name="channel_title_convert_to_private">تبدیل به کانال خصوصی</string>
@@ -822,7 +825,7 @@
   <string name="privacy_setting">تنظیمات خصوصی </string>
   <string name="igap_search">‫بگرد و کشف کن</string>‬‬‬‬‬‬
   <string name="set_color_to_default">انتخاب رنگ پیش فرض برنامه</string>
-  <string name="empty_message"> لطفا 5 کاراکتر ابتدایی نام کاربری را وارد کنید</string>‬‬‬‬‬‬
+  <string name="empty_message"> لطفاً 5 کاراکتر ابتدایی نام کاربری را وارد کنید</string>‬‬‬‬‬‬
   <string name="empty_message3"> برای جستجو حداقل 3 کاراکتر وارد کنید</string>‬‬‬‬‬‬
   <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
   <string name="there_is_no_connection_to_server">ارتباط با سرور برقرار نیست</string>
@@ -888,7 +891,7 @@
   <string name="turn_Password_off_desc">آیا قطعاً می خواهید  رمز عبور را غیرفعال نمایید؟ </string>
   <string name="change_email_recovery">تعیین یا تغییر پست الکترونیکی</string>
   <string name="Change_question_recovery">تغییر سؤال امنیتی</string>
-  <string name="set_unconfirmed_email">وارد کردن کد تایید پست الکترونیکی</string>
+  <string name="set_unconfirmed_email">وارد کردن کد تأیید پست الکترونیکی</string>
 
   <string name="set_recovery_dialog_title">بازیابی از طریق:</string>
   <string name="Recovery_with_question">بازیابی از طریق سؤال امنیتی </string>
@@ -931,15 +934,15 @@
 
   <string name="nothing">چیزی نیست!</string>
   <string name="are_you_sure_clear_call_logs">آیا از حذف  تمامی تماس های ورودی و خروجی اطمینان دارید؟</string>
-  <string name="please_write_your_reasons">لطفا دلیل خود را بنویسید</string>
+  <string name="please_write_your_reasons">لطفاً دلیل خود را بنویسید</string>
   <string name="error_check_password">به دلیل تلاش پیاپی، رمزعبور برای مدتی غیرفعال است.</string>
 
-  <string name="your_confirm_email">لطفا کد تایید پست الکترونیکی را وارد کنید</string>
+  <string name="your_confirm_email">لطفاً کد تأیید پست الکترونیکی را وارد کنید</string>
   <string name="your_confirm_email_skip">بیخیال</string>
-  <string name="your_resend_email_skip">ارسال مجدد کد تایید</string>
-  <string name="invalid_verify_email_code">کد تایید نامعتبر است</string>
-  <string name="resend_verify_email_code"> مجددا کد تایید برا برای شما ارسال کردیم</string>
-  <string name="enter_verify_email_code">لطفا کد تایید را وارد کنید</string>
+  <string name="your_resend_email_skip">ارسال مجدد کد تأیید</string>
+  <string name="invalid_verify_email_code">کد تأیید نامعتبر است</string>
+  <string name="resend_verify_email_code"> مجدداً کد تأیید را برای ایمیل شما ارسال کردیم</string>
+  <string name="enter_verify_email_code">لطفاً کد تأیید را وارد کنید</string>
   <string name="invalid_password">کلمه عبور نامعتبر است</string>
   <string name="please_set_password">تنظیم کلمه عبور</string>
   <string name="please_set_hint">تنظیم یاداوری</string>
@@ -961,7 +964,7 @@
   <string name="reject">رد تماس</string>
   <string name="busy">مشغول</string>
 
-  <string name="invalid_email_token">"کد تایید پست الکترونیکی نادرست است"</string>
+  <string name="invalid_email_token">"کد تأیید پست الکترونیکی نادرست است"</string>
   <string name="invalid_question_token">"پاسخ شما نادرست است"</string>
 
   <string name="not_answerd_call">"به تماس شما پاسخ نداد و یا تماس شما ناموفق بود"</string>
@@ -969,7 +972,7 @@
 
   <string name="Login_with_QrCode">ورود با کیوآر</string>
   <string name="Input_device_specification">ورود موفق دستگاه</string>
-  <string name="QrCode_Scan">اسکنر بارکد</string>
+  <string name="QrCode_Scan">اسکن بارکد</string>
   <string name="Call_Quality">کیفیت تماس</string>
   <string name="desc_self_destroy">"درصورتی که از حساب کاربری خود در طول یکی از مدت زمان های تعیین شده به هیچ وجه استفاده نکنید، حساب شما پس از آن زمان به صورت خودکار تخریب و برای همیشه حذف می شود."</string>
   <string name="color_default">آیا مایلید رنگ بندی همه قسمت های برنامه به حالت اولیه و پیش فرض باز گردد؟</string>

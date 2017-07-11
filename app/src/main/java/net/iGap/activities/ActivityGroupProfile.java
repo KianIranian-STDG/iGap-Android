@@ -787,6 +787,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final TextInputLayout inputGroupLink = new TextInputLayout(ActivityGroupProfile.this);
         EditText edtLink = new EditText(ActivityGroupProfile.this);
         edtLink.setHint(getResources().getString(R.string.group_link_hint_revoke));
+        edtLink.setTypeface(G.typeface_IRANSansMobile);
         edtLink.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtLink.setText(link);
         edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -838,6 +839,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final TextInputLayout inputRevoke = new TextInputLayout(ActivityGroupProfile.this);
         EditText edtRevoke = new EditText(ActivityGroupProfile.this);
         edtRevoke.setHint(getResources().getString(R.string.group_link_hint_revoke));
+        edtRevoke.setTypeface(G.typeface_IRANSansMobile);
         edtRevoke.setText(link);
         edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtRevoke.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -956,6 +958,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
         final EditText edtUserName = new EditText(ActivityGroupProfile.this);
         edtUserName.setHint(getResources().getString(R.string.group_title_set_username));
+        edtUserName.setTypeface(G.typeface_IRANSansMobile);
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
 
         if (isPopup) {
@@ -1575,6 +1578,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
         final EmojiEditTextE edtUserName = new EmojiEditTextE(ActivityGroupProfile.this);
         edtUserName.setHint(getResources().getString(R.string.st_username));
+        edtUserName.setTypeface(G.typeface_IRANSansMobile);
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
         edtUserName.setText(txtGroupNameTitle.getText().toString());
         edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));

@@ -438,6 +438,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     TextInputLayout inputFirstName = new TextInputLayout(ActivityContactsProfile.this);
                     final EmojiEditTextE edtFirstName = new EmojiEditTextE(ActivityContactsProfile.this);
                     edtFirstName.setHint(R.string.first_name);
+                    edtFirstName.setTypeface(G.typeface_IRANSansMobile);
                     edtFirstName.setText(firsName);
                     edtFirstName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
                     edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -456,6 +457,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     TextInputLayout inputLastName = new TextInputLayout(ActivityContactsProfile.this);
                     final EditText edtLastName = new EditText(ActivityContactsProfile.this);
                     edtLastName.setHint(R.string.last_name);
+                    edtLastName.setTypeface(G.typeface_IRANSansMobile);
                     edtLastName.setText(lastName);
                     edtLastName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
                     edtLastName.setTextColor(getResources().getColor(R.color.text_edit_text));
