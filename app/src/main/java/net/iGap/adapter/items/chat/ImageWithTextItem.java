@@ -12,6 +12,7 @@ package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.List;
 import net.iGap.G;
@@ -38,11 +39,17 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
     @Override
     public int getLayoutRes() {
-        return R.layout.chat_sub_layout_image_with_text;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
+
+        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getImageItem(true));
+            holder.image = ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail));
+        }
+
         super.bindView(holder, payloads);
 
         String text = "";
@@ -129,7 +136,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         public ViewHolder(View view) {
             super(view);
 
-            image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
+            //image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
         }
     }
 }

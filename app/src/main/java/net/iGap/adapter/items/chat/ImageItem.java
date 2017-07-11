@@ -12,6 +12,7 @@ package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -29,26 +30,36 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutImage;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_image;
     }
 
-    @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
+    @Override
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
 
-        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-        holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+        G.imageLoader.displayImage(suitablePath(localPath), ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail)));
+        ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail)).setCornerRadius(HelperRadius.computeRadius(localPath));
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
+
+        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getImageItem(false));
+        }
+
         super.bindView(holder, payloads);
 
-        holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+        holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (!isSelected()) {
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
@@ -62,8 +73,9 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
             }
         });
 
-        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View v) {
+        holder.itemView.findViewById(R.id.thumbnail).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
                 holder.itemView.performLongClick();
                 return false;
             }
@@ -72,15 +84,13 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
-        protected ReserveSpaceRoundedImageView image;
-
         public ViewHolder(View view) {
             super(view);
-            image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
         }
     }
 
-    @Override public ViewHolder getViewHolder(View v) {
+    @Override
+    public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 }

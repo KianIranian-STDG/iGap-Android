@@ -13,6 +13,7 @@ package net.iGap.adapter.items.chat;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.List;
 import net.iGap.G;
@@ -31,10 +32,32 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
     }
 
     @Override public int getLayoutRes() {
-        return R.layout.chat_sub_layot_unread_message;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override public void bindView(ViewHolder holder, List payloads) {
+
+        if (holder.itemView.findViewById(R.id.cslum_txt_unread_message) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getUnreadMessageItem());
+
+            holder.txtUnreadMessage = (TextView) holder.itemView.findViewById(R.id.cslum_txt_unread_message);
+            holder.txtUnreadMessage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            holder.txtUnreadMessage.setBackgroundColor(Color.parseColor(G.appBarColor));
+
+            holder.txtUnreadMessage.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return false;
+                }
+            });
+        }
+
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.txtUnreadMessage, mMessage.messageText);
@@ -50,20 +73,7 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
         public ViewHolder(View view) {
             super(view);
 
-            txtUnreadMessage = (TextView) view.findViewById(R.id.cslum_txt_unread_message);
-            txtUnreadMessage.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
 
-                }
-            });
-
-            txtUnreadMessage.setBackgroundColor(Color.parseColor(G.appBarColor));
-
-            txtUnreadMessage.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View v) {
-                    return false;
-                }
-            });
         }
     }
 }

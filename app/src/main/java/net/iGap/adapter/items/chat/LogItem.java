@@ -13,6 +13,7 @@ package net.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.List;
 import net.iGap.R;
@@ -31,10 +32,18 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
     }
 
     @Override public int getLayoutRes() {
-        return R.layout.chat_sub_layout_log;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override public void bindView(ViewHolder holder, List payloads) {
+
+        if (holder.itemView.findViewById(R.id.csll_txt_log_text) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getLogItem());
+
+            holder.text = (TextView) holder.itemView.findViewById(R.id.csll_txt_log_text);
+            holder.text.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+
         super.bindView(holder, payloads);
 
         //Realm realm=Realm.getDefaultInstance();
@@ -57,8 +66,6 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
-            text = (TextView) view.findViewById(R.id.text);
-            text.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 

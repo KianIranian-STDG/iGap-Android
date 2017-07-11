@@ -36,7 +36,7 @@ public class Config {
     public static final int LAST_SEEN_DELAY_CHECKING = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final int LAST_SEEN_TIME_OUT = (int) (60 * DateUtils.MINUTE_IN_MILLIS); // after this time show exactly time instead of minutes
     public static final int GROUP_SHOW_ACTIONS_COUNT = 3;
-    public static final int IMAGE_CORNER = 15;
+    public static final int IMAGE_CORNER = 7;
     public static final int TRY_CONNECTION_COUNT = 5;
     public static final int GET_CONTACT_LIST_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final int HEART_BEAT_CHECKING_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);

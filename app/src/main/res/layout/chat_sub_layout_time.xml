@@ -5,29 +5,28 @@
     android:layout_height="wrap_content"
     >
 
-  <RelativeLayout
+  <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:layout_marginTop="@dimen/dp12"
+      android:layout_marginBottom="@dimen/dp12"
+      android:gravity="center"
       >
 
 
     <View
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/text"
+        android:layout_weight="1"
         android:background="@color/background_log_time"
         />
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/cslt_txt_time_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/dp12"
-        android:layout_marginBottom="@dimen/dp12"
         android:maxLines="1"
         android:paddingBottom="@dimen/dp4"
         android:paddingLeft="@dimen/dp16"
@@ -43,11 +42,11 @@
         />
 
     <View
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/text"
+        android:layout_weight="1"
         android:background="@color/background_log_time"
         />
-  </RelativeLayout>
+  </LinearLayout>
+
 </FrameLayout>

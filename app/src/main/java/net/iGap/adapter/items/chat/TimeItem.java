@@ -12,6 +12,7 @@ package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.List;
 import net.iGap.R;
@@ -29,10 +30,18 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
     }
 
     @Override public int getLayoutRes() {
-        return R.layout.chat_sub_layout_time;
+        return R.layout.chat_sub_layout_message;
     }
 
     @Override public void bindView(ViewHolder holder, List payloads) {
+
+        if (holder.itemView.findViewById(R.id.cslt_txt_time_date) == null) {
+            ((ViewGroup) holder.itemView).addView(ViewMaker.getTimeItem());
+
+            holder.text = (TextView) holder.itemView.findViewById(R.id.cslt_txt_time_date);
+        }
+
+
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.text, mMessage.messageText);
@@ -44,8 +53,6 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
-
-            text = (TextView) view.findViewById(R.id.text);
         }
     }
 
