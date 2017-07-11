@@ -146,6 +146,7 @@ public class FragmentMain extends Fragment implements OnComplete {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
         mRecyclerView.setItemAnimator(null);
+        mRecyclerView.setItemViewCacheSize(200);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         RealmResults<RealmRoom> results = null;

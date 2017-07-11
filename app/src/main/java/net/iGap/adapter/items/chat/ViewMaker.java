@@ -7,7 +7,6 @@ import android.os.Build;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -160,7 +159,8 @@ public class ViewMaker {
         TextView cslv_txt_author = new TextView(G.context);
         cslv_txt_author.setId(R.id.cslv_txt_author);
         cslv_txt_author.setText("recorded voice");
-        cslv_txt_author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        setTextSize(cslv_txt_author, R.dimen.dp14);
+        setTypeFace(cslv_txt_author);
         LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_799.topMargin = i_Dp(R.dimen.dp12);
         cslv_txt_author.setLayoutParams(layout_799);
@@ -179,7 +179,7 @@ public class ViewMaker {
         csla_btn_play_music.setEnabled(false);
         csla_btn_play_music.setText(G.context.getResources().getString(R.string.md_play_arrow));
         csla_btn_play_music.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
-        csla_btn_play_music.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        setTextSize(csla_btn_play_music, R.dimen.dp20);
         csla_btn_play_music.setTypeface(G.typeface_Fontico);
         LinearLayout.LayoutParams layout_978 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp40), ViewGroup.LayoutParams.MATCH_PARENT);
         csla_btn_play_music.setLayoutParams(layout_978);
@@ -197,7 +197,8 @@ public class ViewMaker {
         csla_txt_timer.setPadding(0, 0, i_Dp(R.dimen.dp8), 0);
         csla_txt_timer.setText("00:00");
         csla_txt_timer.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
-        csla_txt_timer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        setTextSize(csla_txt_timer, R.dimen.dp10);
+        setTypeFace(csla_txt_timer);
         LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_758.gravity = Gravity.RIGHT;
         layout_758.leftMargin = i_Dp(R.dimen.dp52);
@@ -263,7 +264,8 @@ public class ViewMaker {
         duration.setText("3:48 (4.5 MB)");
         duration.setAllCaps(TRUE);
         duration.setTextColor(G.context.getResources().getColor(R.color.gray10));
-        duration.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        setTextSize(duration, R.dimen.dp10);
+        setTypeFace(duration);
         FrameLayout.LayoutParams layout_49 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_49.gravity = Gravity.LEFT | Gravity.TOP;
         layout_49.bottomMargin = -dpToPixel(2);
@@ -293,7 +295,8 @@ public class ViewMaker {
         cslum_txt_unread_message.setId(R.id.cslum_txt_unread_message);
         cslum_txt_unread_message.setPadding(0, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
         cslum_txt_unread_message.setBackgroundColor(G.context.getResources().getColor(R.color.green));
-        cslum_txt_unread_message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        setTextSize(cslum_txt_unread_message, R.dimen.dp16);
+        setTypeFace(cslum_txt_unread_message);
         cslum_txt_unread_message.setGravity(CENTER);
         cslum_txt_unread_message.setTypeface(cslum_txt_unread_message.getTypeface(), Typeface.BOLD);
         cslum_txt_unread_message.setText(G.context.getResources().getString(R.string.unread_message));
@@ -330,7 +333,8 @@ public class ViewMaker {
         text.setText("Today");
         text.setAllCaps(false);
         text.setTextColor(G.context.getResources().getColor(R.color.text_log_time));
-        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        setTextSize(text, R.dimen.dp12);
+        setTypeFace(text);
         LinearLayout.LayoutParams layout_835 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_835.gravity = Gravity.CENTER_HORIZONTAL;
         text.setLayoutParams(layout_835);
@@ -368,7 +372,8 @@ public class ViewMaker {
         text.setGravity(CENTER);
         text.setText("Log");
         text.setTextColor(Color.parseColor("#4a5d5c"));
-        text.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        setTextSize(text, R.dimen.dp12);
+        setTypeFace(text);
         text.setAllCaps(false);
         FrameLayout.LayoutParams layout_138 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_138.gravity = Gravity.CENTER_HORIZONTAL;
@@ -571,7 +576,7 @@ public class ViewMaker {
         img_eye.setId(R.id.img_eye);
         img_eye.setText(context.getResources().getString(R.string.md_visibility));
         img_eye.setTextColor(context.getResources().getColor(R.color.gray_6c));
-        img_eye.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        setTextSize(img_eye, R.dimen.dp12);
         // img_eye.setPadding(0, dpToPixel(2), 0, 0);
         img_eye.setSingleLine(true);
         // img_eye.setTextAppearance(G.context, R.style.TextIconAppearance_toolbar);
@@ -627,7 +632,7 @@ public class ViewMaker {
         chslr_txt_replay_from.setText("");
         chslr_txt_replay_from.setTextColor(context.getResources().getColor(R.color.colorOldBlack));
         chslr_txt_replay_from.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
-        chslr_txt_replay_from.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        setTextSize(chslr_txt_replay_from, R.dimen.dp12);
 
         chslr_txt_replay_from.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_55 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -643,7 +648,7 @@ public class ViewMaker {
         chslr_txt_replay_message.setTextColor(Color.WHITE);
         chslr_txt_replay_message.setTypeface(G.typeface_IRANSansMobile);
         chslr_txt_replay_message.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
-        chslr_txt_replay_message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        setTextSize(chslr_txt_replay_message, R.dimen.dp14);
         LinearLayout.LayoutParams layout_641 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         chslr_txt_replay_message.setLayoutParams(layout_641);
         linearLayout_376.addView(chslr_txt_replay_message);
@@ -682,7 +687,7 @@ public class ViewMaker {
         cslr_txt_prefix_forward.setId(R.id.cslr_txt_prefix_forward);
         cslr_txt_prefix_forward.setText(context.getResources().getString(R.string.forwarded_from));
         cslr_txt_prefix_forward.setTextColor(context.getResources().getColor(R.color.newBlack));
-        cslr_txt_prefix_forward.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        setTextSize(cslr_txt_prefix_forward, R.dimen.dp12);
         cslr_txt_prefix_forward.setSingleLine(true);
         cslr_txt_prefix_forward.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_992 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -696,7 +701,7 @@ public class ViewMaker {
         cslr_txt_forward_from.setMinimumWidth(i_Dp(R.dimen.dp100));
         cslr_txt_forward_from.setMaxWidth(i_Dp(R.dimen.dp140));
         cslr_txt_forward_from.setTextColor(context.getResources().getColor(R.color.newBlack));
-        cslr_txt_forward_from.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        setTextSize(cslr_txt_forward_from, R.dimen.dp12);
         cslr_txt_forward_from.setSingleLine(true);
         cslr_txt_forward_from.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_119 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -744,7 +749,7 @@ public class ViewMaker {
         img_vote_up.setId(R.id.img_vote_up);
         img_vote_up.setText(context.getResources().getString(R.string.md_thumb_up));
         img_vote_up.setTextColor(context.getResources().getColor(R.color.gray_6c));
-        img_vote_up.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        setTextSize(img_vote_up, R.dimen.dp16);
         LinearLayout.LayoutParams layout_216 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_216.leftMargin = i_Dp(dp4);
         img_vote_up.setLayoutParams(layout_216);
@@ -762,7 +767,7 @@ public class ViewMaker {
         img_vote_down.setId(R.id.img_vote_down);
         img_vote_down.setText(context.getResources().getString(R.string.md_thumb_down));
         img_vote_down.setTextColor(context.getResources().getColor(R.color.gray_6c));
-        img_vote_down.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        setTextSize(img_vote_down, R.dimen.dp16);
         LinearLayout.LayoutParams layout_877 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_877.leftMargin = i_Dp(dp4);
         img_vote_down.setLayoutParams(layout_877);
@@ -859,7 +864,8 @@ public class ViewMaker {
         fileSize.setText("3.2 mb");
         fileSize.setAllCaps(TRUE);
         fileSize.setTextColor(G.context.getResources().getColor(R.color.black90));
-        fileSize.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        setTextSize(fileSize, R.dimen.dp12);
+        setTypeFace(fileSize);
         LinearLayout.LayoutParams layout_996 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         fileSize.setLayoutParams(layout_996);
         linearLayout_632.addView(linearLayout_916);
@@ -879,7 +885,7 @@ public class ViewMaker {
         fileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
         fileName.setText("file_name.ext");
         fileName.setTextColor(Color.BLACK);
-        fileName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        setTextSize(fileName, R.dimen.dp14);
         fileName.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_298 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         fileName.setLayoutParams(layout_298);
@@ -915,7 +921,7 @@ public class ViewMaker {
         txt_play_music.setGravity(CENTER);
         txt_play_music.setText(G.context.getResources().getString(R.string.md_play_arrow));
         txt_play_music.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
-        txt_play_music.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        setTextSize(txt_play_music, R.dimen.dp20);
         LinearLayout.LayoutParams layout_326 = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp32), LinearLayout.LayoutParams.MATCH_PARENT);
         txt_play_music.setLayoutParams(layout_326);
         linearLayout_511.addView(txt_play_music);
@@ -936,7 +942,8 @@ public class ViewMaker {
         csla_txt_timer.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
         csla_txt_timer.setText("00:00");
         csla_txt_timer.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
-        csla_txt_timer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+        setTextSize(csla_txt_timer, R.dimen.dp10);
+        setTypeFace(csla_txt_timer);
         LinearLayout.LayoutParams layout_637 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layout_637.gravity = RIGHT;
         layout_637.leftMargin = (int) G.context.getResources().getDimension(R.dimen.dp52);
@@ -1015,7 +1022,8 @@ public class ViewMaker {
         name.setTextAppearance(context, android.R.style.TextAppearance_Medium);
         name.setTextColor(G.context.getResources().getColor(R.color.black90));
         name.setText("Contact Name");
-        name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        setTextSize(name, R.dimen.dp14);
+        setTypeFace(name);
         name.setLayoutParams(layoutParamsName);
         container3.addView(name);
 
@@ -1103,7 +1111,7 @@ public class ViewMaker {
         songArtist.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp180));
         songArtist.setText("file_name.ext");
         songArtist.setTextColor(G.context.getResources().getColor(R.color.black90));
-        songArtist.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        setTextSize(songArtist, R.dimen.dp14);
         songArtist.setTypeface(G.typeface_IRANSansMobile_Bold, BOLD);
         LinearLayout.LayoutParams layout_1000 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         songArtist.setLayoutParams(layout_1000);
@@ -1115,7 +1123,8 @@ public class ViewMaker {
         fileSize.setText("3.2 mb");
         fileSize.setAllCaps(TRUE);
         fileSize.setTextColor(G.context.getResources().getColor(R.color.black90));
-        fileSize.setTextSize(TypedValue.COMPLEX_UNIT_DIP, (11));
+        setTextSize(fileSize, R.dimen.dp10);
+        setTypeFace(fileSize);
         LinearLayout.LayoutParams layout_958 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layout_958.topMargin = 3;
         fileSize.setLayoutParams(layout_958);
@@ -1197,7 +1206,7 @@ public class ViewMaker {
             emojiTextViewE.setId(R.id.messageSenderTextMessage);
             emojiTextViewE.setPadding(10, 0, 10, 0);
             emojiTextViewE.setTypeface(G.typeface_IRANSansMobile);
-            emojiTextViewE.setTextSize(TypedValue.COMPLEX_UNIT_DIP, G.userTextSize);
+            setTextSizeDirect(emojiTextViewE, G.userTextSize);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 emojiTextViewE.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                 emojiTextViewE.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
@@ -1216,7 +1225,7 @@ public class ViewMaker {
             textView.setId(R.id.messageSenderTextMessage);
             textView.setPadding(10, 0, 10, 0);
             textView.setTypeface(G.typeface_IRANSansMobile);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, G.userTextSize);
+            setTextSizeDirect(textView, G.userTextSize);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 textView.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                 textView.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
@@ -1243,7 +1252,7 @@ public class ViewMaker {
         textView.setTypeface(G.typeface_IRANSansMobile);
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setText(text);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        setTextSize(textView, R.dimen.dp12);
 
         return textView;
     }
@@ -1323,120 +1332,17 @@ public class ViewMaker {
         return (int) context.getResources().getDimension(dpSrc);
     }
 
-    static AttributeSet getAttribuit(int attr) {
+    private static void setTextSize(TextView v, int sizeSrc) {
 
-        AttributeSet at = new AttributeSet() {
-            @Override
-            public int getAttributeCount() {
-                return 0;
-            }
+        int mSize = i_Dp(sizeSrc);
+        v.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSize);
+    }
 
-            @Override
-            public String getAttributeName(int index) {
-                return null;
-            }
+    private static void setTextSizeDirect(TextView v, int size) {
+        v.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
+    }
 
-            @Override
-            public String getAttributeValue(int index) {
-                return null;
-            }
-
-            @Override
-            public String getAttributeValue(String namespace, String name) {
-                return null;
-            }
-
-            @Override
-            public String getPositionDescription() {
-                return null;
-            }
-
-            @Override
-            public int getAttributeNameResource(int index) {
-                return 0;
-            }
-
-            @Override
-            public int getAttributeListValue(String namespace, String attribute, String[] options, int defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public boolean getAttributeBooleanValue(String namespace, String attribute, boolean defaultValue) {
-                return false;
-            }
-
-            @Override
-            public int getAttributeResourceValue(String namespace, String attribute, int defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public int getAttributeIntValue(String namespace, String attribute, int defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public int getAttributeUnsignedIntValue(String namespace, String attribute, int defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public float getAttributeFloatValue(String namespace, String attribute, float defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public int getAttributeListValue(int index, String[] options, int defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public boolean getAttributeBooleanValue(int index, boolean defaultValue) {
-                return false;
-            }
-
-            @Override
-            public int getAttributeResourceValue(int index, int defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public int getAttributeIntValue(int index, int defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public int getAttributeUnsignedIntValue(int index, int defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public float getAttributeFloatValue(int index, float defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public String getIdAttribute() {
-                return null;
-            }
-
-            @Override
-            public String getClassAttribute() {
-                return null;
-            }
-
-            @Override
-            public int getIdAttributeResourceValue(int defaultValue) {
-                return 0;
-            }
-
-            @Override
-            public int getStyleAttribute() {
-                return 0;
-            }
-        };
-
-        return at;
+    private static void setTypeFace(TextView v) {
+        v.setTypeface(G.typeface_IRANSansMobile);
     }
 }
