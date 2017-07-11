@@ -33,7 +33,7 @@
   <string name="pu_title_profileUser">Complete Your User Profile</string>
   <string name="pu_desc_profileUser">Enter your Nickname and select a photo as your Profile Avatar/Picture</string>
   <string name="pu_addPhoto_profileUser">Profile Picture</string>
-  <string name="pu_nikname_profileUser">Nickname</string>
+  <string name="pu_nikname_profileUser">First/Nick name</string>
   <string name="pu_Lets_Go">Continue</string>
 
   <!-- Register Page -->
@@ -161,7 +161,7 @@
   <string name="st_titleToolbar">Settings</string>
   <string name="st_title_general">General Settings</string>
   <string name="st_username">Username</string>
-  <string name="st_nickname">Nickname</string>
+  <string name="st_nickname">First/Nick Name</string>
   <string name="st_contactName">Contact Name</string>
   <string name="st_phoneNumber">Phone Number</string>
   <string name="st_title_info">Information</string>
@@ -253,7 +253,7 @@
   <!-- fragment add contact -->
   <string name="fac_Add_Contact">Add Contact</string>
   <string name="fac_contact_info">Contact Info</string>
-  <string name="fac_First_Name">First Name</string>
+  <string name="fac_First_Name">First/Nick Name</string>
   <string name="fac_Last_Name">Last Name</string>
   <string name="fac_Phone_Number">Phone Number</string>
   <string name="fac_Find_in_Page">Find in Page</string>

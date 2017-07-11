@@ -10,9 +10,12 @@
 
 package net.iGap.activities;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -44,6 +47,8 @@ public class MyDialog {
         //// layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         //layoutParams.gravity = Gravity.CENTER;
 
+
+
         DialogAnimation.animationDown(dialog);
 
         dialog.show();
@@ -56,6 +61,44 @@ public class MyDialog {
         int pinCount = realmRoom.size();
         realm.close();
 
+
+
+        ViewGroup v1 = (ViewGroup) v.findViewById(R.id.cm_layout_mute_pinToTop);
+        ViewGroup v2 = (ViewGroup) v.findViewById(R.id.cm_layout_mute_notification);
+        ViewGroup v3 = (ViewGroup) v.findViewById(R.id.cm_layout_clear_history);
+        ViewGroup v4 = (ViewGroup) v.findViewById(R.id.cm_layout_delete_chat);
+
+        ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(v1, "translationY", 50, 0);
+        ObjectAnimator fade1 = ObjectAnimator.ofFloat(v1, "alpha", 0, 1);
+
+        ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(v2, "translationY", 50, 0);
+        ObjectAnimator fade2 = ObjectAnimator.ofFloat(v2, "alpha", 0, 1);
+
+        ObjectAnimator scaleY3 = ObjectAnimator.ofFloat(v3, "translationY", 50, 0);
+        ObjectAnimator fade3 = ObjectAnimator.ofFloat(v3, "alpha", 0, 1);
+
+        ObjectAnimator scaleY4 = ObjectAnimator.ofFloat(v4, "translationY", 50, 0);
+        ObjectAnimator fade4 = ObjectAnimator.ofFloat(v4, "alpha", 0, 1);
+
+        final AnimatorSet scaleDown1 = new AnimatorSet();
+        scaleDown1.play(fade1).with(scaleY1);
+        scaleDown1.setDuration(500);
+        scaleDown1.start();
+
+        final AnimatorSet scaleDown2 = new AnimatorSet();
+        scaleDown2.play(fade2).with(scaleY2);
+        scaleDown2.setDuration(600);
+        scaleDown2.start();
+
+        final AnimatorSet scaleDown3 = new AnimatorSet();
+        scaleDown3.play(fade3).with(scaleY3);
+        scaleDown3.setDuration(700);
+        scaleDown3.start();
+
+        final AnimatorSet scaleDown4 = new AnimatorSet();
+        scaleDown4.play(fade4).with(scaleY4);
+        scaleDown4.setDuration(800);
+        scaleDown4.start();
 
         txtMuteNotification = (TextView) v.findViewById(R.id.cm_txt_mute_notification);
         MaterialDesignTextView iconMuteNotification = (MaterialDesignTextView) v.findViewById(R.id.cm_icon_mute_notification);

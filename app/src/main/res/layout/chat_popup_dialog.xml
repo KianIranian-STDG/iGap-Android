@@ -11,6 +11,7 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:id="@+id/cm_layout_mute_pinToTop"
       >
 
     <TextView
@@ -40,6 +41,7 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:id="@+id/cm_layout_mute_notification"
       >
 
     <net.iGap.module.MaterialDesignTextView
@@ -68,6 +70,7 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:id="@+id/cm_layout_clear_history"
       >
 
     <net.iGap.module.MaterialDesignTextView
@@ -95,6 +98,7 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:id="@+id/cm_layout_delete_chat"
       >
 
     <net.iGap.module.MaterialDesignTextView

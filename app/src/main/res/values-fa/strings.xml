@@ -33,9 +33,9 @@
 
   <!-- Fill Profile User  -->
   <string name="pu_title_profileUser">"پروفایل خود را تکمیل کنید"</string>
-  <string name="pu_desc_profileUser">"نام مستعار خود را وارد کرده و برای خود عکس پروفایل انتخاب نمایید"</string>
+  <string name="pu_desc_profileUser">"نام (مستعار) خود را وارد کرده و برای خود عکس پروفایل انتخاب نمایید"</string>
   <string name="pu_addPhoto_profileUser">"عکس پروفایل"</string>
-  <string name="pu_nikname_profileUser">"نام مستعار"</string>
+  <string name="pu_nikname_profileUser">"نام (مستعار)"</string>
   <string name="pu_Lets_Go">"ادامه"</string>
 
   <!-- Register Page -->
@@ -167,7 +167,7 @@
   <string name="st_titleToolbar">"تنظیمات"</string>
   <string name="st_title_general">تنظیمات عمومی</string>
   <string name="st_username">"نام کاربری"</string>
-  <string name="st_nickname">"نام مستعار"</string>
+  <string name="st_nickname">"نام (مستعار)"</string>
   <string name="st_contactName">"نام مخاطب"</string>
   <string name="st_phoneNumber">"شماره تلفن"</string>
   <string name="st_title_info">"اطلاعات"</string>
@@ -260,7 +260,7 @@
   <!-- fragment add contact -->
   <string name="fac_Add_Contact">"افزودن مخاطب"</string>
   <string name="fac_contact_info">"اطلاعات مخاطب"</string>
-  <string name="fac_First_Name">"نام"</string>
+  <string name="fac_First_Name">"نام(مستعار)"</string>
   <string name="fac_Last_Name">"نام خانوادگی"</string>
   <string name="fac_Phone_Number">"شماره تلفن"</string>
   <string name="fac_Find_in_Page">"یافتن در صفحه"</string>
