@@ -123,7 +123,6 @@ import net.iGap.adapter.items.chat.VideoItem;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.fragments.FragmentCall;
-import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperAvatar;
@@ -192,6 +191,7 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MessageLoader;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyAppBarLayout;
+import net.iGap.module.MyLinearLayoutManager;
 import net.iGap.module.MyType;
 import net.iGap.module.ResendMessage;
 import net.iGap.module.SHP_SETTING;
@@ -1920,7 +1920,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         recyclerView.setItemAnimator(null);
         //following lines make scrolling smoother
         //recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(100);
+        //recyclerView.setItemViewCacheSize(100);
         recyclerView.setDrawingCacheEnabled(false);
 
         //recyclerView.getRecycledViewPool().setMaxRecycledViews(R.id.chatSubLayoutAudio, 0);
@@ -1952,17 +1952,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
 
-        //MyLinearLayoutManager layoutManager = new MyLinearLayoutManager(ActivityChat.this);
-        ///**
-        // * make start messages from bottom, this is exactly what Telegram and other messengers do
-        // * for their messages list
-        // */
-        //layoutManager.setStackFromEnd(true);
+        //FragmentMain.PreCachingLayoutManager layoutManager = new FragmentMain.PreCachingLayoutManager(ActivityChat.this, 7500);
+        MyLinearLayoutManager layoutManager = new MyLinearLayoutManager(ActivityChat.this);
+        layoutManager.setStackFromEnd(true);
 
-        FragmentMain.PreCachingLayoutManager preCachingLayoutManager = new FragmentMain.PreCachingLayoutManager(ActivityChat.this, 7500);
-        preCachingLayoutManager.setStackFromEnd(true);
-
-        recyclerView.setLayoutManager(preCachingLayoutManager);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
         /**
@@ -6696,7 +6690,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
-    private int scrollEnd = 30; // to determine the limits to get to the bottom of the list
+    private int scrollEnd = 180; // to determine the limits to get to the bottom of the list
 
     private void getMessages() {
         Realm realm = Realm.getDefaultInstance();
