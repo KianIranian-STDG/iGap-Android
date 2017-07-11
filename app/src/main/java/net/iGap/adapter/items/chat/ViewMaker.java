@@ -245,14 +245,10 @@ public class ViewMaker {
 
         ReserveSpaceRoundedImageView thumbnail = new ReserveSpaceRoundedImageView(G.context);
         thumbnail.setId(R.id.thumbnail);
-        FrameLayout.LayoutParams layout_679 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        FrameLayout.LayoutParams layout_679 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         thumbnail.setLayoutParams(layout_679);
-        thumbnail.setScaleType(ImageView.ScaleType.CENTER);
-
-        thumbnail.setBorderColor(Color.parseColor("#9e9e9e"));
-        thumbnail.setBorderWidth(1f);
-        thumbnail.setCornerRadiusDimen(R.dimen.messageBox_cornerRadius);
-
+        thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
+        thumbnail.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
         frameLayout_642.addView(thumbnail);
 
         TextView duration = new TextView(G.context);
