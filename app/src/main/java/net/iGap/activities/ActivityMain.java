@@ -17,13 +17,14 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -444,20 +445,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onClick(View v) {
 
-                int item = mViewPager.getCurrentItem();
+                FragmentStatePagerAdapter adapter = (FragmentStatePagerAdapter) mViewPager.getAdapter();
+                if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
 
-                if (item == 0) {
-                    arcMenu.toggleMenu();
-                } else if (item == 1) {
-                    btnStartNewChat.performClick();
-                } else if (item == 2) {
-                    btnCreateNewGroup.performClick();
-                } else if (item == 3) {
-                    btnCreateNewChannel.performClick();
-                } else if (item == 4) {
+                    FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
+                    switch (fm.mainType) {
 
-                    ((FragmentCall) pages.get(4)).showContactListForCall();
+                        case all:
+                            arcMenu.toggleMenu();
+                            break;
+                        case chat:
+                            btnStartNewChat.performClick();
+                            break;
+                        case group:
+                            btnCreateNewGroup.performClick();
+                            break;
+                        case channel:
+                            btnCreateNewChannel.performClick();
+                            break;
+                    }
+                } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
 
+                    ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
                 }
             }
         });
@@ -479,7 +488,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         final NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
-        navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
+
+        if (HelperCalander.isLanguagePersian) {
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box),
+                getString(R.string.md_apps));
+            navigationTabStrip.setTabIndex(4);
+        } else {
+            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon),
+                getString(R.string.md_phone));
+        }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
         navigationTabStrip.setStripColor(Color.WHITE);
@@ -493,7 +510,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onEndTabSelected(String title, int index) {
 
-                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+                FragmentStatePagerAdapter adapter = (FragmentStatePagerAdapter) mViewPager.getAdapter();
 
                 if (adapter.getItem(index) instanceof FragmentMain) {
 
@@ -534,14 +551,29 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 fragmentCall = FragmentCall.newInstance(true);
 
-                pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
-                pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
-                pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
-                pages.add(fragmentCall);
+                if (HelperCalander.isLanguagePersian) {
+                    pages.add(0, FragmentMain.newInstance(FragmentMain.MainType.chat));
+                    pages.add(0, FragmentMain.newInstance(FragmentMain.MainType.group));
+                    pages.add(0, FragmentMain.newInstance(FragmentMain.MainType.channel));
+                    pages.add(0, fragmentCall);
+                } else {
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
+                    pages.add(fragmentCall);
+                }
 
-                mViewPager.getAdapter().notifyDataSetChanged();
+                if (HelperCalander.isLanguagePersian) {
+                    mViewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager(), pages));
+                    mViewPager.setCurrentItem(pages.size() - 1);
+                    mViewPager.setOffscreenPageLimit(pages.size());
+                } else {
 
-                mViewPager.setOffscreenPageLimit(pages.size());
+                    mViewPager.getAdapter().notifyDataSetChanged();
+                    mViewPager.setOffscreenPageLimit(pages.size());
+                }
+
+
             }
         }, 2000);
 
@@ -568,15 +600,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (HelperCalander.isLanguagePersian) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 mViewPager.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-                navigationTabStrip.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                //  navigationTabStrip.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             }
         }
 
     }
 
-    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+    class SampleFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
         ArrayList<Fragment> pagesFragment;
+
+        @Override
+        public Parcelable saveState() {
+            return null;
+        }
 
         SampleFragmentPagerAdapter(FragmentManager fm, ArrayList<Fragment> pagesFragment) {
             super(fm);

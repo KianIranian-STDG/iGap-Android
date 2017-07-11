@@ -781,7 +781,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 replayView.setVisibility(View.VISIBLE);
                 TextView replyFrom = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from);
                 replyFrom.setTypeface(G.typeface_IRANSansMobile);
-                TextView replayMessage = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message);
+                EmojiTextViewE replayMessage = (EmojiTextViewE) holder.itemView.findViewById(R.id.chslr_txt_replay_message);
                 replayMessage.setTypeface(G.typeface_IRANSansMobile);
                 replayView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -810,8 +810,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 String forwardMessage = AppUtils.replyTextMessage(mMessage.replayTo, holder.itemView.getResources());
-                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
-                ((TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setTypeface(G.typeface_IRANSansMobile);
+                ((EmojiTextViewE) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
+                ((EmojiTextViewE) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setTypeface(G.typeface_IRANSansMobile);
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
                     replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
                     //holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_sendColor));

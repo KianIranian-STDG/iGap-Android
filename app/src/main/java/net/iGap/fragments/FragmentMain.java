@@ -97,7 +97,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     private View viewById;
 
     private RecyclerView mRecyclerView;
-    private MainType mainType;
+    public MainType mainType;
     private Activity mActivity;
 
     public enum MainType {

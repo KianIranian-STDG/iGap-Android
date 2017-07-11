@@ -617,7 +617,7 @@ public class ViewMaker {
         LinearLayout linearLayout_376 = new LinearLayout(context);
         linearLayout_376.setGravity(LEFT);
         linearLayout_376.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_847 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_847 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayout_376.setLayoutParams(layout_847);
 
         EmojiTextViewE chslr_txt_replay_from = new EmojiTextViewE(context);
@@ -630,11 +630,11 @@ public class ViewMaker {
         chslr_txt_replay_from.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
 
         chslr_txt_replay_from.setTypeface(G.typeface_IRANSansMobile_Bold);
-        LinearLayout.LayoutParams layout_55 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_55 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         chslr_txt_replay_from.setLayoutParams(layout_55);
         linearLayout_376.addView(chslr_txt_replay_from);
 
-        TextView chslr_txt_replay_message = new TextView(context);
+        EmojiTextViewE chslr_txt_replay_message = new EmojiTextViewE(context);
         chslr_txt_replay_message.setId(R.id.chslr_txt_replay_message);
         chslr_txt_replay_message.setEllipsize(TextUtils.TruncateAt.END);
         chslr_txt_replay_message.setSingleLine(true);
@@ -644,7 +644,7 @@ public class ViewMaker {
         chslr_txt_replay_message.setTypeface(G.typeface_IRANSansMobile);
         chslr_txt_replay_message.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
         chslr_txt_replay_message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        LinearLayout.LayoutParams layout_641 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_641 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         chslr_txt_replay_message.setLayoutParams(layout_641);
         linearLayout_376.addView(chslr_txt_replay_message);
         cslr_replay_layout.addView(linearLayout_376);
