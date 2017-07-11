@@ -16,7 +16,7 @@ import net.iGap.module.enums.LocalFileType;
 public interface IChatItemAttachment<VH extends RecyclerView.ViewHolder> {
     void onLoadThumbnailFromLocal(VH holder, String localPath, LocalFileType fileType);
 
-    void onPlayPauseGIF(VH holder, String localPath);
+    void onPlayPauseGIF(VH holder, String localPath) throws ClassCastException;
 
     /**
      * add this prt for video player

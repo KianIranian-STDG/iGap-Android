@@ -88,7 +88,6 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
          * this commented code used with xml layout
          */
         //protected ReserveSpaceRoundedImageView image;
-
         public ViewHolder(View view) {
             super(view);
             //image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);

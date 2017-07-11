@@ -35,7 +35,8 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         super(true, type, messageClickListener);
     }
 
-    @Override public void onPlayPauseGIF(ViewHolder holder, String localPath) {
+    @Override
+    public void onPlayPauseGIF(ViewHolder holder, String localPath) throws ClassCastException {
         super.onPlayPauseGIF(holder, localPath);
 
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
@@ -55,15 +56,18 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         }
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutGif;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_message;
     }
 
-    @Override public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
+    @Override
+    public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, localPath, fileType);
         holder.image.setImageURI(Uri.fromFile(new File(localPath)));
 
@@ -82,7 +86,8 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         }
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
 
 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
@@ -93,7 +98,8 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         super.bindView(holder, payloads);
 
         holder.itemView.findViewById(R.id.progress).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (!isSelected()) {
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
@@ -102,10 +108,18 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
                         messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
                     } else {
                         if (mMessage.forwardedFrom != null && mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
-                            onPlayPauseGIF(holder, mMessage.forwardedFrom.getAttachment().getLocalFilePath());
+                            try {
+                                onPlayPauseGIF(holder, mMessage.forwardedFrom.getAttachment().getLocalFilePath());
+                            } catch (ClassCastException e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             if (mMessage.attachment.isFileExistsOnLocal()) {
-                                onPlayPauseGIF(holder, mMessage.attachment.getLocalFilePath());
+                                try {
+                                    onPlayPauseGIF(holder, mMessage.attachment.getLocalFilePath());
+                                } catch (ClassCastException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -114,20 +128,23 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         });
 
         holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 holder.itemView.findViewById(R.id.progress).performClick();
             }
         });
 
         holder.image.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View v) {
+            @Override
+            public boolean onLongClick(View v) {
                 holder.itemView.performLongClick();
                 return false;
             }
         });
     }
 
-    @Override public ViewHolder getViewHolder(View v) {
+    @Override
+    public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 

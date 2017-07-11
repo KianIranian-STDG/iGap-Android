@@ -91,7 +91,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @Override
-    public void onPlayPauseGIF(VH holder, String localPath) {
+    public void onPlayPauseGIF(VH holder, String localPath) throws ClassCastException {
         // empty
     }
 
@@ -1336,7 +1336,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                      * avoid from show GIF in fragment show image
                      */
                     if (_type == ProtoGlobal.RoomMessageType.GIF || _type == ProtoGlobal.RoomMessageType.GIF_TEXT) {
-                        onPlayPauseGIF(holder, attachment.getLocalFilePath());
+                        try {
+                            onPlayPauseGIF(holder, attachment.getLocalFilePath());
+                        } catch (ClassCastException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         progress.performProgress();
                         messageClickListener.onOpenClick(progress, mMessage, holder.getAdapterPosition());

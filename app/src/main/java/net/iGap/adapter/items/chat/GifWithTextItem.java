@@ -38,7 +38,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     }
 
     @Override
-    public void onPlayPauseGIF(ViewHolder holder, String localPath) {
+    public void onPlayPauseGIF(ViewHolder holder, String localPath) throws ClassCastException {
         super.onPlayPauseGIF(holder, localPath);
 
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
@@ -123,10 +123,18 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
                         messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
                     } else {
                         if (mMessage.forwardedFrom != null && mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
-                            onPlayPauseGIF(holder, mMessage.forwardedFrom.getAttachment().getLocalFilePath());
+                            try {
+                                onPlayPauseGIF(holder, mMessage.forwardedFrom.getAttachment().getLocalFilePath());
+                            } catch (ClassCastException e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             if (mMessage.attachment.isFileExistsOnLocal()) {
-                                onPlayPauseGIF(holder, mMessage.attachment.getLocalFilePath());
+                                try {
+                                    onPlayPauseGIF(holder, mMessage.attachment.getLocalFilePath());
+                                } catch (ClassCastException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
