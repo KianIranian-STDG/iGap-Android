@@ -1203,6 +1203,7 @@ public class ViewMaker {
             emojiTextViewE.setPadding(10, 0, 10, 0);
             emojiTextViewE.setTypeface(G.typeface_IRANSansMobile);
             setTextSizeDirect(emojiTextViewE, G.userTextSize);
+            emojiTextViewE.setEmojiSize(i_Dp(R.dimen.dp18));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 emojiTextViewE.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                 emojiTextViewE.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);

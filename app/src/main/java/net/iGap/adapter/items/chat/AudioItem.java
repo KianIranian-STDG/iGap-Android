@@ -10,7 +10,6 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
@@ -204,11 +203,13 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         }
 
         View audioBoxView = holder.itemView.findViewById(R.id.audioBox);
-        if ((mMessage.forwardedFrom != null && mMessage.forwardedFrom.getForwardMessage() != null && mMessage.forwardedFrom.getForwardMessage().getMessage() != null && !TextUtils.isEmpty(mMessage.forwardedFrom.getForwardMessage().getMessage())) || !TextUtils.isEmpty(mMessage.messageText)) {
-            audioBoxView.setBackgroundResource(R.drawable.green_bg_rounded_corner);
-        } else {
-            audioBoxView.setBackgroundColor(Color.TRANSPARENT);
-        }
+        audioBoxView.setBackgroundResource(R.drawable.green_bg_rounded_corner);
+
+        //if ((mMessage.forwardedFrom != null && mMessage.forwardedFrom.getForwardMessage() != null && mMessage.forwardedFrom.getForwardMessage().getMessage() != null && !TextUtils.isEmpty(mMessage.forwardedFrom.getForwardMessage().getMessage())) || !TextUtils.isEmpty(mMessage.messageText)) {
+        //    audioBoxView.setBackgroundResource(R.drawable.green_bg_rounded_corner);
+        //} else {
+        //    audioBoxView.setBackgroundColor(Color.TRANSPARENT);
+        //}
 
         final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000);
 
