@@ -76,19 +76,6 @@ import org.parceler.Parcel;
         return updateTime >= createTime ? updateTime : createTime;
     }
 
-    public static RealmRoomMessage updateId(long fakeMessageId, long newMessageId) {
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, fakeMessageId).findFirst();
-        if (message != null) {
-            message.deleteFromRealm();
-        }
-        //message.setMessageId(newMessageId);
-
-        realm.close();
-        return message;
-    }
-
     /**
      * delete message from realm
      * hint : use this method in realm transaction
@@ -127,65 +114,7 @@ import org.parceler.Parcel;
         });
     }
 
-    public static void fetchMessagesBB(final long roomId, final OnActivityChatStart callback) {
-        // when user receive message, I send update status as SENT to the message sender
-        // but imagine user is not in the room (or he is in another room) and received some messages
-        // when came back to the room with new messages, I make new update status request as SEEN to
-        // the message sender
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSortedAsync(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-        realmRoomMessages.addChangeListener(new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
-            @Override
-            public void onChange(final RealmResults<RealmRoomMessage> element) {
-                //Start ClientCondition OfflineSeen
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-
-                        if (realmClientCondition != null) {
-                            for (RealmRoomMessage roomMessage : element) {
-                                if (roomMessage != null) {
-                                    if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
-                                        if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) != ProtoGlobal.RoomMessageStatus.SEEN) {
-                                            roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-                                            RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
-                                            realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
-
-                                            realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                            callback.sendSeenStatus(roomMessage);
-                                        }
-                                    } else {
-                                        if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
-                                            /**
-                                             * check timeout, because when forward message to room ,message state is sending
-                                             * and add forward message to Realm from here and finally client have duplicated message
-                                             */
-                                            if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
-                                                if (roomMessage.getAttachment() != null) {
-                                                    if (!HelperUploadFile.isUploading(roomMessage.getMessageId() + "")) {
-                                                        callback.resendMessageNeedsUpload(roomMessage);
-                                                    }
-                                                } else {
-                                                    callback.resendMessage(roomMessage);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-
-                element.removeAllChangeListeners();
-                realm.close();
-            }
-        });
-    }
-
     public static void fetchMessages(final long roomId, final OnActivityChatStart callback) {
-
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -238,7 +167,6 @@ import org.parceler.Parcel;
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
@@ -842,17 +770,17 @@ import org.parceler.Parcel;
         if (lastMessage == null) {
             message.setShowTime(true);
         } else {
-            message.setShowTime(isTimeDayDiferent(message.getUpdateTime(), lastMessage.getUpdateTime()));
+            message.setShowTime(isTimeDayDifferent(message.getUpdateTime(), lastMessage.getUpdateTime()));
         }
 
         if (nextMessage != null && message.isShowTime()) {
 
-            boolean difTime = isTimeDayDiferent(message.getUpdateTime(), nextMessage.getUpdateTime());
+            boolean difTime = isTimeDayDifferent(message.getUpdateTime(), nextMessage.getUpdateTime());
             nextMessage.setShowTime(difTime);
         }
     }
 
-    public static boolean isTimeDayDiferent(long time, long nextTime) {
+    public static boolean isTimeDayDifferent(long time, long nextTime) {
 
         Calendar date1 = Calendar.getInstance();
         date1.setTimeInMillis(time);

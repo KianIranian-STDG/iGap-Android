@@ -6540,13 +6540,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
                         if (mAdapter.getAdapterItem(i) instanceof TimeItem) {
-                            if (!RealmRoomMessage.isTimeDayDiferent(messageInfo.time, mAdapter.getAdapterItem(i).mMessage.time)) {
+                            if (!RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(i).mMessage.time)) {
                                 mAdapter.remove(i);
                             }
                             break;
                         }
                     }
-                    Log.i("TTT", "Time Message 1");
                     mAdapter.add(0, new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                     index = 1;
                 }
@@ -6554,12 +6553,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (!addTop && messageInfo.showTime) {
 
                     if (mAdapter.getItemCount() > 0) {
-                        if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDiferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
-                            Log.i("TTT", "Time Message 2 : messageInfo.time : " + messageInfo.time + "  ||  Adapter Time : " + mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time);
+                        if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
                             mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                         }
                     } else {
-                        Log.i("TTT", "Time Message 3");
                         mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                     }
                 }
