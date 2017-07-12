@@ -405,7 +405,7 @@ public class ViewMaker {
 
         ReserveSpaceRoundedImageView reserveSpaceRoundedImageView = new ReserveSpaceRoundedImageView(G.context);
         reserveSpaceRoundedImageView.setId(R.id.thumbnail);
-        reserveSpaceRoundedImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        reserveSpaceRoundedImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         reserveSpaceRoundedImageView.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
         LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         reserveSpaceRoundedImageView.setLayoutParams(layout_758);
