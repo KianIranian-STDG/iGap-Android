@@ -515,11 +515,10 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="#f7f7f7"
-          android:overScrollMode="always"
-          android:isScrollContainer="true"
-          android:scrollbarAlwaysDrawVerticalTrack="true"
-          android:scrollbarStyle="outsideInset"
           android:scrollbars="vertical"
+          android:fadeScrollbars="false"
+          android:scrollbarStyle="outsideOverlay"
+          android:scrollbarSize="@dimen/dp4"
           >
         <!-- android:scrollbars="none"   android:overScrollMode="never"-->
       </android.support.v7.widget.RecyclerView>
