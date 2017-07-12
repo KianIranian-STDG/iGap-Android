@@ -2,7 +2,6 @@ package net.iGap.adapter.items.chat;
 
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
@@ -294,7 +293,6 @@ public class ViewMaker {
         setTextSize(cslum_txt_unread_message, R.dimen.dp16);
         setTypeFace(cslum_txt_unread_message);
         cslum_txt_unread_message.setGravity(CENTER);
-        cslum_txt_unread_message.setTypeface(cslum_txt_unread_message.getTypeface(), Typeface.BOLD);
         cslum_txt_unread_message.setText(G.context.getResources().getString(R.string.unread_message));
         cslum_txt_unread_message.setTextColor(G.context.getResources().getColor(R.color.white));
         LinearLayout.LayoutParams layout_692 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
