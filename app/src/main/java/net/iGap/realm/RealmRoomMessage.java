@@ -90,6 +90,9 @@ import org.parceler.Parcel;
         return message;
     }
 
+    // if client get message and before send status lost connection, will be need to this method
+    // and this step is very uncommon so don't need to do this action and get performance,if client
+    // needed this method will be used in ActivityMain later
     public static void fetchNotDeliveredMessages(final OnActivityMainStart callback) {
         final Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmRoomMessage> sentMessages = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.USER_ID, G.userId).equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString()).findAllSortedAsync(new String[]{RealmRoomMessageFields.ROOM_ID, RealmRoomMessageFields.MESSAGE_ID}, new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
