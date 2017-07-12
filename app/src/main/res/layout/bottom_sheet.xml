@@ -161,7 +161,7 @@
           <TextView
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
-              android:text="@string/icon_photo"
+              android:text="@string/md_igap_folder_image"
               android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
@@ -345,7 +345,7 @@
           <TextView
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
-              android:text="@string/icon_file_empty"
+              android:text="@string/md_igap_file"
               android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
@@ -380,11 +380,12 @@
               android:id="@+id/txtSend"
               android:layout_width="@dimen/dp52"
               android:layout_height="@dimen/dp52"
-              android:text="@string/md_downwards_arrow"
+              android:text="@string/igap_chevron_double_down"
               android:textSize="@dimen/dp20"
               android:gravity="center"
               android:textColor="@color/green"
               android:layout_gravity="center_horizontal"
+              android:paddingTop="2dp"
               fontPath="fonts/iGap-Fontico.ttf"
               />
 

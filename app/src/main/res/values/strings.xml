@@ -985,5 +985,7 @@
   <string name="title_who_can_invite_you_to_group_s">Groups Invite Link received from</string>
   <string name="title_who_is_allowed_to_call">Calls received from</string>
   <string name="title_Last_Seen">My Last Seen checked by</string>
+  <string name="item">item</string>
+
 
 </resources>

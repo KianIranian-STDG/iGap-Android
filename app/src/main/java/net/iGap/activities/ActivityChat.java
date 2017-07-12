@@ -5226,10 +5226,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     //send.setText(R.mipmap.send2);
                     send.setText(getResources().getString(R.string.md_send_button));
                     isCheckBottomSheet = true;
-                    txtCountItem.setText("" + listPathString.size() + " item");
+                    txtCountItem.setText("" + listPathString.size() + " " + getResources().getString(R.string.item));
                 } else {
                     //send.setImageResource(R.mipmap.ic_close);
-                    send.setText(getResources().getString(R.string.md_downwards_arrow));
+                    send.setText(getResources().getString(R.string.igap_chevron_double_down));
                     isCheckBottomSheet = false;
                     txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
                 }
@@ -5261,7 +5261,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 dialog.dismiss();
                 //send.setImageResource(R.mipmap.ic_close);
-                send.setText(getResources().getString(R.string.md_downwards_arrow));
+                send.setText(getResources().getString(R.string.igap_chevron_double_down));
                 txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
             }
         });
@@ -5336,7 +5336,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     fastItemAdapter.clear();
                     //send.setImageResource(R.mipmap.ic_close);
-                    send.setText(getResources().getString(R.string.md_downwards_arrow));
+                    send.setText(getResources().getString(R.string.igap_chevron_double_down));
                     txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
 
                     new Thread(new Runnable() {

@@ -813,7 +813,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
                     txtLastMessage.setText(mInfo.getActionState());
                     txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_blue));
-
+                    txtLastMessage.setEllipsize(TextUtils.TruncateAt.MIDDLE);
                     addView(holder, lytContainer5, R.layout.room_layout_avi, R.id.lyt_avi_room, lytContainer5.getChildCount());
                     (holder.itemView.findViewById(R.id.cs_avi)).setVisibility(View.VISIBLE);
 
@@ -824,7 +824,6 @@ public class FragmentMain extends Fragment implements OnComplete {
                     TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
                     txtLastMessage.setText(subStringInternal(mInfo.getDraft().getMessage()));
                     txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
-                    txtLastMessage.setEllipsize(TextUtils.TruncateAt.END);
 
                     addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
                     TextView txtView = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
@@ -904,7 +903,6 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                             addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
                             TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
-                            txtLastMessage.setEllipsize(TextUtils.TruncateAt.END);
 
                             if (mInfo.getLastMessage() != null) {
                                 ProtoGlobal.RoomMessageType _type, tmp;

@@ -988,4 +988,5 @@
   <string name="title_who_can_invite_you_to_group_s">دریافت لینک دعوت گروه از</string>
   <string name="title_who_is_allowed_to_call">دریافت تماس از</string>
   <string name="title_Last_Seen"> چک شدن آخرین بازدید من توسط</string>
+  <string name="item">آیتم</string>
 </resources>

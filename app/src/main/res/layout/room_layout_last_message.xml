@@ -22,7 +22,7 @@
       app:emojiSize="@dimen/dp14"
       android:layout_marginBottom="2dp"
       fontPath="fonts/IRANSansMobile.ttf"
-      android:ellipsize="middle"
+      android:ellipsize="end"
       />
 
 </LinearLayout>
