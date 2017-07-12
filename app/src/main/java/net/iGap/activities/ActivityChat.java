@@ -6687,7 +6687,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
-    private int scrollEnd = 180; // to determine the limits to get to the bottom of the list
+    private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
 
     private void getMessages() {
         Realm realm = Realm.getDefaultInstance();
@@ -7111,19 +7111,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             isWaitingForHistoryUp = false;
                             isWaitingForHistoryUp = false;
                             allowGetHistoryUp = false;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                            });
                         } else {
                             addToView = true;
                             isWaitingForHistoryDown = false;
                             allowGetHistoryDown = false;
                         }
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
-                                mAdapter.notifyDataSetChanged();
-                            }
-                        });
                     }
 
 
