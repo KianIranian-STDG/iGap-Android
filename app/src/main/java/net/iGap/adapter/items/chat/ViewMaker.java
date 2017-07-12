@@ -850,7 +850,7 @@ public class ViewMaker {
         fileSize.setId(R.id.fileSize);
         fileSize.setTextAppearance(context, android.R.style.TextAppearance_Small);
         fileSize.setGravity(BOTTOM | CENTER_HORIZONTAL);
-        fileSize.setSingleLine();
+        fileSize.setSingleLine(true);
         fileSize.setText("3.2 mb");
         fileSize.setAllCaps(TRUE);
         fileSize.setTextColor(G.context.getResources().getColor(R.color.black90));
@@ -1237,7 +1237,7 @@ public class ViewMaker {
         textView.setGravity(LEFT);
         textView.setPadding(20, 0, 20, 5);
         //textView.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp220));
-        textView.setSingleLine();
+        textView.setSingleLine(true);
         textView.setTypeface(G.typeface_IRANSansMobile);
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setText(text);

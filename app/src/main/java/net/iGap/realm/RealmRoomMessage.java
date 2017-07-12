@@ -892,6 +892,21 @@ import org.parceler.Parcel;
                         realmClientCondition.setClearId(realmRoom.getLastMessage().getMessageId());
                         G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, realmRoom.getLastMessage().getMessageId());
                     }
+
+                    long clearMessageId = 0;
+                    if (realmRoom.getLastMessage() != null) {
+                        clearMessageId = realmRoom.getLastMessage().getMessageId();
+                    } else {
+                        RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                        if (results.size() > 0) {
+                            if (results.first() != null) {
+                                clearMessageId = results.first().getMessageId();
+                            }
+                        }
+                    }
+                    realmClientCondition.setClearId(clearMessageId);
+                    G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, clearMessageId);
+
                     realmRoom.setUnreadCount(0);
                     realmRoom.setLastMessage(null);
                     realmRoom.setFirstUnreadMessage(null);
