@@ -157,6 +157,7 @@ public class ViewMaker {
         TextView cslv_txt_author = new TextView(G.context);
         cslv_txt_author.setId(R.id.cslv_txt_author);
         cslv_txt_author.setText("recorded voice");
+        cslv_txt_author.setSingleLine(true);
         setTextSize(cslv_txt_author, R.dimen.dp14);
         setTypeFace(cslv_txt_author);
         LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
