@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,6 +54,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         checkLanguage(this);
+        checkFont();
         super.onCreate(savedInstanceState);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -120,6 +122,26 @@ public class ActivityEnhanced extends AppCompatActivity {
     /**
      * check the selected language user and set the language if change it
      */
+
+    private void checkFont() {
+
+        if (G.typeface_IRANSansMobile == null) {
+            G.typeface_IRANSansMobile = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
+        }
+
+        if (G.typeface_IRANSansMobile_Bold == null) {
+            G.typeface_IRANSansMobile_Bold = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile_Bold.ttf");
+        }
+
+        if (G.typeface_Fontico == null) {
+            G.typeface_Fontico = Typeface.createFromAsset(getAssets(), "fonts/iGap-Fontico.ttf");
+        }
+
+        if (G.typeface_neuropolitical == null) {
+            G.typeface_neuropolitical = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
+        }
+    }
+
 
     public static void checkLanguage(Context context) {
 
