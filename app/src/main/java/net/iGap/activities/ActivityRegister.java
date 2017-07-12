@@ -588,7 +588,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                                         edtCodeNumber.setText("+" + callingCode);
                                         edtPhoneNumber.setMask(pattern.replace("X", "#").replace(" ", "-"));
                                         regex = regexR;
-                                        btnStart.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                                        btnStart.setBackgroundColor(Color.parseColor(G.appBarColor));
                                         btnStart.setEnabled(true);
                                     }
                                 });
@@ -1070,7 +1070,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                btnStart.setBackgroundColor(getResources().getColor(R.color.green));
+                btnStart.setBackgroundColor(Color.parseColor(G.appBarColor));
                 btnStart.setTextColor(getResources().getColor(R.color.white));
                 btnStart.setEnabled(true);
                 btnChoseCountry.setEnabled(true);
