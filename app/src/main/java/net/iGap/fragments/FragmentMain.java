@@ -1205,7 +1205,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                                     role = mInfo.getChannelRoom().getRole().toString();
                                 }
 
-                                MyDialog.showDialogMenuItemRooms(mActivity, mInfo.getType(), mInfo.getMute(), role, new OnComplete() {
+                                MyDialog.showDialogMenuItemRooms(mActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, new OnComplete() {
                                     @Override
                                     public void complete(boolean result, String messageOne, String MessageTow) {
                                         onSelectRoomMenu(messageOne, mInfo);

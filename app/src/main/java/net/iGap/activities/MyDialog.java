@@ -10,12 +10,9 @@
 
 package net.iGap.activities;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -31,74 +28,18 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 
 public class MyDialog {
-    public static void showDialogMenuItemRooms(final Context context, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, final OnComplete complete, boolean isPinned) {
-
-        //final Dialog dialog = new Dialog(context);
-        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //dialog.setContentView(R.layout.chat_popup_dialog);
-        //dialog.setCancelable(true);
+    public static void showDialogMenuItemRooms(final Context context, final String itemName, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, final OnComplete complete, boolean isPinned) {
 
         final MaterialDialog dialog = new MaterialDialog.Builder(context).customView(R.layout.chat_popup_dialog, true).build();
-
         View v = dialog.getCustomView();
-
-        //WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        //layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        //// layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        //layoutParams.gravity = Gravity.CENTER;
-
-
-
         DialogAnimation.animationDown(dialog);
-
         dialog.show();
-        //dialog.getWindow().setAttributes(layoutParams);
-
         TextView txtMuteNotification = null;
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll();
         int pinCount = realmRoom.size();
         realm.close();
-
-
-
-        ViewGroup v1 = (ViewGroup) v.findViewById(R.id.cm_layout_mute_pinToTop);
-        ViewGroup v2 = (ViewGroup) v.findViewById(R.id.cm_layout_mute_notification);
-        ViewGroup v3 = (ViewGroup) v.findViewById(R.id.cm_layout_clear_history);
-        ViewGroup v4 = (ViewGroup) v.findViewById(R.id.cm_layout_delete_chat);
-
-        ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(v1, "translationY", 50, 0);
-        ObjectAnimator fade1 = ObjectAnimator.ofFloat(v1, "alpha", 0, 1);
-
-        ObjectAnimator scaleY2 = ObjectAnimator.ofFloat(v2, "translationY", 50, 0);
-        ObjectAnimator fade2 = ObjectAnimator.ofFloat(v2, "alpha", 0, 1);
-
-        ObjectAnimator scaleY3 = ObjectAnimator.ofFloat(v3, "translationY", 50, 0);
-        ObjectAnimator fade3 = ObjectAnimator.ofFloat(v3, "alpha", 0, 1);
-
-        ObjectAnimator scaleY4 = ObjectAnimator.ofFloat(v4, "translationY", 50, 0);
-        ObjectAnimator fade4 = ObjectAnimator.ofFloat(v4, "alpha", 0, 1);
-
-        final AnimatorSet scaleDown1 = new AnimatorSet();
-        scaleDown1.play(fade1).with(scaleY1);
-        scaleDown1.setDuration(500);
-        scaleDown1.start();
-
-        final AnimatorSet scaleDown2 = new AnimatorSet();
-        scaleDown2.play(fade2).with(scaleY2);
-        scaleDown2.setDuration(600);
-        scaleDown2.start();
-
-        final AnimatorSet scaleDown3 = new AnimatorSet();
-        scaleDown3.play(fade3).with(scaleY3);
-        scaleDown3.setDuration(700);
-        scaleDown3.start();
-
-        final AnimatorSet scaleDown4 = new AnimatorSet();
-        scaleDown4.play(fade4).with(scaleY4);
-        scaleDown4.setDuration(800);
-        scaleDown4.start();
 
         txtMuteNotification = (TextView) v.findViewById(R.id.cm_txt_mute_notification);
         MaterialDesignTextView iconMuteNotification = (MaterialDesignTextView) v.findViewById(R.id.cm_icon_mute_notification);
@@ -228,7 +169,7 @@ public class MyDialog {
                     }
                 }
 
-                showDialogNotification(context, str0, complete, "txtDeleteChat");
+                showDialogNotification(context, itemName, str0, complete, "txtDeleteChat");
 
                 dialog.dismiss();
             }
@@ -241,10 +182,9 @@ public class MyDialog {
         //});
     }
 
-    public static void showDialogNotification(Context context, String Message, final OnComplete complete, final String result) {
+    public static void showDialogNotification(Context context, String title, String Message, final OnComplete complete, final String result) {
 
-        new MaterialDialog.Builder(context).title(G.context.getResources().getString(R.string.igap))
-            .titleColor(G.context.getResources().getColor(R.color.toolbar_background))
+        new MaterialDialog.Builder(context).title(title)
             .content(Message)
             .positiveText(G.context.getResources().getString(R.string.B_ok))
             .negativeText(G.context.getResources().getString(R.string.B_cancel))
