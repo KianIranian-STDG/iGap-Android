@@ -965,7 +965,7 @@
   <string name="invalid_email_token">"Your email token is invalid"</string>
   <string name="invalid_question_token">"Your answer is invalid"</string>
 
-  <string name="not_answerd_call">"Did not respond to your call or failed."</string>
+  <string name="not_answerd_call">"Voice Call cancelled"</string>
   <string name="recorded_by">Recorded By</string>
   <string name="Login_with_QrCode">Login with QR code</string>
   <string name="Input_device_specification">Device login success</string>

@@ -967,7 +967,7 @@
   <string name="invalid_email_token">"کد تأیید پست الکترونیکی نادرست است"</string>
   <string name="invalid_question_token">"پاسخ شما نادرست است"</string>
 
-  <string name="not_answerd_call">"به تماس شما پاسخ نداد و یا تماس شما ناموفق بود"</string>
+  <string name="not_answerd_call">"تماس صوتی از دست رفته"</string>
   <string name="recorded_by">"ضبط شده توسط " </string>
 
   <string name="Login_with_QrCode">ورود با کیوآر</string>
