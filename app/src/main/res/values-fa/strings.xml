@@ -972,7 +972,7 @@
 
   <string name="Login_with_QrCode">ورود با کیوآر</string>
   <string name="Input_device_specification">ورود موفق دستگاه</string>
-  <string name="QrCode_Scan">اسکن بارکد</string>
+  <string name="QrCode_Scan">بارکد اسکنر</string>
   <string name="Call_Quality">کیفیت تماس</string>
   <string name="desc_self_destroy">"درصورتی که از حساب کاربری خود در طول یکی از مدت زمان های تعیین شده به هیچ وجه استفاده نکنید، حساب شما پس از آن زمان به صورت خودکار تخریب و برای همیشه حذف می شود."</string>
   <string name="color_default">آیا مایلید رنگ بندی همه قسمت های برنامه به حالت اولیه و پیش فرض باز گردد؟</string>

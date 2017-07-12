@@ -829,7 +829,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
                     TextView txtView = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
                     txtView.setText(R.string.txt_draft);
-                    txtView.setTextColor(getResources().getColor(R.color.toolbar_background));
+                    txtView.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
                     txtView.setTypeface(G.typeface_IRANSansMobile);
                     removeView(lytContainer5, R.id.lyt_avi_room);
                     removeView(lytContainer7, R.id.lyt_tic_room);
@@ -997,9 +997,9 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                     LinearLayout lytChatIcon = (LinearLayout) holder.itemView.findViewById(R.id.lyt_chat_icon_room);
                     if (G.selectedLanguage.equals("en")) {
-                        lytChatIcon.setPadding(0, 0, (int) getResources().getDimension(R.dimen.dp8), 0);
+                        lytChatIcon.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
                     } else {
-                        lytChatIcon.setPadding((int) getResources().getDimension(R.dimen.dp8), 0, 0, 0);
+                        lytChatIcon.setPadding((int) G.context.getResources().getDimension(R.dimen.dp8), 0, 0, 0);
                     }
 
                     TextView txtChatIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_chat_icon);
