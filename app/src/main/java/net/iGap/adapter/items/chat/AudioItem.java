@@ -70,9 +70,13 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             if (!mMessage.isSenderMe() && Build.VERSION.SDK_INT >= JELLY_BEAN) {
                 ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.iGapColorDarker), PorterDuff.Mode.SRC_IN);
             }
+
+            ((TextView) holder.itemView.findViewById(R.id.txt_play_music)).setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
         } else {
             holder.itemView.findViewById(R.id.csla_seekBar1).setEnabled(false);
             holder.itemView.findViewById(R.id.txt_play_music).setEnabled(false);
+
+            ((TextView) holder.itemView.findViewById(R.id.txt_play_music)).setTextColor(holder.itemView.getResources().getColor(R.color.gray_6c));
         }
     }
 
@@ -248,7 +252,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
         }
         ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
-        ((TextView) holder.itemView.findViewById(R.id.txt_play_music)).setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
         ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setTextColor(holder.itemView.getResources().getColor(R.color.black90));
     }
 
@@ -261,14 +264,12 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
             }
             ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
-            ((TextView) holder.itemView.findViewById(R.id.txt_play_music)).setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
             ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setTextColor(holder.itemView.getResources().getColor(R.color.black90));
         } else {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
                 ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
             }
             ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
-            ((TextView) holder.itemView.findViewById(R.id.txt_play_music)).setTextColor(holder.itemView.getResources().getColor(R.color.green));
             ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
             ((TextView) holder.itemView.findViewById(fileName)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }

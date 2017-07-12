@@ -45,17 +45,8 @@ android {
   }
 
   dexOptions {
-    //incremental true
     javaMaxHeapSize "4g"
   }
-  //  splits {
-  //    abi {
-  //      enable true
-  //      reset()
-  //      include 'x86', 'armeabi', 'armeabi-v7a', 'mips'
-  //      universalApk false
-  //    }
-  //  }
 }
 
 dependencies {
