@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.ContactGroupFragment;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentCreateChannel;
@@ -71,6 +72,7 @@ import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.ICallFinish;
+import net.iGap.interfaces.IMainFinish;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatClearMessageResponse;
@@ -121,7 +123,6 @@ import static net.iGap.R.string.updating;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
 
-    public static ActivityMain activityMain;
     public static boolean isMenuButtonAddShown = false;
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
@@ -175,8 +176,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onDestroy() {
         super.onDestroy();
 
-        activityMain = null;
-
         if (G.getRealm() != null) {
             G.getRealm().close();
         }
@@ -198,10 +197,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         btnStartNewChat.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
         btnCreateNewGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
         btnCreateNewChannel.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-
-
-
-        activityMain = this;
 
         final G application = (G) getApplication();
         Tracker mTracker = application.getDefaultTracker();
@@ -604,10 +599,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         if (HelperCalander.isLanguagePersian) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                mViewPager.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-                //  navigationTabStrip.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            }
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            //    mViewPager.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            //    //  navigationTabStrip.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            //}
+            ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
 
     }
@@ -1359,6 +1355,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
             };
+
+            G.iMainFinish = new IMainFinish() {
+                @Override
+                public void onFinish() {
+                    finish();
+                }
+            };
+
+
         } else {
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
         }

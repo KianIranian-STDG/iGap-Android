@@ -41,6 +41,7 @@ import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IClientSearchUserName;
+import net.iGap.interfaces.IMainFinish;
 import net.iGap.interfaces.ISignalingAccept;
 import net.iGap.interfaces.ISignalingCallBack;
 import net.iGap.interfaces.ISignalingCandidate;
@@ -386,6 +387,7 @@ public class G extends MultiDexApplication {
     public static IClientSearchUserName onClientSearchUserName;
     public static OnCallLeaveView onCallLeaveView;
     public static ICallFinish iCallFinish;
+    public static IMainFinish iMainFinish;
 
 
     public static ISignalingOffer iSignalingOffer;

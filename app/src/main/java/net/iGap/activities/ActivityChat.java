@@ -121,6 +121,7 @@ import net.iGap.adapter.items.chat.TimeItem;
 import net.iGap.adapter.items.chat.UnreadMessage;
 import net.iGap.adapter.items.chat.VideoItem;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentMap;
@@ -660,9 +661,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     finish();
 
                     if (!fromCall) {
-                        if (ActivityMain.activityMain != null) {
-                            ActivityMain.activityMain.finish();
+
+                        if (G.iMainFinish != null) {
+                            G.iMainFinish.onFinish();
                         }
+
                     }
                 }
             });
@@ -1156,9 +1159,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member_chat));
                         }
                         avi.setVisibility(View.GONE);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                        }
+                        ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     }
                 }
 
@@ -1526,10 +1527,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
 
                     avi.setVisibility(View.GONE);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                        //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                    }
+                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                    //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                    //}
+                    ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
 
                     // change english number to persian number
                     if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
@@ -3619,10 +3621,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         public void run() {
                             if (action != null) {
                                 avi.setVisibility(View.VISIBLE);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
-                                    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                                }
+                                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
+                                //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                                //}
+                                ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LOCALE);
                                 txtLastSeen.setText(action);
                             } else if (chatType == CHAT) {
                                 if (isCloudRoom) {
@@ -3637,18 +3640,19 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     }
                                 }
                                 avi.setVisibility(View.GONE);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                                    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                                }
+                                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                                //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                                //}
+                                ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                                 //txtLastSeen.setText(userStatus);
                             } else if (chatType == GROUP) {
                                 avi.setVisibility(View.GONE);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                                    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                                }
-
+                                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                                //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                                //}
+                                ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
 
                                 if (groupParticipantsCountLabel != null && Integer.parseInt(groupParticipantsCountLabel) == 1) {
                                     txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.one_member_chat));
@@ -3683,10 +3687,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (chatType == CHAT && userIdR == chatPeerId && userId != userIdR) { // userId != userIdR means that , this isn't update status for own user
                     txtLastSeen.setText(showLastSeen);
                     avi.setVisibility(View.GONE);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                        //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                    }
+                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                    //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                    //}
+                    ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     // change english number to persian number
                     if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
@@ -3952,10 +3957,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (isCloudRoom) {
                     txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
                     avi.setVisibility(View.GONE);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                        //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                    }
+                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                    //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                    //}
+                    ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                 } else {
                     if (status != null) {
                         if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -3964,10 +3970,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             txtLastSeen.setText(status);
                         }
                         avi.setVisibility(View.GONE);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                            //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                        }
+                        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                        //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                        //}
+                        ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                         // change english number to persian number
                         if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
@@ -4002,10 +4009,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((isCloudRoom || (!isCloudRoom && realmRoom.getActionStateUserId() != userId)))) {
                         txtLastSeen.setText(realmRoom.getActionState());
                         avi.setVisibility(View.VISIBLE);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
-                            //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                        }
+                        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
+                        //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                        //}
+                        ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     } else if (chatType == CHAT) {
                         if (isCloudRoom) {
                             txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
@@ -4019,17 +4027,18 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             }
                         }
                         avi.setVisibility(View.GONE);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                            //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                        }
+                        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                        //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                        //}
+                        ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
 
                     } else if (chatType == GROUP) {
                         avi.setVisibility(View.GONE);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                            viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                        }
-
+                        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                        //}
+                        ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                         if (groupParticipantsCountLabel != null && Integer.parseInt(groupParticipantsCountLabel) == 1) {
                             txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.one_member_chat));
                         } else {

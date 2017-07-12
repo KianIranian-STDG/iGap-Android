@@ -3,6 +3,7 @@ package net.iGap.adapter.items.chat;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -116,9 +117,7 @@ public class ViewMaker {
 
         LinearLayout linearLayout_197 = new LinearLayout(G.context);
         linearLayout_197.setGravity(Gravity.CENTER_VERTICAL);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            linearLayout_197.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-        }
+        setLayoutDirection(linearLayout_197, View.LAYOUT_DIRECTION_LTR);
         linearLayout_197.setMinimumHeight(i_Dp(R.dimen.dp95));
         linearLayout_197.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams layout_80 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -660,8 +659,9 @@ public class ViewMaker {
         cslr_ll_forward.setPadding(i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(messageContainerPadding), i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(messageContainerPadding));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             cslr_ll_forward.setTextDirection(View.TEXT_DIRECTION_LOCALE);
-            cslr_ll_forward.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
         }
+        setLayoutDirection(cslr_ll_forward, View.LAYOUT_DIRECTION_LOCALE);
+
         LinearLayout.LayoutParams layout_687 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cslr_ll_forward.setLayoutParams(layout_687);
 
@@ -711,9 +711,7 @@ public class ViewMaker {
         LinearLayout lyt_vote = new LinearLayout(context);
         lyt_vote.setId(R.id.lyt_vote);
         lyt_vote.setGravity(BOTTOM);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            lyt_vote.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-        }
+        setLayoutDirection(lyt_vote, View.LAYOUT_DIRECTION_LTR);
         lyt_vote.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_356 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp40), ViewGroup.LayoutParams.MATCH_PARENT);
         layout_356.gravity = BOTTOM;
@@ -814,9 +812,7 @@ public class ViewMaker {
 
         LinearLayout audioBox = new LinearLayout(G.context);
         audioBox.setId(R.id.audioBox);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            audioBox.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-        }
+        setLayoutDirection(audioBox, View.LAYOUT_DIRECTION_LTR);
         audioBox.setMinimumHeight((int) context.getResources().getDimension(R.dimen.dp130));
         audioBox.setOrientation(HORIZONTAL);
         audioBox.setPadding(0, (int) G.context.getResources().getDimension(messageContainerPadding), 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPaddingBottom));
@@ -1067,9 +1063,7 @@ public class ViewMaker {
 
         LinearLayout linearLayout_784 = new LinearLayout(G.context);
         linearLayout_784.setGravity(center_vertical);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            linearLayout_784.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-        }
+        setLayoutDirection(linearLayout_784, View.LAYOUT_DIRECTION_LTR);
         linearLayout_784.setOrientation(HORIZONTAL);
         linearLayout_784.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPadding), 0);
         LinearLayout.LayoutParams layout_419 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -1203,9 +1197,9 @@ public class ViewMaker {
             setTextSizeDirect(emojiTextViewE, G.userTextSize);
             emojiTextViewE.setEmojiSize(i_Dp(R.dimen.dp18));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                emojiTextViewE.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                 emojiTextViewE.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
             }
+            setLayoutDirection(emojiTextViewE, View.LAYOUT_DIRECTION_LOCALE);
             emojiTextViewE.setMovementMethod(LinkMovementMethod.getInstance());
 
             if (maxsize > 0) {
@@ -1222,9 +1216,9 @@ public class ViewMaker {
             textView.setTypeface(G.typeface_IRANSansMobile);
             setTextSizeDirect(textView, G.userTextSize);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                textView.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                 textView.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
             }
+            setLayoutDirection(textView, View.LAYOUT_DIRECTION_LOCALE);
             textView.setMovementMethod(LinkMovementMethod.getInstance());
             if (maxsize > 0) {
                 textView.setMaxWidth(maxsize);
@@ -1339,5 +1333,11 @@ public class ViewMaker {
 
     private static void setTypeFace(TextView v) {
         v.setTypeface(G.typeface_IRANSansMobile);
+    }
+
+    public static void setLayoutDirection(View view, int direction) {
+
+        ViewCompat.setLayoutDirection(view, direction);
+
     }
 }
