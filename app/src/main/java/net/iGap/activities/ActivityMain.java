@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gigamole.navigationtabstrip.NavigationTabStrip;
 import com.google.android.gms.analytics.HitBuilders;
@@ -341,7 +342,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).content(content).positiveText(R.string.B_ok).show();
+                        if (HelperCalander.isLanguagePersian) {
+                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.END).content(content).positiveText(R.string.B_ok).show();
+                        } else {
+                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.START).content(content).positiveText(R.string.B_ok).show();
+                        }
+
                     }
                 });
 
