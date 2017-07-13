@@ -402,6 +402,10 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         vgPhoneNumber = (ViewGroup) findViewById(R.id.chi_layout_phoneNumber);
         txtClearChat = (TextView) findViewById(R.id.chi_txt_clearChat);
 
+        if (phone.equals("0")) {
+            vgPhoneNumber.setVisibility(View.GONE);
+        }
+
         if (!showNumber) {
             vgPhoneNumber.setVisibility(View.GONE);
             txtClearChat.setVisibility(View.GONE);

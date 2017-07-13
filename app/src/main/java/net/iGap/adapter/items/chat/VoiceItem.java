@@ -73,7 +73,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             if (!mMessage.isSenderMe() && Build.VERSION.SDK_INT >= JELLY_BEAN) {
                 holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.iGapColorDarker), PorterDuff.Mode.SRC_IN);
             }
-            holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
+            holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.toolbar_background));
         } else {
             holder.musicSeekbar.setEnabled(false);
             holder.btnPlayMusic.setEnabled(false);

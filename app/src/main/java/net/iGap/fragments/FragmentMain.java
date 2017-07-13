@@ -814,8 +814,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                     txtLastMessage.setText(mInfo.getActionState());
                     txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_blue));
                     txtLastMessage.setEllipsize(TextUtils.TruncateAt.MIDDLE);
-                    addView(holder, lytContainer5, R.layout.room_layout_avi, R.id.lyt_avi_room, lytContainer5.getChildCount());
-                    (holder.itemView.findViewById(R.id.cs_avi)).setVisibility(View.VISIBLE);
+                    // addView(holder, lytContainer5, R.layout.room_layout_avi, R.id.lyt_avi_room, lytContainer5.getChildCount());
+                    //(holder.itemView.findViewById(R.id.cs_avi)).setVisibility(View.VISIBLE);
 
                     removeView(lytContainer7, R.id.lyt_tic_room);
                 } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
@@ -830,10 +830,10 @@ public class FragmentMain extends Fragment implements OnComplete {
                     txtView.setText(R.string.txt_draft);
                     txtView.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
                     txtView.setTypeface(G.typeface_IRANSansMobile);
-                    removeView(lytContainer5, R.id.lyt_avi_room);
+                    // removeView(lytContainer5, R.id.lyt_avi_room);
                     removeView(lytContainer7, R.id.lyt_tic_room);
                 } else {
-                    removeView(lytContainer5, R.id.lyt_avi_room);
+                    //  removeView(lytContainer5, R.id.lyt_avi_room);
 
                     if (mInfo.getLastMessage() != null) {
                         String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());

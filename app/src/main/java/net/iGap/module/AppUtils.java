@@ -15,6 +15,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -582,7 +583,7 @@ public final class AppUtils {
 
         try {
 
-            progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(G.progressColor), android.graphics.PorterDuff.Mode.MULTIPLY);
+            progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(G.progressColor), PorterDuff.Mode.SRC_IN);
 
             //  getResources().getColor(R.color.toolbar_background)
 

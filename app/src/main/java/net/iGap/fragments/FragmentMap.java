@@ -47,6 +47,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityChat;
 import net.iGap.helper.HelperString;
+import net.iGap.proto.ProtoGlobal;
 
 import static net.iGap.R.id.mf_fragment_map_view;
 
@@ -97,10 +98,20 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             longitude = bundle.getDouble(FragmentMap.Longitude);
             mode = (Mode) bundle.getSerializable(PosoitionMode);
 
+            G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
+
             initComponent(view);
         } else {
             close();
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        ActivityChat activity = (ActivityChat) mActivity;
+        activity.sendCancelAction();
     }
 
     private void close() {

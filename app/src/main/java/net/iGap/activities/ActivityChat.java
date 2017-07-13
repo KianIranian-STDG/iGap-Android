@@ -82,7 +82,6 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
-import com.wang.avi.AVLoadingIndicatorView;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -334,7 +333,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private LinearLayout lyt_user;
     private LinearLayout mReplayLayout;
     private ProgressBar prgWaiting;
-    private AVLoadingIndicatorView avi;
+    //  private AVLoadingIndicatorView avi;
     private ViewGroup vgSpamUser;
     private RecyclerView.OnScrollListener scrollListener;
     private RecyclerView rcvBottomSheet;
@@ -559,7 +558,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                             } else {
                                                 txtLastSeen.setText(finalMembers + " " + getResources().getString(R.string.member_chat));
                                             }
-                                            avi.setVisibility(View.GONE);
+                                            //    avi.setVisibility(View.GONE);
 
                                             if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                                         }
@@ -1112,8 +1111,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
-
-            avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
+            // avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
             txtName = (EmojiTextViewE) findViewById(R.id.chl_txt_name);
             txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
             viewGroupLastSeen = (ViewGroup) findViewById(R.id.chl_txt_viewGroup_seen);
@@ -1158,7 +1156,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         } else {
                             txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member_chat));
                         }
-                        avi.setVisibility(View.GONE);
+                        // avi.setVisibility(View.GONE);
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     }
                 }
@@ -1526,7 +1524,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member_chat));
                     }
 
-                    avi.setVisibility(View.GONE);
+                    // avi.setVisibility(View.GONE);
                     //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                     //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -1574,7 +1572,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         complete = new OnComplete() {
             @Override
             public void complete(boolean result, final String messageOne, String MessageTow) {
-                HelperSetAction.sendCancel(messageId);
+
 
                 String[] split = messageOne.split(",");
                 Double latitude = Double.parseDouble(split[0]);
@@ -2949,6 +2947,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     public void onVoiceRecordDone(final String savedPath) {
+
+        sendCancelAction();
+
         Realm realm = Realm.getDefaultInstance();
         final long messageId = SUID.id().get();
         final long updateTime = TimeUtils.currentLocalTime();
@@ -3031,6 +3032,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     public void onVoiceRecordCancel() {
         //empty
+
+        sendCancelAction();
     }
 
     @Override
@@ -3620,7 +3623,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         @Override
                         public void run() {
                             if (action != null) {
-                                avi.setVisibility(View.VISIBLE);
+                                // avi.setVisibility(View.VISIBLE);
                                 //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                                 //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                                 //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -3639,7 +3642,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                         }
                                     }
                                 }
-                                avi.setVisibility(View.GONE);
+                                // avi.setVisibility(View.GONE);
                                 //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                                 //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                                 //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -3647,7 +3650,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                                 //txtLastSeen.setText(userStatus);
                             } else if (chatType == GROUP) {
-                                avi.setVisibility(View.GONE);
+                                //avi.setVisibility(View.GONE);
                                 //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                                 //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                                 //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -3686,7 +3689,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void run() {
                 if (chatType == CHAT && userIdR == chatPeerId && userId != userIdR) { // userId != userIdR means that , this isn't update status for own user
                     txtLastSeen.setText(showLastSeen);
-                    avi.setVisibility(View.GONE);
+                    //  avi.setVisibility(View.GONE);
                     //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                     //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -3956,7 +3959,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 userTime = time;
                 if (isCloudRoom) {
                     txtLastSeen.setText(getResources().getString(R.string.chat_with_yourself));
-                    avi.setVisibility(View.GONE);
+                    //  avi.setVisibility(View.GONE);
                     //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                     //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -3969,7 +3972,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         } else {
                             txtLastSeen.setText(status);
                         }
-                        avi.setVisibility(View.GONE);
+                        // avi.setVisibility(View.GONE);
                         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                         //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -4008,7 +4011,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 public void run() {
                     if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((isCloudRoom || (!isCloudRoom && realmRoom.getActionStateUserId() != userId)))) {
                         txtLastSeen.setText(realmRoom.getActionState());
-                        avi.setVisibility(View.VISIBLE);
+                        //  avi.setVisibility(View.VISIBLE);
                         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
                         //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -4026,7 +4029,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 }
                             }
                         }
-                        avi.setVisibility(View.GONE);
+                        //  avi.setVisibility(View.GONE);
                         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                         //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
@@ -4034,7 +4037,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
 
                     } else if (chatType == GROUP) {
-                        avi.setVisibility(View.GONE);
+                        //  avi.setVisibility(View.GONE);
                         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                         //}
@@ -6295,8 +6298,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         scrollToEnd();
     }
 
+    public void sendCancelAction() {
+
+        HelperSetAction.sendCancel(messageId);
+    }
 
     public void sendPosition(final Double latitude, final Double longitude, final String imagePath) {
+
+        sendCancelAction();
 
         Realm realm = Realm.getDefaultInstance();
         final long id = SUID.id().get();

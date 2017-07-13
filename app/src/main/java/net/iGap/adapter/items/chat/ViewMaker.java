@@ -120,7 +120,7 @@ public class ViewMaker {
         setLayoutDirection(linearLayout_197, View.LAYOUT_DIRECTION_LTR);
         linearLayout_197.setMinimumHeight(i_Dp(R.dimen.dp95));
         linearLayout_197.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams layout_80 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp200), ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_80 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayout_197.setLayoutParams(layout_80);
 
         LinearLayout audioPlayerViewContainer = new LinearLayout(G.context);
@@ -159,7 +159,9 @@ public class ViewMaker {
         cslv_txt_author.setText("recorded voice");
         cslv_txt_author.setSingleLine(true);
         setTextSize(cslv_txt_author, R.dimen.dp14);
+        cslv_txt_author.setMaxLines(2);
         setTypeFace(cslv_txt_author);
+        // cslv_txt_author.setEllipsize(TextUtils.TruncateAt.END);
         LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_799.topMargin = i_Dp(R.dimen.dp12);
         cslv_txt_author.setLayoutParams(layout_799);
@@ -168,6 +170,7 @@ public class ViewMaker {
 
         LinearLayout linearLayout_503 = new LinearLayout(G.context);
         linearLayout_503.setGravity(Gravity.LEFT | Gravity.CENTER);
+        linearLayout_503.setMinimumHeight(i_Dp(R.dimen.dp32));
         LinearLayout.LayoutParams layout_669 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
         linearLayout_503.setLayoutParams(layout_669);
 
@@ -288,9 +291,9 @@ public class ViewMaker {
 
         TextView cslum_txt_unread_message = new TextView(G.context);
         cslum_txt_unread_message.setId(R.id.cslum_txt_unread_message);
-        cslum_txt_unread_message.setPadding(0, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
+        cslum_txt_unread_message.setPadding(0, dpToPixel(2), 0, dpToPixel(2));
         cslum_txt_unread_message.setBackgroundColor(G.context.getResources().getColor(R.color.green));
-        setTextSize(cslum_txt_unread_message, R.dimen.dp16);
+        setTextSize(cslum_txt_unread_message, R.dimen.dp12);
         setTypeFace(cslum_txt_unread_message);
         cslum_txt_unread_message.setGravity(CENTER);
         cslum_txt_unread_message.setText(G.context.getResources().getString(R.string.unread_message));
@@ -483,6 +486,7 @@ public class ViewMaker {
         txtEditedIndicator.setSingleLine(true);
         txtEditedIndicator.setText(context.getResources().getString(R.string.edited));
         txtEditedIndicator.setTextAppearance(context, R.style.ChatMessages_Time);
+        setTypeFace(txtEditedIndicator);
         LinearLayout.LayoutParams layout_927 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_927.rightMargin = i_Dp(dp4);
         layout_927.topMargin = dpToPixel(4);
@@ -494,6 +498,7 @@ public class ViewMaker {
         cslr_txt_time.setPadding(dpToPixel(2), 0, dpToPixel(2), 0);
         cslr_txt_time.setText("10:21");
         cslr_txt_time.setSingleLine(true);
+        setTypeFace(cslr_txt_time);
         cslr_txt_time.setTextAppearance(context, R.style.ChatMessages_Time);
         LinearLayout.LayoutParams layout_638 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_638.topMargin = i_Dp(dp4);
@@ -552,6 +557,7 @@ public class ViewMaker {
         txt_signature.setTextAppearance(context, R.style.ChatMessages_Time);
         LinearLayout.LayoutParams layout_266 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, i_Dp(R.dimen.dp18));
         txt_signature.setLayoutParams(layout_266);
+        setTypeFace(txt_signature);
         lyt_signature.addView(txt_signature);
         lyt_see.addView(lyt_signature);
 
@@ -559,6 +565,7 @@ public class ViewMaker {
         txt_views_label.setId(R.id.txt_views_label);
         txt_views_label.setGravity(CENTER);
         txt_views_label.setText("0");
+        setTypeFace(txt_views_label);
         txt_views_label.setTextAppearance(context, R.style.ChatMessages_Time);
         txt_views_label.setPadding(0, dpToPixel(2), 0, 0);
         txt_views_label.setTextColor(context.getResources().getColor(R.color.room_message_gray));
@@ -732,6 +739,7 @@ public class ViewMaker {
         txt_vote_up.setGravity(CENTER);
         txt_vote_up.setText("0");
         txt_vote_up.setSingleLine(true);
+        setTypeFace(txt_vote_up);
         txt_vote_up.setTextAppearance(context, R.style.ChatMessages_Time);
         txt_vote_up.setTextColor(context.getResources().getColor(R.color.room_message_gray));
         LinearLayout.LayoutParams layout_713 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dpToPixel(16));
@@ -770,6 +778,7 @@ public class ViewMaker {
         txt_vote_down.setId(R.id.txt_vote_down);
         txt_vote_down.setGravity(CENTER);
         txt_vote_down.setText("0");
+        setTypeFace(txt_vote_down);
         txt_vote_down.setSingleLine(true);
         txt_vote_down.setTextColor(context.getResources().getColor(R.color.room_message_gray));
         LinearLayout.LayoutParams layout_856 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dpToPixel(16));
@@ -817,7 +826,7 @@ public class ViewMaker {
         audioBox.setMinimumHeight((int) context.getResources().getDimension(R.dimen.dp130));
         audioBox.setOrientation(HORIZONTAL);
         audioBox.setPadding(0, (int) G.context.getResources().getDimension(messageContainerPadding), 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPaddingBottom));
-        LinearLayout.LayoutParams layout_262 = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp200), LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_262 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), LinearLayout.LayoutParams.WRAP_CONTENT);
         audioBox.setLayoutParams(layout_262);
 
         LinearLayout linearLayout_39 = new LinearLayout(G.context);
@@ -887,6 +896,7 @@ public class ViewMaker {
         songArtist.setTextAppearance(context, android.R.style.TextAppearance_Small);
         songArtist.setSingleLine(true);
         songArtist.setText("Artist");
+        setTypeFace(songArtist);
         songArtist.setTextColor(G.context.getResources().getColor(R.color.black90));
         LinearLayout.LayoutParams layout_757 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         songArtist.setLayoutParams(layout_757);
@@ -1021,10 +1031,12 @@ public class ViewMaker {
         TextView number = new TextView(G.context);
         LinearLayout.LayoutParams layoutParamsNumber = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         number.setId(R.id.number);
+        setTypeFace(number);
         number.setTextAppearance(context, android.R.style.TextAppearance_Small);
         number.setTextColor(G.context.getResources().getColor(R.color.black90));
         number.setText("Contact Number");
         number.setLayoutParams(layoutParamsNumber);
+
         container3.addView(number);
         container2.addView(image);
         container2.addView(container3);

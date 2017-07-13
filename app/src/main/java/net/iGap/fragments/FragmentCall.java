@@ -432,7 +432,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
                             int i = Math.abs((int) (move - event.getX()));
 
-                            if (i < 2) {
+                            if (i < 10) {
                                 canclick = true;
                             } else {
                                 canclick = false;

@@ -53,6 +53,7 @@ import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmAttachment;
@@ -115,7 +116,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     HeadsetPluginReciver headsetPluginReciver;
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
 
         G.isInCall = false;
@@ -138,7 +140,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
 
         if (isGoingfromApp) {
             isGoingfromApp = false;
@@ -161,7 +164,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         try {
             HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
-                @Override public void Allow() throws IOException {
+                @Override
+                public void Allow() throws IOException {
 
                     setContentView(R.layout.activity_call);
 
@@ -178,7 +182,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                     }
                 }
 
-                @Override public void deny() {
+                @Override
+                public void deny() {
                     finish();
                     new WebRTC().leaveCall();
                 }
@@ -192,21 +197,24 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         headsetPluginReciver = new HeadsetPluginReciver();
     }
 
-    @Override public boolean dispatchTouchEvent(MotionEvent ev) {
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
         verticalSwipe.dispatchTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }
 
     //***************************************************************************************
 
-    @Override public void onLeaveView(String type) {
+    @Override
+    public void onLeaveView(String type) {
 
         isConnected = false;
 
         if (type.equals("error")) {
 
             runOnUiThread(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     cancelRingtone();
                     avLoadingIndicatorView.setVisibility(View.GONE);
                     txtStatus.setText("");
@@ -214,13 +222,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             });
 
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     endVoiceAndFinish();
                 }
-            }, 3000);
+            }, 2000);
         } else {
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     endVoiceAndFinish();
                 }
             }, 1000);
@@ -229,9 +239,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void initCallBack() {
         G.iSignalingCallBack = new ISignalingCallBack() {
-            @Override public void onStatusChanged(final CallState callState) {
+            @Override
+            public void onStatusChanged(final CallState callState) {
                 runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         txtStatus.setText(getTextString(callState));
 
                         switch (callState) {
@@ -256,7 +268,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                     playSound(R.raw.igap_connect);
 
                                     G.handler.postDelayed(new Runnable() {
-                                        @Override public void run() {
+                                        @Override
+                                        public void run() {
                                             cancelRingtone();
                                             startTimer();
                                         }
@@ -268,7 +281,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                                 avLoadingIndicatorView.setVisibility(View.GONE);
                                 playSound(R.raw.igap_discounect);
                                 G.handler.postDelayed(new Runnable() {
-                                    @Override public void run() {
+                                    @Override
+                                    public void run() {
                                         stopTimer();
                                         endVoiceAndFinish();
                                     }
@@ -291,7 +305,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
                                 isConnected = false;
                                 G.handler.postDelayed(new Runnable() {
-                                    @Override public void run() {
+                                    @Override
+                                    public void run() {
                                         stopTimer();
                                         endVoiceAndFinish();
                                     }
@@ -368,6 +383,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void initComponent() {
 
+        if (MusicPlayer.mp != null) {
+            if (MusicPlayer.mp.isPlaying()) {
+                MusicPlayer.playAndPause();
+                MusicPlayer.pauseSoundFromCall = true;
+            }
+        }
+
         verticalSwipe = new VerticalSwipe();
         txtName = (TextView) findViewById(R.id.fcr_txt_name);
         txtStatus = (TextView) findViewById(R.id.fcr_txt_status);
@@ -393,7 +415,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         if (isIncomingCall) {
             layoutCallEnd.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                     if (canClick) {
                         layoutCallEnd.setVisibility(View.INVISIBLE);
@@ -403,7 +426,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             });
 
             btnEndCall.setOnTouchListener(new View.OnTouchListener() {
-                @Override public boolean onTouch(View v, MotionEvent event) {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
                     setUpSwap(layoutCallEnd);
                     return false;
                 }
@@ -411,7 +435,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         } else {
 
             btnEndCall.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     endCall();
                     btnEndCall.setVisibility(View.GONE);
                 }
@@ -427,7 +452,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         if (isIncomingCall) {
             layoutChat.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     if (canClick) {
                         btnChat.performClick();
                         layoutChat.setVisibility(View.INVISIBLE);
@@ -436,7 +462,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             });
 
             btnCircleChat.setOnTouchListener(new View.OnTouchListener() {
-                @Override public boolean onTouch(View v, MotionEvent event) {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
                     setUpSwap(layoutChat);
                     return false;
                 }
@@ -452,13 +479,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         if (isIncomingCall) {
             layoutAnswer.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     answer(layoutAnswer, layoutChat);
                 }
             });
 
             btnAnswer.setOnTouchListener(new View.OnTouchListener() {
-                @Override public boolean onTouch(View v, MotionEvent event) {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
                     setUpSwap(layoutAnswer);
                     return false;
                 }
@@ -471,7 +500,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         btnChat = (MaterialDesignTextView) findViewById(R.id.fcr_btn_chat);
         btnChat.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 HelperPublicMethod.goToChatRoom(true, userId, null, null);
 
                 if (!isConnected) {
@@ -482,7 +512,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         btnSpeaker = (MaterialDesignTextView) findViewById(R.id.fcr_btn_speaker);
         btnSpeaker.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 if (btnSpeaker.getText().toString().equals(G.context.getResources().getString(R.string.md_Mute))) {
                     btnSpeaker.setText(R.string.md_unMuted);
@@ -496,7 +527,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         btnMic = (MaterialDesignTextView) findViewById(R.id.fcr_btn_mic);
         btnMic.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
                 if (btnMic.getText().toString().equals(G.context.getResources().getString(R.string.md_mic))) {
                     btnMic.setText(R.string.md_mic_off);
@@ -525,7 +557,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         setPicture();
 
-        setSpeakerphoneOn(false);
+        //  setSpeakerphoneOn(false);
     }
 
     /**
@@ -552,7 +584,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         isConnected = false;
 
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 endVoiceAndFinish();
             }
@@ -567,6 +600,16 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         if (G.iCallFinish != null) {
             G.iCallFinish.onFinish();
         }
+
+        if (MusicPlayer.pauseSoundFromCall) {
+            MusicPlayer.pauseSoundFromCall = false;
+
+            MusicPlayer.playAndPause();
+
+            if (MusicPlayer.isVoice && MusicPlayer.isSpeakerON) {
+                setSpeakerphoneOn(true);
+            }
+        }
     }
 
     private void answer(FrameLayout layoutAnswer, FrameLayout layoutChat) {
@@ -580,7 +623,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             btnEndCall.setOnTouchListener(null);
 
             btnEndCall.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     endCall();
                     btnEndCall.setVisibility(View.GONE);
                 }
@@ -599,7 +643,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         secendTimer = new Timer();
         secendTimer.schedule(new TimerTask() {
 
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 secend++;
                 if (secend >= 60) {
@@ -612,7 +657,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
                 txtTimer.post(new Runnable() {
 
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         String s = "";
                         if (minute < 10) {
                             s += "0" + minute;
@@ -671,7 +717,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         } else {
             new RequestUserInfo().userInfo(userId);
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     Realm realm = Realm.getDefaultInstance();
                     RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
 
@@ -698,19 +745,22 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             String dirPath = AndroidUtils.getFilePathWithCashId(av.getCacheId(), av.getName(), G.DIR_IMAGE_USER, false);
 
             HelperDownloadFile.startDownload(av.getToken(), av.getCacheId(), av.getName(), av.getSize(), se, dirPath, 4, new HelperDownloadFile.UpdateListener() {
-                @Override public void OnProgress(final String path, int progress) {
+                @Override
+                public void OnProgress(final String path, int progress) {
 
                     if (progress == 100) {
 
                         runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 G.imageLoader.displayImage(AndroidUtils.suitablePath(path), userCallerPicture);
                             }
                         });
                     }
                 }
 
-                @Override public void OnError(String token) {
+                @Override
+                public void OnError(String token) {
 
                 }
             });
@@ -792,43 +842,42 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
+        if (player == null) {
+            try {
+                player = new MediaPlayer();
+                player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
 
-            if (player == null) {
-                try {
-                    player = new MediaPlayer();
-                    player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
+                //if (audioManager.isWiredHeadsetOn()) {
+                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                //} else {
+                //   player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                //}
+                player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 
-                    //if (audioManager.isWiredHeadsetOn()) {
-                    //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                    //} else {
-                    //   player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                    //}
-                    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-
-                    player.setLooping(true);
-                    player.prepare();
-                    player.start();
-                } catch (Exception e) {
-                }
-            } else {
-
-                try {
-                    player.reset();
-                    player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
-
-                    //if (audioManager.isWiredHeadsetOn()) {
-                    //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                    //} else {
-                    //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                    //}
-                    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-
-                    player.prepare();
-                    player.setLooping(true);
-                    player.start();
-                } catch (Exception e) {
-                }
+                player.setLooping(true);
+                player.prepare();
+                player.start();
+            } catch (Exception e) {
             }
+        } else {
+
+            try {
+                player.reset();
+                player.setDataSource(ActivityCall.this, Uri.parse("android.resource://" + getPackageName() + "/" + resSound));
+
+                //if (audioManager.isWiredHeadsetOn()) {
+                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                //} else {
+                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                //}
+                player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+
+                player.prepare();
+                player.setLooping(true);
+                player.start();
+            } catch (Exception e) {
+            }
+        }
     }
 
     private void cancelRingtone() {
@@ -914,7 +963,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
         sensorEventListener = new SensorEventListener() {
-            @Override public void onSensorChanged(SensorEvent event) {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
 
                 if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
                     if (event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY) {
@@ -927,7 +977,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 }
             }
 
-            @Override public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
             }
         };
@@ -976,7 +1027,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(sensorEventListener, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -984,7 +1036,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         registerReceiver(headsetPluginReciver, filter);
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(sensorEventListener);
 
@@ -995,7 +1048,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     class HeadsetPluginReciver extends BroadcastReceiver {
 
-        @Override public void onReceive(Context context, Intent intent) {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
             if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
 

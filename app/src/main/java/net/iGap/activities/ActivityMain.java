@@ -27,7 +27,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +36,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -96,6 +96,7 @@ import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
@@ -137,7 +138,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private DrawerLayout drawer;
     public static int currentMainRoomListPosition = 0;
     private int pageDrawer = 0;
-    private ContentLoadingProgressBar contentLoading;
+    private ProgressBar contentLoading;
 
     public MainInterface mainActionApp;
     public MainInterface mainActionChat;
@@ -1108,8 +1109,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void initComponent() {
 
-        contentLoading = (ContentLoadingProgressBar) findViewById(R.id.loadingContent);
-        contentLoading.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
+        AppUtils.setProgresColler(contentLoading);
 
         RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
         rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

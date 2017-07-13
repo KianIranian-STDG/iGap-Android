@@ -164,18 +164,18 @@
                   app:emojiSize="@dimen/dp14"
                   />
 
-              <com.wang.avi.AVLoadingIndicatorView
-                  android:id="@+id/avi"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="@dimen/dp8"
-                  android:layout_marginStart="@dimen/dp8"
-                  android:visibility="gone"
-                  app:indicatorColor="@color/white"
-                  app:indicatorName="BallPulseIndicator"
-                  style="@style/AVLoadingIndicatorView.Small"
-                  android:layout_marginTop="@dimen/dp4"
-                  />
+              <!--     <com.wang.avi.AVLoadingIndicatorView
+                       android:id="@+id/avi"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginLeft="@dimen/dp8"
+                       android:layout_marginStart="@dimen/dp8"
+                       android:visibility="gone"
+                       app:indicatorColor="@color/white"
+                       app:indicatorName="BallPulseIndicator"
+                       style="@style/AVLoadingIndicatorView.Small"
+                       android:layout_marginTop="@dimen/dp4"
+                       />-->
 
             </LinearLayout>
           </LinearLayout>

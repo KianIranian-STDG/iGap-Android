@@ -91,6 +91,9 @@ public class MusicPlayer {
     public static String strTimer = "";
     public static String messageId = "";
     public static ArrayList<String> playedList = new ArrayList<>();
+    public static boolean isVoice = false;
+    public static boolean pauseSoundFromCall = false;
+    public static boolean isSpeakerON = false;
 
     public MusicPlayer(LinearLayout layoutTripMusic) {
 
@@ -424,6 +427,22 @@ public class MusicPlayer {
 
     public static void startPlayer(String musicPath, String roomName, long roomId, boolean updateList, String messageID) {
 
+        isVoice = false;
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst();
+
+        if (realmRoomMessage != null) {
+            String type = realmRoomMessage.getForwardMessage() != null ? realmRoomMessage.getForwardMessage().getMessageType().toString() : realmRoomMessage.getMessageType().toString();
+
+            if (type.equals("VOICE")) {
+                isVoice = true;
+            }
+        }
+
+        realm.close();
+
+
         MusicPlayer.messageId = messageID;
         MusicPlayer.musicPath = musicPath;
         MusicPlayer.roomName = roomName;
@@ -444,6 +463,14 @@ public class MusicPlayer {
 
             try {
                 mp.setDataSource(musicPath);
+
+                if (isVoice) {
+                    mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                } else {
+                    mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                }
+
+
                 mp.prepare();
                 mp.start();
 
@@ -484,6 +511,11 @@ public class MusicPlayer {
             mp = new MediaPlayer();
             try {
                 mp.setDataSource(musicPath);
+                if (isVoice) {
+                    mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                } else {
+                    mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                }
                 mp.prepare();
                 mp.start();
 
@@ -547,7 +579,15 @@ public class MusicPlayer {
             fillMediaList();
         }
 
-        registerDistanceSensor();
+        if (isVoice) {
+            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+            am.setSpeakerphoneOn(true);
+            registerDistanceSensor();
+        }
+
+
+
+
 
         if (HelperCalander.isLanguagePersian) {
             txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
@@ -884,9 +924,9 @@ public class MusicPlayer {
     private static void registerDistanceSensor() {
 
         try {
-            if (mediaList.get(selectedMedia).getMessageType() == ProtoGlobal.RoomMessageType.VOICE) {
-                mSensorManager.registerListener(sensorEventListener, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
-            }
+
+            mSensorManager.registerListener(sensorEventListener, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
+
         } catch (Exception e) {
             Log.e("dddd", "music player registerDistanceSensor   " + e.toString());
         }
@@ -905,24 +945,17 @@ public class MusicPlayer {
 
         try {
 
-            boolean hasChange = true;
-
-            if (hasChange) {
-
                 AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
 
                 if (fromVoiceCall) {
-                    //  mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-
-                    am.setMode(AudioManager.MODE_IN_CALL);
                     am.setSpeakerphoneOn(false);
-                } else {
-                    //mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    isSpeakerON = false;
 
-                    am.setMode(AudioManager.MODE_NORMAL);
+                } else {
+
                     am.setSpeakerphoneOn(true);
+                    isSpeakerON = true;
                 }
-            }
         } catch (Exception e) {
             Log.e("dddd", "music player setAudioStreamType   " + e.toString());
         }

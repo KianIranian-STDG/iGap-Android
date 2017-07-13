@@ -28,6 +28,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnVoiceRecord;
+import net.iGap.proto.ProtoGlobal;
 
 public class VoiceRecord {
 
@@ -99,6 +100,8 @@ public class VoiceRecord {
     }
 
     private void startRecording() {
+
+        G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.RECORDING_VOICE);
 
         outputFile = G.DIR_AUDIOS + "/" + "record_" + HelperString.getRandomFileName(3) + ".mp3";
 
@@ -302,7 +305,6 @@ public class VoiceRecord {
         if (canStop) {
             stopVoiceRecord();
         }
-
         if (cansel) {
             if (onVoiceRecordListener != null) {
                 onVoiceRecordListener.onVoiceRecordCancel();

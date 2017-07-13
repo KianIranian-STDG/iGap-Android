@@ -218,13 +218,28 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
                     }
                 }
                 break;
+            case 905:
+            case 906:
+                message = G.context.getString(R.string.e_906_1);
+                break;
+
+
+
+
         }
 
         if (G.onCallLeaveView != null) {
             G.onCallLeaveView.onLeaveView("error");
         }
 
-        HelperError.showSnackMessage(message);
+        final String finalMessage = message;
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                HelperError.showSnackMessage(finalMessage);
+            }
+        }, 2500);
+
 
     }
 }

@@ -30,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.wang.avi.AVLoadingIndicatorView;
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -99,7 +98,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setEnabled(false);
-        findViewById(R.id.loadingContent).setVisibility(View.GONE);
+
 
         findViewById(R.id.amr_ripple_menu).setVisibility(View.GONE);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -311,11 +310,11 @@ public class ActivitySelectChat extends ActivityEnhanced {
                     //holder.messageStatus.setVisibility(GONE);
                     holder.lastMessageSender.setVisibility(View.GONE);
                     holder.lastMessage.setVisibility(View.VISIBLE);
-                    holder.avi.setVisibility(View.VISIBLE);
+                    //  holder.avi.setVisibility(View.VISIBLE);
                     holder.lastMessage.setText(mInfo.getActionState());
                     holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                 } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
-                    holder.avi.setVisibility(View.GONE);
+                    // holder.avi.setVisibility(View.GONE);
                     holder.messageStatus.setVisibility(GONE);
                     holder.lastMessage.setVisibility(View.VISIBLE);
                     holder.lastMessageSender.setVisibility(View.VISIBLE);
@@ -324,7 +323,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
                     holder.lastMessage.setText(mInfo.getDraft().getMessage());
                     holder.lastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
                 } else {
-                    holder.avi.setVisibility(View.GONE);
+                    //  holder.avi.setVisibility(View.GONE);
                     if (mInfo.getLastMessage() != null) {
                         String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
                         if (lastMessage == null) {
@@ -555,12 +554,12 @@ public class ActivitySelectChat extends ActivityEnhanced {
             protected TextView lastSeen;
             protected TextView unreadMessage;
             protected ImageView messageStatus;
-            private AVLoadingIndicatorView avi;
+            // private AVLoadingIndicatorView avi;
 
             public ViewHolder(View view) {
                 super(view);
 
-                avi = (AVLoadingIndicatorView) view.findViewById(R.id.cs_avi);
+                // avi = (AVLoadingIndicatorView) view.findViewById(R.id.cs_avi);
                 image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
                 distanceColor = view.findViewById(R.id.cs_view_distance_color);
                 chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);
