@@ -138,7 +138,7 @@
                   android:text="@string/md_flaticon_volume_off_indicator"
                   android:textAppearance="@style/TextIconAppearance.all"
                   android:textColor="@android:color/white"
-                  android:textSize="@dimen/dp14"
+                  android:textSize="@dimen/dp13"
                   android:visibility="gone"
                   />
             </LinearLayout>

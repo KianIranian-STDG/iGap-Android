@@ -17,7 +17,7 @@
       android:text="@string/md_muted"
       android:textAppearance="@style/TextIconAppearance_toolbar"
       android:textColor="@color/grayNew"
-      android:textSize="@dimen/dp16"
+      android:textSize="@dimen/dp13"
       />
 
 </LinearLayout>
