@@ -91,7 +91,7 @@ public class HelperGetAction {
                         } else if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_EUROPEAN_NUMBER) {
                             action = "\u200F" + realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
                         } else {
-                            action = "\u200E" + convertActionEnum(latestStruct.action) + " " + realmRegisteredInfo.getDisplayName();
+                            action = "\u200F" + realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
                         }
                     } else {
                         if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
@@ -133,12 +133,12 @@ public class HelperGetAction {
                 concatenatedNames = concatenatedNames.substring(0, concatenatedNames.length() - 1);
 
                 if (HelperCalander.isLanguagePersian) {
-                    if (Character.getDirectionality(concatenatedNames.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                    if (Character.getDirectionality(concatenatedNames.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT) {
 
-                        return concatenatedNames + " " + HelperConvertEnumToString.convertActionEnum(latestAction);
+                        return "\u200F" + concatenatedNames + " " + HelperConvertEnumToString.convertActionEnum(latestAction);
                     } else {
 
-                        return HelperConvertEnumToString.convertActionEnum(latestAction) + " " + concatenatedNames;
+                        return "\u200F" + concatenatedNames + " " + HelperConvertEnumToString.convertActionEnum(latestAction);
                     }
                 } else {
                     return concatenatedNames + " " + G.context.getResources().getString(R.string.are) + " " + convertActionEnum(latestAction);
@@ -146,7 +146,7 @@ public class HelperGetAction {
             } else {
                 if (HelperCalander.isLanguagePersian) {
 
-                    return convertActionEnum(latestAction) + " " + count + " " + G.context.getResources().getString(R.string.members_are);
+                    return "\u200F" + count + " " + G.context.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);
                 } else {
 
                     return count + " " + G.context.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);

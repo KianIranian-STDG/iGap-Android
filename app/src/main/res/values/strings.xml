@@ -83,20 +83,20 @@
   <string name="contact_message">Contact Message</string>
   <string name="gif_message">Gif Message</string>
   <string name="voice_message">Voice Message</string>
-  <string name="typing">Typing...</string>
-  <string name="sending_image">Sending image...</string>
-  <string name="capturing_image">Capturing image...</string>
-  <string name="sending_video">Sending video...</string>
-  <string name="capturing_video">Capturing video...</string>
-  <string name="sending_audio">Sending audio...</string>
-  <string name="recording_voice">Recording voice...</string>
-  <string name="sending_voice">Sending voice...</string>
-  <string name="sending_document">Sending document...</string>
-  <string name="sending_gif">Sending gif...</string>
-  <string name="sending_file">Sending file...</string>
-  <string name="sending_location">Sending location...</string>
-  <string name="choosing_contact">Choosing contact...</string>
-  <string name="painting">Painting...</string>
+  <string name="typing">Typing…</string>
+  <string name="sending_image">Sending image…</string>
+  <string name="capturing_image">Capturing image…</string>
+  <string name="sending_video">Sending video…</string>
+  <string name="capturing_video">Capturing video…</string>
+  <string name="sending_audio">Sending audio…</string>
+  <string name="recording_voice">Recording voice…</string>
+  <string name="sending_voice">Sending voice…</string>
+  <string name="sending_document">Sending document…</string>
+  <string name="sending_gif">Sending gif…</string>
+  <string name="sending_file">Sending file…</string>
+  <string name="sending_location">Sending location…</string>
+  <string name="choosing_contact">Choosing contact…</string>
+  <string name="painting">Painting…</string>
 
   <!-- Action Box -->
   <string name="log_out">Logout</string>

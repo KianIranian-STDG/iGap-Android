@@ -86,20 +86,20 @@
   <string name="contact_message">پیام مخاطب</string>
   <string name="gif_message">پیام متحرک</string>
   <string name="voice_message">پیغام صوتی</string>
-  <string name="typing">درحال تایپ...</string>
-  <string name="sending_image">درحال ارسال تصویر...</string>
-  <string name="capturing_image">درحال گرفتن تصویر...</string>
-  <string name="sending_video">درحال ارسال ویدئو...</string>
-  <string name="capturing_video">درحال رکورد ویدئو...</string>
-  <string name="sending_audio">درحال ارسال صوت...</string>
-  <string name="recording_voice">درحال ضبط صدا...</string>
-  <string name="sending_voice">درحال ارسال صدا...</string>
-  <string name="sending_document">درحال ارسال سند...</string>
-  <string name="sending_gif">درحال ارسال تصویرمتحرک...</string>
-  <string name="sending_file">درحال ارسال فایل...</string>
-  <string name="sending_location">درحال ارسال موقعیت...</string>
-  <string name="choosing_contact">درحال انتخاب مخاطب...</string>
-  <string name="painting">درحال نقاشی...</string>
+  <string name="typing">درحال تایپ…</string>
+  <string name="sending_image">درحال ارسال تصویر…</string>
+  <string name="capturing_image">درحال گرفتن تصویر…</string>
+  <string name="sending_video">درحال ارسال ویدئو…</string>
+  <string name="capturing_video">درحال رکورد ویدئو…</string>
+  <string name="sending_audio">درحال ارسال صوت…</string>
+  <string name="recording_voice">درحال ضبط صدا…</string>
+  <string name="sending_voice">درحال ارسال صدا…</string>
+  <string name="sending_document">درحال ارسال سند…</string>
+  <string name="sending_gif">درحال ارسال تصویرمتحرک…</string>
+  <string name="sending_file">درحال ارسال فایل…</string>
+  <string name="sending_location">درحال ارسال موقعیت…</string>
+  <string name="choosing_contact">درحال انتخاب مخاطب…</string>
+  <string name="painting">درحال نقاشی…</string>
 
   <!-- Action Box -->
   <string name="log_out">خروج</string>
