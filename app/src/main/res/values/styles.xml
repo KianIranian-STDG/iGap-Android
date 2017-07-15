@@ -172,29 +172,29 @@
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
     </style>
 
-    <style name="AVLoadingIndicatorView">
-        <item name="minWidth">48dip</item>
-        <item name="maxWidth">48dip</item>
-        <item name="minHeight">48dip</item>
-        <item name="maxHeight">48dip</item>
-        <item name="indicatorName">BallPulseIndicator</item>
-    </style>
+    <!--<style name="AVLoadingIndicatorView">-->
+    <!--<item name="minWidth">48dip</item>-->
+    <!--<item name="maxWidth">48dip</item>-->
+    <!--<item name="minHeight">48dip</item>-->
+    <!--<item name="maxHeight">48dip</item>-->
+    <!--<item name="indicatorName">BallPulseIndicator</item>-->
+    <!--</style>-->
 
-    <style name="AVLoadingIndicatorView.Large">
-        <item name="minWidth">76dip</item>
-        <item name="maxWidth">76dip</item>
-        <item name="minHeight">76dip</item>
-        <item name="maxHeight">76dip</item>
-        <item name="indicatorName">BallPulseIndicator</item>
-    </style>
+    <!--<style name="AVLoadingIndicatorView.Large">-->
+    <!--<item name="minWidth">76dip</item>-->
+    <!--<item name="maxWidth">76dip</item>-->
+    <!--<item name="minHeight">76dip</item>-->
+    <!--<item name="maxHeight">76dip</item>-->
+    <!--<item name="indicatorName">BallPulseIndicator</item>-->
+    <!--</style>-->
 
-    <style name="AVLoadingIndicatorView.Small">
-      <item name="minWidth">@dimen/dp20</item>
-      <item name="maxWidth">@dimen/dp20</item>
-      <item name="minHeight">@dimen/dp20</item>
-      <item name="maxHeight">@dimen/dp20</item>
-        <item name="indicatorName">BallPulseIndicator</item>
-    </style>
+    <!--<style name="AVLoadingIndicatorView.Small">-->
+    <!--<item name="minWidth">@dimen/dp20</item>-->
+    <!--<item name="maxWidth">@dimen/dp20</item>-->
+    <!--<item name="minHeight">@dimen/dp20</item>-->
+    <!--<item name="maxHeight">@dimen/dp20</item>-->
+    <!--<item name="indicatorName">BallPulseIndicator</item>-->
+    <!--</style>-->
 
 
     <style name="TextIconAppearance.menu" parent="android:TextAppearance">

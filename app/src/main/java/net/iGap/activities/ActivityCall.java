@@ -37,7 +37,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.wang.avi.AVLoadingIndicatorView;
 import io.realm.Realm;
 import java.io.IOException;
 import java.util.Timer;
@@ -94,7 +93,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     VerticalSwipe verticalSwipe;
     TextView txtName;
     TextView txtStatus;
-    AVLoadingIndicatorView avLoadingIndicatorView;
+    TextView avLoadingIndicatorView;
     ImageView userCallerPicture;
     LinearLayout layoutCaller;
     LinearLayout layoutOption;
@@ -393,7 +392,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         verticalSwipe = new VerticalSwipe();
         txtName = (TextView) findViewById(R.id.fcr_txt_name);
         txtStatus = (TextView) findViewById(R.id.fcr_txt_status);
-        avLoadingIndicatorView = (AVLoadingIndicatorView) findViewById(R.id.fcr_txt_avi);
+        avLoadingIndicatorView = (TextView) findViewById(R.id.fcr_txt_avi);
         userCallerPicture = (ImageView) findViewById(R.id.fcr_imv_background);
         layoutCaller = (LinearLayout) findViewById(R.id.fcr_layout_caller);
         layoutOption = (LinearLayout) findViewById(R.id.fcr_layout_option);
