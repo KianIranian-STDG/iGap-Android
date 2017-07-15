@@ -43,8 +43,8 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     }
 
     @Override
-    public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
-        super.onLoadThumbnailFromLocal(holder, localPath, fileType);
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
+        super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
     }
 
     @Override

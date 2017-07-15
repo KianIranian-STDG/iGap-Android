@@ -41,11 +41,13 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     }
 
     @Override
-    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
-        super.onLoadThumbnailFromLocal(holder, localPath, fileType);
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
+        super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        G.imageLoader.displayImage(suitablePath(localPath), ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail)));
-        ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail)).setCornerRadius(HelperRadius.computeRadius(localPath));
+        if ((holder.itemView.findViewById(R.id.thumbnail).getTag()).equals(tag)) {
+            G.imageLoader.displayImage(suitablePath(localPath), ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail)));
+            ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail)).setCornerRadius(HelperRadius.computeRadius(localPath));
+        }
     }
 
     @Override
@@ -54,7 +56,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getImageItem(false));
         }
-
+        holder.itemView.findViewById(R.id.thumbnail).setTag(mMessage.attachment.cashID);
         super.bindView(holder, payloads);
 
         holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(new View.OnClickListener() {

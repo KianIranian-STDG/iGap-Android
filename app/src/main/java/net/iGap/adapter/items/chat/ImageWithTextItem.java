@@ -48,6 +48,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getImageItem(true));
             holder.image = ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail));
+            holder.image.setTag(mMessage.attachment.cashID);
         }
 
         super.bindView(holder, payloads);
@@ -118,11 +119,13 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
     }
 
     @Override
-    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String localPath, LocalFileType fileType) {
-        super.onLoadThumbnailFromLocal(holder, localPath, fileType);
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
+        super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-        holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+        if ((holder.image.getTag()).equals(tag)) {
+            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+            holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+        }
     }
 
     @Override

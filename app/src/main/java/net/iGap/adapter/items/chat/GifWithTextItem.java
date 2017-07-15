@@ -69,20 +69,23 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     }
 
     @Override
-    public void onLoadThumbnailFromLocal(ViewHolder holder, String localPath, LocalFileType fileType) {
-        super.onLoadThumbnailFromLocal(holder, localPath, fileType);
-        holder.image.setImageURI(Uri.fromFile(new File(localPath)));
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
+        super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (fileType == LocalFileType.FILE) {
-            SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 1) {
-                holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
-            } else {
-                if (holder.image.getDrawable() instanceof GifDrawable) {
-                    GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
-                    // to get first frame
-                    gifDrawable.stop();
-                    holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+        if (holder.image.getTag().equals(tag)) {
+            holder.image.setImageURI(Uri.fromFile(new File(localPath)));
+
+            if (fileType == LocalFileType.FILE) {
+                SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 1) {
+                    holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
+                } else {
+                    if (holder.image.getDrawable() instanceof GifDrawable) {
+                        GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
+                        // to get first frame
+                        gifDrawable.stop();
+                        holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }
@@ -94,6 +97,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getGifItem(true));
             holder.image = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
+            holder.image.setTag(mMessage.attachment.cashID);
         }
 
         super.bindView(holder, payloads);

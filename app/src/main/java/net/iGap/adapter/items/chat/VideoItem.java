@@ -36,47 +36,56 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
         super(true, type, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutVideo;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_message;
     }
 
-    @Override public void onLoadThumbnailFromLocal(final ViewHolder holder, String localPath, LocalFileType fileType) {
-        super.onLoadThumbnailFromLocal(holder, localPath, fileType);
+    @Override
+    public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
+        super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (fileType == LocalFileType.THUMBNAIL) {
+        if ((holder.image.getTag()).equals(tag)) {
+            if (fileType == LocalFileType.THUMBNAIL) {
 
-            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+                G.imageLoader.displayImage(suitablePath(localPath), holder.image);
 
-            holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
-        } else {
+                holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+            } else {
 
-            MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
-            AppUtils.setProgresColor(progress.progressBar);
+                MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
+                AppUtils.setProgresColor(progress.progressBar);
 
-            progress.setVisibility(View.VISIBLE);
-            progress.withDrawable(R.drawable.ic_play, true);
+                progress.setVisibility(View.VISIBLE);
+                progress.withDrawable(R.drawable.ic_play, true);
+            }
         }
     }
 
-    @Override public FastAdapter.OnClickListener<VideoItem> getOnItemClickListener() {
+    @Override
+    public FastAdapter.OnClickListener<VideoItem> getOnItemClickListener() {
         return super.getOnItemClickListener();
     }
 
-    @Override public ViewHolder getViewHolder(View v) {
+    @Override
+    public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 
-    @Override public void bindView(final ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(final ViewHolder holder, List payloads) {
 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getVideoItem(false));
 
             holder.image = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
             holder.duration = (TextView) holder.itemView.findViewById(R.id.duration);
+            holder.image.setTag(mMessage.attachment.cashID);
         }
 
 
@@ -84,14 +93,11 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
 
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
-                holder.duration.setText(
-                    String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)),
-                        AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
+                holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
             }
         } else {
             if (mMessage.attachment != null) {
-                holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)),
-                    AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + mMessage.attachment.compressing));
+                holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + mMessage.attachment.compressing));
             }
         }
     }

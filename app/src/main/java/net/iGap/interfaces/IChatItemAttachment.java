@@ -14,7 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import net.iGap.module.enums.LocalFileType;
 
 public interface IChatItemAttachment<VH extends RecyclerView.ViewHolder> {
-    void onLoadThumbnailFromLocal(VH holder, String localPath, LocalFileType fileType);
+    void onLoadThumbnailFromLocal(VH holder, String tag, String localPath, LocalFileType fileType);
 
     void onPlayPauseGIF(VH holder, String localPath) throws ClassCastException;
 

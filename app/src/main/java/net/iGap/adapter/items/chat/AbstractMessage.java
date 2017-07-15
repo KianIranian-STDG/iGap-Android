@@ -184,12 +184,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             layoutMessageContainer.removeAllViews();
         }
 
-        if (holder instanceof TextItem.ViewHolder
-            || holder instanceof ImageWithTextItem.ViewHolder
-            || holder instanceof AudioItem.ViewHolder
-            || holder instanceof FileItem.ViewHolder
-            || holder instanceof VideoWithTextItem.ViewHolder
-            || holder instanceof GifWithTextItem.ViewHolder) {
+        if (holder instanceof TextItem.ViewHolder || holder instanceof ImageWithTextItem.ViewHolder || holder instanceof AudioItem.ViewHolder || holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder || holder instanceof GifWithTextItem.ViewHolder) {
             int maxsize = 0;
 
             if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {
@@ -765,9 +760,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
                 try {
-                    AppUtils.rightFileThumbnailIcon(((ImageView) replayView.findViewById(R.id.chslr_imv_replay_pic)),
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(),
-                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
+                    AppUtils.rightFileThumbnailIcon(((ImageView) replayView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -1159,9 +1152,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 /**
                  * load file from local
                  */
-                onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
+                onLoadThumbnailFromLocal(holder, mMessage.attachment.cashID, attachment.getLocalFilePath(), LocalFileType.FILE);
             } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
-                onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
+                onLoadThumbnailFromLocal(holder, mMessage.attachment.cashID, attachment.getLocalFilePath(), LocalFileType.FILE);
             } else {
                 /**
                  * file doesn't exist on local, I check for a thumbnail
@@ -1171,7 +1164,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     /**
                      * load thumbnail from local
                      */
-                    onLoadThumbnailFromLocal(holder, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                    onLoadThumbnailFromLocal(holder, mMessage.attachment.cashID, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT) {
                         downLoadThumbnail(holder, attachment);
@@ -1308,7 +1301,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 if (progress.getVisibility() == View.VISIBLE) {
                     progress.setVisibility(View.GONE);
-                    onLoadThumbnailFromLocal(holder, attachment.getLocalFilePath(), LocalFileType.FILE);
+                    onLoadThumbnailFromLocal(holder, mMessage.attachment.cashID, attachment.getLocalFilePath(), LocalFileType.FILE);
                 }
 
                 String _status = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getStatus() : mMessage.status;
@@ -1342,11 +1335,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @Override
     @CallSuper
-    public void onLoadThumbnailFromLocal(VH holder, String localPath, LocalFileType fileType) {
+    public void onLoadThumbnailFromLocal(VH holder, String tag, String localPath, LocalFileType fileType) {
 
     }
 
-    private void downLoadThumbnail(final VH holder, RealmAttachment attachment) {
+    private void downLoadThumbnail(final VH holder, final RealmAttachment attachment) {
 
         if (attachment == null) return;
 
@@ -1383,7 +1376,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     type = mMessage.messageType.toString().toLowerCase();
                                 }
                                 if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-                                    onLoadThumbnailFromLocal(holder, path, LocalFileType.THUMBNAIL);
+                                    onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.THUMBNAIL);
                                 }
                             }
                         });
@@ -1397,13 +1390,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void downLoadFile(final VH holder, RealmAttachment attachment, int priority) {
+    private void downLoadFile(final VH holder, final RealmAttachment attachment, int priority) {
 
         if (attachment == null || attachment.getCacheId() == null) {
             return;
         }
 
         final MessageProgress progressBar = (MessageProgress) holder.itemView.findViewById(R.id.progress);
+        progressBar.setTag(attachment.getCacheId());
         AppUtils.setProgresColor(progressBar.progressBar);
 
         final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
@@ -1437,14 +1431,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         @Override
                         public void run() {
                             if (progress == 100) {
-                                progressBar.setVisibility(View.GONE);
-                                contentLoading.setVisibility(View.GONE);
+                                if (progressBar.getTag().equals(attachment.getCacheId())) {
+                                    progressBar.setVisibility(View.GONE);
+                                    contentLoading.setVisibility(View.GONE);
 
-                                progressBar.performProgress();
+                                    progressBar.performProgress();
+                                }
 
-                                onLoadThumbnailFromLocal(holder, path, LocalFileType.FILE);
+                                onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
                             } else {
-                                progressBar.withProgress(progress);
+                                if (progressBar.getTag().equals(attachment.getCacheId())) {
+                                    progressBar.withProgress(progress);
+                                }
                             }
                         }
                     });
