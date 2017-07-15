@@ -733,66 +733,41 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void replyMessageIfNeeded(VH holder, Realm realm) {
+
+        final LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
+        if (mContainer == null) {
+            return;
+        }
+
+
         /**
          * set replay container visible if message was replayed, otherwise, gone it
          */
 
         if (holder.itemView.findViewById(R.id.cslr_replay_layout) != null) {
-            holder.itemView.findViewById(R.id.cslr_replay_layout).setVisibility(View.GONE);
+            mContainer.removeView(holder.itemView.findViewById(R.id.cslr_replay_layout));
         }
 
         if (mMessage.replayTo != null) {
-            final LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
-            if (mContainer == null) {
-                return;
-            }
 
-            final View replayView;
-
-            if (holder.itemView.findViewById(R.id.cslr_replay_layout) != null) {
-
-                replayView = holder.itemView.findViewById(R.id.cslr_replay_layout);
-            } else {
-                replayView = ViewMaker.getViewReplay();
-                mContainer.addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            }
-
-            replayView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        replayView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    } else {
-                        replayView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    }
-
-                    if (replayView.getWidth() < mContainer.getWidth()) {
-                        replayView.setMinimumWidth(mContainer.getWidth());
-                    }
-                }
-            });
-
-
-
-
-
+            final View replayView = ViewMaker.getViewReplay();
 
             if (replayView != null) {
-                replayView.setVisibility(View.VISIBLE);
-                TextView replyFrom = (TextView) holder.itemView.findViewById(R.id.chslr_txt_replay_from);
-                replyFrom.setTypeface(G.typeface_IRANSansMobile);
-                EmojiTextViewE replayMessage = (EmojiTextViewE) holder.itemView.findViewById(R.id.chslr_txt_replay_message);
-                replayMessage.setTypeface(G.typeface_IRANSansMobile);
+
+                TextView replyFrom = (TextView) replayView.findViewById(R.id.chslr_txt_replay_from);
+                EmojiTextViewE replayMessage = (EmojiTextViewE) replayView.findViewById(R.id.chslr_txt_replay_message);
                 replayView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         messageClickListener.onReplyClick(mMessage.replayTo);
                     }
                 });
-                holder.itemView.findViewById(R.id.chslr_imv_replay_pic).setVisibility(View.VISIBLE);
+
 
                 try {
-                    AppUtils.rightFileThumbnailIcon(((ImageView) holder.itemView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
+                    AppUtils.rightFileThumbnailIcon(((ImageView) replayView.findViewById(R.id.chslr_imv_replay_pic)),
+                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(),
+                        mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -810,8 +785,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 String forwardMessage = AppUtils.replyTextMessage(mMessage.replayTo, holder.itemView.getResources());
-                ((EmojiTextViewE) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
-                ((EmojiTextViewE) holder.itemView.findViewById(R.id.chslr_txt_replay_message)).setTypeface(G.typeface_IRANSansMobile);
+                ((EmojiTextViewE) replayView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
+
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
                     replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
                     //holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_sendColor));
@@ -823,6 +798,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                     replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
                 }
+
+                mContainer.addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                replayView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                            replayView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        } else {
+                            replayView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        }
+
+                        if (replayView.getWidth() < mContainer.getWidth()) {
+                            replayView.setMinimumWidth(mContainer.getWidth());
+                        }
+                    }
+                });
+
+
             }
         }
     }

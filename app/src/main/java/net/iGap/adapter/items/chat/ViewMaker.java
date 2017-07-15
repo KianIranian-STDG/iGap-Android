@@ -76,7 +76,6 @@ public class ViewMaker {
 
         LinearLayout csliwt_layout_container_message = new LinearLayout(context);
         csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
-        csliwt_layout_container_message.setMinimumHeight((int) context.getResources().getDimension(dp32));
         csliwt_layout_container_message.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_577 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         csliwt_layout_container_message.setLayoutParams(layout_577);
@@ -614,7 +613,6 @@ public class ViewMaker {
         ImageView chslr_imv_replay_pic = new ImageView(context);
         chslr_imv_replay_pic.setId(R.id.chslr_imv_replay_pic);
         chslr_imv_replay_pic.setAdjustViewBounds(true);
-        chslr_imv_replay_pic.setVisibility(View.VISIBLE);
         LinearLayout.LayoutParams layout_760 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, i_Dp(R.dimen.dp40));
         layout_760.rightMargin = i_Dp(dp8);
         chslr_imv_replay_pic.setLayoutParams(layout_760);
@@ -649,7 +647,7 @@ public class ViewMaker {
         chslr_txt_replay_message.setTextColor(Color.WHITE);
         chslr_txt_replay_message.setTypeface(G.typeface_IRANSansMobile);
         chslr_txt_replay_message.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
-        setTextSize(chslr_txt_replay_message, R.dimen.dp14);
+        setTextSize(chslr_txt_replay_message, R.dimen.dp12);
         LinearLayout.LayoutParams layout_641 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         chslr_txt_replay_message.setLayoutParams(layout_641);
         linearLayout_376.addView(chslr_txt_replay_message);

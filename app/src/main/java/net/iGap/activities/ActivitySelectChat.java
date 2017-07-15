@@ -83,7 +83,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
     private int mLimit = 20;
     private RecyclerView.OnScrollListener onScrollListener;
     boolean isSendRequestForLoading = false;
-    boolean isThereAnyMoreItemToLoad = true;
+    boolean isThereAnyMoreItemToLoad = false;
 
 
     @Override
@@ -564,10 +564,19 @@ public class ActivitySelectChat extends ActivityEnhanced {
                 distanceColor = view.findViewById(R.id.cs_view_distance_color);
                 chatIcon = (TextView) view.findViewById(R.id.cs_txt_contact_icon);
                 name = (EmojiTextViewE) view.findViewById(R.id.cs_txt_contact_name);
+                name.setTypeface(G.typeface_IRANSansMobile);
+
                 lastMessage = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message);
+                lastMessage.setTypeface(G.typeface_IRANSansMobile);
+
                 lastMessageSender = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message_sender);
+                lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
+
                 lastSeen = (TextView) view.findViewById(R.id.cs_txt_contact_time);
+                lastSeen.setTypeface(G.typeface_IRANSansMobile);
+
                 unreadMessage = (TextView) view.findViewById(R.id.cs_txt_unread_message);
+                unreadMessage.setTypeface(G.typeface_IRANSansMobile);
 
                 mute = (TextView) view.findViewById(R.id.cs_txt_mute);
                 messageStatus = (ImageView) view.findViewById(R.id.cslr_txt_tic);

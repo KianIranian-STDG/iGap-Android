@@ -76,7 +76,6 @@
               android:text="Name"
               android:textColor="@color/black90"
               android:textSize="@dimen/dp15"
-              fontPath="fonts/IRANSansMobile_Bold.ttf"
               />
 
 
@@ -96,7 +95,6 @@
               android:singleLine="true"
               android:textColor="#2bbfbd"
               android:textSize="@dimen/dp13"
-              fontPath="fonts/IRANSansMobile.ttf"
               />
 
           <net.iGap.module.EmojiTextViewE
