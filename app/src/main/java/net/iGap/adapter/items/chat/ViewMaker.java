@@ -19,6 +19,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
@@ -497,8 +498,8 @@ public class ViewMaker {
         cslr_txt_time.setPadding(dpToPixel(2), 0, dpToPixel(2), 0);
         cslr_txt_time.setText("10:21");
         cslr_txt_time.setSingleLine(true);
-        setTypeFace(cslr_txt_time);
         cslr_txt_time.setTextAppearance(context, R.style.ChatMessages_Time);
+        setTypeFace(cslr_txt_time);
         LinearLayout.LayoutParams layout_638 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_638.topMargin = i_Dp(dp4);
         cslr_txt_time.setLayoutParams(layout_638);
@@ -564,8 +565,9 @@ public class ViewMaker {
         txt_views_label.setId(R.id.txt_views_label);
         txt_views_label.setGravity(CENTER);
         txt_views_label.setText("0");
-        setTypeFace(txt_views_label);
         txt_views_label.setTextAppearance(context, R.style.ChatMessages_Time);
+        setTypeFace(txt_views_label);
+
         txt_views_label.setPadding(0, dpToPixel(2), 0, 0);
         txt_views_label.setTextColor(context.getResources().getColor(R.color.room_message_gray));
         LinearLayout.LayoutParams layout_959 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, i_Dp(R.dimen.dp16));
@@ -597,38 +599,62 @@ public class ViewMaker {
         cslr_replay_layout.setOrientation(HORIZONTAL);
         cslr_replay_layout.setPadding(i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            cslr_replay_layout.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
+            cslr_replay_layout.setTextDirection(View.TEXT_DIRECTION_LOCALE);
         }
-        LinearLayout.LayoutParams layout_468 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        setLayoutDirection(cslr_replay_layout, View.LAYOUT_DIRECTION_LOCALE);
+
+        LinearLayout.LayoutParams layout_468 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cslr_replay_layout.setLayoutParams(layout_468);
 
         View verticalLine = new View(context);
         verticalLine.setId(R.id.verticalLine);
         verticalLine.setBackgroundColor(Color.parseColor("#f7ab07"));
         LinearLayout.LayoutParams layout_81 = new LinearLayout.LayoutParams(dpToPixel(3), ViewGroup.LayoutParams.MATCH_PARENT);
-        layout_81.rightMargin = i_Dp(dp8);
+
+        if (HelperCalander.isLanguagePersian) {
+            layout_81.leftMargin = i_Dp(dp8);
+        } else {
+            layout_81.rightMargin = i_Dp(dp8);
+        }
+
+
         verticalLine.setLayoutParams(layout_81);
         cslr_replay_layout.addView(verticalLine);
 
         ImageView chslr_imv_replay_pic = new ImageView(context);
         chslr_imv_replay_pic.setId(R.id.chslr_imv_replay_pic);
         chslr_imv_replay_pic.setAdjustViewBounds(true);
+
         LinearLayout.LayoutParams layout_760 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, i_Dp(R.dimen.dp40));
-        layout_760.rightMargin = i_Dp(dp8);
+
+        if (HelperCalander.isLanguagePersian) {
+            layout_760.leftMargin = i_Dp(dp8);
+        } else {
+            layout_760.rightMargin = i_Dp(dp8);
+        }
+
         chslr_imv_replay_pic.setLayoutParams(layout_760);
         cslr_replay_layout.addView(chslr_imv_replay_pic);
 
         LinearLayout linearLayout_376 = new LinearLayout(context);
         linearLayout_376.setGravity(LEFT);
+
         linearLayout_376.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_847 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_847 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
         linearLayout_376.setLayoutParams(layout_847);
 
         EmojiTextViewE chslr_txt_replay_from = new EmojiTextViewE(context);
         chslr_txt_replay_from.setId(R.id.chslr_txt_replay_from);
         chslr_txt_replay_from.setSingleLine(true);
         chslr_txt_replay_from.setPadding(0, 0, 0, 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            chslr_txt_replay_from.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
+        }
+
         chslr_txt_replay_from.setText("");
+
         chslr_txt_replay_from.setTextColor(context.getResources().getColor(R.color.colorOldBlack));
         chslr_txt_replay_from.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
         setTextSize(chslr_txt_replay_from, R.dimen.dp12);
@@ -644,12 +670,17 @@ public class ViewMaker {
         chslr_txt_replay_message.setSingleLine(true);
         chslr_txt_replay_message.setPadding(0, 0, 0, 0);
         chslr_txt_replay_message.setText("");
+
         chslr_txt_replay_message.setTextColor(Color.WHITE);
-        chslr_txt_replay_message.setTypeface(G.typeface_IRANSansMobile);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            chslr_txt_replay_message.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
+        }
+
         chslr_txt_replay_message.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
         setTextSize(chslr_txt_replay_message, R.dimen.dp12);
         LinearLayout.LayoutParams layout_641 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         chslr_txt_replay_message.setLayoutParams(layout_641);
+        chslr_txt_replay_message.setTypeface(G.typeface_IRANSansMobile);
         linearLayout_376.addView(chslr_txt_replay_message);
         cslr_replay_layout.addView(linearLayout_376);
 
@@ -736,9 +767,10 @@ public class ViewMaker {
         txt_vote_up.setId(R.id.txt_vote_up);
         txt_vote_up.setGravity(CENTER);
         txt_vote_up.setText("0");
+        txt_vote_up.setTextAppearance(context, R.style.ChatMessages_Time);
         txt_vote_up.setSingleLine(true);
         setTypeFace(txt_vote_up);
-        txt_vote_up.setTextAppearance(context, R.style.ChatMessages_Time);
+
         txt_vote_up.setTextColor(context.getResources().getColor(R.color.room_message_gray));
         LinearLayout.LayoutParams layout_713 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dpToPixel(16));
         txt_vote_up.setLayoutParams(layout_713);
@@ -776,12 +808,13 @@ public class ViewMaker {
         txt_vote_down.setId(R.id.txt_vote_down);
         txt_vote_down.setGravity(CENTER);
         txt_vote_down.setText("0");
+        txt_vote_down.setTextAppearance(context, R.style.ChatMessages_Time);
         setTypeFace(txt_vote_down);
         txt_vote_down.setSingleLine(true);
         txt_vote_down.setTextColor(context.getResources().getColor(R.color.room_message_gray));
         LinearLayout.LayoutParams layout_856 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dpToPixel(16));
         txt_vote_down.setLayoutParams(layout_856);
-        txt_vote_down.setTextAppearance(context, R.style.ChatMessages_Time);
+
         lyt_vote_down.addView(txt_vote_down);
         lyt_vote.addView(lyt_vote_down);
 
@@ -1029,8 +1062,9 @@ public class ViewMaker {
         TextView number = new TextView(G.context);
         LinearLayout.LayoutParams layoutParamsNumber = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         number.setId(R.id.number);
-        setTypeFace(number);
         number.setTextAppearance(context, android.R.style.TextAppearance_Small);
+        setTypeFace(number);
+
         number.setTextColor(G.context.getResources().getColor(R.color.black90));
         number.setText("Contact Number");
         number.setLayoutParams(layoutParamsNumber);

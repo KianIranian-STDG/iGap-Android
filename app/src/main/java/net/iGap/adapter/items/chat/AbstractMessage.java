@@ -749,8 +749,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if (replayView != null) {
 
-                TextView replyFrom = (TextView) replayView.findViewById(R.id.chslr_txt_replay_from);
-                EmojiTextViewE replayMessage = (EmojiTextViewE) replayView.findViewById(R.id.chslr_txt_replay_message);
+                final TextView replyFrom = (TextView) replayView.findViewById(R.id.chslr_txt_replay_from);
+                final EmojiTextViewE replayMessage = (EmojiTextViewE) replayView.findViewById(R.id.chslr_txt_replay_message);
                 replayView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -805,7 +805,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                         if (replayView.getWidth() < mContainer.getWidth()) {
                             replayView.setMinimumWidth(mContainer.getWidth());
+
+                            ((LinearLayout) replayMessage.getParent()).setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+
+
                         }
+
+                        replayMessage.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        replyFrom.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
                     }
                 });
 
