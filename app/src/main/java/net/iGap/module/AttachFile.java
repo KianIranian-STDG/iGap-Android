@@ -477,7 +477,9 @@ public class AttachFile {
     public void requestPickFile() throws IOException {
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override public void Allow() {
-                Intent intent = new Intent(context, ActivityExplorer.class);
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 ((Activity) context).startActivityForResult(intent, request_code_pic_file);
                 onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
             }
