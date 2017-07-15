@@ -52,6 +52,7 @@ public class ActivityCrop extends ActivityEnhanced {
     private String result;
     AttachFile attachFile;
     private String path;
+    private TextView txtSet;
 
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class ActivityCrop extends ActivityEnhanced {
         TextView txtAgreeImage = (TextView) findViewById(R.id.pu_txt_agreeImage);
 
         TextView txtCancel = (TextView) findViewById(R.id.pu_txt_cancel_crop);
-        TextView txtSet = (TextView) findViewById(R.id.pu_txt_set_crop);
+        txtSet = (TextView) findViewById(R.id.pu_txt_set_crop);
         final Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
 
@@ -128,7 +129,7 @@ public class ActivityCrop extends ActivityEnhanced {
                         new AttachFile(ActivityCrop.this).requestTakePicture();
                     }
                 } else if (type.equals("gallery")) {
-                    attachFile.requestOpenGalleryForImageSingleSelect();
+                    attachFile.requestOpenGalleryForImageMultipleSelect();
                 }
             }
         });
@@ -200,7 +201,8 @@ public class ActivityCrop extends ActivityEnhanced {
                 uri = Uri.parse(filePath);
                 imgPic.setImageURI(uri);
             }
-        } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.request_code_image_from_gallery_single_select) {
+        } else if (resultCode == Activity.RESULT_OK && requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
+
             String filePath = null;
 
             if (data.getData() == null) {
@@ -208,7 +210,11 @@ public class ActivityCrop extends ActivityEnhanced {
             }
             filePath = "file://" + AttachFile.getFilePathFromUri(data.getData());
             uri = Uri.parse(filePath);
-            imgPic.setImageURI(uri);
+            if (!filePath.toLowerCase().endsWith(".gif")) {
+                imgPic.setImageURI(uri);
+            } else {
+                txtSet.performClick();
+            }
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) { // result for crop
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {

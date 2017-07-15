@@ -55,7 +55,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -4577,9 +4576,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.i("NNNNNNNN", "2 onActivityResult: " + listPathString.get(0));
                 String filename = listPathString.get(0).substring(listPathString.get(0).lastIndexOf("/") + 1);
-                Log.i("NNNNNNNN", "3 onActivityResult: " + filename);
                 if (listPathString == null) return;
                 if (listPathString.size() < 1) return;
 
@@ -4636,7 +4633,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         txtFileNameForSend.setText(getString(R.string.phone_selected_for_send) + "\n" + filename);
                         break;
                     case IntentRequests.REQ_CROP:
-                        txtFileNameForSend.setText(getString(R.string.crop_selected_for_send) + "\n" + filename);
+                        if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
+                            txtFileNameForSend.setText(getString(R.string.crop_selected_for_send) + "\n" + filename);
+                        } else {
+                            txtFileNameForSend.setText(getString(R.string.gif_selected_for_send) + "\n" + filename);
+                        }
                         break;
                 }
             }
@@ -5934,14 +5935,24 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         switch (requestCode) {
             case IntentRequests.REQ_CROP:
+
+                if (!filePath.toLowerCase().endsWith(".gif")) {
+                    if (isMessageWrote()) {
+                        messageType = IMAGE_TEXT;
+                    } else {
+                        messageType = ProtoGlobal.RoomMessageType.IMAGE;
+                    }
+                } else {
+                    if (isMessageWrote()) {
+                        messageType = GIF_TEXT;
+                    } else {
+                        messageType = ProtoGlobal.RoomMessageType.GIF;
+                    }
+                }
+
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
                 imageDimens = AndroidUtils.getImageDimens(filePath);
-                if (isMessageWrote()) {
-                    messageType = IMAGE_TEXT;
-                } else {
-                    messageType = ProtoGlobal.RoomMessageType.IMAGE;
-                }
                 if (userTriesReplay()) {
                     messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
