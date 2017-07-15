@@ -386,7 +386,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
                 MusicPlayer.playAndPause();
-                MusicPlayer.pauseSoundFromCall = true;
+                MusicPlayer.pauseSoundFromIGapCall = true;
             }
         }
 
@@ -601,8 +601,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             G.iCallFinish.onFinish();
         }
 
-        if (MusicPlayer.pauseSoundFromCall) {
-            MusicPlayer.pauseSoundFromCall = false;
+        if (MusicPlayer.pauseSoundFromIGapCall) {
+            MusicPlayer.pauseSoundFromIGapCall = false;
 
             MusicPlayer.playAndPause();
 

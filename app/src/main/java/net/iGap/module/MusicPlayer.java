@@ -28,6 +28,8 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -92,8 +94,11 @@ public class MusicPlayer {
     public static String messageId = "";
     public static ArrayList<String> playedList = new ArrayList<>();
     public static boolean isVoice = false;
-    public static boolean pauseSoundFromCall = false;
+    public static boolean pauseSoundFromIGapCall = false;
     public static boolean isSpeakerON = false;
+
+    public static boolean pauseSoundFromCall = false;
+    public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
 
     public MusicPlayer(LinearLayout layoutTripMusic) {
 
@@ -107,6 +112,7 @@ public class MusicPlayer {
         getAtribuits();
 
         initSensore();
+
     }
 
     public static void repeatClick() {
@@ -960,4 +966,55 @@ public class MusicPlayer {
             Log.e("dddd", "music player setAudioStreamType   " + e.toString());
         }
     }
+
+    //*************************************************************************************** getPhoneState
+
+    public static void registerphoneState() {
+
+        try {
+            PhoneStateListener phoneStateListener = new PhoneStateListener() {
+                @Override
+                public void onCallStateChanged(final int state, String incomingNumber) {
+
+                    if (lastPhoneState == state) {
+                        return;
+                    } else {
+
+                        lastPhoneState = state;
+
+                        if (state == TelephonyManager.CALL_STATE_RINGING) {
+
+                            if (mp != null && mp.isPlaying()) {
+
+                                pauseSound();
+                                pauseSoundFromCall = true;
+                            }
+                        } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+
+                            if (pauseSoundFromCall) {
+                                pauseSoundFromCall = false;
+
+                                playAndPause();
+                            }
+                        } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+
+                        }
+                    }
+                }
+            };
+
+            TelephonyManager mgr = (TelephonyManager) G.context.getSystemService(Context.TELEPHONY_SERVICE);
+            if (mgr != null) {
+                mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+
+
+
 }
+
+

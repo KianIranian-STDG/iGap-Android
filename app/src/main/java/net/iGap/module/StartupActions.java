@@ -80,6 +80,9 @@ public final class StartupActions {
          */
         new HelperDownloadFile();
         new HelperUploadFile();
+
+        // get phone call recive to pause mediaplayer if need
+        MusicPlayer.registerphoneState();
     }
 
     /**
