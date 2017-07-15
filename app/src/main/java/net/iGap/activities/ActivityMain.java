@@ -871,6 +871,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
+                        lockNavigation();
                         closeDrawer();
                     }
                 });
