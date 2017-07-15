@@ -725,7 +725,7 @@
 
   <string name="USER_JOINED">"Joined iGap"</string>
   <string name="USER_DELETED">"Left from iGap"</string>
-  <string name="ROOM_CREATED">"created Room"</string>
+  <string name="ROOM_CREATED">"created"</string>
   <string name="MEMBER_ADDED">"added"</string>
   <string name="prefix">""</string>  <!-- have to empty -->
   <string name="MEMBER_KICKED">"Kicked out"</string>

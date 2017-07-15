@@ -185,7 +185,7 @@ public class HelperLogMessage {
             return "";
         }
 
-        englishResult = authorName + " " + logMessage + " " + targetName;
+        englishResult = "\u200E" + authorName + " " + logMessage + " " + targetName;
 
         linkInfoEnglish = englishResult.indexOf(authorName)
             + "@"
@@ -214,11 +214,18 @@ public class HelperLogMessage {
 
                 if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
                     persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
+
+                    englishResult = "Channel" + " " + logMessage.replace("Created Room", "Created") + " " + targetName;
+
                 } else {
                     persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
+
+                    englishResult = "Group" + " " + logMessage.replace("Room", "") + " " + targetName;
+
                 }
 
-                linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+                linkInfoEnglish = "";
+                linlInfoPersian = "";
 
                 break;
             case MEMBER_ADDED:
@@ -263,22 +270,33 @@ public class HelperLogMessage {
 
                 if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
                     persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
-                    linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
-                } else {
-                    persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
-                    linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
-                }
 
+                    englishResult = "Channel" + " " + logMessage + " " + targetName;
+
+                } else {
+                    persianResult = finalTypeRoom + " " + logMessage;
+
+                    englishResult = "Group" + " " + logMessage + " " + targetName;
+
+
+                }
+                linlInfoPersian = "";
+                linkInfoEnglish = "";
                 break;
             case ROOM_CONVERTED_TO_PRIVATE:
 
                 if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
-                    persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
-                    linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+                    persianResult = finalTypeRoom + " " + logMessage;
+                    englishResult = "Channel" + " " + logMessage + " " + targetName;
+
                 } else {
-                    persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
-                    linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
+                    persianResult = finalTypeRoom + " " + logMessage;
+                    englishResult = "Group" + " " + logMessage + " " + targetName;
+
                 }
+
+                linlInfoPersian = "";
+                linkInfoEnglish = "";
 
                 break;
             case MEMBER_JOINED_BY_INVITE_LINK:
