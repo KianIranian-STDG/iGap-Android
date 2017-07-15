@@ -72,7 +72,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (holder.image.getTag().equals(tag)) {
+        if (holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
             holder.image.setImageURI(Uri.fromFile(new File(localPath)));
 
             if (fileType == LocalFileType.FILE) {

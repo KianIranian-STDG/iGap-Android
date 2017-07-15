@@ -1439,7 +1439,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         @Override
                         public void run() {
                             if (progress == 100) {
-                                if (progressBar.getTag().equals(attachment.getCacheId())) {
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(attachment.getCacheId())) {
                                     progressBar.setVisibility(View.GONE);
                                     contentLoading.setVisibility(View.GONE);
 
@@ -1448,7 +1448,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                                 onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
                             } else {
-                                if (progressBar.getTag().equals(attachment.getCacheId())) {
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(attachment.getCacheId())) {
                                     progressBar.withProgress(progress);
                                 }
                             }

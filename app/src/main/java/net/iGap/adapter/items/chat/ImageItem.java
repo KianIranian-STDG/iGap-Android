@@ -44,7 +44,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if ((holder.itemView.findViewById(R.id.thumbnail).getTag()).equals(tag)) {
+        if ((holder.itemView.findViewById(R.id.thumbnail).getTag()) != null && (holder.itemView.findViewById(R.id.thumbnail).getTag()).equals(tag)) {
             G.imageLoader.displayImage(suitablePath(localPath), ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail)));
             ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail)).setCornerRadius(HelperRadius.computeRadius(localPath));
         }
