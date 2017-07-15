@@ -491,14 +491,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         final NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        if (HelperCalander.isLanguagePersian) {
-            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box),
-                getString(R.string.md_apps));
-            navigationTabStrip.setTabIndex(4);
-        } else {
-            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon),
-                getString(R.string.md_phone));
-        }
+        //if (HelperCalander.isLanguagePersian) {
+        //    navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
+        //    navigationTabStrip.setTabIndex(4);
+        //} else {
+        navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon),
+            getString(R.string.md_phone));
+        // }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
         navigationTabStrip.setStripColor(Color.WHITE);
@@ -544,43 +543,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        final FragmentMain fragmentMainAll = FragmentMain.newInstance(FragmentMain.MainType.all);
 
-        pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                fragmentCall = FragmentCall.newInstance(true);
-
-                if (HelperCalander.isLanguagePersian) {
-                    pages.add(0, FragmentMain.newInstance(FragmentMain.MainType.chat));
-                    pages.add(0, FragmentMain.newInstance(FragmentMain.MainType.group));
-                    pages.add(0, FragmentMain.newInstance(FragmentMain.MainType.channel));
-                    pages.add(0, fragmentCall);
-                } else {
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
-                    pages.add(fragmentCall);
-                }
-
-                if (HelperCalander.isLanguagePersian) {
-                    mViewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager(), pages));
-                    mViewPager.setCurrentItem(pages.size() - 1);
-                    mViewPager.setOffscreenPageLimit(pages.size());
-                } else {
-
-                    mViewPager.getAdapter().notifyDataSetChanged();
-                    mViewPager.setOffscreenPageLimit(pages.size());
-                }
-
-
-            }
-        }, 2000);
-
-
-
+        //if(HelperCalander.isLanguagePersian){
+        //    pages.add( fragmentCall);
+        //    pages.add( FragmentMain.newInstance(FragmentMain.MainType.channel));
+        //    pages.add( FragmentMain.newInstance(FragmentMain.MainType.group));
+        //    pages.add( FragmentMain.newInstance(FragmentMain.MainType.chat));
+        //    pages.add( fragmentMainAll);
+        //
+        //
+        //}else {
+        pages.add(fragmentMainAll);
+        //  }
 
         sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager(), pages);
         mViewPager.setAdapter(sampleFragmentPagerAdapter);
@@ -588,6 +563,26 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setViewPager(mViewPager);
 
         mViewPager.setCurrentItem(0);
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
+                pages.add(FragmentCall.newInstance(true));
+
+                    mViewPager.getAdapter().notifyDataSetChanged();
+                    mViewPager.setOffscreenPageLimit(pages.size());
+                }
+        }, 2000);
+
+        //}
+
+
+
+        navigationTabStrip.setViewPager(mViewPager);
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
 
