@@ -991,4 +991,10 @@
   <string name="title_who_is_allowed_to_call">دریافت تماس از</string>
   <string name="title_Last_Seen"> چک شدن آخرین بازدید من توسط</string>
   <string name="item">آیتم</string>
+
+  <string name="c_byte">بایت</string>
+  <string name="c_KB">کیلوبایت</string>
+  <string name="c_MB">مگابایت </string>
+  <string name="c_GB">گیگابایت </string>
+  <string name="c_TB">ترابایت </string>
 </resources>

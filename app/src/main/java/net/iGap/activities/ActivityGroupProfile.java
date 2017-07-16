@@ -104,6 +104,7 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
+import net.iGap.module.IntentRequests;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
@@ -813,15 +814,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         final MaterialDialog dialog =
             new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutGroupLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.no)).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String copy;
-                        copy = txtGroupLink.getText().toString();
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                        clipboard.setPrimaryClip(clip);
-                    }
-                }).build();
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    String copy;
+                    copy = txtGroupLink.getText().toString();
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                    clipboard.setPrimaryClip(clip);
+                }
+            }).build();
 
         dialog.show();
     }
@@ -859,22 +860,22 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         layoutRevoke.addView(inputRevoke, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link_hint_revoke))
-                .positiveText(getResources().getString(R.string.revoke))
-                .customView(layoutRevoke, true)
-                .widgetColor(getResources().getColor(R.color.toolbar_background))
-                .negativeText(getResources().getString(R.string.B_cancel))
-                .neutralText(R.string.array_Copy)
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String copy;
-                        copy = txtGroupLink.getText().toString();
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                        clipboard.setPrimaryClip(clip);
-                    }
-                })
-                .build();
+            .positiveText(getResources().getString(R.string.revoke))
+            .customView(layoutRevoke, true)
+            .widgetColor(getResources().getColor(R.color.toolbar_background))
+            .negativeText(getResources().getString(R.string.B_cancel))
+            .neutralText(R.string.array_Copy)
+            .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    String copy;
+                    copy = txtGroupLink.getText().toString();
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                    clipboard.setPrimaryClip(clip);
+                }
+            })
+            .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setOnClickListener(new View.OnClickListener() {
@@ -1198,41 +1199,76 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 case AttachFile.request_code_TAKE_PICTURE:
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Intent intent = new Intent(ActivityGroupProfile.this, ActivityCrop.class);
                         ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
-                        filePath = AttachFile.mCurrentPhotoPath;
-                        filePathAvatar = filePath;
+                        intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
+                        intent.putExtra("TYPE", "camera");
+                        intent.putExtra("PAGE", "setting");
+                        intent.putExtra("ID", (int) (avatarId + 1L));
+                        startActivityForResult(intent, IntentRequests.REQ_CROP);
                     } else {
+                        Intent intent = new Intent(ActivityGroupProfile.this, ActivityCrop.class);
                         ImageHelper.correctRotateImage(AttachFile.imagePath, true);
-                        filePath = AttachFile.imagePath;
-                        filePathAvatar = filePath;
+                        intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
+                        intent.putExtra("TYPE", "camera");
+                        intent.putExtra("PAGE", "setting");
+                        intent.putExtra("ID", (int) (avatarId + 1L));
+                        startActivityForResult(intent, IntentRequests.REQ_CROP);
                     }
+
+                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    //    ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                    //    filePath = AttachFile.mCurrentPhotoPath;
+                    //    filePathAvatar = filePath;
+                    //} else {
+                    //    ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                    //    filePath = AttachFile.imagePath;
+                    //    filePathAvatar = filePath;
+                    //}
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     if (data.getData() == null) {
                         return;
                     }
-                    filePath = AttachFile.getFilePathFromUri(data.getData());
-                    filePathAvatar = filePath;
+                    Intent intent = new Intent(ActivityGroupProfile.this, ActivityCrop.class);
+                    intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                    intent.putExtra("TYPE", "gallery");
+                    intent.putExtra("PAGE", "setting");
+                    intent.putExtra("ID", (int) (avatarId + 1L));
+                    startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+                    //filePath = AttachFile.getFilePathFromUri(data.getData());
+                    //filePathAvatar = filePath;
 
                     break;
-            }
 
-            showProgressBar();
-            HelperUploadFile.startUploadTaskAvatar(filePath, avatarId, new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    if (progress < 100) {
-                        prgWait.setProgress(progress);
-                    } else {
-                        new RequestGroupAvatarAdd().groupAvatarAdd(roomId, struct.token);
+                case IntentRequests.REQ_CROP: { // save path image on data base ( realm )
+
+                    String pathSaveImage = null;
+                    if (data != null) {
+                        pathSaveImage = data.getData().toString();
                     }
-                }
 
-                @Override
-                public void OnError() {
-                    hideProgressBar();
+                    long lastUploadedAvatarId = avatarId + 1L;
+
+                    showProgressBar();
+                    HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                        @Override
+                        public void OnProgress(int progress, FileUploadStructure struct) {
+                            if (progress < 100) {
+                                prgWait.setProgress(progress);
+                            } else {
+                                new RequestGroupAvatarAdd().groupAvatarAdd(roomId, struct.token);
+                            }
+                        }
+
+                        @Override
+                        public void OnError() {
+                            hideProgressBar();
+                        }
+                    });
                 }
-            });
+            }
         }
     }
 

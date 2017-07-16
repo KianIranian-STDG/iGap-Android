@@ -739,8 +739,8 @@
   <string name="conversation">""</string>
 
   <string name="MISSED_SCREEN_SHARE">"Missed Screen Share"</string>
-  <string name="MISSED_VOICE_CALL">"Missed Voice Call"</string>
-  <string name="MISSED_VIDEO_CALL">"Missed Video Call"</string>
+  <string name="MISSED_VOICE_CALL">"Voice Call Missed"</string>
+  <string name="MISSED_VIDEO_CALL">"Video Call Missed"</string>
 
 
   <string name="delete_account_text1">other</string>
@@ -967,7 +967,7 @@
   <string name="invalid_email_token">"Your email token is invalid"</string>
   <string name="invalid_question_token">"Your answer is invalid"</string>
 
-  <string name="not_answerd_call">"Voice Call cancelled"</string>
+  <string name="not_answerd_call">"Voice Call Cancelled"</string>
   <string name="recorded_by">Recorded By</string>
   <string name="Login_with_QrCode">Login with QR code</string>
   <string name="Input_device_specification">Device login success</string>
@@ -988,6 +988,12 @@
   <string name="title_who_is_allowed_to_call">Calls received from</string>
   <string name="title_Last_Seen">My Last Seen checked by</string>
   <string name="item">item</string>
+
+  <string name="c_byte">byte</string>
+  <string name="c_KB">KB</string>
+  <string name="c_MB">MB</string>
+  <string name="c_GB">GB</string>
+  <string name="c_TB">TB</string>
 
 
 </resources>

@@ -388,7 +388,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp28"
                 android:gravity="center_vertical"
-                android:maxLength="25"
+                android:maxWidth="140dp"
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"

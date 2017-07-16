@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.text.DecimalFormat;
 import java.util.Comparator;
+import net.iGap.G;
+import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 
 
@@ -506,15 +508,15 @@ public class FileUtils {
         DecimalFormat dec = new DecimalFormat("0.0");
 
         if (t > 1) {
-            hrSize = dec.format(t).concat(" TB");
+            hrSize = dec.format(t).concat(" " + G.context.getResources().getString(R.string.c_TB));
         } else if (g > 1) {
-            hrSize = dec.format(g).concat(" GB");
+            hrSize = dec.format(g).concat(" " + G.context.getResources().getString(R.string.c_GB));
         } else if (m > 1) {
-            hrSize = dec.format(m).concat(" MB");
+            hrSize = dec.format(m).concat(" " + G.context.getResources().getString(R.string.c_MB));
         } else if (k > 1) {
-            hrSize = dec.format(k).concat(" KB");
+            hrSize = dec.format(k).concat(" " + G.context.getResources().getString(R.string.c_KB));
         } else {
-            hrSize = dec.format(b).concat(" Bytes");
+            hrSize = dec.format(b).concat(" " + G.context.getResources().getString(R.string.c_byte));
         }
 
         return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(hrSize) : hrSize;

@@ -70,6 +70,7 @@
               android:textColor="@color/gray_5c"
               android:textSize="@dimen/dp12"
               android:textStyle="bold"
+              android:textDirection="locale"
               />
 
 

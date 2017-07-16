@@ -101,6 +101,7 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
+import net.iGap.module.IntentRequests;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.ChannelChatRole;
@@ -1271,6 +1272,8 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
          * if another account do this action we haven't avatar source and have
          * to download avatars . for do this action call HelperAvatar.getAvatar
          */
+
+        hideProgressBar();
         if (pathSaveImage == null) {
             setAvatar();
         } else {
@@ -1803,42 +1806,76 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                 case AttachFile.request_code_TAKE_PICTURE:
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Intent intent = new Intent(ActivityChannelProfile.this, ActivityCrop.class);
                         ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
-                        filePath = AttachFile.mCurrentPhotoPath;
-                        pathSaveImage = filePath;
+                        intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
+                        intent.putExtra("TYPE", "camera");
+                        intent.putExtra("PAGE", "setting");
+                        intent.putExtra("ID", (int) (avatarId + 1L));
+                        startActivityForResult(intent, IntentRequests.REQ_CROP);
                     } else {
+                        Intent intent = new Intent(ActivityChannelProfile.this, ActivityCrop.class);
                         ImageHelper.correctRotateImage(AttachFile.imagePath, true);
-                        filePath = AttachFile.imagePath;
-                        pathSaveImage = filePath;
+                        intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
+                        intent.putExtra("TYPE", "camera");
+                        intent.putExtra("PAGE", "setting");
+                        intent.putExtra("ID", (int) (avatarId + 1L));
+                        startActivityForResult(intent, IntentRequests.REQ_CROP);
                     }
 
+                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    //    ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                    //    filePath = AttachFile.mCurrentPhotoPath;
+                    //    filePathAvatar = filePath;
+                    //} else {
+                    //    ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                    //    filePath = AttachFile.imagePath;
+                    //    filePathAvatar = filePath;
+                    //}
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
-
                     if (data.getData() == null) {
                         return;
                     }
-                    filePath = AttachFile.getFilePathFromUri(data.getData());
-                    pathSaveImage = filePath;
+                    Intent intent = new Intent(ActivityChannelProfile.this, ActivityCrop.class);
+                    intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                    intent.putExtra("TYPE", "gallery");
+                    intent.putExtra("PAGE", "setting");
+                    intent.putExtra("ID", (int) (avatarId + 1L));
+                    startActivityForResult(intent, IntentRequests.REQ_CROP);
+
+                    //filePath = AttachFile.getFilePathFromUri(data.getData());
+                    //filePathAvatar = filePath;
+
                     break;
-            }
 
-            showProgressBar();
-            HelperUploadFile.startUploadTaskAvatar(filePath, avatarId, new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    if (progress < 100) {
-                        prgWait.setProgress(progress);
-                    } else {
-                        new RequestChannelAvatarAdd().channelAvatarAdd(roomId, struct.token);
+                case IntentRequests.REQ_CROP: { // save path image on data base ( realm )
+
+                    String pathSaveImage = null;
+                    if (data != null) {
+                        pathSaveImage = data.getData().toString();
                     }
-                }
 
-                @Override
-                public void OnError() {
-                    hideProgressBar();
+                    long lastUploadedAvatarId = avatarId + 1L;
+
+                    showProgressBar();
+                    HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                        @Override
+                        public void OnProgress(int progress, FileUploadStructure struct) {
+                            if (progress < 100) {
+                                prgWait.setProgress(progress);
+                            } else {
+                                new RequestChannelAvatarAdd().channelAvatarAdd(roomId, struct.token);
+                            }
+                        }
+
+                        @Override
+                        public void OnError() {
+                            hideProgressBar();
+                        }
+                    });
                 }
-            });
+            }
         }
     }
 

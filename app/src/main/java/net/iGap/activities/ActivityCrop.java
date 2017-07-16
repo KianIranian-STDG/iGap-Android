@@ -26,12 +26,8 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
@@ -144,31 +140,10 @@ public class ActivityCrop extends ActivityEnhanced {
             @Override public void onClick(View view) {
                 if (uri != null && type.equals("crop_camera")) {
                     pathImageUser = getRealPathFromURI(uri);
-                    switch (page) {
-                        case "NewGroup":
-                            String timeStampGroup = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                            result = G.IMAGE_NEW_GROUP.toString() + " " + timeStampGroup;
-                            HelperCopyFile.copyFile(pathImageUser, result);
 
-                            break;
-                        case "NewChanel":
-                            String timeStampChannel = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                            result = G.IMAGE_NEW_CHANEL.toString() + " " + timeStampChannel;
-                            HelperCopyFile.copyFile(pathImageUser, result);
+                    result = G.imageFile.toString() + "_" + id + ".jpg";
+                    HelperCopyFile.copyFile(pathImageUser, result);
 
-                            break;
-                        case "chat":
-                            mediaStorageDir = new File(G.DIR_IMAGES);
-                            fileChat = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
-                            result = fileChat.toString();
-                            HelperCopyFile.copyFile(pathImageUser, result);
-                            break;
-                        default:
-
-                            result = G.imageFile.toString() + "_" + id + ".jpg";
-                            HelperCopyFile.copyFile(pathImageUser, result);
-                            break;
-                    }
                 } else {
                     result = getRealPathFromURI(uri);
                 }
@@ -179,7 +154,6 @@ public class ActivityCrop extends ActivityEnhanced {
                     finish();
                 }
 
-                //}
             }
         });
     }
