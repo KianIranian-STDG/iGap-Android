@@ -3098,7 +3098,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             firstUnreadMessageInChat = null;
         }
 
-        if (chatType != CHANNEL && (messageInfo.status != null && !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) & !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString()))) {
+        if (chatType != CHANNEL && (!messageInfo.isSenderMe() && messageInfo.status != null && !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) & !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString()))) {
 
             /**
              * set message status SEEN for avoid from run this block in each bindView
@@ -7116,7 +7116,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         });
                     }
 
-                    //TODO [Saeed Mozaffari] [2017-07-16 2:27 PM] - I do this for set addToView true , use another way. hint : maybe can use from correct scroll state
+                    //TODO [Saeed Mozaffari] [2017-07-16 2:27 PM] - I do this for set addToView true , use another way. hint : maybe can use from correct scroll state , hint : if size lower that limit set addToView true
                     if (directionEnum == DOWN && realmRoomMessages.size() < (Config.LIMIT_GET_HISTORY_NORMAL - 2)) {
                         getOnlineMessage(startFutureMessageIdDown, directionEnum);
                     }

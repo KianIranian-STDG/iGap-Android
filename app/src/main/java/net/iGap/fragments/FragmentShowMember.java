@@ -255,8 +255,8 @@ public class FragmentShowMember extends Fragment {
             public void onGroupGetMemberList(final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members) {
 
                 mMemberCount = members.size();
-                if (mMemberCount > 0) {
 
+                if (mMemberCount > 0) {
                     listMembers.clear();
                     for (final ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : members) {
                         listMembers.add(member);
@@ -287,31 +287,29 @@ public class FragmentShowMember extends Fragment {
 
                 mMemberCount = members.size();
 
-                Realm realm = Realm.getDefaultInstance();
-                for (final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : members) {
-                    final RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, member.getUserId()).findFirst();
-                    if (realmRegisteredInfo == null) {
+                if (mMemberCount > 0) {
+                    listMembersChannal.clear();
+                    for (final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : members) {
                         listMembersChannal.add(member);
-                        new RequestUserInfo().userInfo(member.getUserId());
-                    } else {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
+                        new RequestUserInfo().userInfo(member.getUserId(), "" + member.getUserId());
+                    }
+                } else {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
 
-                                if (progressBar != null) {
-                                    progressBar.setVisibility(View.GONE);
-                                }
+                            if (progressBar != null) {
+                                progressBar.setVisibility(View.GONE);
                             }
-                        });
-                        isOne = true;
-                        if (isFirstFill) {
-                            fillAdapter();
-                            isFirstFill = false;
                         }
+                    });
+                    isOne = true;
+                    if (isFirstFill) {
+                        fillAdapter();
+                        isFirstFill = false;
                     }
                 }
 
-                realm.close();
             }
 
             @Override
@@ -369,7 +367,7 @@ public class FragmentShowMember extends Fragment {
                                 }
                             }
                         });
-                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit);
+                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
                     }
                 }
 
@@ -541,7 +539,7 @@ public class FragmentShowMember extends Fragment {
                 if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
                     new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
                 } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                    new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit);
+                    new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
                 }
             }
 
