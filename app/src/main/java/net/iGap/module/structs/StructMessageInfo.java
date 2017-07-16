@@ -12,7 +12,6 @@ package net.iGap.module.structs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.view.View;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.module.MyType;
@@ -42,7 +41,8 @@ public class StructMessageInfo implements Parcelable {
             return new StructMessageInfo[size];
         }
     };
-    public View view = null;
+
+    public boolean isSelected = false;
     public long roomId;
     public String messageID = "1";
     public String senderID = "";

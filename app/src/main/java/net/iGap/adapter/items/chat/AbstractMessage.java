@@ -206,13 +206,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          *
          */
 
-        mMessage.view = holder.itemView;
 
         /**
          * noinspection RedundantCast
          */
 
-        if (isSelected()) {
+        if (isSelected() || mMessage.isSelected) {
             ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
         } else {
             ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(Color.TRANSPARENT));

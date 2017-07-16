@@ -25,7 +25,6 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.media.ThumbnailUtils;
@@ -3824,9 +3823,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      */
     private void selectMessage(int position) {
         try {
-            if (mAdapter.getItem(position).mMessage.view != null) {
-                ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
-            }
+            mAdapter.getItem(position).mMessage.isSelected = true;
+            mAdapter.notifyItemChanged(position);
+
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -3836,9 +3835,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * clear foreground color for deSelected message
      */
     private void deSelectMessage(int position) {
-        if (mAdapter != null && mAdapter.getItem(position) != null && mAdapter.getItem(position).mMessage.view != null) {
-            ((FrameLayout) mAdapter.getItem(position).mMessage.view).setForeground(null);
-        }
+        mAdapter.getItem(position).mMessage.isSelected = false;
+        mAdapter.notifyItemChanged(position);
     }
 
     /**
@@ -5009,9 +5007,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 ll_navigateHash.setVisibility(View.GONE);
                 viewAttachFile.setVisibility(View.VISIBLE);
 
-                if (mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view != null) {
-                    ((FrameLayout) mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view).setForeground(null);
-                }
+                mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.isSelected = false;
+                mAdapter.notifyItemChanged(searchHash.currentSelectedPosition);
             }
         });
 
@@ -5771,9 +5768,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
 
             try {
-                if (mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view != null) {
-                    ((FrameLayout) mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.view).setForeground(null);
-                }
+
+                mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.isSelected = false;
+                mAdapter.notifyItemChanged(searchHash.currentSelectedPosition);
+
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
@@ -5798,9 +5796,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             currentSelectedPosition = hashList.get(currentHashPosition - 1);
 
-            if (mAdapter.getItem(currentSelectedPosition).mMessage.view != null) {
-                ((FrameLayout) mAdapter.getItem(currentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
-            }
+            mAdapter.getItem(currentSelectedPosition).mMessage.isSelected = false;
+            mAdapter.notifyItemChanged(currentSelectedPosition);
         }
 
         void downHash() {
@@ -5820,15 +5817,20 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         private void goToSelectedPosition(int position) {
-            ((FrameLayout) mAdapter.getItem(currentSelectedPosition).mMessage.view).setForeground(null);
+
+            mAdapter.getItem(currentSelectedPosition).mMessage.isSelected = false;
+            mAdapter.notifyItemChanged(currentSelectedPosition);
+
             recyclerView.scrollToPosition(position);
             currentSelectedPosition = position;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (mAdapter.getItem(currentSelectedPosition).mMessage.view != null) {
-                        ((FrameLayout) mAdapter.getItem(currentSelectedPosition).mMessage.view).setForeground(new ColorDrawable(getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
-                    }
+
+                    mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.isSelected = true;
+                    mAdapter.notifyItemChanged(searchHash.currentSelectedPosition);
+
+
                 }
             }, 150);
         }
