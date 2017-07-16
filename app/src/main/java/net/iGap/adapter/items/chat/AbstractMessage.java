@@ -1159,9 +1159,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 /**
                  * load file from local
                  */
-                onLoadThumbnailFromLocal(holder, mMessage.attachment.cashID, attachment.getLocalFilePath(), LocalFileType.FILE);
+                onLoadThumbnailFromLocal(holder, getCacheId(mMessage), attachment.getLocalFilePath(), LocalFileType.FILE);
             } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
-                onLoadThumbnailFromLocal(holder, mMessage.attachment.cashID, attachment.getLocalFilePath(), LocalFileType.FILE);
+                onLoadThumbnailFromLocal(holder, getCacheId(mMessage), attachment.getLocalFilePath(), LocalFileType.FILE);
             } else {
                 /**
                  * file doesn't exist on local, I check for a thumbnail
@@ -1171,7 +1171,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     /**
                      * load thumbnail from local
                      */
-                    onLoadThumbnailFromLocal(holder, mMessage.attachment.cashID, attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                    onLoadThumbnailFromLocal(holder, getCacheId(mMessage), attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT) {
                         downLoadThumbnail(holder, attachment);
@@ -1308,7 +1308,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 if (progress.getVisibility() == View.VISIBLE) {
                     progress.setVisibility(View.GONE);
-                    onLoadThumbnailFromLocal(holder, mMessage.attachment.cashID, attachment.getLocalFilePath(), LocalFileType.FILE);
+                    onLoadThumbnailFromLocal(holder, getCacheId(mMessage), attachment.getLocalFilePath(), LocalFileType.FILE);
                 }
 
                 String _status = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getStatus() : mMessage.status;
@@ -1591,7 +1591,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
+    public String getCacheId(StructMessageInfo mMessage) {
+        if (mMessage.forwardedFrom != null && mMessage.forwardedFrom.getAttachment() != null && mMessage.forwardedFrom.getAttachment().getCacheId() != null) {
+            return mMessage.forwardedFrom.getAttachment().getCacheId();
+        } else if (mMessage.getAttachment() != null && mMessage.getAttachment().cashID != null) {
+            return mMessage.getAttachment().cashID;
+        }
 
+        return "";
+    }
 
 
 }

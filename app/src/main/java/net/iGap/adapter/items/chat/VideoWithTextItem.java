@@ -53,7 +53,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
             holder.image = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
             holder.duration = (TextView) holder.itemView.findViewById(R.id.duration);
-            holder.image.setTag(mMessage.attachment.cashID);
+            holder.image.setTag(getCacheId(mMessage));
         }
 
         super.bindView(holder, payloads);

@@ -56,7 +56,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getImageItem(false));
         }
-        holder.itemView.findViewById(R.id.thumbnail).setTag(mMessage.attachment.cashID);
+        holder.itemView.findViewById(R.id.thumbnail).setTag(getCacheId(mMessage));
         super.bindView(holder, payloads);
 
         holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(new View.OnClickListener() {
