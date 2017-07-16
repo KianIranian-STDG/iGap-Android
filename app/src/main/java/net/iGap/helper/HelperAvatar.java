@@ -143,7 +143,7 @@ public class HelperAvatar {
                     onAvatarGetHashMap.put(ownerId, listeners);
                 }
 
-                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL, new OnDownload() {
+                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, new OnDownload() {
                     @Override
                     public void onDownload(final String filepath, final String token) {
 

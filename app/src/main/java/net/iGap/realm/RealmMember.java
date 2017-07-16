@@ -83,10 +83,10 @@ public class RealmMember extends RealmObject {
                                 } else {
                                     members.add(member);
                                 }
-
-                                //newMembers.addAll(0, realmRoom.getChannelRoom().getMembers());
-                                realmRoom.getChannelRoom().setMembers(newMembers);
                             }
+
+                            newMembers.addAll(0, realmRoom.getChannelRoom().getMembers());
+                            realmRoom.getChannelRoom().setMembers(newMembers);
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {
