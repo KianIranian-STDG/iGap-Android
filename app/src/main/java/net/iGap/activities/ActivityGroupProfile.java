@@ -1765,13 +1765,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     private void groupLeft() {
 
         String text = "";
+        int title;
         if (role == GroupChatRole.OWNER) {
             text = getString(R.string.do_you_want_to_delete_this_group);
+            title = R.string.delete_group;
         } else {
             text = getString(R.string.do_you_want_to_leave_this_group);
+            title = R.string.left_group;
         }
 
-        new MaterialDialog.Builder(ActivityGroupProfile.this).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(ActivityGroupProfile.this).title(title).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 

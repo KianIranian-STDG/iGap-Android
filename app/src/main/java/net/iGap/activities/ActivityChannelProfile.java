@@ -368,6 +368,12 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             }
         });
 
+        TextView txtDeletChannel = (TextView) findViewById(R.id.txt_delete_channel);
+        if (role == ChannelChatRole.OWNER) {
+            txtDeletChannel.setText(getString(R.string.channel_delete));
+        } else {
+            txtDeletChannel.setText(getString(R.string.channel_left));
+        }
         lytDeleteChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1745,10 +1751,10 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         String deleteText = "";
         int title;
         if (role.equals(ChannelChatRole.OWNER)) {
-            deleteText = context.getString(R.string.do_you_want_delete_this);
+            deleteText = context.getString(R.string.do_you_want_delete_this_channel);
             title = R.string.channel_delete;
         } else {
-            deleteText = context.getString(R.string.do_you_want_left_this);
+            deleteText = context.getString(R.string.do_you_want_leave_this_channel);
             title = R.string.channel_left;
         }
 

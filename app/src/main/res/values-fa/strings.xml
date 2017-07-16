@@ -552,7 +552,10 @@
   <string name="delete_contact">حذف مخاطب</string>
   <string name="error_email">نشانی ایمیل نامعتبر</string>
   <string name="do_you_want_delete_this">آیا از حذف آیتم انتخاب شده اطمینان دارید؟</string>
-  <string name="do_you_want_delete_this_channel">آیا از خروج و حذف این کانال اطمینان دارید؟</string>
+  <string name="do_you_want_delete_this_channel">آیا از حذف این کانال اطمینان دارید؟</string>
+  <string name="do_you_want_leave_this_channel">آیا مطمئنید که می‌خواهید این کانال را ترک کنید؟</string>
+
+
   <string name="do_you_want_clear_history_this">آیا از پاک کردن تاریخچه آیتم انتخاب شده اطمینان دارید؟</string>
   <string name="active_session_title">لغو و بستن جلسه</string>
   <string name="active_session_all_title">لغو و بستن جلسات</string>
@@ -637,6 +640,7 @@
   <string name="do_you_want_left_this">آیااز ترک ایتم انتخاب شده اطمینان دارید؟</string>
 
   <string name="do_you_want_to_leave_this_group">آیا مطمئنید که می‌خواهید این گروه را ترک کنید؟</string>
+
   <string name="waiting_for_connection">در انتظار اتصال به سرور</string>
   <string name="picture_save_to_galary">"ذخیرهٔ تصویر در گالری"</string>
   <string name="my_location_title">موقعیت من</string>

@@ -76,6 +76,11 @@ public class ActivityRatingBar extends ActivityEnhanced {
         }).build();
         View view = dialog.getView();
 
+        dialog.getTitleView().setTypeface(G.typeface_IRANSansMobile);
+        dialog.getActionButton(DialogAction.NEGATIVE).setTypeface(G.typeface_IRANSansMobile);
+        dialog.getActionButton(DialogAction.POSITIVE).setTypeface(G.typeface_IRANSansMobile);
+
+
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
 
