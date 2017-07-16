@@ -799,19 +799,20 @@ import org.parceler.Parcel;
     }
 
     public static void isEmojiInText(RealmRoomMessage roomMessage, String message) {
+        try {
+            EmojiEditTextE et = new EmojiEditTextE(G.context);
+            et.setText(message);
 
-        EmojiEditTextE et = new EmojiEditTextE(G.context);
-        et.setText(message);
+            final SpannableStringBuilder spannableStringBuilder = (SpannableStringBuilder) et.getText();
 
-        final SpannableStringBuilder spannableStringBuilder = (SpannableStringBuilder) et.getText();
-
-        if (spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), DynamicDrawableSpan.class).length > 0) {
+            if (spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), DynamicDrawableSpan.class).length > 0) {
+                roomMessage.setHasEmojiInText(true);
+            } else {
+                roomMessage.setHasEmojiInText(false);
+            }
+        } catch (Exception e) {
             roomMessage.setHasEmojiInText(true);
-        } else {
-            roomMessage.setHasEmojiInText(false);
         }
-
-
 
     }
 

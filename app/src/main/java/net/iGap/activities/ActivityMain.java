@@ -493,7 +493,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (HelperCalander.isLanguagePersian) {
             navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box),
                 getString(R.string.md_apps));
-            navigationTabStrip.setTabIndex(4);
+
         } else {
             navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon),
                 getString(R.string.md_phone));
@@ -546,30 +546,40 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (HelperCalander.isLanguagePersian) {
 
-            fragmentCall = FragmentCall.newInstance(true);
-            pages.add(fragmentCall);
-        } else {
-            pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-        }
+            findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
 
-        sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(sampleFragmentPagerAdapter);
-        navigationTabStrip.setViewPager(mViewPager);
-
-        mViewPager.setCurrentItem(0);
-
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                if (HelperCalander.isLanguagePersian) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    fragmentCall = FragmentCall.newInstance(true);
+                    pages.add(fragmentCall);
 
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-                } else {
+
+                    mViewPager.getAdapter().notifyDataSetChanged();
+                    mViewPager.setOffscreenPageLimit(pages.size());
+                    mViewPager.setCurrentItem(pages.size() - 1);
+
+                    findViewById(R.id.loadingContent).setVisibility(View.GONE);
+                }
+            }, 500);
+        } else {
+
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
+                    mViewPager.getAdapter().notifyDataSetChanged();
+                    mViewPager.setCurrentItem(0);
+                }
+            }, 100);
+
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
@@ -577,20 +587,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     fragmentCall = FragmentCall.newInstance(true);
                     pages.add(fragmentCall);
+
+                    mViewPager.getAdapter().notifyDataSetChanged();
+                    mViewPager.setOffscreenPageLimit(pages.size());
+
+
                 }
+            }, 1000);
+        }
 
-                mViewPager.getAdapter().notifyDataSetChanged();
-                mViewPager.setOffscreenPageLimit(pages.size());
+        sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(sampleFragmentPagerAdapter);
+        navigationTabStrip.setViewPager(mViewPager);
 
-                if (HelperCalander.isLanguagePersian) {
-                    mViewPager.setCurrentItem(pages.size());
-                } else {
-                    mViewPager.setCurrentItem(0);
-                }
-
-
-            }
-        }, 2000);
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
 
@@ -598,7 +607,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onClick(View v) {
 
-                fragmentCall.openDialogMenu();
+                try {
+                    fragmentCall.openDialogMenu();
+                } catch (Exception e) {
+
+                }
+
             }
         });
 

@@ -751,7 +751,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         String mCashID = mAdapter.getItem(j).mMessage.forwardedFrom != null ? mAdapter.getItem(j).mMessage.forwardedFrom.getAttachment().getCacheId() : mAdapter.getItem(j).mMessage.attachment.cashID;
 
-                        if (mCashID.equals(_cashId)) {
+                        if (mCashID != null && mCashID.equals(_cashId)) {
                             mAdapter.notifyItemChanged(j);
                         }
                     } catch (NullPointerException e) {

@@ -138,8 +138,8 @@ public class RealmRoom extends RealmObject {
      * @param room ProtoGlobal.Room
      * @return RealmRoom
      */
-    public static RealmRoom putOrUpdate(ProtoGlobal.Room room) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmRoom putOrUpdate(ProtoGlobal.Room room, Realm realm) {
+
         putChatToClientCondition(realm, room);
 
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
@@ -234,7 +234,7 @@ public class RealmRoom extends RealmObject {
 
         realmRoom.setDraft(realmRoomDraft);
 
-        realm.close();
+
 
         return realmRoom;
     }
@@ -269,7 +269,7 @@ public class RealmRoom extends RealmObject {
                         }
 
                         for (ProtoGlobal.Room room : rooms) {
-                            RealmRoom.putOrUpdate(room);
+                            RealmRoom.putOrUpdate(room, realm);
                         }
 
                         if (cleanDeletedRoommessage) {

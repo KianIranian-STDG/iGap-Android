@@ -586,7 +586,7 @@ public class HelperUrl {
                     @Override
                     public void execute(Realm realm) {
 
-                        RealmRoom realmRoom = RealmRoom.putOrUpdate(room);
+                        RealmRoom realmRoom = RealmRoom.putOrUpdate(room, realm);
                         realmRoom.setDeleted(true);
                         G.deletedRoomList.add(realmRoom.getId());
                     }
@@ -930,7 +930,7 @@ public class HelperUrl {
                     @Override
                     public void execute(Realm realm) {
 
-                        RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room);
+                        RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
                         realmRoom1.setDeleted(true);                            // if in chat activity join to room set deleted goes to false
                         G.deletedRoomList.add(realmRoom1.getId());
                     }

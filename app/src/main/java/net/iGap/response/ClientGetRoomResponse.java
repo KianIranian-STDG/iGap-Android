@@ -54,7 +54,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                 final String identity = identityParams[0];
 
                 if (identity.equals(RequestClientGetRoom.CreateRoomMode.justInfo.toString())) {
-                    RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom());
+                    RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom(), realm);
                     realmRoom.setDeleted(true);
                     realmRoom.setKeepRoom(true);
 
@@ -82,7 +82,7 @@ public class ClientGetRoomResponse extends MessageHandler {
 
                                     realm.executeTransactionAsync(new Realm.Transaction() {
                                         @Override public void execute(Realm realm) {
-                                            putOrUpdate(clientGetRoom.getRoom());
+                                            putOrUpdate(clientGetRoom.getRoom(), realm);
                                         }
                                     }, new Realm.Transaction.OnSuccess() {
                                         @Override public void onSuccess() {
@@ -108,7 +108,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                         }
                     }).getUserInfo(clientGetRoom.getRoom().getChatRoomExtra().getPeer().getId());
                 } else {
-                    putOrUpdate(clientGetRoom.getRoom());
+                    putOrUpdate(clientGetRoom.getRoom(), realm);
 
                     G.handler.postDelayed(new Runnable() {
                         @Override public void run() {

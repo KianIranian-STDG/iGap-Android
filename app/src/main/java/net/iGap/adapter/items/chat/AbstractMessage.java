@@ -367,6 +367,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         } else if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
 
+            // add layout seen in channel
+            if (holder.itemView.findViewById(R.id.lyt_see) == null) {
+                LinearLayout ll_time_layout = (LinearLayout) holder.itemView.findViewById(R.id.csl_ll_time);
+                ll_time_layout.addView(ViewMaker.getViewSeen(), 0);
+            }
+
             TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
 
             if ((mMessage.forwardedFrom != null)) {
@@ -649,12 +655,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (messageText != null) {
             messageText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
-        ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
+        //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
         setTextcolor(imgTick, R.color.colorOldBlack);
 
 
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.LEFT;
+
+        ((LinearLayout.LayoutParams) holder.itemView.findViewById(R.id.contentContainer).getLayoutParams()).gravity = Gravity.LEFT;
 
         (holder.itemView.findViewById(R.id.contentContainer)).setBackgroundResource(R.drawable.rectangel_white_round);
 
@@ -685,9 +693,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.RIGHT;
 
-        LinearLayout voteLayout = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer).getParent().getParent();
-        voteLayout.setGravity(Gravity.RIGHT);
-
         ((LinearLayout.LayoutParams) holder.itemView.findViewById(R.id.contentContainer).getLayoutParams()).gravity = Gravity.RIGHT;
 
         LinearLayout timeLayout = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer).getParent();
@@ -700,7 +705,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (messageText != null) {
             messageText.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
-        ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
+        //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
         if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
             setTextcolor(imgTick, R.color.iGapColor);
