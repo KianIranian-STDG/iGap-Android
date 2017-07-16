@@ -17,14 +17,13 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -447,7 +446,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onClick(View v) {
 
-                FragmentStatePagerAdapter adapter = (FragmentStatePagerAdapter) mViewPager.getAdapter();
+                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
                 if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
 
                     FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
@@ -491,12 +490,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         final NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        //if (HelperCalander.isLanguagePersian) {
-        //    navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
-        //    navigationTabStrip.setTabIndex(4);
-        //} else {
-        navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
-        // }
+        if (HelperCalander.isLanguagePersian) {
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box),
+                getString(R.string.md_apps));
+            navigationTabStrip.setTabIndex(4);
+        } else {
+            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon),
+                getString(R.string.md_phone));
+        }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
         navigationTabStrip.setStripColor(Color.WHITE);
@@ -510,7 +511,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onEndTabSelected(String title, int index) {
 
-                FragmentStatePagerAdapter adapter = (FragmentStatePagerAdapter) mViewPager.getAdapter();
+                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
 
                 if (adapter.getItem(index) instanceof FragmentMain) {
 
@@ -542,46 +543,54 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        final FragmentMain fragmentMainAll = FragmentMain.newInstance(FragmentMain.MainType.all);
 
-        //if(HelperCalander.isLanguagePersian){
-        //    pages.add( fragmentCall);
-        //    pages.add( FragmentMain.newInstance(FragmentMain.MainType.channel));
-        //    pages.add( FragmentMain.newInstance(FragmentMain.MainType.group));
-        //    pages.add( FragmentMain.newInstance(FragmentMain.MainType.chat));
-        //    pages.add( fragmentMainAll);
-        //
-        //
-        //}else {
-        pages.add(fragmentMainAll);
-        //  }
+        if (HelperCalander.isLanguagePersian) {
 
-        sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager(), pages);
+            fragmentCall = FragmentCall.newInstance(true);
+            pages.add(fragmentCall);
+        } else {
+            pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
+        }
+
+        sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(sampleFragmentPagerAdapter);
-
         navigationTabStrip.setViewPager(mViewPager);
 
         mViewPager.setCurrentItem(0);
+
 
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
-                pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
-                pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
-                pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
-                pages.add(FragmentCall.newInstance(true));
+                if (HelperCalander.isLanguagePersian) {
+
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
+                } else {
+
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
+                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
+
+                    fragmentCall = FragmentCall.newInstance(true);
+                    pages.add(fragmentCall);
+                }
 
                 mViewPager.getAdapter().notifyDataSetChanged();
                 mViewPager.setOffscreenPageLimit(pages.size());
+
+                if (HelperCalander.isLanguagePersian) {
+                    mViewPager.setCurrentItem(pages.size());
+                } else {
+                    mViewPager.setCurrentItem(0);
+                }
+
+
             }
         }, 2000);
-
-        //}
-
-
-
-        navigationTabStrip.setViewPager(mViewPager);
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
 
@@ -603,29 +612,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     }
 
-    class SampleFragmentPagerAdapter extends FragmentStatePagerAdapter {
+    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 
-        ArrayList<Fragment> pagesFragment;
-
-        @Override
-        public Parcelable saveState() {
-            return null;
-        }
-
-        SampleFragmentPagerAdapter(FragmentManager fm, ArrayList<Fragment> pagesFragment) {
+        SampleFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
-            this.pagesFragment = pagesFragment;
         }
 
         @Override
         public Fragment getItem(int i) {
-
-            return pagesFragment.get(i);
+            return pages.get(i);
         }
 
         @Override
         public int getCount() {
-            return pagesFragment.size();
+            return pages.size();
         }
     }
 

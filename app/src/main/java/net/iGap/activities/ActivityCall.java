@@ -840,6 +840,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     private void playSound(final int resSound) {
 
         final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setSpeakerphoneOn(false);
 
         if (player == null) {
             try {
