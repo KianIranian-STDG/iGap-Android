@@ -415,6 +415,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public long mRoomId = 0;
     public static long mRoomIdStatic = 0;
 
+    private final int END_CHAT_LIMIT = 5;
     private int countNewMessage = 0;
     private int lastPosition = 0;
     private int unreadCount = 0;
@@ -2813,7 +2814,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                     StructBackGroundSeen _BackGroundSeen = null;
 
                                                     ProtoGlobal.RoomMessageStatus roomMessageStatus;
-                                                    if (G.isAppInFg) {
+                                                    if (G.isAppInFg && isEnd()) {
 
                                                         /**
                                                          * I'm in the room, so unread messages count is 0. it means, I read all messages
@@ -3084,7 +3085,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     @Override
-    public void onItemShowingMessageId(StructMessageInfo messageInfo) {
+    public void onItemShowingMessageId(final StructMessageInfo messageInfo) {
         /**
          * if in current room client have new message that not seen yet
          * after first new message come in the view change view for unread count
@@ -3095,6 +3096,58 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             txtNewUnreadMessage.setText(countNewMessage + "");
 
             firstUnreadMessageInChat = null;
+        }
+
+        if (chatType != CHANNEL && (messageInfo.status != null && !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) & !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString()))) {
+
+            /**
+             * set message status SEEN for avoid from run this block in each bindView
+             */
+            messageInfo.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
+
+            final Realm realm = Realm.getDefaultInstance();
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    /**
+                     * check SEEN and LISTENED for avoid from duplicate send status request in enter to chat
+                     * because in enter ro chat fetchMessage method will be send status so client shouldn't
+                     * send status again
+                     */
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageInfo.messageID)).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
+                    if (realmRoomMessage != null) {
+                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                        if (realmClientCondition != null) {
+                            if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                                realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+
+                                RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
+                                realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
+                                realm.copyToRealmOrUpdate(realmOfflineSeen);
+                                if (realmClientCondition.getOfflineSeen() != null) {
+                                    realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                } else {
+                                    RealmList<RealmOfflineSeen> offlineSeenList = new RealmList<>();
+                                    offlineSeenList.add(realmOfflineSeen);
+                                    realmClientCondition.setOfflineSeen(offlineSeenList);
+                                }
+                            }
+                        }
+
+                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                    }
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    realm.close();
+                }
+            }, new Realm.Transaction.OnError() {
+                @Override
+                public void onError(Throwable error) {
+                    realm.close();
+                }
+            });
         }
     }
 
@@ -4332,8 +4385,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void setBtnDownVisible(RealmRoomMessage realmRoomMessage) {
-        LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
-        if (addToView && llm.findLastVisibleItemPosition() + 5 > recyclerView.getAdapter().getItemCount()) {
+        if (isEnd()) {
             scrollToEnd();
         } else {
             if (countNewMessage == 0) {
@@ -4352,6 +4404,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             txtNewUnreadMessage.setText(countNewMessage + "");
             txtNewUnreadMessage.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * check difference position to end of adapter
+     *
+     * @return true if lower than END_CHAT_LIMIT otherwise return false
+     */
+    private boolean isEnd() {
+        return addToView && ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition() + END_CHAT_LIMIT > recyclerView.getAdapter().getItemCount();
     }
 
     /**
@@ -7053,6 +7114,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 txtEmptyMessages.setVisibility(View.GONE);
                             }
                         });
+                    }
+
+                    //TODO [Saeed Mozaffari] [2017-07-16 2:27 PM] - I do this for set addToView true , use another way. hint : maybe can use from correct scroll state
+                    if (directionEnum == DOWN && realmRoomMessages.size() < (Config.LIMIT_GET_HISTORY_NORMAL - 2)) {
+                        getOnlineMessage(startFutureMessageIdDown, directionEnum);
                     }
 
                     /**
