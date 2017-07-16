@@ -122,7 +122,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
+        if (holder.image != null && holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
             G.imageLoader.displayImage(suitablePath(localPath), holder.image);
             holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
         }

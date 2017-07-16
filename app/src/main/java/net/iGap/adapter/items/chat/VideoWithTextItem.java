@@ -110,7 +110,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
+        if (holder.image != null && holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
             if (fileType == LocalFileType.THUMBNAIL) {
 
                 G.imageLoader.displayImage(suitablePath(localPath), holder.image);
