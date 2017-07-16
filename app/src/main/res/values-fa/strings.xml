@@ -33,9 +33,9 @@
 
   <!-- Fill Profile User  -->
   <string name="pu_title_profileUser">"پروفایل خود را تکمیل کنید"</string>
-  <string name="pu_desc_profileUser">"نام (مستعار) خود را وارد کرده و برای خود عکس پروفایل انتخاب نمایید"</string>
+  <string name="pu_desc_profileUser">"نام خود را وارد کرده و برای خود عکس پروفایل انتخاب نمایید"</string>
   <string name="pu_addPhoto_profileUser">"عکس پروفایل"</string>
-  <string name="pu_nikname_profileUser">"نام (مستعار)"</string>
+  <string name="pu_nikname_profileUser">"نام"</string>
   <string name="pu_Lets_Go">"ادامه"</string>
 
   <!-- Register Page -->
@@ -68,8 +68,8 @@
   <string name="Toast_Enter_Phone_Number">"لطفاً شماره تلفن خود را بدون صفر ابتدای آن وارد کنید"</string>
   <string name="Toast_Enter_Code">"لطفاً کد تأیید را وارد نمایید"</string>
   <string name="Toast_Number_Block">"شماره وارد شده مسدود شده است"</string>
-  <string name="Toast_Invalid_nickname">"نام مستعار نامعتبر است. لطفاً نام مستعار را تغییر دهید."</string>
-  <string name="Toast_Write_NickName">"لطفاً نام مستعار خود را وارد کنید"</string>
+  <string name="Toast_Invalid_nickname">"نام نامعتبر است. لطفاً نام را تغییر دهید."</string>
+  <string name="Toast_Write_NickName">"لطفاً نام خود را وارد کنید"</string>
 
   <!-- Destruction -->
   <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
@@ -167,7 +167,7 @@
   <string name="st_titleToolbar">"تنظیمات"</string>
   <string name="st_title_general">تنظیمات عمومی</string>
   <string name="st_username">"نام کاربری"</string>
-  <string name="st_nickname">"نام (مستعار)"</string>
+  <string name="st_nickname">"نام"</string>
   <string name="st_contactName">"نام مخاطب"</string>
   <string name="st_phoneNumber">"شماره تلفن"</string>
   <string name="st_title_info">"اطلاعات"</string>
@@ -260,7 +260,7 @@
   <!-- fragment add contact -->
   <string name="fac_Add_Contact">"افزودن مخاطب"</string>
   <string name="fac_contact_info">"اطلاعات مخاطب"</string>
-  <string name="fac_First_Name">"نام(مستعار)"</string>
+  <string name="fac_First_Name">"نام"</string>
   <string name="fac_Last_Name">"نام خانوادگی"</string>
   <string name="fac_Phone_Number">"شماره تلفن"</string>
   <string name="fac_Find_in_Page">"یافتن در صفحه"</string>
@@ -294,7 +294,7 @@
   <string name="array_No_popup">"بدون پنجرۀ اعلان"</string>
   <string name="array_Only_when_screen_on">"‫تنها زمانی که صفحهٔ نمایشگر روشن است"</string>‬‬‬‬‬‬
   <string name="array_Only_when_screen_off">"تنها زمانی که صفحهٔ نمایشگر خاموش است"</string>
-  <string name="array_Always_show_popup">"نمایش همیشگی پنجره های تبلیغاتی"</string>
+  <string name="array_Always_show_popup">"نمایش همیشگی پنجره های اعلان پیام"</string>
   <string name="array_Disable">"غیرفعال"</string>
   <string name="array_enable">"فعال"</string>
   <string name="array_Default">"پیش‌فرض"</string>
@@ -341,9 +341,9 @@
   <string name="group_description">"توضیح مختصر گروه"</string>
   <string name="please_enter_group_description">"لطفاً توضیح مختصری برای گروه وارد کنید."</string>
   <string name="do_you_want_to_delete_this_group">"آیا از حذف این گفتگو اطمینان دارید؟"</string>
-  <string name="do_you_want_to_set_admin_role_to_member">"آیا از گرقتن نقش مدیر از این عضو اطمینان دارید؟"</string>
+  <string name="do_you_want_to_set_admin_role_to_member">"آیا از گرفتن نقش مدیر از این عضو اطمینان دارید؟"</string>
   <string name="do_you_want_to_kick_this_member">"آیا از بیرون انداختن این عضو(ها) اطمینان دارید؟"</string>
-  <string name="do_you_want_to_set_modereator_role_to_member">"آیا از گرقتن نقش ناظر از این عضو اطمینان دارید؟"</string>
+  <string name="do_you_want_to_set_modereator_role_to_member">"آیا از گرفتن نقش ناظر از این عضو اطمینان دارید؟"</string>
   <string name="waiting_for_network">"در انتظار اتصال به اینترنت"</string>
   <string name="connecting">"در حال برقراری ارتباط"</string>
   <string name="updating">"در حال به‌روزرسانی"</string>
@@ -551,8 +551,9 @@
   <string name="set_email">تنظیم و ویرایش ایمیل</string>
   <string name="delete_contact">حذف مخاطب</string>
   <string name="error_email">نشانی ایمیل نامعتبر</string>
-  <string name="do_you_want_delete_this">آیا از حذف آیتم انتخاب شده اطمینان دارید ؟</string>
-  <string name="do_you_want_clear_history_this">آیا از پاک کردن تاریخچه آیتم انتخاب شده اطمینان دارید ؟</string>
+  <string name="do_you_want_delete_this">آیا از حذف آیتم انتخاب شده اطمینان دارید؟</string>
+  <string name="do_you_want_delete_this_channel">آیا از خروج و حذف این کانال اطمینان دارید؟</string>
+  <string name="do_you_want_clear_history_this">آیا از پاک کردن تاریخچه آیتم انتخاب شده اطمینان دارید؟</string>
   <string name="active_session_title">لغو و بستن جلسه</string>
   <string name="active_session_all_title">لغو و بستن جلسات</string>
   <string name="active_session_content">آیا از غیر فعال کردنِ این جلسۀ فعال اطمینان دارید؟</string>
@@ -609,7 +610,7 @@
 
   <string name="message">پیام</string>
   <string name="future_done">این قابلیت در آینده ارائه خواهد شد.</string>
-  <string name="nick_name_not_exist">این نام مستعار وجود ندارد.</string>
+  <string name="nick_name_not_exist">این نام وجود ندارد.</string>
   <string name="first_name">نام</string>
   <string name="last_name">نام خانوادگی</string>
   <string name="block_this_contact">ارتباط این مخاطب مسدود شود؟</string>
@@ -689,7 +690,7 @@
   <string name="normal_error">can\'t do it please try later</string>
   <string name="channel_description">توضیح کانال</string>
   <string name="channel_name">نام کانال</string>
-  <string name="delete_and_leave_channel">حذف و خارج شدن از گروه</string>
+  <string name="delete_and_leave_channel">حذف و خارج شدن از کانال</string>
   <string name="channel_delete">حذف کانال</string>
   <string name="please_enter_channel_name">"لطفاً نام کانال وارد کنید."</string>
   <string name="new_channel">"کانال جدید"</string>
@@ -888,7 +889,7 @@
   <string name="Change_password">تغییر رمزعبور </string>
   <string name="Change_hint">تغییر نشانهٔ رمزعبور </string>
   <string name="turn_Password_off">غیرفعال سازی درخواست رمزعبور </string>
-  <string name="turn_Password_off_desc">آیا قطعاً می خواهید  رمز عبور را غیرفعال نمایید؟ </string>
+  <string name="turn_Password_off_desc">آیا مایلید رمز عبور را غیرفعال نمایید؟</string>
   <string name="change_email_recovery">تعیین یا تغییر پست الکترونیکی</string>
   <string name="Change_question_recovery">تغییر سؤال امنیتی</string>
   <string name="set_unconfirmed_email">وارد کردن کد تأیید پست الکترونیکی</string>
