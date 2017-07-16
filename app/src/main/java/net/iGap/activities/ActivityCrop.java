@@ -153,7 +153,6 @@ public class ActivityCrop extends ActivityEnhanced {
                     setResult(Activity.RESULT_OK, data);
                     finish();
                 }
-
             }
         });
     }

@@ -97,7 +97,7 @@ public class MyDialog {
             @Override public void onClick(View view) {
                 dialog.dismiss();
 
-                new MaterialDialog.Builder(context).title(G.context.getResources().getString(R.string.igap))
+                new MaterialDialog.Builder(context).title(itemName)
                     .titleColor(G.context.getResources().getColor(R.color.toolbar_background))
                     .content(context.getString(R.string.do_you_want_clear_history_this))
                     .positiveText(G.context.getResources().getString(R.string.B_ok))
