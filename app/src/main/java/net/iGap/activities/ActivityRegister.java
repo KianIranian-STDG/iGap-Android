@@ -96,6 +96,7 @@ import net.iGap.proto.ProtoRequest;
 import net.iGap.proto.ProtoUserRegister;
 import net.iGap.proto.ProtoUserVerify;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestQrCodeNewDevice;
@@ -1411,7 +1412,11 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                                 RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                                 if (userInfo == null) {
                                     userInfo = realm.createObject(RealmUserInfo.class);
-                                    RealmRegisteredInfo registeredInfo = realm.createObject(RealmRegisteredInfo.class, userId);
+                                    RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+
+                                    if (registeredInfo == null) {
+                                        registeredInfo = realm.createObject(RealmRegisteredInfo.class, userId);
+                                    }
                                     userInfo.setUserInfo(registeredInfo);
                                 }
                                 userInfo.getUserInfo().setUsername(userName);

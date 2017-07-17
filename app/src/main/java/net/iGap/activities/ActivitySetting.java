@@ -211,6 +211,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         G.onUserAvatarResponse = this;
 
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
+
+        if (realmUserInfo == null) {
+            finish();
+            return;
+        }
+
         realmUserInfo.addChangeListener(new RealmChangeListener<RealmModel>() {
             @Override
             public void onChange(RealmModel realmModel) {
@@ -289,6 +295,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         new RequestUserProfileGetEmail().userProfileGetEmail();
 
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
+
+        if (realmUserInfo == null) {
+            finish();
+            return;
+        }
+
         updateUserInfoUI(realmUserInfo);
          /*
           set layout and open dialog for set or change Name & Family

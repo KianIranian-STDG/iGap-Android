@@ -107,14 +107,22 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                     try {
                         HelperPermision.getLocationPermission(G.currentActivity, new OnGetPermission() {
                             @Override public void Allow() {
-                                FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition);
-                                FragmentActivity activity = (FragmentActivity) G.currentActivity;
-                                activity.getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .addToBackStack(null)
-                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                    .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
-                                    .commit();
+
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition);
+                                        FragmentActivity activity = (FragmentActivity) G.currentActivity;
+                                        activity.getSupportFragmentManager()
+                                            .beginTransaction()
+                                            .addToBackStack(null)
+                                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                            .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
+                                            .commit();
+                                    }
+                                });
+
+
                             }
 
                             @Override public void deny() {

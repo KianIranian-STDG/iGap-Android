@@ -141,6 +141,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().addFlags(
+            LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
+
+        super.onCreate(savedInstanceState);
 
         if (isGoingfromApp) {
             isGoingfromApp = false;
@@ -155,11 +160,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
 
         G.isInCall = true;
-        // requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(
-            LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
-        super.onCreate(savedInstanceState);
 
         try {
             HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
@@ -198,7 +199,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        verticalSwipe.dispatchTouchEvent(ev);
+
+        if (verticalSwipe != null) {
+            verticalSwipe.dispatchTouchEvent(ev);
+        }
+
         return super.dispatchTouchEvent(ev);
     }
 

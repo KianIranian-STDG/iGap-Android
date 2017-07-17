@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="68dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_chat_sub_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp68"
     >
 
   <LinearLayout
@@ -21,7 +21,6 @@
         android:orientation="horizontal"
         >
       <LinearLayout
-          android:paddingTop="@dimen/dp8"
           android:id="@+id/lytContainer3"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
@@ -29,6 +28,7 @@
           android:layout_weight="1"
           android:gravity="top|left"
           android:orientation="vertical"
+          android:paddingTop="@dimen/dp8"
           >
 
         <LinearLayout
@@ -43,16 +43,16 @@
               android:id="@+id/cs_txt_contact_name"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:lineSpacingExtra="0dp"
+              android:lineSpacingMultiplier=".8"
               android:maxWidth="@dimen/dp160"
+              android:paddingBottom="@dimen/dp4"
+              android:paddingTop="@dimen/dp4"
               android:singleLine="true"
               android:text="Name"
               android:textColor="@color/black90"
               android:textSize="@dimen/dp15"
               app:emojiSize="@dimen/dp16"
-              android:lineSpacingMultiplier=".8"
-              android:lineSpacingExtra="0dp"
-              android:paddingBottom="@dimen/dp4"
-              android:paddingTop="@dimen/dp4"
               />
 
 
@@ -70,29 +70,28 @@
       </LinearLayout>
 
       <LinearLayout
-          android:paddingTop="@dimen/dp12"
           android:id="@+id/lytContainer6"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:gravity="top|center_horizontal"
-          android:orientation="vertical"
           android:minWidth="@dimen/dp28"
+          android:orientation="vertical"
+          android:paddingTop="@dimen/dp12"
           >
 
         <LinearLayout
             android:id="@+id/lytContainer7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:paddingEnd="@dimen/dp8"
             android:paddingRight="@dimen/dp8"
-            android:orientation="horizontal"
-            >
-        </LinearLayout>
+            ></LinearLayout>
       </LinearLayout>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.3dp"
+        android:layout_height="1px"
         android:background="#52afafaf"
 
         />
