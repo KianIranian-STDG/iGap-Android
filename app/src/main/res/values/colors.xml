@@ -134,4 +134,5 @@
     <color name="pin_color">#f9f9f9</color>
     <color name="background_qrcode">#a80e0e0e</color>
     <color name="background_checkbox_bottomSheet">#758b8b8b</color>
+    <color name="background_check_gps">#85565656</color>
 </resources>

@@ -1002,4 +1002,7 @@
   <string name="c_MB">مگابایت </string>
   <string name="c_GB">گیگابایت </string>
   <string name="c_TB">ترابایت </string>
+
+  <string name="turn_on_gps">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
+
 </resources>

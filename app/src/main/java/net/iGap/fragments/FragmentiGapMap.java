@@ -11,10 +11,13 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -27,6 +30,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.Config;
@@ -68,6 +72,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private ItemizedOverlay<OverlayItem> latestLocation;
     private ArrayList<Marker> markers = new ArrayList<>();
     private GestureDetector mGestureDetector;
+    private ViewGroup rootTurnOnGps;
 
     private boolean first = true;
     private boolean firstEnter = true;
@@ -110,8 +115,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         G.onLocationChanged = this;
         G.onGetNearbyCoordinate = this;
         startMap(view);
-        new GPSTracker().detectLocation();
-
+        statusCheck();
         //clickDrawMarkActive();
     }
 
@@ -146,6 +150,22 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
+            }
+        });
+
+        rootTurnOnGps = (ViewGroup) view.findViewById(R.id.rootTurnOnGps);
+        rootTurnOnGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //have to empty
+            }
+        });
+
+        ToggleButton toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
+        toggleGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
         });
 
@@ -411,5 +431,24 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
+    }
+
+    public void statusCheck() {
+        final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+            rootTurnOnGps.setVisibility(View.VISIBLE);
+
+        } else {
+            rootTurnOnGps.setVisibility(View.GONE);
+            new GPSTracker().detectLocation();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        statusCheck();
     }
 }

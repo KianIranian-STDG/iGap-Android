@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#EEEEEE"
     android:elevation="999dp"
     android:fitsSystemWindows="false"
     android:orientation="vertical"
+    tools:ignore="MissingPrefix"
     >
 
   <android.support.design.widget.AppBarLayout
@@ -59,12 +61,12 @@
             android:id="@+id/txt_titleToolbar_map"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:gravity="center"
             android:text="@string/igap"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18"
             android:visibility="visible"
+            fontPath="fonts/IRANSansMobile_Bold.ttf"
             />
 
 
@@ -148,5 +150,49 @@
         app:elevation="@dimen/dp6"
         />
   </net.iGap.libs.floatingAddButton.ArcMenu>
+
+
+  <LinearLayout
+      android:id="@+id/rootTurnOnGps"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/background_check_gps"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:visibility="visible"
+      >
+
+
+    <ImageView
+        android:layout_width="@dimen/dp100"
+        android:layout_height="@dimen/dp100"
+        android:src="@mipmap/find"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/dp4"
+        android:paddingBottom="@dimen/dp8"
+        android:paddingLeft="@dimen/dp48"
+        android:paddingRight="@dimen/dp48"
+        android:paddingTop="@dimen/dp20"
+        android:text="@string/turn_on_gps"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp18"
+        fontPath="fonts/IRANSansMobile_Bold.ttf"
+        />
+
+    <ToggleButton
+        android:id="@+id/toggleGps"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:background="@drawable/st_switch_button"
+        android:textOff=""
+        android:textOn=""
+        />
+
+
+  </LinearLayout>
 
 </RelativeLayout>
