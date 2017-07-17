@@ -14,15 +14,11 @@ import net.iGap.proto.ProtoClientGetRoomList;
 
 public class RequestClientGetRoomList {
 
-    public void clientGetRoomList(int offset, int limit) {
-        clientGetRoomList(offset, limit, false);
-    }
-
-    public void clientGetRoomList(int offset, int limit, boolean fromLogin) {
+    public void clientGetRoomList(int offset, int limit, String identity) {
         ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
         clientGetRoomList.setPagination(new RequestPagination().pagination(offset, limit));
 
-        RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList, fromLogin + "");
+        RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList, identity);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -99,6 +99,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     private RecyclerView mRecyclerView;
     public MainType mainType;
     private Activity mActivity;
+    private long tagId;
 
     public enum MainType {
         all, chat, group, channel
@@ -121,6 +122,8 @@ public class FragmentMain extends Fragment implements OnComplete {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        tagId = System.currentTimeMillis();
 
         mainType = (MainType) getArguments().getSerializable(STR_MAIN_TYPE);
 
@@ -316,9 +319,9 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 ((ActivityMain) mActivity).mainInterfaceGetRoomList = new ActivityMain.MainInterfaceGetRoomList() {
                     @Override
-                    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+                    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
 
-                        onclientGetRoomList(roomList, response, fromLogin);
+                        onclientGetRoomList(roomList, response, identity);
                     }
 
                     @Override
@@ -413,9 +416,15 @@ public class FragmentMain extends Fragment implements OnComplete {
         }
     }
 
-    private void onclientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
-        if (fromLogin) {
+    private void onclientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
+
+        boolean fromLogin = false;
+        // requst from login
+        if (identity.equals("0")) {
             mOffset = 0;
+            fromLogin = true;
+        } else if (Long.parseLong(identity) < tagId) {
+            return;
         }
 
         boolean deleteBefore = false;
@@ -423,13 +432,17 @@ public class FragmentMain extends Fragment implements OnComplete {
             deleteBefore = true;
         }
 
-        if (roomList.size() > 0) {
-            putChatToDatabase(roomList, deleteBefore, false);
-            isThereAnyMoreItemToLoad = true;
-        } else {
-            putChatToDatabase(roomList, deleteBefore, true);
+        boolean cleanAfter = false;
+
+        if (roomList.size() < mLimit) {
             isThereAnyMoreItemToLoad = false;
+            cleanAfter = true;
+        } else {
+            isThereAnyMoreItemToLoad = true;
         }
+
+        putChatToDatabase(roomList, deleteBefore, cleanAfter);
+
 
         /**
          * to first enter to app , client first compute clientCondition then
@@ -470,7 +483,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
         if (isThereAnyMoreItemToLoad) {
             isSendRequestForLoading = true;
-            new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+            new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit, tagId + "");
 
             G.handler.post(new Runnable() {
                 @Override
@@ -478,8 +491,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                     progressBar.setVisibility(View.VISIBLE);
                 }
             });
-
-
+        } else {
+            mOffset = 0;
         }
 
 
@@ -522,7 +535,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                 if (G.isSecure && G.userLogin) {
 
                     mOffset = 0;
-                    new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+                    new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit, tagId + "");
                     isSendRequestForLoading = true;
                     progressBar.setVisibility(View.VISIBLE);
                 } else {

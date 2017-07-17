@@ -165,7 +165,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public interface MainInterfaceGetRoomList {
 
-        void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin);
+        void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity);
 
         void onError(int majorCode, int minorCode);
 
@@ -1838,10 +1838,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     //************************
 
     @Override
-    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
 
         if (mainInterfaceGetRoomList != null) {
-            mainInterfaceGetRoomList.onClientGetRoomList(roomList, response, fromLogin);
+            mainInterfaceGetRoomList.onClientGetRoomList(roomList, response, identity);
         }
     }
 

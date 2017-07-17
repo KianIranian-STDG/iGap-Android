@@ -136,9 +136,10 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
         G.onClientGetRoomListResponse = new OnClientGetRoomListResponse() {
             @Override
-            public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, boolean fromLogin) {
+            public void onClientGetRoomList(final List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
 
-                if (fromLogin) {
+                // from login
+                if (identity.equals("0")) {
                     mOffset = 0;
                 }
 
@@ -230,7 +231,7 @@ public class ActivitySelectChat extends ActivityEnhanced {
                             isSendRequestForLoading = true;
 
                             //  mOffset = mRecyclerView.getAdapter().getItemCount();
-                            new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
+                            new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit, "1");
                             progressBar.setVisibility(View.VISIBLE);
                         }
                     }
