@@ -10,8 +10,10 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
+import io.realm.Realm;
 import net.iGap.proto.ProtoGeoGetComment;
+import net.iGap.realm.RealmGeoNearbyDistance;
+import net.iGap.realm.RealmGeoNearbyDistanceFields;
 
 public class GeoGetCommentResponse extends MessageHandler {
 
@@ -31,10 +33,22 @@ public class GeoGetCommentResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoGeoGetComment.GeoGetCommentResponse.Builder builder = (ProtoGeoGetComment.GeoGetCommentResponse.Builder) message;
-        if (G.onGeoGetComment != null) {
-            G.onGeoGetComment.onGetComment(builder.getComment());
-        }
+        final ProtoGeoGetComment.GeoGetCommentResponse.Builder builder = (ProtoGeoGetComment.GeoGetCommentResponse.Builder) message;
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, Long.parseLong(identity)).findFirst();
+                if (realmGeoNearbyDistance != null) {
+                    realmGeoNearbyDistance.setComment(builder.getComment());
+                }
+            }
+        });
+        realm.close();
+
+        //if (G.onGeoGetComment != null) {
+        //    G.onGeoGetComment.onGetComment(builder.getComment());
+        //}
     }
 
     @Override

@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="net.iGap.fragments.FragmentMapUsers"
+    android:background="#ffffff"
+    >
+
+  <View
+      android:id="@+id/map_user_view"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/dp60"
+      android:orientation="horizontal"
+      />
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/map_user_view"
+      >
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcy_map_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fadeScrollbars="false"
+        android:overScrollMode="never"
+        android:scrollbarSize="5dp"
+        android:scrollbarThumbVertical="@color/toolbar_background"
+        android:scrollbars="vertical"
+        />
+
+    <ProgressBar
+        android:id="@+id/prgWaiting_map_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_margin="@dimen/dp20"
+        android:visibility="gone"
+        />
+
+  </FrameLayout>
+
+</RelativeLayout>

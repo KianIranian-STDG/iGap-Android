@@ -9,6 +9,7 @@
     android:fitsSystemWindows="false"
     android:orientation="vertical"
     tools:ignore="MissingPrefix"
+    android:id="@+id/mapContainer"
     >
 
   <android.support.design.widget.AppBarLayout

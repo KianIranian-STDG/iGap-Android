@@ -39,10 +39,12 @@ import net.iGap.R;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnLocationChanged;
 import net.iGap.libs.floatingAddButton.ArcMenu;
+import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
+import net.iGap.request.RequestGeoUpdateComment;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapListener;
@@ -78,7 +80,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private boolean firstEnter = true;
     private double lat1;
     private double lon1;
-    private Location location;
+    public static Location location;
 
     private FragmentActivity mActivity;
 
@@ -173,6 +175,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         FloatingActionButton btnLocation = (FloatingActionButton) view.findViewById(R.id.fab_map_location);
         FloatingActionButton btnOthers = (FloatingActionButton) view.findViewById(R.id.fab_map_others);
         FloatingActionButton btnList = (FloatingActionButton) view.findViewById(R.id.fab_map_list);
+        RippleView rippleMoreMap = (RippleView) view.findViewById(R.id.ripple_more_map);
 
         btnOthers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,6 +212,20 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 //TODO [Saeed Mozaffari] [2017-06-19 5:49 PM] - Go To Nearby Distance Page
             }
         });
+
+        rippleMoreMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentMapUsers fragmentMapUsers = FragmentMapUsers.newInstance();
+                try {
+                    mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.mapContainer, fragmentMapUsers, "fragment_map").commitAllowingStateLoss();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+        });
+
+        new RequestGeoUpdateComment().updateComment("I am " + G.displayName);
     }
 
     /**

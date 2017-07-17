@@ -10,7 +10,9 @@
 
 package net.iGap.response;
 
+import io.realm.Realm;
 import net.iGap.proto.ProtoGeoGetNearbyDistance;
+import net.iGap.realm.RealmGeoNearbyDistance;
 
 public class GeoGetNearbyDistanceResponse extends MessageHandler {
 
@@ -30,12 +32,19 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder builder = (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder) message;
-        for (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Result result : builder.getResultList()) {
-            result.getUserId();
-            result.getHasComment();
-            result.getDistance();
-        }
+        final ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder builder = (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder) message;
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Result result : builder.getResultList()) {
+                    RealmGeoNearbyDistance geoNearbyDistance = realm.createObject(RealmGeoNearbyDistance.class, result.getUserId());
+                    geoNearbyDistance.setHasComment(result.getHasComment());
+                    geoNearbyDistance.setDistance(result.getDistance());
+                }
+            }
+        });
+        realm.close();
     }
 
     @Override
