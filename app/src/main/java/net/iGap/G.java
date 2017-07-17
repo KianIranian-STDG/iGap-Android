@@ -25,6 +25,10 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.EmojiProvider;
+import com.vanniktech.emoji.emoji.Emoji;
+import com.vanniktech.emoji.emoji.EmojiCategory;
+import com.vanniktech.emoji.emoji.EmojiTree;
 import com.vanniktech.emoji.one.EmojiOneProvider;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
@@ -406,12 +410,14 @@ public class G extends MultiDexApplication {
     public static Typeface typeface_Fontico;
     public static Typeface typeface_neuropolitical;
 
+    public static EmojiProvider emojiProvider;
+    public static EmojiTree emojiTree = new EmojiTree();
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
+        initEmoji();
 
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
@@ -432,6 +438,28 @@ public class G extends MultiDexApplication {
         }
 
         new StartupActions();
+    }
+
+    private void initEmoji() {
+        emojiProvider = new EmojiOneProvider();
+
+        EmojiCategory[] categories = emojiProvider.getCategories();
+        emojiTree.clear();
+
+        for (int i = 0; i < categories.length; i++) {
+            try {
+                final Emoji[] emojis = categories[i].getEmojis();
+
+                //noinspection ForLoopReplaceableByForEach
+                for (int j = 0; j < emojis.length; j++) {
+                    emojiTree.add(emojis[j]);
+                }
+            } catch (Exception e) {
+                Log.e("dddd", " G initEmoji()    " + e.toString());
+            }
+        }
+
+        EmojiManager.install(emojiProvider); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
     }
 
     @Override

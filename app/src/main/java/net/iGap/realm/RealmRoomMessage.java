@@ -12,9 +12,8 @@ package net.iGap.realm;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
-import android.text.style.DynamicDrawableSpan;
+import com.vanniktech.emoji.emoji.Emoji;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
@@ -32,7 +31,6 @@ import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnActivityMainStart;
-import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.module.enums.LocalFileType;
@@ -799,17 +797,21 @@ import org.parceler.Parcel;
     }
 
     public static void isEmojiInText(RealmRoomMessage roomMessage, String message) {
+
         try {
-            EmojiEditTextE et = new EmojiEditTextE(G.context);
-            et.setText(message);
-
-            final SpannableStringBuilder spannableStringBuilder = (SpannableStringBuilder) et.getText();
-
-            if (spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), DynamicDrawableSpan.class).length > 0) {
-                roomMessage.setHasEmojiInText(true);
-            } else {
-                roomMessage.setHasEmojiInText(false);
+            boolean hasEmoji = false;
+            int i = 0;
+            while (i < message.length()) {
+                final Emoji found = G.emojiTree.findEmoji(message.subSequence(i, message.length()));
+                if (found != null) {
+                    hasEmoji = true;
+                    break;
+                } else {
+                    i++;
+                }
             }
+
+            roomMessage.setHasEmojiInText(hasEmoji);
         } catch (Exception e) {
             roomMessage.setHasEmojiInText(true);
         }
