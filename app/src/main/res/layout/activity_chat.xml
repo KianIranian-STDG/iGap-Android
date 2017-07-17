@@ -794,7 +794,7 @@
     <RelativeLayout
         android:id="@+id/chl_ll_channel_footer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp48"
+        android:layout_height="@dimen/dp52"
         android:orientation="vertical"
         android:visibility="gone"
         >
@@ -803,47 +803,23 @@
       <LinearLayout
 
           android:layout_width="match_parent"
-          android:layout_height="@dimen/dp48"
+          android:layout_height="match_parent"
           android:layout_alignParentBottom="true"
-          android:background="@android:color/black"
+          android:background="@android:color/white"
           android:orientation="horizontal"
           >
-
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/chl_btn_up"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:gravity="center"
-            android:text="@string/md_expand_arrow"
-            android:textAppearance="@style/TextIconAppearance_toolbar"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/dp16"
-
-            />
-
 
         <TextView
             android:id="@+id/chl_txt_mute_channel"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:layout_gravity="center"
             android:text="Mute"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/dp20"
-            />
-
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/chl_btn_down"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:gravity="center"
-            android:text="@string/md_downwards_arrow"
-            android:textAppearance="@style/TextIconAppearance_toolbar"
-            android:textColor="@android:color/white"
+            android:textColor="@color/green"
             android:textSize="@dimen/dp16"
+
             />
       </LinearLayout>
 

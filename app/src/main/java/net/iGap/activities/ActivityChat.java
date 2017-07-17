@@ -5532,25 +5532,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         layoutAttach.setVisibility(View.GONE);
         layoutChannelFooter.setVisibility(View.VISIBLE);
 
-        btnUp = (TextView) findViewById(R.id.chl_btn_up);
-        btnUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                int position = recyclerView.getAdapter().getItemCount();
-                if (position > 0) recyclerView.scrollToPosition(0);
-            }
-        });
-
-        btnDown = (TextView) findViewById(R.id.chl_btn_down);
-        btnDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                int position = recyclerView.getAdapter().getItemCount();
-                if (position > 0) recyclerView.scrollToPosition(position - 1);
-            }
-        });
 
         txtChannelMute = (TextView) findViewById(R.id.chl_txt_mute_channel);
         txtChannelMute.setOnClickListener(new View.OnClickListener() {
