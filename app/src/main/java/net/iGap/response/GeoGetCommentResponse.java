@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import io.realm.Realm;
+import net.iGap.G;
 import net.iGap.proto.ProtoGeoGetComment;
 import net.iGap.realm.RealmGeoNearbyDistance;
 import net.iGap.realm.RealmGeoNearbyDistanceFields;
@@ -46,9 +47,9 @@ public class GeoGetCommentResponse extends MessageHandler {
         });
         realm.close();
 
-        //if (G.onGeoGetComment != null) {
-        //    G.onGeoGetComment.onGetComment(builder.getComment());
-        //}
+        if (G.onGeoGetComment != null) {
+            G.onGeoGetComment.onGetComment(builder.getComment());
+        }
     }
 
     @Override
