@@ -860,6 +860,7 @@
   <string name="text_limit_Create_Group">شما اجازه دارید نهایتاً ۲۵ گروه و یا کانال بسازید</string>
   <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
   <string name="calls">تماس صوتی</string>
+  <string name="map">نقشه</string>
   <string name="igap_call">تماس صوتی آی گپ</string>
   <string name="No_messages_here_yet">در حال حاضر پیامی وجود ندارد</string>
   <string name="clean_log">پاک کردن تاریخچه تماس صوتی</string>

@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 
 public class GeoGetNearbyCoordinateResponse extends MessageHandler {
@@ -32,11 +33,8 @@ public class GeoGetNearbyCoordinateResponse extends MessageHandler {
 
         ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Builder builder = (ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Builder) message;
 
-        for (ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result result : builder.getResultList()) {
-            result.getUserId();
-            result.getHasComment();
-            result.getLat();
-            result.getLon();
+        if (G.onGetNearbyCoordinate != null) {
+            G.onGetNearbyCoordinate.onNearbyCoordinate(builder.getResultList());
         }
     }
 

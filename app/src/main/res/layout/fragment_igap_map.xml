@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#EEEEEE"
+    android:elevation="999dp"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical"
+    >
+
+  <org.osmdroid.views.MapView
+      android:id="@+id/map"
+      android:layout_width="fill_parent"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      />
+
+  <net.iGap.libs.floatingAddButton.ArcMenu
+      android:id="@+id/arc_map"
+      android:layout_width="@dimen/dp52"
+      android:layout_height="@dimen/dp52"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_gravity="bottom|end"
+      android:layout_marginBottom="@dimen/dp10"
+      android:layout_marginEnd="@dimen/dp10"
+      android:layout_marginRight="@dimen/dp10"
+      app:borderWidth="0dp"
+      app:menu_color="@color/green"
+      app:menu_scr="@mipmap/plus"
+      >
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_map_location"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:src="@mipmap/my_location"
+        app:backgroundTint="@color/green"
+        app:elevation="@dimen/dp6"
+        />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_map_others"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:src="@mipmap/others"
+        app:backgroundTint="@color/green"
+        app:elevation="@dimen/dp6"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_map_list"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:src="@mipmap/list_map"
+        app:backgroundTint="@color/green"
+        app:elevation="@dimen/dp6"
+        />
+  </net.iGap.libs.floatingAddButton.ArcMenu>
+
+</RelativeLayout>

@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoGeoGetComment;
 
 public class GeoGetCommentResponse extends MessageHandler {
@@ -31,7 +32,9 @@ public class GeoGetCommentResponse extends MessageHandler {
         super.handler();
 
         ProtoGeoGetComment.GeoGetCommentResponse.Builder builder = (ProtoGeoGetComment.GeoGetCommentResponse.Builder) message;
-        builder.getComment();
+        if (G.onGeoGetComment != null) {
+            G.onGeoGetComment.onGetComment(builder.getComment());
+        }
     }
 
     @Override
