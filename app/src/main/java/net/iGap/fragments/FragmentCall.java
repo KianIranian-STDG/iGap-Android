@@ -128,9 +128,12 @@ import net.iGap.request.RequestSignalingGetLog;
 
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
-        mRecyclerView.setItemViewCacheSize(100);
+        mRecyclerView.setItemViewCacheSize(300);
         mRecyclerView.setItemAnimator(null);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+
+        FragmentMain.PreCachingLayoutManager layoutManager = new FragmentMain.PreCachingLayoutManager(mActivity, 6000);
+
+        mRecyclerView.setLayoutManager(layoutManager);
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -159,7 +162,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
-                        if (lastVisiblePosition + 10 >= mOffset) {
+                        if (lastVisiblePosition + 15 >= mOffset) {
                             getLogListWithOffset();
                         }
                     }
