@@ -2624,7 +2624,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         if (selectedCount > 0) {
             toolbar.setVisibility(View.GONE);
 
+
             txtNumberOfSelected.setText(Integer.toString(selectedCount));
+
+            if (HelperCalander.isLanguagePersian) txtNumberOfSelected.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNumberOfSelected.getText().toString()));
 
             if (selectedCount > 1) {
                 btnReplaySelected.setVisibility(View.INVISIBLE);

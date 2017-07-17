@@ -360,7 +360,7 @@ public class HelperLogMessage {
                 message = R.string.MEMBER_JOINED_BY_INVITE_LINK;
                 break;
             case ROOM_DELETED:
-                message = R.string.Room_Deleted;
+                message = R.string.Room_Deleted_log;
                 break;
 
             case MISSED_SCREEN_SHARE:

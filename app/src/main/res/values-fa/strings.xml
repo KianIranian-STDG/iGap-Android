@@ -744,6 +744,7 @@
   <string name="MEMBER_JOINED_BY_INVITE_LINK">"با دعوت به"</string>
   <string name="MEMBER_JOINED_BY_INVITE_LINK_2">"اضافه شد"</string>
   <string name="Room_Deleted">"حذف"</string>
+  <string name="Room_Deleted_log">"اضافه شد"</string>
   <string name="revoke">ابطال</string>
   <string name="conversation">صفحه</string>
 

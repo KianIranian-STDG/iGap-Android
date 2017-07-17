@@ -737,6 +737,7 @@
   <string name="MEMBER_JOINED_BY_INVITE_LINK">"Joined by Invitation Link"</string>
   <string name="MEMBER_JOINED_BY_INVITE_LINK_2">"اضافه شد"</string>
   <string name="Room_Deleted">"Deleted Room"</string>
+  <string name="Room_Deleted_log">"deleted Room"</string>
   <string name="conversation">""</string>
 
   <string name="MISSED_SCREEN_SHARE">"Missed Screen Share"</string>
