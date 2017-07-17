@@ -1,10 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     >
+
+  <android.support.design.widget.AppBarLayout
+      android:id="@+id/backgroundToolbarMap"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/iGapColorDarker"
+      >
+    <android.support.v7.widget.Toolbar
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp60"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layoutDirection="ltr"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin"
+        >
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          >
+
+        <net.iGap.libs.rippleeffect.RippleView
+            android:id="@+id/ripple_back_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rv_alpha="200"
+            app:rv_centered="true"
+            app:rv_rippleDuration="0"
+            app:rv_ripplePadding="5dp"
+            rv_centered="true"
+            >
+
+          <net.iGap.module.MaterialDesignTextView
+              android:id="@+id/txt_back_map"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:text="@string/md_back_arrow"
+              android:textAppearance="@style/TextIconAppearance_toolbar"
+              android:textColor="@color/whit_background"
+              />
+        </net.iGap.libs.rippleeffect.RippleView>
+
+        <TextView
+            android:id="@+id/txt_titleToolbar_map"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontPath="fonts/IRANSansMobile_Bold.ttf"
+            android:gravity="center"
+            android:text="@string/igap"
+            android:textColor="@color/whit_background"
+            android:textSize="@dimen/dp18"
+            android:visibility="visible"
+            />
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            />
+        <net.iGap.libs.rippleeffect.RippleView
+            android:id="@+id/ripple_more_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:rv_alpha="200"
+            app:rv_centered="true"
+            app:rv_rippleDuration="100"
+            app:rv_ripplePadding="5dp"
+            rv_centered="true"
+            >
+
+          <net.iGap.module.MaterialDesignTextView
+              android:layout_width="@dimen/dp52"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:text="@string/md_show_more_button"
+              android:textAppearance="@style/TextIconAppearance_toolbar"
+              android:textColor="@color/whit_background"
+              />
+
+        </net.iGap.libs.rippleeffect.RippleView>
+      </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+  </android.support.design.widget.AppBarLayout>
 
 
   <FrameLayout
@@ -12,18 +104,6 @@
       android:layout_width="match_parent"
       android:layout_height="0dp"
       android:layout_weight="1"
-      ></FrameLayout>
-
-
-  <Button
-      android:id="@+id/mf_btn_send_position"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textColor="@color/white"
-      android:textSize="@dimen/dp18"
-      android:background="@color/iGapColor"
-      android:text="@string/send_position"
       />
-
 
 </LinearLayout>

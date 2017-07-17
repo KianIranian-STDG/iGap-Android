@@ -62,7 +62,7 @@ public class MyInfoWindow extends InfoWindow {
             txtMapStatus.setText(realmRegisteredInfo.getStatus());
         }
 
-        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, true, realm, new OnAvatarGet() {
+        HelperAvatar.getAvatar(null, userId, HelperAvatar.AvatarType.USER, true, realm, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long roomId) {
                 G.handler.post(new Runnable() {

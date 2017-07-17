@@ -57,6 +57,7 @@ import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentNewGroup;
+import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
 import net.iGap.helper.HelperAvatar;
@@ -491,12 +492,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isLanguagePersian) {
-            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box),
-                getString(R.string.md_apps));
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
 
         } else {
-            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon),
-                getString(R.string.md_phone));
+            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
         }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
@@ -895,6 +894,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else {
             new RequestSignalingGetConfiguration().signalingGetConfiguration();
         }
+
+        ViewGroup itemNavMap = (ViewGroup) findViewById(R.id.lm_ll_map);
+        itemNavMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
+                try {
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap, "map_fragment").commit();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+                lockNavigation();
+                closeDrawer();
+            }
+        });
 
         ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
         itemNavSend.setOnClickListener(new View.OnClickListener() {
@@ -1457,6 +1471,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         FragmentCreateChannel fragmentCreateChannel = (FragmentCreateChannel) getSupportFragmentManager().findFragmentByTag("createChannel_fragment");
         ContactGroupFragment fragmentContactGroup = (ContactGroupFragment) getSupportFragmentManager().findFragmentByTag("contactGroup_fragment");
         FragmentIgapSearch fragmentIgapSearch = (FragmentIgapSearch) getSupportFragmentManager().findFragmentByTag("Search_fragment_igap");
+        FragmentiGapMap fragmentiGapMap = (FragmentiGapMap) getSupportFragmentManager().findFragmentByTag("map_fragment");
 
         if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
 
@@ -1488,6 +1503,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else if (myFragment != null && myFragment.isVisible()) {
             try {
                 getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+        } else if (fragmentiGapMap != null && fragmentiGapMap.isVisible()) {
+            try {
+                getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
             } catch (Exception e) {
                 e.getStackTrace();
             }

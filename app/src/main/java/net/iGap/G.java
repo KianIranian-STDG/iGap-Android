@@ -98,6 +98,8 @@ import net.iGap.interfaces.OnDeleteChatFinishActivity;
 import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnFileDownloadResponse;
 import net.iGap.interfaces.OnFileDownloaded;
+import net.iGap.interfaces.OnGeoGetComment;
+import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnGetUserInfo;
 import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.interfaces.OnGroupAddAdmin;
@@ -122,6 +124,7 @@ import net.iGap.interfaces.OnHelperSetAction;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnInfoTime;
 import net.iGap.interfaces.OnLastSeenUpdateTiming;
+import net.iGap.interfaces.OnLocationChanged;
 import net.iGap.interfaces.OnPushLoginToken;
 import net.iGap.interfaces.OnPushTwoStepVerification;
 import net.iGap.interfaces.OnQrCodeNewDevice;
@@ -389,7 +392,9 @@ public class G extends MultiDexApplication {
     public static OnCallLeaveView onCallLeaveView;
     public static ICallFinish iCallFinish;
     public static IMainFinish iMainFinish;
-
+    public static OnLocationChanged onLocationChanged;
+    public static OnGetNearbyCoordinate onGetNearbyCoordinate;
+    public static OnGeoGetComment onGeoGetComment;
 
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;

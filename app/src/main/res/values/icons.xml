@@ -114,6 +114,7 @@
   <string name="md_igap_file">\uf24b</string> <!-- igap_eraser  -->
   <string name="igap_chevron_double_down">\uf13c</string> <!-- igap_eraser  -->
   <string name="md_igap_folder_image">\uf24f</string> <!-- igap_eraser  -->
+  <string name="md_map">&#xE55B;</string> <!-- igap_map  -->
 
 
 </resources>
