@@ -13,6 +13,7 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -29,6 +30,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import java.util.ArrayList;
@@ -38,12 +42,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnLocationChanged;
-import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
-import net.iGap.request.RequestGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoUpdateComment;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -75,6 +77,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private ArrayList<Marker> markers = new ArrayList<>();
     private GestureDetector mGestureDetector;
     private ViewGroup rootTurnOnGps;
+    private ViewGroup vgMessageGps;
 
     private boolean first = true;
     private boolean firstEnter = true;
@@ -162,6 +165,17 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 //have to empty
             }
         });
+        vgMessageGps = (ViewGroup) view.findViewById(R.id.vgMessageGps);
+
+        RippleView btnBack = (RippleView) view.findViewById(R.id.ripple_back_map);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentiGapMap.this).commit();
+                closeKeyboard(v);
+            }
+        });
 
         ToggleButton toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
         toggleGps.setOnClickListener(new View.OnClickListener() {
@@ -171,54 +185,77 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
-        final ArcMenu arcMap = (ArcMenu) view.findViewById(R.id.arc_map);
-        FloatingActionButton btnLocation = (FloatingActionButton) view.findViewById(R.id.fab_map_location);
-        FloatingActionButton btnOthers = (FloatingActionButton) view.findViewById(R.id.fab_map_others);
-        FloatingActionButton btnList = (FloatingActionButton) view.findViewById(R.id.fab_map_list);
+        TextView txtMessageGps = (TextView) view.findViewById(R.id.txtMessageGps);
+        txtMessageGps.setTextColor(Color.parseColor(G.appBarColor));
+
+        txtMessageGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        EditText edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
+
+        FloatingActionButton fabGps = (FloatingActionButton) view.findViewById(R.id.st_fab_gps);
+        fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+        fabGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+
+        //final ArcMenu arcMap = (ArcMenu) view.findViewById(R.id.arc_map);
+        //FloatingActionButton btnLocation = (FloatingActionButton) view.findViewById(R.id.fab_map_location);
+        //FloatingActionButton btnOthers = (FloatingActionButton) view.findViewById(R.id.fab_map_others);
+        //FloatingActionButton btnList = (FloatingActionButton) view.findViewById(R.id.fab_map_list);
         RippleView rippleMoreMap = (RippleView) view.findViewById(R.id.ripple_more_map);
 
-        btnOthers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (arcMap.isMenuOpened()) {
-                    arcMap.toggleMenu();
-                }
-                if (location != null) {
-                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                }
-            }
-        });
-
-        btnLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (arcMap.isMenuOpened()) {
-                    arcMap.toggleMenu();
-                }
-                if (location != null) {
-                    currentLocation(location, false);
-                } else {
-                    new GPSTracker().detectLocation();
-                }
-            }
-        });
-
-        btnList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (arcMap.isMenuOpened()) {
-                    arcMap.toggleMenu();
-                }
-                //TODO [Saeed Mozaffari] [2017-06-19 5:49 PM] - Go To Nearby Distance Page
-            }
-        });
+        //btnOthers.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        if (arcMap.isMenuOpened()) {
+        //            arcMap.toggleMenu();
+        //        }
+        //        if (location != null) {
+        //            new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+        //        }
+        //    }
+        //});
+        //
+        //btnLocation.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        if (arcMap.isMenuOpened()) {
+        //            arcMap.toggleMenu();
+        //        }
+        //        if (location != null) {
+        //            currentLocation(location, false);
+        //        } else {
+        //            new GPSTracker().detectLocation();
+        //        }
+        //    }
+        //});
+        //
+        //btnList.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        if (arcMap.isMenuOpened()) {
+        //            arcMap.toggleMenu();
+        //        }
+        //        //TODO [Saeed Mozaffari] [2017-06-19 5:49 PM] - Go To Nearby Distance Page
+        //    }
+        //});
 
         rippleMoreMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentMapUsers fragmentMapUsers = FragmentMapUsers.newInstance();
                 try {
-                    mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.mapContainer, fragmentMapUsers, "fragment_map").commitAllowingStateLoss();
+                    mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.mapContainer, fragmentMapUsers).commitAllowingStateLoss();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -456,9 +493,11 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
             rootTurnOnGps.setVisibility(View.VISIBLE);
+            vgMessageGps.setVisibility(View.GONE);
 
         } else {
             rootTurnOnGps.setVisibility(View.GONE);
+            vgMessageGps.setVisibility(View.VISIBLE);
             new GPSTracker().detectLocation();
         }
     }
@@ -467,5 +506,16 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public void onResume() {
         super.onResume();
         statusCheck();
+    }
+
+    private void closeKeyboard(View v) {
+        if (isAdded()) {
+            try {
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            } catch (IllegalStateException e) {
+                e.getStackTrace();
+            }
+        }
     }
 }

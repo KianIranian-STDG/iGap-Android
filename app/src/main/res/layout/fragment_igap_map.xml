@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mapContainer"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#EEEEEE"
@@ -9,7 +10,6 @@
     android:fitsSystemWindows="false"
     android:orientation="vertical"
     tools:ignore="MissingPrefix"
-    android:id="@+id/mapContainer"
     >
 
   <android.support.design.widget.AppBarLayout
@@ -105,52 +105,11 @@
 
   <org.osmdroid.views.MapView
       android:id="@+id/map"
-      android:layout_width="fill_parent"
+      android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_weight="1"
+      android:layout_below="@+id/vgMessageGps"
       />
-
-  <net.iGap.libs.floatingAddButton.ArcMenu
-      android:id="@+id/arc_map"
-      android:layout_width="@dimen/dp52"
-      android:layout_height="@dimen/dp52"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      android:layout_gravity="bottom|end"
-      android:layout_marginBottom="@dimen/dp10"
-      android:layout_marginEnd="@dimen/dp10"
-      android:layout_marginRight="@dimen/dp10"
-      app:borderWidth="0dp"
-      app:menu_color="@color/green"
-      app:menu_scr="@mipmap/plus"
-      >
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_map_location"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="@dimen/dp52"
-        android:src="@mipmap/my_location"
-        app:backgroundTint="@color/green"
-        app:elevation="@dimen/dp6"
-        />
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_map_others"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="@dimen/dp52"
-        android:src="@mipmap/others"
-        app:backgroundTint="@color/green"
-        app:elevation="@dimen/dp6"
-        />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_map_list"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="@dimen/dp52"
-        android:src="@mipmap/list_map"
-        app:backgroundTint="@color/green"
-        app:elevation="@dimen/dp6"
-        />
-  </net.iGap.libs.floatingAddButton.ArcMenu>
 
 
   <LinearLayout
@@ -160,7 +119,7 @@
       android:background="@color/background_check_gps"
       android:gravity="center"
       android:orientation="vertical"
-      android:visibility="visible"
+      android:visibility="gone"
       >
 
 
@@ -195,5 +154,85 @@
 
 
   </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/vgMessageGps"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/backgroundToolbarMap"
+      android:background="@color/gray10"
+      android:orientation="horizontal"
+      android:padding="@dimen/dp6"
+      >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        >
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          >
+
+
+        <TextView
+            android:id="@+id/txtMessageGps"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:gravity="center"
+            android:text="@string/md_back_arrow"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            />
+
+        <EditText
+            android:id="@+id/edtMessageGps"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:hint="تعیین وضعیت"
+            />
+
+      </LinearLayout>
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/gray_9d"
+          />
+    </LinearLayout>
+    <TextView
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
+        android:gravity="center"
+        android:text="@string/md_igap_pencil_box_outline"
+        android:textAppearance="@style/TextIconAppearance_toolbar"
+        />
+
+  </LinearLayout>
+
+  <android.support.design.widget.FloatingActionButton
+      android:id="@+id/st_fab_gps"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      android:src="@mipmap/gps"
+      android:theme="@style/FabButton"
+      android:tint="@color/white"
+      app:fabSize="normal"
+      app:layout_anchor="@+id/st_appbar"
+      app:layout_anchorGravity="bottom|right|end"
+      android:layout_marginLeft="@dimen/dp24"
+      android:layout_marginBottom="@dimen/dp24"
+      android:layout_alignParentBottom="true"
+      android:layout_toRightOf="@+id/rootTurnOnGps"
+      android:layout_toEndOf="@+id/rootTurnOnGps"
+      android:layout_marginStart="19dp"
+      android:backgroundTint="@color/green"
+
+      />
 
 </RelativeLayout>
