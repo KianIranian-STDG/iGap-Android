@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/igap"
+            android:text="@string/igap_nearby"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18"
             android:visibility="visible"
