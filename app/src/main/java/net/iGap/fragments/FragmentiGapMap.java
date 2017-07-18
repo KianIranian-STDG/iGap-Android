@@ -88,8 +88,6 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private ViewGroup rootTurnOnGps;
     private ViewGroup vgMessageGps;
     public static Location location;
-    public static FloatingActionButton fabGps;
-    public static ViewGroup root1;
     public static RippleView btnBack;
     public static RippleView rippleMoreMap;
     public static boolean isBackPress = false;
@@ -168,7 +166,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
          * Set Zoom Value
          */
         IMapController mapController = map.getController();
-        mapController.setZoom(18);
+        mapController.setZoom(16);
 
         /**
          * Start With This Point
@@ -179,7 +177,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         /**
          * Use From Following Code For Custom Url Tile Server
          */
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", 16, 16, 256, ".png", new String[]{Config.URL_MAP}) {
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", 14, 18, 256, ".png", new String[]{Config.URL_MAP}) {
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
@@ -202,22 +200,6 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
         vgMessageGps = (ViewGroup) view.findViewById(R.id.vgMessageGps);
-
-        btnBack = (RippleView) view.findViewById(R.id.ripple_back_map);
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
-                    rippleMoreMap.setVisibility(View.VISIBLE);
-                    fabGps.setVisibility(View.VISIBLE);
-                }
-                if (!isBackPress) {
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
-                closeKeyboard(v);
-                isBackPress = false;
-            }
-        });
 
         final EditText edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
         toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
@@ -264,7 +246,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
-        fabGps = (FloatingActionButton) view.findViewById(st_fab_gps);
+        final FloatingActionButton fabGps = (FloatingActionButton) view.findViewById(st_fab_gps);
         fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
         fabGps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,6 +256,25 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 } else {
                     new GPSTracker().detectLocation();
                 }
+            }
+        });
+
+        view.findViewById(R.id.backgroundToolbarMap).setBackgroundColor(Color.parseColor(G.appBarColor));
+        fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+
+        btnBack = (RippleView) view.findViewById(R.id.ripple_back_map);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
+                    rippleMoreMap.setVisibility(View.VISIBLE);
+                    fabGps.setVisibility(View.VISIBLE);
+                }
+                if (!isBackPress) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+                closeKeyboard(v);
+                isBackPress = false;
             }
         });
 
@@ -289,7 +290,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 dialog.show();
 
 
-                root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+                ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
                 ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
                 ViewGroup root3 = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
 

@@ -154,12 +154,12 @@
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:hint="@string/hint_gps"
-                fontPath="fonts/IRANSansMobile.ttf"
                 android:maxLength="255"
-                android:paddingStart="@dimen/dp12"
-                android:paddingLeft="@dimen/dp10"
                 android:paddingEnd="@dimen/dp10"
+                android:paddingLeft="@dimen/dp10"
                 android:paddingRight="@dimen/dp10"
+                android:paddingStart="@dimen/dp12"
+                fontPath="fonts/IRANSansMobile.ttf"
                 />
 
           </LinearLayout>
@@ -167,8 +167,8 @@
           <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
-              android:background="@color/gray_9d"
               android:layout_marginBottom="@dimen/dp8"
+              android:background="@color/gray_9d"
               />
         </LinearLayout>
         <TextView
@@ -245,7 +245,7 @@
       android:layout_marginStart="19dp"
       android:layout_toEndOf="@+id/rootTurnOnGps"
       android:layout_toRightOf="@+id/rootTurnOnGps"
-      android:backgroundTint="@color/green"
+      android:background="@color/iGapColor"
       android:clickable="true"
       android:theme="@style/FabButton"
       android:tint="@color/white"

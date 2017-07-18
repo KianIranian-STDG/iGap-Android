@@ -16,6 +16,7 @@ import io.realm.RealmObject;
 import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 import net.iGap.helper.HelperString;
+import net.iGap.interfaces.OnRegistrationInfo;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 
@@ -253,5 +254,10 @@ public class RealmRegisteredInfo extends RealmObject {
         info.setMutual(registeredUser.getMutual());
         info.setLastSeen(registeredUser.getLastSeen());
         info.setCacheId(registeredUser.getCacheId());
+    }
+
+    public static void getRegistrationInfo(long userId, OnRegistrationInfo onRegistrationInfo) {
+
+
     }
 }
