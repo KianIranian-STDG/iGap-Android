@@ -153,7 +153,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
          * Zoom With MultiTouch And With Two Finger
          */
         map.setBuiltInZoomControls(false);
-        map.setMultiTouchControls(false);
+        map.setMultiTouchControls(true);
 
         /**
          * Compass

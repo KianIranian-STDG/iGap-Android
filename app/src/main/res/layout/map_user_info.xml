@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="right"
-        android:text="@string/md_back_arrow"
+        android:text="@string/md_right_arrow"
         android:textAppearance="@style/TextIconAppearance_toolbar"
         android:textColor="@color/iGapColor"
         android:visibility="gone"
