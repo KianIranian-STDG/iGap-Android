@@ -140,7 +140,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
          * Set Zoom Value
          */
         IMapController mapController = map.getController();
-        mapController.setZoom(16);
+        mapController.setZoom(18);
 
         /**
          * Start With This Point
@@ -177,6 +177,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
+        final EditText edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
         ToggleButton toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
         toggleGps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,69 +188,28 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
         TextView txtMessageGps = (TextView) view.findViewById(R.id.txtMessageGps);
         txtMessageGps.setTextColor(Color.parseColor(G.appBarColor));
-
         txtMessageGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new RequestGeoUpdateComment().updateComment(edtMessageGps.getText().toString());
+                edtMessageGps.setText("");
             }
         });
-
-        EditText edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
 
         FloatingActionButton fabGps = (FloatingActionButton) view.findViewById(R.id.st_fab_gps);
         fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
         fabGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (location != null) {
+                    currentLocation(location, false);
+                } else {
+                    new GPSTracker().detectLocation();
+                }
             }
         });
 
-
-
-        //final ArcMenu arcMap = (ArcMenu) view.findViewById(R.id.arc_map);
-        //FloatingActionButton btnLocation = (FloatingActionButton) view.findViewById(R.id.fab_map_location);
-        //FloatingActionButton btnOthers = (FloatingActionButton) view.findViewById(R.id.fab_map_others);
-        //FloatingActionButton btnList = (FloatingActionButton) view.findViewById(R.id.fab_map_list);
         RippleView rippleMoreMap = (RippleView) view.findViewById(R.id.ripple_more_map);
-
-        //btnOthers.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        if (arcMap.isMenuOpened()) {
-        //            arcMap.toggleMenu();
-        //        }
-        //        if (location != null) {
-        //            new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-        //        }
-        //    }
-        //});
-        //
-        //btnLocation.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        if (arcMap.isMenuOpened()) {
-        //            arcMap.toggleMenu();
-        //        }
-        //        if (location != null) {
-        //            currentLocation(location, false);
-        //        } else {
-        //            new GPSTracker().detectLocation();
-        //        }
-        //    }
-        //});
-        //
-        //btnList.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        if (arcMap.isMenuOpened()) {
-        //            arcMap.toggleMenu();
-        //        }
-        //        //TODO [Saeed Mozaffari] [2017-06-19 5:49 PM] - Go To Nearby Distance Page
-        //    }
-        //});
-
         rippleMoreMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -307,7 +267,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                         marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_no));
                     }
 
-                    InfoWindow infoWindow = new MyInfoWindow(R.layout.info_map_window, map, userId, hasComment, FragmentiGapMap.this, mActivity);
+                    InfoWindow infoWindow = new MyInfoWindow(map, userId, hasComment, FragmentiGapMap.this, mActivity);
                     marker.setInfoWindow(infoWindow);
                 }
 

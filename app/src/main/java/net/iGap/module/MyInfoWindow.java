@@ -1,17 +1,21 @@
 package net.iGap.module;
 
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGeoGetComment;
+import net.iGap.realm.RealmGeoNearbyDistance;
+import net.iGap.realm.RealmGeoNearbyDistanceFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestGeoGetComment;
@@ -25,8 +29,9 @@ public class MyInfoWindow extends InfoWindow {
     private MapView map;
     private FragmentActivity mActivity;
     private FragmentiGapMap fragmentiGapMap;
+    private String comment;
 
-    public MyInfoWindow(int layoutResId, MapView mapView, long userId, boolean hasComment, FragmentiGapMap fragmentiGapMap, FragmentActivity mActivity) {
+    public MyInfoWindow(MapView mapView, long userId, boolean hasComment, FragmentiGapMap fragmentiGapMap, FragmentActivity mActivity) {
         super(R.layout.empty_info_map, mapView);
         this.map = mapView;
         this.userId = 449;
@@ -59,16 +64,16 @@ public class MyInfoWindow extends InfoWindow {
         }
 
         final CircleImageView avatar = (CircleImageView) view.findViewById(R.id.img_info_avatar_map);
-        TextView txtClose = (TextView) view.findViewById(R.id.txt_close_map);
-        TextView txtChat = (TextView) view.findViewById(R.id.txt_chat_map);
-        TextView txtCall = (TextView) view.findViewById(R.id.txt_call_map);
+        final TextView txtClose = (TextView) view.findViewById(R.id.txt_close_map);
+        final TextView txtBack = (TextView) view.findViewById(R.id.txt_info_back_map);
+        final TextView txtChat = (TextView) view.findViewById(R.id.txt_chat_map);
+        final TextView txtCall = (TextView) view.findViewById(R.id.txt_call_map);
         TextView txtName = (TextView) view.findViewById(R.id.txt_name_info_map);
         final TextView txtComment = (TextView) view.findViewById(R.id.txt_info_comment);
         TextView txtDistance = (TextView) view.findViewById(R.id.txt_info_distance);
 
         txtName.setText(realmRegisteredInfo.getDisplayName());
         txtDistance.setText("Distance");
-
 
         txtClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,9 +82,22 @@ public class MyInfoWindow extends InfoWindow {
             }
         });
 
+        txtBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                txtBack.setVisibility(View.GONE);
+                txtClose.setVisibility(View.VISIBLE);
+                txtChat.setVisibility(View.VISIBLE);
+                txtCall.setVisibility(View.VISIBLE);
+                txtComment.setMaxLines(1);
+                txtComment.setEllipsize(TextUtils.TruncateAt.END);
+            }
+        });
+
         txtChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.dismiss();
                 HelperPublicMethod.goToChatRoom(false, userId, new HelperPublicMethod.Oncomplet() {
                     @Override
                     public void complete() {
@@ -92,7 +110,21 @@ public class MyInfoWindow extends InfoWindow {
         txtCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO [Saeed Mozaffari] [2017-07-17 4:21 PM] - DO Actions!!!
+                FragmentCall.call(userId, false);
+            }
+        });
+
+        txtComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (hasComment && comment != null) {
+                    txtClose.setVisibility(View.GONE);
+                    txtChat.setVisibility(View.GONE);
+                    txtCall.setVisibility(View.GONE);
+                    txtBack.setVisibility(View.VISIBLE);
+                    txtComment.setMaxLines(Integer.MAX_VALUE);
+                    txtComment.setEllipsize(null);
+                }
             }
         });
 
@@ -121,18 +153,37 @@ public class MyInfoWindow extends InfoWindow {
         if (hasComment) {
             G.onGeoGetComment = new OnGeoGetComment() {
                 @Override
-                public void onGetComment(final String comment) {
+                public void onGetComment(final String commentR) {
+                    comment = commentR;
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            txtComment.setText(comment);
+                            txtComment.setText(commentR);
                         }
                     });
                 }
             };
 
-            new RequestGeoGetComment().getComment(userId);
+            RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, userId).findFirst();
+            if (realmGeoNearbyDistance != null) {
+                if (hasComment) {
+                    //following commented code is for show old comment and get new
+                    //
+                    //if (realmGeoNearbyDistance.getComment() == null || realmGeoNearbyDistance.getComment().isEmpty()) {
+                    //    txtComment.setText(G.context.getResources().getString(R.string.comment_waiting));
+                    //    new RequestGeoGetComment().getComment(userId);
+                    //} else {
+                    //    txtComment.setText(realmGeoNearbyDistance.getComment());
+                    //}
+                    txtComment.setText(G.context.getResources().getString(R.string.comment_waiting));
+                    new RequestGeoGetComment().getComment(userId);
+                } else {
+                    txtComment.setText(G.context.getResources().getString(R.string.comment_no));
+                }
+            }
         }
+
+        realm.close();
     }
 
     /*public void onOpen(Object arg0) {

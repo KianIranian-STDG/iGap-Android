@@ -18,6 +18,7 @@ import java.util.HashMap;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
@@ -27,6 +28,7 @@ import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyDistance;
 
+import static net.iGap.G.context;
 import static net.iGap.G.inflater;
 
 public class FragmentMapUsers extends Fragment {
@@ -99,18 +101,20 @@ public class FragmentMapUsers extends Fragment {
 
             holder.username.setText(registeredInfo.getDisplayName());
             if (item.isHasComment()) {
-                if (item.getComment().isEmpty()) {
-                    holder.comment.setText("getting comment...");
+                if (item.getComment() == null || item.getComment().isEmpty()) {
+                    holder.comment.setText(context.getResources().getString(R.string.comment_waiting));
                     new RequestGeoGetComment().getComment(item.getUserId());
                 } else {
                     holder.comment.setText(item.getComment());
                 }
-
             } else {
-                holder.comment.setText("no comment");
+                holder.comment.setText(context.getResources().getString(R.string.comment_no));
             }
 
-            holder.distance.setText(item.getDistance() + "");
+            holder.distance.setText(String.format(G.context.getString(R.string.distance), item.getDistance()));
+            if (HelperCalander.isLanguagePersian) {
+                holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
+            }
 
             hashMapAvatar.put(item.getUserId(), holder.avatar);
             HelperAvatar.getAvatar(item.getUserId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {

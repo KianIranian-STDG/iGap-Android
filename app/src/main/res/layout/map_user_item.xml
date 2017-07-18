@@ -84,9 +84,9 @@
           android:layout_width="@dimen/dp48"
           android:layout_height="match_parent"
           android:gravity="center"
-          android:text="@string/md_show_more_button"
+          android:text="@string/md_right_arrow"
           android:textAppearance="@style/TextIconAppearance.all"
-          android:textColor="@color/border_editText"
+          android:textColor="@color/iGapColor"
           android:textSize="@dimen/dp18"
           />
 

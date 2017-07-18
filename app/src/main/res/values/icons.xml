@@ -16,6 +16,7 @@
   <string name="md_refresh_button">\uf0e8</string> <!-- igap_cached  -->
   <string name="md_round_info_button">\uf2fd</string>  <!-- igap_information-outline  -->
   <string name="md_back_arrow">\uf141</string> <!-- igap_chevron-left  -->
+  <string name="md_right_arrow">\uf142</string> <!-- igap_chevron-right  -->
   <string name="md_crop_button">\uf19e</string>  <!-- igap_crop  -->
   <string name="md_add_user_button">\uf014</string>  <!-- igap_account-plus  -->
   <string name="md_add_plus_button">\uf415</string>  <!-- igap_plus  -->

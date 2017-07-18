@@ -1003,6 +1003,9 @@
   <string name="c_GB">گیگابایت </string>
   <string name="c_TB">ترابایت </string>
 
+  <!-- Map -->
   <string name="turn_on_gps">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
-
+  <string name="comment_waiting">در حال دریافت یادداشت</string>
+  <string name="comment_no">یادداشتی وجود ندارد</string>
+  <string formatted="false" name="distance">حدود %d متر</string>
 </resources>

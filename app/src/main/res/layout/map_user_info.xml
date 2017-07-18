@@ -7,15 +7,35 @@
     android:padding="0dp"
     >
 
-  <TextView
-      android:id="@+id/txt_close_map"
+  <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:gravity="right"
-      android:text="@string/md_close_button"
-      android:textColor="@color/iGapColor"
-      fontPath="fonts/iGap-Fontico.ttf"
-      />
+      android:orientation="horizontal"
+      >
+    <TextView
+        android:id="@+id/txt_info_back_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:text="@string/md_back_arrow"
+        android:textColor="@color/iGapColor"
+        android:textSize="@dimen/dp22"
+        android:visibility="gone"
+        fontPath="fonts/iGap-Fontico.ttf"
+        />
+    <TextView
+        android:id="@+id/txt_close_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:text="@string/md_close_button"
+        android:textColor="@color/iGapColor"
+        android:textSize="@dimen/dp22"
+        fontPath="fonts/iGap-Fontico.ttf"
+        />
+  </LinearLayout>
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -67,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Display Name"
-            android:textColor="@color/black90"
+            android:textColor="@color/black"
             android:textSize="@dimen/dp18"
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             />
@@ -79,7 +99,7 @@
           android:layout_marginTop="@dimen/dp4"
           android:ellipsize="end"
           android:gravity="right"
-          android:maxLines="3"
+          android:maxLines="1"
           android:text="Comment"
           />
       <TextView
@@ -87,8 +107,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="right"
-          android:visibility="gone"
           android:text="Distance"
+          android:visibility="gone"
           />
     </LinearLayout>
     <net.iGap.module.CircleImageView
