@@ -29,7 +29,7 @@
         android:ems="10"
         android:maxLines="2"
         android:textColor="@color/black90"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:hint="@string/please_write_your_reasons"
         android:textColorHint="@color/gray"
         />

@@ -100,7 +100,7 @@ public class ActivityRatingBar extends ActivityEnhanced {
                     }
                 } else {
 
-                    edtResone.setVisibility(View.INVISIBLE);
+                    edtResone.setVisibility(View.GONE);
                     positive.setEnabled(true);
                 }
             }
