@@ -17,10 +17,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="left"
+        android:gravity="right"
         android:text="@string/md_back_arrow"
-        android:textColor="@color/iGapColor"
         android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:textColor="@color/iGapColor"
         android:visibility="gone"
         />
     <net.iGap.module.MaterialDesignTextView
@@ -30,8 +30,9 @@
         android:layout_weight="1"
         android:gravity="right"
         android:text="@string/md_close_button"
-        android:textColor="@color/iGapColor"
         android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:textColor="@color/iGapColor"
+        android:visibility="visible"
         />
   </LinearLayout>
   <LinearLayout
@@ -60,8 +61,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/md_chat_box"
-            android:textColor="@color/iGapColor"
             android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@color/iGapColor"
             />
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/txt_call_map"
@@ -69,8 +70,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp4"
             android:text="@string/md_phone"
-            android:textColor="@color/iGapColor"
             android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@color/iGapColor"
             />
         <View
             android:layout_width="0dip"
@@ -87,25 +88,34 @@
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             />
       </LinearLayout>
-      <TextView
-          android:id="@+id/txt_info_comment"
+      <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/dp4"
-          android:ellipsize="end"
-          android:gravity="right"
-          android:textSize="@dimen/dp16"
-          android:maxLines="1"
-          android:text="Comment"
-          />
-      <TextView
-          android:id="@+id/txt_info_distance"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:gravity="right"
-          android:text="Distance"
-          android:visibility="gone"
-          />
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:gravity="center_vertical"
+          android:orientation="horizontal"
+          >
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/txt_open_comment_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/md_back_arrow"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@color/iGapColor"
+            />
+        <TextView
+            android:id="@+id/txt_info_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="right"
+            android:maxLines="1"
+            android:text="Comment"
+            android:textSize="@dimen/dp16"
+            />
+      </LinearLayout>
     </LinearLayout>
     <net.iGap.module.CircleImageView
         android:id="@+id/img_info_avatar_map"

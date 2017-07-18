@@ -66,14 +66,19 @@ public class MyInfoWindow extends InfoWindow {
         final CircleImageView avatar = (CircleImageView) view.findViewById(R.id.img_info_avatar_map);
         final TextView txtClose = (TextView) view.findViewById(R.id.txt_close_map);
         final TextView txtBack = (TextView) view.findViewById(R.id.txt_info_back_map);
+        final TextView txtOpenComment = (TextView) view.findViewById(R.id.txt_open_comment_map);
         final TextView txtChat = (TextView) view.findViewById(R.id.txt_chat_map);
         final TextView txtCall = (TextView) view.findViewById(R.id.txt_call_map);
         TextView txtName = (TextView) view.findViewById(R.id.txt_name_info_map);
         final TextView txtComment = (TextView) view.findViewById(R.id.txt_info_comment);
-        TextView txtDistance = (TextView) view.findViewById(R.id.txt_info_distance);
 
         txtName.setText(realmRegisteredInfo.getDisplayName());
-        txtDistance.setText("Distance");
+
+        if (G.selectedLanguage.equals("en")) {
+            txtOpenComment.setText(G.context.getResources().getString(R.string.md_back_arrow));
+        } else {
+            txtOpenComment.setText(G.context.getResources().getString(R.string.md_right_arrow));
+        }
 
         txtClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +130,13 @@ public class MyInfoWindow extends InfoWindow {
                     txtComment.setMaxLines(Integer.MAX_VALUE);
                     txtComment.setEllipsize(null);
                 }
+            }
+        });
+
+        txtOpenComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                txtComment.performClick();
             }
         });
 
