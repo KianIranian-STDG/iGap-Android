@@ -91,6 +91,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public static RippleView btnBack;
     public static RippleView rippleMoreMap;
     public static boolean isBackPress = false;
+    private ToggleButton toggleGps;
 
     private FragmentActivity mActivity;
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
@@ -208,7 +209,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         });
 
         final EditText edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
-        ToggleButton toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
+        toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
         toggleGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -600,6 +601,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
             rootTurnOnGps.setVisibility(View.VISIBLE);
+            toggleGps.setChecked(false);
             vgMessageGps.setVisibility(View.GONE);
 
         } else {
