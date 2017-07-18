@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -125,6 +126,8 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
                 holder.arrow.setText(G.context.getResources().getString(R.string.md_back_arrow));
             }
 
+            holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
+
             holder.arrow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -198,6 +201,7 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
                 comment = (TextView) itemView.findViewById(R.id.txt_user_comment_map);
                 arrow = (MaterialDesignTextView) itemView.findViewById(R.id.txt_arrow_list_map);
                 distance = (CustomTextViewMedium) itemView.findViewById(R.id.txt_user_distance_map);
+
             }
         }
     }
