@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PointF;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +41,7 @@ import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityProfile;
 import net.iGap.activities.MyDialog;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperClientCondition;
@@ -52,6 +52,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
+import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -73,7 +74,6 @@ import net.iGap.request.RequestGroupLeft;
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
 import static net.iGap.G.firstTimeEnterToApp;
-import static net.iGap.G.inflater;
 import static net.iGap.G.userId;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -147,9 +147,9 @@ public class FragmentMain extends Fragment implements OnComplete {
     private void initRecycleView(View view) {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.cl_recycler_view_contact);
-        mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
+        // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
         mRecyclerView.setItemAnimator(null);
-        mRecyclerView.setItemViewCacheSize(200);
+        mRecyclerView.setItemViewCacheSize(1000);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         RealmResults<RealmRoom> results = null;
@@ -756,7 +756,6 @@ public class FragmentMain extends Fragment implements OnComplete {
 
         public OnComplete mComplete;
         public String action;
-        private Typeface typeFaceIcon;
         private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
         public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete) {
@@ -766,18 +765,17 @@ public class FragmentMain extends Fragment implements OnComplete {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
+
+            // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
+
+            View v = ViewMaker.getViewItemRoom();
+
             return new RoomAdapter.ViewHolder(v);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int i) {
 
-            LinearLayout lytContainerRoot = (LinearLayout) holder.itemView.findViewById(R.id.root_chat_sub_layout);
-            LinearLayout lytContainer4 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer4);
-            LinearLayout lytContainer5 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer5);
-            LinearLayout lytContainer6 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer6);
-            LinearLayout lytContainer7 = (LinearLayout) holder.itemView.findViewById(R.id.lytContainer7);
 
             final RealmRoom mInfo = holder.mInfo = getItem(i);
 
@@ -785,254 +783,41 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             if (mInfo != null && mInfo.isValid()) {
 
-                CircleImageView image = null;
+                setLastMessage(mInfo, holder, isMyCloud);
 
                 if (isMyCloud) {
-                    addView(holder, lytContainerRoot, R.layout.room_layout_initials, R.id.lyt_initials, 0);
 
-                    TextView txtInitials = (TextView) holder.itemView.findViewById(R.id.cs_txt_contact_initials);
-                    txtInitials.setText(G.context.getString(R.string.md_cloud));
-                    txtInitials.setTypeface(G.typeface_Fontico);
-                    txtInitials.setGravity(Gravity.CENTER);
-                    ViewGroup.LayoutParams paramsText = txtInitials.getLayoutParams();
-                    paramsText.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    paramsText.width = (int) G.context.getResources().getDimension(R.dimen.dp68);
-                    txtInitials.setLayoutParams(paramsText);
+                    if (holder.txtClude == null) {
 
-                    LinearLayout linearLayout = (LinearLayout) holder.itemView.findViewById(R.id.lyt_initials);
-                    ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    params.width = (int) G.context.getResources().getDimension(R.dimen.dp68);
-                    linearLayout.setLayoutParams(params);
+                        MaterialDesignTextView cs_txt_contact_initials = new MaterialDesignTextView(G.context);
+                        cs_txt_contact_initials.setId(R.id.cs_txt_contact_initials);
+                        cs_txt_contact_initials.setGravity(Gravity.CENTER);
+                        cs_txt_contact_initials.setText(G.context.getResources().getString(R.string.md_cloud));
+                        cs_txt_contact_initials.setTextColor(Color.parseColor("#ad333333"));
+                        ViewMaker.setTextSize(cs_txt_contact_initials, R.dimen.dp32);
+                        LinearLayout.LayoutParams layout_936 = new LinearLayout.LayoutParams(ViewMaker.i_Dp(R.dimen.dp52), ViewMaker.i_Dp(R.dimen.dp52));
+                        layout_936.gravity = Gravity.CENTER;
+                        layout_936.setMargins(ViewMaker.i_Dp(R.dimen.dp6), ViewMaker.i_Dp(R.dimen.dp6), ViewMaker.i_Dp(R.dimen.dp6), ViewMaker.i_Dp(R.dimen.dp6));
+                        cs_txt_contact_initials.setVisibility(View.GONE);
+                        cs_txt_contact_initials.setLayoutParams(layout_936);
 
-                    removeView(lytContainer5, R.id.lyt_avatar);
+                        holder.txtClude = cs_txt_contact_initials;
+
+                        holder.rootChat.addView(cs_txt_contact_initials, 0);
+                    }
+
+                    holder.txtClude.setVisibility(View.VISIBLE);
+                    holder.image.setVisibility(View.GONE);
                 } else {
-                    addView(holder, lytContainerRoot, R.layout.room_layout_avatar, R.id.lyt_avatar, 0);
-                    image = (CircleImageView) holder.itemView.findViewById(R.id.cs_img_contact_picture);
-
-                    LinearLayout linearLayout = (LinearLayout) holder.itemView.findViewById(R.id.lyt_avatar);
-                    ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    params.width = (int) G.context.getResources().getDimension(R.dimen.dp68);
-                    linearLayout.setLayoutParams(params);
-
-                    removeView(lytContainer5, R.id.lyt_initials);
+                    setAvatar(mInfo, holder.image);
                 }
 
-                if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((isMyCloud || (mInfo.getActionStateUserId() != userId))))) {
-                    removeView(lytContainer5, R.id.lyt_message_sender_room);
-
-                    addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
-                    TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
-                    txtLastMessage.setText(mInfo.getActionState());
-                    txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_blue));
-                    txtLastMessage.setEllipsize(TextUtils.TruncateAt.MIDDLE);
-                    // addView(holder, lytContainer5, R.layout.room_layout_avi, R.id.lyt_avi_room, lytContainer5.getChildCount());
-                    //(holder.itemView.findViewById(R.id.cs_avi)).setVisibility(View.VISIBLE);
-
-                    removeView(lytContainer7, R.id.lyt_tic_room);
-                } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
-
-                    addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
-                    TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
-                    txtLastMessage.setText(subStringInternal(mInfo.getDraft().getMessage()));
-                    txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
-
-                    addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
-                    TextView txtView = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
-                    txtView.setText(R.string.txt_draft);
-                    txtView.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
-                    txtView.setTypeface(G.typeface_IRANSansMobile);
-                    // removeView(lytContainer5, R.id.lyt_avi_room);
-                    removeView(lytContainer7, R.id.lyt_tic_room);
-                } else {
-                    //  removeView(lytContainer5, R.id.lyt_avi_room);
-
-                    if (mInfo.getLastMessage() != null) {
-                        String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
-
-                        if (lastMessage == null) {
-                            lastMessage = mInfo.getLastMessage().getMessage();
-                        }
-
-                        if (lastMessage == null || lastMessage.isEmpty()) {
-                            removeView(lytContainer7, R.id.lyt_tic_room);
-                            removeView(lytContainer5, R.id.lyt_message_sender_room);
-                            removeView(lytContainer5, R.id.lyt_last_message_room);
-                        } else {
-                            if (mInfo.getLastMessage().isAuthorMe()) {
-                                addView(holder, lytContainer7, R.layout.room_layout_tic, R.id.lyt_tic_room, 0);
-                                AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isAuthorMe());
-                            } else {
-                                removeView(lytContainer7, R.id.lyt_tic_room);
-                            }
-
-                            if (mInfo.getType() == GROUP) {
-                                /**
-                                 * here i get latest message from chat history with chatId and
-                                 * get DisplayName with that . when login app client get latest
-                                 * message for each group from server , if latest message that
-                                 * send server and latest message that exist in client for that
-                                 * room be different latest message sender showing will be wrong
-                                 */
-
-                                String lastMessageSender = "";
-                                if (mInfo.getLastMessage().isAuthorMe()) {
-                                    lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
-                                } else {
-                                    Realm realm = Realm.getDefaultInstance();
-                                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
-                                    if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
-
-                                        String _name = realmRegisteredInfo.getDisplayName();
-                                        if (_name.length() > 0) {
-
-                                            if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                                                if (HelperCalander.isLanguagePersian) {
-                                                    lastMessageSender = _name + ": ";
-                                                } else {
-                                                    lastMessageSender = " :" + _name;
-                                                }
-                                            } else {
-                                                if (HelperCalander.isLanguagePersian) {
-                                                    lastMessageSender = " :" + _name;
-                                                } else {
-                                                    lastMessageSender = _name + ": ";
-                                                }
-                                            }
-                                        }
-                                    }
-                                    realm.close();
-                                }
-
-                                addView(holder, lytContainer5, R.layout.room_layout_message_sender, R.id.lyt_message_sender_room, 0);
-                                TextView txtMessageSender = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message_sender);
-                                txtMessageSender.setText(lastMessageSender);
-                                txtMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
-                                txtMessageSender.setTypeface(G.typeface_IRANSansMobile);
-                            } else {
-                                removeView(lytContainer5, R.id.lyt_message_sender_room);
-                            }
-
-                            addView(holder, lytContainer5, R.layout.room_layout_last_message, R.id.lyt_last_message_room, lytContainer5.getChildCount());
-                            TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
-
-                            if (mInfo.getLastMessage() != null) {
-                                ProtoGlobal.RoomMessageType _type, tmp;
-
-                                _type = mInfo.getLastMessage().getMessageType();
-
-                                try {
-                                    if (mInfo.getLastMessage().getReplyTo() != null) {
-                                        tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
-                                        if (tmp != null) _type = tmp;
-                                    }
-                                } catch (NullPointerException e) {
-                                    e.printStackTrace();
-                                }
-
-                                try {
-                                    if (mInfo.getLastMessage().getForwardMessage() != null) {
-                                        tmp = mInfo.getLastMessage().getForwardMessage().getMessageType();
-                                        if (tmp != null) _type = tmp;
-                                    }
-                                } catch (NullPointerException e) {
-                                    e.printStackTrace();
-                                }
-
-                                String result = AppUtils.conversionMessageType(_type, txtLastMessage, R.color.room_message_blue);
-                                if (result.isEmpty()) {
-                                    if (!HelperCalander.isLanguagePersian) {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                            txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
-                                        }
-                                    }
-                                    txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
-                                    txtLastMessage.setText(subStringInternal(lastMessage));
-                                }
-                            } else {
-                                txtLastMessage.setText(subStringInternal(lastMessage));
-                            }
-                        }
-                    } else {
-                        removeView(lytContainer5, R.id.lyt_last_message_room);
-                        removeView(lytContainer5, R.id.lyt_message_sender_room);
-                        removeView(lytContainer7, R.id.lyt_time_room);
-                        removeView(lytContainer7, R.id.lyt_tic_room);
-                    }
-                }
-
-                long idForGetAvatar;
-                HelperAvatar.AvatarType avatarType;
-                if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
-                    idForGetAvatar = mInfo.getChatRoom().getPeerId();
-                    avatarType = HelperAvatar.AvatarType.USER;
-                } else {
-                    idForGetAvatar = mInfo.getId();
-                    avatarType = HelperAvatar.AvatarType.ROOM;
-                }
-
-                if (!isMyCloud) {
-                    hashMapAvatar.put(idForGetAvatar, image);
-                }
-
-                HelperAvatar.getAvatar(idForGetAvatar, avatarType, new OnAvatarGet() {
-                    @Override
-                    public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                        if (hashMapAvatar.get(idForGetAvatar) != null) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(idForGetAvatar));
-                        }
-                    }
-
-                    @Override
-                    public void onShowInitials(String initials, String color) {
-                        long idForGetAvatar;
-                        if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
-                            idForGetAvatar = mInfo.getChatRoom().getPeerId();
-                        } else {
-                            idForGetAvatar = mInfo.getId();
-                        }
-                        if (hashMapAvatar.get(idForGetAvatar) != null) {
-                            hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp52), initials, color));
-                        }
-                    }
-                });
-
-                /**
-                 * ********************* chat icon *********************
-                 */
-                if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT || mainType != MainType.all) {
-                    removeView(lytContainer4, R.id.lyt_chat_icon_room);
-                } else {
-                    addView(holder, lytContainer4, R.layout.room_layout_chat_icon, R.id.lyt_chat_icon_room, 0);
-
-                    LinearLayout lytChatIcon = (LinearLayout) holder.itemView.findViewById(R.id.lyt_chat_icon_room);
-                    if (G.selectedLanguage.equals("en")) {
-                        lytChatIcon.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
-                    } else {
-                        lytChatIcon.setPadding((int) G.context.getResources().getDimension(R.dimen.dp8), 0, 0, 0);
-                    }
-
-                    TextView txtChatIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_chat_icon);
-                    if (mInfo.getType() == GROUP) {
-                        typeFaceIcon = G.typeface_Fontico;
-                        txtChatIcon.setText(getStringChatIcon(RoomType.GROUP));
-                    } else if (mInfo.getType() == CHANNEL) {
-                        typeFaceIcon = G.typeface_Fontico;
-                        txtChatIcon.setText(getStringChatIcon(RoomType.CHANNEL));
-                    }
-                    txtChatIcon.setTypeface(typeFaceIcon);
-                }
+                setChatIcon(mInfo, holder.txtChatIcon);
 
                 holder.name.setText(mInfo.getTitle());
 
                 if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
-                    addView(holder, lytContainer7, R.layout.room_layout_time, R.id.lyt_time_room, lytContainer7.getChildCount());
-                    TextView txtTime = ((TextView) holder.itemView.findViewById(R.id.cs_txt_contact_time));
-                    txtTime.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
-                    txtTime.setTypeface(G.typeface_IRANSansMobile);
-                } else {
-                    removeView(lytContainer7, R.id.lyt_time_room);
+                    holder.txtTime.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
                 }
 
                 /**
@@ -1041,57 +826,43 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 if (mInfo.isPinned()) {
                     holder.rootChat.setBackgroundColor(ContextCompat.getColor(context, R.color.pin_color));
+                    holder.txtPinIcon.setVisibility(View.VISIBLE);
+
                 } else {
                     holder.rootChat.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                    holder.txtPinIcon.setVisibility(View.GONE);
                 }
 
                 if (mInfo.getUnreadCount() < 1) {
-                    removeView(lytContainer6, R.id.lyt_unread_room);
-                    holder.name.setTypeface(G.typeface_IRANSansMobile);
 
-                    if (mInfo.isPinned()) {
-                        addView(holder, lytContainer6, R.layout.room_layout_pinned, R.id.lyt_pinned_room, lytContainer6.getChildCount());
-                        TextView txtPinIcon = (TextView) holder.itemView.findViewById(R.id.cs_txt_pinned_message);
-                        txtPinIcon.setTypeface(G.typeface_Fontico);
-                    } else {
-                        removeView(lytContainer6, R.id.lyt_pinned_room);
-                    }
+                    holder.name.setTypeface(G.typeface_IRANSansMobile);
+                    holder.txtUnread.setVisibility(View.GONE);
 
                 } else {
-
+                    holder.txtUnread.setVisibility(View.VISIBLE);
                     holder.name.setTypeface(G.typeface_IRANSansMobile_Bold);
-
-                    addView(holder, lytContainer6, R.layout.room_layout_unread, R.id.lyt_unread_room, lytContainer6.getChildCount());
-                    removeView(lytContainer6, R.id.lyt_pinned_room);
-
-                    TextView txtUnread = (TextView) holder.itemView.findViewById(R.id.cs_txt_unread_message);
-                    txtUnread.setText(Integer.toString(mInfo.getUnreadCount()));
+                    holder.txtPinIcon.setVisibility(View.GONE);
+                    holder.txtUnread.setText(Integer.toString(mInfo.getUnreadCount()));
 
                     if (HelperCalander.isLanguagePersian) {
-                        txtUnread.setBackgroundResource(R.drawable.rect_oval_red);
+                        holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red);
                     } else {
-                        txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
+                        holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
                     }
 
 
                     if (mInfo.getMute()) {
-                        AndroidUtils.setBackgroundShapeColor(txtUnread, Color.parseColor("#c6c1c1"));
+                        AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor("#c6c1c1"));
                     } else {
-                        AndroidUtils.setBackgroundShapeColor(txtUnread, Color.parseColor(G.notificationColor));
+                        AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
                     }
                 }
 
-                /**
-                 * ********************* mute *********************
-                 * hint : message status should be added before mute
-                 * for observance order with mute icon
-                 */
+
                 if (mInfo.getMute()) {
-                    if (holder.itemView.findViewById(R.id.lyt_mute_room) == null) {
-                        addView(holder, lytContainer7, R.layout.room_layout_mute, R.id.cs_txt_mute, 0);
-                    }
+                    holder.mute.setVisibility(View.VISIBLE);
                 } else {
-                    removeView(lytContainer7, R.id.lyt_mute_room);
+                    holder.mute.setVisibility(View.GONE);
                 }
             }
 
@@ -1099,84 +870,65 @@ public class FragmentMain extends Fragment implements OnComplete {
              * for change english number to persian number
              */
             if (HelperCalander.isLanguagePersian) {
-                TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
-                if (txtLastMessage != null) {
-                    txtLastMessage.setText(txtLastMessage.getText().toString());
-                }
 
-                TextView txtUnread = (TextView) holder.itemView.findViewById(R.id.cs_txt_unread_message);
-                if (txtUnread != null) {
-                    txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(txtUnread.getText().toString()));
-                }
+                holder.txtLastMessage.setText(holder.txtLastMessage.getText().toString());
+
+                holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));
 
                 holder.name.setText(holder.name.getText().toString());
             }
 
-            TextView txtLastMessage = (TextView) holder.itemView.findViewById(R.id.cs_txt_last_message);
-            if (txtLastMessage != null) {
-                txtLastMessage.setTypeface(G.typeface_IRANSansMobile);
-            }
+
         }
 
-        private String subStringInternal(String text) {
 
-            if (text == null || text.length() == 0) {
-                return "";
-            }
 
-            int subLenght = 50;
-
-            if (text.length() > subLenght) {
-                return text.substring(0, subLenght);
-            } else {
-                return text;
-            }
-        }
-
-        /**
-         * add element to view
-         *
-         * @param holder holder of recycler
-         * @param layout chat_sub_layout
-         * @param inflateLayout layout that inflated for showing
-         * @param parentId parent id in inflated layout
-         * @param position position for add element to view
-         */
-        private void addView(ViewHolder holder, LinearLayout layout, int inflateLayout, int parentId, int position) {
-            if (holder.itemView.findViewById(parentId) == null) {
-                View muteView = LayoutInflater.from(G.context).inflate(inflateLayout, null);
-                layout.addView(muteView, position);
-            }
-        }
-
-        /**
-         * remove element from view
-         *
-         * @param container parent of view
-         * @param id view id
-         */
-        private void removeView(LinearLayout container, int id) {
-            for (int i = 0; i < container.getChildCount(); i++) {
-                if (container.getChildAt(i).getId() == id) {
-                    container.removeViewAt(i);
-                    return;
-                }
-            }
-        }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
             RealmRoom mInfo;
-            //protected CircleImageView image;
+
+            protected CircleImageView image;
             protected EmojiTextViewE name;
             protected ViewGroup rootChat;
+            protected EmojiTextViewE txtLastMessage;
+            protected MaterialDesignTextView txtChatIcon;
+            protected TextView txtTime;
+            protected MaterialDesignTextView txtPinIcon;
+            protected TextView txtUnread;
+            protected MaterialDesignTextView mute;
+            protected EmojiTextViewE lastMessageSender;
+            protected ImageView txtTic;
+            protected MaterialDesignTextView txtClude;
+
 
             public ViewHolder(View view) {
                 super(view);
 
-                //image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
+                image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
                 name = (EmojiTextViewE) view.findViewById(R.id.cs_txt_contact_name);
                 rootChat = (ViewGroup) view.findViewById(R.id.root_chat_sub_layout);
+                txtLastMessage = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message);
+                txtChatIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_chat_icon);
+
+                txtTime = ((TextView) view.findViewById(R.id.cs_txt_contact_time));
+                txtTime.setTypeface(G.typeface_IRANSansMobile);
+
+                txtPinIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_pinned_message);
+                txtPinIcon.setTypeface(G.typeface_Fontico);
+
+                txtUnread = (TextView) view.findViewById(R.id.cs_txt_unread_message);
+                mute = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_mute);
+
+                lastMessageSender = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message_sender);
+                lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
+
+                txtTic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
+
+                txtClude = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_contact_initials);
+
+
+
 
                 //AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
 
@@ -1231,6 +983,207 @@ public class FragmentMain extends Fragment implements OnComplete {
                 });
             }
         }
+
+        private String subStringInternal(String text) {
+
+            if (text == null || text.length() == 0) {
+                return "";
+            }
+
+            int subLenght = 50;
+
+            if (text.length() > subLenght) {
+                return text.substring(0, subLenght);
+            } else {
+                return text;
+            }
+        }
+
+        //*******************************************************************************************
+        private void setLastMessage(RealmRoom mInfo, ViewHolder holder, boolean isMyCloud) {
+
+            holder.txtTic.setVisibility(View.GONE);
+            holder.txtLastMessage.setText("");
+
+            if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((isMyCloud || (mInfo.getActionStateUserId() != userId))))) {
+
+                holder.lastMessageSender.setVisibility(View.GONE);
+                holder.txtLastMessage.setText(mInfo.getActionState());
+                holder.txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_blue));
+                holder.txtLastMessage.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+            } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
+
+                holder.txtLastMessage.setText(subStringInternal(mInfo.getDraft().getMessage()));
+                holder.txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
+
+                holder.lastMessageSender.setVisibility(View.VISIBLE);
+                holder.lastMessageSender.setText(R.string.txt_draft);
+                holder.lastMessageSender.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+                holder.lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
+            } else {
+
+                if (mInfo.getLastMessage() != null) {
+                    String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(),
+                        mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+
+                    if (lastMessage == null) {
+                        lastMessage = mInfo.getLastMessage().getMessage();
+                    }
+
+                    if (lastMessage == null || lastMessage.isEmpty()) {
+
+                        holder.lastMessageSender.setVisibility(View.GONE);
+                    } else {
+                        if (mInfo.getLastMessage().isAuthorMe()) {
+
+                            holder.txtTic.setVisibility(View.VISIBLE);
+                            AppUtils.rightMessageStatus(holder.txtTic, ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isAuthorMe());
+                        }
+
+                        if (mInfo.getType() == GROUP) {
+                            /**
+                             * here i get latest message from chat history with chatId and
+                             * get DisplayName with that . when login app client get latest
+                             * message for each group from server , if latest message that
+                             * send server and latest message that exist in client for that
+                             * room be different latest message sender showing will be wrong
+                             */
+
+                            String lastMessageSender = "";
+                            if (mInfo.getLastMessage().isAuthorMe()) {
+                                lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
+                            } else {
+
+                                RealmRegisteredInfo realmRegisteredInfo =
+                                    G.getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
+                                if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
+
+                                    String _name = realmRegisteredInfo.getDisplayName();
+                                    if (_name.length() > 0) {
+
+                                        if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                                            if (HelperCalander.isLanguagePersian) {
+                                                lastMessageSender = _name + ": ";
+                                            } else {
+                                                lastMessageSender = " :" + _name;
+                                            }
+                                        } else {
+                                            if (HelperCalander.isLanguagePersian) {
+                                                lastMessageSender = " :" + _name;
+                                            } else {
+                                                lastMessageSender = _name + ": ";
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            holder.lastMessageSender.setVisibility(View.VISIBLE);
+
+                            holder.lastMessageSender.setText(lastMessageSender);
+                            holder.lastMessageSender.setTextColor(Color.parseColor("#2bbfbd"));
+                        } else {
+                            holder.lastMessageSender.setVisibility(View.GONE);
+                        }
+
+                        if (mInfo.getLastMessage() != null) {
+                            ProtoGlobal.RoomMessageType _type, tmp;
+
+                            _type = mInfo.getLastMessage().getMessageType();
+
+                            try {
+                                if (mInfo.getLastMessage().getReplyTo() != null) {
+                                    tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
+                                    if (tmp != null) _type = tmp;
+                                }
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
+
+                            try {
+                                if (mInfo.getLastMessage().getForwardMessage() != null) {
+                                    tmp = mInfo.getLastMessage().getForwardMessage().getMessageType();
+                                    if (tmp != null) _type = tmp;
+                                }
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
+
+                            String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, R.color.room_message_blue);
+                            if (result.isEmpty()) {
+                                if (!HelperCalander.isLanguagePersian) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                                        holder.txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
+                                    }
+                                }
+                                holder.txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
+                                holder.txtLastMessage.setText(subStringInternal(lastMessage));
+                            }
+                        } else {
+                            holder.txtLastMessage.setText(subStringInternal(lastMessage));
+                        }
+                    }
+                } else {
+
+                    holder.lastMessageSender.setVisibility(View.GONE);
+                    holder.txtTime.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        private void setAvatar(final RealmRoom mInfo, CircleImageView imageView) {
+            long idForGetAvatar;
+            HelperAvatar.AvatarType avatarType;
+            if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
+                idForGetAvatar = mInfo.getChatRoom().getPeerId();
+                avatarType = HelperAvatar.AvatarType.USER;
+            } else {
+                idForGetAvatar = mInfo.getId();
+                avatarType = HelperAvatar.AvatarType.ROOM;
+            }
+
+            hashMapAvatar.put(idForGetAvatar, imageView);
+
+            HelperAvatar.getAvatar(idForGetAvatar, avatarType, new OnAvatarGet() {
+                @Override
+                public void onAvatarGet(String avatarPath, long idForGetAvatar) {
+                    if (hashMapAvatar.get(idForGetAvatar) != null) {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(idForGetAvatar));
+                    }
+                }
+
+                @Override
+                public void onShowInitials(String initials, String color) {
+                    long idForGetAvatar;
+                    if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
+                        idForGetAvatar = mInfo.getChatRoom().getPeerId();
+                    } else {
+                        idForGetAvatar = mInfo.getId();
+                    }
+                    if (hashMapAvatar.get(idForGetAvatar) != null) {
+                        hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp52), initials, color));
+                    }
+                }
+            });
+        }
+
+        private void setChatIcon(RealmRoom mInfo, MaterialDesignTextView textView) {
+            /**
+             * ********************* chat icon *********************
+             */
+            if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT || mainType != MainType.all) {
+                textView.setVisibility(View.GONE);
+            } else {
+
+                if (mInfo.getType() == GROUP) {
+                    textView.setText(getStringChatIcon(RoomType.GROUP));
+                } else if (mInfo.getType() == CHANNEL) {
+                    textView.setText(getStringChatIcon(RoomType.CHANNEL));
+                }
+            }
+        }
+
+        //*******************************************************************************************
 
         /**
          * get string chat icon
