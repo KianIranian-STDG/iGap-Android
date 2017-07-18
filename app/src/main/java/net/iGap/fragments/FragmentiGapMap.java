@@ -174,6 +174,14 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
+        ViewGroup mapContainer = (ViewGroup) view.findViewById(R.id.mapContainer);
+        mapContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         rootTurnOnGps = (ViewGroup) view.findViewById(R.id.rootTurnOnGps);
         rootTurnOnGps.setOnClickListener(new View.OnClickListener() {
             @Override

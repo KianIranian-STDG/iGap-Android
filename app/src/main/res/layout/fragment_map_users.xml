@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     tools:context="net.iGap.fragments.FragmentMapUsers"
     android:background="#ffffff"
+    android:id="@+id/rooFragmentUserMap"
     >
 
   <LinearLayout

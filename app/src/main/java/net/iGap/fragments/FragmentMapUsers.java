@@ -80,6 +80,13 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
         mRecyclerView.setAdapter(mAdapter);
         realm.close();
         ((ActivityMain) mActivity).setOnBackPressedListener(FragmentMapUsers.this, false);
+        ViewGroup mapContainer = (ViewGroup) view.findViewById(R.id.rooFragmentUserMap);
+        mapContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
