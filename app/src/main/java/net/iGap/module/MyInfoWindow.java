@@ -1,5 +1,6 @@
 package net.iGap.module;
 
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -71,6 +72,11 @@ public class MyInfoWindow extends InfoWindow {
         final TextView txtCall = (TextView) view.findViewById(R.id.txt_call_map);
         TextView txtName = (TextView) view.findViewById(R.id.txt_name_info_map);
         final TextView txtComment = (TextView) view.findViewById(R.id.txt_info_comment);
+
+        txtCall.setTextColor(Color.parseColor(G.appBarColor));
+        txtChat.setTextColor(Color.parseColor(G.appBarColor));
+        txtOpenComment.setTextColor(Color.parseColor(G.appBarColor));
+        txtBack.setTextColor(Color.parseColor(G.appBarColor));
 
         txtName.setText(realmRegisteredInfo.getDisplayName());
 
