@@ -17,6 +17,7 @@ import io.realm.RealmResults;
 import java.util.HashMap;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnAvatarGet;
@@ -32,8 +33,10 @@ import net.iGap.request.RequestGeoGetNearbyDistance;
 
 import static net.iGap.G.context;
 import static net.iGap.G.inflater;
+import static net.iGap.fragments.FragmentiGapMap.btnBack;
+import static net.iGap.fragments.FragmentiGapMap.isBackPress;
 
-public class FragmentMapUsers extends Fragment {
+public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPressedListener {
 
     private FragmentActivity mActivity;
     private RecyclerView mRecyclerView;
@@ -76,6 +79,13 @@ public class FragmentMapUsers extends Fragment {
         mAdapter = new MapUserAdapter(realm.where(RealmGeoNearbyDistance.class).findAll(), true);
         mRecyclerView.setAdapter(mAdapter);
         realm.close();
+        ((ActivityMain) mActivity).setOnBackPressedListener(FragmentMapUsers.this, false);
+    }
+
+    @Override
+    public void doBack() {
+        isBackPress = true;
+        if (btnBack != null) btnBack.performClick();
     }
 
     private class MapUserAdapter extends RealmRecyclerViewAdapter<RealmGeoNearbyDistance, MapUserAdapter.ViewHolder> {
@@ -174,5 +184,11 @@ public class FragmentMapUsers extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((ActivityMain) mActivity).setOnBackPressedListener(FragmentMapUsers.this, true);
     }
 }

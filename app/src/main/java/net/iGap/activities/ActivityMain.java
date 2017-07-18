@@ -899,13 +899,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
+
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap, "map_fragment").commit();
-                } catch (Exception e) {
-                    e.getStackTrace();
+                    HelperPermision.getLocationPermission(ActivityMain.this, new OnGetPermission() {
+                        @Override
+                        public void Allow() throws IOException {
+                            FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
+                            try {
+                                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap).commit();
+                            } catch (Exception e) {
+                                e.getStackTrace();
+                            }
+                            lockNavigation();
+                        }
+
+                        @Override
+                        public void deny() {
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                lockNavigation();
+
                 closeDrawer();
             }
         });
@@ -1463,9 +1478,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    protected OnBackPressedListener onBackPressedListener;
+
+    public interface OnBackPressedListener {
+        void doBack();
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener, boolean isDisable) {
+        if (!isDisable) {
+            this.onBackPressedListener = onBackPressedListener;
+        } else {
+            this.onBackPressedListener = null;
+        }
+    }
+
     @Override
     public void onBackPressed() {
         openNavigation();
+
+        if (onBackPressedListener != null) {
+            onBackPressedListener.doBack();
+        }
+
         SearchFragment myFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("Search_fragment");
         FragmentNewGroup fragmentNeGroup = (FragmentNewGroup) getSupportFragmentManager().findFragmentByTag("newGroup_fragment");
         FragmentCreateChannel fragmentCreateChannel = (FragmentCreateChannel) getSupportFragmentManager().findFragmentByTag("createChannel_fragment");

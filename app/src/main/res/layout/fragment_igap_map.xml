@@ -164,6 +164,7 @@
               android:layout_width="match_parent"
               android:layout_height="1dp"
               android:background="@color/gray_9d"
+              android:layout_marginBottom="@dimen/dp8"
               />
         </LinearLayout>
         <TextView
@@ -243,7 +244,7 @@
       android:theme="@style/FabButton"
       android:tint="@color/white"
       app:fabSize="normal"
-      app:layout_anchor="@+id/st_appbar"
+      app:layout_anchor="@+id/replace"
       app:layout_anchorGravity="bottom|right|end"
       app:srcCompat="@drawable/ic_gps_fixed_black_24px"
 

@@ -76,6 +76,7 @@ import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import static net.iGap.G.context;
+import static net.iGap.R.id.st_fab_gps;
 
 public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState {
 
@@ -85,6 +86,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private ViewGroup rootTurnOnGps;
     private ViewGroup vgMessageGps;
     public static Location location;
+    public static FloatingActionButton fabGps;
+    public static ViewGroup root1;
+    public static RippleView btnBack;
+    public static RippleView rippleMoreMap;
+    public static boolean isBackPress = false;
+
     private FragmentActivity mActivity;
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
     private GestureDetector mGestureDetector;
@@ -176,13 +183,19 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         });
         vgMessageGps = (ViewGroup) view.findViewById(R.id.vgMessageGps);
 
-        RippleView btnBack = (RippleView) view.findViewById(R.id.ripple_back_map);
+        btnBack = (RippleView) view.findViewById(R.id.ripple_back_map);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                getActivity().getSupportFragmentManager().popBackStack();
+                if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
+                    rippleMoreMap.setVisibility(View.VISIBLE);
+                    fabGps.setVisibility(View.VISIBLE);
+                }
+                if (!isBackPress) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
                 closeKeyboard(v);
+                isBackPress = false;
             }
         });
 
@@ -228,7 +241,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
-        FloatingActionButton fabGps = (FloatingActionButton) view.findViewById(R.id.st_fab_gps);
+        fabGps = (FloatingActionButton) view.findViewById(st_fab_gps);
         fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
         fabGps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,7 +254,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
-        RippleView rippleMoreMap = (RippleView) view.findViewById(R.id.ripple_more_map);
+        rippleMoreMap = (RippleView) view.findViewById(R.id.ripple_more_map);
 
         rippleMoreMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,7 +266,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 dialog.show();
 
 
-                ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+                root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
                 ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
                 ViewGroup root3 = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
 
@@ -277,17 +290,17 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 txtItem3.setText(getResources().getString(R.string.nearby));
                 icon3.setText(getResources().getString(R.string.md_delete_acc));
 
-
-
                 txtItem3.setText(getResources().getString(R.string.nearby));
 
                 root1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
+                        fabGps.setVisibility(View.GONE);
+                        rippleMoreMap.setVisibility(View.GONE);
                         FragmentMapUsers fragmentMapUsers = FragmentMapUsers.newInstance();
                         try {
-                            mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.replace, fragmentMapUsers).commitAllowingStateLoss();
+                            mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.replace, fragmentMapUsers, "map_user_fragment").commitAllowingStateLoss();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
