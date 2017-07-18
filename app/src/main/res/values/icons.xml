@@ -109,7 +109,7 @@
   <string name="icon_folder">\uf76f</string>  <!-- igap_folder-open  -->
   <string name="icon_photo">\uf2ef</string> <!--  igap_image-filter  -->
   <string name="md_eraser">\uf1fe</string> <!-- igap_eraser  -->
-  <string name="md_qrCode">\uf433</string> <!-- igap_eraser  -->
+  <string name="md_qrCode">\uf433</string> <!-- igap_qrCode  -->
   <string name="md_file_video">\ue92a</string> <!-- igap_eraser  -->
   <string name="md_file_music">\ue928</string> <!-- igap_eraser  -->
   <string name="igap_file_text2">\ue926</string> <!-- igap_eraser  -->
@@ -119,6 +119,7 @@
   <string name="md_map">\uf24f</string> <!-- igap_map  -->
   <string name="md_igap_pencil_box_outline">\uf3ed</string> <!-- igap_map  -->
   <string name="md_igap_crosshairs_gps">\uf1a4</string> <!-- igap_gps  -->
+  <string name="md_gap_eye_off">\uf209</string> <!-- igap_eye_off  -->
 
 
 </resources>

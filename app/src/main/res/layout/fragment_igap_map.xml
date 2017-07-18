@@ -6,7 +6,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#EEEEEE"
-    android:elevation="999dp"
+    android:elevation="20dp"
     android:fitsSystemWindows="false"
     android:orientation="vertical"
     tools:ignore="MissingPrefix"
@@ -67,7 +67,7 @@
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18"
             android:visibility="visible"
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
+            fontPath="fonts/IRANSansMobile.ttf"
             />
 
 
@@ -102,15 +102,87 @@
     </android.support.v7.widget.Toolbar>
 
   </android.support.design.widget.AppBarLayout>
+  <RelativeLayout
+      android:id="@+id/replace"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/backgroundToolbarMap"
+      >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
-  <org.osmdroid.views.MapView
-      android:id="@+id/map"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
-      android:layout_below="@+id/vgMessageGps"
-      />
+      <LinearLayout
+          android:id="@+id/vgMessageGps"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/backgroundToolbarMap"
+          android:background="@color/gray10"
+          android:layoutDirection="ltr"
 
+          android:orientation="horizontal"
+          >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              >
+
+
+            <TextView
+                android:id="@+id/txtSendMessageGps"
+                android:layout_width="@dimen/dp52"
+                android:layout_height="@dimen/dp52"
+                android:gravity="center"
+                android:text="@string/md_back_arrow"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
+                />
+
+            <EditText
+                android:id="@+id/edtMessageGps"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:hint="@string/B_ok"
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:maxLength="255"
+                />
+
+          </LinearLayout>
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/gray_9d"
+              />
+        </LinearLayout>
+        <TextView
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:gravity="center"
+            android:text="@string/md_igap_pencil_box_outline"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@color/gray_4c"
+            />
+
+      </LinearLayout>
+      <org.osmdroid.views.MapView
+          android:id="@+id/map"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          />
+    </LinearLayout>
+  </RelativeLayout>
 
   <LinearLayout
       android:id="@+id/rootTurnOnGps"
@@ -137,7 +209,7 @@
         android:paddingLeft="@dimen/dp48"
         android:paddingRight="@dimen/dp48"
         android:paddingTop="@dimen/dp20"
-        android:text="@string/turn_on_gps"
+        android:text="@string/turn_on_gps_explain"
         android:textColor="@color/white"
         android:textSize="@dimen/dp18"
         fontPath="fonts/IRANSansMobile_Bold.ttf"
@@ -155,83 +227,25 @@
 
   </LinearLayout>
 
-  <LinearLayout
-      android:id="@+id/vgMessageGps"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_below="@+id/backgroundToolbarMap"
-      android:background="@color/gray10"
-      android:orientation="horizontal"
-      android:padding="@dimen/dp6"
-      >
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        >
-
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          >
-
-
-        <TextView
-            android:id="@+id/txtMessageGps"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:gravity="center"
-            android:text="@string/md_back_arrow"
-            android:textAppearance="@style/TextIconAppearance_toolbar"
-            />
-
-        <EditText
-            android:id="@+id/edtMessageGps"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:hint="تعیین وضعیت"
-            />
-
-      </LinearLayout>
-
-      <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          android:background="@color/gray_9d"
-          />
-    </LinearLayout>
-    <TextView
-        android:layout_width="@dimen/dp48"
-        android:layout_height="@dimen/dp48"
-        android:gravity="center"
-        android:text="@string/md_igap_pencil_box_outline"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
-        />
-
-  </LinearLayout>
 
   <android.support.design.widget.FloatingActionButton
       android:id="@+id/st_fab_gps"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_marginBottom="@dimen/dp24"
+      android:layout_marginLeft="@dimen/dp24"
+      android:layout_marginStart="19dp"
+      android:layout_toEndOf="@+id/rootTurnOnGps"
+      android:layout_toRightOf="@+id/rootTurnOnGps"
+      android:backgroundTint="@color/green"
       android:clickable="true"
-      android:src="@mipmap/gps"
       android:theme="@style/FabButton"
       android:tint="@color/white"
       app:fabSize="normal"
       app:layout_anchor="@+id/st_appbar"
       app:layout_anchorGravity="bottom|right|end"
-      android:layout_marginLeft="@dimen/dp24"
-      android:layout_marginBottom="@dimen/dp24"
-      android:layout_alignParentBottom="true"
-      android:layout_toRightOf="@+id/rootTurnOnGps"
-      android:layout_toEndOf="@+id/rootTurnOnGps"
-      android:layout_marginStart="19dp"
-      android:backgroundTint="@color/green"
+      app:srcCompat="@drawable/ic_gps_fixed_black_24px"
 
       />
 

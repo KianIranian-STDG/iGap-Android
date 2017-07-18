@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,21 +6,24 @@
     android:background="#ffffff"
     >
 
-  <View
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      >
+
+    <View
       android:id="@+id/map_user_view"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
       android:orientation="horizontal"
+        android:background="@android:color/transparent"
       />
-  <FrameLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_below="@+id/map_user_view"
-      >
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcy_map_user"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:fadeScrollbars="false"
         android:overScrollMode="never"
         android:scrollbarSize="5dp"
@@ -37,6 +40,5 @@
         android:visibility="gone"
         />
 
-  </FrameLayout>
-
-</RelativeLayout>
+  </LinearLayout>
+</FrameLayout>

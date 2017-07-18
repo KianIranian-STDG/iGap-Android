@@ -997,9 +997,17 @@
   <string name="c_GB">GB</string>
   <string name="c_TB">TB</string>
 
-  <!-- Map -->
-  <string name="turn_on_gps">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
+
+  <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
+  <string name="turn_off_gps">turn off</string>
+  <string name="turn_on_gps">turn on</string>
+  <string name="positioning">positioning</string>
+  <string name="nearby">People Nearby</string>
+  <string name="list_user_map">List user</string>
+  <string name="turn_off_on_gps">Turn Off/On GPS</string>
   <string name="comment_waiting">Receiving notes...</string>
   <string name="comment_no">There is no note</string>
   <string formatted="false" name="distance">about %d meters</string>
+
+
 </resources>
