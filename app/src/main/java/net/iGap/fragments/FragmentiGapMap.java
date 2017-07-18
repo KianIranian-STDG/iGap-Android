@@ -208,6 +208,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
+        final TextView txtIconMessageGps = (TextView) view.findViewById(R.id.txtIconMessageGps);
+        txtIconMessageGps.setTextColor(Color.parseColor(G.appBarColor));
+
         final TextView txtSendMessageGps = (TextView) view.findViewById(R.id.txtSendMessageGps);
         txtSendMessageGps.setTextColor(Color.parseColor(G.appBarColor));
         txtSendMessageGps.setOnClickListener(new View.OnClickListener() {
@@ -228,9 +231,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if (s.length() > 0) {
-                    txtSendMessageGps.setText(getResources().getString(R.string.md_downwards_arrow));
+                    txtSendMessageGps.setVisibility(View.VISIBLE);
                 } else {
-                    txtSendMessageGps.setText(getResources().getString(R.string.md_back_arrow));
+                    txtSendMessageGps.setVisibility(View.GONE);
                 }
 
             }

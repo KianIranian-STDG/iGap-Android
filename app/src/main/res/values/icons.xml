@@ -121,6 +121,7 @@
   <string name="md_igap_pencil_box_outline">\uf3ed</string> <!-- igap_map  -->
   <string name="md_igap_crosshairs_gps">\uf1a4</string> <!-- igap_gps  -->
   <string name="md_gap_eye_off">\uf209</string> <!-- igap_eye_off  -->
+  <string name="md_igap_map_marker_minus">\uf650</string> <!-- igap_eye_off  -->
 
 
 </resources>

@@ -140,11 +140,11 @@
 
 
             <TextView
-                android:id="@+id/txtSendMessageGps"
+                android:id="@+id/txtIconMessageGps"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="@dimen/dp52"
                 android:gravity="center"
-                android:text="@string/md_back_arrow"
+                android:text="@string/md_igap_map_marker_minus"
                 android:textAppearance="@style/TextIconAppearance_toolbar"
                 />
 
@@ -156,6 +156,10 @@
                 android:hint="@string/hint_gps"
                 fontPath="fonts/IRANSansMobile.ttf"
                 android:maxLength="255"
+                android:paddingStart="@dimen/dp12"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingEnd="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
                 />
 
           </LinearLayout>
@@ -168,12 +172,14 @@
               />
         </LinearLayout>
         <TextView
+            android:id="@+id/txtSendMessageGps"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:gravity="center"
             android:text="@string/md_igap_pencil_box_outline"
             android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@color/gray_4c"
+            android:visibility="gone"
             />
 
       </LinearLayout>
