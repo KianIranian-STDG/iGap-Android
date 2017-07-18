@@ -362,7 +362,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                                 } else {
                                     new RequestGeoRegister().register(true);
                                 }
-                                //dialog.dismiss();
+                                dialog.dismiss();
                             }
                         });
                     }

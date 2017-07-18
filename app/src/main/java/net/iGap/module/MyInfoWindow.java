@@ -94,6 +94,7 @@ public class MyInfoWindow extends InfoWindow {
                 txtClose.setVisibility(View.VISIBLE);
                 txtChat.setVisibility(View.VISIBLE);
                 txtCall.setVisibility(View.VISIBLE);
+                txtOpenComment.setVisibility(View.VISIBLE);
                 txtComment.setMaxLines(1);
                 txtComment.setEllipsize(TextUtils.TruncateAt.END);
             }
@@ -126,6 +127,7 @@ public class MyInfoWindow extends InfoWindow {
                     txtClose.setVisibility(View.GONE);
                     txtChat.setVisibility(View.GONE);
                     txtCall.setVisibility(View.GONE);
+                    txtOpenComment.setVisibility(View.GONE);
                     txtBack.setVisibility(View.VISIBLE);
                     txtComment.setMaxLines(Integer.MAX_VALUE);
                     txtComment.setEllipsize(null);
