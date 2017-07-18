@@ -12,14 +12,6 @@
       android:orientation="vertical"
       >
 
-    <View
-      android:id="@+id/map_user_view"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dp60"
-      android:orientation="horizontal"
-        android:background="@android:color/transparent"
-      />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcy_map_user"
         android:layout_width="match_parent"

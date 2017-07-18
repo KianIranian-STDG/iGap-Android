@@ -22,6 +22,8 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.CustomTextViewMedium;
+import net.iGap.module.MaterialDesignTextView;
 import net.iGap.realm.RealmGeoNearbyDistance;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
@@ -99,6 +101,12 @@ public class FragmentMapUsers extends Fragment {
                 return;
             }
 
+            if (G.selectedLanguage.equals("en")) {
+                holder.arrow.setText(G.context.getResources().getString(R.string.md_right_arrow));
+            } else {
+                holder.arrow.setText(G.context.getResources().getString(R.string.md_back_arrow));
+            }
+
             holder.username.setText(registeredInfo.getDisplayName());
             if (item.isHasComment()) {
                 if (item.getComment() == null || item.getComment().isEmpty()) {
@@ -147,7 +155,8 @@ public class FragmentMapUsers extends Fragment {
             public CircleImageView avatar;
             public TextView username;
             public TextView comment;
-            public TextView distance;
+            public MaterialDesignTextView arrow;
+            public CustomTextViewMedium distance;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -155,7 +164,8 @@ public class FragmentMapUsers extends Fragment {
                 avatar = (CircleImageView) itemView.findViewById(R.id.img_user_avatar_map);
                 username = (TextView) itemView.findViewById(R.id.txt_user_name_map);
                 comment = (TextView) itemView.findViewById(R.id.txt_user_comment_map);
-                distance = (TextView) itemView.findViewById(R.id.txt_user_distance_map);
+                arrow = (MaterialDesignTextView) itemView.findViewById(R.id.txt_arrow_list_map);
+                distance = (CustomTextViewMedium) itemView.findViewById(R.id.txt_user_distance_map);
             }
         }
     }

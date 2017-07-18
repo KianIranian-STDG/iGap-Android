@@ -8,6 +8,7 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_weight="1"
       android:orientation="horizontal"
       android:padding="@dimen/dp8"
       >
@@ -69,7 +70,7 @@
             />
       </RelativeLayout>
 
-      <TextView
+      <net.iGap.module.CustomTextViewMedium
           android:id="@+id/txt_user_distance_map"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
@@ -80,14 +81,14 @@
           />
 
       <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/cigp_moreButton"
+          android:id="@+id/txt_arrow_list_map"
           android:layout_width="@dimen/dp48"
           android:layout_height="match_parent"
           android:gravity="center"
           android:text="@string/md_right_arrow"
           android:textAppearance="@style/TextIconAppearance.all"
           android:textColor="@color/iGapColor"
-          android:textSize="@dimen/dp18"
+          android:textStyle="bold"
           />
 
     </LinearLayout>
@@ -97,8 +98,8 @@
       android:id="@+id/view_topLine_map"
       android:layout_width="match_parent"
       android:layout_height="1px"
-      android:layout_marginLeft="@dimen/dp8"
-      android:layout_marginStart="@dimen/dp8"
+      android:layout_marginLeft="@dimen/dp60"
+      android:layout_marginStart="@dimen/dp60"
       android:background="@color/gray"
       />
 

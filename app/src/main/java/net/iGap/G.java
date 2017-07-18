@@ -124,6 +124,7 @@ import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnInfoTime;
 import net.iGap.interfaces.OnLastSeenUpdateTiming;
 import net.iGap.interfaces.OnLocationChanged;
+import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnPushLoginToken;
 import net.iGap.interfaces.OnPushTwoStepVerification;
 import net.iGap.interfaces.OnQrCodeNewDevice;
@@ -394,6 +395,7 @@ public class G extends MultiDexApplication {
     public static OnLocationChanged onLocationChanged;
     public static OnGetNearbyCoordinate onGetNearbyCoordinate;
     public static OnGeoGetComment onGeoGetComment;
+    public static OnMapRegisterState onMapRegisterState;
 
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;

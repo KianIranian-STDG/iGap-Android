@@ -45,12 +45,15 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnLocationChanged;
+import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
+import net.iGap.request.RequestGeoGetRegisterStatus;
+import net.iGap.request.RequestGeoRegister;
 import net.iGap.request.RequestGeoUpdateComment;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -74,39 +77,37 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import static net.iGap.G.context;
 
-public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate {
+public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState {
 
     private MapView map;
-    private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
     private ItemizedOverlay<OverlayItem> latestLocation;
     private ArrayList<Marker> markers = new ArrayList<>();
-    private GestureDetector mGestureDetector;
     private ViewGroup rootTurnOnGps;
     private ViewGroup vgMessageGps;
-
-    private boolean first = true;
-    private boolean firstEnter = true;
-    private double lat1;
-    private double lon1;
     public static Location location;
-
     private FragmentActivity mActivity;
+    private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
+    private GestureDetector mGestureDetector;
+    private ToggleButton btnMapChangeRegistration;
 
-    //0.011 longitude, 0.009 latitude
+    private boolean firstEnter = true;
+    private boolean canUpdate = true;
+    private boolean mapRegisterState = true;
+    private boolean first = true;
+
     private final double LONGITUDE_LIMIT = 0.011;
     private final double LATITUDE_LIMIT = 0.009;
-
-    double northLimitation;
-    double eastLimitation;
-    double southLimitation;
-    double westLimitation;
-
+    private double northLimitation;
+    private double eastLimitation;
+    private double southLimitation;
+    private double westLimitation;
     private double lastLatitude;
     private double lastLongitude;
-
-    private boolean canUpdate = true;
+    private double lat1;
+    private double lon1;
 
     private long latestUpdateTime = 0;
+
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -124,9 +125,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         super.onViewCreated(view, savedInstanceState);
         G.onLocationChanged = this;
         G.onGetNearbyCoordinate = this;
+        G.onMapRegisterState = this;
         startMap(view);
         statusCheck();
         //clickDrawMarkActive();
+
+        new RequestGeoGetRegisterStatus().getRegisterStatus();
     }
 
     private void startMap(View view) {
@@ -295,34 +299,36 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                     public void onClick(View view) {
                         dialog.dismiss();
 
-                        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.dialog_map_turnoff_gps, true).build();
+                        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.dialog_map_registration, true).build();
                         View v = dialog.getCustomView();
+                        if (v == null) {
+                            return;
+                        }
                         DialogAnimation.animationUp(dialog);
                         dialog.show();
-                        ToggleButton tgGpsOff = (ToggleButton) v.findViewById(R.id.toggleGpsOff);
-                        TextView txtOffOnGps = (TextView) v.findViewById(R.id.txtOffOnGps);
+                        btnMapChangeRegistration = (ToggleButton) v.findViewById(R.id.btnMapChangeRegistration);
+                        TextView txtMapRegister = (TextView) v.findViewById(R.id.txtMapRegister);
                         TextView txtIconTurnOnOrOff = (TextView) v.findViewById(R.id.txtIconTurnOnOrOff);
 
-                        final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
-
-                        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                            tgGpsOff.setChecked(false);
-                            txtOffOnGps.setText(getResources().getString(R.string.turn_on_gps));
-                            txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_visibility));
-
-                        } else {
-                            tgGpsOff.setChecked(true);
-                            txtOffOnGps.setText(getResources().getString(R.string.turn_off_gps));
+                        if (mapRegisterState) {
+                            txtMapRegister.setText(getResources().getString(R.string.turn_off_gps));
                             txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_gap_eye_off));
+                        } else {
+                            txtMapRegister.setText(getResources().getString(R.string.turn_on_gps));
+                            txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_visibility));
                         }
+                        btnMapChangeRegistration.setChecked(mapRegisterState);
 
-
-                        tgGpsOff.setOnClickListener(new View.OnClickListener() {
+                        btnMapChangeRegistration.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
+                                if (mapRegisterState) {
+                                    new RequestGeoRegister().register(false);
+                                } else {
+                                    new RequestGeoRegister().register(true);
+                                }
                                 dialog.dismiss();
-                                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                             }
                         });
                     }
@@ -340,8 +346,6 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
             }
         });
-
-        new RequestGeoUpdateComment().updateComment("I am " + G.displayName + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     /**
@@ -595,6 +599,14 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             } catch (IllegalStateException e) {
                 e.getStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void onState(boolean state) {
+        mapRegisterState = state;
+        if (btnMapChangeRegistration != null) {
+            btnMapChangeRegistration.setChecked(state);
         }
     }
 }

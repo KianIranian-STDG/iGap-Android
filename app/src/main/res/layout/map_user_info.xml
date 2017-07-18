@@ -12,7 +12,7 @@
       android:layout_height="wrap_content"
       android:orientation="horizontal"
       >
-    <TextView
+    <net.iGap.module.MaterialDesignTextView
         android:id="@+id/txt_info_back_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,11 +20,10 @@
         android:gravity="left"
         android:text="@string/md_back_arrow"
         android:textColor="@color/iGapColor"
-        android:textSize="@dimen/dp22"
+        android:textAppearance="@style/TextIconAppearance_toolbar"
         android:visibility="gone"
-        fontPath="fonts/iGap-Fontico.ttf"
         />
-    <TextView
+    <net.iGap.module.MaterialDesignTextView
         android:id="@+id/txt_close_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,8 +31,7 @@
         android:gravity="right"
         android:text="@string/md_close_button"
         android:textColor="@color/iGapColor"
-        android:textSize="@dimen/dp22"
-        fontPath="fonts/iGap-Fontico.ttf"
+        android:textAppearance="@style/TextIconAppearance_toolbar"
         />
   </LinearLayout>
   <LinearLayout
@@ -58,31 +56,29 @@
           android:gravity="center_vertical"
           android:orientation="horizontal"
           >
-        <TextView
+        <net.iGap.module.MaterialDesignTextView
             android:id="@+id/txt_chat_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/md_chat_box"
             android:textColor="@color/iGapColor"
-            android:textSize="@dimen/dp24"
-            fontPath="fonts/iGap-Fontico.ttf"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             />
-        <TextView
+        <net.iGap.module.MaterialDesignTextView
             android:id="@+id/txt_call_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp4"
             android:text="@string/md_phone"
             android:textColor="@color/iGapColor"
-            android:textSize="@dimen/dp24"
-            fontPath="fonts/iGap-Fontico.ttf"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             />
         <View
             android:layout_width="0dip"
             android:layout_height="0dp"
             android:layout_weight="1"
             />
-        <TextView
+        <net.iGap.module.MaterialDesignTextView
             android:id="@+id/txt_name_info_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
