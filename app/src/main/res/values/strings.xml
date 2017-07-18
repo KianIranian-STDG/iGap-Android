@@ -1009,6 +1009,7 @@
   <string name="comment_waiting">Receiving notes...</string>
   <string name="comment_no">There is no note</string>
   <string formatted="false" name="distance">about %d meters</string>
+  <string name="hint_gps">Writ you\'r comment</string>
 
 
 </resources>
