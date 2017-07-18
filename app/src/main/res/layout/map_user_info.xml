@@ -31,7 +31,7 @@
         android:gravity="right"
         android:text="@string/md_close_button"
         android:textAppearance="@style/TextIconAppearance_toolbar"
-        android:textColor="@color/iGapColor"
+        android:textColor="@color/gray_5c"
         android:visibility="visible"
         />
   </LinearLayout>
@@ -91,6 +91,7 @@
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
+          android:layout_marginTop="@dimen/dp4"
           android:layout_weight="1"
           android:gravity="center_vertical"
           android:orientation="horizontal"
@@ -107,7 +108,7 @@
             android:id="@+id/txt_info_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp4"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="right"
