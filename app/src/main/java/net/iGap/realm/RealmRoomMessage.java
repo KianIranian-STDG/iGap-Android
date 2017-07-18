@@ -891,11 +891,6 @@ import org.parceler.Parcel;
                         return;
                     }
 
-                    if (realmRoom.getLastMessage() != null) {
-                        realmClientCondition.setClearId(realmRoom.getLastMessage().getMessageId());
-                        G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, realmRoom.getLastMessage().getMessageId());
-                    }
-
                     long clearMessageId = 0;
                     if (realmRoom.getLastMessage() != null) {
                         clearMessageId = realmRoom.getLastMessage().getMessageId();
