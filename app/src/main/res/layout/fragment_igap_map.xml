@@ -121,7 +121,6 @@
           android:layout_below="@+id/backgroundToolbarMap"
           android:background="@color/gray10"
           android:layoutDirection="ltr"
-
           android:orientation="horizontal"
           >
 
@@ -138,21 +137,12 @@
               android:orientation="horizontal"
               >
 
-
-            <TextView
-                android:id="@+id/txtIconMessageGps"
-                android:layout_width="@dimen/dp52"
-                android:layout_height="@dimen/dp52"
-                android:gravity="center"
-                android:text="@string/md_igap_map_marker_minus"
-                android:textAppearance="@style/TextIconAppearance_toolbar"
-                />
-
             <EditText
                 android:id="@+id/edtMessageGps"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
+                android:minHeight="@dimen/dp52"
                 android:hint="@string/hint_gps"
                 android:maxLength="255"
                 android:paddingEnd="@dimen/dp10"
@@ -176,7 +166,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:gravity="center"
-            android:text="@string/md_igap_pencil_box_outline"
+            android:text="@string/md_igap_check"
             android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@color/gray_4c"
             android:visibility="gone"
