@@ -385,7 +385,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:minWidth="@dimen/dp32"
-                android:text="@string/md_map"
+                android:text="@string/md_nearby"
                 android:textAppearance="@style/TextIconAppearance.menu"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/grayNew"
@@ -402,7 +402,7 @@
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
                 android:paddingTop="@dimen/dp12"
-                android:text="@string/map"
+                android:text="@string/igap_nearby"
                 android:textColor="@color/black90"
                 android:textSize="@dimen/dp14"
 

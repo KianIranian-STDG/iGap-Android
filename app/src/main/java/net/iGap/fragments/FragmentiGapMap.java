@@ -281,7 +281,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
                 TextView txtItem2 = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
                 TextView icon2 = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-                txtItem2.setText(getResources().getString(R.string.turn_off_on_gps));
+                txtItem2.setText(getResources().getString(R.string.map_registration));
                 icon2.setText(getResources().getString(R.string.md_delete_acc));
 
 
@@ -324,10 +324,10 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                         TextView txtIconTurnOnOrOff = (TextView) v.findViewById(R.id.txtIconTurnOnOrOff);
 
                         if (mapRegisterState) {
-                            txtMapRegister.setText(getResources().getString(R.string.turn_off_gps));
+                            txtMapRegister.setText(getResources().getString(R.string.turn_off_map));
                             txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_gap_eye_off));
                         } else {
-                            txtMapRegister.setText(getResources().getString(R.string.turn_on_gps));
+                            txtMapRegister.setText(getResources().getString(R.string.turn_on_map));
                             txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_visibility));
                         }
                         btnMapChangeRegistration.setChecked(mapRegisterState);
@@ -341,7 +341,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                                 } else {
                                     new RequestGeoRegister().register(true);
                                 }
-                                dialog.dismiss();
+                                //dialog.dismiss();
                             }
                         });
                     }
@@ -616,10 +616,15 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     }
 
     @Override
-    public void onState(boolean state) {
+    public void onState(final boolean state) {
         mapRegisterState = state;
         if (btnMapChangeRegistration != null) {
-            btnMapChangeRegistration.setChecked(state);
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    btnMapChangeRegistration.setChecked(state);
+                }
+            });
         }
     }
 }

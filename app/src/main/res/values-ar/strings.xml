@@ -850,6 +850,7 @@
   <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
   <string name="calls">تماس صوتی</string>
   <string name="map">نقشه</string>
+  <string name="igap_nearby">اطراف من</string>
   <string name="igap_call">تماس صوتی آی گپ</string>
   <string name="No_messages_here_yet">در حال حاضر پیامی وجود ندارد</string>
   <string name="clean_log">پاک کردن تاریخچه پیام صوتی</string>
@@ -962,7 +963,7 @@
   <string name="Call_Quality">کیفیت تماس</string>
 
   <!-- Map -->
-  <string name="turn_on_gps">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
+  <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
   <string name="comment_waiting">در حال دریافت یادداشت</string>
   <string name="comment_no">یادداشتی وجود ندارد</string>
   <string formatted="false" name="distance">حدود %d متر</string>

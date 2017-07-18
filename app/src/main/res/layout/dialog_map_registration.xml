@@ -24,7 +24,7 @@
       android:layout_weight="1"
       android:layout_height="match_parent"
       android:gravity="start|center_vertical"
-      android:text="@string/turn_off_gps"
+      android:text="@string/turn_off_map"
       android:textColor="@color/gray_4c"
       android:textSize="@dimen/dp16"
       fontPath="fonts/IRANSansMobile_Bold.ttf"

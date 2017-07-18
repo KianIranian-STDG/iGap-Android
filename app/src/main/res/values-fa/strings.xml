@@ -861,6 +861,7 @@
   <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
   <string name="calls">تماس صوتی</string>
   <string name="map">نقشه</string>
+  <string name="igap_nearby">اطراف من</string>
   <string name="igap_call">تماس صوتی آی گپ</string>
   <string name="No_messages_here_yet">در حال حاضر پیامی وجود ندارد</string>
   <string name="clean_log">پاک کردن تاریخچه تماس صوتی</string>
@@ -1004,12 +1005,12 @@
   <string name="c_TB">ترابایت </string>
 
   <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
-  <string name="turn_off_gps">خاموش</string>
-  <string name="turn_on_gps">روشن</string>
+  <string name="turn_off_map">خاموش</string>
+  <string name="turn_on_map">روشن</string>
   <string name="positioning">تعیین وضعیت</string>
   <string name="nearby">افراد نزدیک من</string>
   <string name="list_user_map">لیست افراد</string>
-  <string name="turn_off_on_gps">روشن یا خاموش کردن موقعیت یاب</string>
+  <string name="map_registration">نمایش موقعیت شما</string>
   <string name="comment_waiting">در حال دریافت یادداشت</string>
   <string name="comment_no">یادداشتی وجود ندارد</string>
   <string formatted="false" name="distance">حدود %d متر</string>

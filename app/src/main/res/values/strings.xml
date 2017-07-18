@@ -857,6 +857,7 @@
   <string name="show_sender_name_in_group">Show Sender Name in Groups</string>
   <string name="calls">Voice Calls</string>
   <string name="map">Map</string>
+  <string name="igap_nearby">Nearby</string>
   <string name="igap_call">iGap Voice Call</string>
   <string name="No_messages_here_yet">No messages here yet…</string>
   <string name="mandatory">(Mandatory)</string>
@@ -999,12 +1000,12 @@
 
 
   <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
-  <string name="turn_off_gps">turn off</string>
-  <string name="turn_on_gps">turn on</string>
+  <string name="map_register">register</string>
+  <string name="map_unregister">unregister</string>
   <string name="positioning">positioning</string>
   <string name="nearby">People Nearby</string>
   <string name="list_user_map">List user</string>
-  <string name="turn_off_on_gps">Turn Off/On GPS</string>
+  <string name="map_registration">Map Registration</string>
   <string name="comment_waiting">Receiving notes...</string>
   <string name="comment_no">There is no note</string>
   <string formatted="false" name="distance">about %d meters</string>
