@@ -522,7 +522,7 @@
   <string name="exactly">Exactly</string>
   <string name="recently">Recently</string>
   <string name="support">Support</string>
-  <string name="service_notification">Notification Service</string>
+  <string name="service_notification">Notification Services</string>
   <string name="B_edit">Edit</string>
   <string name="left">Leave</string>
   <string name="Channel_name">New Channel</string>
@@ -565,7 +565,7 @@
   <string name="current_session">Current Session</string>
   <string name="Active_session">Active Session</string>
   <string name="terminate">Terminate</string>
-  <string name="terminate_all">Terminating all other Active sessions</string>
+  <string name="terminate_all">Terminate all other Active Sessions</string>
   <string name="forwarded_from">Forwarded from</string>
   <string name="more">more ...</string>
   <string name="do_you_want_to_delet_this_chat">Do you want to delete this chat?</string>
@@ -607,7 +607,7 @@
   <string name="last_name">Last Name</string>
   <string name="block_this_contact">Block This Contact?</string>
   <string name="block">Block</string>
-  <string name="clear_this_chat">Clear This Chat?</string>
+  <string name="clear_this_chat">Are you sure you want to clear this chat history?</string>
   <string name="clear">Clear</string>
   <string name="can_not_save_image">Can\'t Save image</string>
   <string name="just_owner_can_delete">Just Creator can delete</string>
@@ -859,7 +859,7 @@
   <string name="calls">Voice Calls</string>
   <string name="igap_call">iGap Voice Call</string>
   <string name="No_messages_here_yet">No messages here yet…</string>
-  <string name="mandatory">(Mandatory)</string>
+  <string name="mandatory">(Required)</string>
   <string name="optional">(Optional)</string>
   <string name="desc_group_chanel">Description (Optional)</string>
   <string name="set_additional_password">Set Additional Password</string>
@@ -871,9 +871,9 @@
   <string name="please_re_enter_your_password">Please re-enter your password</string>
   <string name="please_create_hint_for_your_password">Please create a password hint</string>
   <string name="password_hint">Password Hint</string>
-  <string name="password_Question_title_one">Question one (Mandatory)</string>
+  <string name="password_Question_title_one">Question one (Required)</string>
   <string name="password_Question_one">eg: Who is your Favorite teacher?</string>
-  <string name="password_Question_title_two">Question two (Mandatory)</string>
+  <string name="password_Question_title_two">Question two (Required)</string>
   <string name="password_Question_two">eg: Who is your best friend?</string>
   <string name="password_answer">Answer</string>
   <string name="password_Question_title">Password Question</string>
@@ -891,7 +891,7 @@
   <string name="turn_Password_off_desc">Do you really want to remove password?</string>
 
   <string name="change_email_recovery">Set/change Recovery E-Mail</string>
-  <string name="Change_question_recovery">Change question</string>
+  <string name="Change_question_recovery">Change Security Questions</string>
   <string name="set_recovery_dialog_title"> Recover password via:</string>
 
   <string name="set_unconfirmed_email">Confirm E-Mail</string>
@@ -939,9 +939,9 @@
   <string name="please_write_your_reasons">Please write your reasons</string>
   <string name="your_confirm_email">Enter the confirmation code sent to Email</string>
   <string name="confirm_email_title">Confirmation email</string>
-  <string name="confirm_email_text">A code has been sent to your email in order that your email address will be verified and confirmed then</string>
+  <string name="confirm_email_text">A code has been sent to your email in order that your email address will be verified and confirmed then.</string>
   <string name="your_confirm_email_skip">Skip</string>
-  <string name="your_resend_email_skip">Resend confirmation code</string>
+  <string name="your_resend_email_skip">Resend Confirmation Code</string>
   <string name="invalid_verify_email_code">Invalid verify email code</string>
   <string name="resend_verify_email_code">We\'ve resent the confirmation code to your email</string>
   <string name="enter_verify_email_code">Please enter verify email code</string>
