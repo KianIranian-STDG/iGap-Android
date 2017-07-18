@@ -45,6 +45,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnLocationChanged;
+import net.iGap.interfaces.OnMapClose;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.DialogAnimation;
@@ -73,12 +74,14 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import static net.iGap.G.context;
 import static net.iGap.R.id.st_fab_gps;
 
-public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState {
+public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose {
 
     private MapView map;
     private ItemizedOverlay<OverlayItem> latestLocation;
@@ -134,6 +137,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         G.onLocationChanged = this;
         G.onGetNearbyCoordinate = this;
         G.onMapRegisterState = this;
+        G.onMapClose = this;
         startMap(view);
         statusCheck();
         //clickDrawMarkActive();
@@ -153,6 +157,14 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
          */
         map.setBuiltInZoomControls(false);
         map.setMultiTouchControls(false);
+
+        /**
+         * Compass
+         */
+        CompassOverlay mCompassOverlay = new CompassOverlay(getContext(), new InternalCompassOrientationProvider(getContext()), map);
+        mCompassOverlay.enableCompass();
+        map.getOverlays().add(mCompassOverlay);
+
         /**
          * Set Zoom Value
          */
@@ -336,10 +348,10 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                         TextView txtIconTurnOnOrOff = (TextView) v.findViewById(R.id.txtIconTurnOnOrOff);
 
                         if (mapRegisterState) {
-                            txtMapRegister.setText(getResources().getString(R.string.turn_off_map));
+                            txtMapRegister.setText(G.context.getResources().getString(R.string.turn_off_map));
                             txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_gap_eye_off));
                         } else {
-                            txtMapRegister.setText(getResources().getString(R.string.turn_on_map));
+                            txtMapRegister.setText(G.context.getResources().getString(R.string.turn_on_map));
                             txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_visibility));
                         }
                         btnMapChangeRegistration.setChecked(mapRegisterState);
@@ -638,6 +650,13 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                     btnMapChangeRegistration.setChecked(state);
                 }
             });
+        }
+    }
+
+    @Override
+    public void onClose() {
+        if (mActivity != null) {
+            mActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
         }
     }
 }

@@ -1000,8 +1000,8 @@
 
 
   <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
-  <string name="map_register">register</string>
-  <string name="map_unregister">unregister</string>
+  <string name="turn_off_map">turn off</string>
+  <string name="turn_on_map">turn on</string>
   <string name="positioning">positioning</string>
   <string name="nearby">People Nearby</string>
   <string name="list_user_map">List user</string>

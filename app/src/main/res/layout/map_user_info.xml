@@ -51,7 +51,6 @@
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/dp6"
           android:layout_weight="1"
           android:gravity="center_vertical"
           android:orientation="horizontal"
@@ -95,6 +94,7 @@
           android:layout_marginTop="@dimen/dp4"
           android:ellipsize="end"
           android:gravity="right"
+          android:textSize="@dimen/dp16"
           android:maxLines="1"
           android:text="Comment"
           />
