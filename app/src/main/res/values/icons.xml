@@ -16,12 +16,15 @@
   <string name="md_refresh_button">\uf0e8</string> <!-- igap_cached  -->
   <string name="md_round_info_button">\uf2fd</string>  <!-- igap_information-outline  -->
   <string name="md_back_arrow">\uf141</string> <!-- igap_chevron-left  -->
+  <string name="md_right_arrow">\uf142</string> <!-- igap_chevron-right  -->
   <string name="md_crop_button">\uf19e</string>  <!-- igap_crop  -->
   <string name="md_add_user_button">\uf014</string>  <!-- igap_account-plus  -->
   <string name="md_add_plus_button">\uf415</string>  <!-- igap_plus  -->
   <string name="md_user_account_box">\uf004</string>  <!-- igap_account  -->
   <string name="md_apps">\uf03b</string>  <!-- igap_apps  -->
   <string name="md_igap_contacts">\uf6ca</string>  <!-- igap_apps  -->
+  <string name="md_nearby">\uf352</string>  <!-- igap_map-marker-radius -->
+  <string name="md_chat_box">\uf366</string>  <!-- igap_message-processing -->
 
   <string name="md_users_social_symbol">\uf00e</string>  <!-- igap_account-multiple  -->
   <string name="md_settings_cogwheel_button">\uf493</string>  <!-- igap_settings  -->
@@ -107,13 +110,19 @@
   <string name="icon_folder">\uf76f</string>  <!-- igap_folder-open  -->
   <string name="icon_photo">\uf2ef</string> <!--  igap_image-filter  -->
   <string name="md_eraser">\uf1fe</string> <!-- igap_eraser  -->
-  <string name="md_qrCode">\uf433</string> <!-- igap_eraser  -->
+  <string name="md_qrCode">\uf433</string> <!-- igap_qrCode  -->
   <string name="md_file_video">\ue92a</string> <!-- igap_eraser  -->
   <string name="md_file_music">\ue928</string> <!-- igap_eraser  -->
   <string name="igap_file_text2">\ue926</string> <!-- igap_eraser  -->
   <string name="md_igap_file">\uf24b</string> <!-- igap_eraser  -->
   <string name="igap_chevron_double_down">\uf13c</string> <!-- igap_eraser  -->
   <string name="md_igap_folder_image">\uf24f</string> <!-- igap_eraser  -->
+  <string name="md_map">\uf24f</string> <!-- igap_map  -->
+  <string name="md_igap_pencil_box_outline">\uf3ed</string> <!-- igap_map  -->
+  <string name="md_igap_crosshairs_gps">\uf1a4</string> <!-- igap_gps  -->
+  <string name="md_gap_eye_off">\uf209</string> <!-- igap_eye_off  -->
+  <string name="md_igap_map_marker_minus">\uf650</string> <!-- igap_eye_off  -->
+  <string name="md_igap_check">\uf12c</string> <!-- igap_eye_off  -->
 
 
 </resources>

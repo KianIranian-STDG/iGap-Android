@@ -16,7 +16,6 @@ import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 import android.view.LayoutInflater;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import com.crashlytics.android.Crashlytics;
@@ -102,6 +101,8 @@ import net.iGap.interfaces.OnDeleteChatFinishActivity;
 import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnFileDownloadResponse;
 import net.iGap.interfaces.OnFileDownloaded;
+import net.iGap.interfaces.OnGeoGetComment;
+import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnGetUserInfo;
 import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.interfaces.OnGroupAddAdmin;
@@ -126,6 +127,9 @@ import net.iGap.interfaces.OnHelperSetAction;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnInfoTime;
 import net.iGap.interfaces.OnLastSeenUpdateTiming;
+import net.iGap.interfaces.OnLocationChanged;
+import net.iGap.interfaces.OnMapClose;
+import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnPushLoginToken;
 import net.iGap.interfaces.OnPushTwoStepVerification;
 import net.iGap.interfaces.OnQrCodeNewDevice;
@@ -393,7 +397,11 @@ public class G extends MultiDexApplication {
     public static OnCallLeaveView onCallLeaveView;
     public static ICallFinish iCallFinish;
     public static IMainFinish iMainFinish;
-
+    public static OnLocationChanged onLocationChanged;
+    public static OnGetNearbyCoordinate onGetNearbyCoordinate;
+    public static OnGeoGetComment onGeoGetComment;
+    public static OnMapRegisterState onMapRegisterState;
+    public static OnMapClose onMapClose;
 
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
@@ -428,14 +436,6 @@ public class G extends MultiDexApplication {
         context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-
-        Object test = "a";
-        if (test.equals("a")) {
-            Log.i("AAA", "OKKKKKKKKKKKKKKKKK");
-        } else {
-            Log.i("AAA", "NNNNNNNNN");
-        }
 
         new StartupActions();
     }

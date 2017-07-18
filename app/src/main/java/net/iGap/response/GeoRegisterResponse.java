@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoGeoRegister;
 
 public class GeoRegisterResponse extends MessageHandler {
@@ -31,7 +32,9 @@ public class GeoRegisterResponse extends MessageHandler {
         super.handler();
 
         ProtoGeoRegister.GeoRegisterResponse.Builder builder = (ProtoGeoRegister.GeoRegisterResponse.Builder) message;
-        builder.getEnable();
+        if (G.onMapRegisterState != null) {
+            G.onMapRegisterState.onState(builder.getEnable());
+        }
     }
 
     @Override

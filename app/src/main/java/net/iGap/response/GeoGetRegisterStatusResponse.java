@@ -10,7 +10,10 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
+import net.iGap.module.GPSTracker;
 import net.iGap.proto.ProtoGeoGetRegisterStatus;
+import net.iGap.request.RequestGeoUpdatePosition;
 
 public class GeoGetRegisterStatusResponse extends MessageHandler {
 
@@ -30,8 +33,23 @@ public class GeoGetRegisterStatusResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse.Builder builder = (ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse.Builder) message;
-        builder.getEnable();
+
+        final ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse.Builder builder = (ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse.Builder) message;
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (builder.getEnable()) {
+                    GPSTracker gps = new GPSTracker();
+                    gps.detectLocation();
+                    if (gps.canGetLocation()) {
+                        new RequestGeoUpdatePosition().updatePosition(gps.getLatitude(), gps.getLongitude());
+                    }
+                }
+            }
+        });
+        if (G.onMapRegisterState != null) {
+            G.onMapRegisterState.onState(builder.getEnable());
+        }
     }
 
     @Override

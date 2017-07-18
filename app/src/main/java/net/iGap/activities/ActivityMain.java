@@ -57,6 +57,7 @@ import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentNewGroup;
+import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
 import net.iGap.helper.HelperAvatar;
@@ -491,12 +492,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isLanguagePersian) {
-            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box),
-                getString(R.string.md_apps));
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
 
         } else {
-            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon),
-                getString(R.string.md_phone));
+            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
         }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
@@ -895,6 +894,36 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else {
             new RequestSignalingGetConfiguration().signalingGetConfiguration();
         }
+
+        ViewGroup itemNavMap = (ViewGroup) findViewById(R.id.lm_ll_map);
+        itemNavMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    HelperPermision.getLocationPermission(ActivityMain.this, new OnGetPermission() {
+                        @Override
+                        public void Allow() throws IOException {
+                            FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
+                            try {
+                                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap).commit();
+                            } catch (Exception e) {
+                                e.getStackTrace();
+                            }
+                            lockNavigation();
+                        }
+
+                        @Override
+                        public void deny() {
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                closeDrawer();
+            }
+        });
 
         ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
         itemNavSend.setOnClickListener(new View.OnClickListener() {
@@ -1449,14 +1478,34 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    protected OnBackPressedListener onBackPressedListener;
+
+    public interface OnBackPressedListener {
+        void doBack();
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener, boolean isDisable) {
+        if (!isDisable) {
+            this.onBackPressedListener = onBackPressedListener;
+        } else {
+            this.onBackPressedListener = null;
+        }
+    }
+
     @Override
     public void onBackPressed() {
         openNavigation();
+
+        if (onBackPressedListener != null) {
+            onBackPressedListener.doBack();
+        }
+
         SearchFragment myFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("Search_fragment");
         FragmentNewGroup fragmentNeGroup = (FragmentNewGroup) getSupportFragmentManager().findFragmentByTag("newGroup_fragment");
         FragmentCreateChannel fragmentCreateChannel = (FragmentCreateChannel) getSupportFragmentManager().findFragmentByTag("createChannel_fragment");
         ContactGroupFragment fragmentContactGroup = (ContactGroupFragment) getSupportFragmentManager().findFragmentByTag("contactGroup_fragment");
         FragmentIgapSearch fragmentIgapSearch = (FragmentIgapSearch) getSupportFragmentManager().findFragmentByTag("Search_fragment_igap");
+        FragmentiGapMap fragmentiGapMap = (FragmentiGapMap) getSupportFragmentManager().findFragmentByTag("map_fragment");
 
         if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
 
@@ -1488,6 +1537,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else if (myFragment != null && myFragment.isVisible()) {
             try {
                 getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+        } else if (fragmentiGapMap != null && fragmentiGapMap.isVisible()) {
+            try {
+                getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
             } catch (Exception e) {
                 e.getStackTrace();
             }
@@ -1550,6 +1605,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (drawer != null) {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            drawer.closeDrawer(GravityCompat.START);
         }
 
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));

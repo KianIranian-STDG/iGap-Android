@@ -323,7 +323,6 @@
                 android:text="@string/contacts"
                 android:textColor="@color/black90"
                 android:textSize="@dimen/dp14"
-
                 fontPath="fonts/IRANSansMobile_Bold.ttf"
                 />
 
@@ -370,6 +369,46 @@
 
           </LinearLayout>
 
+          <LinearLayout
+              android:id="@+id/lm_ll_map"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="@dimen/dp6"
+              android:layout_marginTop="@dimen/dp4"
+              android:visibility="visible"
+              android:orientation="horizontal"
+              style="@style/NavigationDrawer.Item"
+              >
+
+            <net.iGap.module.MaterialDesignTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:minWidth="@dimen/dp32"
+                android:text="@string/md_nearby"
+                android:textAppearance="@style/TextIconAppearance.menu"
+                android:textSize="@dimen/dp20"
+                android:textColor="@color/grayNew"
+
+                />
+
+            <TextView
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginStart="@dimen/dp4"
+                android:paddingBottom="@dimen/dp8"
+                android:paddingLeft="@dimen/dp8"
+                android:paddingRight="@dimen/dp8"
+                android:paddingTop="@dimen/dp12"
+                android:text="@string/igap_nearby"
+                android:textColor="@color/black90"
+                android:textSize="@dimen/dp14"
+
+                />
+
+          </LinearLayout>
           <LinearLayout
               android:id="@+id/lm_ll_invite_friends"
               android:layout_width="match_parent"

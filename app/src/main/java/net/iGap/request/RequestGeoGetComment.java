@@ -18,7 +18,7 @@ public class RequestGeoGetComment {
         ProtoGeoGetComment.GeoGetComment.Builder builder = ProtoGeoGetComment.GeoGetComment.newBuilder();
         builder.setUserId(userId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(1003, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(1003, builder, userId + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
