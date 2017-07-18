@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import io.realm.Realm;
+import net.iGap.G;
 import net.iGap.proto.ProtoGeoGetNearbyDistance;
 import net.iGap.realm.RealmGeoNearbyDistance;
 
@@ -38,9 +39,11 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 for (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Result result : builder.getResultList()) {
-                    RealmGeoNearbyDistance geoNearbyDistance = realm.createObject(RealmGeoNearbyDistance.class, result.getUserId());
-                    geoNearbyDistance.setHasComment(result.getHasComment());
-                    geoNearbyDistance.setDistance(result.getDistance());
+                    if (G.userId != result.getUserId()) { // don't show my account
+                        RealmGeoNearbyDistance geoNearbyDistance = realm.createObject(RealmGeoNearbyDistance.class, result.getUserId());
+                        geoNearbyDistance.setHasComment(result.getHasComment());
+                        geoNearbyDistance.setDistance(result.getDistance());
+                    }
                 }
             }
         });

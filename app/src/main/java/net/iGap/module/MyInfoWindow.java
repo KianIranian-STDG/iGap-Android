@@ -34,7 +34,7 @@ public class MyInfoWindow extends InfoWindow {
     public MyInfoWindow(MapView mapView, long userId, boolean hasComment, FragmentiGapMap fragmentiGapMap, FragmentActivity mActivity) {
         super(R.layout.empty_info_map, mapView);
         this.map = mapView;
-        this.userId = 449;
+        this.userId = userId;
         this.hasComment = hasComment;
         this.fragmentiGapMap = fragmentiGapMap;
         this.mActivity = mActivity;

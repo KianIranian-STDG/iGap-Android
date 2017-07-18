@@ -35,7 +35,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.ArrayList;
@@ -570,7 +569,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         Drawable drawable = context.getResources().getDrawable(R.drawable.location_current);
         overlayItem.setMarker(drawable);
 
-        ArrayList<OverlayItem> overlayItemArrayList = new ArrayList<OverlayItem>();
+        ArrayList<OverlayItem> overlayItemArrayList = new ArrayList<>();
         overlayItemArrayList.add(overlayItem);
         ItemizedOverlay<OverlayItem> locationOverlay = new ItemizedIconOverlay<>(context, overlayItemArrayList, null);
 
@@ -581,23 +580,24 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         latestLocation = locationOverlay;
         map.getOverlays().add(locationOverlay);
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(context, "Update Position", Toast.LENGTH_SHORT).show();
-            }
-        });
+        //G.handler.post(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        Toast.makeText(context, "Update Position", Toast.LENGTH_SHORT).show();
+        //    }
+        //});
     }
 
     @Override
     public void onNearbyCoordinate(List<ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result> results) {
-
         for (Marker marker : markers) {
             map.getOverlays().remove(marker);
         }
 
         for (ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result result : results) {
-            drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+            if (G.userId != result.getUserId()) { // don't show my account
+                drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+            }
         }
     }
 
