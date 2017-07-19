@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
     private RecyclerView mRecyclerView;
     private MapUserAdapter mAdapter;
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
+    private final int DEFAULT_LOOP_TIME = (int) (10 * DateUtils.SECOND_IN_MILLIS);
 
     public FragmentMapUsers() {
         // Required empty public constructor
@@ -64,7 +66,8 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
         super.onViewCreated(view, savedInstanceState);
         initComponent(view);
         if (FragmentiGapMap.location != null) {
-            new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
+            //new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
+            getDistanceLoop(0, true);
         }
     }
 
@@ -90,6 +93,20 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
 
             }
         });
+    }
+
+    private void getDistanceLoop(final int delay, boolean loop) {
+        if (loop) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
+                    getDistanceLoop(DEFAULT_LOOP_TIME, true);
+                }
+            }, delay);
+        } else {
+            new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
+        }
     }
 
     @Override

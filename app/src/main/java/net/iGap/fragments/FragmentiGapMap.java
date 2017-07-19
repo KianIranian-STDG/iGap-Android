@@ -27,6 +27,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -92,16 +93,18 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public static RippleView rippleMoreMap;
     public static boolean isBackPress = false;
     private ToggleButton toggleGps;
+    private ToggleButton btnMapChangeRegistration;
     private TextView txtTextTurnOnOffGps;
-
     private FragmentActivity mActivity;
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
     private GestureDetector mGestureDetector;
-    private ToggleButton btnMapChangeRegistration;
+
+    private String specialRequests;
 
     private boolean firstEnter = true;
     private boolean canUpdate = true;
     private boolean mapRegisterState = true;
+    private boolean isGpsOn = false;
     private boolean first = true;
 
     private final double LONGITUDE_LIMIT = 0.011;
@@ -114,10 +117,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private double lastLongitude;
     private double lat1;
     private double lon1;
-    private String specialRequests;
-    private long latestUpdateTime = 0;
+
     private int lastSpecialRequestsCursorPosition = 0;
-    private boolean isGpsOn = false;
+    private final int DEFAULT_LOOP_TIME = (int) (10 * DateUtils.SECOND_IN_MILLIS);
+
+    private long latestUpdateTime = 0;
+
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -478,6 +483,23 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         map.setScrollableAreaLimit(bBox);
     }
 
+    /**
+     * hint : call this method after fill location
+     */
+    private void getCoordinateLoop(final int delay, boolean loop) {
+        if (loop) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                    getCoordinateLoop(DEFAULT_LOOP_TIME, false);
+                }
+            }, delay);
+        } else {
+            new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+        }
+    }
+
     private void initMapListener() {
         map.setMapListener(new MapListener() {
             @Override
@@ -577,6 +599,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             firstEnter = false;
             currentLocation(location, true);
             mapBounding(location);
+            getCoordinateLoop(0, true);
         }
 
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
