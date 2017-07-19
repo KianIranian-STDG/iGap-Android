@@ -39,10 +39,10 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
         if (holder.itemView.findViewById(R.id.csll_txt_log_text) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getLogItem());
-
-            holder.text = (TextView) holder.itemView.findViewById(R.id.csll_txt_log_text);
-            holder.text.setMovementMethod(LinkMovementMethod.getInstance());
         }
+
+        holder.text = (TextView) holder.itemView.findViewById(R.id.csll_txt_log_text);
+        holder.text.setMovementMethod(LinkMovementMethod.getInstance());
 
         super.bindView(holder, payloads);
 

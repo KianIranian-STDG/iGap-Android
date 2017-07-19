@@ -44,9 +44,9 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (holder.itemView.findViewById(R.id.thumbnail) != null && (holder.itemView.findViewById(R.id.thumbnail).getTag()) != null && (holder.itemView.findViewById(R.id.thumbnail).getTag()).equals(tag)) {
-            G.imageLoader.displayImage(suitablePath(localPath), ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail)));
-            ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail)).setCornerRadius(HelperRadius.computeRadius(localPath));
+        if (holder.image != null && holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
+            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+            holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
         }
     }
 
@@ -56,10 +56,13 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getImageItem(false));
         }
-        holder.itemView.findViewById(R.id.thumbnail).setTag(getCacheId(mMessage));
+
+        holder.image = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
+        holder.image.setTag(getCacheId(mMessage));
+
         super.bindView(holder, payloads);
 
-        holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(new View.OnClickListener() {
+        holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isSelected()) {
@@ -89,7 +92,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
         /**
          * this commented code used with xml layout
          */
-        //protected ReserveSpaceRoundedImageView image;
+        protected ReserveSpaceRoundedImageView image;
         public ViewHolder(View view) {
             super(view);
             //image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);

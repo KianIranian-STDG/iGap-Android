@@ -96,9 +96,10 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getGifItem(true));
-            holder.image = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
-            holder.image.setTag(getCacheId(mMessage));
         }
+
+        holder.image = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
+        holder.image.setTag(getCacheId(mMessage));
 
         super.bindView(holder, payloads);
 

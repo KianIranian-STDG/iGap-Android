@@ -539,7 +539,8 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                         final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_TEMP, true);
 
                         if (selector != null && fileSize > 0) {
-                            HelperDownloadFile.startDownload(ra.getToken(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.startDownload(System.currentTimeMillis() + "", ra.getToken(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4,
+                                new HelperDownloadFile.UpdateListener() {
                                 @Override public void OnProgress(final String path, int progress) {
 
                                     if (progress == 100) {
@@ -605,7 +606,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
 
             final String dirPath = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_IMAGE_USER, false);
 
-            HelperDownloadFile.startDownload(ra.getToken(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4,
+            HelperDownloadFile.startDownload(System.currentTimeMillis() + "", ra.getToken(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4,
                 new HelperDownloadFile.UpdateListener() {
                     @Override public void OnProgress(final String path, final int progres) {
 

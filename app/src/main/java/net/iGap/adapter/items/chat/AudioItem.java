@@ -37,9 +37,7 @@ import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
-import static net.iGap.R.id.fileName;
-import static net.iGap.R.id.fileSize;
-import static net.iGap.R.id.songArtist;
+
 
 public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> {
 
@@ -61,22 +59,24 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
+        if (holder.musicSeekbar.getTag().equals(mMessage.messageID)) {
+            if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
 
-            holder.mFilePath = localPath;
-            holder.itemView.findViewById(R.id.csla_seekBar1).setEnabled(true);
-            holder.itemView.findViewById(R.id.txt_play_music).setEnabled(true);
+                holder.mFilePath = localPath;
+                holder.musicSeekbar.setEnabled(true);
+                holder.btnPlayMusic.setEnabled(true);
 
-            if (!mMessage.isSenderMe() && Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.iGapColorDarker), PorterDuff.Mode.SRC_IN);
+                if (!mMessage.isSenderMe() && Build.VERSION.SDK_INT >= JELLY_BEAN) {
+                    holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.iGapColorDarker), PorterDuff.Mode.SRC_IN);
+                }
+
+                holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
+            } else {
+                holder.musicSeekbar.setEnabled(false);
+                holder.btnPlayMusic.setEnabled(false);
+
+                holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.gray_6c));
             }
-
-            ((TextView) holder.itemView.findViewById(R.id.txt_play_music)).setTextColor(holder.itemView.getResources().getColor(R.color.iGapColor));
-        } else {
-            holder.itemView.findViewById(R.id.csla_seekBar1).setEnabled(false);
-            holder.itemView.findViewById(R.id.txt_play_music).setEnabled(false);
-
-            ((TextView) holder.itemView.findViewById(R.id.txt_play_music)).setTextColor(holder.itemView.getResources().getColor(R.color.gray_6c));
         }
     }
 
@@ -87,32 +87,44 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             ((ViewGroup) holder.itemView).addView(ViewMaker.getAudioItem());
         }
 
-        final MaterialDesignTextView materialDesignTextView = (MaterialDesignTextView) holder.itemView.findViewById(R.id.txt_play_music);
+        holder.btnPlayMusic = (MaterialDesignTextView) holder.itemView.findViewById(R.id.txt_play_music);
+        holder.txt_Timer = (TextView) holder.itemView.findViewById(R.id.csla_txt_timer);
+        holder.musicSeekbar = (SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1);
+        holder.fileName = (TextView) holder.itemView.findViewById(R.id.fileName);
+        holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
+        holder.fileSize = (TextView) holder.itemView.findViewById(R.id.fileSize);
+        holder.songArtist = (TextView) holder.itemView.findViewById(R.id.songArtist);
+
+        holder.musicSeekbar.setTag(mMessage.messageID);
 
         holder.complete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, final String MessageTow) {
 
-                if (messageOne.equals("play")) {
-                    (materialDesignTextView).setText(R.string.md_play_arrow);
-                } else if (messageOne.equals("pause")) {
-                    (materialDesignTextView).setText(R.string.md_pause_button);
-                } else if (messageOne.equals("updateTime")) {
-                    ((materialDesignTextView).findViewById(R.id.txt_play_music)).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setText(MessageTow + "/" + holder.mTimeMusic);
-                            ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).setProgress(MusicPlayer.musicProgress);
+                if (holder.musicSeekbar.getTag().equals(mMessage.messageID)) {
+                    if (messageOne.equals("play")) {
+                        holder.btnPlayMusic.setText(R.string.md_play_arrow);
+                    } else if (messageOne.equals("pause")) {
+                        holder.btnPlayMusic.setText(R.string.md_pause_button);
+                    } else if (messageOne.equals("updateTime")) {
+                        holder.btnPlayMusic.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
+                                holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
 
-                            if (HelperCalander.isLanguagePersian) ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setText(HelperCalander.convertToUnicodeFarsiNumber(((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).getText().toString()));
-                        }
-                    });
+                                if (HelperCalander.isLanguagePersian) {
+                                    holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber((holder.txt_Timer.getText().toString())));
+                                }
+                            }
+                        });
+                    }
                 }
+
             }
         };
 
-
-        (materialDesignTextView).setOnClickListener(new View.OnClickListener() {
+        holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -137,14 +149,14 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             }
         });
 
-        ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).setOnTouchListener(new View.OnTouchListener() {
+        holder.musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (holder.mMessageID.equals(MusicPlayer.messageId)) {
-                        MusicPlayer.setMusicProgress(((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getProgress());
+                        MusicPlayer.setMusicProgress(holder.musicSeekbar.getProgress());
                     }
                 }
                 return false;
@@ -154,9 +166,9 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         super.bindView(holder, payloads);
 
         if (mMessage.isSenderMe()) {
-            AppUtils.setImageDrawable(((ImageView) holder.itemView.findViewById(R.id.thumbnail)), R.drawable.white_music_note);
+            AppUtils.setImageDrawable(holder.thumbnail, R.drawable.white_music_note);
         } else {
-            AppUtils.setImageDrawable(((ImageView) holder.itemView.findViewById(R.id.thumbnail)), R.drawable.green_music_note);
+            AppUtils.setImageDrawable(holder.thumbnail, R.drawable.green_music_note);
         }
 
         String text = "";
@@ -164,18 +176,18 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
                 if (mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
-                    holder.itemView.findViewById(fileSize).setVisibility(View.INVISIBLE);
+                    holder.fileSize.setVisibility(View.INVISIBLE);
                 } else {
-                    holder.itemView.findViewById(fileSize).setVisibility(View.VISIBLE);
-                    ((TextView) holder.itemView.findViewById(fileSize)).setText(AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
+                    holder.fileSize.setVisibility(View.VISIBLE);
+                    holder.fileSize.setText(AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
                 }
-                ((TextView) holder.itemView.findViewById(fileName)).setText(mMessage.forwardedFrom.getAttachment().getName());
+                holder.fileName.setText(mMessage.forwardedFrom.getAttachment().getName());
                 if (mMessage.forwardedFrom.getAttachment().isFileExistsOnLocal()) {
                     String artistName = AndroidUtils.getAudioArtistName(mMessage.forwardedFrom.getAttachment().getLocalFilePath());
                     if (!TextUtils.isEmpty(artistName)) {
-                        ((TextView) holder.itemView.findViewById(songArtist)).setText(artistName);
+                        holder.songArtist.setText(artistName);
                     } else {
-                        ((TextView) holder.itemView.findViewById(songArtist)).setText(holder.itemView.getResources().getString(R.string.unknown_artist));
+                        holder.songArtist.setText(holder.itemView.getResources().getString(R.string.unknown_artist));
                     }
                 }
             }
@@ -184,17 +196,17 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         } else {
             if (mMessage.attachment != null) {
                 if (mMessage.attachment.isFileExistsOnLocal()) {
-                    holder.itemView.findViewById(fileSize).setVisibility(View.INVISIBLE);
+                    holder.fileSize.setVisibility(View.INVISIBLE);
                 } else {
-                    holder.itemView.findViewById(fileSize).setVisibility(View.VISIBLE);
-                    ((TextView) holder.itemView.findViewById(fileSize)).setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+                    holder.fileSize.setVisibility(View.VISIBLE);
+                    holder.fileSize.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
                 }
-                ((TextView) holder.itemView.findViewById(fileName)).setText(mMessage.attachment.name);
+                holder.fileName.setText(mMessage.attachment.name);
             }
             if (!TextUtils.isEmpty(mMessage.songArtist)) {
-                ((TextView) holder.itemView.findViewById(songArtist)).setText(mMessage.songArtist);
+                holder.songArtist.setText(mMessage.songArtist);
             } else {
-                ((TextView) holder.itemView.findViewById(songArtist)).setText(holder.itemView.getResources().getString(R.string.unknown_artist));
+                holder.songArtist.setText(holder.itemView.getResources().getString(R.string.unknown_artist));
             }
 
             text = mMessage.messageText;
@@ -217,31 +229,33 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000);
 
-        ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
+        holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
 
         if (mMessage.messageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.onCompleteChat = holder.complete;
 
-            ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).setProgress(MusicPlayer.musicProgress);
-            ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setText(MusicPlayer.strTimer + "/" + MusicPlayer.musicTime);
+            holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
+            holder.txt_Timer.setText(MusicPlayer.strTimer + "/" + MusicPlayer.musicTime);
 
             holder.mTimeMusic = MusicPlayer.musicTime;
 
             if (MusicPlayer.mp != null) {
                 if (MusicPlayer.mp.isPlaying()) {
-                    ((TextView) holder.itemView.findViewById(R.id.txt_play_music)).setText(R.string.md_pause_button);
+                    holder.btnPlayMusic.setText(R.string.md_pause_button);
                 } else {
-                    ((TextView) holder.itemView.findViewById(R.id.txt_play_music)).setText(R.string.md_play_arrow);
+                    holder.btnPlayMusic.setText(R.string.md_play_arrow);
                 }
             }
         } else {
-            ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).setProgress(0);
-            ((TextView) holder.itemView.findViewById(R.id.txt_play_music)).setText(R.string.md_play_arrow);
+            holder.musicSeekbar.setProgress(0);
+            holder.btnPlayMusic.setText(R.string.md_play_arrow);
         }
 
         holder.mMessageID = mMessage.messageID;
 
-        if (HelperCalander.isLanguagePersian) ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setText(HelperCalander.convertToUnicodeFarsiNumber(((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).getText().toString()));
+        if (HelperCalander.isLanguagePersian) {
+            (holder.txt_Timer).setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+        }
     }
 
     @Override
@@ -249,10 +263,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         super.updateLayoutForSend(holder);
 
         if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-            ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
+            holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
         }
-        ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
-        ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setTextColor(holder.itemView.getResources().getColor(R.color.black90));
+        holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
+        holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.black90));
     }
 
     @Override
@@ -261,17 +275,17 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
+                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
             }
-            ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
-            ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setTextColor(holder.itemView.getResources().getColor(R.color.black90));
+            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
+            holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.black90));
         } else {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
+                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
             }
-            ((SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1)).getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
-            ((TextView) holder.itemView.findViewById(R.id.csla_txt_timer)).setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
-            ((TextView) holder.itemView.findViewById(fileName)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
+            holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
+            holder.fileName.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
         }
     }
 
@@ -284,7 +298,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         protected String mMessageID = "";
         protected String mTimeMusic = "";
 
-        protected TextView btnPlayMusic;
+        protected MaterialDesignTextView btnPlayMusic;
         protected SeekBar musicSeekbar;
         protected OnComplete complete;
         protected TextView txt_Timer;

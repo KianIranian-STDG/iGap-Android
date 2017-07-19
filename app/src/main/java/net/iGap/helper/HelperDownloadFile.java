@@ -80,9 +80,9 @@ public class HelperDownloadFile {
                         requestDownloadFile(item);
                     } else {
 
-                        for (UpdateListener listener : item.listeners) {
-                            if (listener != null) {
-                                listener.OnError(item.Token);
+                        for (StructListener mItem : item.structListeners) {
+                            if (mItem.listener != null) {
+                                mItem.listener.OnError(item.Token);
                             }
                         }
 
@@ -99,10 +99,21 @@ public class HelperDownloadFile {
         G.onFileDownloadResponse = onFileDownloadResponse;
     }
 
+    public static class StructListener {
+        public UpdateListener listener;
+        public String messageId;
+
+        public StructListener(UpdateListener listener, String messageId) {
+            this.listener = listener;
+            this.messageId = messageId;
+        }
+    }
+
     private static class StructDownLoad {
+
         public String Token = "";
         public String cashId = "";
-        public ArrayList<UpdateListener> listeners = new ArrayList<>();
+        public ArrayList<StructListener> structListeners = new ArrayList<>();
         public int progress = 0;
         public long offset = 0;
         public String name = "";
@@ -172,7 +183,7 @@ public class HelperDownloadFile {
         }
     }
 
-    public static void startDownload(String token, String cashId, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority,
+    public static void startDownload(String messageID, String token, String cashId, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority,
         UpdateListener update) {
 
         StructDownLoad item;
@@ -184,7 +195,8 @@ public class HelperDownloadFile {
             item = new StructDownLoad();
             item.Token = token;
             item.cashId = cashId;
-            item.listeners.add(update);
+
+            item.structListeners.add(new StructListener(update, messageID));
             item.name = name;
             item.moveToDirectoryPAth = moveToDirectoryPAth;
             item.size = size;
@@ -192,7 +204,22 @@ public class HelperDownloadFile {
             list.put(primaryKey, item);
         } else {
             item = list.get(primaryKey);
-            item.listeners.add(update);
+
+            boolean needAdd = true;
+            for (StructListener structListener : item.structListeners) {
+
+                if (structListener.messageId.equals(messageID)) {
+                    needAdd = false;
+                    structListener.listener = update;
+                    break;
+                }
+            }
+
+            if (needAdd) {
+                item.structListeners.add(new StructListener(update, messageID));
+            }
+
+
             updateView(item);
 
             return;
@@ -249,10 +276,10 @@ public class HelperDownloadFile {
 
             StructDownLoad item = list.get(primaryKey);
 
-            if (item != null && item.listeners != null) {
-                for (UpdateListener listener : item.listeners) {
-                    if (listener != null) {
-                        listener.OnError(item.Token);
+            if (item != null && item.structListeners != null) {
+                for (StructListener mItem : item.structListeners) {
+                    if (mItem.listener != null) {
+                        mItem.listener.OnError(item.Token);
                     }
                 }
             }
@@ -384,12 +411,10 @@ public class HelperDownloadFile {
     }
 
     private static void updateView(final StructDownLoad item) {
-        for (UpdateListener listener : item.listeners) {
-            if (listener != null) {
-
+        for (StructListener mItem : item.structListeners) {
+            if (mItem.listener != null) {
                 String _path = item.moveToDirectoryPAth.length() > 0 ? item.moveToDirectoryPAth : item.path;
-
-                listener.OnProgress(_path, item.progress);
+                mItem.listener.OnProgress(_path, item.progress);
             }
         }
     }

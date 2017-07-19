@@ -38,9 +38,9 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
         if (holder.itemView.findViewById(R.id.cslt_txt_time_date) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getTimeItem());
 
-            holder.text = (TextView) holder.itemView.findViewById(R.id.cslt_txt_time_date);
         }
 
+        holder.text = (TextView) holder.itemView.findViewById(R.id.cslt_txt_time_date);
 
         super.bindView(holder, payloads);
 

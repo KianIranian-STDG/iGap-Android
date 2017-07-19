@@ -1508,7 +1508,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void refresh(String changeLanguage) {
                 ActivityMain.this.recreate();
-                G.isMainActivityRecreate = true;
+
+                if (changeLanguage.length() > 0) {
+                    G.isMainActivityRecreate = true;
+                }
+
             }
         };
 
@@ -1571,18 +1575,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         getIntent().setData(null);
         setDrawerInfo(false);
 
-        if (HelperCalander.isLanguagePersian && G.isMainActivityRecreate) {
-            if (pages.size() > 0) {
+        if (G.isMainActivityRecreate) {
+            if (pages.size() > 0 && pages.size() >= G.salectedTabInMainActivity) {
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mViewPager.setCurrentItem(pages.size() - 1, false);
+                        mViewPager.setCurrentItem(G.salectedTabInMainActivity, false);
                         G.isMainActivityRecreate = false;
                     }
                 }, 500);
             }
         } else {
             G.isMainActivityRecreate = false;
+
         }
 
         if (drawer != null) {
@@ -1595,6 +1600,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onPause() {
         super.onPause();
         HelperNotificationAndBadge.updateBadgeOnly();
+
+        if (mViewPager != null && !G.isMainActivityRecreate) {
+            G.salectedTabInMainActivity = mViewPager.getAdapter().getCount() - 1 - mViewPager.getCurrentItem();
+
+            if (G.salectedTabInMainActivity < 0) {
+                G.salectedTabInMainActivity = 0;
+            }
+        }
+
     }
 
     @Override

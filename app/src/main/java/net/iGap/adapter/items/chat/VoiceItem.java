@@ -87,33 +87,37 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getVoiceItem());
+        }
 
             holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
             holder.author = (TextView) holder.itemView.findViewById(R.id.cslv_txt_author);
             holder.btnPlayMusic = (TextView) holder.itemView.findViewById(R.id.csla_btn_play_music);
             holder.txt_Timer = (TextView) holder.itemView.findViewById(R.id.csla_txt_timer);
             holder.musicSeekbar = (SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1);
+        holder.musicSeekbar.setTag(mMessage.messageID);
             //tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
             holder.complete = new OnComplete() {
                 @Override
                 public void complete(boolean result, String messageOne, final String MessageTow) {
 
-                    if (messageOne.equals("play")) {
-                        holder.btnPlayMusic.setText(R.string.md_play_arrow);
-                    } else if (messageOne.equals("pause")) {
-                        holder.btnPlayMusic.setText(R.string.md_pause_button);
-                    } else if (messageOne.equals("updateTime")) {
-                        holder.txt_Timer.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
+                    if (holder.musicSeekbar.getTag().equals(mMessage.messageID)) {
+                        if (messageOne.equals("play")) {
+                            holder.btnPlayMusic.setText(R.string.md_play_arrow);
+                        } else if (messageOne.equals("pause")) {
+                            holder.btnPlayMusic.setText(R.string.md_pause_button);
+                        } else if (messageOne.equals("updateTime")) {
+                            holder.txt_Timer.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
 
-                                if (HelperCalander.isLanguagePersian) holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+                                    if (HelperCalander.isLanguagePersian) holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
 
-                                holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
-                            }
-                        });
+                                    holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
+                                }
+                            });
+                        }
                     }
                 }
             };
@@ -180,8 +184,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                     return false;
                 }
             });
-        }
-
 
         super.bindView(holder, payloads);
 

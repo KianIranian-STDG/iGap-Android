@@ -39,24 +39,24 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
 
         if (holder.itemView.findViewById(R.id.cslum_txt_unread_message) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getUnreadMessageItem());
-
-            holder.txtUnreadMessage = (TextView) holder.itemView.findViewById(R.id.cslum_txt_unread_message);
-            holder.txtUnreadMessage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-
-            holder.txtUnreadMessage.setBackgroundColor(Color.parseColor(G.appBarColor));
-
-            holder.txtUnreadMessage.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return false;
-                }
-            });
         }
+
+        holder.txtUnreadMessage = (TextView) holder.itemView.findViewById(R.id.cslum_txt_unread_message);
+        holder.txtUnreadMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        holder.txtUnreadMessage.setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        holder.txtUnreadMessage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
 
         super.bindView(holder, payloads);
 

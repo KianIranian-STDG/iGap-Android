@@ -38,17 +38,19 @@ public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat
 
         if (holder.itemView.findViewById(R.id.cslp_progress_bar_waiting) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getProgressWaitingItem());
-
-            holder.progressBar = (ProgressBar) holder.itemView.findViewById(R.id.cslp_progress_bar_waiting);
-            AppUtils.setProgresColler(holder.progressBar);
-
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return false;
-                }
-            });
         }
+
+        holder.progressBar = (ProgressBar) holder.itemView.findViewById(R.id.cslp_progress_bar_waiting);
+        AppUtils.setProgresColler(holder.progressBar);
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
+
+
 
         super.bindView(holder, payloads);
     }

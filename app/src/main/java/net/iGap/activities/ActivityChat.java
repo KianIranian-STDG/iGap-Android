@@ -3543,7 +3543,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     if (_token != null && _token.length() > 0 && _size > 0) {
 
-                        HelperDownloadFile.startDownload(_token, _cashid, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                        HelperDownloadFile.startDownload(message.messageID, _token, _cashid, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
 

@@ -1193,7 +1193,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             String dirPath = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
 
-            HelperDownloadFile.startDownload(at.getToken(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(mList.get(position).item.getMessageId() + "", at.getToken(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE,
+                dirPath, 2, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(String path, final int progress) {
 
@@ -1384,7 +1385,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
 
-                            HelperDownloadFile.startDownload(at.getToken(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.startDownload(mList.get(position).item.getMessageId() + "", at.getToken(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(),
+                                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                 @Override
                                 public void OnProgress(final String path, int progress) {
 
@@ -1517,7 +1519,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
 
-                            HelperDownloadFile.startDownload(at.getToken(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.startDownload(mList.get(position).item.getMessageId() + "", at.getToken(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(),
+                                ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                 @Override
                                 public void OnProgress(final String path, int progress) {
 
@@ -1757,7 +1760,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                         if (at.getSmallThumbnail() != null) {
                             if (at.getSmallThumbnail().getSize() > 0) {
 
-                                HelperDownloadFile.startDownload(at.getToken(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
+                                HelperDownloadFile.startDownload(mList.get(position).item.getMessageId() + "", at.getToken(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(),
+                                    ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                     @Override
                                     public void OnProgress(final String path, int progress) {
 

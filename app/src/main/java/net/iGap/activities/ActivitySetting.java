@@ -1187,30 +1187,42 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                         switch (which) {
                             case 0:
-                                setLocale("en");
-                                HelperCalander.isLanguagePersian = false;
-                                if (onRefreshActivity != null) onRefreshActivity.refresh("en");
-                                G.selectedLanguage = "en";
+                                if (!G.selectedLanguage.equals("en")) {
+                                    setLocale("en");
+                                    HelperCalander.isLanguagePersian = false;
+                                    if (onRefreshActivity != null) onRefreshActivity.refresh("en");
+                                    G.selectedLanguage = "en";
+                                }
+
                                 break;
                             case 1:
-                                G.selectedLanguage = "fa";
-                                setLocale("fa");
-                                HelperCalander.isLanguagePersian = true;
-                                if (onRefreshActivity != null) onRefreshActivity.refresh("fa");
+                                if (!G.selectedLanguage.equals("fa")) {
+                                    G.selectedLanguage = "fa";
+                                    setLocale("fa");
+                                    HelperCalander.isLanguagePersian = true;
+                                    if (onRefreshActivity != null) onRefreshActivity.refresh("fa");
+                                }
+
 
                                 break;
                             case 2:
-                                G.selectedLanguage = "ar";
-                                setLocale("ar");
-                                HelperCalander.isLanguagePersian = false;
-                                if (onRefreshActivity != null) onRefreshActivity.refresh("ar");
+                                if (!G.selectedLanguage.equals("ar")) {
+                                    G.selectedLanguage = "ar";
+                                    setLocale("ar");
+                                    HelperCalander.isLanguagePersian = false;
+                                    if (onRefreshActivity != null) onRefreshActivity.refresh("ar");
+                                }
+
 
                                 break;
                             case 3:
-                                G.selectedLanguage = "nl";
-                                setLocale("nl");
-                                HelperCalander.isLanguagePersian = false;
-                                if (onRefreshActivity != null) onRefreshActivity.refresh("nl");
+                                if (!G.selectedLanguage.equals("nl")) {
+                                    G.selectedLanguage = "nl";
+                                    setLocale("nl");
+                                    HelperCalander.isLanguagePersian = false;
+                                    if (onRefreshActivity != null) onRefreshActivity.refresh("nl");
+                                }
+
 
                                 break;
                         }
@@ -1568,7 +1580,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 }
 
                 if (G.onRefreshActivity != null) {
-                    G.onRefreshActivity.refresh(G.selectedLanguage);
+                    G.onRefreshActivity.refresh("");
                 }
             }
         });
@@ -2312,7 +2324,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
         ActivitySetting.this.recreate();
         if (G.onRefreshActivity != null) {
-            G.onRefreshActivity.refresh(G.selectedLanguage);
+            G.onRefreshActivity.refresh("");
         }
     }
 
@@ -2325,7 +2337,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         editor.apply();
 
         if (updateUi && G.onRefreshActivity != null) {
-            G.onRefreshActivity.refresh(G.selectedLanguage);
+            G.onRefreshActivity.refresh("");
         }
     }
 
@@ -2339,7 +2351,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         editor.apply();
 
         if (updateUi && G.onRefreshActivity != null) {
-            G.onRefreshActivity.refresh(G.selectedLanguage);
+            G.onRefreshActivity.refresh("");
         }
     }
 
