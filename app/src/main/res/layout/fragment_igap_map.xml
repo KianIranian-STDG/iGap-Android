@@ -118,7 +118,6 @@
           android:id="@+id/vgMessageGps"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/backgroundToolbarMap"
           android:background="@color/gray10"
           android:layoutDirection="ltr"
           android:orientation="horizontal"
@@ -131,29 +130,24 @@
             android:orientation="vertical"
             >
 
-          <LinearLayout
+          <EditText
+              android:id="@+id/edtMessageGps"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              >
-
-            <EditText
-                android:id="@+id/edtMessageGps"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:hint="@string/hint_gps"
-                android:maxLength="255"
-                android:maxLines="4"
-                android:minHeight="@dimen/dp52"
-                android:paddingEnd="@dimen/dp10"
-                android:paddingLeft="@dimen/dp10"
-                android:paddingRight="@dimen/dp10"
-                android:paddingStart="@dimen/dp12"
-                fontPath="fonts/IRANSansMobile.ttf"
-                />
-
-          </LinearLayout>
+              android:background="@android:color/transparent"
+              android:hint="@string/hint_gps"
+              android:lineSpacingMultiplier=".8"
+              android:maxLength="255"
+              android:maxLines="4"
+              android:minHeight="@dimen/dp52"
+              android:paddingEnd="@dimen/dp10"
+              android:paddingLeft="@dimen/dp10"
+              android:paddingRight="@dimen/dp10"
+              android:paddingStart="@dimen/dp12"
+              android:textColorHint="@color/light_gray"
+              android:textSize="@dimen/dp15"
+              fontPath="fonts/IRANSansMobile.ttf"
+              />
 
           <View
               android:layout_width="match_parent"
@@ -177,7 +171,8 @@
       <org.osmdroid.views.MapView
           android:id="@+id/map"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1"
           />
     </LinearLayout>
   </RelativeLayout>
