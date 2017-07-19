@@ -1555,6 +1555,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (drawer != null) {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            drawer.closeDrawer(GravityCompat.START);
         }
 
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
