@@ -119,6 +119,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private double lastLongitude;
     private double lat1;
     private double lon1;
+    public static int page;
+    public static final int pageiGapmap = 1;
+    public static final int pageUserList = 2;
 
     private int lastSpecialRequestsCursorPosition = 0;
     private final int DEFAULT_LOOP_TIME = (int) (10 * DateUtils.SECOND_IN_MILLIS);
@@ -150,6 +153,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         statusCheck();
         //clickDrawMarkActive();
 
+        page = 1;
         new RequestGeoGetRegisterStatus().getRegisterStatus();
         new RequestGeoGetComment().getComment(G.userId);
     }
@@ -306,6 +310,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 }
                 closeKeyboard(v);
                 isBackPress = false;
+                page = pageiGapmap;
             }
         });
 
@@ -353,6 +358,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                         dialog.dismiss();
                         fabGps.setVisibility(View.GONE);
                         rippleMoreMap.setVisibility(View.GONE);
+                        page = pageUserList;
                         FragmentMapUsers fragmentMapUsers = FragmentMapUsers.newInstance();
                         try {
                             mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.replace, fragmentMapUsers, "map_user_fragment").commitAllowingStateLoss();
@@ -498,12 +504,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
      * hint : call this method after fill location
      */
     private void getCoordinateLoop(final int delay, boolean loop) {
-        if (loop) {
+        if (loop && page == pageiGapmap) {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                    getCoordinateLoop(DEFAULT_LOOP_TIME, false);
+                    getCoordinateLoop(DEFAULT_LOOP_TIME, true);
                 }
             }, delay);
         } else {
@@ -710,6 +716,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public void onResume() {
         super.onResume();
         statusCheck();
+        FragmentiGapMap.page = FragmentiGapMap.pageiGapmap;
     }
 
     private void closeKeyboard(View v) {

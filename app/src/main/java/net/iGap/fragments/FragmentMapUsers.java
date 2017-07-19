@@ -39,6 +39,7 @@ import static net.iGap.G.context;
 import static net.iGap.G.inflater;
 import static net.iGap.fragments.FragmentiGapMap.btnBack;
 import static net.iGap.fragments.FragmentiGapMap.isBackPress;
+import static net.iGap.fragments.FragmentiGapMap.pageUserList;
 
 public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPressedListener {
 
@@ -96,7 +97,7 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
     }
 
     private void getDistanceLoop(final int delay, boolean loop) {
-        if (loop) {
+        if (loop && FragmentiGapMap.page == pageUserList) {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -235,5 +236,11 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
     public void onDestroy() {
         super.onDestroy();
         ((ActivityMain) mActivity).setOnBackPressedListener(FragmentMapUsers.this, true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FragmentiGapMap.page = FragmentiGapMap.pageUserList;
     }
 }
