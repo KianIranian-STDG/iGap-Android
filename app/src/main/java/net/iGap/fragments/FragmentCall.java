@@ -129,7 +129,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
-        mRecyclerView.setItemViewCacheSize(300);
+        mRecyclerView.setItemViewCacheSize(1000);
         mRecyclerView.setItemAnimator(null);
 
         FragmentMain.PreCachingLayoutManager layoutManager = new FragmentMain.PreCachingLayoutManager(mActivity, 6000);

@@ -150,7 +150,8 @@ public class FragmentMain extends Fragment implements OnComplete {
         // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setItemViewCacheSize(1000);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        mRecyclerView.setLayoutManager(new PreCachingLayoutManager(mActivity, 3000));
+
 
         RealmResults<RealmRoom> results = null;
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.UPDATED_TIME};
@@ -695,6 +696,7 @@ public class FragmentMain extends Fragment implements OnComplete {
         private int extraLayoutSpace = -1;
         private Context context;
 
+
         public PreCachingLayoutManager(Context context) {
             super(context);
             this.context = context;
@@ -768,9 +770,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
 
-            View v = ViewMaker.getViewItemRoom();
-
-            return new RoomAdapter.ViewHolder(v);
+            return new RoomAdapter.ViewHolder(ViewMaker.getViewItemRoom());
         }
 
         @Override
@@ -842,7 +842,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                     holder.txtUnread.setVisibility(View.VISIBLE);
                     holder.name.setTypeface(G.typeface_IRANSansMobile_Bold);
                     holder.txtPinIcon.setVisibility(View.GONE);
-                    holder.txtUnread.setText(Integer.toString(mInfo.getUnreadCount()));
+                    holder.txtUnread.setText(mInfo.getUnreadCount() + "");
 
                     if (HelperCalander.isLanguagePersian) {
                         holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red);
