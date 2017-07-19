@@ -113,9 +113,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private double lastLongitude;
     private double lat1;
     private double lon1;
-
+    private String specialRequests;
     private long latestUpdateTime = 0;
-
+    private int lastSpecialRequestsCursorPosition = 0;
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -239,6 +239,17 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                edtMessageGps.removeTextChangedListener(this);
+
+                if (edtMessageGps.getLineCount() > 4) {
+                    edtMessageGps.setText(specialRequests);
+                    edtMessageGps.setSelection(lastSpecialRequestsCursorPosition);
+                } else {
+                    specialRequests = edtMessageGps.getText().toString();
+                }
+
+                edtMessageGps.addTextChangedListener(this);
 
             }
         });
