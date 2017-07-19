@@ -92,6 +92,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public static RippleView rippleMoreMap;
     public static boolean isBackPress = false;
     private ToggleButton toggleGps;
+    private TextView txtTextTurnOnOffGps;
 
     private FragmentActivity mActivity;
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
@@ -116,6 +117,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private String specialRequests;
     private long latestUpdateTime = 0;
     private int lastSpecialRequestsCursorPosition = 0;
+    private boolean isGpsOn = false;
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -201,12 +203,17 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         });
         vgMessageGps = (ViewGroup) view.findViewById(R.id.vgMessageGps);
 
+        txtTextTurnOnOffGps = (TextView) view.findViewById(R.id.txtTextTurnOnOffGps);
         final EditText edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
         toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
         toggleGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                if (!isGpsOn) {
+                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                } else {
+                    new RequestGeoRegister().register(true);
+                }
             }
         });
 
@@ -619,17 +626,30 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public void statusCheck() {
         final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
 
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 
-            rootTurnOnGps.setVisibility(View.VISIBLE);
-            toggleGps.setChecked(false);
-            vgMessageGps.setVisibility(View.GONE);
+            visibleViewAttention(mActivity.getResources().getString(R.string.turn_on_gps_explain));
 
-        } else {
-            rootTurnOnGps.setVisibility(View.GONE);
-            vgMessageGps.setVisibility(View.VISIBLE);
-            new GPSTracker().detectLocation();
+        } else {// GPS is on
+            isGpsOn = true;
+            if (mapRegisterState) {
+                rootTurnOnGps.setVisibility(View.GONE);
+                vgMessageGps.setVisibility(View.VISIBLE);
+                rippleMoreMap.setVisibility(View.VISIBLE);
+                new GPSTracker().detectLocation();
+            } else {
+                visibleViewAttention(mActivity.getResources().getString(R.string.do_you_want_delete_this_channel));
+            }
+
         }
+    }
+
+    private void visibleViewAttention(String text) {
+        rootTurnOnGps.setVisibility(View.VISIBLE);
+        toggleGps.setChecked(false);
+        vgMessageGps.setVisibility(View.GONE);
+        rippleMoreMap.setVisibility(View.GONE);
+        txtTextTurnOnOffGps.setText(text);
     }
 
     @Override
@@ -652,14 +672,17 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     @Override
     public void onState(final boolean state) {
         mapRegisterState = state;
-        if (btnMapChangeRegistration != null) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                statusCheck();
+                if (btnMapChangeRegistration != null) {
                     btnMapChangeRegistration.setChecked(state);
                 }
-            });
-        }
+            }
+        });
+
     }
 
     @Override

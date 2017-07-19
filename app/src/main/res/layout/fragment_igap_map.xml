@@ -185,6 +185,8 @@
       android:gravity="center"
       android:orientation="vertical"
       android:visibility="gone"
+      android:layout_below="@+id/backgroundToolbarMap"
+      android:paddingBottom="100dp"
       >
 
 
@@ -194,6 +196,7 @@
         android:src="@mipmap/find"
         />
     <TextView
+        android:id="@+id/txtTextTurnOnOffGps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
