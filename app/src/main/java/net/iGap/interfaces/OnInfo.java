@@ -10,8 +10,11 @@
 
 package net.iGap.interfaces;
 
-import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRegisteredInfo;
 
-public interface OnRegistrationInfo {
-    void onInfo(ProtoGlobal.RegisteredUser registeredInfo);
+/**
+ * a callback for getting registered info from server
+ */
+public interface OnInfo {
+    void onInfo(RealmRegisteredInfo registeredInfo);
 }

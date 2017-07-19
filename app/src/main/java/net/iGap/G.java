@@ -138,6 +138,7 @@ import net.iGap.interfaces.OnReceivePageInfoTOS;
 import net.iGap.interfaces.OnRecoveryEmailToken;
 import net.iGap.interfaces.OnRecoverySecurityPassword;
 import net.iGap.interfaces.OnRefreshActivity;
+import net.iGap.interfaces.OnRegistrationInfo;
 import net.iGap.interfaces.OnSecuring;
 import net.iGap.interfaces.OnSecurityCheckPassword;
 import net.iGap.interfaces.OnSetAction;
@@ -402,6 +403,7 @@ public class G extends MultiDexApplication {
     public static OnGeoGetComment onGeoGetComment;
     public static OnMapRegisterState onMapRegisterState;
     public static OnMapClose onMapClose;
+    public static OnRegistrationInfo onRegistrationInfo;
 
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
@@ -455,7 +457,7 @@ public class G extends MultiDexApplication {
                     emojiTree.add(emojis[j]);
                 }
             } catch (Exception e) {
-                Log.e("dddd", " G initEmoji()    " + e.toString());
+                e.printStackTrace();
             }
         }
 

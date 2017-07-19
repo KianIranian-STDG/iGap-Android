@@ -94,7 +94,7 @@ import static net.iGap.G.context;
 
 public class ActivityContactsProfile extends ActivityEnhanced implements OnUserUpdateStatus {
     private long userId = 0;
-    private long roomId;
+    private long roomId = 0;
     private String phone = "0";
     private String displayName = "";
     private String username = "";
@@ -216,8 +216,11 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         userId = extras.getLong("peerId");
         roomId = extras.getLong("RoomId");
         enterFrom = extras.getString("enterFrom");
+        if (enterFrom == null) {
+            enterFrom = "";
+        }
 
-        if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+        if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || roomId == 0) {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
             if (realmRoom != null) {
                 shearedId = realmRoom.getId();
@@ -326,7 +329,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
             @Override
             public void onClick(View view) {
 
-                if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
+                if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
 
                     final Realm realm = Realm.getDefaultInstance();
                     final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();

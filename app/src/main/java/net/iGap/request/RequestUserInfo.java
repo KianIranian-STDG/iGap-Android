@@ -10,9 +10,16 @@
 
 package net.iGap.request;
 
+import java.util.HashMap;
+import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserInfo;
 
 public class RequestUserInfo {
+    public static HashMap<Long, OnInfo> infoHashMap = new HashMap<>();
+
+    public enum InfoType {
+        JUST_INFO
+    }
 
     public void userInfo(long userId) {
         ProtoUserInfo.UserInfo.Builder builder = ProtoUserInfo.UserInfo.newBuilder();

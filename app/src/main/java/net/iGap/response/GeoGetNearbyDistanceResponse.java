@@ -12,8 +12,10 @@ package net.iGap.response;
 
 import io.realm.Realm;
 import net.iGap.G;
+import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoGeoGetNearbyDistance;
 import net.iGap.realm.RealmGeoNearbyDistance;
+import net.iGap.realm.RealmRegisteredInfo;
 
 public class GeoGetNearbyDistanceResponse extends MessageHandler {
 
@@ -37,12 +39,24 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
-                for (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Result result : builder.getResultList()) {
+            public void execute(final Realm realm) {
+                for (final ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Result result : builder.getResultList()) {
                     if (G.userId != result.getUserId()) { // don't show my account
-                        RealmGeoNearbyDistance geoNearbyDistance = realm.createObject(RealmGeoNearbyDistance.class, result.getUserId());
-                        geoNearbyDistance.setHasComment(result.getHasComment());
-                        geoNearbyDistance.setDistance(result.getDistance());
+                        RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
+                            @Override
+                            public void onInfo(RealmRegisteredInfo registeredInfo) {
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmGeoNearbyDistance geoNearbyDistance = realm.createObject(RealmGeoNearbyDistance.class, result.getUserId());
+                                        geoNearbyDistance.setHasComment(result.getHasComment());
+                                        geoNearbyDistance.setDistance(result.getDistance());
+                                    }
+                                });
+                                realm.close();
+                            }
+                        });
                     }
                 }
             }

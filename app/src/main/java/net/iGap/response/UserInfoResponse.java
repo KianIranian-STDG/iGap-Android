@@ -23,6 +23,7 @@ import net.iGap.proto.ProtoUserInfo;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.request.RequestUserInfo;
 
 public class UserInfoResponse extends MessageHandler {
 
@@ -38,16 +39,19 @@ public class UserInfoResponse extends MessageHandler {
         this.actionId = actionId;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 final Realm realm = Realm.getDefaultInstance();
-
+                RealmRegisteredInfo realmRegisteredInfo;
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
 
                         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, builder.getUser().getId()).findFirst();
                         if (realmRegisteredInfo == null) {
@@ -70,6 +74,11 @@ public class UserInfoResponse extends MessageHandler {
                     }
                 });
 
+                if (identity != null && identity.equals(RequestUserInfo.InfoType.JUST_INFO.toString())) {
+                    G.onRegistrationInfo.onInfo(builder.getUser());
+                    return;
+                }
+
                 if ((builder.getUser().getId() == G.userId)) {
                     canGetInfo = true;
                 }
@@ -77,7 +86,8 @@ public class UserInfoResponse extends MessageHandler {
                 realm.close();
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         if (canGetInfo) {
                             if (G.onUserInfoMyClient != null) {
@@ -113,26 +123,28 @@ public class UserInfoResponse extends MessageHandler {
                         }
                     }
                 });
+
+                // update log message in realm room message after get user info
+                if (G.logMessageUpdatList.containsKey(builder.getUser().getId())) {
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            HelperLogMessage.updateLogMessageAfterGetUserInfo(G.logMessageUpdatList.get(builder.getUser().getId()));
+                        }
+                    }, 500);
+                }
             }
         });
-
-        // update log message in realm room message after get user info
-        if (G.logMessageUpdatList.containsKey(builder.getUser().getId())) {
-
-            G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
-                    HelperLogMessage.updateLogMessageAfterGetUserInfo(G.logMessageUpdatList.get(builder.getUser().getId()));
-                }
-            }, 500);
-        }
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
         G.onUserInfoResponse.onUserInfoTimeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

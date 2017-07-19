@@ -15,8 +15,7 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGeoGetComment;
-import net.iGap.realm.RealmGeoNearbyDistance;
-import net.iGap.realm.RealmGeoNearbyDistanceFields;
+import net.iGap.interfaces.OnInfo;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestGeoGetComment;
@@ -48,7 +47,19 @@ public class MyInfoWindow extends InfoWindow {
     public void onClose() {
     }
 
-    public void onOpen(Object arg0) {
+    public void onOpen(final Object arg) {
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        if (realmRegisteredInfo == null) {
+            RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
+                @Override
+                public void onInfo(RealmRegisteredInfo registeredInfo) {
+                    onOpen(arg);
+                }
+            });
+            return;
+        }
 
         final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.map_user_info, true).build();
         View view = dialog.getCustomView();
@@ -57,12 +68,6 @@ public class MyInfoWindow extends InfoWindow {
         }
         DialogAnimation.animationDown(dialog);
         dialog.show();
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
-        if (realmRegisteredInfo == null) {
-            return;
-        }
 
         final CircleImageView avatar = (CircleImageView) view.findViewById(R.id.img_info_avatar_map);
         final TextView txtClose = (TextView) view.findViewById(R.id.txt_close_map);
@@ -110,7 +115,7 @@ public class MyInfoWindow extends InfoWindow {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                HelperPublicMethod.goToChatRoom(false, userId, new HelperPublicMethod.Oncomplet() {
+                HelperPublicMethod.goToChatRoom(false, userId, new HelperPublicMethod.OnComplete() {
                     @Override
                     public void complete() {
                         mActivity.getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
@@ -184,22 +189,20 @@ public class MyInfoWindow extends InfoWindow {
                 }
             };
 
-            RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, userId).findFirst();
-            if (realmGeoNearbyDistance != null) {
-                if (hasComment) {
-                    //following commented code is for show old comment and get new
-                    //
-                    //if (realmGeoNearbyDistance.getComment() == null || realmGeoNearbyDistance.getComment().isEmpty()) {
-                    //    txtComment.setText(G.context.getResources().getString(R.string.comment_waiting));
-                    //    new RequestGeoGetComment().getComment(userId);
-                    //} else {
-                    //    txtComment.setText(realmGeoNearbyDistance.getComment());
-                    //}
-                    txtComment.setText(G.context.getResources().getString(R.string.comment_waiting));
-                    new RequestGeoGetComment().getComment(userId);
-                } else {
-                    txtComment.setText(G.context.getResources().getString(R.string.comment_no));
-                }
+            //for show old comment
+            //
+            //RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, userId).findFirst();
+            //if (realmGeoNearbyDistance != null && hasComment) {
+            //    if (realmGeoNearbyDistance.getComment() != null && !realmGeoNearbyDistance.getComment().isEmpty()) {
+            //        txtComment.setText(realmGeoNearbyDistance.getComment());
+            //    }
+            //}
+
+            if (hasComment) {
+                txtComment.setText(G.context.getResources().getString(R.string.comment_waiting));
+                new RequestGeoGetComment().getComment(userId);
+            } else {
+                txtComment.setText(G.context.getResources().getString(R.string.comment_no));
             }
         }
 
@@ -250,7 +253,7 @@ public class MyInfoWindow extends InfoWindow {
         imgMapUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HelperPublicMethod.goToChatRoom(false, userId, new HelperPublicMethod.Oncomplet() {
+                HelperPublicMethod.goToChatRoom(false, userId, new HelperPublicMethod.OnComplete() {
                     @Override
                     public void complete() {
                         mActivity.getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();

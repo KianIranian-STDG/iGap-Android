@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,10 +19,10 @@ import io.realm.RealmResults;
 import java.util.HashMap;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityContactsProfile;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
@@ -98,7 +99,7 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
     }
 
     private class MapUserAdapter extends RealmRecyclerViewAdapter<RealmGeoNearbyDistance, MapUserAdapter.ViewHolder> {
-        public MapUserAdapter(RealmResults<RealmGeoNearbyDistance> data, boolean autoUpdate) {
+        MapUserAdapter(RealmResults<RealmGeoNearbyDistance> data, boolean autoUpdate) {
             super(data, autoUpdate);
         }
 
@@ -131,14 +132,15 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
             holder.arrow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HelperPublicMethod.goToChatRoom(false, item.getUserId(), new HelperPublicMethod.Oncomplet() {
-                        @Override
-                        public void complete() {
-                            if (G.onMapClose != null) {
-                                G.onMapClose.onClose();
-                            }
-                        }
-                    }, null);
+                    Intent intent = new Intent(G.currentActivity, ActivityContactsProfile.class);
+                    intent.putExtra("peerId", item.getUserId());
+                    intent.putExtra("enterFrom", "Others");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    G.currentActivity.startActivity(intent);
+
+                    if (G.onMapClose != null) {
+                        G.onMapClose.onClose();
+                    }
                 }
             });
 

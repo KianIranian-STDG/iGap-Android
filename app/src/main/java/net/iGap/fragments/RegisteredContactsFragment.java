@@ -345,7 +345,7 @@ public class RegisteredContactsFragment extends Fragment {
                         } else {
                             showProgress();
 
-                            HelperPublicMethod.goToChatRoom(false, realmContacts.getId(), new HelperPublicMethod.Oncomplet() {
+                            HelperPublicMethod.goToChatRoom(false, realmContacts.getId(), new HelperPublicMethod.OnComplete() {
                                 @Override
                                 public void complete() {
                                     hideProgress();

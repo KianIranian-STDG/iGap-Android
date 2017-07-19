@@ -30,7 +30,7 @@ import net.iGap.request.RequestUserInfo;
 
 public class HelperPublicMethod {
 
-    public interface Oncomplet {
+    public interface OnComplete {
         void complete();
     }
 
@@ -40,15 +40,15 @@ public class HelperPublicMethod {
 
     //**************************************************************************************************************************************
 
-    public static void goToChatRoom(final boolean fromCall, final long peerId, final Oncomplet oncomplet, final OnError onError) {
+    public static void goToChatRoom(final boolean fromCall, final long peerId, final OnComplete onComplete, final OnError onError) {
 
         final Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
         if (realmRoom != null) {
 
-            if (oncomplet != null) {
-                oncomplet.complete();
+            if (onComplete != null) {
+                onComplete.complete();
             }
 
             goToRoom(fromCall, realmRoom.getId(), -1);
@@ -60,7 +60,7 @@ public class HelperPublicMethod {
                         onError.error();
                     }
 
-                    getUserInfo(fromCall, peerId, roomId, oncomplet, onError);
+                    getUserInfo(fromCall, peerId, roomId, onComplete, onError);
 
                     G.onChatGetRoom = null;
                 }
@@ -89,7 +89,7 @@ public class HelperPublicMethod {
         realm.close();
     }
 
-    private static void getUserInfo(final boolean fromCall, final long peerId, final long roomId, final Oncomplet oncomplet, final OnError onError) {
+    private static void getUserInfo(final boolean fromCall, final long peerId, final long roomId, final OnComplete onComplete, final OnError onError) {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
@@ -125,8 +125,8 @@ public class HelperPublicMethod {
                                 @Override public void onSuccess() {
                                     try {
 
-                                        if (oncomplet != null) {
-                                            oncomplet.complete();
+                                        if (onComplete != null) {
+                                            onComplete.complete();
                                         }
 
                                         goToRoom(fromCall, roomId, peerId);
