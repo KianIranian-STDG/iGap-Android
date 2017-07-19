@@ -1508,6 +1508,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void refresh(String changeLanguage) {
                 ActivityMain.this.recreate();
+                G.isMainActivityRecreate = true;
             }
         };
 
@@ -1569,6 +1570,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         HelperUrl.getLinkinfo(getIntent(), ActivityMain.this);
         getIntent().setData(null);
         setDrawerInfo(false);
+
+        if (HelperCalander.isLanguagePersian && G.isMainActivityRecreate) {
+            if (pages.size() > 0) {
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mViewPager.setCurrentItem(pages.size() - 1, false);
+                        G.isMainActivityRecreate = false;
+                    }
+                }, 500);
+            }
+        } else {
+            G.isMainActivityRecreate = false;
+        }
+
+        if (drawer != null) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+
     }
 
     @Override
