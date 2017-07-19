@@ -1610,4 +1610,111 @@ public class ViewMaker {
 
         return root_chat_sub_layout;
     }
+
+    public static View getViewItemCall() {
+
+        LinearLayout linearLayout_205 = new LinearLayout(G.context);
+        LinearLayout.LayoutParams layout_218 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_205.setLayoutParams(layout_218);
+
+        CircleImageView fcsl_imv_picture = new CircleImageView(G.context);
+        fcsl_imv_picture.setId(R.id.fcsl_imv_picture);
+        LinearLayout.LayoutParams layout_856 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48));
+        layout_856.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
+        layout_856.gravity = Gravity.CENTER;
+
+        fcsl_imv_picture.setLayoutParams(layout_856);
+        linearLayout_205.addView(fcsl_imv_picture);
+
+        LinearLayout linearLayout_71 = new LinearLayout(G.context);
+        linearLayout_71.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_794 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp68));
+        linearLayout_71.setLayoutParams(layout_794);
+
+        LinearLayout linearLayout_470 = new LinearLayout(G.context);
+        linearLayout_470.setOrientation(HORIZONTAL);
+        LinearLayout.LayoutParams layout_822 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
+        linearLayout_470.setPadding(0, i_Dp(R.dimen.dp12), 0, 0);
+        linearLayout_470.setLayoutParams(layout_822);
+
+        LinearLayout linearLayout_983 = new LinearLayout(G.context);
+        linearLayout_983.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_313 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1);
+        layout_313.leftMargin = i_Dp(R.dimen.dp6);
+        linearLayout_983.setLayoutParams(layout_313);
+
+        EmojiTextViewE fcsl_txt_name = new EmojiTextViewE(G.context);
+        fcsl_txt_name.setId(R.id.fcsl_txt_name);
+        fcsl_txt_name.setPadding(0, 0, 0, dpToPixel(1));
+        fcsl_txt_name.setText("Name");
+        fcsl_txt_name.setSingleLine(true);
+        fcsl_txt_name.setTextColor(G.context.getResources().getColor(R.color.black90));
+        setTextSize(fcsl_txt_name, R.dimen.dp15);
+        fcsl_txt_name.setTypeface(G.typeface_IRANSansMobile_Bold);
+        LinearLayout.LayoutParams layout_415 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_415.gravity = Gravity.START;
+        fcsl_txt_name.setLayoutParams(layout_415);
+        linearLayout_983.addView(fcsl_txt_name);
+
+        LinearLayout linearLayout_976 = new LinearLayout(G.context);
+        linearLayout_976.setOrientation(HORIZONTAL);
+        LinearLayout.LayoutParams layout_106 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_976.setLayoutParams(layout_106);
+
+        TextView fcsl_txt_time_info = new TextView(G.context);
+        fcsl_txt_time_info.setId(R.id.fcsl_txt_time_info);
+        fcsl_txt_time_info.setGravity(Gravity.START);
+        fcsl_txt_time_info.setSingleLine(true);
+        fcsl_txt_time_info.setText("(4) 9:24 am");
+        fcsl_txt_time_info.setTextColor(G.context.getResources().getColor(R.color.gray_5c));
+        setTextSize(fcsl_txt_time_info, R.dimen.dp12);
+        fcsl_txt_time_info.setTypeface(G.typeface_IRANSansMobile_Bold);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            fcsl_txt_time_info.setTextDirection(View.TEXT_DIRECTION_LOCALE);
+        }
+        LinearLayout.LayoutParams layout_959 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+
+        fcsl_txt_time_info.setLayoutParams(layout_959);
+        linearLayout_976.addView(fcsl_txt_time_info);
+        linearLayout_983.addView(linearLayout_976);
+        linearLayout_470.addView(linearLayout_983);
+
+        LinearLayout linearLayout_202 = new LinearLayout(G.context);
+        linearLayout_202.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_803 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        layout_803.rightMargin = i_Dp(R.dimen.dp8);
+        layout_803.leftMargin = i_Dp(R.dimen.dp8);
+        linearLayout_202.setLayoutParams(layout_803);
+
+        MaterialDesignTextView fcsl_txt_icon = new MaterialDesignTextView(G.context);
+        fcsl_txt_icon.setId(R.id.fcsl_txt_icon);
+        fcsl_txt_icon.setText(G.context.getResources().getString(R.string.md_call_made));
+        fcsl_txt_icon.setTextColor(G.context.getResources().getColor(R.color.green));
+        setTextSize(fcsl_txt_icon, R.dimen.dp22);
+        LinearLayout.LayoutParams layout_178 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_178.gravity = Gravity.END;
+        fcsl_txt_icon.setLayoutParams(layout_178);
+        linearLayout_202.addView(fcsl_txt_icon);
+
+        TextView fcsl_txt_dureation_time = new TextView(G.context);
+        fcsl_txt_dureation_time.setId(R.id.fcsl_txt_dureation_time);
+        fcsl_txt_dureation_time.setText("2:24");
+        fcsl_txt_dureation_time.setTextColor(G.context.getResources().getColor(R.color.btn_start_page5));
+        setTextSize(fcsl_txt_dureation_time, R.dimen.dp12);
+        fcsl_txt_dureation_time.setTypeface(G.typeface_IRANSansMobile_Bold);
+        LinearLayout.LayoutParams layout_483 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        fcsl_txt_dureation_time.setLayoutParams(layout_483);
+        linearLayout_202.addView(fcsl_txt_dureation_time);
+        linearLayout_470.addView(linearLayout_202);
+        linearLayout_71.addView(linearLayout_470);
+
+        View textView_316 = new View(G.context);
+        textView_316.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
+        LinearLayout.LayoutParams layout_241 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+        textView_316.setLayoutParams(layout_241);
+        linearLayout_71.addView(textView_316);
+        linearLayout_205.addView(linearLayout_71);
+
+        return linearLayout_205;
+    }
 }

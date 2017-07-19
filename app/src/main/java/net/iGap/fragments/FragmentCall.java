@@ -34,6 +34,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
@@ -450,7 +451,10 @@ import net.iGap.request.RequestSignalingGetLog;
 
         @Override
         public CallAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null));
+            //  new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null));
+
+            return new ViewHolder(ViewMaker.getViewItemCall());
+
         }
 
         @Override
