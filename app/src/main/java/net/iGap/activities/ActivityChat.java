@@ -1784,7 +1784,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 }
 
-
+                Realm realm = Realm.getDefaultInstance();
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
 
@@ -1804,6 +1804,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     root5.setVisibility(View.GONE);
                     root6.setVisibility(View.GONE);
                 }
+                realm.close();
 
 
                 root1.setOnClickListener(new View.OnClickListener() {
@@ -2828,7 +2829,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                                         }
 
                                                         if (realmClientCondition != null) {
-                                                            if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                                                            if (realmRoomMessage.isValid() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
                                                                 realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
                                                                 RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
@@ -6583,7 +6584,17 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         long identifier = SUID.id().get();
         for (StructMessageInfo messageInfo : messageInfos) {
 
-            ProtoGlobal.RoomMessageType messageType = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessageType() : messageInfo.messageType;
+            ProtoGlobal.RoomMessageType messageType;
+            if (messageInfo.forwardedFrom != null) {
+                if (messageInfo.forwardedFrom.isValid()) {
+                    messageType = messageInfo.forwardedFrom.getMessageType();
+                } else {
+                    return;
+                }
+            } else {
+                messageType = messageInfo.messageType;
+            }
+
             if (!messageInfo.isTimeOrLogMessage() || (messageType == LOG)) {
                 int index = 0;
                 if (addTop && messageInfo.showTime) {

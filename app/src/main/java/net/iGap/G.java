@@ -16,7 +16,6 @@ import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 import android.view.LayoutInflater;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import com.crashlytics.android.Crashlytics;
@@ -430,14 +429,6 @@ public class G extends MultiDexApplication {
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-
-        Object test = "a";
-        if (test.equals("a")) {
-            Log.i("AAA", "OKKKKKKKKKKKKKKKKK");
-        } else {
-            Log.i("AAA", "NNNNNNNNN");
-        }
-
         new StartupActions();
     }
 
@@ -456,7 +447,7 @@ public class G extends MultiDexApplication {
                     emojiTree.add(emojis[j]);
                 }
             } catch (Exception e) {
-                Log.e("dddd", " G initEmoji()    " + e.toString());
+                e.printStackTrace();
             }
         }
 
