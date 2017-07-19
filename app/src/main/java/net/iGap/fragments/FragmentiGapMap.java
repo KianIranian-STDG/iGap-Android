@@ -43,6 +43,7 @@ import java.util.List;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnLocationChanged;
 import net.iGap.interfaces.OnMapClose;
@@ -52,6 +53,7 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
+import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoGetRegisterStatus;
 import net.iGap.request.RequestGeoRegister;
@@ -81,7 +83,7 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow;
 import static net.iGap.G.context;
 import static net.iGap.R.id.st_fab_gps;
 
-public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose {
+public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnGeoGetComment {
 
     private MapView map;
     private ItemizedOverlay<OverlayItem> latestLocation;
@@ -106,7 +108,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private boolean mapRegisterState = true;
     private boolean isGpsOn = false;
     private boolean first = true;
-
+    private EditText edtMessageGps;
     private final double LONGITUDE_LIMIT = 0.011;
     private final double LATITUDE_LIMIT = 0.009;
     private double northLimitation;
@@ -142,11 +144,13 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         G.onGetNearbyCoordinate = this;
         G.onMapRegisterState = this;
         G.onMapClose = this;
+        G.onGeoGetComment = this;
         startMap(view);
         statusCheck();
         //clickDrawMarkActive();
 
         new RequestGeoGetRegisterStatus().getRegisterStatus();
+        new RequestGeoGetComment().getComment(G.userId);
     }
 
     private void startMap(View view) {
@@ -209,7 +213,13 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         vgMessageGps = (ViewGroup) view.findViewById(R.id.vgMessageGps);
 
         txtTextTurnOnOffGps = (TextView) view.findViewById(R.id.txtTextTurnOnOffGps);
-        final EditText edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
+        edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
+        edtMessageGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edtMessageGps.setSingleLine(false);
+            }
+        });
         toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
         toggleGps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,7 +238,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             @Override
             public void onClick(View v) {
                 new RequestGeoUpdateComment().updateComment(edtMessageGps.getText().toString());
-                edtMessageGps.setText("");
+                //edtMessageGps.setText("");
             }
         });
 
@@ -713,5 +723,18 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         if (mActivity != null) {
             mActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
         }
+    }
+
+    @Override
+    public void onGetComment(final String comment) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (comment.length() > 0) {
+                    edtMessageGps.setText(comment);
+                    edtMessageGps.setSingleLine(true);
+                }
+            }
+        });
     }
 }
