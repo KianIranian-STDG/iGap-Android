@@ -122,6 +122,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private final int DEFAULT_LOOP_TIME = (int) (10 * DateUtils.SECOND_IN_MILLIS);
 
     private long latestUpdateTime = 0;
+    long firstTap = 0;
 
 
     public static FragmentiGapMap getInstance() {
@@ -184,7 +185,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         /**
          * Use From Following Code For Custom Url Tile Server
          */
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", 14, 18, 256, ".png", new String[]{Config.URL_MAP}) {
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", 15, 17, 256, ".png", new String[]{Config.URL_MAP}) {
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
@@ -550,6 +551,26 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
             @Override
             public boolean onSingleTapConfirmed(final MotionEvent e, final MapView mapView) {
+                //if (firstTap == 0) {
+                //    firstTap = System.currentTimeMillis();
+                //    G.handler.postDelayed(new Runnable() {
+                //        @Override
+                //        public void run() {
+                //            firstTap = 0;
+                //        }
+                //    }, 60);
+                //} else {
+                //    if (System.currentTimeMillis() - firstTap < 50) {
+                //        //double tap
+                //    }
+                //    firstTap = 0;
+                //}
+
+                if (System.currentTimeMillis() - firstTap < 50) {
+                    //double tap
+                }
+                firstTap = System.currentTimeMillis();
+
                 //drawMark(e, mapView);
                 return true;
             }
