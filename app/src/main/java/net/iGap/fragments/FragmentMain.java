@@ -835,12 +835,10 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 if (mInfo.getUnreadCount() < 1) {
 
-                    holder.name.setTypeface(G.typeface_IRANSansMobile);
                     holder.txtUnread.setVisibility(View.GONE);
 
                 } else {
                     holder.txtUnread.setVisibility(View.VISIBLE);
-                    holder.name.setTypeface(G.typeface_IRANSansMobile_Bold);
                     holder.txtPinIcon.setVisibility(View.GONE);
                     holder.txtUnread.setText(mInfo.getUnreadCount() + "");
 
@@ -907,6 +905,8 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
                 name = (EmojiTextViewE) view.findViewById(R.id.cs_txt_contact_name);
+                name.setTypeface(G.typeface_IRANSansMobile_Bold);
+
                 rootChat = (ViewGroup) view.findViewById(R.id.root_chat_sub_layout);
                 txtLastMessage = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message);
                 txtChatIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_chat_icon);
