@@ -60,7 +60,8 @@ public class RequestQueue {
         if (!G.pullRequestQueueRunned.get()) {
             G.pullRequestQueueRunned.getAndSet(true);
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     requestQueuePullFunction();
                 }
             }, Config.TIME_OUT_DELAY_MS);
@@ -158,7 +159,8 @@ public class RequestQueue {
 
         if (G.requestQueueMap.size() > 0) {
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     requestQueuePullFunction();
                 }
             }, Config.TIME_OUT_DELAY_MS);

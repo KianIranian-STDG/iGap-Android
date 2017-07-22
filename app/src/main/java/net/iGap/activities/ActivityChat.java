@@ -693,12 +693,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     @Override
     protected void onPause() {
+        storingLastPosition();
         super.onPause();
         if (isGoingFromUserLink && isNotJoin) {
             new RequestClientUnsubscribeFromRoom().clientUnsubscribeFromRoom(mRoomId);
         }
         onMusicListener = null;
-        storingLastPosition();
         overridePendingTransition(0, 0);
     }
 
@@ -7111,8 +7111,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         });
                     }
 
-                    //TODO [Saeed Mozaffari] [2017-07-16 2:27 PM] - I do this for set addToView true , use another way. hint : maybe can use from correct scroll state , hint : if size lower that limit set addToView true
-                    if (directionEnum == DOWN && realmRoomMessages.size() < (Config.LIMIT_GET_HISTORY_NORMAL - 2)) {
+                    /**
+                     * I do this for set addToView true
+                     */
+                    if (directionEnum == DOWN && realmRoomMessages.size() < (Config.LIMIT_GET_HISTORY_NORMAL - 1)) {
                         getOnlineMessage(startFutureMessageIdDown, directionEnum);
                     }
 

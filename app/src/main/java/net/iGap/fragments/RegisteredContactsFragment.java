@@ -256,8 +256,6 @@ public class RegisteredContactsFragment extends Fragment {
         decoration = new StickyRecyclerHeadersDecoration(stickyHeader);
         realmRecyclerView.addItemDecoration(decoration);
 
-        realm.close();
-
         /**
          * if contacts size is zero send request for get contacts list
          * for insuring that contacts not exist really or not
@@ -265,6 +263,8 @@ public class RegisteredContactsFragment extends Fragment {
         if (results.size() == 0) {
             new RequestUserContactsGetList().userContactGetList();
         }
+
+        realm.close();
     }
 
 

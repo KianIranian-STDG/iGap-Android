@@ -126,15 +126,13 @@
 
 # Realm library
 -keepnames public class * extends io.realm.RealmObject
--keep @io.realm.annotations.RealmModule class *
 -keep class io.realm.** { *; }
--dontwarn io.realm.**
-
 -keep class io.realm.annotations.RealmModule
 -keep @io.realm.annotations.RealmModule class *
 -keep class io.realm.internal.Keep
 -keep @io.realm.internal.Keep class *
 -dontwarn javax.**
+-dontwarn io.realm.**
 
 -keep class com.wang.avi.** { *; }
 -keep class com.wang.avi.indicators.** { *; }
