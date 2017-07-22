@@ -79,6 +79,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
     private String mUnconfirmedEmailPattern = "";
     private EditText edtConfirmedEmail;
     private RippleView btnBack;
+    private TextView txtTitleToolbar;
 
     public FragmentSecurity() {
         // Required empty public constructor
@@ -100,7 +101,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
 
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-
+        txtTitleToolbar = (TextView) view.findViewById(R.id.stps_titleToolbar);
         rootSetPassword = (ViewGroup) view.findViewById(R.id.rootSetPassword);
         rootCheckPassword = (ViewGroup) view.findViewById(R.id.rootCheckPassword);
         rootSetAdditionPassword = (ViewGroup) view.findViewById(R.id.rootSetAdditionPassword);
@@ -151,6 +152,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
 
             }
         });
+
 
         btnBack = (RippleView) view.findViewById(R.id.tsv_ripple_back);
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -244,6 +246,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootChangeHint.setVisibility(View.VISIBLE);
+                txtTitleToolbar.setText(mActivity.getString(R.string.password_hint));
                 rippleOk.setVisibility(View.VISIBLE);
 
             }
@@ -258,6 +261,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootConfirmedEmail.setVisibility(View.VISIBLE);
+                txtTitleToolbar.setText(mActivity.getString(R.string.confirm_email_title));
                 rippleOk.setVisibility(View.VISIBLE);
             }
         });
@@ -284,7 +288,8 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootChangeEmail.setVisibility(View.VISIBLE);
-                rootConfirmedEmail.setVisibility(View.VISIBLE);
+                txtTitleToolbar.setText(mActivity.getString(R.string.change_email_recovery));
+                //rootConfirmedEmail.setVisibility(View.VISIBLE);
                 rippleOk.setVisibility(View.VISIBLE);
 
             }
@@ -316,6 +321,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootQuestionPassword.setVisibility(View.VISIBLE);
+                txtTitleToolbar.setText(mActivity.getString(R.string.title_toolbar_password_Question));
                 rippleOk.setVisibility(View.VISIBLE);
             }
         });
@@ -643,6 +649,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
                 page = 0;
                 rootSetPassword.setVisibility(View.VISIBLE);
                 rootConfirmedEmail.setVisibility(View.GONE);
+                txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
                 rippleOk.setVisibility(View.GONE);
             }
         });
@@ -656,6 +663,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
                 rootSetPassword.setVisibility(View.VISIBLE);
                 rootConfirmedEmail.setVisibility(View.GONE);
                 rootChangeEmail.setVisibility(View.GONE);
+                txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
                 rippleOk.setVisibility(View.GONE);
                 if (mUnconfirmedEmailPattern.length() > 0) {
                     txtSetConfirmedEmail.setVisibility(View.VISIBLE);
@@ -677,6 +685,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
                 page = 0;
                 rootSetPassword.setVisibility(View.VISIBLE);
                 rootChangeHint.setVisibility(View.GONE);
+                txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
                 rippleOk.setVisibility(View.GONE);
             }
         });
@@ -690,6 +699,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
                 page = 0;
                 rootSetPassword.setVisibility(View.VISIBLE);
                 rootQuestionPassword.setVisibility(View.GONE);
+                txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
                 rippleOk.setVisibility(View.GONE);
             }
         });

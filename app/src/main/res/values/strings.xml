@@ -874,6 +874,8 @@
   <string name="password_Question_title_one">Question one (Required)</string>
   <string name="password_Question_one">eg: Who is your Favorite teacher?</string>
   <string name="password_Question_title_two">Question two (Required)</string>
+  <string name="title_toolbar_password_Question">New Security Questions</string>
+  <string name="password_Question_explain">Change old question with answers for recovering password.</string>
   <string name="password_Question_two">eg: Who is your best friend?</string>
   <string name="password_answer">Answer</string>
   <string name="password_Question_title">Password Question</string>

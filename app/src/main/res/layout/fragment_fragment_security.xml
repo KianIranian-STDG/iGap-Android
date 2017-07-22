@@ -83,6 +83,7 @@
 
         </net.iGap.libs.rippleeffect.RippleView>
         <TextView
+            android:id="@+id/stps_titleToolbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
@@ -459,6 +460,21 @@
         android:textSize="@dimen/dp13"
         android:maxLines="1"
         android:singleLine="true"
+
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:gravity="center"
+        android:text="@string/confirm_email_text"
+        android:textColor="@color/gray_4c"
+        android:textSize="@dimen/dp14"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginLeft="@dimen/dp24"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginStart="@dimen/dp24"
 
         />
 

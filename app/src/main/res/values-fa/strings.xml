@@ -880,6 +880,8 @@
   <string name="password_Question_title_one">سؤال امنیتی شماره ۱ (الزامی) </string>
   <string name="password_Question_one">برای مثال: معلم مورد علاقه تان کیست؟ </string>
   <string name="password_Question_title_two"> سؤال امنیتی شماره ۲ (الزامی)</string>
+  <string name="title_toolbar_password_Question">سوالات امنیتی جدید</string>
+  <string name="password_Question_explain">لطفاً سؤالات و پاسخ های جدید را جهت بازیابی رمز عبور وارد نمایید.</string>
   <string name="password_Question_two">برای مثال: بهترین دوست شما کیست؟</string>
   <string name="password_answer">جواب </string>
   <string name="password_Question_title">پرسش رمزعبور</string>
