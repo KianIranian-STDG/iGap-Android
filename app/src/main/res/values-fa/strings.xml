@@ -1006,5 +1006,6 @@
   <string name="c_TB">ترابایت </string>
 
   <string name="audio">فایل صوتی</string>
+  <string name="total_size">حجم کل</string>
 
 </resources>
