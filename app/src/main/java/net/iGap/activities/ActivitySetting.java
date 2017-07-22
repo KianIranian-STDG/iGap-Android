@@ -1236,8 +1236,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         final long sizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
         final long sizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
         final long sizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
+        final long sizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
 
-        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument;
+        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio;
 
         txtSizeClearCach = (TextView) findViewById(R.id.st_txt_clearCache);
         txtSizeClearCach.setText(FileUtils.formatFileSize(total));
@@ -1293,6 +1294,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 final long sizeFolderPhotoDialog = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
                 final long sizeFolderVideoDialog = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
                 final long sizeFolderDocumentDialog = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
+                final long sizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
 
                 boolean wrapInScrollView = true;
                 final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_Clear_Cache)).customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText(getResources().getString(R.string.st_title_Clear_Cache)).show();
@@ -1317,6 +1319,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
                 final CheckBox checkBoxDocument = (CheckBox) view.findViewById(R.id.st_checkBox_document_dialogClearCash);
 
+                final File fileAudio = new File(G.DIR_AUDIOS);
+                TextView txtAudio = (TextView) view.findViewById(R.id.st_txt_audio_dialogClearCash);
+                txtAudio.setText(FileUtils.formatFileSize(sizeFolderAudio));
+                final CheckBox checkBoxAudio = (CheckBox) view.findViewById(R.id.st_checkBox_audio_dialogClearCash);
+
+                long rTotalSize = sizeFolderPhotoDialog + sizeFolderVideoDialog + sizeFolderDocumentDialog + sizeFolderAudio;
+                final TextView txtTotalSize = (TextView) view.findViewById(R.id.st_txt_totalSize_dialogClearCash);
+                txtTotalSize.setText(FileUtils.formatFileSize(rTotalSize));
+
+
                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -1336,11 +1348,19 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                                 if (!file.isDirectory()) file.delete();
                             }
                         }
+                        if (checkBoxAudio.isChecked()) {
+                            for (File file : fileAudio.listFiles()) {
+                                if (!file.isDirectory()) file.delete();
+                            }
+                        }
+
                         long afterClearSizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
                         long afterClearSizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
                         long afterClearSizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
-                        long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument;
+                        long afterClearSizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
+                        long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument + afterClearSizeFolderAudio;
                         txtSizeClearCach.setText(FileUtils.formatFileSize(afterClearTotal));
+                        txtTotalSize.setText(FileUtils.formatFileSize(afterClearTotal));
                         dialog.dismiss();
                     }
                 });

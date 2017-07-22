@@ -1000,4 +1000,8 @@
   <string name="c_TB">TB</string>
 
 
+  <string name="audio">Audio</string>
+  <string name="total_size">Total Size</string>
+
+
 </resources>

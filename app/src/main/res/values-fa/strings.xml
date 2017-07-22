@@ -1004,4 +1004,7 @@
   <string name="c_MB">مگابایت </string>
   <string name="c_GB">گیگابایت </string>
   <string name="c_TB">ترابایت </string>
+
+  <string name="audio">فایل صوتی</string>
+
 </resources>
