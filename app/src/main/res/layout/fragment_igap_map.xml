@@ -189,10 +189,14 @@
       >
 
 
-    <ImageView
-        android:layout_width="@dimen/dp100"
-        android:layout_height="@dimen/dp100"
-        android:src="@mipmap/find"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/md_igap_alert"
+        android:gravity="center"
+        android:textSize="@dimen/dp70"
+        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:textColor="@color/layout_background_top_connectivity"
         />
     <TextView
         android:id="@+id/txtTextTurnOnOffGps"

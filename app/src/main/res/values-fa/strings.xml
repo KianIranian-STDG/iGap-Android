@@ -1017,4 +1017,10 @@
   <string formatted="false" name="distance">حدود %d متر</string>
   <string name="hint_gps">متن مورد نظر خود را وارد کنید</string>
 
+
+  <string name="Visible_Status_title_dialog">موقعیت قابل مشاهده</string>
+  <string name="Visible_Status_text_dialog">آیا از اینکه موقعیتتان برای سایرین قابل مشاهده باشد، اطمینان دارید؟</string>
+  <string name="Visible_Status_text_dialog_invisible">آیا از اینکه موقعیتتان برای سایرین غیر قابل مشاهده باشد، اطمینان دارید؟</string>
+  <string name="Visible_Status_text">توجه! با روشن کردن حالت نزدیک به من موقعیت شما برای سایرین قابل مشاهده می باشد، پس قبل از روشن کردن این حالت از انجام آن مطمئن شوید.</string>
+
 </resources>

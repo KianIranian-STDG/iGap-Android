@@ -1000,7 +1000,7 @@
   <string name="c_TB">TB</string>
 
 
-  <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
+  <string name="turn_on_gps_explain">The location status and other features of map are disabled. To use all the capabilities, turn the switch on first.</string>
   <string name="turn_off_map">turn off</string>
   <string name="turn_on_map">turn on</string>
   <string name="positioning">positioning</string>
@@ -1011,6 +1011,11 @@
   <string name="comment_no">There is no note</string>
   <string formatted="false" name="distance">about %d meters</string>
   <string name="hint_gps">Writ you\'r comment</string>
+
+  <string name="Visible_Status_title_dialog">Visible Status</string>
+  <string name="Visible_Status_text_dialog">Are you sure you want to make your status visible to others nearby?</string>
+  <string name="Visible_Status_text_dialog_invisible">Are you sure you want to make your status invisible to others nearby?</string>
+  <string name="Visible_Status_text">Notice! Activating "Nearby" will result in making your status visible to others. Please be sure about it before turning on.</string>
 
 
 </resources>

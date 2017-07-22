@@ -30,6 +30,7 @@ import android.location.LocationManager;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -48,6 +49,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import io.realm.Sort;
@@ -251,10 +253,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
         txtTextTurnOnOffGps = (TextView) view.findViewById(R.id.txtTextTurnOnOffGps);
         edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
-        edtMessageGps.setOnClickListener(new View.OnClickListener() {
+
+        edtMessageGps.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 edtMessageGps.setSingleLine(false);
+                return false;
             }
         });
         toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
@@ -264,8 +268,20 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 if (!isGpsOn) {
                     startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                 } else {
-                    new RequestGeoRegister().register(true);
+                    new MaterialDialog.Builder(mActivity).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            new RequestGeoRegister().register(true);
+                        }
+                    }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            toggleGps.setChecked(false);
+                        }
+                    }).show();
+
                 }
+
             }
         });
 
@@ -373,16 +389,15 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
                 TextView txtItem2 = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
                 TextView icon2 = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-                txtItem2.setText(getResources().getString(R.string.map_registration));
+                txtItem2.setText(getResources().getString(R.string.nearby));
                 icon2.setText(getResources().getString(R.string.md_delete_acc));
 
 
                 TextView txtItem3 = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
                 TextView icon3 = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-                txtItem3.setText(getResources().getString(R.string.nearby));
+                txtItem3.setText(getResources().getString(R.string.map_registration));
                 icon3.setText(getResources().getString(R.string.md_delete_acc));
 
-                txtItem3.setText(getResources().getString(R.string.nearby));
 
                 root1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -405,38 +420,10 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                     public void onClick(View view) {
                         dialog.dismiss();
 
-                        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.dialog_map_registration, true).build();
-                        View v = dialog.getCustomView();
-                        if (v == null) {
-                            return;
+                        if (location != null) {
+                            new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
                         }
-                        DialogAnimation.animationUp(dialog);
-                        dialog.show();
-                        btnMapChangeRegistration = (ToggleButton) v.findViewById(R.id.btnMapChangeRegistration);
-                        TextView txtMapRegister = (TextView) v.findViewById(R.id.txtMapRegister);
-                        TextView txtIconTurnOnOrOff = (TextView) v.findViewById(R.id.txtIconTurnOnOrOff);
 
-                        if (mapRegisterState) {
-                            txtMapRegister.setText(G.context.getResources().getString(R.string.turn_off_map));
-                            txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_gap_eye_off));
-                        } else {
-                            txtMapRegister.setText(G.context.getResources().getString(R.string.turn_on_map));
-                            txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_visibility));
-                        }
-                        btnMapChangeRegistration.setChecked(mapRegisterState);
-
-                        btnMapChangeRegistration.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                if (mapRegisterState) {
-                                    new RequestGeoRegister().register(false);
-                                } else {
-                                    new RequestGeoRegister().register(true);
-                                }
-                                dialog.dismiss();
-                            }
-                        });
                     }
                 });
 
@@ -444,9 +431,55 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        if (location != null) {
-                            new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                        }
+
+
+                        new MaterialDialog.Builder(mActivity).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                new RequestGeoRegister().register(false);
+
+                            }
+                        }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            }
+                        }).show();
+
+
+                        //final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.dialog_map_registration, true).build();
+                        //View v = dialog.getCustomView();
+                        //if (v == null) {
+                        //    return;
+                        //}
+                        //DialogAnimation.animationUp(dialog);
+                        //dialog.show();
+                        //btnMapChangeRegistration = (ToggleButton) v.findViewById(R.id.btnMapChangeRegistration);
+                        //TextView txtMapRegister = (TextView) v.findViewById(R.id.txtMapRegister);
+                        //TextView txtIconTurnOnOrOff = (TextView) v.findViewById(R.id.txtIconTurnOnOrOff);
+                        //
+                        //if (mapRegisterState) {
+                        //    txtMapRegister.setText(G.context.getResources().getString(R.string.turn_off_map));
+                        //    txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_gap_eye_off));
+                        //} else {
+                        //    txtMapRegister.setText(G.context.getResources().getString(R.string.turn_on_map));
+                        //    txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_visibility));
+                        //}
+                        //btnMapChangeRegistration.setChecked(mapRegisterState);
+                        //
+                        //btnMapChangeRegistration.setOnClickListener(new View.OnClickListener() {
+                        //    @Override
+                        //    public void onClick(View v) {
+                        //
+                        //        if (mapRegisterState) {
+                        //            new RequestGeoRegister().register(false);
+                        //        } else {
+                        //            new RequestGeoRegister().register(true);
+                        //        }
+                        //        dialog.dismiss();
+                        //    }
+                        //});
                     }
                 });
 
@@ -763,7 +796,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 new GPSTracker().detectLocation();
             } else {
-                visibleViewAttention(mActivity.getResources().getString(R.string.do_you_want_delete_this_channel));
+                visibleViewAttention(mActivity.getResources().getString(R.string.Visible_Status_text));
             }
 
         }
