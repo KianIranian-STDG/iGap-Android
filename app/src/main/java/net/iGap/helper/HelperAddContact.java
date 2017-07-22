@@ -19,9 +19,20 @@ public class HelperAddContact {
 
     public static void addContact(String displayName, String phone) {
 
-        if (phone.startsWith("0")) phone = phone.substring(1, phone.length());
+        //if (phone.startsWith("0")) phone = phone.substring(1, phone.length());
 
-        String saveNumber = "+98" + phone.replace("+98", "");
+        String saveNumber;
+        if (phone.startsWith("+980")) {//x
+            saveNumber = phone.replace("+980", "+98");
+        } else if (phone.startsWith("+98")) {
+            saveNumber = phone;
+        } else if (phone.startsWith("0")) {
+            saveNumber = "+98" + phone.substring(1, phone.length());
+        } else {
+            saveNumber = "+98" + phone;
+        }
+
+
 
         ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 

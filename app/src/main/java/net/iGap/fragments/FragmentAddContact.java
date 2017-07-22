@@ -240,15 +240,30 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
     private void addContactToServer() {
 
         String _phone = edtPhoneNumber.getText().toString();
-        if (_phone.startsWith("0")) _phone = _phone.substring(1, _phone.length());
+        //if (_phone.startsWith("0")) _phone = _phone.substring(1, _phone.length());
+        //
+        //String ph = "+98" + _phone.replace("+98", "");
+        //
 
-        String ph = "+98" + _phone.replace("+98", "");
+
+        String saveNumber;
+        if (_phone.startsWith("+980")) {//x
+            saveNumber = _phone.replace("+980", "+98");
+
+        } else if (_phone.startsWith("+98")) {
+            saveNumber = _phone;
+        } else if (_phone.startsWith("0")) {
+            saveNumber = "+98" + _phone.substring(1, _phone.length());
+        } else {
+            saveNumber = "+98" + _phone;
+        }
+
 
         ArrayList<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
         contact.firstName = edtFirstName.getText().toString();
         contact.lastName = edtLastName.getText().toString();
-        contact.phone = ph;
+        contact.phone = saveNumber;
 
         contacts.add(contact);
 
