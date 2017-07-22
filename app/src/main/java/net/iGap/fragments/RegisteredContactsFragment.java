@@ -40,6 +40,7 @@ import io.realm.RealmResults;
 import java.util.HashMap;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPublicMethod;
@@ -61,7 +62,6 @@ import net.iGap.request.RequestUserContactsGetList;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
-import static net.iGap.G.inflater;
 import static net.iGap.R.string.contacts;
 
 public class RegisteredContactsFragment extends Fragment {
@@ -245,7 +245,7 @@ public class RegisteredContactsFragment extends Fragment {
         Realm realm = Realm.getDefaultInstance();
 
         realmRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        realmRecyclerView.setItemViewCacheSize(100);
+        realmRecyclerView.setItemViewCacheSize(1000);
         realmRecyclerView.setItemAnimator(null);
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
@@ -317,16 +317,16 @@ public class RegisteredContactsFragment extends Fragment {
 
             private RealmContacts realmContacts;
             protected CircleImageView image;
-            protected CustomTextViewMedium title;
-            protected CustomTextViewMedium subtitle;
+            protected TextView title;
+            protected TextView subtitle;
             protected View topLine;
 
             public ViewHolder(View view) {
                 super(view);
 
                 image = (CircleImageView) view.findViewById(R.id.imageView);
-                title = (CustomTextViewMedium) view.findViewById(R.id.title);
-                subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
+                title = (TextView) view.findViewById(R.id.title);
+                subtitle = (TextView) view.findViewById(R.id.subtitle);
                 topLine = (View) view.findViewById(R.id.topLine);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
@@ -369,7 +369,9 @@ public class RegisteredContactsFragment extends Fragment {
 
         @Override
         public ContactListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = inflater.inflate(R.layout.contact_item, viewGroup, false);
+            // View v = inflater.inflate(R.layout.contact_item, viewGroup, false);
+
+            View v = ViewMaker.getViewRegisteredContacts();
 
             if (getData() != null && count != getData().size()) {
                 count = getData().size();

@@ -1717,4 +1717,83 @@ public class ViewMaker {
 
         return linearLayout_205;
     }
+
+    public static View getViewRegisteredContacts() {
+
+        LinearLayout linearLayout_578 = new LinearLayout(G.context);
+        linearLayout_578.setOrientation(VERTICAL);
+        if (HelperCalander.isLanguagePersian) {
+            linearLayout_578.setPadding(i_Dp(R.dimen.dp20), 0, i_Dp(R.dimen.dp20), 0);
+        } else {
+            linearLayout_578.setPadding(i_Dp(R.dimen.dp52), 0, i_Dp(R.dimen.dp20), 0);
+        }
+
+        LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_578.setLayoutParams(layout_842);
+
+        TextView topLine = new TextView(G.context);
+        topLine.setId(R.id.topLine);
+        topLine.setBackgroundColor(G.context.getResources().getColor(R.color.gray));
+        LinearLayout.LayoutParams layout_323 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        if (HelperCalander.isLanguagePersian) {
+            layout_323.leftMargin = i_Dp(R.dimen.dp20);
+            layout_323.rightMargin = i_Dp(R.dimen.dp8);
+        } else {
+            layout_323.leftMargin = i_Dp(R.dimen.dp8);
+            layout_323.rightMargin = i_Dp(R.dimen.dp20);
+        }
+
+        topLine.setLayoutParams(layout_323);
+        linearLayout_578.addView(topLine);
+
+        LinearLayout linearLayout_823 = new LinearLayout(G.context);
+        linearLayout_823.setOrientation(HORIZONTAL);
+        LinearLayout.LayoutParams layout_692 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_692.topMargin = i_Dp(R.dimen.dp16);
+        linearLayout_823.setLayoutParams(layout_692);
+
+        CircleImageView imageView = new CircleImageView(G.context);
+        imageView.setId(R.id.imageView);
+        LinearLayout.LayoutParams layout_54 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48));
+        imageView.setLayoutParams(layout_54);
+        linearLayout_823.addView(imageView);
+
+        LinearLayout linearLayout_673 = new LinearLayout(G.context);
+        linearLayout_673.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_445 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        if (HelperCalander.isLanguagePersian) {
+            layout_445.rightMargin = i_Dp(R.dimen.dp8);
+        } else {
+            layout_445.leftMargin = i_Dp(R.dimen.dp8);
+        }
+        linearLayout_673.setLayoutParams(layout_445);
+
+        TextView title = new TextView(G.context);
+        title.setId(R.id.title);
+        title.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+        title.setSingleLine(true);
+        title.setTextColor(Color.parseColor("#000000"));
+        setTextSize(title, R.dimen.dp16);
+        setTypeFace(title);
+        LinearLayout.LayoutParams layout_949 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0, 1);
+        title.setLayoutParams(layout_949);
+        linearLayout_673.addView(title);
+
+        TextView subtitle = new TextView(G.context);
+        subtitle.setId(R.id.subtitle);
+        subtitle.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+        subtitle.setText(G.context.getResources().getString(R.string.last_seen_recently));
+        setTextSize(subtitle, R.dimen.dp14);
+        subtitle.setSingleLine(true);
+        setTypeFace(subtitle);
+        subtitle.setTextColor(Color.parseColor("#bbbbbb"));
+        LinearLayout.LayoutParams layout_488 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0, 1);
+        subtitle.setLayoutParams(layout_488);
+        linearLayout_673.addView(subtitle);
+        linearLayout_823.addView(linearLayout_673);
+        linearLayout_578.addView(linearLayout_823);
+
+        return linearLayout_578;
+    }
 }
