@@ -402,6 +402,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private boolean isMuteNotification;
     private boolean sendByEnter = false;
     private boolean fromCall = false;
+    private boolean fromCallMain = false;
     private boolean isCloudRoom;
 
     private long replyToMessageId = 0;
@@ -645,7 +646,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             backGroundSeenList.clear();
         }
 
-        if (ActivityCall.isConnected) {
+        if (ActivityCall.isConnected || fromCall || fromCallMain) {
 
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
 
@@ -668,11 +669,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }
             });
 
-            G.iCallFinish = new ICallFinish() {
+            G.iCallFinishChat = new ICallFinish() {
                 @Override
                 public void onFinish() {
                     try {
                         findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
+                        fromCall = false;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -772,8 +774,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 startActivity(intent);
             }
 
-            if (fromCall && ActivityCall.isConnected) {
+            if ((fromCall || ActivityCall.isConnected) && !fromCallMain) {
+
                 Intent intent = new Intent(ActivityChat.this, ActivityMain.class);
+                intent.putExtra("FROM_CALL", true);
                 startActivity(intent);
             }
 
@@ -1107,6 +1111,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             mRoomId = extras.getLong("RoomId");
             chatPeerId = extras.getLong("peerId");
             fromCall = extras.getBoolean("FROM_CALL");
+            fromCallMain = extras.getBoolean("FROM_CALL_Main");
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 

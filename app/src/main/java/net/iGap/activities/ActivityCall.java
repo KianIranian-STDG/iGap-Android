@@ -506,11 +506,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HelperPublicMethod.goToChatRoom(true, userId, null, null);
 
-                if (!isConnected) {
+                boolean _fromCall = true;
+                if (!isConnected && isIncomingCall) {
                     endCall();
+                    _fromCall = false;
                 }
+
+                HelperPublicMethod.goToChatRoom(_fromCall, userId, null, null);
+
             }
         });
 
@@ -546,13 +550,14 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         if (isIncomingCall) {
             playRingtone();
+            layoutOption.setVisibility(View.GONE);
         } else {
 
             playSound(R.raw.igap_signaling);
 
             layoutAnswer.setVisibility(View.GONE);
             layoutChat.setVisibility(View.GONE);
-            layoutOption.setVisibility(View.INVISIBLE);
+
         }
 
         muteMusic();
@@ -601,8 +606,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         finish();
 
-        if (G.iCallFinish != null) {
-            G.iCallFinish.onFinish();
+        if (G.iCallFinishChat != null) {
+            G.iCallFinishChat.onFinish();
+        }
+
+        if (G.iCallFinishMain != null) {
+            G.iCallFinishMain.onFinish();
         }
 
         if (MusicPlayer.pauseSoundFromIGapCall) {
@@ -614,6 +623,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 setSpeakerphoneOn(true);
             }
         }
+
+        txtTimeChat = txtTimerMain = null;
+
     }
 
     private void answer(FrameLayout layoutAnswer, FrameLayout layoutChat) {
@@ -638,7 +650,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void startTimer() {
 
-        txtTimeChat = txtTimerMain = null;
 
         txtTimer.setVisibility(View.VISIBLE);
         secend = 0;

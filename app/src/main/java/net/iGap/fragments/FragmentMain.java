@@ -946,6 +946,11 @@ public class FragmentMain extends Fragment implements OnComplete {
                             if (mInfo.isValid()) {
 
                                 Intent intent = new Intent(mActivity, ActivityChat.class);
+
+                                if (((ActivityMain) getActivity()).fromCall) {
+                                    intent.putExtra("FROM_CALL_Main", true);
+                                }
+
                                 intent.putExtra("RoomId", mInfo.getId());
 
                                 startActivity(intent);

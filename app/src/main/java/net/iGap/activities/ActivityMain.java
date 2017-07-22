@@ -127,6 +127,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
     FragmentCall fragmentCall;
+    public boolean fromCall = false;
 
 
 
@@ -202,6 +203,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Tracker mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RoomList");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            fromCall = extras.getBoolean("FROM_CALL");
+        }
 
         new HelperGetDataFromOtherApp(getIntent());
 
@@ -1519,7 +1525,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        if (ActivityCall.isConnected) {
+        if (ActivityCall.isConnected || fromCall) {
 
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
 
@@ -1533,11 +1539,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             });
 
-            G.iCallFinish = new ICallFinish() {
+            G.iCallFinishMain = new ICallFinish() {
                 @Override
                 public void onFinish() {
                     try {
-                        findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
+
+                        finish();
+                        //findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
+                        //fromCall=false;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

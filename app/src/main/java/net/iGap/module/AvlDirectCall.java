@@ -53,37 +53,111 @@ public class AvlDirectCall extends LinearLayout {
 
     private void init(Context context) {
 
-        TextView txtDirect1 = (TextView) makeHeaderTextView(context);
-        TextView txtDirect2 = (TextView) makeHeaderTextView(context);
-        TextView txtDirect3 = (TextView) makeHeaderTextView(context);
+        int time = 400;
 
-        addAnimation(txtDirect1, 0);
-        addAnimation(txtDirect2, 250);
-        addAnimation(txtDirect3, 500);
+        final TextView txtDirect2 = (TextView) makeHeaderTextView(context);
+        final TextView txtDirect3 = (TextView) makeHeaderTextView(context);
+        final TextView txtDirect4 = (TextView) makeHeaderTextView(context);
 
-        this.addView(txtDirect1);
+        final Animation fadeIn2 = new AlphaAnimation(0, 1);
+        fadeIn2.setDuration(time);
+
+        final Animation fadeIn3 = new AlphaAnimation(0, 1);
+        fadeIn3.setDuration(time);
+
+        final Animation fadeIn4 = new AlphaAnimation(0, 1);
+        fadeIn4.setDuration(time);
+
+        txtDirect4.setAnimation(fadeIn4);
+
+        fadeIn4.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                txtDirect3.startAnimation(fadeIn3);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        fadeIn3.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                txtDirect2.startAnimation(fadeIn2);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        fadeIn2.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                txtDirect4.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtDirect4.startAnimation(fadeIn4);
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+
+
+
+
         this.addView(txtDirect2);
         this.addView(txtDirect3);
+        this.addView(txtDirect4);
     }
 
     private View makeHeaderTextView(Context context) {
 
         TextView textView = new TextView(context);
         textView.setTextColor(Color.parseColor("#ffffff"));
-        textView.setTextSize(context.getResources().getDimension(R.dimen.dp14));
-        textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        textView.setTextSize(context.getResources().getDimension(R.dimen.dp12));
+        LinearLayoutCompat.LayoutParams lp = new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        textView.setLayoutParams(lp);
         textView.setText(R.string.md_expand_arrow);
+        // textView.setVisibility(INVISIBLE);
         textView.setTypeface(G.typeface_Fontico);
+
 
         return textView;
     }
 
-    private void addAnimation(View view, int start) {
+    private void getAnimation(View view, int start) {
 
         Animation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setStartOffset(start);
-        fadeIn.setDuration(500);
-        fadeIn.setRepeatCount(Animation.REVERSE);
+        // fadeIn.setDuration(600);
+        // fadeIn.setRepeatCount(Animation.REVERSE);
         fadeIn.setRepeatCount(Animation.INFINITE);
 
         view.setAnimation(fadeIn);
