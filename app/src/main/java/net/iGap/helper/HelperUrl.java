@@ -600,12 +600,24 @@ public class HelperUrl {
 
                         switch (room.getType()) {
                             case CHANNEL:
-                                title += G.context.getString(R.string.channel);
-                                memberNumber = room.getChannelRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member);
+
+                                if (HelperCalander.isLanguagePersian) {
+                                    title += G.context.getString(R.string.channel) + " " + "عضو شوید؟";
+                                } else {
+                                    title += G.context.getString(R.string.channel) + "?";
+                                }
+
+                                memberNumber = room.getChannelRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member_chat);
                                 break;
                             case GROUP:
-                                title += G.context.getString(R.string.group);
-                                memberNumber = room.getGroupRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member);
+
+                                if (HelperCalander.isLanguagePersian) {
+                                    title += G.context.getString(R.string.group) + " " + "عضو شوید؟";
+                                } else {
+                                    title += G.context.getString(R.string.group) + "?";
+                                }
+
+                                memberNumber = room.getGroupRoomExtra().getParticipantsCount() + " " + G.context.getString(R.string.member_chat);
                                 break;
                         }
 
@@ -616,7 +628,7 @@ public class HelperUrl {
                             @Override
                             public void run() {
 
-                                final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle).customView(R.layout.dialog_alert_join, true).positiveText(R.string.join).cancelable(false).negativeText(android.R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle).customView(R.layout.dialog_alert_join, true).positiveText(R.string.join).cancelable(true).negativeText(android.R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
