@@ -475,6 +475,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //*******************************************************************************************************************************************
 
+    private void onSelectItem(int position) {
+        FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+
+        if (adapter.getItem(position) instanceof FragmentMain) {
+
+            findViewById(R.id.amr_ripple_search).setVisibility(View.VISIBLE);
+            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
+            setFabIcon(R.mipmap.plus);
+        } else if (adapter.getItem(position) instanceof FragmentCall) {
+
+            findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
+            findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
+            setFabIcon(R.drawable.ic_call_black_24dp);
+        }
+
+        if (arcMenu.isMenuOpened()) {
+            arcMenu.toggleMenu();
+        }
+
+        arcMenu.fabMenu.show();
+    }
+
     private void setFabIcon(int res) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             arcMenu.fabMenu.setImageDrawable(getResources().getDrawable(res, context.getTheme()));
@@ -511,26 +533,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onEndTabSelected(String title, int index) {
 
-                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-
-                if (adapter.getItem(index) instanceof FragmentMain) {
-
-                    findViewById(R.id.amr_ripple_search).setVisibility(View.VISIBLE);
-                    findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
-                    setFabIcon(R.mipmap.plus);
-                } else if (adapter.getItem(index) instanceof FragmentCall) {
-
-                    findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
-                    findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
-                    setFabIcon(R.drawable.ic_call_black_24dp);
-                }
-
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-
-                arcMenu.fabMenu.show();
-
+                onSelectItem(index);
 
             }
         });
@@ -1583,6 +1586,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     public void run() {
                         mViewPager.setCurrentItem(G.salectedTabInMainActivity, false);
                         G.isMainActivityRecreate = false;
+                        onSelectItem(G.salectedTabInMainActivity);
                     }
                 }, 500);
             }
