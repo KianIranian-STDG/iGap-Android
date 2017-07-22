@@ -1232,7 +1232,7 @@ public class ViewMaker {
             emojiTextViewE.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             emojiTextViewE.setTextColor(Color.parseColor("#333333"));
             emojiTextViewE.setId(R.id.messageSenderTextMessage);
-            emojiTextViewE.setPadding(10, 0, 10, 0);
+            emojiTextViewE.setPadding(10, 4, 10, 4);
             emojiTextViewE.setTypeface(G.typeface_IRANSansMobile);
             setTextSizeDirect(emojiTextViewE, G.userTextSize);
             emojiTextViewE.setEmojiSize(i_Dp(R.dimen.dp18));

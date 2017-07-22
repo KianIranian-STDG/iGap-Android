@@ -129,11 +129,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (!TextUtils.isEmpty(msg)) {
             if (mMessage.hasLinkInMessage) {
-                view.hasEmoji = mMessage.hasEmojiInText;
                 view.setText(HelperUrl.getLinkText(msg, mMessage.linkInfo, mMessage.messageID));
             } else {
                 msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
-                view.hasEmoji = mMessage.hasEmojiInText;
                 view.setText(msg);
             }
 
