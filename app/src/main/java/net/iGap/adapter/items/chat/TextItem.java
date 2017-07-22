@@ -58,8 +58,10 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
             EmojiTextViewE textViewE = (EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage);
 
-            if (text.length() == 2) {
+            if (text.length() <= 2) {
                 textViewE.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
+            } else {
+                textViewE.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp18));
             }
 
             setTextIfNeeded(textViewE, text);
