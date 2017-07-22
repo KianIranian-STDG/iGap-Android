@@ -14,11 +14,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -28,6 +37,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,10 +46,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.MaterialDialog;
+import io.realm.Realm;
+import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
+import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -53,6 +67,8 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
+import net.iGap.realm.RealmAvatar;
+import net.iGap.realm.RealmAvatarFields;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoGetRegisterStatus;
@@ -81,9 +97,10 @@ import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import static net.iGap.G.context;
+import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
 
-public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnGeoGetComment {
+public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
 
     private MapView map;
     private ItemizedOverlay<OverlayItem> latestLocation;
@@ -125,6 +142,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     private int lastSpecialRequestsCursorPosition = 0;
     private final int DEFAULT_LOOP_TIME = (int) (10 * DateUtils.SECOND_IN_MILLIS);
+    private final int ZOOM_LEVEL_MIN = 15;
+    private final int ZOOM_LEVEL_NORMAL = 16;
+    private final int ZOOM_LEVEL_MAX = 17;
 
     private long latestUpdateTime = 0;
     long firstTap = 0;
@@ -155,7 +175,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
         page = 1;
         new RequestGeoGetRegisterStatus().getRegisterStatus();
-        new RequestGeoGetComment().getComment(G.userId);
+        new RequestGeoGetComment().getComment(userId);
     }
 
     private void startMap(View view) {
@@ -182,7 +202,19 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
          * Set Zoom Value
          */
         IMapController mapController = map.getController();
-        mapController.setZoom(16);
+        mapController.setZoom(ZOOM_LEVEL_NORMAL);
+
+
+        /**
+         * double tap callback enable
+         */
+        final GestureDetector mGestureDetector = new GestureDetector(G.context, this);
+        map.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mGestureDetector.onTouchEvent(event);
+            }
+        });
 
         /**
          * Start With This Point
@@ -193,7 +225,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         /**
          * Use From Following Code For Custom Url Tile Server
          */
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", 15, 17, 256, ".png", new String[]{Config.URL_MAP}) {
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{Config.URL_MAP}) {
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
@@ -452,16 +484,29 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     }
 
     private void drawMark(final OverlayItem mapItem, final boolean hasComment, final long userId) {
+
+        String pathName = "";
+        Realm realm = Realm.getDefaultInstance();
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, G.userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
+            if (avatar.getFile() != null) {
+                pathName = avatar.getFile().getLocalFilePath();
+            }
+        }
+        realm.close();
+
+        Bitmap bitmap = BitmapFactory.decodeFile(pathName);
+        final Drawable drawableFinal = new BitmapDrawable(context.getResources(), getCircleBitmap(bitmap));
+
         G.handler.post(new Runnable() {
             @Override
             public void run() {
                 Marker marker = new Marker(map);
                 marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
-                if (userId != 0) {
+                if (G.userId != 0) {
                     if (hasComment) {
-                        marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_yes));
+                        marker.setIcon(drawableFinal);
                     } else {
-                        marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_no));
+                        marker.setIcon(drawableFinal);
                     }
 
                     InfoWindow infoWindow = new MyInfoWindow(map, userId, hasComment, FragmentiGapMap.this, mActivity);
@@ -498,6 +543,44 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         westLimitation = location.getLongitude() - LONGITUDE_LIMIT;
         BoundingBoxE6 bBox = new BoundingBoxE6(northLimitation + extraBounding, eastLimitation + extraBounding, southLimitation - extraBounding, westLimitation - extraBounding);
         map.setScrollableAreaLimit(bBox);
+    }
+
+    public static Bitmap getCircleBitmap(Bitmap bm) {
+
+        int sice = Math.min((bm.getWidth() / 4), (bm.getHeight()) / 4);
+
+        Bitmap bitmap = ThumbnailUtils.extractThumbnail(bm, sice, sice);
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        //Bitmap output = Bitmap.createBitmap(bitmap.getWidth() / 2, bitmap.getHeight() / 2, Bitmap.Config.ARGB_8888);
+
+        int halfWidth = bitmap.getWidth() / 2;
+        int halfWidth3 = bitmap.getWidth() / 3;
+        int halfHeight = bitmap.getHeight() / 2;
+        int halfHeight3 = bitmap.getHeight() / 3;
+
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xffff0000;
+        final Paint paint = new Paint();
+        //final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final Rect rect = new Rect(halfWidth - halfWidth3, halfHeight - halfHeight3, halfWidth + halfWidth3, halfHeight + halfHeight3);
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        paint.setDither(true);
+        paint.setFilterBitmap(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawOval(rectF, paint);
+
+        paint.setColor(Color.BLUE);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth((float) 4);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
     }
 
     /**
@@ -567,27 +650,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
             @Override
             public boolean onSingleTapConfirmed(final MotionEvent e, final MapView mapView) {
-                //if (firstTap == 0) {
-                //    firstTap = System.currentTimeMillis();
-                //    G.handler.postDelayed(new Runnable() {
-                //        @Override
-                //        public void run() {
-                //            firstTap = 0;
-                //        }
-                //    }, 60);
-                //} else {
-                //    if (System.currentTimeMillis() - firstTap < 50) {
-                //        //double tap
-                //    }
-                //    firstTap = 0;
-                //}
-
-                if (System.currentTimeMillis() - firstTap < 50) {
-                    //double tap
-                }
-                firstTap = System.currentTimeMillis();
-
-                //drawMark(e, mapView);
+                drawMark(e, mapView);
                 return true;
             }
 
@@ -656,12 +719,14 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         latestLocation = locationOverlay;
         map.getOverlays().add(locationOverlay);
 
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        Toast.makeText(context, "Update Position", Toast.LENGTH_SHORT).show();
-        //    }
-        //});
+        if (BuildConfig.DEBUG) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, "Update Position", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override
@@ -671,7 +736,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         }
 
         for (ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result result : results) {
-            if (G.userId != result.getUserId()) { // don't show my account
+            if (userId != result.getUserId()) { // don't show my account
                 drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
             }
         }
@@ -764,5 +829,53 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent motionEvent) {
+        if (map.getZoomLevel() == ZOOM_LEVEL_MAX) {
+            map.getController().zoomTo(ZOOM_LEVEL_NORMAL);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+        Log.i("TTT", "onShowPress");
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
     }
 }

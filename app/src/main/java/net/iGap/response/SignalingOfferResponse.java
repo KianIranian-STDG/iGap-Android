@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import android.util.Log;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
@@ -41,7 +40,6 @@ public class SignalingOfferResponse extends MessageHandler {
          * if client get response from caller do this actions
          */
         if (builder.getResponse().getId().isEmpty()) {
-            Log.i("WWW", "SignalingOfferResponse from callee");
             String callerSdp = builder.getCallerSdp();
             Long callerUserID = builder.getCallerUserId();
             net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type type = builder.getType();
@@ -58,10 +56,6 @@ public class SignalingOfferResponse extends MessageHandler {
             }
 
             realm.close();
-
-
-
-
         }
     }
 
