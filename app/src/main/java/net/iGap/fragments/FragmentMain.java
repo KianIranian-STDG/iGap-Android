@@ -869,11 +869,11 @@ public class FragmentMain extends Fragment implements OnComplete {
              */
             if (HelperCalander.isLanguagePersian) {
 
-                holder.txtLastMessage.setText(holder.txtLastMessage.getText().toString());
+                holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
 
                 holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));
 
-                holder.name.setText(holder.name.getText().toString());
+                holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
             }
 
 
@@ -918,6 +918,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                 txtPinIcon.setTypeface(G.typeface_Fontico);
 
                 txtUnread = (TextView) view.findViewById(R.id.cs_txt_unread_message);
+                txtUnread.setTypeface(G.typeface_IRANSansMobile);
+
                 mute = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_mute);
 
                 lastMessageSender = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message_sender);
