@@ -776,12 +776,14 @@ public class FragmentMain extends Fragment implements OnComplete {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int i) {
 
-
             final RealmRoom mInfo = holder.mInfo = getItem(i);
+            if (mInfo == null) {
+                return;
+            }
 
             final boolean isMyCloud = RealmRoom.isCloudRoom(mInfo.getId());
 
-            if (mInfo != null && mInfo.isValid()) {
+            if (mInfo.isValid()) {
 
                 setLastMessage(mInfo, holder, isMyCloud);
 
@@ -1025,8 +1027,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             } else {
 
                 if (mInfo.getLastMessage() != null) {
-                    String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(),
-                        mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                    String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
 
                     if (lastMessage == null) {
                         lastMessage = mInfo.getLastMessage().getMessage();
@@ -1056,8 +1057,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
 
-                                RealmRegisteredInfo realmRegisteredInfo =
-                                    G.getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
+                                RealmRegisteredInfo realmRegisteredInfo = G.getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
                                 if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
 
                                     String _name = realmRegisteredInfo.getDisplayName();
