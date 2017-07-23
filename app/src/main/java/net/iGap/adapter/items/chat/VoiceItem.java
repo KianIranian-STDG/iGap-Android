@@ -101,7 +101,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 @Override
                 public void complete(boolean result, String messageOne, final String MessageTow) {
 
-                    if (holder.musicSeekbar.getTag().equals(mMessage.messageID)) {
+                    if (holder.musicSeekbar.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
                         if (messageOne.equals("play")) {
                             holder.btnPlayMusic.setText(R.string.md_play_arrow);
                         } else if (messageOne.equals("pause")) {
@@ -159,12 +159,14 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                             MusicPlayer.playAndPause();
                         } else {
                             MusicPlayer.startPlayer(holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+                            messageClickListener.onPlayMusic(holder.mMessageID);
                         }
                     } else {
 
                         MusicPlayer.stopSound();
                         MusicPlayer.onCompleteChat = holder.complete;
                         MusicPlayer.startPlayer(holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+                        messageClickListener.onPlayMusic(holder.mMessageID);
 
                         holder.mTimeMusic = MusicPlayer.musicTime;
                     }

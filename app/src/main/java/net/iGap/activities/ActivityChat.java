@@ -3079,7 +3079,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     public void onDownloadAllEqualCashId(String cashId, String messageID) {
 
-        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+        int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+        for (int i = start; i < mAdapter.getItemCount() && i < start + 6; i++) {
             try {
                 AbstractMessage item = mAdapter.getAdapterItem(i);
                 if (item.mMessage.hasAttachment()) {
@@ -3157,6 +3159,62 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     realm.close();
                 }
             });
+        }
+    }
+
+    @Override
+    public void onPlayMusic(String messageId) {
+
+        for (int i = mAdapter.getItemCount() - 1; i >= 0; i--) {
+
+            AbstractMessage item = mAdapter.getAdapterItem(i);
+
+            try {
+
+                if (item.mMessage.messageID.equals(messageId)) {
+
+                    try {
+
+                        int j = i + 1;
+
+                        AbstractMessage nextItem = mAdapter.getAdapterItem(j);
+                        if (nextItem instanceof TimeItem || nextItem instanceof UnreadMessage) {
+                            j++;
+                            nextItem = mAdapter.getAdapterItem(j);
+                        }
+
+                        if (nextItem instanceof VoiceItem || nextItem instanceof AudioItem) {
+
+                            ProtoGlobal.RoomMessageType _messageType = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getMessageType() : nextItem.mMessage.messageType;
+                            String _cashid = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getCacheId() : nextItem.mMessage.getAttachment().cashID;
+                            String _name = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getName() : nextItem.mMessage.getAttachment().name;
+                            String _token = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getToken() : nextItem.mMessage.getAttachment().token;
+                            Long _size = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getSize() : nextItem.mMessage.getAttachment().size;
+
+                            if (_cashid == null) {
+                                return;
+                            }
+
+                            ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+
+                            final String _path = AndroidUtils.getFilePathWithCashId(_cashid, _name, _messageType);
+
+                            if (_token != null && _token.length() > 0 && _size > 0) {
+
+                                HelperDownloadFile.startDownload(nextItem.mMessage.messageID, _token, _cashid, _name, _size, selector, _path, 0, null);
+                            }
+                        }
+
+                        mAdapter.notifyItemChanged(j);
+                    } catch (Exception e) {
+
+                    }
+
+                    break;
+                }
+            } catch (Exception e) {
+
+            }
         }
     }
 
@@ -3543,7 +3601,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-                    onDownloadAllEqualCashId(_cashid, String.valueOf(0));
+
 
                     final String _path = AndroidUtils.getFilePathWithCashId(_cashid, _name, _messageType);
 
@@ -3584,6 +3642,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             }
                         });
                     }
+
+                    onDownloadAllEqualCashId(_cashid, message.messageID);
 
                 }
             }

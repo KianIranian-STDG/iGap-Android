@@ -1413,6 +1413,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
+        boolean _isDownloading = HelperDownloadFile.isDownLoading(attachment.getCacheId());
+
         final MessageProgress progressBar = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         AppUtils.setProgresColor(progressBar.progressBar);
 
@@ -1426,9 +1428,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Long size = attachment.getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-        if (!HelperDownloadFile.isDownLoading(attachment.getCacheId())) {
-            messageClickListener.onDownloadAllEqualCashId(attachment.getCacheId(), mMessage.messageID);
-        }
 
         ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
 
@@ -1480,6 +1479,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 }
             });
+
+            if (!_isDownloading) {
+                messageClickListener.onDownloadAllEqualCashId(attachment.getCacheId(), mMessage.messageID);
+            }
         }
     }
 

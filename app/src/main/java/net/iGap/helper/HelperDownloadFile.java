@@ -206,12 +206,17 @@ public class HelperDownloadFile {
             item = list.get(primaryKey);
 
             boolean needAdd = true;
-            for (StructListener structListener : item.structListeners) {
 
-                if (structListener.messageId.equals(messageID)) {
-                    needAdd = false;
-                    structListener.listener = update;
-                    break;
+            if (update == null) {
+                needAdd = false;
+            } else {
+                for (StructListener structListener : item.structListeners) {
+
+                    if (structListener.messageId.equals(messageID)) {
+                        needAdd = false;
+                        structListener.listener = update;
+                        break;
+                    }
                 }
             }
 

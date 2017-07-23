@@ -150,7 +150,7 @@ public class AvlDirectCall extends LinearLayout {
         textView.setTextSize(context.getResources().getDimension(R.dimen.dp10));
         LinearLayoutCompat.LayoutParams lp = new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(lp);
-        textView.setPadding(0, -(ViewMaker.i_Dp(R.dimen.dp4)), 0, -(ViewMaker.i_Dp(R.dimen.dp4)));
+        textView.setPadding(0, -(ViewMaker.i_Dp(R.dimen.dp6)), 0, -(ViewMaker.i_Dp(R.dimen.dp6)));
         textView.setText(R.string.md_expand_arrow);
         textView.setVisibility(INVISIBLE);
         textView.setTypeface(G.typeface_Fontico);
