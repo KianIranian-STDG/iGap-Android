@@ -39,6 +39,10 @@ public class HelperClientCondition {
         Realm realm = Realm.getDefaultInstance();
         ProtoClientCondition.ClientCondition.Builder clientCondition = ProtoClientCondition.ClientCondition.newBuilder();
 
+        if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll().size() == 0) {
+            return clientCondition;
+        }
+
         RealmResults<RealmClientCondition> clientConditionList;
 
         if (roomId != null) {
@@ -54,8 +58,14 @@ public class HelperClientCondition {
              * it is better that client just create RealmClientCondition for rooms that need really.
              */
             RealmQuery<RealmClientCondition> conditionQuery = realm.where(RealmClientCondition.class);
-            for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
-                conditionQuery.equalTo(RealmClientConditionFields.ROOM_ID, realmRoom.getId()).or();
+            if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll().size() > 1) {
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
+                    conditionQuery.equalTo(RealmClientConditionFields.ROOM_ID, realmRoom.getId()).or();
+                }
+            } else {
+                for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
+                    conditionQuery.equalTo(RealmClientConditionFields.ROOM_ID, realmRoom.getId());
+                }
             }
             clientConditionList = conditionQuery.findAll();
         }
