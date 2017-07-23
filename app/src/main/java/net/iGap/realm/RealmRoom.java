@@ -362,17 +362,6 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
-    public static boolean isCloudRoom(long roomId) {
-        boolean result = false;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == G.userId) {
-            result = true;
-        }
-        realm.close();
-        return result;
-    }
-
     /**
      * check updater author for detect that updater is another device for
      * this account and finally update unread count if another account

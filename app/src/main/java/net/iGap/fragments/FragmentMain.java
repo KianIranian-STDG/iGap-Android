@@ -776,12 +776,21 @@ public class FragmentMain extends Fragment implements OnComplete {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int i) {
 
+
             final RealmRoom mInfo = holder.mInfo = getItem(i);
             if (mInfo == null) {
                 return;
             }
 
-            final boolean isMyCloud = RealmRoom.isCloudRoom(mInfo.getId());
+            final boolean isMyCloud;
+
+            if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == G.userId) {
+                isMyCloud = true;
+            } else {
+                isMyCloud = false;
+            }
+
+
 
             if (mInfo.isValid()) {
 
@@ -811,6 +820,15 @@ public class FragmentMain extends Fragment implements OnComplete {
                     holder.txtClude.setVisibility(View.VISIBLE);
                     holder.image.setVisibility(View.GONE);
                 } else {
+
+                    if (holder.txtClude != null) {
+                        holder.txtClude.setVisibility(View.GONE);
+                    }
+
+                    if (holder.image.getVisibility() == View.GONE) {
+                        holder.image.setVisibility(View.VISIBLE);
+                    }
+
                     setAvatar(mInfo, holder.image);
                 }
 

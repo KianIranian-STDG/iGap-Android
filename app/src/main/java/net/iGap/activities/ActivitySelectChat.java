@@ -655,7 +655,17 @@ public class ActivitySelectChat extends ActivityEnhanced {
 
             final RealmRoom mInfo = holder.mInfo = getItem(i);
 
-            final boolean isMyCloud = RealmRoom.isCloudRoom(mInfo.getId());
+            if (mInfo == null) {
+                return;
+            }
+
+            final boolean isMyCloud;
+
+            if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == G.userId) {
+                isMyCloud = true;
+            } else {
+                isMyCloud = false;
+            }
 
             if (mInfo != null && mInfo.isValid()) {
 
@@ -686,6 +696,14 @@ public class ActivitySelectChat extends ActivityEnhanced {
                     holder.txtClude.setVisibility(View.VISIBLE);
                     holder.image.setVisibility(View.GONE);
                 } else {
+                    if (holder.txtClude != null) {
+                        holder.txtClude.setVisibility(View.GONE);
+                    }
+
+                    if (holder.image.getVisibility() == View.GONE) {
+                        holder.image.setVisibility(View.VISIBLE);
+                    }
+
                     setAvatar(mInfo, holder.image);
                 }
 

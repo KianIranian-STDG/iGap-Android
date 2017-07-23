@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
 
 public class AvlDirectCall extends LinearLayout {
 
@@ -53,7 +54,7 @@ public class AvlDirectCall extends LinearLayout {
 
     private void init(Context context) {
 
-        int time = 400;
+        int time = 250;
 
         final TextView txtDirect2 = (TextView) makeHeaderTextView(context);
         final TextView txtDirect3 = (TextView) makeHeaderTextView(context);
@@ -80,6 +81,7 @@ public class AvlDirectCall extends LinearLayout {
             public void onAnimationEnd(Animation animation) {
 
                 txtDirect3.startAnimation(fadeIn3);
+                txtDirect4.setVisibility(VISIBLE);
             }
 
             @Override
@@ -97,6 +99,7 @@ public class AvlDirectCall extends LinearLayout {
             @Override
             public void onAnimationEnd(Animation animation) {
                 txtDirect2.startAnimation(fadeIn2);
+                txtDirect3.setVisibility(VISIBLE);
             }
 
             @Override
@@ -114,12 +117,15 @@ public class AvlDirectCall extends LinearLayout {
             @Override
             public void onAnimationEnd(Animation animation) {
 
+                txtDirect4.setVisibility(INVISIBLE);
+                txtDirect3.setVisibility(INVISIBLE);
+
                 txtDirect4.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         txtDirect4.startAnimation(fadeIn4);
                     }
-                }, 1000);
+                }, 750);
             }
 
             @Override
@@ -141,11 +147,12 @@ public class AvlDirectCall extends LinearLayout {
 
         TextView textView = new TextView(context);
         textView.setTextColor(Color.parseColor("#ffffff"));
-        textView.setTextSize(context.getResources().getDimension(R.dimen.dp12));
+        textView.setTextSize(context.getResources().getDimension(R.dimen.dp10));
         LinearLayoutCompat.LayoutParams lp = new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(lp);
+        textView.setPadding(0, -(ViewMaker.i_Dp(R.dimen.dp4)), 0, -(ViewMaker.i_Dp(R.dimen.dp4)));
         textView.setText(R.string.md_expand_arrow);
-        // textView.setVisibility(INVISIBLE);
+        textView.setVisibility(INVISIBLE);
         textView.setTypeface(G.typeface_Fontico);
 
 
