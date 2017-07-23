@@ -37,14 +37,12 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -95,7 +93,6 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
-import net.iGap.module.FileUtils;
 import net.iGap.module.IntentRequests;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
@@ -110,7 +107,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
-import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserProfileCheckUsername;
@@ -1233,137 +1229,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        final long sizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
-        final long sizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
-        final long sizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
-        final long sizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
 
-        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio;
+        ViewGroup ltDataStorage = (ViewGroup) findViewById(R.id.st_layout_dataStorage);
 
-        txtSizeClearCach = (TextView) findViewById(R.id.st_txt_clearCache);
-        txtSizeClearCach.setText(FileUtils.formatFileSize(total));
-
-        RelativeLayout lyCleanUp = (RelativeLayout) findViewById(R.id.st_layout_cleanup);
-        lyCleanUp.setOnClickListener(new View.OnClickListener() {
+        ltDataStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                final MaterialDialog inDialog = new MaterialDialog.Builder(ActivitySetting.this).customView(R.layout.dialog_content_custom, true).build();
-                View view = inDialog.getCustomView();
+                startActivity(new Intent(ActivitySetting.this, ActivityManageSpace.class));
 
-                inDialog.show();
-
-                TextView txtTitle = (TextView) view.findViewById(R.id.txtDialogTitle);
-                txtTitle.setText(getResources().getString(R.string.clean_up_chat_rooms));
-
-                TextView iconTitle = (TextView) view.findViewById(R.id.iconDialogTitle);
-                iconTitle.setText(R.string.md_clean_up);
-
-                TextView txtContent = (TextView) view.findViewById(R.id.txtDialogContent);
-                txtContent.setText(R.string.do_you_want_to_clean_all_data_in_chat_rooms);
-
-                TextView txtCancel = (TextView) view.findViewById(R.id.txtDialogCancel);
-                TextView txtOk = (TextView) view.findViewById(R.id.txtDialogOk);
-
-                txtOk.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        inDialog.dismiss();
-                        RealmRoomMessage.ClearAllMessage(true, 0);
-                    }
-                });
-
-                txtCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        inDialog.dismiss();
-                    }
-                });
-
-            }
-        });
-
-         /*
-          clear all video , image , document cache
-         */
-        LinearLayout ltClearCache = (LinearLayout) findViewById(R.id.st_layout_clearCache);
-        ltClearCache.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                final long sizeFolderPhotoDialog = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
-                final long sizeFolderVideoDialog = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
-                final long sizeFolderDocumentDialog = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
-                final long sizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
-
-                boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_Clear_Cache)).customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText(getResources().getString(R.string.st_title_Clear_Cache)).show();
-
-                View view = dialog.getCustomView();
-
-                final File filePhoto = new File(G.DIR_IMAGES);
-                assert view != null;
-                TextView photo = (TextView) view.findViewById(R.id.st_txt_sizeFolder_photo);
-                photo.setText(FileUtils.formatFileSize(sizeFolderPhotoDialog));
-
-                final CheckBox checkBoxPhoto = (CheckBox) view.findViewById(R.id.st_checkBox_photo);
-                final File fileVideo = new File(G.DIR_VIDEOS);
-                TextView video = (TextView) view.findViewById(R.id.st_txt_sizeFolder_video);
-                video.setText(FileUtils.formatFileSize(sizeFolderVideoDialog));
-
-                final CheckBox checkBoxVideo = (CheckBox) view.findViewById(R.id.st_checkBox_video_dialogClearCash);
-
-                final File fileDocument = new File(G.DIR_DOCUMENT);
-                TextView document = (TextView) view.findViewById(R.id.st_txt_sizeFolder_document_dialogClearCash);
-                document.setText(FileUtils.formatFileSize(sizeFolderDocumentDialog));
-
-                final CheckBox checkBoxDocument = (CheckBox) view.findViewById(R.id.st_checkBox_document_dialogClearCash);
-
-                final File fileAudio = new File(G.DIR_AUDIOS);
-                TextView txtAudio = (TextView) view.findViewById(R.id.st_txt_audio_dialogClearCash);
-                txtAudio.setText(FileUtils.formatFileSize(sizeFolderAudio));
-                final CheckBox checkBoxAudio = (CheckBox) view.findViewById(R.id.st_checkBox_audio_dialogClearCash);
-
-                long rTotalSize = sizeFolderPhotoDialog + sizeFolderVideoDialog + sizeFolderDocumentDialog + sizeFolderAudio;
-                final TextView txtTotalSize = (TextView) view.findViewById(R.id.st_txt_totalSize_dialogClearCash);
-                txtTotalSize.setText(FileUtils.formatFileSize(rTotalSize));
-
-
-                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if (checkBoxPhoto.isChecked()) {
-                            for (File file : filePhoto.listFiles()) {
-                                if (!file.isDirectory()) file.delete();
-                            }
-                        }
-                        if (checkBoxVideo.isChecked()) {
-                            for (File file : fileVideo.listFiles()) {
-                                if (!file.isDirectory()) file.delete();
-                            }
-                        }
-                        if (checkBoxDocument.isChecked()) {
-                            for (File file : fileDocument.listFiles()) {
-                                if (!file.isDirectory()) file.delete();
-                            }
-                        }
-                        if (checkBoxAudio.isChecked()) {
-                            for (File file : fileAudio.listFiles()) {
-                                if (!file.isDirectory()) file.delete();
-                            }
-                        }
-
-                        long afterClearSizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
-                        long afterClearSizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
-                        long afterClearSizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
-                        long afterClearSizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
-                        long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument + afterClearSizeFolderAudio;
-                        txtSizeClearCach.setText(FileUtils.formatFileSize(afterClearTotal));
-                        txtTotalSize.setText(FileUtils.formatFileSize(afterClearTotal));
-                        dialog.dismiss();
-                    }
-                });
             }
         });
 
@@ -1629,33 +1503,33 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize))
-                        .titleGravity(GravityEnum.START)
-                        .titleColor(getResources().getColor(android.R.color.black))
-                        .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
-                        .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    .titleGravity(GravityEnum.START)
+                    .titleColor(getResources().getColor(android.R.color.black))
+                    .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
+                    .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override
+                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                if (text != null) {
-                                    txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                            if (text != null) {
+                                txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
 
-                                    if (HelperCalander.isLanguagePersian) {
-                                        txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
-                                    }
+                                if (HelperCalander.isLanguagePersian) {
+                                    txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
                                 }
-                                poRbDialogTextSize = which;
-                                int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-                                editor.apply();
-
-                                StartupActions.textSizeDetection(sharedPreferences);
-
-                                return false;
                             }
-                        })
-                        .positiveText(getResources().getString(R.string.B_ok))
-                        .show();
+                            poRbDialogTextSize = which;
+                            int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                            editor.apply();
+
+                            StartupActions.textSizeDetection(sharedPreferences);
+
+                            return false;
+                        }
+                    })
+                    .positiveText(getResources().getString(R.string.B_ok))
+                    .show();
             }
         });
 
@@ -1876,39 +1750,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             }
         });
 
-        final TextView txtSubKeepMedia = (TextView) findViewById(R.id.st_txt_sub_keepMedia);
-        ViewGroup ltKeepMedia = (ViewGroup) findViewById(R.id.st_layout_keepMedia);
-        TextView txtKeepMedia = (TextView) findViewById(R.id.st_txt_keepMedia);
-        boolean isForever = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
-        Log.i("KKKKKKK", "isForever: " + isForever);
-        if (isForever) {
-            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
-        } else {
-            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
-        }
-
-        ltKeepMedia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new MaterialDialog.Builder(ActivitySetting.this).title(R.string.st_keepMedia).content(R.string.st_dialog_content_keepMedia).positiveText(getResources().getString(R.string.keep_media_forever)).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
-                        editor.apply();
-                        txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
-                    }
-                }).negativeText(getResources().getString(R.string.keep_media_1week)).onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
-                        editor.apply();
-                        txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
-                    }
-                }).show();
-            }
-        });
 
         TextView txtAutoDownloadData = (TextView) findViewById(R.id.st_txt_autoDownloadData);
         txtAutoDownloadData.setOnClickListener(new View.OnClickListener() {
@@ -1923,7 +1764,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 5);
 
                 new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                        KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
+                    KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -1974,7 +1815,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5);
 
                 new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                        KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
+                    KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -2028,7 +1869,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
 
                 new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                        KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
+                    KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {

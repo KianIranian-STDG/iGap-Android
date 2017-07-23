@@ -6,7 +6,6 @@
     package="net.iGap"
     tools:replace="allowBackup, label">
 
-
   <uses-feature android:name="android.hardware.camera" />
   <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -29,20 +28,20 @@
   <uses-permission android:name="android.permission.READ_LOGS" />
   <!-- WebRTC Start hint:other permissions was exist in before codes -->
   <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-  <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
   <uses-feature
       android:glEsVersion="0x00020000"
       android:required="true" />
-  <!-- WebRTC End-->
 
-
+  <!-- WebRTC End -->
   <application
       android:name=".G"
       android:configChanges="locale"
       android:icon="@mipmap/icon"
       android:largeHeap="true"
       android:supportsRtl="true"
+      android:manageSpaceActivity=".activities.ActivityManageSpace"
       android:theme="@style/AppTheme">
     <receiver android:name=".module.MusicPlayer$customButtonListener" />
     <receiver android:name=".helper.HelperNotificationAndBadge$RemoteActionReceiver" />
@@ -51,18 +50,15 @@
         android:name=".activities.ActivityChat"
         android:screenOrientation="portrait"
         android:windowSoftInputMode="stateAlwaysHidden" />
-
     <activity
         android:name=".activities.ActivityChatBackground"
         android:configChanges="keyboard|keyboardHidden|screenSize|locale" />
-
     <activity
         android:name=".activities.ActivityShearedMedia"
         android:configChanges="keyboard|keyboardHidden|screenSize|locale" />
     <activity
         android:name=".activities.ActivityPaint"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-
     <activity
         android:name=".activities.ActivityMediaPlayer"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
@@ -81,24 +77,20 @@
         android:name=".activities.ActivityComment"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
     <activity android:name=".activities.ActivityTrimVideo" />
-
     <activity
         android:name=".activities.Activity_QrPayment"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
-
       <intent-filter>
         <action android:name="com.company.package.FOO" />
+
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
-
-
     <activity
         android:name=".activities.ActivityRatingBar"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:theme="@style/Theme.AppCompat.Translucent"
         android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-
     <activity
         android:name=".activities.ActivityCall"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
@@ -109,19 +101,16 @@
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
         <data android:scheme="http" android:host="@string/host" />
-      </intent-filter>  -->
-
+      </intent-filter>
+            -->
 
     </activity>
-
     <activity
         android:name=".activities.Activity_charge_balance"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-
     <activity
         android:name=".activities.Activity_Transfer_mony"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-
     <activity
         android:name=".activities.Activity_CreateQRCode"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
@@ -134,17 +123,14 @@
     <activity
         android:name=".activities.Activity_transactionHistory"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-
     <activity
         android:name=".activities.ActivityQrCodeNewDevice"
-        android:theme="@style/Theme.AppCompat.Translucent"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
+        android:theme="@style/Theme.AppCompat.Translucent" />
     <activity
         android:name=".activities.ActivityMain"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:theme="@style/AppThemeTranslucent">
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
 
@@ -219,7 +205,7 @@
     <activity
         android:name=".activities.ActivityProfile"
         android:configChanges="keyboard|keyboardHidden|screenSize|locale"
-        android:windowSoftInputMode="adjustPan|stateHidden"></activity>
+        android:windowSoftInputMode="adjustPan|stateHidden" />
     <activity android:name=".activities.ActivityCrop" />
     <activity android:name=".activities.ActivitySettingNotification" />
     <activity
@@ -230,7 +216,6 @@
     <activity
         android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
         android:theme="@style/AppTheme22" />
-
     <activity android:name=".activities.ActivitySetting" />
     <activity
         android:name=".activities.ActivityContactsProfile"
@@ -281,7 +266,7 @@
       You need a different API key for each encryption key, including the release key that is used to
       sign the APK for publishing.
       You can define the keys for the debug and release targets in src/debug/ and src/release/.
- -->
+        -->
     <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="@string/google_maps_key" />
@@ -293,7 +278,7 @@
         <action android:name="cat.ereza.customactivityoncrash.ERROR" />
       </intent-filter>
     </activity>
-
+    <activity android:name=".activities.ActivityManageSpace"></activity>
   </application>
 
 </manifest>

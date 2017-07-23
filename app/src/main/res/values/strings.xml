@@ -845,6 +845,7 @@
   <string name="selected_color_can_not_set_on_yout_device">Selected color cannot be set on your device</string>
   <string name="keep_media_forever">Forever</string>
   <string name="keep_media_1week">1 Week</string>
+  <string name="keep_media">Keep Media</string>
   <string name="file_save_to_download_folder">"File save to download folder"</string>
   <string name="first_download_file">First download file</string>
   <string name="file_save_to_galary_folder">File save to galary folder</string>
@@ -1002,6 +1003,10 @@
 
   <string name="audio">Audio</string>
   <string name="total_size">Total Size</string>
+
+  <string name="manage_spacing">Manage Spacing</string>
+  <string name="local_database">Local Database</string>
+  <string name="data_storage">Data Storage</string>
 
 
 </resources>

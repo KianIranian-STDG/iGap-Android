@@ -577,45 +577,7 @@
             />
 
 
-        <LinearLayout
-            android:id="@+id/st_layout_clearCache"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:orientation="horizontal"
-            >
 
-          <TextView
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingLeft="@dimen/dp16"
-              android:paddingRight="@dimen/dp16"
-              android:paddingTop="@dimen/dp8"
-              android:text="@string/st_title_Clear_Cache"
-              android:textColor="@color/black_register"
-              android:textSize="@dimen/dp15"
-              android:textStyle="normal"
-              fontPath="fonts/IRANSansMobile.ttf"
-              />
-
-
-          <TextView
-              android:id="@+id/st_txt_clearCache"
-              android:layout_width="wrap_content"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:paddingLeft="@dimen/dp16"
-              android:paddingRight="@dimen/dp16"
-              android:text="0 KB"
-              android:textColor="@color/toolbar_background"
-              android:textSize="@dimen/dp15"
-              android:textStyle="normal"
-              fontPath="fonts/IRANSansMobile.ttf"
-              />
-
-
-        </LinearLayout>
 
 
         <View
@@ -626,7 +588,7 @@
 
 
         <RelativeLayout
-            android:id="@+id/st_layout_cleanup"
+            android:id="@+id/st_layout_dataStorage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
             >
@@ -641,7 +603,7 @@
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp8"
-              android:text="@string/clean_up_chat_rooms"
+              android:text="@string/data_storage"
               android:textColor="@color/black_register"
               android:textSize="@dimen/dp15"
               android:textStyle="normal"
@@ -1298,54 +1260,6 @@
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             />
 
-
-        <LinearLayout
-            android:id="@+id/st_layout_keepMedia"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp52"
-            android:orientation="horizontal"
-            >
-
-
-          <TextView
-              android:id="@+id/st_txt_keepMedia"
-              android:layout_width="0dp"
-              android:layout_height="@dimen/dp48"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingLeft="@dimen/dp16"
-              android:paddingRight="@dimen/dp16"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_keepMedia"
-              android:textColor="@color/black_register"
-              android:textSize="@dimen/dp15"
-              android:textStyle="normal"
-              android:visibility="visible"
-              android:singleLine="true"
-              fontPath="fonts/IRANSansMobile.ttf"
-              />
-
-          <TextView
-              android:id="@+id/st_txt_sub_keepMedia"
-              android:layout_width="wrap_content"
-              android:layout_height="match_parent"
-              android:gravity="center_vertical"
-              android:paddingLeft="@dimen/dp16"
-              android:paddingRight="@dimen/dp16"
-              android:text="1Week"
-              android:textColor="@color/toolbar_background"
-              android:textSize="@dimen/dp15"
-              android:textStyle="normal"
-              fontPath="fonts/IRANSansMobile.ttf"
-              />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/background_editText"
-            android:visibility="visible"
-            />
 
         <TextView
             android:id="@+id/st_txt_autoDownloadData"
