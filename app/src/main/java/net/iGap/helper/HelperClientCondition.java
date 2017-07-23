@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import android.util.Log;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmQuery;
@@ -144,6 +145,7 @@ public class HelperClientCondition {
                 }
 
                 clientCondition.addRooms(room);
+                Log.i("CLI", "room : " + room);
                 clearOffline(realmClientCondition, realm);
             }
         }

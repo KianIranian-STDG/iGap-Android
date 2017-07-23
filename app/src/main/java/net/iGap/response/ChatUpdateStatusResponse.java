@@ -86,6 +86,7 @@ public class ChatUpdateStatusResponse extends MessageHandler {
 
                     if (roomMessage != null) {
                         roomMessage.setStatus(chatUpdateStatus.getStatus().toString());
+                        roomMessage.setStatusVersion(chatUpdateStatus.getStatusVersion());
                         realm.copyToRealmOrUpdate(roomMessage);
 
                         if (G.chatUpdateStatusUtil != null) {
