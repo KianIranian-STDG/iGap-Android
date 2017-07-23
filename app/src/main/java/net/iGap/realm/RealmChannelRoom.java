@@ -16,6 +16,7 @@ import io.realm.RealmObject;
 import net.iGap.G;
 import net.iGap.helper.HelperString;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 
 public class RealmChannelRoom extends RealmObject {
@@ -72,6 +73,7 @@ public class RealmChannelRoom extends RealmObject {
                 if (channelName != null) {
                     realmRoom.setTitle(channelName);
                 }
+                realmRoom.setType(RoomType.CHANNEL);
                 RealmChannelRoom realmChannelRoom = realm.createObject(RealmChannelRoom.class);
                 realmChannelRoom.setInviteLink(inviteLink);
 
