@@ -1008,4 +1008,9 @@
   <string name="audio">فایل صوتی</string>
   <string name="total_size">حجم کل</string>
 
+  <string name="manage_spacing">Manage Spacing</string>
+  <string name="local_database">Local Database</string>
+  <string name="data_storage">Data Storage</string>
+  <string name="keep_media">Keep Media</string>
+
 </resources>
