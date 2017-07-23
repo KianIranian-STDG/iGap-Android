@@ -4644,10 +4644,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                String filename = listPathString.get(0).substring(listPathString.get(0).lastIndexOf("/") + 1);
                 if (listPathString == null) return;
                 if (listPathString.size() < 1) return;
-
+                if (listPathString.get(0) == null) return;
+                String filename = listPathString.get(0).substring(listPathString.get(0).lastIndexOf("/") + 1);
                 switch (requestCode) {
                     case AttachFile.request_code_TAKE_PICTURE:
                         txtFileNameForSend.setText(getString(R.string.image_selected_for_send) + "\n" + filename);
@@ -4719,7 +4719,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
+                if (listPathString == null) return;
+                if (listPathString.size() < 1) return;
+                if (listPathString.get(0) == null) return;
                 if (ll_attach_text == null) { // have null error , so reInitialize for avoid that
 
                     ll_attach_text = (LinearLayout) findViewById(R.id.ac_ll_attach_text);

@@ -1321,11 +1321,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if (attachment.isFileExistsOnLocal()) {
 
-                if (progress.getVisibility() == View.VISIBLE) {
-                    progress.setVisibility(View.GONE);
-                    onLoadThumbnailFromLocal(holder, getCacheId(mMessage), attachment.getLocalFilePath(), LocalFileType.FILE);
-                }
-
                 String _status = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getStatus() : mMessage.status;
                 ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
 
