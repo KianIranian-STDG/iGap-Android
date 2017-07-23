@@ -5400,10 +5400,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         public void run() {
 
                             for (String path : listPathString) {
-                                if (!path.toLowerCase().endsWith(".gif")) {
+                                //if (!path.toLowerCase().endsWith(".gif")) {
                                     String localpathNew = attachFile.saveGalleryPicToLocal(path);
                                     sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localpathNew);
-                                }
+                                //}
                             }
 
                         }
