@@ -93,6 +93,7 @@ public class RegisteredContactsFragment extends Fragment {
     private boolean isCallAction = false;
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
     private FastItemAdapter fastItemAdapter;
+    private ProgressBar prgWaitingLiadList;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -138,6 +139,8 @@ public class RegisteredContactsFragment extends Fragment {
         //}
 
         //set interface for get callback here
+
+        prgWaitingLiadList = (ProgressBar) view.findViewById(R.id.prgWaiting_loadList);
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
         AppUtils.setProgresColler(prgWaiting);
@@ -588,6 +591,13 @@ public class RegisteredContactsFragment extends Fragment {
 
     private class LongOperation extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
 
+
+        @Override
+        protected void onPreExecute() {
+
+            prgWaitingLiadList.setVisibility(View.VISIBLE);
+        }
+
         @Override
         protected ArrayList<StructListOfContact> doInBackground(Void... params) {
             ArrayList<StructListOfContact> listContact = Contacts.getListOfContact();
@@ -603,14 +613,13 @@ public class RegisteredContactsFragment extends Fragment {
             for (int i = 0; i < structListOfContacts.size(); i++) {
                 fastItemAdapter.add(new AdapterTest(structListOfContacts.get(i).getDisplayName()).withIdentifier(100 + i));
             }
+            prgWaitingLiadList.setVisibility(View.GONE);
             super.onPostExecute(structListOfContacts);
         }
 
 
 
-        @Override
-        protected void onPreExecute() {
-        }
+
 
     }
 }

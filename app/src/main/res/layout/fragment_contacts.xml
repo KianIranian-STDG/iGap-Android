@@ -207,7 +207,7 @@
 
     </net.iGap.module.MyAppBarLayout>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true"
@@ -226,14 +226,26 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fadeScrollbars="false"
             android:paddingBottom="@dimen/dp6"
-            android:scrollbarSize="@dimen/dp4"
-            android:scrollbarStyle="outsideOverlay"
-            android:scrollbarThumbVertical="@color/gray_4c"
-            android:scrollbars="vertical"
             />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background_editText"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/list_contacts"
+            android:gravity="center"
+            android:padding="@dimen/dp10"
+            android:textColor="@color/green"
+            android:textSize="@dimen/dp18"
+            android:textStyle="bold"
+            fontPath="fonts/IRANSansMobile_Bold.ttf"
+            />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -245,8 +257,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
+
+        <ProgressBar
+            android:id="@+id/prgWaiting_loadList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:indeterminate="true"
+            android:visibility="visible"
+            />
       </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
   </android.support.design.widget.CoordinatorLayout>
 
