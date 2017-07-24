@@ -445,9 +445,11 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             public void onClick(View view) {
                 Realm realm = Realm.getDefaultInstance();
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
-                    FragmentShowAvatars.appBarLayout = fab;
+
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
+                    fragment.appBarLayout = fab;
+
                     ActivityChannelProfile.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
                 }
                 realm.close();

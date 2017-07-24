@@ -1143,8 +1143,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             public void onComplete(RippleView rippleView) {
 
                 if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
-                    FragmentShowAvatars.appBarLayout = fab;
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
+                    fragment.appBarLayout = fab;
                     ActivitySetting.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragment, null).commit();
                 }
             }

@@ -110,7 +110,7 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
     public static OnComplete onComplete;
     private Realm realm;
 
-    public static View appBarLayout;
+    public View appBarLayout;
 
     public static FragmentShowAvatars newInstance(long peerId, FragmentShowAvatars.From from) {
         Bundle args = new Bundle();
