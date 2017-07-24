@@ -225,7 +225,7 @@
   <string name="st_title_reset">"بازنشانی"</string>
   <string name="st_reset_all_notification">"بازنشانی همهٔ اعلانات"</string>
   <string name="st_text_reset_all_notification">"تمامی تنظیمات معمول اعلانات را برای همهٔ مخاطبین و گروه های خود خنثی کنید."</string>
-  <string name="st_dialog_reset_all_notification">"آیا مطئنید که می‌خواهید تمامی تنظیمات معمول اعلانات را خنثی کنید؟"</string>
+  <string name="st_dialog_reset_all_notification">"آیا مایلید تمامی تنظیمات اعلانات برنامه را به حالت اولیه بازگردانید؟"</string>
   <string name="st_dialog_reset_all_notification_yes">"بلی"</string>
   <string name="st_dialog_reset_all_notification_no">"خیر"</string>
   <string name="st_title_Background">"پس زمينهٔ گفتگو"</string>
@@ -342,7 +342,7 @@
   <string name="please_enter_group_description">"لطفاً توضیح مختصری برای گروه وارد کنید."</string>
   <string name="do_you_want_to_delete_this_group">"آیا از حذف این گفتگو اطمینان دارید؟"</string>
   <string name="do_you_want_to_set_admin_role_to_member">"آیا از گرفتن نقش مدیر از این عضو اطمینان دارید؟"</string>
-  <string name="do_you_want_to_kick_this_member">"آیا از بیرون انداختن این عضو(ها) اطمینان دارید؟"</string>
+  <string name="do_you_want_to_kick_this_member">"آیا از بیرون انداختن این عضو اطمینان دارید؟"</string>
   <string name="do_you_want_to_set_modereator_role_to_member">"آیا از گرفتن نقش ناظر از این عضو اطمینان دارید؟"</string>
   <string name="waiting_for_network">"در انتظار اتصال به اینترنت"</string>
   <string name="connecting">"در حال برقراری ارتباط"</string>
@@ -786,7 +786,7 @@
   <string name="array_delete_photo_group">حذف عکس</string>
   <string name="group_link_hint_revoke">لینک دعوت گروه</string>
   <string name="channel_title_convert_to_private">تبدیل به کانال خصوصی</string>
-  <string name="channel_text_convert_to_private">آیا می خواهید این گروه را به گروه خصوصی تبدیل کنید؟</string>
+  <string name="channel_text_convert_to_private">آیا می خواهید این کانال را به کانال خصوصی تبدیل کنید؟</string>
   <string name="channel_title_convert_to_public">تبدیل به کانال عمومی</string>
   <string name="channel_text_convert_to_public">آیا می خواهید این کانال را به کانال عمومی تبدیل کنید؟</string>
   <string name="channel_title_channel_set_username">تخصیص لینک عمومی کانال</string>
@@ -868,7 +868,7 @@
   <string name="optional">اختیاری</string>
   <string name="desc_group_chanel">توضیحات (اختیاری)</string>
 
-  <string name="set_additional_password">رمزعبور را تعیین کنید </string>
+  <string name="set_additional_password">تعیین رمزعبور</string>
   <string name="two_step_verification_title">فعال سازی دو مرحله ای </string>
   <string name="two_step_verification_description">شما می توانید رمزعبوری برای حساب کاربری خود تعیین کنید، این رمز زمانی مورد نیاز است که بخواهید جهت ورود به حساب کاربریتان از دستگاه دیگری استفاده نمایید. بعلاوهٔ این رمز شما زمان ورود به حساب کاربری کد تأییدی نیز به صورت پیامک دریافت خواهید کرد. </string>
   <string name="enter_a_password"> رمز عبور را وارد کنید</string>
@@ -1016,6 +1016,8 @@
   <string name="invite_friend">این مخاطب هنوز به آی گپ نپیوسته. آیا مایلید ایشان را دعوت کنید؟</string>
   <string name="clean_up_description">پاک کردن پایگاه دادهٔ برنامه منجر به حذف پیام های متنی ذخیره شده در حافظهٔ نهان و فشرده شدن پایگاه داده به منظور ذخیرهٔ فضای داخلی خواهد شد. آی گپ برای کارکردن به مقداری از اطلاعات نیاز دارد، بنابراین حجم پایگاه داده کاملاً خالی نخواهد شد و به صفر نمیرسد. تکمیل این عملیات چند دقیقه زمان می برد.</string>
   <string name="list_contacts">لیست مخاطبین شما که در آی گپ حضور ندارند</string>
+
+  <string name="limit_for_set_username">محدودیت زمانی برای تغییر نام کاربری</string>
 
 
 </resources>

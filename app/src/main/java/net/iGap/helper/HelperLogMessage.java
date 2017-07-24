@@ -269,7 +269,7 @@ public class HelperLogMessage {
             case ROOM_CONVERTED_TO_PUBLIC:
 
                 if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
-                    persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
+                    persianResult = finalTypeRoom + " " + logMessage;
 
                     englishResult = "Channel" + " " + logMessage + " " + targetName;
 

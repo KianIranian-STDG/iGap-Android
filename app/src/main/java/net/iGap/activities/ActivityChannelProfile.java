@@ -1571,6 +1571,9 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
         final EditText edtUserName = new EditText(ActivityChannelProfile.this);
         edtUserName.setHint(getResources().getString(R.string.channel_title_channel_set_username));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
+        }
         edtUserName.setTypeface(G.typeface_IRANSansMobile);
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
 
@@ -1707,7 +1710,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                             @Override
                             public void run() {
                                 if (dialog.isShowing()) dialog.dismiss();
-                                dialogWaitTime(R.string.CHANNEL_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
+                                dialogWaitTime(R.string.limit_for_set_username, time, majorCode);
                             }
                         });
                         break;

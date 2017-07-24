@@ -959,6 +959,9 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final TextInputLayout inputUserName = new TextInputLayout(ActivityGroupProfile.this);
         final EditText edtUserName = new EditText(ActivityGroupProfile.this);
         edtUserName.setHint(getResources().getString(R.string.group_title_set_username));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
+        }
         edtUserName.setTypeface(G.typeface_IRANSansMobile);
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
 
