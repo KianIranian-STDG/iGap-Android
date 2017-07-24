@@ -211,6 +211,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true"
+        android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
         >
@@ -239,18 +240,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/list_contacts"
-            android:gravity="center"
-            android:padding="@dimen/dp10"
+            android:gravity="start"
+            android:paddingTop="@dimen/dp10"
+            android:paddingBottom="@dimen/dp10"
+            android:paddingStart="@dimen/dp20"
+            android:paddingLeft="@dimen/dp20"
             android:textColor="@color/green"
             android:textSize="@dimen/dp16"
             android:textStyle="bold"
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/background_editText"
-            />
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rcv_friends_to_invite"
