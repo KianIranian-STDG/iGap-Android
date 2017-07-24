@@ -742,13 +742,7 @@
 
     </LinearLayout>
 
-    <include
-        layout="@layout/layout_mic_record"
-        android:id="@+id/layout_mic_recorde"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        />
+
 
 
     <android.support.v7.widget.ViewStubCompat
@@ -828,6 +822,15 @@
 
   </LinearLayout>
 
+
+  <include
+      layout="@layout/layout_mic_record"
+      android:id="@+id/layout_mic_recorde"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:visibility="gone"
+      />
 
   <ProgressBar
       android:id="@+id/chl_prgWaiting"

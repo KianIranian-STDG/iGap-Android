@@ -2448,7 +2448,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         }
                     } else {
                         voiceRecord.setItemTag("ivVoice");
-                        viewAttachFile.setVisibility(View.GONE);
+                        // viewAttachFile.setVisibility(View.GONE);
                         viewMicRecorder.setVisibility(View.VISIBLE);
                         voiceRecord.startVoiceRecord();
                     }
