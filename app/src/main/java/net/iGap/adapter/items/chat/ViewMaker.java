@@ -1664,7 +1664,7 @@ public class ViewMaker {
         fcsl_txt_time_info.setText("(4) 9:24 am");
         fcsl_txt_time_info.setTextColor(G.context.getResources().getColor(R.color.gray_5c));
         setTextSize(fcsl_txt_time_info, R.dimen.dp12);
-        fcsl_txt_time_info.setTypeface(G.typeface_IRANSansMobile_Bold);
+        fcsl_txt_time_info.setTypeface(G.typeface_IRANSansMobile);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             fcsl_txt_time_info.setTextDirection(View.TEXT_DIRECTION_LOCALE);
         }
@@ -1686,7 +1686,7 @@ public class ViewMaker {
         fcsl_txt_icon.setId(R.id.fcsl_txt_icon);
         fcsl_txt_icon.setText(G.context.getResources().getString(R.string.md_call_made));
         fcsl_txt_icon.setTextColor(G.context.getResources().getColor(R.color.green));
-        setTextSize(fcsl_txt_icon, R.dimen.dp22);
+        setTextSize(fcsl_txt_icon, R.dimen.dp18);
         LinearLayout.LayoutParams layout_178 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_178.gravity = Gravity.END;
         fcsl_txt_icon.setLayoutParams(layout_178);
@@ -1697,7 +1697,7 @@ public class ViewMaker {
         fcsl_txt_dureation_time.setText("2:24");
         fcsl_txt_dureation_time.setTextColor(G.context.getResources().getColor(R.color.btn_start_page5));
         setTextSize(fcsl_txt_dureation_time, R.dimen.dp12);
-        fcsl_txt_dureation_time.setTypeface(G.typeface_IRANSansMobile_Bold);
+        fcsl_txt_dureation_time.setTypeface(G.typeface_IRANSansMobile);
         LinearLayout.LayoutParams layout_483 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         fcsl_txt_dureation_time.setLayoutParams(layout_483);
         linearLayout_202.addView(fcsl_txt_dureation_time);
