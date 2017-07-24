@@ -594,8 +594,7 @@ public class ViewMaker {
         cslr_replay_layout.setBackgroundColor(context.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
         cslr_replay_layout.setClickable(true);
         cslr_replay_layout.setOrientation(HORIZONTAL);
-        cslr_replay_layout.setPadding(i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight),
-            i_Dp(R.dimen.messageContainerPaddingLeftRight));
+        cslr_replay_layout.setPadding(i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             cslr_replay_layout.setTextDirection(View.TEXT_DIRECTION_LOCALE);
         }
@@ -1503,6 +1502,28 @@ public class ViewMaker {
         layout_1151.bottomMargin = dpToPixel(2);
         cs_txt_last_message.setLayoutParams(layout_1151);
         lyt_last_message_room.addView(cs_txt_last_message);
+
+        EmojiTextViewE cs_txt_last_message_file_text = new EmojiTextViewE(G.context);
+        cs_txt_last_message_file_text.setId(R.id.cs_txt_last_message_file_text);
+        cs_txt_last_message_file_text.setGravity(Gravity.CENTER_VERTICAL);
+        cs_txt_last_message_file_text.setEllipsize(TextUtils.TruncateAt.END);
+        cs_txt_last_message_file_text.setSingleLine(true);
+        cs_txt_last_message_file_text.setMaxWidth(i_Dp(R.dimen.dp180));
+        cs_txt_last_message_file_text.setText("");
+        setTypeFace(cs_txt_last_message_file_text);
+        cs_txt_last_message_file_text.setTextColor(Color.parseColor("#FF616161"));
+        setTextSize(cs_txt_last_message_file_text, R.dimen.dp12);
+        cs_txt_last_message_file_text.setEmojiSize(i_Dp(R.dimen.dp13));
+        LinearLayout.LayoutParams layout_1151_file_text = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        layout_1151_file_text.bottomMargin = dpToPixel(2);
+        if (HelperCalander.isLanguagePersian) {
+            layout_1151_file_text.rightMargin = dpToPixel(2);
+        } else {
+            layout_1151_file_text.leftMargin = dpToPixel(2);
+        }
+        cs_txt_last_message_file_text.setLayoutParams(layout_1151_file_text);
+        lyt_last_message_room.addView(cs_txt_last_message_file_text);
+
         linearLayout_353.addView(lyt_last_message_room);
         linearLayout_938.addView(linearLayout_353);
 

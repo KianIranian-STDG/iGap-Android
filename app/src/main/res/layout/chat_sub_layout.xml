@@ -129,6 +129,23 @@
               fontPath="fonts/IRANSansMobile.ttf"
               />
 
+          <net.iGap.module.EmojiTextViewE
+              android:id="@+id/cs_txt_last_message_file_text"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical"
+              android:ellipsize="end"
+              android:maxLines="1"
+              android:layout_marginBottom="2dp"
+              android:maxWidth="@dimen/dp180"
+              android:singleLine="true"
+              android:text="LAST MESSAGE"
+              android:textColor="#FF616161"
+              android:textSize="@dimen/dp12"
+              app:emojiSize="@dimen/dp13"
+              fontPath="fonts/IRANSansMobile.ttf"
+              />
+
         </LinearLayout>
 
       </LinearLayout>

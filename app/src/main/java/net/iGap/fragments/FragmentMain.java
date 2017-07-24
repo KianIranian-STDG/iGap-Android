@@ -910,6 +910,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             protected EmojiTextViewE name;
             protected ViewGroup rootChat;
             protected EmojiTextViewE txtLastMessage;
+            protected EmojiTextViewE txtLastMessageFileText;
             protected MaterialDesignTextView txtChatIcon;
             protected TextView txtTime;
             protected MaterialDesignTextView txtPinIcon;
@@ -929,6 +930,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 rootChat = (ViewGroup) view.findViewById(R.id.root_chat_sub_layout);
                 txtLastMessage = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message);
+                txtLastMessageFileText = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message_file_text);
                 txtChatIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_chat_icon);
 
                 txtTime = ((TextView) view.findViewById(R.id.cs_txt_contact_time));
@@ -1115,26 +1117,44 @@ public class FragmentMain extends Fragment implements OnComplete {
                             ProtoGlobal.RoomMessageType _type, tmp;
 
                             _type = mInfo.getLastMessage().getMessageType();
+                            String fileText = mInfo.getLastMessage().getMessage();
 
-                            try {
-                                if (mInfo.getLastMessage().getReplyTo() != null) {
-                                    tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
-                                    if (tmp != null) _type = tmp;
-                                }
-                            } catch (NullPointerException e) {
-                                e.printStackTrace();
-                            }
-
+                            //don't use from reply , in reply message just get type and fileText from main message
+                            //try {
+                            //    if (mInfo.getLastMessage().getReplyTo() != null) {
+                            //        tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
+                            //        if (tmp != null) {
+                            //            _type = tmp;
+                            //        }
+                            //        //if (mInfo.getLastMessage().getReplyTo().getMessage() != null) {
+                            //        //    fileText = mInfo.getLastMessage().getReplyTo().getMessage();
+                            //        //}
+                            //    }
+                            //} catch (NullPointerException e) {
+                            //    e.printStackTrace();
+                            //}
+                            //
                             try {
                                 if (mInfo.getLastMessage().getForwardMessage() != null) {
                                     tmp = mInfo.getLastMessage().getForwardMessage().getMessageType();
-                                    if (tmp != null) _type = tmp;
+                                    if (tmp != null) {
+                                        _type = tmp;
+                                    }
+                                    if (mInfo.getLastMessage().getForwardMessage().getMessage() != null) {
+                                        fileText = mInfo.getLastMessage().getForwardMessage().getMessage();
+                                    }
                                 }
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
                             }
 
                             String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, R.color.room_message_blue);
+                            if (fileText != null && !fileText.isEmpty()) {
+                                holder.txtLastMessageFileText.setVisibility(View.VISIBLE);
+                                holder.txtLastMessageFileText.setText(fileText);
+                            } else {
+                                holder.txtLastMessageFileText.setVisibility(View.GONE);
+                            }
                             if (result.isEmpty()) {
                                 if (!HelperCalander.isLanguagePersian) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
