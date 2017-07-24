@@ -135,7 +135,7 @@ public class UserInfoResponse extends MessageHandler {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    HelperLogMessage.updateLogMessageAfterGetUserInfo(G.logMessageUpdatList.get(builder.getUser().getId()));
+                    HelperLogMessage.updateLogMessageAfterGetUserInfo(builder.getUser().getId());
                 }
             }, 500);
         }

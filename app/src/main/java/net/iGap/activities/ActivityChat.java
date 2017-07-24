@@ -54,6 +54,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,6 +144,7 @@ import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.IResendMessage;
+import net.iGap.interfaces.IUpdateLogItem;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelAddMessageReaction;
@@ -313,6 +315,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private ProtoGlobal.Room.Type chatType;
     private EmojiPopup emojiPopup;
     public static OnComplete onMusicListener;
+    public static IUpdateLogItem iUpdateLogItem;
     private GroupChatRole groupRole;
     private ChannelChatRole channelRole;
     private PopupWindow popupWindow;
@@ -701,6 +704,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             new RequestClientUnsubscribeFromRoom().clientUnsubscribeFromRoom(mRoomId);
         }
         onMusicListener = null;
+        iUpdateLogItem = null;
         overridePendingTransition(0, 0);
     }
 
@@ -1569,6 +1573,28 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
             }
         };
+
+        iUpdateLogItem = new IUpdateLogItem() {
+            @Override
+            public void onUpdate(String logText, long messageId) {
+
+                for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+
+                    try {
+                        AbstractMessage item = mAdapter.getAdapterItem(i);
+
+                        if (item.mMessage != null && item.mMessage.messageID.equals(messageId + "")) {
+                            item.mMessage.messageText = logText;
+                            mAdapter.notifyAdapterItemChanged(i);
+                            break;
+                        }
+                    } catch (Exception e) {
+                        Log.e("ddddd", "activity chat iUpdateLogItem    " + e.toString());
+                    }
+                }
+            }
+        };
+
 
         /**
          * after get position from gps

@@ -63,7 +63,7 @@ public class ClientGetRoomResponse extends MessageHandler {
 
                         G.handler.postDelayed(new Runnable() {
                             @Override public void run() {
-                                HelperLogMessage.updateLogMessageAfterGetUserInfo(G.logMessageUpdatList.get(clientGetRoom.getRoom().getId()));
+                                HelperLogMessage.updateLogMessageAfterGetUserInfo(clientGetRoom.getRoom().getId());
                             }
                         }, 500);
                     }
