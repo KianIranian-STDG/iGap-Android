@@ -45,6 +45,7 @@ import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -54,8 +55,10 @@ import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.interfaces.OnGetPermission;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -276,7 +279,25 @@ public class RegisteredContactsFragment extends Fragment {
 
         RecyclerView rcvListContact = (RecyclerView) view.findViewById(R.id.rcv_friends_to_invite);
         fastItemAdapter = new FastItemAdapter();
-        new LongOperation().execute();
+
+        try {
+            HelperPermision.getContactPermision(mActivity, new OnGetPermission() {
+                @Override
+                public void Allow() throws IOException {
+                    new LongOperation().execute();
+                }
+
+                @Override
+                public void deny() {
+                    prgWaitingLiadList.setVisibility(View.GONE);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
         rcvListContact.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvListContact.setItemAnimator(new DefaultItemAnimator());
         rcvListContact.setAdapter(fastItemAdapter);
@@ -511,7 +532,7 @@ public class RegisteredContactsFragment extends Fragment {
         }
     }
 
-    public class AdapterTest extends AbstractItem<AdapterTest, AdapterTest.ViewHolder> {
+    public class AdapterListContact extends AbstractItem<AdapterListContact, AdapterListContact.ViewHolder> {
 
         public String item;
 
@@ -519,7 +540,7 @@ public class RegisteredContactsFragment extends Fragment {
         //    return item;
         //}
 
-        public AdapterTest(String item) {
+        public AdapterListContact(String item) {
             this.item = item;
         }
 
@@ -602,6 +623,7 @@ public class RegisteredContactsFragment extends Fragment {
 
         @Override
         protected ArrayList<StructListOfContact> doInBackground(Void... params) {
+
             ArrayList<StructListOfContact> listContact = Contacts.getListOfContact();
 
             return listContact;
@@ -613,7 +635,7 @@ public class RegisteredContactsFragment extends Fragment {
             Collections.sort(structListOfContacts);
 
             for (int i = 0; i < structListOfContacts.size(); i++) {
-                fastItemAdapter.add(new AdapterTest(structListOfContacts.get(i).getDisplayName()).withIdentifier(100 + i));
+                fastItemAdapter.add(new AdapterListContact(structListOfContacts.get(i).getDisplayName()).withIdentifier(100 + i));
             }
             prgWaitingLiadList.setVisibility(View.GONE);
             super.onPostExecute(structListOfContacts);
