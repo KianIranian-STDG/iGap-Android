@@ -92,6 +92,15 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                         if (G.chatUpdateStatusUtil != null) {
                             G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
                         }
+                    } else if (chatUpdateStatus.getStatus() == ProtoGlobal.RoomMessageStatus.SEEN) {
+                        /**
+                         * reason : getRoomList will be updated status in Realm and after that when
+                         * client get status here and was in chat will not be updated status in second
+                         * so i use from this block for avoid from this problem
+                         */
+                        if (G.chatUpdateStatusUtil != null) {
+                            G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
+                        }
                     }
                 }
             }
