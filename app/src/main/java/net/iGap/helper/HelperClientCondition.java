@@ -76,24 +76,15 @@ public class HelperClientCondition {
                 ProtoClientCondition.ClientCondition.Room.Builder room = ProtoClientCondition.ClientCondition.Room.newBuilder();
                 room.setRoomId(realmClientCondition.getRoomId());
 
-                long messageVersion = 0;
-                long statusVersion = 0;
-                List<RealmRoomMessage> allItemsMessageVersion = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.MESSAGE_VERSION, Sort.DESCENDING);
-                for (RealmRoomMessage item : allItemsMessageVersion) {
-                    if (item != null) {
-                        messageVersion = item.getMessageVersion();
-                        break;
-                    }
+                Number messageVersion = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().max(RealmRoomMessageFields.MESSAGE_VERSION);
+                if (messageVersion != null) {
+                    room.setMessageVersion((long) messageVersion);
                 }
-                List<RealmRoomMessage> allItemsStatusVersion = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.STATUS_VERSION, Sort.DESCENDING);
-                for (RealmRoomMessage item : allItemsStatusVersion) {
-                    if (item != null) {
-                        statusVersion = item.getStatusVersion();
-                        break;
-                    }
+
+                Number statusVersion = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().max(RealmRoomMessageFields.STATUS_VERSION);
+                if (statusVersion != null) {
+                    room.setStatusVersion((long) statusVersion);
                 }
-                room.setMessageVersion(messageVersion);
-                room.setStatusVersion(statusVersion);
 
                 room.setDeleteVersion(realmClientCondition.getDeleteVersion());
 
