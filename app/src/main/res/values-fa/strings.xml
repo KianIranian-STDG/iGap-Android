@@ -1009,7 +1009,7 @@
   <string name="total_size">حجم کل</string>
 
   <string name="manage_spacing">کنترل حافظهٔ برنامه</string>
-  <string name="local_database"> پایگاه دادهٔ داخلی</string>
+  <string name="local_database">پایگاه دادهٔ محلی</string>
   <string name="data_storage"> ذخیره سازی اطلاعات</string>
   <string name="keep_media">نگهداری و حفظ رسانه ها</string>
 
