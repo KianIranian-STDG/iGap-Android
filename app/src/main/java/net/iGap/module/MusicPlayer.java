@@ -561,6 +561,9 @@ public class MusicPlayer {
                         if (playNextMusic) {
                             fillMediaList(false);
                             nextMusic();
+                            if (ActivityChat.onMusicListener != null) {
+                                ActivityChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
+                            }
                         } else {
 
                             if (repeatMode.equals(RepeatMode.noRepeat.toString())) {

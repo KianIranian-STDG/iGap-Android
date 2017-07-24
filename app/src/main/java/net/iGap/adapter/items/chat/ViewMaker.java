@@ -696,7 +696,7 @@ public class ViewMaker {
         }
         setLayoutDirection(cslr_ll_forward, View.LAYOUT_DIRECTION_LOCALE);
 
-        LinearLayout.LayoutParams layout_687 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_687 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cslr_ll_forward.setLayoutParams(layout_687);
 
         View View_997 = new View(context);
@@ -706,10 +706,6 @@ public class ViewMaker {
         View_997.setLayoutParams(layout_547);
         cslr_ll_forward.addView(View_997);
 
-        LinearLayout linearLayout_515 = new LinearLayout(context);
-        linearLayout_515.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams layout_762 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayout_515.setLayoutParams(layout_762);
 
         TextView cslr_txt_prefix_forward = new TextView(context);
         cslr_txt_prefix_forward.setId(R.id.cslr_txt_prefix_forward);
@@ -722,7 +718,7 @@ public class ViewMaker {
         layout_992.rightMargin = i_Dp(dp4);
         layout_992.leftMargin = i_Dp(R.dimen.dp6);
         cslr_txt_prefix_forward.setLayoutParams(layout_992);
-        linearLayout_515.addView(cslr_txt_prefix_forward);
+        cslr_ll_forward.addView(cslr_txt_prefix_forward);
 
         TextView cslr_txt_forward_from = new TextView(context);
         cslr_txt_forward_from.setId(R.id.cslr_txt_forward_from);
@@ -734,8 +730,8 @@ public class ViewMaker {
         cslr_txt_forward_from.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_119 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cslr_txt_forward_from.setLayoutParams(layout_119);
-        linearLayout_515.addView(cslr_txt_forward_from);
-        cslr_ll_forward.addView(linearLayout_515);
+        cslr_ll_forward.addView(cslr_txt_forward_from);
+
 
         return cslr_ll_forward;
     }

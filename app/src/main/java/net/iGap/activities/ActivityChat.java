@@ -1550,23 +1550,28 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void complete(boolean result, String messageID, String beforMessageID) {
 
-                if (beforMessageID != null) {
-                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                        if (mAdapter.getItem(i).mMessage.messageID.equals(beforMessageID)) {
-                            mAdapter.notifyAdapterItemChanged(i);
-                            break;
+                if (result) {
+                    if (beforMessageID != null) {
+                        for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                            if (mAdapter.getItem(i).mMessage.messageID.equals(beforMessageID)) {
+                                mAdapter.notifyAdapterItemChanged(i);
+                                break;
+                            }
                         }
                     }
+
+                    if (messageID != null) {
+                        for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                            if (mAdapter.getItem(i).mMessage.messageID.equals(messageID)) {
+                                mAdapter.notifyAdapterItemChanged(i);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    onPlayMusic(messageID);
                 }
 
-                if (messageID != null) {
-                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                        if (mAdapter.getItem(i).mMessage.messageID.equals(messageID)) {
-                            mAdapter.notifyAdapterItemChanged(i);
-                            break;
-                        }
-                    }
-                }
             }
         };
 
@@ -3203,10 +3208,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                                 HelperDownloadFile.startDownload(nextItem.mMessage.messageID, _token, _cashid, _name, _size, selector, _path, 0, null);
                                 MusicPlayer.playNextMusic = true;
+                                mAdapter.notifyItemChanged(j);
                             }
                         }
-
-                        mAdapter.notifyItemChanged(j);
                     } catch (Exception e) {
 
                     }

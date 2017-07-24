@@ -124,6 +124,14 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             }
         };
 
+        holder.itemView.findViewById(R.id.mainContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
         holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
