@@ -3202,6 +3202,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             if (_token != null && _token.length() > 0 && _size > 0) {
 
                                 HelperDownloadFile.startDownload(nextItem.mMessage.messageID, _token, _cashid, _name, _size, selector, _path, 0, null);
+                                MusicPlayer.playNextMusic = true;
                             }
                         }
 

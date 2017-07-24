@@ -100,6 +100,8 @@ public class MusicPlayer {
     public static boolean pauseSoundFromCall = false;
     public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
 
+    public static boolean playNextMusic = false;
+
     public MusicPlayer(LinearLayout layoutTripMusic) {
 
         remoteViews = new RemoteViews(G.context.getPackageName(), R.layout.music_layout_notification);
@@ -431,9 +433,10 @@ public class MusicPlayer {
         }
     }
 
-    public static void startPlayer(String musicPath, String roomName, long roomId, boolean updateList, String messageID) {
+    public static void startPlayer(String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
 
         isVoice = false;
+        playNextMusic = false;
 
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst();
@@ -555,19 +558,25 @@ public class MusicPlayer {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
 
-                        if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
-                            stopSound();
-                        } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
+                        if (playNextMusic) {
+                            fillMediaList(false);
+                            nextMusic();
+                        } else {
 
-                            if (isShuffelOn) {
-                                nextRandomMusic();
-                            } else {
+                            if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
+                                stopSound();
+                            } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
 
-                                nextMusic();
+                                if (isShuffelOn) {
+                                    nextRandomMusic();
+                                } else {
+
+                                    nextMusic();
+                                }
+                            } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
+                                stopSound();
+                                playAndPause();
                             }
-                        } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
-                            stopSound();
-                            playAndPause();
                         }
                     }
                 });
@@ -582,7 +591,7 @@ public class MusicPlayer {
         updateProgress();
 
         if (updateList) {
-            fillMediaList();
+            fillMediaList(true);
         }
 
         if (isVoice) {
@@ -685,7 +694,7 @@ public class MusicPlayer {
         }
     }
 
-    public static void fillMediaList() {
+    public static void fillMediaList(boolean setSelectedItem) {
 
         mediaList = new ArrayList<>();
 
@@ -709,16 +718,19 @@ public class MusicPlayer {
             }
         }
 
-        for (int i = mediaList.size() - 1; i >= 0; i--) {
+        if (setSelectedItem) {
 
-            RealmRoomMessage rm = mediaList.get(i);
+            for (int i = mediaList.size() - 1; i >= 0; i--) {
 
-            if (rm.getAttachment() != null) {
-                String tmpPath = rm.getAttachment().getLocalFilePath();
-                if (tmpPath != null) {
-                    if (tmpPath.equals(musicPath)) {
-                        selectedMedia = i;
-                        break;
+                RealmRoomMessage rm = mediaList.get(i);
+
+                if (rm.getAttachment() != null) {
+                    String tmpPath = rm.getAttachment().getLocalFilePath();
+                    if (tmpPath != null) {
+                        if (tmpPath.equals(musicPath)) {
+                            selectedMedia = i;
+                            break;
+                        }
                     }
                 }
             }
