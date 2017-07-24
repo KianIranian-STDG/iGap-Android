@@ -88,7 +88,7 @@ public class FragmentShowImage extends Fragment {
     private MediaPlayer mMediaPlayer;
     public static ArrayList<String> downloadedList = new ArrayList<>();
 
-    public static View appBarLayout;
+    public View appBarLayout;
     public MediaController videoController;
     public int po;
     private String path;

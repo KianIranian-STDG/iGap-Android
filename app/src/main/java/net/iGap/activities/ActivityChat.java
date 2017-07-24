@@ -4532,7 +4532,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-        FragmentShowImage.appBarLayout = appBarLayout;
+
 
         long selectedFileToken = Long.parseLong(messageInfo.messageID);
 
@@ -4541,6 +4541,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         bundle.putLong("RoomId", mRoomId);
         bundle.putLong("SelectedImage", selectedFileToken);
         fragment.setArguments(bundle);
+
+        fragment.appBarLayout = appBarLayout;
 
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.ac_ll_parent, fragment, "ShowImageMessage").commit();
     }

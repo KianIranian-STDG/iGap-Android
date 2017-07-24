@@ -270,8 +270,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         findViewById(R.id.asm_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        FragmentShowImage.appBarLayout = appBarLayout;
-
         MaterialDesignTextView btnBack = (MaterialDesignTextView) findViewById(R.id.asm_btn_back);
         RippleView rippleBack = (RippleView) findViewById(R.id.asm_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -1452,6 +1450,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             bundle.putLong("SelectedImage", selectedFileToken);
             bundle.putString("TYPE", ProtoGlobal.RoomMessageType.IMAGE.toString());
             fragment.setArguments(bundle);
+
+            fragment.appBarLayout = appBarLayout;
 
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
         }
