@@ -264,6 +264,7 @@ public class RegisteredContactsFragment extends Fragment {
         realmRecyclerView.setItemViewCacheSize(1000);
         realmRecyclerView.setItemAnimator(null);
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        realmRecyclerView.setNestedScrollingEnabled(false);
 
         results = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
         realmRecyclerView.setAdapter(new ContactListAdapter(results));
@@ -279,6 +280,7 @@ public class RegisteredContactsFragment extends Fragment {
         rcvListContact.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvListContact.setItemAnimator(new DefaultItemAnimator());
         rcvListContact.setAdapter(fastItemAdapter);
+        rcvListContact.setNestedScrollingEnabled(false);
 
 
         /**
