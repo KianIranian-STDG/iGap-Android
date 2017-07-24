@@ -12,13 +12,17 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -31,13 +35,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.items.AbstractItem;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -49,10 +60,12 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.Contacts;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
@@ -79,7 +92,7 @@ public class RegisteredContactsFragment extends Fragment {
     private EditText edtSearch;
     private boolean isCallAction = false;
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
-
+    private FastItemAdapter fastItemAdapter;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -255,6 +268,15 @@ public class RegisteredContactsFragment extends Fragment {
         StickyHeader stickyHeader = new StickyHeader(results);
         decoration = new StickyRecyclerHeadersDecoration(stickyHeader);
         realmRecyclerView.addItemDecoration(decoration);
+
+
+        RecyclerView rcvListContact = (RecyclerView) view.findViewById(R.id.rcv_friends_to_invite);
+        fastItemAdapter = new FastItemAdapter();
+        new LongOperation().execute();
+        rcvListContact.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcvListContact.setItemAnimator(new DefaultItemAnimator());
+        rcvListContact.setAdapter(fastItemAdapter);
+
 
         /**
          * if contacts size is zero send request for get contacts list
@@ -482,6 +504,114 @@ public class RegisteredContactsFragment extends Fragment {
         public int getItemCount() {
             return realmResults.size();
         }
+    }
+
+    public class AdapterTest extends AbstractItem<AdapterTest, AdapterTest.ViewHolder> {
+
+        public String item;
+
+        //public String getItem() {
+        //    return item;
+        //}
+
+        public AdapterTest(String item) {
+            this.item = item;
+        }
+
+        //public void setItem(String item) {
+        //    this.item = item;
+        //}
+
+        //The unique ID for this type of item
+        @Override
+        public int getType() {
+            return R.id.rooTest;
+        }
+
+        //The layout to be used for this type of item
+        @Override
+        public int getLayoutRes() {
+            return R.layout.adapter_list_cobtact;
+        }
+
+        //The logic to bind your data to the view
+
+        @Override
+        public void bindView(ViewHolder holder, List payloads) {
+            super.bindView(holder, payloads);
+
+            holder.txtName.setText(item);
+
+            holder.txtName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.igap))
+
+                        .content(getResources().getString(R.string.invite_friend)).positiveText(getResources().getString(R.string.ok)).negativeText(getResources().getString(R.string.cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you!");
+                            sendIntent.setType("text/plain");
+                            startActivity(sendIntent);
+                        }
+                    }).show();
+
+
+                }
+            });
+
+
+        }
+
+        //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
+        protected class ViewHolder extends RecyclerView.ViewHolder {
+
+
+            private TextView txtName;
+
+            public ViewHolder(View view) {
+                super(view);
+
+                txtName = (TextView) view.findViewById(R.id.txtTest);
+
+            }
+        }
+
+        @Override
+        public ViewHolder getViewHolder(View v) {
+            return new ViewHolder(v);
+        }
+    }
+
+    private class LongOperation extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
+
+        @Override
+        protected ArrayList<StructListOfContact> doInBackground(Void... params) {
+            ArrayList<StructListOfContact> listContact = Contacts.getListOfContact();
+
+            return listContact;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<StructListOfContact> structListOfContacts) {
+
+            Collections.sort(structListOfContacts);
+
+            for (int i = 0; i < structListOfContacts.size(); i++) {
+                fastItemAdapter.add(new AdapterTest(structListOfContacts.get(i).getDisplayName()).withIdentifier(100 + i));
+            }
+            super.onPostExecute(structListOfContacts);
+        }
+
+
+
+        @Override
+        protected void onPreExecute() {
+        }
+
     }
 }
 

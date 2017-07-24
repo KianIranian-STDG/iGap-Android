@@ -1013,4 +1013,8 @@
   <string name="data_storage">Data Storage</string>
   <string name="keep_media">Keep Media</string>
 
+  <string name="invite_friend">این مخاطب هنوز به آی گپ نپیوسته. آیا مایلید ایشان را دعوت کنید؟</string>
+  <string name="clean_up_description">Clearing the local database will delete the texts of cached messages and compress the database to save internal disk space. iGap need some data to work, so database size will not reach zero. \n\n this operation can take few minutes to complete.</string>
+
+
 </resources>

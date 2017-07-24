@@ -1009,4 +1009,7 @@
   <string name="keep_media">Keep Media</string>
 
 
+  <string name="invite_friend">This user dose not have iGap yet,send an invitation?</string>
+  <string name="clean_up_description">Clearing the local database will delete the texts of cached messages and compress the database to save internal disk space. iGap need some data to work, so database size will not reach zero. \n\n this operation can take few minutes to complete.</string>
+
 </resources>

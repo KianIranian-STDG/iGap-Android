@@ -256,7 +256,7 @@
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
       android:padding="@dimen/dp16"
-      android:text="@string/st_dialog_content_keepMedia"
+      android:text="@string/clean_up_description"
       android:textColor="@color/black_register"
       android:textSize="@dimen/dp14"
       android:textStyle="normal"
