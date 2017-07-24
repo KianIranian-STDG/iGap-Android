@@ -65,6 +65,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     private Mode mode;
     Marker marker;
     private FragmentActivity mActivity;
+
     public enum Mode {
         sendPosition, seePosition;
     }
@@ -83,11 +84,14 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         return fragmentMap;
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.map_fragment, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle saveInctanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle saveInctanceState) {
         super.onViewCreated(view, saveInctanceState);
 
         Bundle bundle = getArguments();
@@ -97,8 +101,9 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             latitude = bundle.getDouble(FragmentMap.Latitude);
             longitude = bundle.getDouble(FragmentMap.Longitude);
             mode = (Mode) bundle.getSerializable(PosoitionMode);
-
-            G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
+            if (G.onHelperSetAction != null) {
+                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
+            }
 
             initComponent(view);
         } else {
@@ -121,11 +126,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     private void initComponent(View view) {
 
         SupportMapFragment mapFragment = new SupportMapFragment();
-        mActivity.getSupportFragmentManager()
-            .beginTransaction()
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            .replace(mf_fragment_map_view, mapFragment, null)
-            .commit();
+        mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(mf_fragment_map_view, mapFragment, null).commit();
         mapFragment.getMapAsync(FragmentMap.this);
 
         Button btnSendPosition = (Button) view.findViewById(R.id.mf_btn_send_position);
@@ -134,16 +135,19 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         if (mode == Mode.sendPosition) {
 
             btnSendPosition.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                     if (latitude == null || longitude == null) {
 
                         G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 final Snackbar snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), "Can not set position", Snackbar.LENGTH_LONG);
 
                                 snack.setAction(R.string.cancel, new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
+                                    @Override
+                                    public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });
@@ -154,7 +158,8 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
 
                         try {
                             mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                                @Override public void onSnapshotReady(Bitmap bitmap) {
+                                @Override
+                                public void onSnapshotReady(Bitmap bitmap) {
 
                                     String path = saveBitmapToFile(bitmap);
 
@@ -188,10 +193,11 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-    @Override public void onMapReady(GoogleMap googleMap) {
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
-        final boolean[] updatePosition = { true };
+        final boolean[] updatePosition = {true};
 
         //if device has not gps permision in androi 6+ return form map
         if (ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -209,7 +215,8 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
         if (mode == Mode.sendPosition) {
 
             mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-                @Override public void onMyLocationChange(Location location) {
+                @Override
+                public void onMyLocationChange(Location location) {
 
                     updatePosition[0] = false;
                     latitude = location.getLatitude();
@@ -229,7 +236,8 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             });
 
             mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                @Override public void onCameraChange(CameraPosition cameraPosition) {
+                @Override
+                public void onCameraChange(CameraPosition cameraPosition) {
 
                     if (updatePosition[0]) {
                         Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
@@ -252,7 +260,8 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             });
 
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override public void onMapClick(LatLng latLng) {
+                @Override
+                public void onMapClick(LatLng latLng) {
 
                     updatePosition[0] = false;
                     latitude = latLng.latitude;
@@ -267,7 +276,8 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
             });
 
             mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                @Override public boolean onMyLocationButtonClick() {
+                @Override
+                public boolean onMyLocationButtonClick() {
 
                     Location location = mMap.getMyLocation();
 
@@ -322,17 +332,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
 
     public static void loadImageFromPosition(double latiude, double longitude, OnGetPicture listener) {
 
-        String urlstr = "https://maps.googleapis.com/maps/api/staticmap?center="
-            + latiude
-            + ","
-            + longitude
-            + "&zoom=16&size=480x240"
-            + "&markers=color:red%7Clabel:S%7C"
-            + latiude
-            + ","
-            + longitude
-            + "&maptype=roadmap&key="
-            + G.context.getString(R.string.google_maps_key);
+        String urlstr = "https://maps.googleapis.com/maps/api/staticmap?center=" + latiude + "," + longitude + "&zoom=16&size=480x240" + "&markers=color:red%7Clabel:S%7C" + latiude + "," + longitude + "&maptype=roadmap&key=" + G.context.getString(R.string.google_maps_key);
 
         new DownloadImageTask(listener).execute(urlstr);
     }

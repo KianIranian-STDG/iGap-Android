@@ -553,7 +553,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (finalMembers != null && Integer.parseInt(finalMembers) == 1) {
+                                            if (finalMembers != null && HelperString.isNumeric(finalMembers) && Integer.parseInt(finalMembers) == 1) {
                                                 txtLastSeen.setText(finalMembers + " " + getResources().getString(R.string.one_member_chat));
                                             } else {
                                                 txtLastSeen.setText(finalMembers + " " + getResources().getString(R.string.member_chat));
@@ -1155,7 +1155,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 } else if ((chatType == GROUP) || (chatType == CHANNEL)) {
                     if (groupParticipantsCountLabel != null) {
 
-                        if (Integer.parseInt(groupParticipantsCountLabel) == 1) {
+                        if (HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
                             txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.one_member_chat));
                         } else {
                             txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member_chat));
@@ -1522,7 +1522,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 if (result) {
 
 
-                    if (messageOne != null && Integer.parseInt(messageOne) == 1) {
+                    if (messageOne != null && HelperString.isNumeric(messageOne) && Integer.parseInt(messageOne) == 1) {
                         txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.one_member_chat));
                     } else {
                         txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member_chat));
@@ -3752,7 +3752,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 //}
                                 ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
 
-                                if (groupParticipantsCountLabel != null && Integer.parseInt(groupParticipantsCountLabel) == 1) {
+                                if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
                                     txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.one_member_chat));
                                 } else {
                                     txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member_chat));
@@ -4136,7 +4136,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                         //}
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
-                        if (groupParticipantsCountLabel != null && Integer.parseInt(groupParticipantsCountLabel) == 1) {
+                        if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
                             txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.one_member_chat));
                         } else {
                             txtLastSeen.setText(groupParticipantsCountLabel + " " + getResources().getString(R.string.member_chat));
@@ -5462,8 +5462,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                             for (String path : listPathString) {
                                 //if (!path.toLowerCase().endsWith(".gif")) {
-                                    String localpathNew = attachFile.saveGalleryPicToLocal(path);
-                                    sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localpathNew);
+                                String localpathNew = attachFile.saveGalleryPicToLocal(path);
+                                sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localpathNew);
                                 //}
                             }
 

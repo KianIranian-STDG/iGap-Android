@@ -55,8 +55,6 @@ import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoGlobal;
 
-import static net.iGap.G.onHelperSetAction;
-
 public class AttachFile {
 
     public static final int request_code_TAKE_PICTURE = 10;
@@ -88,19 +86,23 @@ public class AttachFile {
 
     LocationListener locationListener = new LocationListener() {
 
-        @Override public void onStatusChanged(String provider, int status, Bundle extras) {
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
 
         }
 
-        @Override public void onProviderEnabled(String provider) {
+        @Override
+        public void onProviderEnabled(String provider) {
 
         }
 
-        @Override public void onProviderDisabled(String provider) {
+        @Override
+        public void onProviderDisabled(String provider) {
 
         }
 
-        @Override public void onLocationChanged(Location location) {
+        @Override
+        public void onLocationChanged(Location location) {
 
             if (sendPosition) {
                 sendPosition = false;
@@ -117,8 +119,7 @@ public class AttachFile {
                 if (complete != null) complete.complete(true, position, "");
             }
 
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -159,13 +160,17 @@ public class AttachFile {
     public void requestPaint() throws IOException {
 
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
                 Intent intent = new Intent(context, ActivityPaint.class);
                 ((Activity) context).startActivityForResult(intent, request_code_paint);
-                onHelperSetAction.onAction(ProtoGlobal.ClientAction.PAINTING);
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.PAINTING);
+                }
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -180,7 +185,8 @@ public class AttachFile {
         }
 
         HelperPermision.getCameraPermission(context, new OnGetPermission() {
-            @Override public void Allow() throws IOException {
+            @Override
+            public void Allow() throws IOException {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -198,7 +204,8 @@ public class AttachFile {
                 }
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -242,8 +249,8 @@ public class AttachFile {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
         File image = File.createTempFile(imageFileName,  /* prefix */
-            ".jpg",         /* suffix */
-            storageDir      /* directory */);
+                ".jpg",         /* suffix */
+                storageDir      /* directory */);
 
         // Save a file: path for use with ACTION_VIEW intents
         //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
@@ -320,7 +327,8 @@ public class AttachFile {
         //((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
 
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -328,11 +336,14 @@ public class AttachFile {
                 intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
-                onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
+                }
                 isInAttach = true;
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -342,17 +353,21 @@ public class AttachFile {
     public void requestOpenGalleryForVideoMultipleSelect() throws IOException {
 
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
                 Intent intent = new Intent();
                 intent.setType("video/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 ((Activity) context).startActivityForResult(intent, requestOpenGalleryForVideoMultipleSelect);
-                onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_VIDEO);
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_VIDEO);
+                }
                 isInAttach = true;
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -362,14 +377,16 @@ public class AttachFile {
     public void requestOpenGalleryForImageSingleSelect() throws IOException {
 
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
                 ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
                 isInAttach = true;
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -387,7 +404,8 @@ public class AttachFile {
         }
 
         HelperPermision.getCameraPermission(context, new OnGetPermission() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
 
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 videoPath = G.DIR_VIDEOS + File.separator + "VID_" + timeStamp + ".mp4";
@@ -408,7 +426,8 @@ public class AttachFile {
                 isInAttach = true;
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -417,13 +436,16 @@ public class AttachFile {
     public void showDialogOpenCamera(View view, final ProgressBar prgWaiting) {
 
         new MaterialDialog.Builder(context).items(R.array.capture).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+            @Override
+            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                 switch (which) {
                     case 0:
 
                         try {
                             requestTakePicture();
-                            onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_IMAGE);
+                            if (G.onHelperSetAction != null) {
+                                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_IMAGE);
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -437,7 +459,9 @@ public class AttachFile {
                     case 1:
                         try {
                             requestVideoCapture();
-                            onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_VIDEO);
+                            if (G.onHelperSetAction != null) {
+                                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_VIDEO);
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -458,17 +482,20 @@ public class AttachFile {
         //((Activity) context).startActivityForResult(intent, request_code_pic_audi);
 
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("audio/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
-                onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_AUDIO);
-
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_AUDIO);
+                }
                 isInAttach = true;
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -476,15 +503,19 @@ public class AttachFile {
 
     public void requestPickFile() throws IOException {
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 ((Activity) context).startActivityForResult(intent, request_code_pic_file);
-                onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
+                }
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -493,16 +524,20 @@ public class AttachFile {
     public void requestPickContact() throws IOException {
 
         HelperPermision.getContactPermision(context, new OnGetPermission() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
                 Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                 intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
-                onHelperSetAction.onAction(ProtoGlobal.ClientAction.CHOOSING_CONTACT);
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CHOOSING_CONTACT);
+                }
                 isInAttach = true;
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -513,11 +548,13 @@ public class AttachFile {
         this.complete = complete;
 
         HelperPermision.getLocationPermission(context, new OnGetPermission() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
                 getPosition();
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -529,18 +566,9 @@ public class AttachFile {
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 showSettingsAlert();
             } else {
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-                //G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
@@ -573,14 +601,18 @@ public class AttachFile {
     public void requestOpenDocumentFolder() throws IOException {
 
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override public void Allow() {
+            @Override
+            public void Allow() {
                 Intent intent = new Intent(context, ActivityExplorer.class);
                 intent.putExtra("Mode", "documnet");
                 ((Activity) context).startActivityForResult(intent, request_code_open_document);
-                onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
+                }
             }
 
-            @Override public void deny() {
+            @Override
+            public void deny() {
 
             }
         });
@@ -590,15 +622,14 @@ public class AttachFile {
 
     void showSettingsAlert() {
 
-        new MaterialDialog.Builder(context).title(context.getString(R.string.do_you_want_to_turn_on_gps)).positiveText(R.string.yes).negativeText(R.string.no)
-            .callback(new MaterialDialog.ButtonCallback() {
-                @Override public void onPositive(MaterialDialog dialog) {
-                    super.onPositive(dialog);
+        new MaterialDialog.Builder(context).title(context.getString(R.string.do_you_want_to_turn_on_gps)).positiveText(R.string.yes).negativeText(R.string.no).callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog dialog) {
+                super.onPositive(dialog);
 
-                    turnOnGps();
-                }
-            })
-            .show();
+                turnOnGps();
+            }
+        }).show();
     }
 
     private void turnOnGps() {

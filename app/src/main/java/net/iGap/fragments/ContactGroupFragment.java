@@ -296,7 +296,7 @@ public class ContactGroupFragment extends Fragment {
         realm.executeTransaction(new Realm.Transaction() {
             @Override public void execute(Realm realm) {
                 realmRoom.getGroupRoom().setParticipantsCountLabel(realmRoom.getGroupRoom().getMembers().size() + "");
-                realmRoom.getGroupRoom().setParticipants_count_limit_label(participantsLimit);
+                //realmRoom.getGroupRoom().setParticipants_count_limit_label(participantsLimit);
             }
         });
         realm.close();
