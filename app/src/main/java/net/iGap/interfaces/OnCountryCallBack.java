@@ -11,6 +11,6 @@ package net.iGap.interfaces;
 
 public interface OnCountryCallBack {
 
-    void countryName(String nameCountry, String code);
+    void countryName(String nameCountry, String code, String mask);
 
 }

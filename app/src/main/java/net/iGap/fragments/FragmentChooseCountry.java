@@ -266,7 +266,7 @@ public class FragmentChooseCountry extends Fragment {
                     @Override
                     public void onClick(View v) {
                         if (onCountryCallBack != null) {
-                            FragmentAddContact.onCountryCallBack.countryName(txtNameCountry.getText().toString(), txtCodeCountry.getText().toString());
+                            FragmentAddContact.onCountryCallBack.countryName(txtNameCountry.getText().toString(), txtCodeCountry.getText().toString(), item.getPhonePattern());
                             mActivity.getSupportFragmentManager().popBackStack();
                             closeKeyboard(v);
                         }

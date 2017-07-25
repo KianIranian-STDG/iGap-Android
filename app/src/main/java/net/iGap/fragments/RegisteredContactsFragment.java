@@ -626,9 +626,7 @@ public class RegisteredContactsFragment extends Fragment {
         @Override
         protected ArrayList<StructListOfContact> doInBackground(Void... params) {
 
-            ArrayList<StructListOfContact> listContact = Contacts.getListOfContact();
-
-            return listContact;
+            return Contacts.getMobileListContact();
         }
 
         @Override
@@ -642,10 +640,6 @@ public class RegisteredContactsFragment extends Fragment {
             prgWaitingLiadList.setVisibility(View.GONE);
             super.onPostExecute(structListOfContacts);
         }
-
-
-
-
 
     }
 }

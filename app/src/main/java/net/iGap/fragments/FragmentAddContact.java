@@ -91,8 +91,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
         onCountryCallBack = new OnCountryCallBack() {
             @Override
-            public void countryName(final String nameCountry, final String code) {
-
+            public void countryName(final String nameCountry, final String code, String mask) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -100,8 +99,6 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                         txtCodeCountry.setText("+" + code);
                     }
                 });
-
-
             }
         };
 

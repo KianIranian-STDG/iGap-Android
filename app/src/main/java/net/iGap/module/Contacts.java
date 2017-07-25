@@ -92,8 +92,7 @@ public class Contacts {
                     id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
 
                     if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                        Cursor pCur =
-                            cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { String.valueOf(id) }, null);
+                        Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(id)}, null);
 
                         if (pCur != null) {
 
@@ -169,7 +168,8 @@ public class Contacts {
         if (size > 0) {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
+                @Override
+                public void execute(Realm realm) {
                     realm.delete(RealmInviteFriend.class);  // delete all item in invite friend database
                     for (int i = 0; i < size; i++) {
                         RealmInviteFriend item = realm.createObject(RealmInviteFriend.class);
@@ -186,7 +186,8 @@ public class Contacts {
             final RealmResults<RealmContacts> results = realm.where(RealmContacts.class).findAll();
             if (!results.isEmpty()) {
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
+                    @Override
+                    public void execute(Realm realm) {
                         for (int i = 0; i < results.size(); i++) {
                             if (results.get(i).isValid()) {
                                 long phone = results.get(i).getPhone();
@@ -236,5 +237,42 @@ public class Contacts {
         realm.close();
 
         return list;
+    }
+
+    public static ArrayList<StructListOfContact> getMobileListContact() { //get List Of Contact
+
+        ArrayList<StructListOfContact> contactList = new ArrayList<>();
+        ContentResolver cr = G.context.getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+
+        if (cur != null) {
+            if (cur.getCount() > 0) {
+                while (cur.moveToNext()) {
+
+                    int id = 0;
+                    id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
+
+                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                        Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(id)}, null);
+
+                        if (pCur != null) {
+                            while (pCur.moveToNext()) {
+                                StructListOfContact itemContact = new StructListOfContact();
+                                itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                                int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                                if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) { //
+                                    itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                                    contactList.add(itemContact);
+                                    break;
+                                }
+                            }
+                            pCur.close();
+                        }
+                    }
+                }
+            }
+            cur.close();
+        }
+        return contactList;
     }
 }
