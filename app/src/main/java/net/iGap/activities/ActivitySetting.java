@@ -55,6 +55,7 @@ import com.larswerkman.holocolorpicker.SVBar;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import net.iGap.Config;
@@ -2327,8 +2328,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                 idAvatar = SUID.id().get();
                 pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
+                File nameImageFile = new File(pathSaveImage);
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                uriIntent = AppUtils.getUri(pathSaveImage);
+                uriIntent = Uri.fromFile(nameImageFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
                 startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
             } else {

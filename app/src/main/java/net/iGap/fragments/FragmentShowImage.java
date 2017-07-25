@@ -392,7 +392,7 @@ public class FragmentShowImage extends Fragment {
         try {
             String filePath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
             if (filePath != null) {
-                intent.putExtra(Intent.EXTRA_STREAM, AppUtils.getUri(filePath));
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
             }
         } catch (Exception e) {
             e.printStackTrace();

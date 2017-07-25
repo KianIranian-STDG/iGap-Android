@@ -845,7 +845,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         if (listPathString != null) {
                             for (int i = 0; i < listPathString.size(); i++) {
                                 if (listPathString.get(i) != null) {
-                                    listPathString.set(i, getFilePathFromUri(AppUtils.getUri(listPathString.get(i))));
+                                    listPathString.set(i, getFilePathFromUri(Uri.fromFile(new File(listPathString.get(i)))));
                                 }
                             }
                         }
@@ -2556,7 +2556,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             String filePath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
 
             if (filePath != null) {
-                intent.putExtra(Intent.EXTRA_STREAM, AppUtils.getUri(filePath));
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -5081,7 +5081,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     String imagePathPosition = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getLocation().getImagePath() : messageInfo.location.getImagePath();
                     intent.setType("image/*");
                     if (imagePathPosition != null) {
-                        intent.putExtra(Intent.EXTRA_STREAM, AppUtils.getUri(imagePathPosition));
+                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(imagePathPosition)));
+
                     }
                     break;
                 case "VOICE":
@@ -5107,7 +5108,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 case "FILE_TEXT":
                     String mfilepath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
                     if (mfilepath != null) {
-                        Uri uri = AppUtils.getUri(mfilepath);
+                        Uri uri = Uri.fromFile(new File(mfilepath));
                         String mimeType = FileUtils.getMimeType(ActivityChat.this, uri);
 
                         if (mimeType == null || mimeType.length() < 1) {

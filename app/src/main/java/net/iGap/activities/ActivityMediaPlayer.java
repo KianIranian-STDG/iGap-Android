@@ -25,12 +25,12 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
+import java.io.File;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
@@ -286,7 +286,7 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
 
         String sharePath = MusicPlayer.musicPath;
 
-        Uri uri = AppUtils.getUri(sharePath);
+        Uri uri = Uri.fromFile(new File(sharePath));
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("audio/*");
         share.putExtra(Intent.EXTRA_STREAM, uri);

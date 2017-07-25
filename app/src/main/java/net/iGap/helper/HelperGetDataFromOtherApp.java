@@ -16,11 +16,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import net.iGap.G;
-import net.iGap.module.AppUtils;
 
 public class HelperGetDataFromOtherApp {
 
@@ -55,7 +55,7 @@ public class HelperGetDataFromOtherApp {
         } else {
             //If scheme is a File
             //This will replace white spaces with %20 and also other special characters. This will avoid returning null values on file name with spaces and special characters.
-            extension = MimeTypeMap.getFileExtensionFromUrl(AppUtils.getUri(uri.getPath()).toString());
+            extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(uri.getPath())).toString());
         }
 
         if (extension == null) {

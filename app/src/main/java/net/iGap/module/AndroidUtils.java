@@ -76,7 +76,7 @@ public final class AndroidUtils {
         File file = new File(filePath);
 
         if (file.exists()) {
-            uri = AppUtils.getUri(filePath);
+            uri = Uri.fromFile(file);
 
             try {
                 metaRetriever.setDataSource(G.context, uri);
@@ -99,7 +99,7 @@ public final class AndroidUtils {
         File file = new File(filePath);
 
         if (file.exists()) {
-            uri = AppUtils.getUri(filePath);
+            uri = Uri.fromFile(file);
 
             try {
                 MediaMetadataRetriever mmr = new MediaMetadataRetriever();
@@ -107,7 +107,7 @@ public final class AndroidUtils {
                 String durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
                 return Integer.parseInt(durationStr);
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
 
@@ -156,7 +156,7 @@ public final class AndroidUtils {
         if (path.matches("\\w+?://")) {
             return path;
         } else {
-            String encoded = AppUtils.getUri(path).toString();
+            String encoded = Uri.fromFile(new File(path)).toString();
             return Uri.decode(encoded);
         }
     }

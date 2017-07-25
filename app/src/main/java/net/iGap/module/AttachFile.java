@@ -410,7 +410,13 @@ public class AttachFile {
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 videoPath = G.DIR_VIDEOS + File.separator + "VID_" + timeStamp + ".mp4";
 
-                Uri outputUri = AppUtils.getUri(videoPath);
+                Uri outputUri;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    outputUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(videoPath));
+                } else {
+                    outputUri = Uri.fromFile(new File(videoPath));
+                }
+
 
                 Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
