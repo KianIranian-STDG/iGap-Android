@@ -239,6 +239,8 @@ public class Contacts {
         return list;
     }
 
+    private static ArrayList<String> arrayList = new ArrayList<>();
+
     public static ArrayList<StructListOfContact> getMobileListContact() { //get List Of Contact
 
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
@@ -248,19 +250,22 @@ public class Contacts {
         if (cur != null) {
             if (cur.getCount() > 0) {
                 while (cur.moveToNext()) {
-
-                    int id = 0;
-                    id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
-
+                    int id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
                     if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                         Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(id)}, null);
 
                         if (pCur != null) {
-                            while (pCur.moveToNext()) {
+                            while (pCur.moveToFirst()) {
+                                if (arrayList != null && arrayList.contains(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)))) {
+                                    break;
+                                }
                                 StructListOfContact itemContact = new StructListOfContact();
                                 itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                                 int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
                                 if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) { //
+                                    if (arrayList != null) {
+                                        arrayList.add(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                                    }
                                     itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
                                     contactList.add(itemContact);
                                     break;
