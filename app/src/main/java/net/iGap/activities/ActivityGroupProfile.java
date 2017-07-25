@@ -191,6 +191,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
+    private Realm realm;
 
     @Override
     protected void onStop() {
@@ -199,6 +200,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         if (mRoom != null) {
             mRoom.removeAllChangeListeners();
         }
+
+        if (realm != null) {
+            realm.close();
+        }
     }
 
     @Override
@@ -206,7 +211,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         super.onResume();
 
-        Realm realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
 
         mRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom != null) {
@@ -246,7 +251,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         LocalBroadcastManager.getInstance(this).registerReceiver(reciverOnGroupChangeName, new IntentFilter("Intent_filter_on_change_group_name"));
 
-        realm.close();
     }
 
     @Override
@@ -813,16 +817,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         layoutGroupLink.addView(txtLink, layoutParams);
 
         final MaterialDialog dialog =
-            new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutGroupLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.no)).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    String copy;
-                    copy = txtGroupLink.getText().toString();
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                    clipboard.setPrimaryClip(clip);
-                }
-            }).build();
+                new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutGroupLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.no)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = txtGroupLink.getText().toString();
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                }).build();
 
         dialog.show();
     }
@@ -860,22 +864,22 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         layoutRevoke.addView(inputRevoke, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(ActivityGroupProfile.this).title(getResources().getString(R.string.group_link_hint_revoke))
-            .positiveText(getResources().getString(R.string.revoke))
-            .customView(layoutRevoke, true)
-            .widgetColor(getResources().getColor(R.color.toolbar_background))
-            .negativeText(getResources().getString(R.string.B_cancel))
-            .neutralText(R.string.array_Copy)
-            .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    String copy;
-                    copy = txtGroupLink.getText().toString();
-                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                    clipboard.setPrimaryClip(clip);
-                }
-            })
-            .build();
+                .positiveText(getResources().getString(R.string.revoke))
+                .customView(layoutRevoke, true)
+                .widgetColor(getResources().getColor(R.color.toolbar_background))
+                .negativeText(getResources().getString(R.string.B_cancel))
+                .neutralText(R.string.array_Copy)
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = txtGroupLink.getText().toString();
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                })
+                .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setOnClickListener(new View.OnClickListener() {
