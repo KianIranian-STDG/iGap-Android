@@ -844,7 +844,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         if (listPathString != null) {
                             for (int i = 0; i < listPathString.size(); i++) {
-                                listPathString.set(i, getFilePathFromUri(Uri.fromFile(new File(listPathString.get(i)))));
+                                if (listPathString.get(i) != null) {
+                                    listPathString.set(i, getFilePathFromUri(Uri.fromFile(new File(listPathString.get(i)))));
+                                }
                             }
                         }
                     }
@@ -4002,8 +4004,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * clear foreground color for deSelected message
      */
     private void deSelectMessage(int position) {
-        mAdapter.getItem(position).mMessage.isSelected = false;
-        mAdapter.notifyItemChanged(position);
+        if (mAdapter != null && mAdapter.getItem(position) != null && mAdapter.getItem(position).mMessage != null) {
+            mAdapter.getItem(position).mMessage.isSelected = false;
+            mAdapter.notifyItemChanged(position);
+        }
     }
 
     /**
@@ -5927,15 +5931,16 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             hashList.clear();
 
             for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
+                if (mAdapter.getItem(i).mMessage != null) {
+                    if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                        currentHashPosition = hashList.size() + 1;
+                    }
 
-                if (mAdapter.getItem(i).mMessage != null && mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
-                    currentHashPosition = hashList.size() + 1;
-                }
+                    String mText = mAdapter.getItem(i).mMessage.forwardedFrom != null ? mAdapter.getItem(i).mMessage.forwardedFrom.getMessage() : mAdapter.getItem(i).mMessage.messageText;
 
-                String mText = mAdapter.getItem(i).mMessage.forwardedFrom != null ? mAdapter.getItem(i).mMessage.forwardedFrom.getMessage() : mAdapter.getItem(i).mMessage.messageText;
-
-                if (mText.contains(hashString)) {
-                    hashList.add(i);
+                    if (mText.contains(hashString)) {
+                        hashList.add(i);
+                    }
                 }
             }
 

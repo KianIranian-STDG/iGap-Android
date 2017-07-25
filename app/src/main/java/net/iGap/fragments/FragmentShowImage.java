@@ -193,7 +193,9 @@ public class FragmentShowImage extends Fragment {
 
             return true;
         } else {
-            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+            if (mActivity != null) {
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+            }
             return false;
         }
 
