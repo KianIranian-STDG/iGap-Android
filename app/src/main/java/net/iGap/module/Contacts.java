@@ -240,6 +240,7 @@ public class Contacts {
     }
 
     private static ArrayList<String> arrayList = new ArrayList<>();
+    private static ArrayList<String> number = new ArrayList<>();
 
     public static ArrayList<StructListOfContact> getMobileListContact() { //get List Of Contact
 
@@ -255,8 +256,8 @@ public class Contacts {
                         Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(id)}, null);
 
                         if (pCur != null) {
-                            while (pCur.moveToFirst()) {
-                                if (arrayList != null && arrayList.contains(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)))) {
+                            while (pCur.moveToNext()) {
+                                if (arrayList != null && arrayList.contains(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))) || (number != null && number.contains(cur.getString(cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))))) {
                                     break;
                                 }
                                 StructListOfContact itemContact = new StructListOfContact();
@@ -265,6 +266,9 @@ public class Contacts {
                                 if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) { //
                                     if (arrayList != null) {
                                         arrayList.add(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                                    }
+                                    if (number != null) {
+                                        number.add(cur.getString(cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
                                     }
                                     itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
                                     contactList.add(itemContact);
