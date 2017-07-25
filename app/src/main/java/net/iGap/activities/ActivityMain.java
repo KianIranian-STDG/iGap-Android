@@ -568,21 +568,36 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
 
-                    mViewPager.getAdapter().notifyDataSetChanged();
+                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
+                    mViewPager.setAdapter(sampleFragmentPagerAdapter);
+
                     mViewPager.setOffscreenPageLimit(pages.size());
-                    mViewPager.setCurrentItem(pages.size() - 1);
+
+                    navigationTabStrip.setViewPager(mViewPager, 0);
+
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewPager.setCurrentItem(pages.size() - 1, false);
+                        }
+                    }, 50);
+
 
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
-            }, 500);
+            }, 200);
         } else {
 
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-                    mViewPager.getAdapter().notifyDataSetChanged();
-                    mViewPager.setCurrentItem(0);
+
+                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
+                    mViewPager.setAdapter(sampleFragmentPagerAdapter);
+                    navigationTabStrip.setViewPager(mViewPager, 0);
+
+
                 }
             }, 100);
 
@@ -604,11 +619,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }, 1000);
         }
-
-        sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(sampleFragmentPagerAdapter);
-        navigationTabStrip.setViewPager(mViewPager);
-
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
 

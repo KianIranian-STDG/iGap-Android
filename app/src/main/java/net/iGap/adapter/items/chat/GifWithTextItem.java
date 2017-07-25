@@ -11,12 +11,10 @@
 package net.iGap.adapter.items.chat;
 
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import java.io.File;
 import java.util.List;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
@@ -73,7 +71,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
         if (holder.image != null && holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
-            holder.image.setImageURI(Uri.fromFile(new File(localPath)));
+            holder.image.setImageURI(AppUtils.getUri(localPath));
 
             if (fileType == LocalFileType.FILE) {
                 SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);

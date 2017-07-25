@@ -77,7 +77,7 @@ public final class AndroidUtils {
         File file = new File(filePath);
 
         if (file.exists()) {
-            uri = Uri.fromFile(file);
+            uri = AppUtils.getUri(filePath);
 
             try {
                 metaRetriever.setDataSource(G.context, uri);
@@ -100,7 +100,7 @@ public final class AndroidUtils {
         File file = new File(filePath);
 
         if (file.exists()) {
-            uri = Uri.fromFile(file);
+            uri = AppUtils.getUri(filePath);
 
             try {
                 MediaMetadataRetriever mmr = new MediaMetadataRetriever();
@@ -157,7 +157,7 @@ public final class AndroidUtils {
         if (path.matches("\\w+?://")) {
             return path;
         } else {
-            String encoded = Uri.fromFile(new File(path)).toString();
+            String encoded = AppUtils.getUri(path).toString();
             return Uri.decode(encoded);
         }
     }

@@ -1640,7 +1640,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     try {
 
                         MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-                        Uri uri = Uri.fromFile(file);
+                        Uri uri = AppUtils.getUri(filePath);
                         mediaMetadataRetriever.setDataSource(context, uri);
                         String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
 
@@ -1731,7 +1731,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                 File file = new File(filePath);
                 if (file.exists()) {
-                    gifView.setImageURI(Uri.fromFile(file));
+                    gifView.setImageURI(AppUtils.getUri(filePath));
 
                     gifDrawable = (GifDrawable) gifView.getDrawable();
 
@@ -1808,7 +1808,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             } else {
                 File file = new File(vh.filePath);
                 if (file.exists()) {
-                    vh.gifView.setImageURI(Uri.fromFile(file));
+                    vh.gifView.setImageURI(AppUtils.getUri(vh.filePath));
                     vh.gifDrawable = (GifDrawable) vh.gifView.getDrawable();
                     vh.messageProgress.withDrawable(R.drawable.ic_play, true);
 

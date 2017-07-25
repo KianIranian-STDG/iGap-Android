@@ -17,14 +17,11 @@ import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.widget.ImageView;
 import java.io.File;
 import net.iGap.R;
-
-import static net.iGap.G.context;
+import net.iGap.module.AppUtils;
 
 public class HelperMimeType {
 
@@ -104,12 +101,7 @@ public class HelperMimeType {
         Intent intent = new Intent();
         intent.setAction(android.content.Intent.ACTION_VIEW);
 
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file);
-        } else {
-            uri = Uri.fromFile(file);
-        }
+        Uri uri = AppUtils.getUri(filePath);
 
         if (isFileText(path)) {
             intent.setDataAndType(uri, "text/*");

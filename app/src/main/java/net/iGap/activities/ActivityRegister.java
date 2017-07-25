@@ -243,7 +243,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setType("image/*");
                             try {
-                                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                                intent.putExtra(Intent.EXTRA_STREAM, AppUtils.getUri(_resultQrCode));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
