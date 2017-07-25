@@ -235,6 +235,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 dialogQrCode = new MaterialDialog.Builder(ActivityRegister.this).title(getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true).positiveText(R.string.share_item_dialog).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (_resultQrCode == null) {
+                            return;
+                        }
                         File file = new File(_resultQrCode);
                         if (file.exists()) {
                             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -250,6 +253,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                 }).negativeText(R.string.save).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (_resultQrCode == null) {
+                            return;
+                        }
                         File file = new File(_resultQrCode);
                         if (file.exists()) {
                             HelperSaveFile.savePicToGallary(_resultQrCode, true);
