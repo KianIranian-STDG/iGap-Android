@@ -185,15 +185,17 @@ public class ActivityMain extends ActivityEnhanced
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
+
         RealmUserInfo userInfo = G.getRealm().where(RealmUserInfo.class).findFirst();
 
-        if (userInfo == null && !userInfo.getUserRegistrationState()) { // user registered before
-            finish();
+        if (userInfo == null) { // user registered before
+
             G.getRealm().close();
+            finish();
             return;
         }
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initTabStrip();
