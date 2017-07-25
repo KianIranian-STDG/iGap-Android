@@ -121,15 +121,15 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
+public class ActivityMain extends ActivityEnhanced
+    implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom,
+    OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
 
     public static boolean isMenuButtonAddShown = false;
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
     FragmentCall fragmentCall;
     public boolean fromCall = false;
-
-
 
     public static MyAppBarLayout appBarLayout;
     private Typeface titleTypeface;
@@ -180,12 +180,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (G.getRealm() != null) {
             G.getRealm().close();
         }
-
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        RealmUserInfo userInfo = G.getRealm().where(RealmUserInfo.class).findFirst();
+
+        if (userInfo == null && !userInfo.getUserRegistrationState()) { // user registered before
+            finish();
+            G.getRealm().close();
+            return;
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -291,7 +298,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         fragmentNewGroup.setArguments(bundle);
 
                         try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment").commitAllowingStateLoss();
+                            getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment")
+                                .commitAllowingStateLoss();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -336,22 +346,49 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.onVerifyNewDevice = new OnVerifyNewDevice() {
             @Override
-            public void verifyNewDevice(String appName, int appId, int appBuildVersion, String appVersion, ProtoGlobal.Platform platform, String platformVersion, ProtoGlobal.Device device, String deviceName, boolean twoStepVerification) {
+            public void verifyNewDevice(String appName, int appId, int appBuildVersion, String appVersion, ProtoGlobal.Platform platform, String platformVersion, ProtoGlobal.Device device,
+                String deviceName, boolean twoStepVerification) {
 
-                final String content = "" + "App name: " + appName + "\n" + "Build version: " + appBuildVersion + "\n" + "App version: " + appVersion + "\n" + "Platform: " + platform + "\n" + "Platform version: " + platformVersion + "\n" + "Device: " + device + "\n" + "Device name: " + deviceName;
+                final String content = ""
+                    + "App name: "
+                    + appName
+                    + "\n"
+                    + "Build version: "
+                    + appBuildVersion
+                    + "\n"
+                    + "App version: "
+                    + appVersion
+                    + "\n"
+                    + "Platform: "
+                    + platform
+                    + "\n"
+                    + "Platform version: "
+                    + platformVersion
+                    + "\n"
+                    + "Device: "
+                    + device
+                    + "\n"
+                    + "Device name: "
+                    + deviceName;
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (HelperCalander.isLanguagePersian) {
-                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.END).content(content).positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification)
+                                .contentGravity(GravityEnum.END)
+                                .content(content)
+                                .positiveText(R.string.B_ok)
+                                .show();
                         } else {
-                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.START).content(content).positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification)
+                                .contentGravity(GravityEnum.START)
+                                .content(content)
+                                .positiveText(R.string.B_ok)
+                                .show();
                         }
-
                     }
                 });
-
             }
 
             @Override
@@ -365,7 +402,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
     }
-
 
     //*******************************************************************************************************************************************
 
@@ -393,7 +429,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragment.setArguments(bundle);
 
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -415,7 +455,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragment.setArguments(bundle);
 
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -437,7 +480,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -511,7 +557,44 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    private void setmViewPagerSelectedItem() {
 
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (G.salectedTabInMainActivity.length() > 0) {
+
+                    FragmentPagerAdapter _adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+
+                    for (int i = 0; i < _adapter.getCount(); i++) {
+
+                        if (_adapter.getItem(i) instanceof FragmentMain) {
+
+                            FragmentMain fm = (FragmentMain) _adapter.getItem(i);
+
+                            if (G.salectedTabInMainActivity.equals(fm.mainType.toString())) {
+                                mViewPager.setCurrentItem(i, false);
+                                break;
+                            }
+                        } else if (_adapter.getItem(i) instanceof FragmentCall) {
+
+                            if (G.salectedTabInMainActivity.equals(_adapter.getItem(i).getClass().getName())) {
+                                mViewPager.setCurrentItem(i, false);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+
+                    if (HelperCalander.isLanguagePersian) {
+                        mViewPager.setCurrentItem(pages.size() - 1, false);
+                    }
+                }
+                G.salectedTabInMainActivity = "";
+            }
+        }, 50);
+    }
 
     private void initTabStrip() {
 
@@ -521,7 +604,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (HelperCalander.isLanguagePersian) {
             navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box),
                 getString(R.string.md_apps));
-
         } else {
             navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon),
                 getString(R.string.md_phone));
@@ -540,7 +622,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             public void onEndTabSelected(String title, int index) {
 
                 onSelectItem(index);
-
             }
         });
 
@@ -549,7 +630,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (fragment != null && (fragment instanceof FragmentCall || fragment instanceof FragmentMain)) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             }
         }
-
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
@@ -575,13 +655,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     navigationTabStrip.setViewPager(mViewPager, 0);
 
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mViewPager.setCurrentItem(pages.size() - 1, false);
-                        }
-                    }, 50);
-
+                    setmViewPagerSelectedItem();
 
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
@@ -596,8 +670,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
                     navigationTabStrip.setViewPager(mViewPager, 0);
-
-
                 }
             }, 100);
 
@@ -615,6 +687,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     mViewPager.getAdapter().notifyDataSetChanged();
                     mViewPager.setOffscreenPageLimit(pages.size());
 
+                    setmViewPagerSelectedItem();
 
                 }
             }, 1000);
@@ -631,7 +704,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (Exception e) {
 
                 }
-
             }
         });
 
@@ -642,7 +714,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             //}
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
-
     }
 
     class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -761,7 +832,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -788,7 +863,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -814,7 +892,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -867,7 +948,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TITLE", "Contacts");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -900,7 +985,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         Fragment fragment = FragmentCall.newInstance(false);
                         try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                            getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .addToBackStack(null)
+                                .replace(R.id.fragmentContainer, fragment)
+                                .commit();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -1013,64 +1102,64 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 //
                 //pageDrawer = 11;
                 new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                        .content(R.string.content_log_out)
-                        .positiveText(getResources().getString(R.string.B_ok))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .iconRes(R.mipmap.exit_to_app_button)
-                        .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                G.onUserSessionLogout = new OnUserSessionLogout() {
-                                    @Override
-                                    public void onUserSessionLogout() {
+                    .content(R.string.content_log_out)
+                    .positiveText(getResources().getString(R.string.B_ok))
+                    .negativeText(getResources().getString(R.string.B_cancel))
+                    .iconRes(R.mipmap.exit_to_app_button)
+                    .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            G.onUserSessionLogout = new OnUserSessionLogout() {
+                                @Override
+                                public void onUserSessionLogout() {
 
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                HelperLogout.logout();
-                                            }
-                                        });
-                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            HelperLogout.logout();
+                                        }
+                                    });
+                                }
 
-                                    @Override
-                                    public void onError() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
-                                            }
-                                        });
-                                    }
+                                @Override
+                                public void onError() {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    snack.dismiss();
+                                                }
+                                            });
+                                            snack.show();
+                                        }
+                                    });
+                                }
 
-                                    @Override
-                                    public void onTimeOut() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
-                                            }
-                                        });
-                                    }
-                                };
-                                new RequestUserSessionLogout().userSessionLogout();
-                            }
-                        })
-                        .show();
+                                @Override
+                                public void onTimeOut() {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    snack.dismiss();
+                                                }
+                                            });
+                                            snack.show();
+                                        }
+                                    });
+                                }
+                            };
+                            new RequestUserSessionLogout().userSessionLogout();
+                        }
+                    })
+                    .show();
                 closeDrawer();
             }
         });
@@ -1525,13 +1614,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
          */
         G.onRefreshActivity = new OnRefreshActivity() {
             @Override
-            public void refresh(String changeLanguage) {
+            public void refresh(String changeLanguag) {
                 ActivityMain.this.recreate();
-
-                if (changeLanguage.length() > 0) {
-                    G.isMainActivityRecreate = true;
-                }
-
             }
         };
 
@@ -1569,8 +1653,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     finish();
                 }
             };
-
-
         } else {
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
         }
@@ -1598,26 +1680,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         getIntent().setData(null);
         setDrawerInfo(false);
 
-        if (G.isMainActivityRecreate) {
-            if (pages.size() > 0 && pages.size() >= G.salectedTabInMainActivity) {
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mViewPager.setCurrentItem(G.salectedTabInMainActivity, false);
-                        G.isMainActivityRecreate = false;
-                        onSelectItem(G.salectedTabInMainActivity);
-                    }
-                }, 500);
-            }
-        } else {
-            G.isMainActivityRecreate = false;
-
-        }
-
         if (drawer != null) {
             drawer.closeDrawer(GravityCompat.START);
         }
-
     }
 
     @Override
@@ -1625,14 +1690,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onPause();
         HelperNotificationAndBadge.updateBadgeOnly();
 
-        if (mViewPager != null && !G.isMainActivityRecreate) {
-            G.salectedTabInMainActivity = mViewPager.getAdapter().getCount() - 1 - mViewPager.getCurrentItem();
+        if (mViewPager != null) {
 
-            if (G.salectedTabInMainActivity < 0) {
-                G.salectedTabInMainActivity = 0;
+            try {
+
+                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+
+                if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
+
+                    FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
+                    G.salectedTabInMainActivity = fm.mainType.toString();
+                } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
+
+                    ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
+                    G.salectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
+                }
+            } catch (Exception e) {
+
             }
         }
-
     }
 
     @Override
@@ -1720,7 +1796,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         if (imagePath == null || !new File(imagePath).exists()) {
                             Realm realm1 = Realm.getDefaultInstance();
                             RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
-                            imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
+                            imgNavImage.setImageBitmap(
+                                HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(),
+                                    realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);

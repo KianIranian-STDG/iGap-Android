@@ -256,8 +256,8 @@ public class G extends MultiDexApplication {
     public static boolean needGetSignalingConfiguration = true;
     public static boolean isInCall = false;
     public static boolean isShowRatingDialog = false;
-    public static boolean isMainActivityRecreate = false;
-    public static int salectedTabInMainActivity = 0;
+
+    public static String salectedTabInMainActivity = "";
 
     public static int ivSize;
     public static int userTextSize = 0;
