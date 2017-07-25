@@ -419,10 +419,11 @@ public class ActivityPaint extends ActivityEnhanced {
 
                             File imgFile = new File(selectedImagePath);
                             Bitmap b = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-
-                            b = Bitmap.createScaledBitmap(b, w, h, false);
-                            Paint paint = new Paint();
-                            mCanvas.drawBitmap(b, 0, 0, paint);
+                            if (b != null) {
+                                b = Bitmap.createScaledBitmap(b, w, h, false);
+                                Paint paint = new Paint();
+                                mCanvas.drawBitmap(b, 0, 0, paint);
+                            }
                         } finally {
                             cursor.close();
                         }
@@ -431,9 +432,11 @@ public class ActivityPaint extends ActivityEnhanced {
                     String filePath = AttachFile.imagePath;
                     File imgFile = new File(filePath);
                     Bitmap b = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    b = Bitmap.createScaledBitmap(b, w, h, false);
-                    Paint paint = new Paint();
-                    mCanvas.drawBitmap(b, 0, 0, paint);
+                    if (b != null) {
+                        b = Bitmap.createScaledBitmap(b, w, h, false);
+                        Paint paint = new Paint();
+                        mCanvas.drawBitmap(b, 0, 0, paint);
+                    }
                 }
             }
         }
