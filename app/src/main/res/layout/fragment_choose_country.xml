@@ -6,6 +6,7 @@
     tools:context="net.iGap.fragments.FragmentChooseCountry"
     android:id="@+id/rootChooseCountry"
     android:orientation="vertical"
+    android:elevation="999dp"
     >
 
   <android.support.design.widget.AppBarLayout

@@ -136,18 +136,19 @@
           android:background="@color/background_editText"
           />
 
-      <TextView
+
+      <com.uncopt.android.widget.text.justify.JustifiedTextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:gravity="center_vertical"
-          android:lineSpacingExtra="4dp"
-          android:padding="@dimen/dp16"
+          android:lineSpacingExtra="3dp"
+          android:padding="@dimen/dp14"
           android:text="@string/st_dialog_content_keepMedia"
           android:textColor="@color/black_register"
           android:textSize="@dimen/dp14"
           fontPath="fonts/IRANSansMobile.ttf"
-
           />
+
+
       <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
@@ -261,16 +262,14 @@
           android:background="@color/background_editText"
           />
 
-      <TextView
+      <com.uncopt.android.widget.text.justify.JustifiedTextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:gravity="center_vertical"
-          android:lineSpacingExtra="4dp"
-          android:padding="@dimen/dp16"
+          android:lineSpacingExtra="3dp"
+          android:padding="@dimen/dp14"
           android:text="@string/clean_up_description"
           android:textColor="@color/black_register"
           android:textSize="@dimen/dp14"
-          android:textStyle="normal"
           fontPath="fonts/IRANSansMobile.ttf"
           />
     </LinearLayout>
