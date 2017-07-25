@@ -1032,6 +1032,7 @@ public class FragmentMain extends Fragment implements OnComplete {
         private void setLastMessage(RealmRoom mInfo, ViewHolder holder, boolean isMyCloud) {
 
             holder.txtTic.setVisibility(View.GONE);
+            holder.txtLastMessageFileText.setVisibility(View.GONE);
             holder.txtLastMessage.setText("");
 
             if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((isMyCloud || (mInfo.getActionStateUserId() != userId))))) {
@@ -1161,8 +1162,6 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 if (fileText != null && !fileText.isEmpty()) {
                                     holder.txtLastMessageFileText.setVisibility(View.VISIBLE);
                                     holder.txtLastMessageFileText.setText(fileText);
-                                } else {
-                                    holder.txtLastMessageFileText.setVisibility(View.GONE);
                                 }
                             }
                         } else {
