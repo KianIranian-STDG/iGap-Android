@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -21,11 +20,11 @@ import net.iGap.module.FileUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmRoomMessage;
 
-public class ActivityManageSpace extends AppCompatActivity {
+public class ActivityManageSpace extends ActivityEnhanced {
     private SharedPreferences sharedPreferences;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_space);
 

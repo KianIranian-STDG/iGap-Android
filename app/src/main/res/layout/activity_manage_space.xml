@@ -145,7 +145,6 @@
           android:text="@string/st_dialog_content_keepMedia"
           android:textColor="@color/black_register"
           android:textSize="@dimen/dp14"
-          android:textStyle="normal"
           fontPath="fonts/IRANSansMobile.ttf"
 
           />
@@ -230,7 +229,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp8"
-            android:text="@string/st_title_Clear_Cache"
+            android:text="@string/clean_up_chat_rooms"
             android:textColor="@color/black_register"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
