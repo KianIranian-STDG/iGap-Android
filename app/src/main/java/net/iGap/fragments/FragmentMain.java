@@ -1149,12 +1149,6 @@ public class FragmentMain extends Fragment implements OnComplete {
                             }
 
                             String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, R.color.room_message_blue);
-                            if (fileText != null && !fileText.isEmpty()) {
-                                holder.txtLastMessageFileText.setVisibility(View.VISIBLE);
-                                holder.txtLastMessageFileText.setText(fileText);
-                            } else {
-                                holder.txtLastMessageFileText.setVisibility(View.GONE);
-                            }
                             if (result.isEmpty()) {
                                 if (!HelperCalander.isLanguagePersian) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -1163,6 +1157,13 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 }
                                 holder.txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
                                 holder.txtLastMessage.setText(subStringInternal(lastMessage));
+                            } else {
+                                if (fileText != null && !fileText.isEmpty()) {
+                                    holder.txtLastMessageFileText.setVisibility(View.VISIBLE);
+                                    holder.txtLastMessageFileText.setText(fileText);
+                                } else {
+                                    holder.txtLastMessageFileText.setVisibility(View.GONE);
+                                }
                             }
                         } else {
                             holder.txtLastMessage.setText(subStringInternal(lastMessage));
