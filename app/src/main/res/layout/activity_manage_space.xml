@@ -76,193 +76,204 @@
   </android.support.design.widget.AppBarLayout>
 
 
-  <LinearLayout
-      android:id="@+id/st_layout_keepMedia"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dp52"
-      android:orientation="horizontal"
-      android:background="@color/white"
-      >
-
-
-    <TextView
-        android:id="@+id/st_txt_keepMedia"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/dp48"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dp16"
-        android:paddingRight="@dimen/dp16"
-        android:paddingTop="@dimen/dp4"
-        android:text="@string/st_keepMedia"
-        android:textColor="@color/black_register"
-        android:textSize="@dimen/dp15"
-        android:textStyle="normal"
-        android:visibility="visible"
-        android:singleLine="true"
-        fontPath="fonts/IRANSansMobile.ttf"
-        />
-
-    <TextView
-        android:id="@+id/st_txt_sub_keepMedia"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dp16"
-        android:paddingRight="@dimen/dp16"
-        android:text="1Week"
-        android:textColor="@color/toolbar_background"
-        android:textSize="@dimen/dp15"
-        android:textStyle="normal"
-        fontPath="fonts/IRANSansMobile.ttf"
-        />
-  </LinearLayout>
-
-
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="@color/background_editText"
-      />
-
-  <TextView
-      android:layout_width="match_parent"
+  <android.support.v4.widget.NestedScrollView
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:padding="@dimen/dp16"
-      android:text="@string/st_dialog_content_keepMedia"
-      android:textColor="@color/black_register"
-      android:textSize="@dimen/dp14"
-      android:textStyle="normal"
-      fontPath="fonts/IRANSansMobile.ttf"
-      android:lineSpacingExtra="2.5dp"
-
-      />
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="@color/background_editText"
-      />
-
-  <LinearLayout
-      android:id="@+id/st_layout_clearCache"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dp48"
-      android:orientation="horizontal"
-      android:background="@color/white"
       >
 
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dp16"
-        android:paddingRight="@dimen/dp16"
-        android:paddingTop="@dimen/dp8"
-        android:text="@string/st_title_Clear_Cache"
-        android:textColor="@color/black_register"
-        android:textSize="@dimen/dp15"
-        android:textStyle="normal"
-        fontPath="fonts/IRANSansMobile.ttf"
-        />
-
-
-    <TextView
-        android:id="@+id/st_txt_clearCache"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:paddingLeft="@dimen/dp16"
-        android:paddingRight="@dimen/dp16"
-        android:text="0 KB"
-        android:textColor="@color/toolbar_background"
-        android:textSize="@dimen/dp15"
-        android:textStyle="normal"
-        fontPath="fonts/IRANSansMobile.ttf"
-        />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+      <LinearLayout
+          android:id="@+id/st_layout_keepMedia"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp52"
+          android:background="@color/white"
+          android:orientation="horizontal"
+          >
 
 
-  </LinearLayout>
+        <TextView
+            android:id="@+id/st_txt_keepMedia"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:singleLine="true"
+            android:text="@string/st_keepMedia"
+            android:textColor="@color/black_register"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            android:visibility="visible"
+            fontPath="fonts/IRANSansMobile.ttf"
+            />
 
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="@color/background_editText"
-      />
-
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dp48"
-      />
-
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="@color/background_editText"
-      />
-
-  <LinearLayout
-      android:id="@+id/st_layout_cleanUp"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dp48"
-      android:orientation="horizontal"
-      android:background="@color/white"
-      >
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dp16"
-        android:paddingRight="@dimen/dp16"
-        android:paddingTop="@dimen/dp8"
-        android:text="@string/st_title_Clear_Cache"
-        android:textColor="@color/black_register"
-        android:textSize="@dimen/dp15"
-        android:textStyle="normal"
-        fontPath="fonts/IRANSansMobile.ttf"
-        />
+        <TextView
+            android:id="@+id/st_txt_sub_keepMedia"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:text="1Week"
+            android:textColor="@color/toolbar_background"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            fontPath="fonts/IRANSansMobile.ttf"
+            />
+      </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/st_txt_cleanUp"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:paddingLeft="@dimen/dp16"
-        android:paddingRight="@dimen/dp16"
-        android:text="0 KB"
-        android:textColor="@color/toolbar_background"
-        android:textSize="@dimen/dp15"
-        android:textStyle="normal"
-        fontPath="fonts/IRANSansMobile.ttf"
-        />
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/background_editText"
+          />
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center_vertical"
+          android:lineSpacingExtra="4dp"
+          android:padding="@dimen/dp16"
+          android:text="@string/st_dialog_content_keepMedia"
+          android:textColor="@color/black_register"
+          android:textSize="@dimen/dp14"
+          android:textStyle="normal"
+          fontPath="fonts/IRANSansMobile.ttf"
+
+          />
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/background_editText"
+          />
+
+      <LinearLayout
+          android:id="@+id/st_layout_clearCache"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp48"
+          android:background="@color/white"
+          android:orientation="horizontal"
+          >
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:text="@string/st_title_Clear_Cache"
+            android:textColor="@color/black_register"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            fontPath="fonts/IRANSansMobile.ttf"
+            />
 
 
-  </LinearLayout>
+        <TextView
+            android:id="@+id/st_txt_clearCache"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:text="0 KB"
+            android:textColor="@color/toolbar_background"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            fontPath="fonts/IRANSansMobile.ttf"
+            />
 
 
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="@color/background_editText"
-      />
+      </LinearLayout>
 
-  <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center_vertical"
-      android:padding="@dimen/dp16"
-      android:text="@string/clean_up_description"
-      android:textColor="@color/black_register"
-      android:textSize="@dimen/dp14"
-      android:textStyle="normal"
-      fontPath="fonts/IRANSansMobile.ttf"
-      android:lineSpacingExtra="2.5dp"
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/background_editText"
+          />
 
-      />
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp48"
+          />
 
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/background_editText"
+          />
+
+      <LinearLayout
+          android:id="@+id/st_layout_cleanUp"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp48"
+          android:background="@color/white"
+          android:orientation="horizontal"
+          >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:text="@string/st_title_Clear_Cache"
+            android:textColor="@color/black_register"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            fontPath="fonts/IRANSansMobile.ttf"
+            />
+
+
+        <TextView
+            android:id="@+id/st_txt_cleanUp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:text="0 KB"
+            android:textColor="@color/toolbar_background"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            fontPath="fonts/IRANSansMobile.ttf"
+            />
+
+
+      </LinearLayout>
+
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/background_editText"
+          />
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center_vertical"
+          android:lineSpacingExtra="4dp"
+          android:padding="@dimen/dp16"
+          android:text="@string/clean_up_description"
+          android:textColor="@color/black_register"
+          android:textSize="@dimen/dp14"
+          android:textStyle="normal"
+          fontPath="fonts/IRANSansMobile.ttf"
+          />
+    </LinearLayout>
+  </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

@@ -237,6 +237,7 @@
             />
 
         <TextView
+            android:id="@+id/txtNon_User"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/list_contacts"

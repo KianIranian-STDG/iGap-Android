@@ -143,6 +143,8 @@ public class RegisteredContactsFragment extends Fragment {
 
         //set interface for get callback here
 
+        TextView txtNonUser = (TextView) view.findViewById(R.id.txtNon_User);
+        txtNonUser.setTextColor(Color.parseColor(G.appBarColor));
         prgWaitingLiadList = (ProgressBar) view.findViewById(R.id.prgWaiting_loadList);
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);

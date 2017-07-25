@@ -4,6 +4,7 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CountryListComparator;
@@ -69,6 +71,8 @@ public class FragmentChooseCountry extends Fragment {
 
             }
         });
+
+        view.findViewById(R.id.fac_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.ac_ripple_back);
         rippleBack.setOnClickListener(new View.OnClickListener() {
