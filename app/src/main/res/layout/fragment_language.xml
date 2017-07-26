@@ -62,7 +62,7 @@
             android:layout_toEndOf="@+id/stns_ripple_back"
             android:layout_toRightOf="@+id/stns_ripple_back"
             android:gravity="center"
-            android:text="@string/manage_spacing"
+            android:text="@string/st_Language"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18"
             android:textStyle="normal"
