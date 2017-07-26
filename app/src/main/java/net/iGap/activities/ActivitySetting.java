@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
@@ -62,6 +61,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentDeleteAccount;
+import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentPrivacyAndSecurity;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperAvatar;
@@ -120,7 +120,6 @@ import net.iGap.request.RequestUserSessionLogout;
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
 
 import static net.iGap.G.context;
-import static net.iGap.G.onRefreshActivity;
 import static net.iGap.R.string.log_out;
 
 public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarResponse {
@@ -1171,61 +1170,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_Language)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.language).itemsCallbackSingleChoice(poRbDialogLangouage, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                        txtLanguage.setText(text.toString());
-                        poRbDialogLangouage = which;
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(SHP_SETTING.KEY_LANGUAGE, text.toString());
-                        editor.apply();
-
-                        switch (which) {
-                            case 0:
-                                if (!G.selectedLanguage.equals("en")) {
-                                    setLocale("en");
-                                    HelperCalander.isLanguagePersian = false;
-                                    if (onRefreshActivity != null) onRefreshActivity.refresh("en");
-                                    G.selectedLanguage = "en";
-                                }
-
-                                break;
-                            case 1:
-                                if (!G.selectedLanguage.equals("fa")) {
-                                    G.selectedLanguage = "fa";
-                                    setLocale("fa");
-                                    HelperCalander.isLanguagePersian = true;
-                                    if (onRefreshActivity != null) onRefreshActivity.refresh("fa");
-                                }
-
-
-                                break;
-                            case 2:
-                                if (!G.selectedLanguage.equals("ar")) {
-                                    G.selectedLanguage = "ar";
-                                    setLocale("ar");
-                                    HelperCalander.isLanguagePersian = false;
-                                    if (onRefreshActivity != null) onRefreshActivity.refresh("ar");
-                                }
-
-
-                                break;
-                            case 3:
-                                if (!G.selectedLanguage.equals("nl")) {
-                                    G.selectedLanguage = "nl";
-                                    setLocale("nl");
-                                    HelperCalander.isLanguagePersian = false;
-                                    if (onRefreshActivity != null) onRefreshActivity.refresh("nl");
-                                }
-
-
-                                break;
-                        }
-
-                        return false;
-                    }
-                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
+                FragmentLanguage fragmentLanguage = new FragmentLanguage();
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentLanguage, null).commit();
             }
         });
 
@@ -2426,17 +2372,6 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     // change language
-    public void setLocale(String lang) {
-
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-        startActivity(new Intent(ActivitySetting.this, ActivitySetting.class));
-        overridePendingTransition(0, 0);
-        finish();
-    }
 
     @Override
     public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {

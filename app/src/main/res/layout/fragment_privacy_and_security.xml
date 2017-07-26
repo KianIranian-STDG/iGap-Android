@@ -616,7 +616,7 @@
             android:padding="@dimen/dp8"
             android:text="@string/desc_self_destroy"
             android:textColor="@color/cardview_dark_background"
-            android:textSize="@dimen/dp13"
+            android:textSize="@dimen/dp12"
             android:textStyle="normal"
             fontPath="fonts/IRANSansMobile.ttf"
             />

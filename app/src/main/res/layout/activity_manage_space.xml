@@ -137,17 +137,20 @@
           />
 
 
-      <com.uncopt.android.widget.text.justify.JustifiedTextView
-          android:layout_width="match_parent"
+      <RelativeLayout
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:lineSpacingExtra="3dp"
-          android:padding="@dimen/dp14"
-          android:text="@string/st_dialog_content_keepMedia"
-          android:textColor="@color/black_register"
-          android:textSize="@dimen/dp14"
-          fontPath="fonts/IRANSansMobile.ttf"
-          />
-
+          >
+        <com.uncopt.android.widget.text.justify.JustifiedTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp14"
+            android:text="@string/st_dialog_content_keepMedia"
+            android:textColor="@color/black_register"
+            android:textSize="@dimen/dp12"
+            fontPath="fonts/IRANSansMobile.ttf"
+            />
+      </RelativeLayout>
 
       <View
           android:layout_width="match_parent"
@@ -262,16 +265,21 @@
           android:background="@color/background_editText"
           />
 
-      <com.uncopt.android.widget.text.justify.JustifiedTextView
+      <RelativeLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:lineSpacingExtra="3dp"
-          android:padding="@dimen/dp14"
-          android:text="@string/clean_up_description"
-          android:textColor="@color/black_register"
-          android:textSize="@dimen/dp14"
-          fontPath="fonts/IRANSansMobile.ttf"
-          />
+          android:layout_height="match_parent"
+          >
+        <com.uncopt.android.widget.text.justify.JustifiedTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp14"
+            android:text="@string/clean_up_description"
+            android:textColor="@color/black_register"
+            android:textSize="@dimen/dp12"
+            fontPath="fonts/IRANSansMobile.ttf"
+            />
+      </RelativeLayout>
+
     </LinearLayout>
   </android.support.v4.widget.NestedScrollView>
 </LinearLayout>
