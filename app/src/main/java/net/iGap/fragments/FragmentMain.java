@@ -1162,6 +1162,10 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 if (fileText != null && !fileText.isEmpty()) {
                                     holder.txtLastMessageFileText.setVisibility(View.VISIBLE);
                                     holder.txtLastMessageFileText.setText(fileText);
+
+                                    holder.txtLastMessage.setText(holder.txtLastMessage.getText() + " : ");
+                                } else {
+                                    holder.txtLastMessageFileText.setVisibility(View.GONE);
                                 }
                             }
                         } else {

@@ -1433,14 +1433,18 @@ public class ViewMaker {
         cs_txt_chat_icon.setId(R.id.cs_txt_chat_icon);
         cs_txt_chat_icon.setPadding(0, 0, 0, dpToPixel(2));
         cs_txt_chat_icon.setTextColor(Color.parseColor("#333333"));
-        if (HelperCalander.isLanguagePersian) {
-            cs_txt_chat_icon.setPadding((int) G.context.getResources().getDimension(R.dimen.dp8), 0, 0, 0);
-        } else {
-            cs_txt_chat_icon.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
-        }
+
         setTextSize(cs_txt_chat_icon, R.dimen.dp14);
         LinearLayout.LayoutParams layout_525 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_525.gravity = Gravity.CENTER;
+        if (HelperCalander.isLanguagePersian) {
+            layout_525.leftMargin = i_Dp(R.dimen.dp8);
+        } else {
+            layout_525.rightMargin = i_Dp(R.dimen.dp8);
+        }
+
+
+
         cs_txt_chat_icon.setLayoutParams(layout_525);
         linearLayout_922.addView(cs_txt_chat_icon);
 
@@ -1450,19 +1454,30 @@ public class ViewMaker {
         cs_txt_contact_name.setMaxWidth(i_Dp(R.dimen.dp160));
         cs_txt_contact_name.setPadding(0, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
         cs_txt_contact_name.setText("Name");
+
         setTypeFace(cs_txt_contact_name);
         cs_txt_contact_name.setSingleLine(true);
         cs_txt_contact_name.setEmojiSize(i_Dp(R.dimen.dp16));
         cs_txt_contact_name.setTextColor(G.context.getResources().getColor(R.color.black90));
         setTextSize(cs_txt_contact_name, R.dimen.dp15);
-        LinearLayout.LayoutParams layout_115 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_115 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+
+        if (HelperCalander.isLanguagePersian) {
+            layout_115.gravity = Gravity.RIGHT;
+            cs_txt_contact_name.setGravity(Gravity.RIGHT);
+        } else {
+            layout_115.gravity = Gravity.LEFT;
+            cs_txt_contact_name.setGravity(Gravity.LEFT);
+        }
+
+
         cs_txt_contact_name.setLayoutParams(layout_115);
         linearLayout_922.addView(cs_txt_contact_name);
         linearLayout_353.addView(linearLayout_922);
 
         LinearLayout lyt_last_message_room = new LinearLayout(G.context);
         lyt_last_message_room.setId(R.id.lyt_last_message_room);
-        lyt_last_message_room.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+        // lyt_last_message_room.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         if (HelperCalander.isLanguagePersian) {
             lyt_last_message_room.setGravity(Gravity.RIGHT);
         } else {
@@ -1471,6 +1486,21 @@ public class ViewMaker {
         lyt_last_message_room.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_338 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         lyt_last_message_room.setLayoutParams(layout_338);
+
+        LinearLayout lyt_last_message = new LinearLayout(G.context);
+        if (HelperCalander.isLanguagePersian) {
+            lyt_last_message.setGravity(Gravity.RIGHT);
+        } else {
+            lyt_last_message.setGravity(Gravity.LEFT);
+        }
+        lyt_last_message.setOrientation(HORIZONTAL);
+        LinearLayout.LayoutParams layout_3382 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1);
+        lyt_last_message.setLayoutParams(layout_3382);
+
+
+
+
+
 
         EmojiTextViewE cs_txt_last_message_sender = new EmojiTextViewE(G.context);
         cs_txt_last_message_sender.setId(R.id.cs_txt_last_message_sender);
@@ -1485,14 +1515,15 @@ public class ViewMaker {
         layout_972.leftMargin = dpToPixel(2);
         layout_972.rightMargin = dpToPixel(2);
         cs_txt_last_message_sender.setLayoutParams(layout_972);
-        lyt_last_message_room.addView(cs_txt_last_message_sender);
+        lyt_last_message.addView(cs_txt_last_message_sender);
 
         EmojiTextViewE cs_txt_last_message = new EmojiTextViewE(G.context);
         cs_txt_last_message.setId(R.id.cs_txt_last_message);
         cs_txt_last_message.setGravity(Gravity.CENTER_VERTICAL);
         cs_txt_last_message.setEllipsize(TextUtils.TruncateAt.END);
         cs_txt_last_message.setSingleLine(true);
-        cs_txt_last_message.setMaxWidth(i_Dp(R.dimen.dp180));
+
+        //  cs_txt_last_message.setMaxWidth(i_Dp(R.dimen.dp180));
         cs_txt_last_message.setText("LAST MESSAGE");
         setTypeFace(cs_txt_last_message);
         cs_txt_last_message.setTextColor(Color.parseColor("#FF616161"));
@@ -1501,14 +1532,14 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_1151 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layout_1151.bottomMargin = dpToPixel(2);
         cs_txt_last_message.setLayoutParams(layout_1151);
-        lyt_last_message_room.addView(cs_txt_last_message);
+        lyt_last_message.addView(cs_txt_last_message);
 
         EmojiTextViewE cs_txt_last_message_file_text = new EmojiTextViewE(G.context);
         cs_txt_last_message_file_text.setId(R.id.cs_txt_last_message_file_text);
         cs_txt_last_message_file_text.setGravity(Gravity.CENTER_VERTICAL);
         cs_txt_last_message_file_text.setEllipsize(TextUtils.TruncateAt.END);
         cs_txt_last_message_file_text.setSingleLine(true);
-        cs_txt_last_message_file_text.setMaxWidth(i_Dp(R.dimen.dp180));
+        // cs_txt_last_message_file_text.setMaxWidth(i_Dp(R.dimen.dp180));
         cs_txt_last_message_file_text.setText("");
         setTypeFace(cs_txt_last_message_file_text);
         cs_txt_last_message_file_text.setTextColor(Color.parseColor("#FF616161"));
@@ -1516,29 +1547,37 @@ public class ViewMaker {
         cs_txt_last_message_file_text.setEmojiSize(i_Dp(R.dimen.dp13));
         LinearLayout.LayoutParams layout_1151_file_text = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layout_1151_file_text.bottomMargin = dpToPixel(2);
-        if (HelperCalander.isLanguagePersian) {
-            layout_1151_file_text.rightMargin = dpToPixel(2);
-        } else {
-            layout_1151_file_text.leftMargin = dpToPixel(2);
-        }
+        layout_1151_file_text.rightMargin = dpToPixel(2);
+        layout_1151_file_text.leftMargin = dpToPixel(2);
+
         cs_txt_last_message_file_text.setLayoutParams(layout_1151_file_text);
-        lyt_last_message_room.addView(cs_txt_last_message_file_text);
+        lyt_last_message.addView(cs_txt_last_message_file_text);
+
+        lyt_last_message_room.addView(lyt_last_message);
 
         linearLayout_353.addView(lyt_last_message_room);
         linearLayout_938.addView(linearLayout_353);
 
-        LinearLayout linearLayout_604 = new LinearLayout(G.context);
-        linearLayout_604.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-        linearLayout_604.setMinimumWidth(i_Dp(R.dimen.dp28));
-        linearLayout_604.setOrientation(VERTICAL);
-        linearLayout_604.setPadding(0, i_Dp(R.dimen.dp10), 0, 0);
-        LinearLayout.LayoutParams layout_468 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        linearLayout_604.setLayoutParams(layout_468);
+        //LinearLayout linearLayout_604 = new LinearLayout(G.context);
+        //linearLayout_604.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+        //linearLayout_604.setMinimumWidth(i_Dp(R.dimen.dp28));
+        //linearLayout_604.setOrientation(VERTICAL);
+        //linearLayout_604.setPadding(0, i_Dp(R.dimen.dp10), 0, 0);
+        //LinearLayout.LayoutParams layout_468 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        //linearLayout_604.setLayoutParams(layout_468);
 
         LinearLayout linearLayout_620 = new LinearLayout(G.context);
         linearLayout_620.setOrientation(HORIZONTAL);
-        linearLayout_620.setPadding(i_Dp(R.dimen.dp8), 0, i_Dp(R.dimen.dp8), 0);
+        linearLayout_620.setPadding(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp8), 0);
         LinearLayout.LayoutParams layout_800 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        if (HelperCalander.isLanguagePersian) {
+            layout_800.gravity = Gravity.LEFT;
+        } else {
+            layout_800.gravity = Gravity.RIGHT;
+        }
+
+
         linearLayout_620.setLayoutParams(layout_800);
 
         MaterialDesignTextView cs_txt_mute = new MaterialDesignTextView(G.context);
@@ -1577,7 +1616,8 @@ public class ViewMaker {
         setTypeFace(cs_txt_contact_time);
         cs_txt_contact_time.setLayoutParams(layout_574);
         linearLayout_620.addView(cs_txt_contact_time);
-        linearLayout_604.addView(linearLayout_620);
+
+        linearLayout_922.addView(linearLayout_620);
 
         TextView cs_txt_unread_message = new TextView(G.context);
         cs_txt_unread_message.setId(R.id.cs_txt_unread_message);
@@ -1592,9 +1632,8 @@ public class ViewMaker {
         setTextSize(cs_txt_unread_message, R.dimen.dp10);
         LinearLayout.LayoutParams layout_79 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_79.gravity = Gravity.END | Gravity.CENTER;
-        layout_79.topMargin = i_Dp(R.dimen.dp4);
         cs_txt_unread_message.setLayoutParams(layout_79);
-        linearLayout_604.addView(cs_txt_unread_message);
+        lyt_last_message_room.addView(cs_txt_unread_message);
 
         MaterialDesignTextView cs_txt_pinned_message = new MaterialDesignTextView(G.context);
         cs_txt_pinned_message.setId(R.id.cs_txt_pinned_message);
@@ -1606,16 +1645,13 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_175 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_175.gravity = Gravity.END | Gravity.CENTER;
 
-        if (HelperCalander.isLanguagePersian) {
-            layout_175.leftMargin = i_Dp(R.dimen.dp6);
-        } else {
-            layout_175.rightMargin = i_Dp(R.dimen.dp6);
-        }
+        layout_175.leftMargin = i_Dp(R.dimen.dp6);
+        layout_175.rightMargin = i_Dp(R.dimen.dp6);
 
-        layout_175.topMargin = i_Dp(R.dimen.dp4);
         cs_txt_pinned_message.setLayoutParams(layout_175);
-        linearLayout_604.addView(cs_txt_pinned_message);
-        linearLayout_938.addView(linearLayout_604);
+
+        lyt_last_message_room.addView(cs_txt_pinned_message);
+        //  linearLayout_938.addView(linearLayout_604);
         linearLayout_849.addView(linearLayout_938);
 
         View textView_186 = new View(G.context);
