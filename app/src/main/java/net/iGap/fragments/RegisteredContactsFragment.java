@@ -47,7 +47,6 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import net.iGap.G;
@@ -632,7 +631,7 @@ public class RegisteredContactsFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<StructListOfContact> structListOfContacts) {
 
-            Collections.sort(structListOfContacts);
+            //Collections.sort(structListOfContacts);
 
             for (int i = 0; i < structListOfContacts.size(); i++) {
                 fastItemAdapter.add(new AdapterListContact(structListOfContacts.get(i).getDisplayName()).withIdentifier(100 + i));

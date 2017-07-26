@@ -239,36 +239,34 @@ public class Contacts {
         return list;
     }
 
+    private static ArrayList<String> arrayList = new ArrayList<>();
     private static ArrayList<String> number = new ArrayList<>();
 
     public static ArrayList<StructListOfContact> getMobileListContact() { //get List Of Contact
-        number.clear();
+        ArrayList<String> test = new ArrayList<>();
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME + " ASC");
 
         if (cur != null) {
             if (cur.getCount() > 0) {
                 while (cur.moveToNext()) {
-                    int id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
+
+                    int id = 0;
+                    id = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
+
                     if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                         Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(id)}, null);
-
                         if (pCur != null) {
                             while (pCur.moveToNext()) {
-                                if ((number != null && number.contains(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replace(" ", "")))) {
-                                    break;
-                                }
-                                StructListOfContact itemContact = new StructListOfContact();
-                                itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-                                int phoneType = pCur.getInt(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-                                if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) { //
-                                    if (number != null) {
-                                        number.add(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replace(" ", ""));
-                                    }
-                                    itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
+                                String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                                if (!test.contains(number.replace(" ", ""))) {
+                                    StructListOfContact itemContact = new StructListOfContact();
+                                    itemContact.setDisplayName(name);
+                                    itemContact.setPhone(number);
                                     contactList.add(itemContact);
-                                    break;
+                                    test.add(number.replace(" ", ""));
                                 }
                             }
                             pCur.close();
@@ -278,6 +276,7 @@ public class Contacts {
             }
             cur.close();
         }
+
         return contactList;
     }
 }
