@@ -76,14 +76,63 @@
               android:lineSpacingExtra="0dp"
               android:lineSpacingMultiplier=".8"
               android:maxWidth="@dimen/dp160"
-              android:paddingBottom="@dimen/dp4"
-              android:paddingTop="@dimen/dp4"
               android:singleLine="true"
+              android:layout_gravity="top"
               android:text="Name"
               android:textColor="@color/black90"
               android:textSize="@dimen/dp15"
               app:emojiSize="@dimen/dp16"
               />
+
+          <LinearLayout
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:layout_weight="1"
+              android:gravity="right|end"
+              android:paddingEnd="@dimen/dp8"
+              android:paddingTop="@dimen/dp4"
+              android:paddingRight="@dimen/dp8"
+              >
+
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/cs_txt_mute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp4"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:layout_marginStart="@dimen/dp4"
+                android:text="@string/md_muted"
+                android:textAppearance="@style/TextIconAppearance_toolbar"
+                android:textColor="@color/grayNew"
+                android:textSize="@dimen/dp13"
+                />
+
+            <ImageView
+                android:id="@+id/cslr_txt_tic"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                style="@style/ChatMessages.MaterialDesignTextView.Tick"
+                />
+
+            <TextView
+                android:id="@+id/cs_txt_contact_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="time"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dp12"
+                />
+
+
+          </LinearLayout>
 
 
         </LinearLayout>
@@ -116,11 +165,11 @@
               android:id="@+id/cs_txt_last_message"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
+              android:layout_weight="1"
               android:gravity="center_vertical"
               android:ellipsize="end"
               android:maxLines="1"
               android:layout_marginBottom="2dp"
-              android:maxWidth="@dimen/dp180"
               android:singleLine="true"
               android:text="LAST MESSAGE"
               android:textColor="#FF616161"
@@ -135,9 +184,11 @@
               android:layout_height="match_parent"
               android:gravity="center_vertical"
               android:ellipsize="end"
+              android:layout_marginRight="@dimen/dp4"
+              android:layout_marginLeft="@dimen/dp4"
               android:maxLines="1"
+              android:layout_weight="1"
               android:layout_marginBottom="2dp"
-              android:maxWidth="@dimen/dp180"
               android:singleLine="true"
               android:text="LAST MESSAGE"
               android:textColor="#FF616161"
@@ -146,98 +197,41 @@
               fontPath="fonts/IRANSansMobile.ttf"
               />
 
-        </LinearLayout>
-
-      </LinearLayout>
-
-      <LinearLayout
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:gravity="top|center_horizontal"
-          android:minWidth="@dimen/dp28"
-          android:orientation="vertical"
-          android:paddingTop="@dimen/dp10"
-          >
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp8"
-            android:paddingRight="@dimen/dp8"
-            >
-
-          <net.iGap.module.MaterialDesignTextView
-              android:id="@+id/cs_txt_mute"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginEnd="@dimen/dp4"
-              android:layout_marginLeft="@dimen/dp4"
-              android:layout_marginRight="@dimen/dp4"
-              android:layout_marginStart="@dimen/dp4"
-              android:text="@string/md_muted"
-              android:textAppearance="@style/TextIconAppearance_toolbar"
-              android:textColor="@color/grayNew"
-              android:textSize="@dimen/dp13"
-              />
-
-          <ImageView
-              android:id="@+id/cslr_txt_tic"
-              android:layout_width="16dp"
-              android:layout_height="16dp"
-              android:layout_marginEnd="@dimen/dp4"
-              android:layout_marginRight="@dimen/dp4"
-              style="@style/ChatMessages.MaterialDesignTextView.Tick"
-              />
 
           <TextView
-              android:id="@+id/cs_txt_contact_time"
+              android:id="@+id/cs_txt_unread_message"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:layout_gravity="center"
+              android:background="@drawable/rect_oval_red"
               android:gravity="center"
-              android:maxLines="1"
+              android:minHeight="@dimen/dp20"
+              android:layout_marginBottom="@dimen/dp4"
+              android:minWidth="@dimen/dp24"
               android:singleLine="true"
-              android:text="time"
-              android:textColor="@color/gray"
-              android:textSize="@dimen/dp12"
+              android:text="1"
+              android:textColor="@android:color/white"
+              android:textSize="@dimen/dp10"
+              />
+
+          <net.iGap.module.MaterialDesignTextView
+              android:id="@+id/cs_txt_pinned_message"
+              android:layout_width="wrap_content"
+              android:layout_marginBottom="@dimen/dp4"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="@dimen/dp6"
+              android:layout_marginRight="@dimen/dp6"
+
+              android:text="@string/md_circlePin"
+              android:textColor="@android:color/black"
+              android:textSize="@dimen/dp20"
               />
 
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/cs_txt_unread_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:layout_marginTop="@dimen/dp4"
-            android:background="@drawable/rect_oval_red"
-            android:gravity="center"
-            android:minHeight="@dimen/dp20"
-            android:minWidth="@dimen/dp24"
-            android:singleLine="true"
-            android:text="1"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/dp10"
-            />
-
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/cs_txt_pinned_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:layout_marginEnd="@dimen/dp6"
-            android:layout_marginRight="@dimen/dp6"
-            android:layout_marginTop="@dimen/dp4"
-            android:gravity="center"
-            android:text="@string/md_circlePin"
-            android:textColor="@android:color/black"
-            android:textSize="@dimen/dp20"
-            />
-
-
       </LinearLayout>
+
+
 
     </LinearLayout>
 
