@@ -2002,26 +2002,46 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         });
 
         TextView txtWebViewHome = (TextView) findViewById(R.id.st_txt_iGap_home);
+        final String link;
+        if (HelperCalander.isLanguagePersian) {
+            link = "https://www.igap.net/fa";
+        } else {
+            link = "https://www.igap.net/";
+        }
         txtWebViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HelperUrl.openBrowser("https://www.igap.net/");
+                HelperUrl.openBrowser(link);
             }
         });
+
+        final String blogLink;
+        if (HelperCalander.isLanguagePersian) {
+            blogLink = "https://blog.igap.net/fa";
+        } else {
+            blogLink = "https://blog.igap.net";
+        }
 
         TextView txtWebViewBlog = (TextView) findViewById(R.id.st_txt_privacy_blog);
         txtWebViewBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HelperUrl.openBrowser("https://blog.igap.net");
+                HelperUrl.openBrowser(blogLink);
             }
         });
 
+
+        final String supportLink;
+        if (HelperCalander.isLanguagePersian) {
+            supportLink = "https://support.igap.net/fa";
+        } else {
+            supportLink = "https://support.igap.net";
+        }
         TextView txtCreateTicket = (TextView) findViewById(R.id.st_txt_create_ticket);
         txtCreateTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HelperUrl.openBrowser("https://support.igap.net");
+                HelperUrl.openBrowser(supportLink);
             }
         });
 
