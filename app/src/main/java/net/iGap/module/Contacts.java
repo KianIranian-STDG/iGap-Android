@@ -243,7 +243,7 @@ public class Contacts {
     private static ArrayList<String> number = new ArrayList<>();
 
     public static ArrayList<StructListOfContact> getMobileListContact() { //get List Of Contact
-        ArrayList<String> test = new ArrayList<>();
+        ArrayList<String> tempList = new ArrayList<>();
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME + " ASC");
@@ -261,12 +261,12 @@ public class Contacts {
                             while (pCur.moveToNext()) {
                                 String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                                if (!test.contains(number.replace(" ", ""))) {
+                                if (!tempList.contains(number.replace(" ", ""))) {
                                     StructListOfContact itemContact = new StructListOfContact();
                                     itemContact.setDisplayName(name);
                                     itemContact.setPhone(number);
                                     contactList.add(itemContact);
-                                    test.add(number.replace(" ", ""));
+                                    tempList.add(number.replace(" ", ""));
                                 }
                             }
                             pCur.close();
