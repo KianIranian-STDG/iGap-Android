@@ -179,6 +179,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiEditTextE;
@@ -300,7 +301,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private ArrayList<String> listPathString;
     private MaterialDesignTextView btnCancelSendingFile;
     private ViewGroup viewGroupLastSeen;
-    private ImageView imvUserPicture;
+    private CircleImageView imvUserPicture;
     private RecyclerView recyclerView;
     private MaterialDesignTextView imvSmileButton;
     private LocationManager locationManager;
@@ -702,7 +703,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         if (isCloudRoom) {
             findViewById(R.id.ac_txt_cloud).setVisibility(View.VISIBLE);
-            imvUserPicture.setVisibility(View.GONE);
+            findViewById(R.id.chl_imv_user_picture).setVisibility(View.GONE);
         } else {
             setAvatar();
         }
@@ -1142,7 +1143,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             txtName = (EmojiTextViewE) findViewById(R.id.chl_txt_name);
             txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
             viewGroupLastSeen = (ViewGroup) findViewById(R.id.chl_txt_viewGroup_seen);
-            imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
+            imvUserPicture = (CircleImageView) findViewById(R.id.chl_imv_user_picture);
             /**
              * need this info for load avatar
              */
@@ -2182,7 +2183,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
 
-        imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
+        imvUserPicture = (CircleImageView) findViewById(R.id.chl_imv_user_picture);
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -5985,6 +5986,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         private void goToSelectedPosition(int position) {
+
+            try {
+
+            } catch (Exception e) {
+
+            }
 
             mAdapter.getItem(currentSelectedPosition).mMessage.isSelected = false;
             mAdapter.notifyItemChanged(currentSelectedPosition);

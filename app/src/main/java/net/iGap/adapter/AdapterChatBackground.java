@@ -79,22 +79,22 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 if (!new File(path).exists()) {
                     HelperDownloadFile.startDownload(System.currentTimeMillis() + "", pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSmallThumbnail().getSize(),
                         ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4, new HelperDownloadFile.UpdateListener() {
-                        @Override
-                        public void OnProgress(String mPath, int progress) {
-                            if (progress == 100) {
-                                G.currentActivity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
-                                    }
-                                });
+                            @Override
+                            public void OnProgress(String mPath, int progress) {
+                                if (progress == 100) {
+                                    G.currentActivity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
+                                        }
+                                    });
+                                }
                             }
-                        }
 
-                        @Override
-                        public void OnError(String token) {
-                        }
-                    });
+                            @Override
+                            public void OnError(String token) {
+                            }
+                        });
                 } else {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
                 }
@@ -118,7 +118,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 holder2.mPath = "";
                 holder2.messageProgress.setVisibility(View.VISIBLE);
                 //  if (HelperDownloadFile.isDownLoading(wallpaper.getProtoWallpaper().getFile().getCacheId())) {
-                    startDownload(position, holder2.messageProgress, holder2.contentLoading);
+                startDownload(position, holder2.messageProgress, holder2.contentLoading);
                 //   }
 
                 //holder2.messageProgress.setOnClickListener(new View.OnClickListener() {
@@ -165,29 +165,33 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new MaterialDialog.Builder(G.currentActivity).title(G.context.getString(R.string.choose_picture)).negativeText(G.context.getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override
-                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    new MaterialDialog.Builder(G.currentActivity).title(G.context.getString(R.string.choose_picture))
+                        .negativeText(G.context.getString(R.string.cancel))
+                        .items(R.array.profile)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            AttachFile attachFile = new AttachFile(G.currentActivity);
+                                AttachFile attachFile = new AttachFile(G.currentActivity);
 
-                            if (text.toString().equals(G.context.getString(R.string.from_camera))) {
-                                try {
-                                    attachFile.requestTakePicture();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                if (text.toString().equals(G.context.getString(R.string.from_camera))) {
+                                    try {
+                                        attachFile.requestTakePicture();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    try {
+                                        attachFile.requestOpenGalleryForImageSingleSelect();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            } else {
-                                try {
-                                    attachFile.requestOpenGalleryForImageSingleSelect();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+
+                                dialog.dismiss();
                             }
-
-                            dialog.dismiss();
-                        }
-                    }).show();
+                        })
+                        .show();
                 }
             });
         }
@@ -245,40 +249,44 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
         HelperDownloadFile.startDownload(System.currentTimeMillis() + "", pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2,
             new HelperDownloadFile.UpdateListener() {
-            @Override
-            public void OnProgress(String mPath, final int progress) {
+                @Override
+                public void OnProgress(String mPath, final int progress) {
 
-                if (messageProgress != null) {
+                    if (messageProgress != null) {
 
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (progress < 100) {
-                                messageProgress.withProgress(progress);
-                            } else {
-                                messageProgress.withProgress(0);
-                                messageProgress.setVisibility(View.GONE);
-                                contentLoading.setVisibility(View.GONE);
-                                notifyItemChanged(position);
+                        messageProgress.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                if (progress < 100) {
+                                    messageProgress.withProgress(progress);
+                                } else {
+                                    messageProgress.withProgress(0);
+                                    messageProgress.setVisibility(View.GONE);
+                                    contentLoading.setVisibility(View.GONE);
+                                    notifyItemChanged(position);
+                                }
                             }
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void OnError(String token) {
-
-                G.currentActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        messageProgress.withProgress(0);
-                        messageProgress.withDrawable(R.drawable.ic_download, true);
-                        contentLoading.setVisibility(View.GONE);
+                        });
                     }
-                });
-            }
-        });
+                }
+
+                @Override
+                public void OnError(String token) {
+
+                    if (messageProgress != null) {
+                        messageProgress.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                messageProgress.withProgress(0);
+                                messageProgress.withDrawable(R.drawable.ic_download, true);
+                                contentLoading.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }
+            });
     }
 
     private void stopDownload(int position) {

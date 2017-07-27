@@ -24,6 +24,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1029,9 +1030,23 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void stopRingAnimation() {
 
-        btnAnswer.clearAnimation();
-        btnEndCall.clearAnimation();
-        btnCircleChat.clearAnimation();
+        try {
+
+            if (btnAnswer != null) {
+                btnAnswer.clearAnimation();
+            }
+
+            // btnEndCall.clearAnimation();
+            // btnCircleChat.clearAnimation();
+
+        } catch (Exception e) {
+
+            Log.e("debug", "activityCall     stopRingAnimation      " + e.toString());
+        }
+
+
+
+
     }
 
     //*****************************  distance sensor  **********************************************************

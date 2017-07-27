@@ -963,7 +963,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                         if (ActivityMain.isMenuButtonAddShown) {
                             mComplete.complete(true, "closeMenuButton", "");
                         } else {
-                            if (mInfo.isValid()) {
+                            if (mInfo.isValid() && mActivity != null) {
 
                                 new GoToChatActivity(mInfo.getId()).setContext(mActivity).setFromCall(((ActivityMain) getActivity()).fromCall).startActivity();
 
@@ -982,9 +982,13 @@ public class FragmentMain extends Fragment implements OnComplete {
                     public boolean onLongClick(View v) {
 
                         if (ActivityMain.isMenuButtonAddShown) {
-                            mComplete.complete(true, "closeMenuButton", "");
+
+                            if (mComplete != null) {
+                                mComplete.complete(true, "closeMenuButton", "");
+                            }
+
                         } else {
-                            if (mInfo.isValid()) {
+                            if (mInfo.isValid() && mActivity != null) {
                                 String role = null;
                                 if (mInfo.getType() == GROUP) {
                                     role = mInfo.getGroupRoom().getRole().toString();

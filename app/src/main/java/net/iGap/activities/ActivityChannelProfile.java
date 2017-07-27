@@ -350,7 +350,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         }
 
         if (role != ChannelChatRole.OWNER) {
-            if (description.length() == 0) {
+            if (description == null && description.isEmpty() || description.length() == 0) {
                 lytChannelDescription.setVisibility(View.GONE);
             }
         }
