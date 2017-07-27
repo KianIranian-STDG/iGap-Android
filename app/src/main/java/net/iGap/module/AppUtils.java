@@ -552,7 +552,11 @@ public final class AppUtils {
             newIds[itemsId.indexOf(integer)] = integer;
         }
 
-        return new MaterialDialog.Builder(context).title("Resend Messages").negativeText(context.getString(R.string.cancel)).items(items).itemsIds(newIds).itemsCallback(new MaterialDialog.ListCallback() {
+        return new MaterialDialog.Builder(context).title(R.string.resend_chat_message)
+            .negativeText(context.getString(R.string.cancel))
+            .items(items)
+            .itemsIds(newIds)
+            .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
                 switch (itemView.getId()) {
