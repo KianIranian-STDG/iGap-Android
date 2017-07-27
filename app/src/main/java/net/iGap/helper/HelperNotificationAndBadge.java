@@ -37,7 +37,6 @@ import java.util.List;
 import me.leolin.shortcutbadger.ShortcutBadger;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.module.AttachFile;
@@ -109,13 +108,13 @@ public class HelperNotificationAndBadge {
         remoteViewsLarge.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
     }
 
-    private void setOnTextClick(int resLayot, int indexItem) {
-        Intent intent = new Intent(context, ActivityChat.class);
-        intent.putExtra("RoomId", list.get(indexItem).roomId);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 30 + indexItem, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        ActivityPopUpNotification.isGoingToChatFromPopUp = true;
-        remoteViewsLarge.setOnClickPendingIntent(resLayot, pendingIntent);
-    }
+    //private void setOnTextClick(int resLayot, int indexItem) {
+    //    Intent intent = new Intent(context, ActivityChat.class);
+    //    intent.putExtra("RoomId", list.get(indexItem).roomId);
+    //    PendingIntent pendingIntent = PendingIntent.getActivity(context, 30 + indexItem, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    //    ActivityPopUpNotification.isGoingToChatFromPopUp = true;
+    //    remoteViewsLarge.setOnClickPendingIntent(resLayot, pendingIntent);
+    //}
 
     private NotificationCompat.InboxStyle getBigStyle() {
 
@@ -217,9 +216,8 @@ public class HelperNotificationAndBadge {
         PendingIntent pi;
 
         if (isFromOnRoom) {
-            Intent intent = new Intent(context, ActivityChat.class);
-            intent.putExtra("RoomId", roomId);
-            pi = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            pi = PendingIntent.getActivity(context, notificationId, new GoToChatActivity(roomId).getIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
             ActivityPopUpNotification.isGoingToChatFromPopUp = true;
         } else {
             pi = PendingIntent.getActivity(context, notificationId, new Intent(context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);

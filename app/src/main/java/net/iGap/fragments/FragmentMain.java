@@ -37,11 +37,11 @@ import java.util.List;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityProfile;
 import net.iGap.activities.MyDialog;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperClientCondition;
@@ -965,15 +965,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                         } else {
                             if (mInfo.isValid()) {
 
-                                Intent intent = new Intent(mActivity, ActivityChat.class);
+                                new GoToChatActivity(mInfo.getId()).setContext(mActivity).setFromCall(((ActivityMain) getActivity()).fromCall).startActivity();
 
-                                if (((ActivityMain) getActivity()).fromCall) {
-                                    intent.putExtra("FROM_CALL_Main", true);
-                                }
-
-                                intent.putExtra("RoomId", mInfo.getId());
-
-                                startActivity(intent);
                                 mActivity.overridePendingTransition(0, 0);
 
                                 if (((ActivityMain) mActivity).arcMenu != null && ((ActivityMain) mActivity).arcMenu.isMenuOpened()) {

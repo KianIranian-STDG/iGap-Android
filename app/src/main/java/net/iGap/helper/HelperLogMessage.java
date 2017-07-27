@@ -583,10 +583,9 @@ public class HelperLogMessage {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
         if (realmRoom != null) {
-            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-            intent.putExtra("RoomId", realmRoom.getId());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            G.currentActivity.startActivity(intent);
+
+            new GoToChatActivity(realmRoom.getId()).setContext(G.currentActivity).setNewTask(true).startActivity();
+
         } else {
             HelperInfo.needUpdateRoomInfo(id);
         }

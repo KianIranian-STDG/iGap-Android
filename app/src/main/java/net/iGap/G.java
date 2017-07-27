@@ -43,6 +43,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperNotificationAndBadge;
+import net.iGap.interfaces.IActivityFinish;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IClientSearchUserName;
 import net.iGap.interfaces.IMainFinish;
@@ -395,6 +396,7 @@ public class G extends MultiDexApplication {
     public static ICallFinish iCallFinishChat;
     public static ICallFinish iCallFinishMain;
     public static IMainFinish iMainFinish;
+    public static IActivityFinish iActivityFinish;
 
 
     public static ISignalingOffer iSignalingOffer;
