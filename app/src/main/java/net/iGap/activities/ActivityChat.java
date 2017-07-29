@@ -179,6 +179,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiEditTextE;
@@ -300,7 +301,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private ArrayList<String> listPathString;
     private MaterialDesignTextView btnCancelSendingFile;
     private ViewGroup viewGroupLastSeen;
-    private ImageView imvUserPicture;
+    private CircleImageView imvUserPicture;
     private RecyclerView recyclerView;
     private MaterialDesignTextView imvSmileButton;
     private LocationManager locationManager;
@@ -355,6 +356,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private RealmRoomMessage firstUnreadMessage;
     private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
+
+    public static int forwardMessageCount = 0;
+    public static ArrayList<Parcelable> mForwardMessages;
+
+
 
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
 
@@ -614,6 +620,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void finishActivity() {
                 ActivityChat.this.finish();
+
+                if (ActivityPopUpNotification.isGoingToChatFromPopUp) {
+                    ActivityPopUpNotification.isGoingToChatFromPopUp = false;
+                    Intent intent = new Intent(context, ActivityMain.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+
             }
         };
 
@@ -689,9 +703,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         if (isCloudRoom) {
             findViewById(R.id.ac_txt_cloud).setVisibility(View.VISIBLE);
-            imvUserPicture.setVisibility(View.GONE);
+            findViewById(R.id.chl_imv_user_picture).setVisibility(View.GONE);
         } else {
             setAvatar();
+        }
+
+        if (mForwardMessages == null) {
+            findViewById(R.id.ac_ll_forward).setVisibility(View.GONE);
         }
 
     }
@@ -1125,7 +1143,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             txtName = (EmojiTextViewE) findViewById(R.id.chl_txt_name);
             txtLastSeen = (TextView) findViewById(R.id.chl_txt_last_seen);
             viewGroupLastSeen = (ViewGroup) findViewById(R.id.chl_txt_viewGroup_seen);
-            imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
+            imvUserPicture = (CircleImageView) findViewById(R.id.chl_imv_user_picture);
             /**
              * need this info for load avatar
              */
@@ -2165,7 +2183,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
 
-        imvUserPicture = (ImageView) findViewById(R.id.chl_imv_user_picture);
+        imvUserPicture = (CircleImageView) findViewById(R.id.chl_imv_user_picture);
         imvUserPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -2563,15 +2581,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
     }
 
-    private Intent makeIntentForForwardMessages(ArrayList<Parcelable> messageInfos) {
-        Intent intent = new Intent(ActivityChat.this, ActivitySelectChat.class);
-        intent.putParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE, messageInfos);
-        return intent;
-    }
 
-    private Intent makeIntentForForwardMessages(StructMessageInfo messageInfos) {
-        return makeIntentForForwardMessages(new ArrayList<>(Arrays.asList(Parcels.wrap(messageInfos))));
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -3541,7 +3551,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null) {
                     finish();
-                    startActivity(makeIntentForForwardMessages(message));
+                    mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
                 }
             }
         });
@@ -5714,7 +5724,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             public void onComplete(RippleView rippleView) {
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
-                    startActivity(makeIntentForForwardMessages(getMessageStructFromSelectedItems()));
+
+                    mForwardMessages = getMessageStructFromSelectedItems();
+
                     finish();
                 }
             }
@@ -5974,6 +5986,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
 
         private void goToSelectedPosition(int position) {
+
+            try {
+
+            } catch (Exception e) {
+
+            }
 
             mAdapter.getItem(currentSelectedPosition).mMessage.isSelected = false;
             mAdapter.notifyItemChanged(currentSelectedPosition);
@@ -6504,14 +6522,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      * do forward actions if any message forward to this room
      */
     private void manageForwardedMessage() {
-        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getParcelableArrayList(ActivitySelectChat.ARG_FORWARD_MESSAGE) != null) {
+        if (mForwardMessages != null && !isChatReadOnly) {
 
             final LinearLayout ll_Forward = (LinearLayout) findViewById(R.id.ac_ll_forward);
 
             if (hasForward) {
-                imvCancelForward.performClick();
-                final ArrayList<Parcelable> messageInfos = getIntent().getParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE);
-                for (int i = 0; i < messageInfos.size(); i++) {
+
+                final ArrayList<Parcelable> mg = mForwardMessages;
+
+                for (int i = 0; i < mg.size(); i++) {
                     /**
                      * send forwarded message with one second delay for each message
                      */
@@ -6519,10 +6538,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     G.handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(messageInfos.get(j)));
+                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)));
                         }
                     }, 1000 * j);
                 }
+
+                imvCancelForward.performClick();
+
             } else {
                 imvCancelForward = (TextView) findViewById(R.id.cslhf_imv_cansel);
                 imvCancelForward.setOnClickListener(new View.OnClickListener() {
@@ -6531,6 +6553,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         ll_Forward.setVisibility(View.GONE);
                         hasForward = false;
+                        mForwardMessages = null;
 
                         if (edtChat.getText().length() == 0) {
 
@@ -6580,7 +6603,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     }
                 }).start();
 
-                int _count = getIntent().getExtras().getInt(ActivitySelectChat.ARG_FORWARD_MESSAGE_COUNT);
+                int _count = mForwardMessages.size();
                 String str = _count > 1 ? getString(R.string.messages_selected) : getString(R.string.message_selected);
 
                 EmojiTextViewE emMessage = (EmojiTextViewE) findViewById(R.id.cslhf_txt_message);
@@ -6640,7 +6663,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                             forwardedMessage.setUserId(G.userId);
                             forwardedMessage.setShowMessage(true);
 
-                            realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst().setLastMessage(forwardedMessage);
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {
@@ -6651,7 +6673,6 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         if (forwardedMessage != null && forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
                             switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
                             scrollToEnd();
-
                             RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
                             chatSendMessageUtil.buildForward(chatType, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
                         }
@@ -7525,6 +7546,5 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         totalItemCount = 0;
         unreadCount = 0;
     }
-
 }
 

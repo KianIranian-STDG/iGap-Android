@@ -112,6 +112,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private int changesize = 0;
     ProgressBar progressBar;
 
+
     private boolean isChangeSelectType = false;
 
     private RecyclerView.OnScrollListener onScrollListener;
@@ -217,7 +218,6 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         musicPlayer = new MusicPlayer(mediaLayout);
 
         roomId = getIntent().getExtras().getLong("RoomID");
-
         initComponent();
 
         handler = new Handler();
@@ -386,10 +386,17 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     }
                 }
 
-                Intent intent = new Intent(ActivityShearedMedia.this, ActivitySelectChat.class);
-                intent.putParcelableArrayListExtra(ActivitySelectChat.ARG_FORWARD_MESSAGE, messageInfos);
+                ActivityChat.mForwardMessages = messageInfos;
 
-                startActivity(intent);
+                finish();
+
+                if (G.iActivityFinish != null) {
+                    G.iActivityFinish.onFinish();
+                }
+
+                if (ActivityChat.finishActivity != null) {
+                    ActivityChat.finishActivity.finishActivity();
+                }
 
                 adapter.resetSelected();
             }

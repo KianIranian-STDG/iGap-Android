@@ -12,7 +12,6 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -41,9 +40,9 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.adapter.items.SearchItem;
 import net.iGap.adapter.items.SearchItemHeader;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MaterialDesignTextView;
@@ -354,13 +353,13 @@ public class SearchFragment extends Fragment {
         }
 
         if (realmRoom != null) {
-            Intent intent = new Intent(G.context, ActivityChat.class);
 
-            if (type == SearchType.message) intent.putExtra("MessageId", messageId);
+            if (type == SearchType.message) {
+                new GoToChatActivity(realmRoom.getId()).setNewTask(true).setMessageID(messageId).startActivity();
+            } else {
+                new GoToChatActivity(realmRoom.getId()).setNewTask(true).startActivity();
+            }
 
-            intent.putExtra("RoomId", realmRoom.getId());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            G.context.startActivity(intent);
             mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
@@ -369,13 +368,9 @@ public class SearchFragment extends Fragment {
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Realm realm = Realm.getDefaultInstance();
-                            Intent intent = new Intent(G.context, ActivityChat.class);
-                            intent.putExtra("peerId", id);
-                            intent.putExtra("RoomId", roomId);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            realm.close();
-                            G.context.startActivity(intent);
+
+                            new GoToChatActivity(roomId).setPeerID(id).setNewTask(true).startActivity();
+
                             if (mActivity != null) {
                                 mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
                             }

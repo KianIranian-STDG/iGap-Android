@@ -11,7 +11,6 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,9 +41,9 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.interfaces.OnChannelAddMember;
 import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -148,9 +147,8 @@ public class ContactGroupFragment extends Fragment {
                             new RequestChannelAddMember().channelAddMember(roomId, peerId, 0);
                         }
                     } else {
-                        Intent intent = new Intent(G.context, ActivityChat.class);
-                        intent.putExtra("RoomId", ContactGroupFragment.this.roomId);
-                        startActivity(intent);
+
+                        new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
                         mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                     }
                 }
@@ -181,9 +179,9 @@ public class ContactGroupFragment extends Fragment {
                             new RequestGroupAddMember().groupAddMember(roomId, peerId, 0);
                         }
                     } else {
-                        Intent intent = new Intent(G.context, ActivityChat.class);
-                        intent.putExtra("RoomId", ContactGroupFragment.this.roomId);
-                        startActivity(intent);
+
+                        new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
+
                         mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                     }
                 }
@@ -301,9 +299,8 @@ public class ContactGroupFragment extends Fragment {
         });
         realm.close();
 
-        Intent intent = new Intent(G.context, ActivityChat.class);
-        intent.putExtra("RoomId", roomId);
-        startActivity(intent);
+        new GoToChatActivity(roomId).startActivity();
+
         mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
     }
 
@@ -320,9 +317,8 @@ public class ContactGroupFragment extends Fragment {
         });
         realm.close();
 
-        Intent intent = new Intent(G.context, ActivityChat.class);
-        intent.putExtra("RoomId", roomId);
-        startActivity(intent);
+        new GoToChatActivity(roomId).startActivity();
+
         mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
     }
 

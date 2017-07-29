@@ -59,6 +59,7 @@ import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
@@ -1832,21 +1833,15 @@ public class ActivityMain extends ActivityEnhanced
 
         if (realmRoom != null) {
 
-            Intent intent = new Intent(context, ActivityChat.class);
-            intent.putExtra("RoomId", realmRoom.getId());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-            //getActivity().getSupportFragmentManager().popBackStack();
+            new GoToChatActivity(realmRoom.getId()).setNewTask(true).startActivity();
+
         } else {
 
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final long roomId) {
-                    Intent intent = new Intent(context, ActivityChat.class);
-                    intent.putExtra("peerId", peerId);
-                    intent.putExtra("RoomId", roomId);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+
+                    new GoToChatActivity(roomId).setPeerID(peerId).setNewTask(true).startActivity();
 
                     G.onChatGetRoom = null;
                 }

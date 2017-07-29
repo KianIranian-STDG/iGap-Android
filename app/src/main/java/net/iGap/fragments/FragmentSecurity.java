@@ -381,131 +381,155 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
 
             @Override
             public void errorGetPasswordDetail(final int majorCode, final int minorCode) {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
 
-                        if (majorCode == 188 && minorCode == 1) {  //USER DON'T SET A PASSWORD
-                            setFirstView();
-                        } else { // CAN'T CONNECT TO SERVER
-                            mActivity.getSupportFragmentManager().popBackStack();
+                if (isAdded()) {
+
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if (majorCode == 188 && minorCode == 1) {  //USER DON'T SET A PASSWORD
+                                setFirstView();
+                            } else { // CAN'T CONNECT TO SERVER
+                                mActivity.getSupportFragmentManager().popBackStack();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             @Override
             public void timeOutGetPasswordDetail() {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mActivity.getSupportFragmentManager().popBackStack();
-                    }
-                });
+                if (isAdded()) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mActivity.getSupportFragmentManager().popBackStack();
+                        }
+                    });
+                }
             }
 
             @Override
             public void checkPassword() {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        rootSetPassword.setVisibility(View.VISIBLE);
-                        rootCheckPassword.setVisibility(View.GONE);
-                        rippleOk.setVisibility(View.GONE);
-                    }
-                });
+                if (isAdded()) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            rootSetPassword.setVisibility(View.VISIBLE);
+                            rootCheckPassword.setVisibility(View.GONE);
+                            rippleOk.setVisibility(View.GONE);
+                        }
+                    });
+                }
 
             }
 
             @Override
             public void errorCheckPassword(final int getWait) {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialogWaitTime(getWait);
-                    }
-                });
+                if (isAdded()) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialogWaitTime(getWait);
+                        }
+                    });
+                }
             }
 
             @Override
             public void unSetPassword() {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                if (isAdded()) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
 
-                        rootSetPassword.setVisibility(View.VISIBLE);
-                        rootSetAdditionPassword.setVisibility(View.VISIBLE);
-                        root_ChangePassword.setVisibility(View.GONE);
-                        rootCheckPassword.setVisibility(View.GONE);
-                        rippleOk.setVisibility(View.GONE);
-                    }
-                });
+                            rootSetPassword.setVisibility(View.VISIBLE);
+                            rootSetAdditionPassword.setVisibility(View.VISIBLE);
+                            root_ChangePassword.setVisibility(View.GONE);
+                            rootCheckPassword.setVisibility(View.GONE);
+                            rippleOk.setVisibility(View.GONE);
+                        }
+                    });
+                }
             }
 
             @Override
             public void changeRecoveryQuestion() {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewChangeRecoveryQuestion();
-                    }
-                });
+                if (isAdded()) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            viewChangeRecoveryQuestion();
+                        }
+                    });
+                }
             }
 
             @Override
             public void changeHint() {
+                if (isAdded()) {
 
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewChangeHint();
-                    }
-                });
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            viewChangeHint();
+                        }
+                    });
+                }
             }
 
             @Override
             public void changeEmail(final String unConfirmEmailPatern) {
+                if (isAdded()) {
 
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mUnconfirmedEmailPattern = unConfirmEmailPatern;
-                        isSetRecoveryEmail = true;
-                        viewChangeEmail();
-                    }
-                });
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mUnconfirmedEmailPattern = unConfirmEmailPatern;
+                            isSetRecoveryEmail = true;
+                            viewChangeEmail();
+                        }
+                    });
+                }
 
             }
 
             @Override
             public void confirmEmail() {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewConfirmEmail();
-                    }
-                });
+                if (isAdded()) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            viewConfirmEmail();
+                        }
+                    });
+                }
 
             }
 
             @Override
             public void errorConfirmEmail() {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        error(getString(R.string.invalid_verify_email_code));
-                    }
-                });
+                if (isAdded()) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            error(getString(R.string.invalid_verify_email_code));
+                        }
+                    });
+                }
             }
 
             @Override
             public void errorInvalidPassword() {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        error(getString(R.string.invalid_password));
-                    }
-                });
+                if (isAdded()) {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            error(getString(R.string.invalid_password));
+                        }
+                    });
+                }
             }
         };
 
@@ -605,105 +629,112 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
     }
 
     private void setFirstView() {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        if (isAdded()) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
 
-                rootSetPassword.setVisibility(View.VISIBLE);
-                rootSetAdditionPassword.setVisibility(View.VISIBLE);
-                root_ChangePassword.setVisibility(View.GONE);
-                rootCheckPassword.setVisibility(View.GONE);
-                rippleOk.setVisibility(View.GONE);
-                prgWaiting.setVisibility(View.GONE);
-            }
-        });
+                    rootSetPassword.setVisibility(View.VISIBLE);
+                    rootSetAdditionPassword.setVisibility(View.VISIBLE);
+                    root_ChangePassword.setVisibility(View.GONE);
+                    rootCheckPassword.setVisibility(View.GONE);
+                    rippleOk.setVisibility(View.GONE);
+                    prgWaiting.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     private void setSecondView() {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                rootSetPassword.setVisibility(View.VISIBLE);
-                root_ChangePassword.setVisibility(View.VISIBLE);
-                rootSetAdditionPassword.setVisibility(View.GONE);
-                rootCheckPassword.setVisibility(View.GONE);
-                rippleOk.setVisibility(View.GONE);
-                prgWaiting.setVisibility(View.GONE);
-                if (!isSetRecoveryEmail) {
-                    txtSetConfirmedEmail.setVisibility(View.GONE);
-                    lineConfirmView.setVisibility(View.GONE);
-
-                } else {
-                    txtSetConfirmedEmail.setVisibility(View.VISIBLE);
-                    lineConfirmView.setVisibility(View.VISIBLE);
+        if (isAdded()) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    rootSetPassword.setVisibility(View.VISIBLE);
+                    root_ChangePassword.setVisibility(View.VISIBLE);
+                    rootSetAdditionPassword.setVisibility(View.GONE);
+                    rootCheckPassword.setVisibility(View.GONE);
+                    rippleOk.setVisibility(View.GONE);
+                    prgWaiting.setVisibility(View.GONE);
+                    if (!isSetRecoveryEmail) {
+                        txtSetConfirmedEmail.setVisibility(View.GONE);
+                        lineConfirmView.setVisibility(View.GONE);
+                    } else {
+                        txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                        lineConfirmView.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
-        });
+            });
+        }
 
     }
 
     private void viewConfirmEmail() {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                page = 0;
-                rootSetPassword.setVisibility(View.VISIBLE);
-                rootConfirmedEmail.setVisibility(View.GONE);
-                txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
-                rippleOk.setVisibility(View.GONE);
-            }
-        });
+        if (isAdded()) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    page = 0;
+                    rootSetPassword.setVisibility(View.VISIBLE);
+                    rootConfirmedEmail.setVisibility(View.GONE);
+                    txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
+                    rippleOk.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     private void viewChangeEmail() {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                page = 0;
-                rootSetPassword.setVisibility(View.VISIBLE);
-                rootConfirmedEmail.setVisibility(View.GONE);
-                rootChangeEmail.setVisibility(View.GONE);
-                txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
-                rippleOk.setVisibility(View.GONE);
-                if (mUnconfirmedEmailPattern.length() > 0) {
-                    txtSetConfirmedEmail.setVisibility(View.VISIBLE);
-                    lineConfirmView.setVisibility(View.VISIBLE);
-                } else {
-                    txtSetConfirmedEmail.setVisibility(View.GONE);
-                    lineConfirmView.setVisibility(View.GONE);
+        if (isAdded()) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    page = 0;
+                    rootSetPassword.setVisibility(View.VISIBLE);
+                    rootConfirmedEmail.setVisibility(View.GONE);
+                    rootChangeEmail.setVisibility(View.GONE);
+                    txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
+                    rippleOk.setVisibility(View.GONE);
+                    if (mUnconfirmedEmailPattern.length() > 0) {
+                        txtSetConfirmedEmail.setVisibility(View.VISIBLE);
+                        lineConfirmView.setVisibility(View.VISIBLE);
+                    } else {
+                        txtSetConfirmedEmail.setVisibility(View.GONE);
+                        lineConfirmView.setVisibility(View.GONE);
+                    }
                 }
-
-
-            }
-        });
+            });
+        }
     }
 
     private void viewChangeHint() {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                page = 0;
-                rootSetPassword.setVisibility(View.VISIBLE);
-                rootChangeHint.setVisibility(View.GONE);
-                txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
-                rippleOk.setVisibility(View.GONE);
-            }
-        });
-
+        if (isAdded()) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    page = 0;
+                    rootSetPassword.setVisibility(View.VISIBLE);
+                    rootChangeHint.setVisibility(View.GONE);
+                    txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
+                    rippleOk.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     private void viewChangeRecoveryQuestion() {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                page = 0;
-                rootSetPassword.setVisibility(View.VISIBLE);
-                rootQuestionPassword.setVisibility(View.GONE);
-                txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
-                rippleOk.setVisibility(View.GONE);
-            }
-        });
-
+        if (isAdded()) {
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    page = 0;
+                    rootSetPassword.setVisibility(View.VISIBLE);
+                    rootQuestionPassword.setVisibility(View.GONE);
+                    txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
+                    rippleOk.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     private void closeKeyboard(View v) {

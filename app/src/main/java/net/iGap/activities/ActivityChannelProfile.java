@@ -68,6 +68,7 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
+import net.iGap.interfaces.IActivityFinish;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
@@ -349,7 +350,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         }
 
         if (role != ChannelChatRole.OWNER) {
-            if (description.length() == 0) {
+            if (description == null && description.isEmpty() || description.length() == 0) {
                 lytChannelDescription.setVisibility(View.GONE);
             }
         }
@@ -461,6 +462,14 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         lytSharedMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                G.iActivityFinish = new IActivityFinish() {
+                    @Override
+                    public void onFinish() {
+                        finish();
+                    }
+                };
+
                 Intent intent = new Intent(ActivityChannelProfile.this, ActivityShearedMedia.class);
                 intent.putExtra("RoomID", roomId);
                 startActivity(intent);

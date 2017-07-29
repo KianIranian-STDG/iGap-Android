@@ -568,9 +568,7 @@ public class HelperUrl {
 
         if (realmRoom != null) {
 
-            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-            intent.putExtra("RoomId", room.getId());
-            G.currentActivity.startActivity(intent);
+            new GoToChatActivity(room.getId()).setContext(G.currentActivity).startActivity();
 
             realm.close();
 
@@ -712,9 +710,7 @@ public class HelperUrl {
 
                     realm.close();
 
-                    Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-                    intent.putExtra("RoomId", room.getId());
-                    G.currentActivity.startActivity(intent);
+                    new GoToChatActivity(room.getId()).setContext(G.currentActivity).startActivity();
                 }
 
                 @Override
@@ -782,11 +778,7 @@ public class HelperUrl {
         switch (chatEntery) {
             case chat:
 
-                intent = new Intent(G.currentActivity, ActivityChat.class);
-                intent.putExtra("RoomId", Roomid);
-                intent.putExtra("peerId", peerId);
-                //  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                G.currentActivity.startActivity(intent);
+                new GoToChatActivity(Roomid).setPeerID(peerId).setContext(G.currentActivity).startActivity();
 
                 break;
 
@@ -908,9 +900,8 @@ public class HelperUrl {
             } else {
                 closeDialogWaiting();
 
-                Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-                intent.putExtra("RoomId", room.getId());
-                G.currentActivity.startActivity(intent);
+                new GoToChatActivity(room.getId()).setContext(G.currentActivity).startActivity();
+
             }
 
             realm.close();
@@ -941,13 +932,7 @@ public class HelperUrl {
                     @Override
                     public void onSuccess() {
 
-                        Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-                        intent.putExtra("RoomId", room.getId());
-                        intent.putExtra("GoingFromUserLink", true);
-                        intent.putExtra("ISNotJoin", true);
-                        intent.putExtra("UserName", username);
-
-                        G.currentActivity.startActivity(intent);
+                        new GoToChatActivity(room.getId()).setContext(G.currentActivity).setfromUserLink(true).setisNotJoin(true).setuserName(username).startActivity();
 
                         realm.close();
                     }

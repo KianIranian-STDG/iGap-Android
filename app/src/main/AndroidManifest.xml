@@ -220,11 +220,6 @@
     <activity
         android:name=".activities.ActivityContactsProfile"
         android:exported="false" />
-    <activity
-        android:name=".activities.ActivitySelectChat"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-        android:label="@string/select_room"
-        android:theme="@style/AppThemeTranslucent" />
 
     <receiver android:name=".module.IncomingSms" />
     <receiver

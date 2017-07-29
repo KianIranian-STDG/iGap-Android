@@ -88,6 +88,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.IncomingSms;
+import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.module.enums.Security;
 import net.iGap.module.structs.StructCountry;
@@ -128,7 +129,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private SoftKeyboard softKeyboard;
     private Button btnStart;
-    private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc, txtQrCode;
+    private TextView txtAgreement_register, txtTitleToolbar, txtTitleRegister, txtDesc;
+    MaterialDesignTextView txtQrCode;
+
     private ProgressBar rg_prg_verify_connect, rg_prg_verify_sms, rg_prg_verify_generate, rg_prg_verify_register;
     private TextView rg_txt_verify_connect, rg_txt_verify_sms, rg_txt_verify_generate, rg_txt_verify_register, txtTimer;
     private ImageView rg_img_verify_connect, rg_img_verify_sms, rg_img_verify_generate, rg_img_verify_register;
@@ -226,7 +229,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         btnChoseCountry = (Button) findViewById(R.id.rg_btn_choseCountry);
         edtPhoneNumber = (MaskedEditText) findViewById(R.id.rg_edt_PhoneNumber);
         txtAgreement_register = (TextView) findViewById(R.id.txtAgreement_register);
-        txtQrCode = (TextView) findViewById(R.id.rg_qrCode);
+        txtQrCode = (MaterialDesignTextView) findViewById(R.id.rg_qrCode);
 
         txtQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1072,6 +1075,12 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     }
 
     private void dialogWaitTime(int title, long time, int majorCode) {
+
+        if (!ActivityRegister.this.hasWindowFocus()) {
+            return;
+        }
+
+
         boolean wrapInScrollView = true;
         dialogWait = new MaterialDialog.Builder(ActivityRegister.this).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
