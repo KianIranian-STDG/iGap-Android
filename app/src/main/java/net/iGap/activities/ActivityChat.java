@@ -272,7 +272,6 @@ import static java.lang.Long.parseLong;
 import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
-import static net.iGap.R.string.of;
 import static net.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
@@ -337,7 +336,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private LinearLayout ll_attach_text;
     private LinearLayout ll_AppBarSelected;
     private LinearLayout toolbar;
-    private LinearLayout ll_navigate_Message;
+    // private LinearLayout ll_navigate_Message;
     private LinearLayout ll_navigateHash;
     private LinearLayout lyt_user;
     private LinearLayout mReplayLayout;
@@ -380,9 +379,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private TextView btnUp;
     private TextView btnDown;
     private TextView txtChannelMute;
-    private TextView btnUpMessage;
-    private TextView btnDownMessage;
-    private TextView txtMessageCounter;
+    // private TextView btnUpMessage;
+    // private TextView btnDownMessage;
+    // private TextView txtMessageCounter;
     private TextView btnUpHash;
     private TextView btnDownHash;
     private TextView txtHashCounter;
@@ -1880,8 +1879,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                         findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
                         ll_Search.setVisibility(View.VISIBLE);
-                        ll_navigate_Message.setVisibility(View.VISIBLE);
-                        viewAttachFile.setVisibility(View.GONE);
+                        // ll_navigate_Message.setVisibility(View.VISIBLE);
+                        //  viewAttachFile.setVisibility(View.GONE);
+
+                        if (!initHash) {
+                            initHash = true;
+                            initHashView();
+                        }
+
                         edtSearchMessage.requestFocus();
                     }
                 });
@@ -5176,6 +5181,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 searchHash.setPosition(messageId);
                 ll_navigateHash.setVisibility(View.VISIBLE);
                 viewAttachFile.setVisibility(View.GONE);
+
+                if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
+                    findViewById(R.id.chl_ll_channel_footer).setVisibility(View.GONE);
+                }
+
+
             }
         };
     }
@@ -5205,8 +5216,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 ll_navigateHash.setVisibility(View.GONE);
                 viewAttachFile.setVisibility(View.VISIBLE);
 
-                mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.isSelected = false;
-                mAdapter.notifyItemChanged(searchHash.currentSelectedPosition);
+                mAdapter.toggleSelection(searchHash.lastMessageId, false, null);
+
+                if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
+                    findViewById(R.id.chl_ll_channel_footer).setVisibility(View.VISIBLE);
+                }
+
             }
         });
 
@@ -5908,44 +5923,46 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void initLayoutSearchNavigation() {
-        ll_navigate_Message = (LinearLayout) findViewById(R.id.ac_ll_message_navigation);
-        btnUpMessage = (TextView) findViewById(R.id.ac_btn_message_up);
+        //  ll_navigate_Message = (LinearLayout) findViewById(R.id.ac_ll_message_navigation);
+        //  btnUpMessage = (TextView) findViewById(R.id.ac_btn_message_up);
         txtClearMessageSearch = (MaterialDesignTextView) findViewById(R.id.ac_btn_clear_message_search);
-        btnDownMessage = (TextView) findViewById(R.id.ac_btn_message_down);
-        txtMessageCounter = (TextView) findViewById(R.id.ac_txt_message_counter);
+        //  btnDownMessage = (TextView) findViewById(R.id.ac_btn_message_down);
+        //  txtMessageCounter = (TextView) findViewById(R.id.ac_txt_message_counter);
 
-        btnUpMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        //btnUpMessage.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //
+        //        if (selectedPosition > 0) {
+        //            deSelectMessage(selectedPosition);
+        //            selectedPosition--;
+        //            selectMessage(selectedPosition);
+        //            recyclerView.scrollToPosition(selectedPosition);
+        //            txtMessageCounter.setText(selectedPosition + 1 + " " + getString(of) + " " + messageCounter);
+        //        }
+        //    }
+        //});
 
-                if (selectedPosition > 0) {
-                    deSelectMessage(selectedPosition);
-                    selectedPosition--;
-                    selectMessage(selectedPosition);
-                    recyclerView.scrollToPosition(selectedPosition);
-                    txtMessageCounter.setText(selectedPosition + 1 + " " + getString(of) + " " + messageCounter);
-                }
-            }
-        });
+        //btnDownMessage.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        if (selectedPosition < messageCounter - 1) {
+        //            deSelectMessage(selectedPosition);
+        //            selectedPosition++;
+        //            selectMessage(selectedPosition);
+        //            recyclerView.scrollToPosition(selectedPosition);
+        //            txtMessageCounter.setText(selectedPosition + 1 + " " + getString(of) + messageCounter);
+        //        }
+        //    }
+        //});
 
-        btnDownMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedPosition < messageCounter - 1) {
-                    deSelectMessage(selectedPosition);
-                    selectedPosition++;
-                    selectMessage(selectedPosition);
-                    recyclerView.scrollToPosition(selectedPosition);
-                    txtMessageCounter.setText(selectedPosition + 1 + " " + getString(of) + messageCounter);
-                }
-            }
-        });
         final RippleView rippleClose = (RippleView) findViewById(R.id.chl_btn_close_ripple_search_message);
         rippleClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deSelectMessage(selectedPosition);
+                // deSelectMessage(selectedPosition);
                 edtSearchMessage.setText("");
+                btnHashLayoutClose.performClick();
             }
         });
 
@@ -5954,12 +5971,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         rippleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deSelectMessage(selectedPosition);
+                //  deSelectMessage(selectedPosition);
                 edtSearchMessage.setText("");
                 ll_Search.setVisibility(View.GONE);
                 findViewById(R.id.toolbarContainer).setVisibility(View.VISIBLE);
-                ll_navigate_Message.setVisibility(View.GONE);
-                viewAttachFile.setVisibility(View.VISIBLE);
+                //  ll_navigate_Message.setVisibility(View.GONE);
+                // viewAttachFile.setVisibility(View.VISIBLE);
+
+                btnHashLayoutClose.performClick();
+
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
@@ -5975,37 +5995,45 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
 
-                mAdapter.filter(charSequence);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        messageCounter = mAdapter.getAdapterItemCount();
-
-                        if (messageCounter > 0) {
-                            selectedPosition = messageCounter - 1;
-                            recyclerView.scrollToPosition(selectedPosition);
-
-                            if (charSequence.length() > 0) {
-                                selectMessage(selectedPosition);
-                                txtMessageCounter.setText(messageCounter + " " + getString(of) + " " + messageCounter);
-                            } else {
-                                txtMessageCounter.setText("0 " + getString(of) + " 0");
-                            }
-                        } else {
-                            txtMessageCounter.setText("0 " + getString(of) + " " + messageCounter);
-                            selectedPosition = 0;
-                        }
+                if (charSequence.length() > 0) {
+                    if (ActivityChat.hashListener != null) {
+                        ActivityChat.hashListener.complete(true, charSequence.toString(), "");
                     }
-                }, 600);
+                } else {
+                    btnHashLayoutClose.performClick();
+                }
 
+                //mAdapter.filter(charSequence);
+                //
+                //new Handler().postDelayed(new Runnable() {
+                //    @Override
+                //    public void run() {
+                //        messageCounter = mAdapter.getAdapterItemCount();
+                //
+                //        if (messageCounter > 0) {
+                //            selectedPosition = messageCounter - 1;
+                //            recyclerView.scrollToPosition(selectedPosition);
+                //
+                //            if (charSequence.length() > 0) {
+                //                selectMessage(selectedPosition);
+                //                txtMessageCounter.setText(messageCounter + " " + getString(of) + " " + messageCounter);
+                //            } else {
+                //                txtMessageCounter.setText("0 " + getString(of) + " 0");
+                //            }
+                //        } else {
+                //            txtMessageCounter.setText("0 " + getString(of) + " " + messageCounter);
+                //            selectedPosition = 0;
+                //        }
+                //    }
+                //}, 600);
+                //
                 if (charSequence.length() > 0) {
                     txtClearMessageSearch.setTextColor(Color.WHITE);
                     ((View) rippleClose).setEnabled(true);
                 } else {
                     txtClearMessageSearch.setTextColor(Color.parseColor("#dededd"));
                     ((View) rippleClose).setEnabled(false);
-                    txtMessageCounter.setText("0 " + getString(of) + " 0");
+                    //  txtMessageCounter.setText("0 " + getString(of) + " 0");
                 }
             }
 
@@ -6084,14 +6112,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
      */
 
     private class SearchHash {
-        int currentSelectedPosition = 0;
-        private String hashString = "";
-        private int currentHashPosition = 0;
 
-        private ArrayList<Integer> hashList = new ArrayList<>();
+        private String hashString = "";
+        public String lastMessageId = "";
+        private int currentHashPosition;
+
+        private ArrayList<String> hashList = new ArrayList<>();
 
         void setHashString(String hashString) {
-            this.hashString = "#" + hashString;
+            this.hashString = hashString;
         }
 
         public void setPosition(String messageId) {
@@ -6100,79 +6129,81 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 return;
             }
 
-            try {
-
-                mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.isSelected = false;
-                mAdapter.notifyItemChanged(searchHash.currentSelectedPosition);
-
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+            if (lastMessageId.length() > 0) {
+                mAdapter.toggleSelection(lastMessageId, false, null);
             }
+
+
 
             currentHashPosition = 0;
             hashList.clear();
 
             for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
                 if (mAdapter.getItem(i).mMessage != null) {
-                    if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
-                        currentHashPosition = hashList.size() + 1;
+
+                    if (messageId.length() > 0) {
+                        if (mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                            currentHashPosition = hashList.size();
+                            lastMessageId = messageId;
+                            mAdapter.getItem(i).mMessage.isSelected = true;
+                            mAdapter.notifyItemChanged(i);
+                        }
                     }
+
 
                     String mText = mAdapter.getItem(i).mMessage.forwardedFrom != null ? mAdapter.getItem(i).mMessage.forwardedFrom.getMessage() : mAdapter.getItem(i).mMessage.messageText;
 
                     if (mText.contains(hashString)) {
-                        hashList.add(i);
+                        hashList.add(mAdapter.getItem(i).mMessage.messageID);
                     }
                 }
             }
 
-            txtHashCounter.setText(currentHashPosition + " / " + hashList.size());
+            if (messageId.length() == 0) {
+                txtHashCounter.setText(hashList.size() + " / " + hashList.size());
 
-            currentSelectedPosition = hashList.get(currentHashPosition - 1);
+                if (hashList.size() > 0) {
+                    currentHashPosition = hashList.size() - 1;
+                    goToSelectedPosition(hashList.get(currentHashPosition));
+                }
+            } else {
+                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
+            }
 
-            mAdapter.getItem(currentSelectedPosition).mMessage.isSelected = false;
-            mAdapter.notifyItemChanged(currentSelectedPosition);
+
+
         }
 
         void downHash() {
-            if (currentHashPosition < hashList.size()) {
-                goToSelectedPosition(hashList.get(currentHashPosition));
+            if (currentHashPosition < hashList.size() - 1) {
+
                 currentHashPosition++;
-                txtHashCounter.setText(currentHashPosition + " / " + hashList.size());
+
+                goToSelectedPosition(hashList.get(currentHashPosition));
+
+                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
             }
         }
 
         void upHash() {
-            if (currentHashPosition > 1) {
+            if (currentHashPosition > 0) {
+
                 currentHashPosition--;
-                goToSelectedPosition(hashList.get(currentHashPosition - 1));
-                txtHashCounter.setText(currentHashPosition + " / " + hashList.size());
+
+                goToSelectedPosition(hashList.get(currentHashPosition));
+                txtHashCounter.setText((currentHashPosition + 1) + " / " + hashList.size());
             }
         }
 
-        private void goToSelectedPosition(int position) {
+        private void goToSelectedPosition(String messageid) {
 
-            try {
+            mAdapter.toggleSelection(lastMessageId, false, null);
 
-            } catch (Exception e) {
+            lastMessageId = messageid;
 
-            }
-
-            mAdapter.getItem(currentSelectedPosition).mMessage.isSelected = false;
-            mAdapter.notifyItemChanged(currentSelectedPosition);
-
-            recyclerView.scrollToPosition(position);
-            currentSelectedPosition = position;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    mAdapter.getItem(searchHash.currentSelectedPosition).mMessage.isSelected = true;
-                    mAdapter.notifyItemChanged(searchHash.currentSelectedPosition);
+            mAdapter.toggleSelection(lastMessageId, true, recyclerView);
 
 
-                }
-            }, 150);
         }
     }
 

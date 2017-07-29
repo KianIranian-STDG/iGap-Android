@@ -12,6 +12,7 @@ package net.iGap.adapter;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import com.mikepenz.fastadapter.FastAdapter;
@@ -410,4 +411,26 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
         return false;
     }
+
+    public void toggleSelection(String messageId, boolean select, RecyclerView recyclerView) {
+
+        List<Item> items = getAdapterItems();
+        for (int i = items.size() - 1; i >= 0; i--) {
+            Item messageInfo = items.get(i);
+
+            if (messageInfo.mMessage.messageID.equals(messageId)) {
+                messageInfo.mMessage.isSelected = select;
+                notifyItemChanged(i);
+
+                if (select) {
+                    recyclerView.scrollToPosition(i);
+                }
+
+                break;
+            }
+        }
+    }
+
+
+
 }

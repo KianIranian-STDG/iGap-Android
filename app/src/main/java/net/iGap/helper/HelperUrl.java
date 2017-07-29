@@ -333,7 +333,7 @@ public class HelperUrl {
             @Override
             public void onClick(View widget) {
                 if (ActivityChat.hashListener != null) {
-                    ActivityChat.hashListener.complete(true, text, messageID);
+                    ActivityChat.hashListener.complete(true, "#" + text, messageID);
                 }
             }
 
