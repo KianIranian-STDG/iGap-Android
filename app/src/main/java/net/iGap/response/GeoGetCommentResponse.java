@@ -48,7 +48,7 @@ public class GeoGetCommentResponse extends MessageHandler {
         realm.close();
 
         if (G.onGeoGetComment != null) {
-            G.onGeoGetComment.onGetComment(builder.getComment());
+            G.onGeoGetComment.onGetComment(Long.parseLong(identity), builder.getComment());
         }
     }
 

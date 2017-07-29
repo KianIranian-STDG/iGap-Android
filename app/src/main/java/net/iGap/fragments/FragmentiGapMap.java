@@ -15,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,7 +22,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -51,8 +49,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.BuildConfig;
@@ -68,8 +64,6 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
-import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoGetRegisterStatus;
@@ -522,17 +516,17 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     private void drawMark(final OverlayItem mapItem, final boolean hasComment, final long userId) {
 
-        String pathName = "";
-        Realm realm = Realm.getDefaultInstance();
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, G.userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
-            if (avatar.getFile() != null) {
-                pathName = avatar.getFile().getLocalFilePath();
-            }
-        }
-        realm.close();
-
-        Bitmap bitmap = BitmapFactory.decodeFile(pathName);
-        final Drawable drawableFinal = new BitmapDrawable(context.getResources(), getCircleBitmap(bitmap));
+        //String pathName = "";
+        //Realm realm = Realm.getDefaultInstance();
+        //for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, G.userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
+        //    if (avatar.getFile() != null) {
+        //        pathName = avatar.getFile().getLocalFilePath();
+        //    }
+        //}
+        //realm.close();
+        //
+        //Bitmap bitmap = BitmapFactory.decodeFile(pathName);
+        //final Drawable drawableFinal = new BitmapDrawable(context.getResources(), getCircleBitmap(bitmap));
 
         G.handler.post(new Runnable() {
             @Override
@@ -541,9 +535,11 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
                 if (G.userId != 0) {
                     if (hasComment) {
-                        marker.setIcon(drawableFinal);
+                        //marker.setIcon(drawableFinal);
+                        marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_yes));
                     } else {
-                        marker.setIcon(drawableFinal);
+                        //marker.setIcon(drawableFinal);
+                        marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_no));
                     }
 
                     InfoWindow infoWindow = new MyInfoWindow(map, userId, hasComment, FragmentiGapMap.this, mActivity);
@@ -856,11 +852,11 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     }
 
     @Override
-    public void onGetComment(final String comment) {
+    public void onGetComment(final long userIdR, final String comment) {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (comment.length() > 0) {
+                if (G.userId == userIdR && comment.length() > 0) {
                     edtMessageGps.setText(comment);
                     edtMessageGps.setSingleLine(true);
                 }

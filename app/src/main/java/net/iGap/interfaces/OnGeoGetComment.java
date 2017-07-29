@@ -11,5 +11,5 @@
 package net.iGap.interfaces;
 
 public interface OnGeoGetComment {
-    void onGetComment(String comment);
+    void onGetComment(long userId, String comment);
 }

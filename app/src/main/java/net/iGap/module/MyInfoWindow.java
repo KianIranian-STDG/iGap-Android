@@ -178,7 +178,7 @@ public class MyInfoWindow extends InfoWindow {
         if (hasComment) {
             G.onGeoGetComment = new OnGeoGetComment() {
                 @Override
-                public void onGetComment(final String commentR) {
+                public void onGetComment(long userId, final String commentR) {
                     comment = commentR;
                     G.handler.post(new Runnable() {
                         @Override
@@ -188,23 +188,27 @@ public class MyInfoWindow extends InfoWindow {
                     });
                 }
             };
-
-            //for show old comment
-            //
-            //RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, userId).findFirst();
-            //if (realmGeoNearbyDistance != null && hasComment) {
-            //    if (realmGeoNearbyDistance.getComment() != null && !realmGeoNearbyDistance.getComment().isEmpty()) {
-            //        txtComment.setText(realmGeoNearbyDistance.getComment());
-            //    }
-            //}
-
-            if (hasComment) {
-                txtComment.setText(G.context.getResources().getString(R.string.comment_waiting));
-                new RequestGeoGetComment().getComment(userId);
-            } else {
-                txtComment.setText(G.context.getResources().getString(R.string.comment_no));
-            }
+            txtComment.setText(G.context.getResources().getString(R.string.comment_waiting));
+            new RequestGeoGetComment().getComment(userId);
+        } else {
+            txtComment.setText(G.context.getResources().getString(R.string.comment_no));
         }
+
+        //for show old comment
+        //
+        //RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, userId).findFirst();
+        //if (realmGeoNearbyDistance != null && hasComment) {
+        //    if (realmGeoNearbyDistance.getComment() != null && !realmGeoNearbyDistance.getComment().isEmpty()) {
+        //        txtComment.setText(realmGeoNearbyDistance.getComment());
+        //    }
+        //}
+        //
+        //if (hasComment) {
+        //    txtComment.setText(G.context.getResources().getString(R.string.comment_waiting));
+        //    new RequestGeoGetComment().getComment(userId);
+        //} else {
+        //    txtComment.setText(G.context.getResources().getString(R.string.comment_no));
+        //}
 
         realm.close();
     }
