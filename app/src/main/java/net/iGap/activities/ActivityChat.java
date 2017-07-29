@@ -1838,7 +1838,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 if (chatType == CHAT) {
                     root3.setVisibility(View.VISIBLE);
-                    root5.setVisibility(View.VISIBLE);
+                    if (!isChatReadOnly && !blockUser) {
+                        root5.setVisibility(View.VISIBLE);
+                    } else {
+                        root5.setVisibility(View.GONE);
+                    }
                 } else {
                     root3.setVisibility(View.GONE);
                     root5.setVisibility(View.GONE);
