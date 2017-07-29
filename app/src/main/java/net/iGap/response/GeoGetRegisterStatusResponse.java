@@ -47,9 +47,6 @@ public class GeoGetRegisterStatusResponse extends MessageHandler {
                 }
             }
         });
-        if (G.onMapRegisterState != null) {
-            G.onMapRegisterState.onState(builder.getEnable());
-        }
     }
 
     @Override

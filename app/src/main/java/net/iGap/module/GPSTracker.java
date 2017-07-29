@@ -10,8 +10,10 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.format.DateUtils;
 import android.util.Log;
 import net.iGap.G;
+import net.iGap.helper.HelperTimeOut;
 import net.iGap.request.RequestGeoUpdatePosition;
 
 import static net.iGap.G.context;
@@ -36,6 +38,9 @@ public class GPSTracker extends Service implements LocationListener {
 
     // The minimum time between updates in milliseconds
     private static final long MIN_TIME_BW_UPDATES = 30;//(int) (DateUtils.MINUTE_IN_MILLIS);
+    private final int UPDATE_LOCATION_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);
+
+    private long latestUpdateLocation = 0;
 
     // Declaring a Location Manager
     protected LocationManager locationManager;
@@ -147,7 +152,11 @@ public class GPSTracker extends Service implements LocationListener {
         if (G.onLocationChanged != null) {
             G.onLocationChanged.onLocationChanged(location);
         }
-        new RequestGeoUpdatePosition().updatePosition(location.getLatitude(), location.getLongitude());
+
+        if (HelperTimeOut.timeoutChecking(0, latestUpdateLocation, UPDATE_LOCATION_TIME_OUT)) {
+            latestUpdateLocation = System.currentTimeMillis();
+            new RequestGeoUpdatePosition().updatePosition(location.getLatitude(), location.getLongitude());
+        }
     }
 
     @Override

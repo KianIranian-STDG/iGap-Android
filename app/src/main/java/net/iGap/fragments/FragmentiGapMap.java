@@ -56,7 +56,6 @@ import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.BuildConfig;
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnGeoGetComment;
@@ -120,6 +119,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
     private GestureDetector mGestureDetector;
 
+    public static ArrayList<String> mapUrls = new ArrayList<>();
     private String specialRequests;
 
     private boolean firstEnter = true;
@@ -172,7 +172,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         G.onMapClose = this;
         G.onGeoGetComment = this;
         startMap(view);
-        statusCheck();
+        //statusCheck();
         //clickDrawMarkActive();
 
         page = 1;
@@ -227,7 +227,11 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         /**
          * Use From Following Code For Custom Url Tile Server
          */
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{Config.URL_MAP}) {
+
+        String[] mStringArray = new String[mapUrls.size()];
+        mStringArray = mapUrls.toArray(mStringArray);
+
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", mStringArray) {
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
