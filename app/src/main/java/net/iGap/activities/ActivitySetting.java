@@ -812,6 +812,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override
                     public void onClick(View view) {
 
+                        showProgressBar();
                         new RequestUserProfileUpdateUsername().userProfileUpdateUsername(edtUserName.getText().toString());
                     }
                 });
@@ -823,6 +824,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                             @Override
                             public void run() {
                                 dialog.dismiss();
+                                hideProgressBar();
                             }
                         });
                     }
@@ -830,19 +832,29 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     @Override
                     public void Error(final int majorCode, int minorCode, final int time) {
 
-                        switch (majorCode) {
-                            case 175:
-                                if (dialog.isShowing()) dialog.dismiss();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
+                                switch (majorCode) {
+                                    case 175:
+                                        if (dialog.isShowing()) dialog.dismiss();
+                                        hideProgressBar();
                                         dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
-                                    }
-                                });
+                                        break;
+                                }
+                            }
+                        });
+                    }
 
-                                break;
-                        }
+                    @Override
+                    public void timeOut() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideProgressBar();
+                            }
+                        });
                     }
                 };
 
