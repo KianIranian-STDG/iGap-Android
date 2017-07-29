@@ -288,8 +288,6 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public static StructMessageInfo convert(RealmRoomMessage roomMessage) {
-        Realm realm = Realm.getDefaultInstance();
-
         StructMessageInfo messageInfo = new StructMessageInfo();
         messageInfo.roomId = roomMessage.getRoomId();
         messageInfo.status = roomMessage.getStatus();
@@ -301,7 +299,7 @@ public class StructMessageInfo implements Parcelable {
         messageInfo.messageID = Long.toString(roomMessage.getMessageId());
         messageInfo.isEdited = roomMessage.isEdited();
         if (!roomMessage.isSenderMe()) {
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, roomMessage.getUserId()).findFirst();
+            RealmRegisteredInfo realmRegisteredInfo = G.getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, roomMessage.getUserId()).findFirst();
             if (realmRegisteredInfo != null) {
                 messageInfo.senderAvatar = StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar());
                 messageInfo.senderColor = realmRegisteredInfo.getColor();
@@ -344,7 +342,7 @@ public class StructMessageInfo implements Parcelable {
         }
 
         messageInfo.replayTo = roomMessage.getReplyTo();
-        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+        RealmChannelExtra realmChannelExtra = G.getRealm().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
         if (realmChannelExtra != null) {
             messageInfo.channelExtra = StructChannelExtra.convert(realmChannelExtra);
         } else {
@@ -353,7 +351,6 @@ public class StructMessageInfo implements Parcelable {
 
         messageInfo.showTime = roomMessage.isShowTime();
 
-        //realm.close();
         return messageInfo;
     }
 
