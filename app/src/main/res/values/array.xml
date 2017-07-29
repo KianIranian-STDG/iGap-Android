@@ -245,6 +245,11 @@
         <item>@string/Female</item>
     </string-array>
 
+    <string-array name="keepMedia">
+        <item>@string/keep_media_forever</item>
+        <item>@string/keep_media_1week</item>
+    </string-array>
+
     <string-array name="delete_account">
         <item>@string/delete_account_text1</item>
         <item>@string/delete_account_text2</item>

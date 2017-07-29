@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import java.io.File;
@@ -22,6 +23,7 @@ import net.iGap.realm.RealmRoomMessage;
 
 public class ActivityManageSpace extends ActivityEnhanced {
     private SharedPreferences sharedPreferences;
+    private boolean isForever;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,34 +45,54 @@ public class ActivityManageSpace extends ActivityEnhanced {
 
         final TextView txtSubKeepMedia = (TextView) findViewById(R.id.st_txt_sub_keepMedia);
         ViewGroup ltKeepMedia = (ViewGroup) findViewById(R.id.st_layout_keepMedia);
-        TextView txtKeepMedia = (TextView) findViewById(R.id.st_txt_keepMedia);
-        boolean isForever = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
-        if (isForever) {
-            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
-        } else {
+        isForever = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
+        if (!isForever) {
             txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
+        } else {
+            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
         }
 
         ltKeepMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MaterialDialog.Builder(ActivityManageSpace.this).title(R.string.st_keepMedia).content(R.string.st_dialog_content_keepMedia).positiveText(getResources().getString(R.string.keep_media_forever)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                isForever = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
+                final int position;
+                if (!isForever) {
+                    txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
+                    position = 1;
+                } else {
+                    txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
+                    position = 0;
+                }
+
+                new MaterialDialog.Builder(ActivityManageSpace.this).title(getResources().getString(R.string.st_keepMedia)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.keepMedia).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
-                        editor.apply();
-                        txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        switch (which) {
+                            case 0: {
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
+                                editor.apply();
+                                txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
+                                break;
+                            }
+                            case 1: {
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
+                                editor.apply();
+                                txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
+                                break;
+                            }
+                        }
+                        return false;
                     }
-                }).negativeText(getResources().getString(R.string.keep_media_1week)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
-                        editor.apply();
-                        txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
                     }
                 }).show();
+
             }
         });
 
