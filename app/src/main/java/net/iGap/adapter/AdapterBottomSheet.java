@@ -54,25 +54,6 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
     @Override public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        //DisplayImageOptions options = new DisplayImageOptions.Builder().showImageOnLoading(R.mipmap.icon) // resource or drawable
-        //    .showImageForEmptyUri(R.mipmap.icon) // resource or drawable
-        //    .showImageOnFail(R.mipmap.icon) // resource or drawable
-        //    .resetViewBeforeLoading(false)  // default
-        //    .delayBeforeLoading(1000).cacheInMemory(false) // default
-        //    .cacheOnDisk(false) // default
-        //    .considerExifParams(false) // default
-        //    .imageScaleType(ImageScaleType.IN_SAMPLE_INT) // default
-        //    .bitmapConfig(Bitmap.Config.ARGB_8888) // default
-        //    .handler(new Handler()) // default
-        //    .build();
-        //
-        //ImageSize targetSize = new ImageSize(100, 130); // result Bitmap will be fit to this size
-        //imageLoader.loadImage("file://" + mList.getPath(), targetSize, options, new SimpleImageLoadingListener() {
-        //    @Override public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-        //        holder.imgSrc.setImageBitmap(loadedImage);
-        //    }
-        //});
-
         G.imageLoader.displayImage("file://" + mList.getPath(), holder.imgSrc);
 
         if (mList.isSelected) {
@@ -136,24 +117,4 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
         return new ViewHolder(v);
     }
 
-    ////the static ViewHolderFactory which will be used to generate the ViewHolder for this Item
-    //private static final ViewHolderFactory<? extends ViewHolder> FACTORY = new ItemFactory();
-    //
-    ///**
-    // * our ItemFactory implementation which creates the ViewHolder for our adapter.
-    // * It is highly recommended to implement a ViewHolderFactory as it is 0-1ms faster for ViewHolder creation,
-    // * and it is also many many times more efficient if you define custom listeners on views within your mList.
-    // */
-    //protected static class ItemFactory implements ViewHolderFactory<ViewHolder> {
-    //    public ViewHolder create(View v) {
-    //        return new ViewHolder(v);
-    //    }
-    //}
-    //
-    ///**
-    // * return our ViewHolderFactory implementation here
-    // */
-    //@Override public ViewHolderFactory<? extends ViewHolder> getFactory() {
-    //    return FACTORY;
-    //}
 }

@@ -45,7 +45,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -73,6 +72,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.items.AbstractItem;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.emoji.Emoji;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
@@ -82,6 +82,9 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
+import io.fotoapparat.Fotoapparat;
+import io.fotoapparat.view.CameraRenderer;
+import io.fotoapparat.view.CameraView;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -158,9 +161,11 @@ import net.iGap.interfaces.OnChatSendMessage;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.interfaces.OnClearChatHistory;
+import net.iGap.interfaces.OnClickCamera;
 import net.iGap.interfaces.OnClientJoinByUsername;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDeleteChatFinishActivity;
+import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnHelperSetAction;
 import net.iGap.interfaces.OnLastSeenUpdateTiming;
@@ -261,6 +266,8 @@ import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 import org.parceler.Parcels;
 
+import static io.fotoapparat.parameter.selector.LensPositionSelectors.back;
+import static io.fotoapparat.parameter.selector.SizeSelectors.biggestSize;
 import static java.lang.Long.parseLong;
 import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
@@ -352,7 +359,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     public static ArrayMap<Long, HelperUploadFile.StructUpload> compressingFiles = new ArrayMap<>();
-    private ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<>();
+    private ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private RealmRoomMessage firstUnreadMessage;
     private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
@@ -434,6 +441,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private int selectedPosition = 0;
     private boolean isNoMessage = true;
     private boolean isEmojiSHow = false;
+    public static OnClickCamera onClickCamera;
+    Fotoapparat fotoapparatSwitcher;
+    private boolean isCameraStart = false;
+    private boolean isCameraAttached = false;
+    private boolean isPermissionCamera = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -512,6 +524,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     protected void onResume() {
         super.onResume();
+
+
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -2438,14 +2452,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 itemAdapterBottomSheet();
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!ActivityChat.this.isFinishing()) {
-                            bottomSheetDialog.show();
-                        }
-                    }
-                }, 100);
+
             }
         });
 
@@ -3022,14 +3029,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         if (userTriesReplay()) {
             messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
@@ -4688,7 +4695,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
@@ -5413,13 +5420,22 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         rcvBottomSheet = (RecyclerView) viewBottomSheet.findViewById(R.id.rcvContent);
         rcvBottomSheet.setLayoutManager(new GridLayoutManager(ActivityChat.this, 1, GridLayoutManager.HORIZONTAL, false));
-        rcvBottomSheet.setItemAnimator(new DefaultItemAnimator());
-        rcvBottomSheet.setDrawingCacheEnabled(true);
-        rcvBottomSheet.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         rcvBottomSheet.setItemViewCacheSize(100);
         rcvBottomSheet.setAdapter(fastItemAdapter);
         bottomSheetDialog = new BottomSheetDialog(ActivityChat.this);
         bottomSheetDialog.setContentView(viewBottomSheet);
+
+        onClickCamera = new OnClickCamera() {
+            @Override
+            public void onclickCamera() {
+                try {
+                    bottomSheetDialog.dismiss();
+                    new AttachFile(ActivityChat.this).requestTakePicture();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
 
         bottomSheetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -5430,19 +5446,122 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
 
+        rcvBottomSheet.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(View view) {
+                if (isPermissionCamera) {
+
+
+                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
+                        isCameraAttached = true;
+                    }
+                    if (isCameraAttached) {
+                        if (fotoapparatSwitcher != null) {
+                            if (!isCameraStart) {
+
+                                try {
+                                    fotoapparatSwitcher.start();
+                                    isCameraStart = true;
+                                } catch (Exception e) {
+                                    e.getMessage();
+                                }
+                            }
+
+                        } else {
+
+                            fotoapparatSwitcher = Fotoapparat.with(ActivityChat.this).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                .lensPosition(back())       // we want back camera
+                                .build();
+
+                            fotoapparatSwitcher.start();
+                            isCameraStart = true;
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(View view) {
+
+                if (isPermissionCamera) {
+                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
+                        isCameraAttached = false;
+                    }
+                    if (!isCameraAttached) {
+                        if (fotoapparatSwitcher != null) {
+                            //                    if (isCameraStart && ( rcvBottomSheet.getChildAdapterPosition(view)> 4  || rcvBottomSheet.computeHorizontalScrollOffset() >200)){
+                            if (isCameraStart) {
+
+                                try {
+                                    fotoapparatSwitcher.stop();
+                                    isCameraStart = false;
+                                } catch (Exception e) {
+                                    e.getMessage();
+                                }
+                            }
+                        } else {
+
+                            fotoapparatSwitcher = Fotoapparat.with(ActivityChat.this).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                .lensPosition(back())       // we want back camera
+
+                                .build();
+
+                            fotoapparatSwitcher.stop();
+                            isCameraStart = false;
+                        }
+                    }
+                }
+            }
+        });
+
+        rcvBottomSheet.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(final View v) {
+                if (isPermissionCamera) {
+
+
+                    if (fotoapparatSwitcher != null) {
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isCameraStart) {
+                                    fotoapparatSwitcher.start();
+                                    isCameraStart = true;
+                                }
+                            }
+                        }, 50);
+                    }
+                }
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                if (isPermissionCamera) {
+                    if (fotoapparatSwitcher != null) {
+                        if (isCameraStart) {
+                            fotoapparatSwitcher.stop();
+                            isCameraStart = false;
+                        }
+                    }
+                }
+            }
+        });
+
         bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-
                 dialog.dismiss();
                 //send.setImageResource(R.mipmap.ic_close);
                 send.setText(getResources().getString(R.string.igap_chevron_double_down));
                 txtCountItem.setText(getResources().getString(R.string.navigation_drawer_close));
+                itemGalleryList.clear();
             }
         });
 
 
-        fastItemAdapter.withSelectable(true);
         listPathString = new ArrayList<>();
 
         camera.setOnClickListener(new View.OnClickListener() {
@@ -5901,12 +6020,58 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         listPathString.clear();
         fastItemAdapter.clear();
         itemGalleryList = getAllShownImagesPath(ActivityChat.this);
-        int itemSize = itemGalleryList.size();
-        for (int i = 0; i < itemSize; i++) {
-            fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
+        try {
+            HelperPermision.getCameraPermission(ActivityChat.this, new OnGetPermission() {
+                @Override
+                public void Allow() throws IOException {
+
+                    for (int i = 0; i < itemGalleryList.size(); i++) {
+                        if (i == 0) {
+                            fastItemAdapter.add(new AdapterCamera("").withIdentifier(100 + i));
+                        } else {
+                            fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
+                        }
+                        isPermissionCamera = true;
+                    }
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!ActivityChat.this.isFinishing()) {
+                                bottomSheetDialog.show();
+                            }
+                        }
+                    }, 100);
+                }
+
+                @Override
+                public void deny() {
+
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < itemGalleryList.size(); i++) {
+                                fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
+                            }
+                        }
+                    });
+
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!ActivityChat.this.isFinishing()) {
+                                bottomSheetDialog.show();
+                                fastItemAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }, 100);
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        itemGalleryList.clear();
+
     }
 
 
@@ -7546,5 +7711,74 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         totalItemCount = 0;
         unreadCount = 0;
     }
+
+    public class AdapterCamera extends AbstractItem<AdapterCamera, AdapterCamera.ViewHolder> {
+
+        public String item;
+
+        //public String getItem() {
+        //    return item;
+        //}
+
+        public AdapterCamera(String item) {
+            this.item = item;
+        }
+
+        //public void setItem(String item) {
+        //    this.item = item;
+        //}
+
+        //The unique ID for this type of item
+        @Override
+        public int getType() {
+            return R.id.rootCamera;
+        }
+
+        //The layout to be used for this type of item
+        @Override
+        public int getLayoutRes() {
+            return R.layout.adapter_camera;
+        }
+
+        //The logic to bind your data to the view
+
+        @Override
+        public void unbindView(ViewHolder holder) {
+            super.unbindView(holder);
+
+        }
+
+        @Override
+        public void bindView(ViewHolder holder, List payloads) {
+            super.bindView(holder, payloads);
+
+        }
+
+        //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
+        protected class ViewHolder extends RecyclerView.ViewHolder {
+
+            CameraView cm2;
+            private TextView rootCamera;
+
+            public ViewHolder(View view) {
+                super(view);
+
+                cm2 = (CameraView) view.findViewById(R.id.cameraView);
+                rootCamera = (TextView) view.findViewById(R.id.txtIconCamera);
+                rootCamera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (ActivityChat.onClickCamera != null) ActivityChat.onClickCamera.onclickCamera();
+                    }
+                });
+            }
+        }
+
+        @Override
+        public ViewHolder getViewHolder(View v) {
+            return new ViewHolder(v);
+        }
+    }
+
 }
 
