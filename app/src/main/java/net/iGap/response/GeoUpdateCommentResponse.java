@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoGeoUpdateComment;
 
 public class GeoUpdateCommentResponse extends MessageHandler {
@@ -32,16 +33,26 @@ public class GeoUpdateCommentResponse extends MessageHandler {
 
         ProtoGeoUpdateComment.GeoUpdateCommentResponse.Builder builder = (ProtoGeoUpdateComment.GeoUpdateCommentResponse.Builder) message;
         builder.getComment();
+
+        if (G.onGeoCommentResponse != null) {
+            G.onGeoCommentResponse.commentResponse();
+        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        if (G.onGeoCommentResponse != null) {
+            G.onGeoCommentResponse.timeOutCommentResponse();
+        }
     }
 
     @Override
     public void error() {
         super.error();
+        if (G.onGeoCommentResponse != null) {
+            G.onGeoCommentResponse.errorCommentResponse();
+        }
     }
 }
 

@@ -44,6 +44,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -54,6 +56,7 @@ import java.util.List;
 import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.interfaces.OnGeoCommentResponse;
 import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnLocationChanged;
@@ -100,7 +103,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private MapView map;
     private ItemizedOverlay<OverlayItem> latestLocation;
     private ArrayList<Marker> markers = new ArrayList<>();
-    private ViewGroup rootTurnOnGps;
+    private ScrollView rootTurnOnGps;
     private ViewGroup vgMessageGps;
     public static Location location;
     public static RippleView btnBack;
@@ -144,6 +147,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     private long latestUpdateTime = 0;
     long firstTap = 0;
+    private FloatingActionButton fabGps;
+    private ProgressBar prgWatingSendMessage;
+    private TextView txtSendMessageGps;
 
 
     public static FragmentiGapMap getInstance() {
@@ -240,7 +246,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
-        rootTurnOnGps = (ViewGroup) view.findViewById(R.id.rootTurnOnGps);
+        rootTurnOnGps = (ScrollView) view.findViewById(R.id.scrollView);
         rootTurnOnGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -283,11 +289,59 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
-        final TextView txtSendMessageGps = (TextView) view.findViewById(R.id.txtSendMessageGps);
+        prgWatingSendMessage = (ProgressBar) view.findViewById(R.id.prgWaitSendMessage);
+        txtSendMessageGps = (TextView) view.findViewById(R.id.txtSendMessageGps);
         txtSendMessageGps.setTextColor(Color.parseColor(G.appBarColor));
+
+        G.onGeoCommentResponse = new OnGeoCommentResponse() {
+            @Override
+            public void commentResponse() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        txtSendMessageGps.setVisibility(View.VISIBLE);
+                        prgWatingSendMessage.setVisibility(View.GONE);
+                        edtMessageGps.setEnabled(true);
+                        edtMessageGps.setText("");
+                    }
+                });
+            }
+
+            @Override
+            public void errorCommentResponse() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        txtSendMessageGps.setVisibility(View.VISIBLE);
+                        prgWatingSendMessage.setVisibility(View.GONE);
+                        edtMessageGps.setEnabled(true);
+                    }
+                });
+            }
+
+            @Override
+            public void timeOutCommentResponse() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        txtSendMessageGps.setVisibility(View.VISIBLE);
+                        prgWatingSendMessage.setVisibility(View.GONE);
+                        edtMessageGps.setEnabled(true);
+                    }
+                });
+            }
+        };
+
         txtSendMessageGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                txtSendMessageGps.setVisibility(View.GONE);
+                prgWatingSendMessage.setVisibility(View.VISIBLE);
+                edtMessageGps.setEnabled(false);
                 new RequestGeoUpdateComment().updateComment(edtMessageGps.getText().toString());
                 //edtMessageGps.setText("");
             }
@@ -327,7 +381,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
-        final FloatingActionButton fabGps = (FloatingActionButton) view.findViewById(st_fab_gps);
+        fabGps = (FloatingActionButton) view.findViewById(st_fab_gps);
         fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
         fabGps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -792,6 +846,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             isGpsOn = true;
             if (mapRegisterState) {
                 rootTurnOnGps.setVisibility(View.GONE);
+                fabGps.setVisibility(View.VISIBLE);
                 vgMessageGps.setVisibility(View.VISIBLE);
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 new GPSTracker().detectLocation();
@@ -804,6 +859,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     private void visibleViewAttention(String text) {
         rootTurnOnGps.setVisibility(View.VISIBLE);
+        fabGps.setVisibility(View.GONE);
         toggleGps.setChecked(false);
         vgMessageGps.setVisibility(View.GONE);
         rippleMoreMap.setVisibility(View.GONE);

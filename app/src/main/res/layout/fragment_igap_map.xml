@@ -155,6 +155,11 @@
               android:background="@color/gray_9d"
               />
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
         <TextView
             android:id="@+id/txtSendMessageGps"
             android:layout_width="@dimen/dp52"
@@ -166,6 +171,15 @@
             android:visibility="gone"
             />
 
+          <ProgressBar
+              android:id="@+id/prgWaitSendMessage"
+              android:layout_width="@dimen/dp52"
+              android:layout_height="@dimen/dp52"
+              android:padding="@dimen/dp12"
+              android:visibility="gone"
+              />
+        </RelativeLayout>
+
       </LinearLayout>
       <org.osmdroid.views.MapView
           android:id="@+id/map"
@@ -176,56 +190,59 @@
     </LinearLayout>
   </RelativeLayout>
 
-  <LinearLayout
-      android:id="@+id/rootTurnOnGps"
+  <ScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:id="@+id/scrollView"
       android:background="@color/background_check_gps"
-      android:gravity="center"
-      android:orientation="vertical"
       android:visibility="gone"
-      android:layout_below="@+id/backgroundToolbarMap"
-      android:paddingBottom="100dp"
       >
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/md_igap_alert"
-        android:gravity="center"
-        android:textSize="@dimen/dp70"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
-        android:textColor="@color/layout_background_top_connectivity"
-        />
-    <TextView
-        android:id="@+id/txtTextTurnOnOffGps"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/rootTurnOnGps"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:lineSpacingExtra="@dimen/dp4"
-        android:paddingBottom="@dimen/dp8"
-        android:paddingLeft="@dimen/dp48"
-        android:paddingRight="@dimen/dp48"
-        android:paddingTop="@dimen/dp20"
-        android:text="@string/turn_on_gps_explain"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dp18"
-        fontPath="fonts/IRANSansMobile_Bold.ttf"
-        />
+        android:layout_gravity="center"
+        android:orientation="vertical"
 
-    <ToggleButton
-        android:id="@+id/toggleGps"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="@dimen/dp52"
-        android:background="@drawable/st_switch_button"
-        android:textOff=""
-        android:textOn=""
-        />
+        >
 
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:text="@string/md_igap_alert"
+          android:textAppearance="@style/TextIconAppearance_toolbar"
+          android:textColor="@color/layout_background_top_connectivity"
+          android:textSize="@dimen/dp70"
+          />
+      <TextView
+          android:id="@+id/txtTextTurnOnOffGps"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:lineSpacingExtra="@dimen/dp4"
+          android:paddingBottom="@dimen/dp8"
+          android:paddingLeft="@dimen/dp48"
+          android:paddingRight="@dimen/dp48"
+          android:paddingTop="@dimen/dp20"
+          android:text="@string/turn_on_gps_explain"
+          android:textColor="@color/white"
+          android:textSize="@dimen/dp18"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
+          />
 
-  </LinearLayout>
-
+      <ToggleButton
+          android:id="@+id/toggleGps"
+          android:layout_width="@dimen/dp52"
+          android:layout_height="@dimen/dp52"
+          android:background="@drawable/st_switch_button"
+          android:textOff=""
+          android:textOn=""
+          />
+    </LinearLayout>
+  </ScrollView>
 
   <android.support.design.widget.FloatingActionButton
       android:id="@+id/st_fab_gps"
@@ -235,8 +252,6 @@
       android:layout_marginBottom="@dimen/dp24"
       android:layout_marginLeft="@dimen/dp24"
       android:layout_marginStart="19dp"
-      android:layout_toEndOf="@+id/rootTurnOnGps"
-      android:layout_toRightOf="@+id/rootTurnOnGps"
       android:background="@color/iGapColor"
       android:clickable="true"
       android:theme="@style/FabButton"

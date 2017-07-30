@@ -101,6 +101,7 @@ import net.iGap.interfaces.OnDeleteChatFinishActivity;
 import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnFileDownloadResponse;
 import net.iGap.interfaces.OnFileDownloaded;
+import net.iGap.interfaces.OnGeoCommentResponse;
 import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnGetUserInfo;
@@ -404,6 +405,7 @@ public class G extends MultiDexApplication {
     public static OnMapRegisterState onMapRegisterState;
     public static OnMapClose onMapClose;
     public static OnRegistrationInfo onRegistrationInfo;
+    public static OnGeoCommentResponse onGeoCommentResponse;
 
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
