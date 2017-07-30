@@ -1155,6 +1155,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 }
                                 holder.txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
                                 holder.txtLastMessage.setText(subStringInternal(lastMessage));
+                                holder.txtLastMessage.setEllipsize(TextUtils.TruncateAt.END);
                             } else {
                                 if (fileText != null && !fileText.isEmpty()) {
                                     holder.txtLastMessageFileText.setVisibility(View.VISIBLE);
