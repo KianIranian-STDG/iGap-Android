@@ -6059,7 +6059,8 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     for (int i = 0; i < itemGalleryList.size(); i++) {
                         if (i == 0) {
-                            fastItemAdapter.add(new AdapterCamera("").withIdentifier(100 + i));
+                            fastItemAdapter.add(new AdapterCamera("").withIdentifier(99 + i));
+                            fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
                         } else {
                             fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
                         }
