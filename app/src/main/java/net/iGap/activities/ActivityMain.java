@@ -10,8 +10,10 @@
 
 package net.iGap.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -24,6 +26,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -183,19 +186,65 @@ public class ActivityMain extends ActivityEnhanced
         }
     }
 
+    private void deleteContentFolderChatBackground() {
+
+        // delete  content of folder chat background in the first registeration
+        File root = new File(G.DIR_CHAT_BACKGROUND);
+        File[] Files = root.listFiles();
+        if (Files != null) {
+            for (int j = 0; j < Files.length; j++) {
+                Files[j].delete();
+            }
+        }
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(this, ActivityIntroduce.class);
+            startActivity(intent);
+
+            finish();
+            return;
+        }
+
         RealmUserInfo userInfo = G.getRealm().where(RealmUserInfo.class).findFirst();
 
         if (userInfo == null) { // user registered before
+
+            Intent intent = new Intent(this, ActivityIntroduce.class);
+            startActivity(intent);
 
             G.getRealm().close();
             finish();
             return;
         }
+
+        if (G.firstTimeEnterToApp == false) {
+            /**
+             * set true mFirstRun for get room history after logout and login again
+             */
+            G.firstTimeEnterToApp = true;
+            //licenceChecker();
+
+            sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+            boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
+
+            if (deleteFolderBackground) {
+                deleteContentFolderChatBackground();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
+                editor.apply();
+            }
+        }
+
+
+
 
         setContentView(R.layout.activity_main);
 

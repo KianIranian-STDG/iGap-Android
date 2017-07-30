@@ -422,8 +422,22 @@ public class G extends MultiDexApplication {
         super.onCreate();
 
         initEmoji();
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+                CaocConfig.Builder.create()
+                    .backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT)
+                    .showErrorDetails(false)
+                    .showRestartButton(true)
+                    .trackActivities(true)
+                    .restartActivity(ActivityMain.class)
+                    .errorActivity(ActivityCustomError.class)
+                    .apply();
+            }
+        }).start();
+
 
         context = getApplicationContext();
         handler = new Handler();
@@ -433,25 +447,31 @@ public class G extends MultiDexApplication {
     }
 
     private void initEmoji() {
-        emojiProvider = new EmojiOneProvider();
 
-        EmojiCategory[] categories = emojiProvider.getCategories();
-        emojiTree.clear();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                emojiProvider = new EmojiOneProvider();
 
-        for (int i = 0; i < categories.length; i++) {
-            try {
-                final Emoji[] emojis = categories[i].getEmojis();
+                EmojiCategory[] categories = emojiProvider.getCategories();
+                emojiTree.clear();
 
-                //noinspection ForLoopReplaceableByForEach
-                for (int j = 0; j < emojis.length; j++) {
-                    emojiTree.add(emojis[j]);
+                for (int i = 0; i < categories.length; i++) {
+                    try {
+                        final Emoji[] emojis = categories[i].getEmojis();
+
+                        //noinspection ForLoopReplaceableByForEach
+                        for (int j = 0; j < emojis.length; j++) {
+                            emojiTree.add(emojis[j]);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
-        EmojiManager.install(emojiProvider); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
+                EmojiManager.install(emojiProvider); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
+            }
+        }).start();
     }
 
     @Override

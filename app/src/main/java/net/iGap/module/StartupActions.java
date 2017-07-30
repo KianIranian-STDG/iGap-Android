@@ -67,12 +67,15 @@ import static net.iGap.G.waitingActionIds;
 public final class StartupActions {
 
     public StartupActions() {
-        realmConfiguration();
+
         initializeGlobalVariables();
+        realmConfiguration();
+        mainUserInfo();
         connectToServer();
         manageSettingPreferences();
         makeFolder();
         ConnectionManager.manageConnection();
+
 
         new CallObserver();
         /**
@@ -251,25 +254,31 @@ public final class StartupActions {
     }
 
     private void initializeGlobalVariables() {
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
-        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
-        imageLoader = ImageLoader.getInstance();
-        helperNotificationAndBadge = new HelperNotificationAndBadge();
 
-        HelperFillLookUpClass.fillLookUpClassArray();
-        fillUnSecureList();
-        fillUnSecureServerActionId();
-        fillUnLoginList();
-        fillWaitingRequestActionIdAllowed();
-        mainUserInfo();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
+                ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
+                imageLoader = ImageLoader.getInstance();
+                helperNotificationAndBadge = new HelperNotificationAndBadge();
+
+                HelperFillLookUpClass.fillLookUpClassArray();
+                fillUnSecureList();
+                fillUnSecureServerActionId();
+                fillUnLoginList();
+                fillWaitingRequestActionIdAllowed();
+            }
+        }).start();
+
     }
 
     /**
      * fill main user info in global variables
      */
     private void mainUserInfo() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+
+        RealmUserInfo userInfo = G.getRealm().where(RealmUserInfo.class).findFirst();
 
         if (userInfo != null) {
 
@@ -284,7 +293,6 @@ public final class StartupActions {
             }
 
         }
-        realm.close();
     }
 
     /**
