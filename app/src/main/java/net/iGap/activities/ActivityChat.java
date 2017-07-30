@@ -5467,7 +5467,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         rcvBottomSheet.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
-            public void onChildViewAttachedToWindow(View view) {
+            public void onChildViewAttachedToWindow(final View view) {
                 if (isPermissionCamera) {
 
 
@@ -5477,24 +5477,41 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     if (isCameraAttached) {
                         if (fotoapparatSwitcher != null) {
                             if (!isCameraStart) {
-
+                                isCameraStart = true;
                                 try {
-                                    fotoapparatSwitcher.start();
-                                    isCameraStart = true;
+                                    G.handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            fotoapparatSwitcher.start();
+                                        }
+                                    }, 50);
+
                                 } catch (Exception e) {
                                     e.getMessage();
                                 }
                             }
 
                         } else {
+                            if (!isCameraStart) {
+                                isCameraStart = true;
+                                try {
+                                    G.handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
 
-                            fotoapparatSwitcher = Fotoapparat.with(ActivityChat.this).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                .lensPosition(back())       // we want back camera
-                                .build();
+                                            fotoapparatSwitcher = Fotoapparat.with(ActivityChat.this).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                .lensPosition(back())       // we want back camera
+                                                .build();
 
-                            fotoapparatSwitcher.start();
-                            isCameraStart = true;
+                                            fotoapparatSwitcher.start();
+
+                                        }
+                                    }, 100);
+                                } catch (IllegalStateException e) {
+                                    e.getMessage();
+                                }
+                            }
                         }
                     }
                 }
@@ -5502,7 +5519,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
 
             @Override
-            public void onChildViewDetachedFromWindow(View view) {
+            public void onChildViewDetachedFromWindow(final View view) {
 
                 if (isPermissionCamera) {
                     if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
@@ -5521,15 +5538,24 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                 }
                             }
                         } else {
+                            if (!isCameraStart) {
+                                isCameraStart = false;
+                                try {
+                                    G.handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            fotoapparatSwitcher = Fotoapparat.with(ActivityChat.this).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                .lensPosition(back())       // we want back camera
+                                                .build();
 
-                            fotoapparatSwitcher = Fotoapparat.with(ActivityChat.this).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                .lensPosition(back())       // we want back camera
-
-                                .build();
-
-                            fotoapparatSwitcher.stop();
-                            isCameraStart = false;
+                                            fotoapparatSwitcher.stop();
+                                        }
+                                    }, 100);
+                                } catch (IllegalStateException e) {
+                                    e.getMessage();
+                                }
+                            }
                         }
                     }
                 }
