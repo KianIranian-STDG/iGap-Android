@@ -148,8 +148,11 @@ public class ContactGroupFragment extends Fragment {
                         }
                     } else {
 
-                        new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
-                        mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+                        if (isAdded()) {
+                            new GoToChatActivity(ContactGroupFragment.this.roomId).setContext(mActivity).startActivity();
+                            mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+                        }
+
                     }
                 }
 
@@ -180,9 +183,12 @@ public class ContactGroupFragment extends Fragment {
                         }
                     } else {
 
-                        new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
+                        if (isAdded()) {
+                            new GoToChatActivity(ContactGroupFragment.this.roomId).setContext(mActivity).startActivity();
 
-                        mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+                            mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+                        }
+
                     }
                 }
             }
@@ -299,9 +305,11 @@ public class ContactGroupFragment extends Fragment {
         });
         realm.close();
 
-        new GoToChatActivity(roomId).startActivity();
+        if (isAdded()) {
+            new GoToChatActivity(roomId).setContext(mActivity).startActivity();
+            mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+        }
 
-        mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
     }
 
     private void channelAddMember(long roomId) {
@@ -317,9 +325,11 @@ public class ContactGroupFragment extends Fragment {
         });
         realm.close();
 
-        new GoToChatActivity(roomId).startActivity();
+        if (isAdded()) {
+            new GoToChatActivity(roomId).setContext(mActivity).startActivity();
+            mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+        }
 
-        mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
     }
 
     private void addOwnerToDatabase(Long roomId, ProtoGlobal.Room.Type type) {

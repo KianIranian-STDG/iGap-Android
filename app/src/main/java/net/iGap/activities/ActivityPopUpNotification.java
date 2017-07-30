@@ -311,7 +311,7 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
 
     private void goToChatActivity() {
 
-        new GoToChatActivity(mList.get(viewPager.getCurrentItem()).getRoomId()).startActivity();
+        new GoToChatActivity(mList.get(viewPager.getCurrentItem()).getRoomId()).setContext(ActivityPopUpNotification.this).startActivity();
         isGoingToChatFromPopUp = true;
 
         finish();
