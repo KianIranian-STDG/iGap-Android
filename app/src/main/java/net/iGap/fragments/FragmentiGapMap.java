@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -22,6 +23,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -51,11 +53,14 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import io.realm.Realm;
+import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnGeoCommentResponse;
 import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
@@ -67,6 +72,10 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
+import net.iGap.realm.RealmAvatar;
+import net.iGap.realm.RealmAvatarFields;
+import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoGetRegisterStatus;
@@ -94,6 +103,7 @@ import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
+import static net.iGap.Config.URL_MAP;
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
@@ -173,7 +183,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         G.onGeoGetComment = this;
         startMap(view);
         //statusCheck();
-        //clickDrawMarkActive();
+        clickDrawMarkActive();
 
         page = 1;
         new RequestGeoGetRegisterStatus().getRegisterStatus();
@@ -228,10 +238,10 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
          * Use From Following Code For Custom Url Tile Server
          */
 
-        String[] mStringArray = new String[mapUrls.size()];
-        mStringArray = mapUrls.toArray(mStringArray);
+        //String[] mStringArray = new String[mapUrls.size()];
+        //mStringArray = mapUrls.toArray(mStringArray);
 
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", mStringArray) {
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{URL_MAP}) {
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
@@ -570,31 +580,6 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     private void drawMark(final OverlayItem mapItem, final boolean hasComment, final long userId) {
 
-        //String pathName = "";
-        //String initials = "";
-        //String color = "";
-        //Bitmap bitmap = null;
-        //Realm realm = Realm.getDefaultInstance();
-        //for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, G.userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
-        //    if (avatar.getFile() != null) {
-        //        pathName = avatar.getFile().getLocalFilePath();
-        //    }
-        //}
-        //if (pathName == null) {
-        //    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
-        //    if (realmRegisteredInfo != null) {
-        //        initials = realmRegisteredInfo.getInitials();
-        //        color = realmRegisteredInfo.getColor();
-        //    }
-        //    bitmap = HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color);
-        //} else {
-        //    bitmap = BitmapFactory.decodeFile(pathName);
-        //}
-        //
-        //realm.close();
-        //
-        //final Drawable drawableFinal = new BitmapDrawable(context.getResources(), getCircleBitmap(bitmap));
-
         G.handler.post(new Runnable() {
             @Override
             public void run() {
@@ -602,11 +587,11 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
                 if (G.userId != 0) {
                     if (hasComment) {
-                        //marker.setIcon(drawableFinal);
-                        marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_yes));
+                        marker.setIcon(avatarMark());
+                        //marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_yes));
                     } else {
-                        //marker.setIcon(drawableFinal);
-                        marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_no));
+                        marker.setIcon(avatarMark());
+                        //marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_no));
                     }
 
                     InfoWindow infoWindow = new MyInfoWindow(map, userId, hasComment, FragmentiGapMap.this, mActivity);
@@ -618,6 +603,31 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 map.invalidate();
             }
         });
+    }
+
+    private Drawable avatarMark() {
+        String pathName = "";
+        String initials = "";
+        String color = "";
+        Bitmap bitmap = null;
+        Realm realm = Realm.getDefaultInstance();
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, G.userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
+            if (avatar.getFile() != null) {
+                pathName = avatar.getFile().getLocalFilePath();
+            }
+        }
+        if (pathName == null || pathName.isEmpty()) {
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, G.userId).findFirst();
+            if (realmRegisteredInfo != null) {
+                initials = realmRegisteredInfo.getInitials();
+                color = realmRegisteredInfo.getColor();
+            }
+            bitmap = HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color);
+        } else {
+            bitmap = BitmapFactory.decodeFile(pathName);
+        }
+        realm.close();
+        return new BitmapDrawable(context.getResources(), getCircleBitmap(bitmap));
     }
 
     private void currentLocation(Location location, boolean setDefaultZoom) {
@@ -645,40 +655,70 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         map.setScrollableAreaLimit(bBox);
     }
 
+
     public static Bitmap getCircleBitmap(Bitmap bm) {
 
-        int sice = Math.min((bm.getWidth() / 4), (bm.getHeight()) / 4);
-
+        int sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp48), (int) G.context.getResources().getDimension(R.dimen.dp48));
         Bitmap bitmap = ThumbnailUtils.extractThumbnail(bm, sice, sice);
-
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        //Bitmap output = Bitmap.createBitmap(bitmap.getWidth() / 2, bitmap.getHeight() / 2, Bitmap.Config.ARGB_8888);
-
         int halfWidth = bitmap.getWidth() / 2;
         int halfWidth3 = bitmap.getWidth() / 3;
         int halfHeight = bitmap.getHeight() / 2;
         int halfHeight3 = bitmap.getHeight() / 3;
 
+        /**
+         * ******************* Avatar Start *******************
+         */
         Canvas canvas = new Canvas(output);
-
-        final int color = 0xffff0000;
-        final Paint paint = new Paint();
-        //final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final Rect rect = new Rect(halfWidth - halfWidth3, halfHeight - halfHeight3, halfWidth + halfWidth3, halfHeight + halfHeight3);
-        final RectF rectF = new RectF(rect);
+        Paint paint = new Paint();
+        Rect rect = new Rect(halfWidth - halfWidth3, halfHeight - halfHeight3, halfWidth + halfWidth3, halfHeight + halfHeight3);
+        RectF rectF = new RectF(rect);
 
         paint.setAntiAlias(true);
         paint.setDither(true);
         paint.setFilterBitmap(true);
         canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
+        paint.setColor(Color.BLUE);
         canvas.drawOval(rectF, paint);
 
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth((float) 4);
         paint.setColor(Color.BLUE);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth((float) 4);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
+        //******************* Avatar End *******************
+
+        /**
+         * ******************* Background Start *******************
+         */
+        Canvas canvasImage = new Canvas(output);
+        Paint paintImageStroke = new Paint();
+        Rect rectMain = new Rect(4, 4, bitmap.getWidth() - 4, bitmap.getHeight() - 4);
+        RectF rectFImage = new RectF(rectMain);
+
+        //===Stroke
+        paintImageStroke.setAntiAlias(true);
+        paintImageStroke.setDither(true);
+        paintImageStroke.setFilterBitmap(true);
+        canvasImage.drawARGB(0, 0, 0, 0);
+        paintImageStroke.setColor(Color.BLUE);
+        paintImageStroke.setStyle(Paint.Style.STROKE);
+        paintImageStroke.setStrokeWidth((float) 4);
+
+        //===Fill
+        Paint paintImageFill = new Paint();
+        paintImageFill.setAntiAlias(true);
+        paintImageFill.setDither(true);
+        paintImageFill.setFilterBitmap(true);
+        canvasImage.drawARGB(0, 0, 0, 0);
+        paintImageFill.setColor(Color.parseColor("#7f007fff"));
+        paintImageFill.setStyle(Paint.Style.FILL);
+        canvasImage.drawOval(rectFImage, paintImageFill);
+
+        canvasImage.drawOval(rectFImage, paintImageStroke);
+        //******************* Background End *******************
 
         return output;
     }
@@ -799,7 +839,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             firstEnter = false;
             currentLocation(location, true);
             mapBounding(location);
-            getCoordinateLoop(0, true);
+            getCoordinateLoop(0, false);
         }
 
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());

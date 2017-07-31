@@ -68,7 +68,7 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
         initComponent(view);
         if (FragmentiGapMap.location != null) {
             //new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
-            getDistanceLoop(0, true);
+            getDistanceLoop(0, false);
         }
     }
 
