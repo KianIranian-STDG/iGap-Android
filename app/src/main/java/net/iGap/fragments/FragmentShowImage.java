@@ -751,7 +751,16 @@ public class FragmentShowImage extends Fragment {
         }
 
         private void setMediaPlayer(MediaPlayer mMediaPlayer, final TextureView mTextureView, final ImageView imgPlay, final TouchImageView touchImageView) {
+
+            if (mTextureView == null) {
+                return;
+            }
             Surface surfaceTexture = new Surface(mTextureView.getSurfaceTexture());
+
+            if (surfaceTexture == null) {
+                return;
+                }
+
             mMediaPlayer.setSurface(surfaceTexture);
             mMediaPlayer.setLooping(false);
             mMediaPlayer.prepareAsync();
@@ -778,6 +787,10 @@ public class FragmentShowImage extends Fragment {
                     videoController.show();
                 }
             });
+
+
+
+
         }
 
         /**
