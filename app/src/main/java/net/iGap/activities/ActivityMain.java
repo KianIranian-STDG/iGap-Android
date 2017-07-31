@@ -685,9 +685,11 @@ public class ActivityMain extends ActivityEnhanced
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
+        findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
+
         if (HelperCalander.isLanguagePersian) {
 
-            findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
+
 
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -711,7 +713,7 @@ public class ActivityMain extends ActivityEnhanced
 
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
-            }, 200);
+            }, 500);
         } else {
 
             G.handler.postDelayed(new Runnable() {
@@ -722,8 +724,11 @@ public class ActivityMain extends ActivityEnhanced
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
                     navigationTabStrip.setViewPager(mViewPager, 0);
+
+                    findViewById(R.id.loadingContent).setVisibility(View.GONE);
+
                 }
-            }, 100);
+            }, 500);
 
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -742,7 +747,7 @@ public class ActivityMain extends ActivityEnhanced
                     setmViewPagerSelectedItem();
 
                 }
-            }, 1000);
+            }, 1500);
         }
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
@@ -1754,7 +1759,6 @@ public class ActivityMain extends ActivityEnhanced
                     G.salectedTabInMainActivity = fm.mainType.toString();
                 } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
 
-                    ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
                     G.salectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
                 }
             } catch (Exception e) {

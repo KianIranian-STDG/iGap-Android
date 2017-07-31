@@ -77,6 +77,7 @@ import net.iGap.request.RequestUserContactsGetList;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
+import static net.iGap.G.getRealm;
 import static net.iGap.R.string.contacts;
 
 public class RegisteredContactsFragment extends Fragment {
@@ -96,6 +97,17 @@ public class RegisteredContactsFragment extends Fragment {
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
     private FastItemAdapter fastItemAdapter;
     private ProgressBar prgWaitingLiadList;
+
+    private Realm mRealm;
+
+    private Realm getmRealm() {
+        if (mRealm == null || mRealm.isClosed()) {
+            mRealm = Realm.getDefaultInstance();
+        }
+
+        return mRealm;
+    }
+
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -215,12 +227,12 @@ public class RegisteredContactsFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                Realm realm = Realm.getDefaultInstance();
+
 
                 if (s.length() > 0) {
-                    results = realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+                    results = getmRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAllSorted(RealmContactsFields.DISPLAY_NAME);
                 } else {
-                    results = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+                    results = getmRealm().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
                 }
                 realmRecyclerView.setAdapter(new ContactListAdapter(results));
 
@@ -228,7 +240,7 @@ public class RegisteredContactsFragment extends Fragment {
                 decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(results));
                 realmRecyclerView.addItemDecoration(decoration);
 
-                realm.close();
+
             }
 
             @Override
@@ -262,7 +274,7 @@ public class RegisteredContactsFragment extends Fragment {
             }
         });
 
-        Realm realm = Realm.getDefaultInstance();
+
 
         realmRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         realmRecyclerView.setItemViewCacheSize(1000);
@@ -270,7 +282,7 @@ public class RegisteredContactsFragment extends Fragment {
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         realmRecyclerView.setNestedScrollingEnabled(false);
 
-        results = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+        results = getmRealm().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
         realmRecyclerView.setAdapter(new ContactListAdapter(results));
 
         StickyHeader stickyHeader = new StickyHeader(results);
@@ -312,8 +324,6 @@ public class RegisteredContactsFragment extends Fragment {
         if (results.size() == 0) {
             new RequestUserContactsGetList().userContactGetList();
         }
-
-        realm.close();
     }
 
 
@@ -348,6 +358,8 @@ public class RegisteredContactsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         hideProgress();
+
+        getRealm().close();
     }
 
     //********************************************************************************************
@@ -457,8 +469,8 @@ public class RegisteredContactsFragment extends Fragment {
             lastHeader = header;
 
             viewHolder.title.setText(contact.getDisplay_name());
-            Realm realm = Realm.getDefaultInstance();
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, contact.getId()).findFirst();
+
+            RealmRegisteredInfo realmRegisteredInfo = getmRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, contact.getId()).findFirst();
             if (realmRegisteredInfo != null) {
                 viewHolder.subtitle.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
                 if (realmRegisteredInfo.getStatus() != null) {
@@ -476,7 +488,6 @@ public class RegisteredContactsFragment extends Fragment {
                     viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
                 }
             }
-            realm.close();
 
             hashMapAvatar.put(contact.getId(), viewHolder.image);
             setAvatar(viewHolder, contact.getId());

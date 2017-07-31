@@ -310,7 +310,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         };
 
         recyclerView = (RecyclerView) findViewById(R.id.asm_recycler_view_sheared_media);
-        recyclerView.setItemViewCacheSize(150);
+        recyclerView.setItemViewCacheSize(400);
 
 
         onScrollListener = new RecyclerView.OnScrollListener() {
@@ -601,7 +601,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             super(context, spanCount);
         }
 
-        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 4000;
+        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 7000;
 
         @Override
         protected int getExtraLayoutSpace(RecyclerView.State state) {
