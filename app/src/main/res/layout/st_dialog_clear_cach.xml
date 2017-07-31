@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:textColor="@color/gray_6c"
             android:text="@string/array_Photo"/>
 
         <TextView
@@ -26,8 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="@string/photo"
-            android:textColor="@android:color/black"
             android:textSize="@dimen/dp16"
+            android:textColor="@color/gray_6c"
             />
     </RelativeLayout>
 
@@ -46,6 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:textColor="@color/gray_6c"
             android:text="@string/array_Video"/>
 
         <TextView
@@ -54,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="@string/photo"
-            android:textColor="@android:color/black"
+            android:textColor="@color/gray_6c"
             android:textSize="@dimen/dp16"
             />
     </RelativeLayout>
@@ -73,6 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:textColor="@color/gray_6c"
             android:text="@string/Documents"/>
 
         <TextView
@@ -81,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="@string/photo"
-            android:textColor="@android:color/black"
+            android:textColor="@color/gray_6c"
             android:textSize="@dimen/dp16"
             />
     </RelativeLayout>
@@ -102,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:textColor="@color/gray_6c"
             android:text="@string/audio"
             />
 
@@ -114,7 +118,7 @@
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:text="photo"
-            android:textColor="@android:color/black"
+            android:textColor="@color/gray_6c"
             android:textSize="@dimen/dp16"
             />
     </RelativeLayout>
@@ -136,7 +140,7 @@
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:text="@string/total_size"
-            android:textColor="@android:color/black"
+            android:textColor="@color/gray_6c"
             android:textSize="@dimen/dp18"
             android:padding="@dimen/dp6"
             />
@@ -148,7 +152,7 @@
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:text="photo"
-            android:textColor="@android:color/black"
+            android:textColor="@color/gray_6c"
             android:textSize="@dimen/dp18"
             />
     </RelativeLayout>
