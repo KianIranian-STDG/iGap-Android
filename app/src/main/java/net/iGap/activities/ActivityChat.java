@@ -302,7 +302,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private MaterialDesignTextView imvMicButton;
-    private MaterialDesignTextView btnReplaySelected;
+    //  private MaterialDesignTextView btnReplaySelected;
     private RippleView rippleDeleteSelected;
     private RippleView rippleReplaySelected;
     private ArrayList<String> listPathString;
@@ -2709,35 +2709,45 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         //   Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
         if (selectedCount > 0) {
             toolbar.setVisibility(View.GONE);
+            rippleReplaySelected.setVisibility(View.VISIBLE);
 
+            txtNumberOfSelected.setText(selectedCount + "");
 
-            txtNumberOfSelected.setText(Integer.toString(selectedCount));
-
-            if (HelperCalander.isLanguagePersian) txtNumberOfSelected.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNumberOfSelected.getText().toString()));
+            if (HelperCalander.isLanguagePersian) {
+                txtNumberOfSelected.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNumberOfSelected.getText().toString()));
+            }
 
             if (selectedCount > 1) {
-                btnReplaySelected.setVisibility(View.INVISIBLE);
+                rippleReplaySelected.setVisibility(View.INVISIBLE);
             } else {
 
                 if (chatType == CHANNEL) {
                     if (channelRole == ChannelChatRole.MEMBER) {
-                        btnReplaySelected.setVisibility(View.INVISIBLE);
+                        rippleReplaySelected.setVisibility(View.INVISIBLE);
                     }
-                } else {
-                    btnReplaySelected.setVisibility(View.VISIBLE);
                 }
             }
 
+            Realm realm = Realm.getDefaultInstance();
 
             for (AbstractMessage message : selectedItems) {
 
-                Realm realm = Realm.getDefaultInstance();
+
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
+
+                    long messageSender = 0;
+                    if (message != null && message.mMessage != null && message.mMessage.senderID != null) {
+                        messageSender = Long.parseLong(message.mMessage.senderID);
+                    } else {
+                        continue;
+                    }
+
+
                     // if user clicked on any message which he wasn't its sender, remove edit mList option
                     if (chatType == CHANNEL) {
                         if (channelRole == ChannelChatRole.MEMBER) {
-                            btnReplaySelected.setVisibility(View.GONE);
+                            rippleReplaySelected.setVisibility(View.INVISIBLE);
                             rippleDeleteSelected.setVisibility(View.GONE);
 
                         }
@@ -2746,11 +2756,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                         RealmList<RealmMember> realmMembers = realmChannelRoom.getMembers();
                         for (RealmMember rm : realmMembers) {
-                            if (rm.getPeerId() == Long.parseLong(message.mMessage.senderID)) {
+                            if (rm.getPeerId() == messageSender) {
                                 roleSenderMessage = ChannelChatRole.valueOf(rm.getRole());
                             }
                         }
-                        if (senderId != Long.parseLong(message.mMessage.senderID)) {  // if message dose'nt belong to owner
+                        if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (channelRole == ChannelChatRole.MEMBER) {
                                 rippleDeleteSelected.setVisibility(View.GONE);
                             } else if (channelRole == ChannelChatRole.MODERATOR) {
@@ -2773,11 +2783,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                         RealmList<RealmMember> realmMembers = realmGroupRoom.getMembers();
                         for (RealmMember rm : realmMembers) {
-                            if (rm.getPeerId() == Long.parseLong(message.mMessage.senderID)) {
+                            if (rm.getPeerId() == messageSender) {
                                 roleSenderMessage = GroupChatRole.valueOf(rm.getRole());
                             }
                         }
-                        if (senderId != Long.parseLong(message.mMessage.senderID)) {  // if message dose'nt belong to owner
+                        if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (groupRole == GroupChatRole.MEMBER) {
                                 rippleDeleteSelected.setVisibility(View.GONE);
                             } else if (groupRole == GroupChatRole.MODERATOR) {
@@ -2795,10 +2805,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                     } else if (realmRoom.getReadOnly()) {
                         rippleReplaySelected.setVisibility(View.INVISIBLE);
                     }
-                    realm.close();
+
                 }
             }
 
+            realm.close();
 
             ll_AppBarSelected.setVisibility(View.VISIBLE);
         } else {
@@ -5859,15 +5870,15 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             }
         });
 
-        btnReplaySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_replay_selected);
+        //  btnReplaySelected = (MaterialDesignTextView) findViewById(R.id.chl_btn_replay_selected);
         rippleReplaySelected = (RippleView) findViewById(R.id.chl_ripple_replay_selected);
 
         if (chatType == CHANNEL) {
             if (channelRole == ChannelChatRole.MEMBER) {
-                btnReplaySelected.setVisibility(View.GONE);
+                rippleReplaySelected.setVisibility(View.INVISIBLE);
             }
         } else {
-            btnReplaySelected.setVisibility(View.VISIBLE);
+            rippleReplaySelected.setVisibility(View.VISIBLE);
         }
         rippleReplaySelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
