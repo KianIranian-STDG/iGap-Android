@@ -114,7 +114,6 @@ public class MusicPlayer {
         getAtribuits();
 
         initSensore();
-
     }
 
     public static void repeatClick() {
@@ -451,7 +450,6 @@ public class MusicPlayer {
 
         realm.close();
 
-
         MusicPlayer.messageId = messageID;
         MusicPlayer.musicPath = musicPath;
         MusicPlayer.roomName = roomName;
@@ -478,7 +476,6 @@ public class MusicPlayer {
                 } else {
                     mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 }
-
 
                 mp.prepare();
                 mp.start();
@@ -603,10 +600,6 @@ public class MusicPlayer {
             registerDistanceSensor();
         }
 
-
-
-
-
         if (HelperCalander.isLanguagePersian) {
             txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
         }
@@ -679,8 +672,8 @@ public class MusicPlayer {
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
         notification = new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_audio).setContentTitle(musicName)
-                //  .setContentText(place)
-                .setContent(remoteViews).setContentIntent(pi).setAutoCancel(false).build();
+            //  .setContentText(place)
+            .setContent(remoteViews).setContentIntent(pi).setAutoCancel(false).build();
         if (G.handler != null) {
             G.handler.post(new Runnable() {
                 @Override
@@ -704,12 +697,14 @@ public class MusicPlayer {
         Realm realm = Realm.getDefaultInstance();
 
         RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                equalTo(RealmRoomMessageFields.DELETED, false).findAll();
+            equalTo(RealmRoomMessageFields.DELETED, false).findAll();
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage realmRoomMessage : roomMessages) {
 
-                if (realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
+                if (realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || realmRoomMessage.getMessageType()
+                    .toString()
+                    .equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
                     try {
                         if (new File(realmRoomMessage.getAttachment().getLocalFilePath()).exists()) mediaList.add(realmRoomMessage);
                     } catch (Exception e) {
@@ -832,43 +827,41 @@ public class MusicPlayer {
     private static void getMusicInfo() {
 
         musicInfo = "";
-        musicInfoTitle = "";
+        musicInfoTitle = G.context.getString(R.string.unknown_artist);
 
         MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
 
         Uri uri = null;
 
-        if (MusicPlayer.musicPath != null) uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
+        if (MusicPlayer.musicPath != null) {
+            uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
+        }
 
         if (uri != null) {
 
-            mediaMetadataRetriever.setDataSource(G.context, uri);
-
-            String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-
-            if (title != null) {
-                musicInfo += title + "       ";
-                musicInfoTitle = title;
-            }
-
-            String albumName = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-            if (albumName != null) {
-                musicInfo += albumName + "       ";
-                musicInfoTitle = albumName;
-            }
-
-            String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-            if (artist != null) {
-                musicInfo += artist + "       ";
-                musicInfoTitle = artist;
-            }
-
-            if (musicInfoTitle.trim().length() == 0) {
-                musicInfoTitle = G.context.getString(R.string.unknown_artist);
-            }
-
             try {
+
                 mediaMetadataRetriever.setDataSource(G.context, uri);
+
+                String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+
+                if (title != null) {
+                    musicInfo += title + "       ";
+                    musicInfoTitle = title;
+                }
+
+                String albumName = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+                if (albumName != null) {
+                    musicInfo += albumName + "       ";
+                    musicInfoTitle = albumName;
+                }
+
+                String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                if (artist != null) {
+                    musicInfo += artist + "       ";
+                    musicInfoTitle = artist;
+                }
+
                 byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
                 if (data != null) {
                     mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -878,6 +871,8 @@ public class MusicPlayer {
                     remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
                 }
             } catch (Exception e) {
+
+                Log.e("debug", " music plyer   getMusicInfo    " + uri + "       " + e.toString());
             }
         }
     }
@@ -945,7 +940,6 @@ public class MusicPlayer {
         try {
 
             mSensorManager.registerListener(sensorEventListener, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
-
         } catch (Exception e) {
             Log.e("dddd", "music player registerDistanceSensor   " + e.toString());
         }
@@ -969,7 +963,6 @@ public class MusicPlayer {
             if (fromVoiceCall) {
                 am.setSpeakerphoneOn(false);
                 isSpeakerON = false;
-
             } else {
 
                 am.setSpeakerphoneOn(true);
@@ -1024,10 +1017,6 @@ public class MusicPlayer {
 
         }
     }
-
-
-
-
 }
 
 

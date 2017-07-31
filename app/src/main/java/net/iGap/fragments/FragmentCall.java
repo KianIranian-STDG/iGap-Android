@@ -47,6 +47,7 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.realm.RealmCallConfig;
@@ -132,7 +133,7 @@ import net.iGap.request.RequestSignalingGetLog;
         mRecyclerView.setItemViewCacheSize(1000);
         mRecyclerView.setItemAnimator(null);
 
-        FragmentMain.PreCachingLayoutManager layoutManager = new FragmentMain.PreCachingLayoutManager(mActivity, 6000);
+        PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(mActivity, 6000);
 
         mRecyclerView.setLayoutManager(layoutManager);
 

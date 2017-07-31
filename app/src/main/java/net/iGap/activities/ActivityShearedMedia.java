@@ -56,7 +56,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -71,6 +70,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoClientCountRoomHistory;
 import net.iGap.proto.ProtoClientSearchRoomHistory;
@@ -685,7 +685,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.AUDIO.toString());
         adapter = new VoiceAdapter(ActivityShearedMedia.this, mNewList);
 
-        recyclerView.setLayoutManager(new FragmentMain.PreCachingLayoutManager(ActivityShearedMedia.this, 5000));
+        recyclerView.setLayoutManager(new PreCachingLayoutManager(ActivityShearedMedia.this, 5000));
         recyclerView.setAdapter(adapter);
 
         isChangeSelectType = false;
@@ -701,7 +701,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.VOICE.toString());
         adapter = new VoiceAdapter(ActivityShearedMedia.this, mNewList);
 
-        recyclerView.setLayoutManager(new FragmentMain.PreCachingLayoutManager(ActivityShearedMedia.this, 5000));
+        recyclerView.setLayoutManager(new PreCachingLayoutManager(ActivityShearedMedia.this, 5000));
         recyclerView.setAdapter(adapter);
 
         isChangeSelectType = false;
@@ -732,7 +732,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.FILE.toString());
         adapter = new FileAdapter(ActivityShearedMedia.this, mNewList);
 
-        recyclerView.setLayoutManager(new FragmentMain.PreCachingLayoutManager(ActivityShearedMedia.this, 5000));
+        recyclerView.setLayoutManager(new PreCachingLayoutManager(ActivityShearedMedia.this, 5000));
         recyclerView.setAdapter(adapter);
 
         isChangeSelectType = false;
@@ -766,7 +766,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         mNewList = addTimeToList(mRealmList);
         adapter = new LinkAdapter(ActivityShearedMedia.this, mNewList);
 
-        recyclerView.setLayoutManager(new FragmentMain.PreCachingLayoutManager(ActivityShearedMedia.this, 5000));
+        recyclerView.setLayoutManager(new PreCachingLayoutManager(ActivityShearedMedia.this, 5000));
         recyclerView.setAdapter(adapter);
 
         isChangeSelectType = false;
