@@ -762,7 +762,7 @@
   <string name="permission_contact">لیست تماس ها را بدهید</string>
   <string name="permission_calender">تقویم را بدهید</string>
   <string name="permission_location">موقعیت یاب گوشی را بدهید</string>
-  <string name="permission_record_audio">ظبط صدا را بدهید</string>
+  <string name="permission_record_audio">ضبط صدا را بدهید</string>
   <string name="permission_phone">گوشی را بدهید</string>
   <string name="permission_sms">پیامک ها را بدهید</string>
   <string name="st_privacy_blog">بلاگ رسمی آی گپ</string>
