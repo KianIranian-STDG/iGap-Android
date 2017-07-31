@@ -75,6 +75,7 @@ public class RealmChannelRoom extends RealmObject {
                 realmRoom.setType(RoomType.CHANNEL);
                 RealmChannelRoom realmChannelRoom = realm.createObject(RealmChannelRoom.class);
                 realmChannelRoom.setInviteLink(inviteLink);
+                realmChannelRoom.setRole(ChannelChatRole.MEMBER);// set default role
 
                 realmRoom.setChannelRoom(realmChannelRoom);
             }
