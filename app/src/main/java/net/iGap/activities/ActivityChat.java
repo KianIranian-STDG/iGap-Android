@@ -1703,6 +1703,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         iconMute = (MaterialDesignTextView) findViewById(R.id.imgMutedRoom);
         RippleView rippleBackButton = (RippleView) findViewById(R.id.chl_ripple_back_Button);
 
+
         final Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null) {
@@ -2003,6 +2004,10 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         //FragmentMain.PreCachingLayoutManager layoutManager = new FragmentMain.PreCachingLayoutManager(ActivityChat.this, 7500);
         MyLinearLayoutManager layoutManager = new MyLinearLayoutManager(ActivityChat.this);
         layoutManager.setStackFromEnd(true);
+
+        if (recyclerView == null) {
+            recyclerView = (RecyclerView) findViewById(R.id.chl_recycler_view_chat);
+        }
 
         recyclerView.setItemAnimator(null);
         recyclerView.setLayoutManager(layoutManager);

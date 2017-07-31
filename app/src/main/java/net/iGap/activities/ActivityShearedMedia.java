@@ -311,6 +311,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         recyclerView = (RecyclerView) findViewById(R.id.asm_recycler_view_sheared_media);
         recyclerView.setItemViewCacheSize(400);
+        recyclerView.setItemAnimator(null);
 
 
         onScrollListener = new RecyclerView.OnScrollListener() {
