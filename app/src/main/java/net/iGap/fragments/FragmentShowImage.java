@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -725,14 +726,28 @@ public class FragmentShowImage extends Fragment {
             mMediaPlayer.reset();
             try {
                 mMediaPlayer.setDataSource(mActivity, Uri.parse(videoPath));
-                if (mTextureView.getSurfaceTexture() == null) {
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, touchImageView);
-                        }
-                    }, 500);
-                } else {
+                mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+                    @Override
+                    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                        setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, touchImageView);
+                    }
+
+                    @Override
+                    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+                    }
+
+                    @Override
+                    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+
+                        return false;
+                    }
+
+                    @Override
+                    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
+                    }
+                });
+                if (mTextureView.getSurfaceTexture() != null) {
                     setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, touchImageView);
                 }
             } catch (IOException | IllegalArgumentException e) {
@@ -759,7 +774,7 @@ public class FragmentShowImage extends Fragment {
 
             if (surfaceTexture == null) {
                 return;
-                }
+            }
 
             mMediaPlayer.setSurface(surfaceTexture);
             mMediaPlayer.setLooping(false);
