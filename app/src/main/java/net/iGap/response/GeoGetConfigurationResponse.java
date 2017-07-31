@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.proto.ProtoGeoGetConfiguration;
 
@@ -34,6 +35,10 @@ public class GeoGetConfigurationResponse extends MessageHandler {
 
         for (ProtoGeoGetConfiguration.GeoGetConfigurationResponse.TileServer tileServer : builder.getTileServerList()) {
             FragmentiGapMap.mapUrls.add(tileServer.getBaseUrl());
+        }
+
+        if (G.onGeoGetConfiguration != null) {
+            G.onGeoGetConfiguration.onGetConfiguration();
         }
     }
 

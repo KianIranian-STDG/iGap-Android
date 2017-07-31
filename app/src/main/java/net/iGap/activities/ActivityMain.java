@@ -82,6 +82,7 @@ import net.iGap.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.interfaces.OnClientCondition;
 import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnConnectionChangeState;
+import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnRefreshActivity;
@@ -113,6 +114,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
+import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
@@ -121,6 +123,7 @@ import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
+import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
 
@@ -899,29 +902,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                try {
-                    HelperPermision.getLocationPermission(ActivityMain.this, new OnGetPermission() {
+                if (mapUrls == null || mapUrls.isEmpty()) {
+                    G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
                         @Override
-                        public void Allow() throws IOException {
-                            FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
-                            try {
-                                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap).commit();
-                            } catch (Exception e) {
-                                e.getStackTrace();
-                            }
-                            lockNavigation();
+                        public void onGetConfiguration() {
+                            openMapFragment();
                         }
-
-                        @Override
-                        public void deny() {
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    };
+                    new RequestGeoGetConfiguration().getConfiguration();
+                } else {
+                    openMapFragment();
                 }
-
-                closeDrawer();
             }
         });
 
@@ -1304,6 +1295,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             }
         });
+    }
+
+    private void openMapFragment() {
+        try {
+            HelperPermision.getLocationPermission(ActivityMain.this, new OnGetPermission() {
+                @Override
+                public void Allow() throws IOException {
+                    FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
+                    try {
+                        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap).commit();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            lockNavigation();
+                        }
+                    });
+                }
+
+                @Override
+                public void deny() {
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        closeDrawer();
     }
 
     private void closeDrawer() {

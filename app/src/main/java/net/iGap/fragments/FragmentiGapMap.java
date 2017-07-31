@@ -571,15 +571,28 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private void drawMark(final OverlayItem mapItem, final boolean hasComment, final long userId) {
 
         //String pathName = "";
+        //String initials = "";
+        //String color = "";
+        //Bitmap bitmap = null;
         //Realm realm = Realm.getDefaultInstance();
         //for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, G.userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
         //    if (avatar.getFile() != null) {
         //        pathName = avatar.getFile().getLocalFilePath();
         //    }
         //}
+        //if (pathName == null) {
+        //    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        //    if (realmRegisteredInfo != null) {
+        //        initials = realmRegisteredInfo.getInitials();
+        //        color = realmRegisteredInfo.getColor();
+        //    }
+        //    bitmap = HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color);
+        //} else {
+        //    bitmap = BitmapFactory.decodeFile(pathName);
+        //}
+        //
         //realm.close();
         //
-        //Bitmap bitmap = BitmapFactory.decodeFile(pathName);
         //final Drawable drawableFinal = new BitmapDrawable(context.getResources(), getCircleBitmap(bitmap));
 
         G.handler.post(new Runnable() {

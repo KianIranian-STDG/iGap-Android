@@ -103,6 +103,7 @@ import net.iGap.interfaces.OnFileDownloadResponse;
 import net.iGap.interfaces.OnFileDownloaded;
 import net.iGap.interfaces.OnGeoCommentResponse;
 import net.iGap.interfaces.OnGeoGetComment;
+import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
 import net.iGap.interfaces.OnGetUserInfo;
 import net.iGap.interfaces.OnGetWallpaper;
@@ -406,6 +407,7 @@ public class G extends MultiDexApplication {
     public static OnMapClose onMapClose;
     public static OnRegistrationInfo onRegistrationInfo;
     public static OnGeoCommentResponse onGeoCommentResponse;
+    public static OnGeoGetConfiguration onGeoGetConfiguration;
 
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
