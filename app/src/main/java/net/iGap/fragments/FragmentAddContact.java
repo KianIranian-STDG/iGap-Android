@@ -72,6 +72,9 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         initComponent(view);
     }
 
@@ -89,18 +92,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
         view.findViewById(R.id.fac_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        onCountryCallBack = new OnCountryCallBack() {
-            @Override
-            public void countryName(final String nameCountry, final String code, String mask) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtChooseCountry.setText(nameCountry);
-                        txtCodeCountry.setText("+" + code);
-                    }
-                });
-            }
-        };
+
 
         txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
         txtSet.setTextColor(getResources().getColor(R.color.line_edit_text));
@@ -252,12 +244,18 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             }
         });
 
-        //G.onContactImport = new OnUserContactImport() {
-        //    @Override
-        //    public void onContactImport() {
-        //
-        //    }
-        //};
+        onCountryCallBack = new OnCountryCallBack() {
+            @Override
+            public void countryName(final String nameCountry, final String code, String mask) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtChooseCountry.setText(nameCountry);
+                        txtCodeCountry.setText("+" + code);
+                    }
+                });
+            }
+        };
 
     }
 
@@ -285,24 +283,16 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
      */
     private void addContactToServer() {
 
-        String _phone = txtCodeCountry.getText().toString() + edtPhoneNumber.getText().toString();
-        //if (_phone.startsWith("0")) _phone = _phone.substring(1, _phone.length());
-        //
-        //String ph = "+98" + _phone.replace("+98", "");
-        //
+        String _phone = edtPhoneNumber.getText().toString();
+        String codeCountry = txtCodeCountry.getText().toString();
 
         String saveNumber;
-        if (_phone.startsWith(txtCodeCountry.getText().toString())) {//x
-            saveNumber = _phone.replace("+980", "+98");
 
-        } else if (_phone.startsWith("+98")) {
-            saveNumber = _phone;
-        } else if (_phone.startsWith("0")) {
-            saveNumber = "+98" + _phone.substring(1, _phone.length());
+        if (edtPhoneNumber.getText().toString().startsWith("0")) {
+            saveNumber = codeCountry + _phone.substring(1, _phone.length());
         } else {
-            saveNumber = "+98" + _phone;
+            saveNumber = codeCountry + _phone;
         }
-
 
         ArrayList<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
@@ -322,8 +312,9 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                 final String phone = edtPhoneNumber.getText().toString();
                 final String firstName = edtFirstName.getText().toString();
                 final String lastName = edtLastName.getText().toString();
+                final String codeNumber = txtCodeCountry.getText().toString();
                 String displayName = firstName + " " + lastName;
-                HelperAddContact.addContact(displayName, phone);
+                HelperAddContact.addContact(displayName, codeNumber, phone);
 
                 changePage(view);
             } else {

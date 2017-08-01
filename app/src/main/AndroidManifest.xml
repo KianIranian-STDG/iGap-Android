@@ -41,6 +41,7 @@
       android:icon="@mipmap/icon"
       android:largeHeap="true"
       android:supportsRtl="true"
+      android:launchMode="singleTask"
       android:manageSpaceActivity=".activities.ActivityManageSpace"
       android:theme="@style/AppTheme">
     <receiver android:name=".module.MusicPlayer$customButtonListener" />
