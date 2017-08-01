@@ -69,6 +69,7 @@ import net.iGap.interfaces.OnMapClose;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.FileUtils;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
@@ -83,6 +84,7 @@ import net.iGap.request.RequestGeoRegister;
 import net.iGap.request.RequestGeoUpdateComment;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.config.IConfigurationProvider;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
@@ -1020,4 +1022,18 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         return false;
     }
+
+    public static void deleteMapFileCash() {
+        try {
+
+            IConfigurationProvider configurationProvider = Configuration.getInstance();
+            FileUtils.deleteRecursive((configurationProvider.getOsmdroidBasePath()));
+        } catch (Exception e) {
+            Log.e("debug", "FragmentiGapMap     deleteMapFileCash()    " + e.toString());
+        }
+    }
+
+
+
+
 }
