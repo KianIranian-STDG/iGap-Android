@@ -1075,7 +1075,7 @@ public class ActivityMain extends ActivityEnhanced
                 //pageDrawer = 8;
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you!");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net I'm waiting for you!");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 closeDrawer();
