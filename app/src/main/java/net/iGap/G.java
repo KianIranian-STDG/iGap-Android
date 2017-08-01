@@ -259,6 +259,7 @@ public class G extends MultiDexApplication {
     public static boolean isShowRatingDialog = false;
 
     public static String salectedTabInMainActivity = "";
+    public static boolean isMainRecreate = false;
 
     public static int ivSize;
     public static int userTextSize = 0;
@@ -420,6 +421,8 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        G.firstTimeEnterToApp = true;
 
         initEmoji();
 

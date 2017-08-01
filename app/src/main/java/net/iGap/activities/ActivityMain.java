@@ -224,11 +224,11 @@ public class ActivityMain extends ActivityEnhanced
             return;
         }
 
-        if (G.firstTimeEnterToApp == false) {
+        if (G.firstTimeEnterToApp) {
             /**
              * set true mFirstRun for get room history after logout and login again
              */
-            G.firstTimeEnterToApp = true;
+
             //licenceChecker();
 
             sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -1672,9 +1672,25 @@ public class ActivityMain extends ActivityEnhanced
         G.onRefreshActivity = new OnRefreshActivity() {
             @Override
             public void refresh(String changeLanguag) {
-                ActivityMain.this.recreate();
+
+                G.isMainRecreate = true;
+
             }
         };
+
+        if (G.isMainRecreate) {
+            G.isMainRecreate = false;
+
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    recreate();
+                }
+            }, 200);
+
+            return;
+        }
+
 
         if (ActivityCall.isConnected || fromCall) {
 

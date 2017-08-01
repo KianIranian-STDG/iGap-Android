@@ -102,14 +102,9 @@ public class FragmentLanguage extends Fragment {
                     setLocale("en");
                     HelperCalander.isLanguagePersian = false;
 
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (onRefreshActivity != null) {
-                                onRefreshActivity.refresh("en");
-                            }
-                        }
-                    }, 100);
+                    if (onRefreshActivity != null) {
+                        onRefreshActivity.refresh("en");
+                    }
 
                     G.selectedLanguage = "en";
                 }
@@ -132,14 +127,9 @@ public class FragmentLanguage extends Fragment {
                     setLocale("fa");
                     HelperCalander.isLanguagePersian = true;
 
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (onRefreshActivity != null) {
-                                onRefreshActivity.refresh("fa");
-                            }
-                        }
-                    }, 100);
+                    if (onRefreshActivity != null) {
+                        onRefreshActivity.refresh("fa");
+                    }
                 }
 
 

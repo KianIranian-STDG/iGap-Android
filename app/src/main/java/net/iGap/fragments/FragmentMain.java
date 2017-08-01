@@ -489,9 +489,10 @@ public class FragmentMain extends Fragment implements OnComplete {
                     progressBar.setVisibility(View.VISIBLE);
                 }
             });
-        } else {
-            mOffset = 0;
         }
+        //else {
+        //    mOffset = 0;
+        //}
 
 
 
