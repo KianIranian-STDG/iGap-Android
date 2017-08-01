@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -88,13 +89,15 @@ public class FragmentShowImage extends Fragment {
     private MediaPlayer mMediaPlayer;
     public static ArrayList<String> downloadedList = new ArrayList<>();
 
-    public static View appBarLayout;
+    public View appBarLayout;
     public MediaController videoController;
     public int po;
     private String path;
     private String type = null;
     private boolean isLockScreen = false;
     private FragmentActivity mActivity;
+    private Realm realm;
+
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
     }
@@ -115,8 +118,13 @@ public class FragmentShowImage extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        if (appBarLayout != null) appBarLayout.setVisibility(View.VISIBLE);
+        if (appBarLayout != null) {
+            appBarLayout.setVisibility(View.VISIBLE);
+        }
 
+        if (realm != null) {
+            realm.close();
+        }
     }
 
     @Override
@@ -140,7 +148,7 @@ public class FragmentShowImage extends Fragment {
                 return false;
             }
 
-            Realm realm = Realm.getDefaultInstance();
+            realm = Realm.getDefaultInstance();
 
             mRealmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
 
@@ -184,11 +192,11 @@ public class FragmentShowImage extends Fragment {
                 }
             }
 
-            realm.close();
-
             return true;
         } else {
-            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+            if (mActivity != null) {
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+            }
             return false;
         }
 
@@ -507,7 +515,7 @@ public class FragmentShowImage extends Fragment {
                         final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(rm.getAttachment().getCacheId(), rm.getAttachment().getName(), G.DIR_TEMP, true);
 
                         if (selector != null && fileSize > 0) {
-                            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.startDownload(System.currentTimeMillis() + "", rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                                 @Override
                                 public void OnProgress(final String path, int progress) {
 
@@ -656,7 +664,7 @@ public class FragmentShowImage extends Fragment {
                 downloadedList.add(rm.getAttachment().getCacheId());
             }
 
-            HelperDownloadFile.startDownload(rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(System.currentTimeMillis() + "", rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progres) {
 
@@ -718,14 +726,28 @@ public class FragmentShowImage extends Fragment {
             mMediaPlayer.reset();
             try {
                 mMediaPlayer.setDataSource(mActivity, Uri.parse(videoPath));
-                if (mTextureView.getSurfaceTexture() == null) {
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, touchImageView);
-                        }
-                    }, 500);
-                } else {
+                mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+                    @Override
+                    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                        setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, touchImageView);
+                    }
+
+                    @Override
+                    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+                    }
+
+                    @Override
+                    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+
+                        return false;
+                    }
+
+                    @Override
+                    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
+                    }
+                });
+                if (mTextureView.getSurfaceTexture() != null) {
                     setMediaPlayer(mMediaPlayer, mTextureView, imgPlay, touchImageView);
                 }
             } catch (IOException | IllegalArgumentException e) {
@@ -744,10 +766,26 @@ public class FragmentShowImage extends Fragment {
         }
 
         private void setMediaPlayer(MediaPlayer mMediaPlayer, final TextureView mTextureView, final ImageView imgPlay, final TouchImageView touchImageView) {
+
+            if (mTextureView == null) {
+                return;
+            }
             Surface surfaceTexture = new Surface(mTextureView.getSurfaceTexture());
-            mMediaPlayer.setSurface(surfaceTexture);
-            mMediaPlayer.setLooping(false);
-            mMediaPlayer.prepareAsync();
+
+            if (surfaceTexture == null) {
+                return;
+            }
+
+            try {
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.setSurface(surfaceTexture);
+                    mMediaPlayer.setLooping(false);
+                    mMediaPlayer.prepareAsync();
+                }
+            } catch (IllegalStateException e) {
+                e.getMessage();
+            }
+
 
             mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -771,6 +809,7 @@ public class FragmentShowImage extends Fragment {
                     videoController.show();
                 }
             });
+
         }
 
         /**

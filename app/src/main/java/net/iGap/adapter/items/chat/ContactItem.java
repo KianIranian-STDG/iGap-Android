@@ -58,17 +58,21 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             ((ViewGroup) holder.itemView).addView(ViewMaker.getContactItem());
         }
 
+        holder.name = (TextView) holder.itemView.findViewById(R.id.name);
+        holder.number = (TextView) holder.itemView.findViewById(R.id.number);
+
+
         super.bindView(holder, payloads);
 
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getRoomMessageContact() != null) {
-                ((TextView) holder.itemView.findViewById(R.id.name)).setText(mMessage.forwardedFrom.getRoomMessageContact().getFirstName() + " " + mMessage.forwardedFrom.getRoomMessageContact().getLastName());
-                ((TextView) holder.itemView.findViewById(R.id.number)).setText(mMessage.forwardedFrom.getRoomMessageContact().getLastPhoneNumber());
+                holder.name.setText(mMessage.forwardedFrom.getRoomMessageContact().getFirstName() + " " + mMessage.forwardedFrom.getRoomMessageContact().getLastName());
+                holder.number.setText(mMessage.forwardedFrom.getRoomMessageContact().getLastPhoneNumber());
             }
         } else {
             if (mMessage.userInfo != null) {
-                ((TextView) holder.itemView.findViewById(R.id.name)).setText(mMessage.userInfo.displayName);
-                ((TextView) holder.itemView.findViewById(R.id.number)).setText(mMessage.userInfo.phone);
+                holder.name.setText(mMessage.userInfo.displayName);
+                holder.number.setText(mMessage.userInfo.phone);
             }
         }
     }
@@ -78,9 +82,9 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         /**
          * this commented code used with xml layout
          */
-        //protected TextView name;
-        //protected TextView number;
-        //protected ImageView image;
+        protected TextView name;
+        protected TextView number;
+        //   protected ImageView image;
 
         public ViewHolder(View view) {
             super(view);

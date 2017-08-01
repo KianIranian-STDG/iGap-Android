@@ -68,6 +68,7 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
+import net.iGap.interfaces.IActivityFinish;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
@@ -349,7 +350,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         }
 
         if (role != ChannelChatRole.OWNER) {
-            if (description.length() == 0) {
+            if (description == null || description.isEmpty() || description.length() == 0) {
                 lytChannelDescription.setVisibility(View.GONE);
             }
         }
@@ -445,9 +446,11 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             public void onClick(View view) {
                 Realm realm = Realm.getDefaultInstance();
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
-                    FragmentShowAvatars.appBarLayout = fab;
+
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
+                    fragment.appBarLayout = fab;
+
                     ActivityChannelProfile.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
                 }
                 realm.close();
@@ -459,6 +462,14 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         lytSharedMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                G.iActivityFinish = new IActivityFinish() {
+                    @Override
+                    public void onFinish() {
+                        finish();
+                    }
+                };
+
                 Intent intent = new Intent(ActivityChannelProfile.this, ActivityShearedMedia.class);
                 intent.putExtra("RoomID", roomId);
                 startActivity(intent);
@@ -1571,6 +1582,9 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         final TextInputLayout inputUserName = new TextInputLayout(ActivityChannelProfile.this);
         final EditText edtUserName = new EditText(ActivityChannelProfile.this);
         edtUserName.setHint(getResources().getString(R.string.channel_title_channel_set_username));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
+        }
         edtUserName.setTypeface(G.typeface_IRANSansMobile);
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
 
@@ -1707,7 +1721,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                             @Override
                             public void run() {
                                 if (dialog.isShowing()) dialog.dismiss();
-                                dialogWaitTime(R.string.CHANNEL_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
+                                dialogWaitTime(R.string.limit_for_set_username, time, majorCode);
                             }
                         });
                         break;

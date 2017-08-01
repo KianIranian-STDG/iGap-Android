@@ -25,6 +25,9 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserInfo;
 
+import static net.iGap.G.userId;
+import net.iGap.request.RequestUserInfo;
+
 public class UserInfoResponse extends MessageHandler {
 
     public int actionId;
@@ -73,6 +76,13 @@ public class UserInfoResponse extends MessageHandler {
                         RealmAvatar.put(builder.getUser().getId(), builder.getUser().getAvatar(), true);
                     }
                 });
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        RequestUserInfo.userIdArrayList.remove(String.valueOf(builder.getUser().getId()));
+                    }
+                }, RequestUserInfo.CLEAR_ARRAY_TIME);
 
                 if (identity != null && identity.equals(RequestUserInfo.InfoType.JUST_INFO.toString())) {
                     G.onRegistrationInfo.onInfo(builder.getUser());
@@ -146,6 +156,17 @@ public class UserInfoResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (identity != null) {
+                    RequestUserInfo.userIdArrayList.remove(identity);
+                } else {
+                    RequestUserInfo.userIdArrayList.clear();
+                }
+            }
+        }, RequestUserInfo.CLEAR_ARRAY_TIME);
+
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();

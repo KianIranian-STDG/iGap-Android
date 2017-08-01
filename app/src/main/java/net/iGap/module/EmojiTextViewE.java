@@ -7,7 +7,6 @@ import com.vanniktech.emoji.EmojiTextView;
 
 public class EmojiTextViewE extends EmojiTextView {
 
-    public boolean hasEmoji;
 
     public EmojiTextViewE(Context context) {
         super(context);

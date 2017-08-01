@@ -206,6 +206,7 @@
                 android:singleLine="true"
                 android:textColorHint="@color/default_shadow_color"
                 android:textSize="@dimen/dp15"
+                android:textDirection="ltr"
                 />
 
           </android.support.design.widget.TextInputLayout>

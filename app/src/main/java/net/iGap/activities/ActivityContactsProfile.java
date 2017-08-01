@@ -49,9 +49,11 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentNotification;
 import net.iGap.fragments.FragmentShowAvatars;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPermision;
+import net.iGap.interfaces.IActivityFinish;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnGetPermission;
@@ -300,7 +302,6 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                 Realm realm = Realm.getDefaultInstance();
 
                 if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
-                    FragmentShowAvatars.appBarLayout = fab;
 
                     FragmentShowAvatars fragment;
                     if (userId == G.userId) {
@@ -309,6 +310,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                         fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat);
                     }
 
+                    fragment.appBarLayout = fab;
                     getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, fragment).commit();
                 }
                 realm.close();
@@ -335,12 +337,9 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
 
                     if (realmRoom != null) {
-                        // ActivityChat.activityChatForFinish.finish();
 
-                        Intent intent = new Intent(context, ActivityChat.class);
-                        intent.putExtra("RoomId", realmRoom.getId());
-                        //  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                        new GoToChatActivity(realmRoom.getId()).setContext(ActivityContactsProfile.this).startActivity();
+
                         finish();
                     } else {
                         G.onChatGetRoom = new OnChatGetRoom() {
@@ -349,17 +348,10 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                 G.currentActivity.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        //  ActivityChat.activityChatForFinish.finish();
 
-                                        Realm realm = Realm.getDefaultInstance();
-                                        Intent intent = new Intent(context, ActivityChat.class);
-                                        intent.putExtra("peerId", userId);
-                                        intent.putExtra("RoomId", roomId);
-                                        //   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        realm.close();
-                                        startActivity(intent);
+                                        new GoToChatActivity(roomId).setContext(ActivityContactsProfile.this).setPeerID(userId).startActivity();
+
                                         finish();
-
                                         G.onChatGetRoom = null;
                                     }
                                 });
@@ -739,6 +731,13 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
         vgSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
             @Override
             public void onClick(View view) {
+
+                G.iActivityFinish = new IActivityFinish() {
+                    @Override
+                    public void onFinish() {
+                        finish();
+                    }
+                };
 
                 Intent intent = new Intent(ActivityContactsProfile.this, ActivityShearedMedia.class);
                 intent.putExtra("RoomID", shearedId);

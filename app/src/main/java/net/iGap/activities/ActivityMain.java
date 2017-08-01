@@ -10,8 +10,10 @@
 
 package net.iGap.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -24,6 +26,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -57,9 +60,9 @@ import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentNewGroup;
-import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
@@ -122,14 +125,15 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
+public class ActivityMain extends ActivityEnhanced
+    implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom,
+    OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
 
     public static boolean isMenuButtonAddShown = false;
     LinearLayout mediaLayout;
     MusicPlayer musicPlayer;
     FragmentCall fragmentCall;
-
-
+    public boolean fromCall = false;
 
     public static MyAppBarLayout appBarLayout;
     private Typeface titleTypeface;
@@ -180,13 +184,68 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (G.getRealm() != null) {
             G.getRealm().close();
         }
+    }
 
+    private void deleteContentFolderChatBackground() {
+
+        // delete  content of folder chat background in the first registeration
+        File root = new File(G.DIR_CHAT_BACKGROUND);
+        File[] Files = root.listFiles();
+        if (Files != null) {
+            for (int j = 0; j < Files.length; j++) {
+                Files[j].delete();
+            }
+        }
     }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(this, ActivityIntroduce.class);
+            startActivity(intent);
+
+            finish();
+            return;
+        }
+
+        RealmUserInfo userInfo = G.getRealm().where(RealmUserInfo.class).findFirst();
+
+        if (userInfo == null) { // user registered before
+
+            Intent intent = new Intent(this, ActivityIntroduce.class);
+            startActivity(intent);
+
+            G.getRealm().close();
+            finish();
+            return;
+        }
+
+        if (G.firstTimeEnterToApp) {
+            /**
+             * set true mFirstRun for get room history after logout and login again
+             */
+
+            //licenceChecker();
+
+            sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+            boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
+
+            if (deleteFolderBackground) {
+                deleteContentFolderChatBackground();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
+                editor.apply();
+            }
+        }
+
+
+
+
         setContentView(R.layout.activity_main);
 
         initTabStrip();
@@ -203,6 +262,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Tracker mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RoomList");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            fromCall = extras.getBoolean("FROM_CALL");
+        }
 
         new HelperGetDataFromOtherApp(getIntent());
 
@@ -286,7 +350,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         fragmentNewGroup.setArguments(bundle);
 
                         try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment").commitAllowingStateLoss();
+                            getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment")
+                                .commitAllowingStateLoss();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -331,22 +398,49 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.onVerifyNewDevice = new OnVerifyNewDevice() {
             @Override
-            public void verifyNewDevice(String appName, int appId, int appBuildVersion, String appVersion, ProtoGlobal.Platform platform, String platformVersion, ProtoGlobal.Device device, String deviceName, boolean twoStepVerification) {
+            public void verifyNewDevice(String appName, int appId, int appBuildVersion, String appVersion, ProtoGlobal.Platform platform, String platformVersion, ProtoGlobal.Device device,
+                String deviceName, boolean twoStepVerification) {
 
-                final String content = "" + "App name: " + appName + "\n" + "Build version: " + appBuildVersion + "\n" + "App version: " + appVersion + "\n" + "Platform: " + platform + "\n" + "Platform version: " + platformVersion + "\n" + "Device: " + device + "\n" + "Device name: " + deviceName;
+                final String content = ""
+                    + "App name: "
+                    + appName
+                    + "\n"
+                    + "Build version: "
+                    + appBuildVersion
+                    + "\n"
+                    + "App version: "
+                    + appVersion
+                    + "\n"
+                    + "Platform: "
+                    + platform
+                    + "\n"
+                    + "Platform version: "
+                    + platformVersion
+                    + "\n"
+                    + "Device: "
+                    + device
+                    + "\n"
+                    + "Device name: "
+                    + deviceName;
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (HelperCalander.isLanguagePersian) {
-                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.END).content(content).positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification)
+                                .contentGravity(GravityEnum.END)
+                                .content(content)
+                                .positiveText(R.string.B_ok)
+                                .show();
                         } else {
-                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.START).content(content).positiveText(R.string.B_ok).show();
+                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification)
+                                .contentGravity(GravityEnum.START)
+                                .content(content)
+                                .positiveText(R.string.B_ok)
+                                .show();
                         }
-
                     }
                 });
-
             }
 
             @Override
@@ -360,7 +454,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
     }
-
 
     //*******************************************************************************************************************************************
 
@@ -388,7 +481,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragment.setArguments(bundle);
 
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -410,7 +507,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragment.setArguments(bundle);
 
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -432,7 +532,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -476,6 +579,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //*******************************************************************************************************************************************
 
+    private void onSelectItem(int position) {
+        FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+
+        if (adapter.getItem(position) instanceof FragmentMain) {
+
+            findViewById(R.id.amr_ripple_search).setVisibility(View.VISIBLE);
+            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
+            setFabIcon(R.mipmap.plus);
+        } else if (adapter.getItem(position) instanceof FragmentCall) {
+
+            findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
+            findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
+            setFabIcon(R.drawable.ic_call_black_24dp);
+        }
+
+        if (arcMenu.isMenuOpened()) {
+            arcMenu.toggleMenu();
+        }
+
+        arcMenu.fabMenu.show();
+    }
+
     private void setFabIcon(int res) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             arcMenu.fabMenu.setImageDrawable(getResources().getDrawable(res, context.getTheme()));
@@ -484,7 +609,44 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    private void setmViewPagerSelectedItem() {
 
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (G.salectedTabInMainActivity.length() > 0) {
+
+                    FragmentPagerAdapter _adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+
+                    for (int i = 0; i < _adapter.getCount(); i++) {
+
+                        if (_adapter.getItem(i) instanceof FragmentMain) {
+
+                            FragmentMain fm = (FragmentMain) _adapter.getItem(i);
+
+                            if (G.salectedTabInMainActivity.equals(fm.mainType.toString())) {
+                                mViewPager.setCurrentItem(i, false);
+                                break;
+                            }
+                        } else if (_adapter.getItem(i) instanceof FragmentCall) {
+
+                            if (G.salectedTabInMainActivity.equals(_adapter.getItem(i).getClass().getName())) {
+                                mViewPager.setCurrentItem(i, false);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+
+                    if (HelperCalander.isLanguagePersian) {
+                        mViewPager.setCurrentItem(pages.size() - 1, false);
+                    }
+                }
+                G.salectedTabInMainActivity = "";
+            }
+        }, 50);
+    }
 
     private void initTabStrip() {
 
@@ -492,10 +654,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isLanguagePersian) {
-            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
-
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box),
+                getString(R.string.md_apps));
         } else {
-            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
+            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon),
+                getString(R.string.md_phone));
         }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
@@ -510,27 +673,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onEndTabSelected(String title, int index) {
 
-                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-
-                if (adapter.getItem(index) instanceof FragmentMain) {
-
-                    findViewById(R.id.amr_ripple_search).setVisibility(View.VISIBLE);
-                    findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
-                    setFabIcon(R.mipmap.plus);
-                } else if (adapter.getItem(index) instanceof FragmentCall) {
-
-                    findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
-                    findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
-                    setFabIcon(R.drawable.ic_call_black_24dp);
-                }
-
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-
-                arcMenu.fabMenu.show();
-
-
+                onSelectItem(index);
             }
         });
 
@@ -540,12 +683,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         }
 
-
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
 
         if (HelperCalander.isLanguagePersian) {
 
-            findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
+
 
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -558,9 +702,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
 
-                    mViewPager.getAdapter().notifyDataSetChanged();
+                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
+                    mViewPager.setAdapter(sampleFragmentPagerAdapter);
+
                     mViewPager.setOffscreenPageLimit(pages.size());
-                    mViewPager.setCurrentItem(pages.size() - 1);
+
+                    navigationTabStrip.setViewPager(mViewPager, 0);
+
+                    setmViewPagerSelectedItem();
 
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
@@ -571,10 +720,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public void run() {
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-                    mViewPager.getAdapter().notifyDataSetChanged();
-                    mViewPager.setCurrentItem(0);
+
+                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
+                    mViewPager.setAdapter(sampleFragmentPagerAdapter);
+                    navigationTabStrip.setViewPager(mViewPager, 0);
+
+                    findViewById(R.id.loadingContent).setVisibility(View.GONE);
+
                 }
-            }, 100);
+            }, 500);
 
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -590,15 +744,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     mViewPager.getAdapter().notifyDataSetChanged();
                     mViewPager.setOffscreenPageLimit(pages.size());
 
+                    setmViewPagerSelectedItem();
 
                 }
-            }, 1000);
+            }, 1500);
         }
-
-        sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(sampleFragmentPagerAdapter);
-        navigationTabStrip.setViewPager(mViewPager);
-
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
 
@@ -611,7 +761,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } catch (Exception e) {
 
                 }
-
             }
         });
 
@@ -622,7 +771,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             //}
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
-
     }
 
     class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -741,7 +889,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -768,7 +920,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -794,7 +949,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -847,7 +1005,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TITLE", "Contacts");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .addToBackStack(null)
+                        .replace(R.id.fragmentContainer, fragment)
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -880,7 +1042,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         Fragment fragment = FragmentCall.newInstance(false);
                         try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                            getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .addToBackStack(null)
+                                .replace(R.id.fragmentContainer, fragment)
+                                .commit();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -894,24 +1060,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else {
             new RequestSignalingGetConfiguration().signalingGetConfiguration();
         }
-
-        ViewGroup itemNavMap = (ViewGroup) findViewById(R.id.lm_ll_map);
-        itemNavMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //if (mapUrls == null || mapUrls.isEmpty()) {
-                //    G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
-                //        @Override
-                //        public void onGetConfiguration() {
-                //            openMapFragment();
-                //        }
-                //    };
-                //    new RequestGeoGetConfiguration().getConfiguration();
-                //} else {
-                    openMapFragment();
-                //}
-            }
-        });
 
         ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
         itemNavSend.setOnClickListener(new View.OnClickListener() {
@@ -927,7 +1075,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 //pageDrawer = 8;
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you!");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net I'm waiting for you!");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 closeDrawer();
@@ -1011,64 +1159,64 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 //
                 //pageDrawer = 11;
                 new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                        .content(R.string.content_log_out)
-                        .positiveText(getResources().getString(R.string.B_ok))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .iconRes(R.mipmap.exit_to_app_button)
-                        .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                G.onUserSessionLogout = new OnUserSessionLogout() {
-                                    @Override
-                                    public void onUserSessionLogout() {
+                    .content(R.string.content_log_out)
+                    .positiveText(getResources().getString(R.string.B_ok))
+                    .negativeText(getResources().getString(R.string.B_cancel))
+                    .iconRes(R.mipmap.exit_to_app_button)
+                    .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            G.onUserSessionLogout = new OnUserSessionLogout() {
+                                @Override
+                                public void onUserSessionLogout() {
 
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                HelperLogout.logout();
-                                            }
-                                        });
-                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            HelperLogout.logout();
+                                        }
+                                    });
+                                }
 
-                                    @Override
-                                    public void onError() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
-                                            }
-                                        });
-                                    }
+                                @Override
+                                public void onError() {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    snack.dismiss();
+                                                }
+                                            });
+                                            snack.show();
+                                        }
+                                    });
+                                }
 
-                                    @Override
-                                    public void onTimeOut() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
-                                            }
-                                        });
-                                    }
-                                };
-                                new RequestUserSessionLogout().userSessionLogout();
-                            }
-                        })
-                        .show();
+                                @Override
+                                public void onTimeOut() {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    snack.dismiss();
+                                                }
+                                            });
+                                            snack.show();
+                                        }
+                                    });
+                                }
+                            };
+                            new RequestUserSessionLogout().userSessionLogout();
+                        }
+                    })
+                    .show();
                 closeDrawer();
             }
         });
@@ -1294,35 +1442,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
     }
 
-    private void openMapFragment() {
-        try {
-            HelperPermision.getLocationPermission(ActivityMain.this, new OnGetPermission() {
-                @Override
-                public void Allow() throws IOException {
-                    FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
-                    try {
-                        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap).commit();
-                    } catch (Exception e) {
-                        e.getStackTrace();
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            lockNavigation();
-                        }
-                    });
-                }
-
-                @Override
-                public void deny() {
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        closeDrawer();
-    }
-
     private void closeDrawer() {
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -1495,34 +1614,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    protected OnBackPressedListener onBackPressedListener;
-
-    public interface OnBackPressedListener {
-        void doBack();
-    }
-
-    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener, boolean isDisable) {
-        if (!isDisable) {
-            this.onBackPressedListener = onBackPressedListener;
-        } else {
-            this.onBackPressedListener = null;
-        }
-    }
-
     @Override
     public void onBackPressed() {
         openNavigation();
-
-        if (onBackPressedListener != null) {
-            onBackPressedListener.doBack();
-        }
-
         SearchFragment myFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("Search_fragment");
         FragmentNewGroup fragmentNeGroup = (FragmentNewGroup) getSupportFragmentManager().findFragmentByTag("newGroup_fragment");
         FragmentCreateChannel fragmentCreateChannel = (FragmentCreateChannel) getSupportFragmentManager().findFragmentByTag("createChannel_fragment");
         ContactGroupFragment fragmentContactGroup = (ContactGroupFragment) getSupportFragmentManager().findFragmentByTag("contactGroup_fragment");
         FragmentIgapSearch fragmentIgapSearch = (FragmentIgapSearch) getSupportFragmentManager().findFragmentByTag("Search_fragment_igap");
-        FragmentiGapMap fragmentiGapMap = (FragmentiGapMap) getSupportFragmentManager().findFragmentByTag("map_fragment");
 
         if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
 
@@ -1557,12 +1656,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } catch (Exception e) {
                 e.getStackTrace();
             }
-        } else if (fragmentiGapMap != null && fragmentiGapMap.isVisible()) {
-            try {
-                getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
-            } catch (Exception e) {
-                e.getStackTrace();
-            }
         } else if (this.drawer.isDrawerOpen(GravityCompat.START)) {
             this.drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -1578,12 +1671,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
          */
         G.onRefreshActivity = new OnRefreshActivity() {
             @Override
-            public void refresh(String changeLanguage) {
-                ActivityMain.this.recreate();
+            public void refresh(String changeLanguag) {
+
+                G.isMainRecreate = true;
+
             }
         };
 
-        if (ActivityCall.isConnected) {
+        if (G.isMainRecreate) {
+            G.isMainRecreate = false;
+
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    recreate();
+                }
+            }, 200);
+
+            return;
+        }
+
+
+        if (ActivityCall.isConnected || fromCall) {
 
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
 
@@ -1597,11 +1706,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             });
 
-            G.iCallFinish = new ICallFinish() {
+            G.iCallFinishMain = new ICallFinish() {
                 @Override
                 public void onFinish() {
                     try {
-                        findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
+
+                        finish();
+                        //findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
+                        //fromCall=false;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1614,8 +1726,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     finish();
                 }
             };
-
-
         } else {
             findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
         }
@@ -1642,12 +1752,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         HelperUrl.getLinkinfo(getIntent(), ActivityMain.this);
         getIntent().setData(null);
         setDrawerInfo(false);
+
+        if (drawer != null) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         HelperNotificationAndBadge.updateBadgeOnly();
+
+        if (mViewPager != null) {
+
+            try {
+
+                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+
+                if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
+
+                    FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
+                    G.salectedTabInMainActivity = fm.mainType.toString();
+                } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
+
+                    G.salectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
+                }
+            } catch (Exception e) {
+
+            }
+        }
     }
 
     @Override
@@ -1735,7 +1868,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         if (imagePath == null || !new File(imagePath).exists()) {
                             Realm realm1 = Realm.getDefaultInstance();
                             RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
-                            imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
+                            imgNavImage.setImageBitmap(
+                                HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(),
+                                    realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);
@@ -1767,21 +1902,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (realmRoom != null) {
 
-            Intent intent = new Intent(context, ActivityChat.class);
-            intent.putExtra("RoomId", realmRoom.getId());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-            //getActivity().getSupportFragmentManager().popBackStack();
+            new GoToChatActivity(realmRoom.getId()).setNewTask(true).startActivity();
+
         } else {
 
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final long roomId) {
-                    Intent intent = new Intent(context, ActivityChat.class);
-                    intent.putExtra("peerId", peerId);
-                    intent.putExtra("RoomId", roomId);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+
+                    new GoToChatActivity(roomId).setPeerID(peerId).setNewTask(true).startActivity();
 
                     G.onChatGetRoom = null;
                 }

@@ -266,8 +266,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dp4"
                 android:layout_marginStart="@dimen/dp4"
-
-                android:gravity="center"
                 android:paddingBottom="@dimen/dp8"
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
@@ -329,30 +327,28 @@
           </LinearLayout>
 
           <LinearLayout
-              android:id="@+id/lm_ll_call"
+              android:id="@+id/lm_ll_setting"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginBottom="@dimen/dp6"
               android:layout_marginTop="@dimen/dp4"
-              android:visibility="visible"
               android:orientation="horizontal"
               style="@style/NavigationDrawer.Item"
               >
 
             <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/lm_txt_icon_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:minWidth="@dimen/dp32"
-                android:text="@string/md_phone"
+                android:text="@string/md_settings_cogwheel_button"
                 android:textAppearance="@style/TextIconAppearance.menu"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/grayNew"
-
                 />
 
             <TextView
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp4"
@@ -360,11 +356,12 @@
                 android:paddingBottom="@dimen/dp8"
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
-                android:paddingTop="@dimen/dp12"
-                android:text="@string/calls"
+                android:paddingTop="@dimen/dp8"
+                android:text="@string/chi_title_setting"
                 android:textColor="@color/black90"
                 android:textSize="@dimen/dp14"
 
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
                 />
 
           </LinearLayout>
@@ -410,30 +407,30 @@
 
           </LinearLayout>
           <LinearLayout
-              android:id="@+id/lm_ll_invite_friends"
+              android:id="@+id/lm_ll_call"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginBottom="@dimen/dp6"
               android:layout_marginTop="@dimen/dp4"
+              android:visibility="visible"
               android:orientation="horizontal"
               style="@style/NavigationDrawer.Item"
               >
 
             <net.iGap.module.MaterialDesignTextView
-                android:id="@+id/lm_txt_icon_invite_friends"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:minWidth="@dimen/dp32"
-                android:paddingRight="@dimen/dp4"
-                android:text="@string/md_add_user_button"
+                android:text="@string/md_phone"
                 android:textAppearance="@style/TextIconAppearance.menu"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/grayNew"
+
                 />
 
             <TextView
-                android:id="@+id/textView2"
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp4"
@@ -441,13 +438,13 @@
                 android:paddingBottom="@dimen/dp8"
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
-                android:paddingTop="@dimen/dp8"
-                android:text="@string/Invite_Friends"
+                android:paddingTop="@dimen/dp12"
+                android:text="@string/calls"
                 android:textColor="@color/black90"
                 android:textSize="@dimen/dp14"
 
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
                 />
+
 
           </LinearLayout>
 
@@ -491,9 +488,8 @@
 
           </LinearLayout>
 
-
           <LinearLayout
-              android:id="@+id/lm_ll_setting"
+              android:id="@+id/lm_ll_invite_friends"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginBottom="@dimen/dp6"
@@ -503,18 +499,20 @@
               >
 
             <net.iGap.module.MaterialDesignTextView
-                android:id="@+id/lm_txt_icon_setting"
+                android:id="@+id/lm_txt_icon_invite_friends"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:minWidth="@dimen/dp32"
-                android:text="@string/md_settings_cogwheel_button"
+                android:paddingRight="@dimen/dp4"
+                android:text="@string/md_add_user_button"
                 android:textAppearance="@style/TextIconAppearance.menu"
                 android:textSize="@dimen/dp20"
                 android:textColor="@color/grayNew"
                 />
 
             <TextView
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp4"
@@ -523,7 +521,7 @@
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
                 android:paddingTop="@dimen/dp8"
-                android:text="@string/chi_title_setting"
+                android:text="@string/Invite_Friends"
                 android:textColor="@color/black90"
                 android:textSize="@dimen/dp14"
 

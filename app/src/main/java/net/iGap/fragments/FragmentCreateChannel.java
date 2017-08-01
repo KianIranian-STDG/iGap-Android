@@ -69,7 +69,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
     private boolean existAvatar;
     private ProgressBar prgWaiting;
     private String pathSaveImage;
-    private Activity mActivity;
+    private FragmentActivity mActivity;
 
     public FragmentCreateChannel() {
         // Required empty public constructor
@@ -108,14 +108,14 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         TextView txtBack = (TextView) view.findViewById(R.id.fch_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
             }
         });
 
         TextView txtCancel = (TextView) view.findViewById(R.id.fch_txt_cancel);
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
             }
         });
 
@@ -148,7 +148,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                         hideProgressBar();
                         mActivity.runOnUiThread(new Runnable() {
                             @Override public void run() {
-                                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override public void onClick(View view) {
@@ -164,7 +164,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                         hideProgressBar();
                         mActivity.runOnUiThread(new Runnable() {
                             @Override public void run() {
-                                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override public void onClick(View view) {
@@ -254,9 +254,9 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                         new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
                     } else {
                         txtFinish.setEnabled(false);
-                        txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
+                        txtFinish.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
                         txtInputLayout.setErrorEnabled(true);
-                        txtInputLayout.setError("" + getResources().getString(R.string.INVALID));
+                        txtInputLayout.setError("" + G.context.getResources().getString(R.string.INVALID));
                     }
                 }
             }
@@ -305,12 +305,12 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                                 bundle.putString("TYPE", type.toString());
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);
-                                getActivity().getSupportFragmentManager()
+                                mActivity.getSupportFragmentManager()
                                     .beginTransaction()
                                     .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                                     .replace(fragmentContainer, fragment, "contactGroup_fragment")
                                     .commitAllowingStateLoss();
-                                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+                                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
                                 //ActivityMain.mLeftDrawerLayout.closeDrawer();
                             }
                         });
@@ -343,7 +343,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
             edtLink.setText(inviteLink);
             edtLink.setEnabled(false);
             txtFinish.setEnabled(true);
-            txtFinish.setTextColor(getResources().getColor(R.color.toolbar_background));
+            txtFinish.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
             txtInputLayout.setErrorEnabled(true);
             txtInputLayout.setError("");
         } else if (raPublic.isChecked()) {
@@ -360,24 +360,24 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                     if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
 
                         txtFinish.setEnabled(true);
-                        txtFinish.setTextColor(getResources().getColor(R.color.toolbar_background));
+                        txtFinish.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
                         txtInputLayout.setErrorEnabled(true);
                         txtInputLayout.setError("");
                     } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.INVALID) {
                         txtFinish.setEnabled(false);
-                        txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
+                        txtFinish.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
                         txtInputLayout.setErrorEnabled(true);
-                        txtInputLayout.setError("" + getResources().getString(R.string.INVALID));
+                        txtInputLayout.setError("" + G.context.getResources().getString(R.string.INVALID));
                     } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
                         txtFinish.setEnabled(false);
-                        txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
+                        txtFinish.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
                         txtInputLayout.setErrorEnabled(true);
-                        txtInputLayout.setError("" + getResources().getString(R.string.TAKEN));
+                        txtInputLayout.setError("" + G.context.getResources().getString(R.string.TAKEN));
                     } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.OCCUPYING_LIMIT_EXCEEDED) {
                         txtFinish.setEnabled(false);
-                        txtFinish.setTextColor(getResources().getColor(R.color.gray_6c));
+                        txtFinish.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
                         txtInputLayout.setErrorEnabled(true);
-                        txtInputLayout.setError("" + getResources().getString(R.string.OCCUPYING_LIMIT_EXCEEDED));
+                        txtInputLayout.setError("" + G.context.getResources().getString(R.string.OCCUPYING_LIMIT_EXCEEDED));
                     }
                 }
             });
@@ -389,7 +389,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         if (mActivity != null) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override public void onClick(View view) {
                             snack.dismiss();
@@ -406,7 +406,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         if (mActivity != null) {
             mActivity.runOnUiThread(new Runnable() {
                 @Override public void run() {
-                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override public void onClick(View view) {

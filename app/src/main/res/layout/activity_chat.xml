@@ -442,6 +442,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="@dimen/dp16"
             android:hint="@string/search"
             android:padding="@dimen/dp8"
             android:textColor="@color/white"
@@ -604,6 +605,7 @@
           android:layout_weight="1"
           android:paddingLeft="@dimen/dp12"
           android:text="New Text"
+          android:textSize="@dimen/dp13"
           />
 
       <net.iGap.module.MaterialDesignTextView
@@ -619,54 +621,54 @@
           />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ac_ll_message_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp48"
-        android:background="@color/white"
-        android:clickable="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        >
+    <!-- <LinearLayout
+         android:id="@+id/ac_ll_message_navigation"
+         android:layout_width="match_parent"
+         android:layout_height="@dimen/dp48"
+         android:background="@color/white"
+         android:clickable="true"
+         android:gravity="center"
+         android:orientation="horizontal"
+         android:visibility="visible"
+         >
 
-      <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/ac_btn_message_up"
-          android:layout_width="@dimen/dp48"
-          android:layout_height="match_parent"
-          android:background="@null"
-          android:gravity="center"
-          android:text="@string/md_expand_arrow"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/green"
+       <net.iGap.module.MaterialDesignTextView
+           android:id="@+id/ac_btn_message_up"
+           android:layout_width="@dimen/dp48"
+           android:layout_height="match_parent"
+           android:background="@null"
+           android:gravity="center"
+           android:text="@string/md_expand_arrow"
+           android:textAppearance="@style/TextIconAppearance_toolbar"
+           android:textColor="@color/green"
 
-          />
+           />
 
-      <TextView
-          android:id="@+id/ac_txt_message_counter"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:gravity="center"
-          android:maxWidth="@dimen/dp100"
-          android:padding="@dimen/dp8"
-          android:singleLine="true"
-          android:text="0 of 0"
-          android:textColor="@color/green"
-          android:textSize="@dimen/dp16"
-          />
+       <TextView
+           android:id="@+id/ac_txt_message_counter"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:gravity="center"
+           android:maxWidth="@dimen/dp100"
+           android:padding="@dimen/dp8"
+           android:singleLine="true"
+           android:text="0 of 0"
+           android:textColor="@color/green"
+           android:textSize="@dimen/dp16"
+           />
 
-      <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/ac_btn_message_down"
-          android:layout_width="@dimen/dp48"
-          android:layout_height="match_parent"
-          android:background="@null"
-          android:gravity="center"
-          android:text="@string/md_downwards_arrow"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/green"
+       <net.iGap.module.MaterialDesignTextView
+           android:id="@+id/ac_btn_message_down"
+           android:layout_width="@dimen/dp48"
+           android:layout_height="match_parent"
+           android:background="@null"
+           android:gravity="center"
+           android:text="@string/md_downwards_arrow"
+           android:textAppearance="@style/TextIconAppearance_toolbar"
+           android:textColor="@color/green"
 
-          />
-    </LinearLayout>
+           />
+     </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/ac_ll_hash_navigation"
@@ -741,13 +743,7 @@
 
     </LinearLayout>
 
-    <include
-        layout="@layout/layout_mic_record"
-        android:id="@+id/layout_mic_recorde"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        />
+
 
 
     <android.support.v7.widget.ViewStubCompat
@@ -827,6 +823,15 @@
 
   </LinearLayout>
 
+
+  <include
+      layout="@layout/layout_mic_record"
+      android:id="@+id/layout_mic_recorde"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:visibility="gone"
+      />
 
   <ProgressBar
       android:id="@+id/chl_prgWaiting"

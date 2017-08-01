@@ -24,7 +24,7 @@ android {
     applicationId "net.iGap"
     minSdkVersion 15
     targetSdkVersion 25
-    versionCode 32
+    versionCode 33
     versionName "0.2.0"
     multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
@@ -75,6 +75,9 @@ dependencies {
     exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
   }
 
+  testCompile 'junit:junit:4.12'
+  annotationProcessor 'org.parceler:parceler:1.1.6'
+  provided 'com.android.support:support-annotations:25.3.1'
   compile 'com.mikepenz:fastadapter-commons:2.6.0@aar'
   compile 'com.mikepenz:fastadapter-extensions:2.6.0@aar'
   compile 'com.mikepenz:materialize:1.0.2@aar'
@@ -108,11 +111,9 @@ dependencies {
   compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
   compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
   compile 'cat.ereza:customactivityoncrash:2.1.0'
-  compile 'com.vanniktech:emoji-one:0.4.0'
+  compile 'com.vanniktech:emoji-one:0.5.0'
   compile 'com.github.devlight.navigationtabstrip:navigationtabstrip:1.0.4'
-  compile 'io.realm:android-adapters:2.0.0'
+  compile 'io.realm:android-adapters:2.1.0'
   compile 'org.osmdroid:osmdroid-android:5.6.4'
-  testCompile 'junit:junit:4.12'
-  annotationProcessor 'org.parceler:parceler:1.1.6'
-  provided 'com.android.support:support-annotations:25.3.1'
+  compile 'io.fotoapparat.fotoapparat:library:1.1.0'
 }

@@ -608,14 +608,15 @@
               fontPath="fonts/IRANSansMobile.ttf"
               />
         </LinearLayout>
-        <TextView
+
+        <com.uncopt.android.widget.text.justify.JustifiedTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|top"
+            android:gravity="top"
             android:padding="@dimen/dp8"
             android:text="@string/desc_self_destroy"
             android:textColor="@color/cardview_dark_background"
-            android:textSize="@dimen/dp13"
+            android:textSize="@dimen/dp12"
             android:textStyle="normal"
             fontPath="fonts/IRANSansMobile.ttf"
             />

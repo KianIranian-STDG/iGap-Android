@@ -34,6 +34,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
@@ -46,6 +47,7 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.realm.RealmCallConfig;
@@ -128,10 +130,10 @@ import net.iGap.request.RequestSignalingGetLog;
 
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
-        mRecyclerView.setItemViewCacheSize(300);
+        mRecyclerView.setItemViewCacheSize(1000);
         mRecyclerView.setItemAnimator(null);
 
-        FragmentMain.PreCachingLayoutManager layoutManager = new FragmentMain.PreCachingLayoutManager(mActivity, 6000);
+        PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(mActivity, 6000);
 
         mRecyclerView.setLayoutManager(layoutManager);
 
@@ -450,7 +452,10 @@ import net.iGap.request.RequestSignalingGetLog;
 
         @Override
         public CallAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null));
+            //  new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null));
+
+            return new ViewHolder(ViewMaker.getViewItemCall());
+
         }
 
         @Override

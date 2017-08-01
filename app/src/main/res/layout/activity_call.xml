@@ -134,42 +134,18 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/fcr_layout_chat_call"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            >
-          <!--<net.iGap.module.AvlDirectCall-->
-          <!--android:layout_width="wrap_content"-->
-          <!--android:layout_height="wrap_content"-->
-          <!--android:layout_gravity="center"-->
-          <!--android:layout_marginBottom="@dimen/dp10"-->
-          <!--android:orientation="vertical"-->
-          <!--&gt;</net.iGap.module.AvlDirectCall>-->
-
-
-          <net.iGap.module.MaterialDesignTextView
-              android:id="@+id/fcr_btn_circle_chat"
-              android:layout_width="@dimen/dp60"
-              android:layout_height="@dimen/dp60"
-              android:layout_gravity="bottom"
-              android:layout_marginLeft="@dimen/dp40"
-              android:layout_marginRight="@dimen/dp40"
-              android:background="@drawable/circle_white"
-              android:gravity="center"
-              android:text="@string/md_chat"
-              android:textAppearance="@style/TextIconAppearance.all"
-              android:textColor="@color/gray"
-              />
-
-
-        </FrameLayout>
-
-        <FrameLayout
             android:id="@+id/fcr_layout_answer_call"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             >
 
+          <net.iGap.module.AvlDirectCall
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:layout_marginBottom="@dimen/dp24"
+              android:orientation="vertical"
+              ></net.iGap.module.AvlDirectCall>
 
           <net.iGap.module.MaterialDesignTextView
               android:id="@+id/fcr_btn_call"
@@ -178,10 +154,34 @@
               android:layout_gravity="bottom"
               android:background="@drawable/circle_green"
               android:gravity="center"
+              android:layout_marginLeft="@dimen/dp40"
+              android:layout_marginRight="@dimen/dp40"
               android:text="@string/md_phone"
               android:textAppearance="@style/TextIconAppearance.all"
               android:textColor="@color/white"
               />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fcr_layout_chat_call"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            >
+
+          <net.iGap.module.MaterialDesignTextView
+              android:id="@+id/fcr_btn_circle_chat"
+              android:layout_width="@dimen/dp60"
+              android:layout_height="@dimen/dp60"
+              android:layout_gravity="bottom"
+
+              android:background="@drawable/circle_white"
+              android:gravity="center"
+              android:text="@string/md_chat"
+              android:textAppearance="@style/TextIconAppearance.all"
+              android:textColor="@color/gray"
+              />
+
+
         </FrameLayout>
 
 
@@ -194,7 +194,7 @@
           android:layout_marginTop="@dimen/dp20"
           android:gravity="center"
           android:orientation="horizontal"
-          android:visibility="gone"
+          android:visibility="visible"
           >
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/fcr_btn_mic"

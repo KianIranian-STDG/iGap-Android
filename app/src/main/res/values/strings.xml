@@ -681,7 +681,7 @@
   <string name="txt_draft">Draft: </string>
   <string name="txt_you">You: </string>
   <string name="you">You</string>
-  <string name="st_data_shams">Shamsi Date</string>
+  <string name="st_data_shams">Persian Date</string>
   <string name="do_you_want_left_this">"Are you sure you want to leave this room?"</string>
   <string name="do_you_want_delete_this">Are you sure you want to delete this room?</string>
   <string name="do_you_want_delete_this_channel">Are you sure you want to delete this channel?</string>
@@ -711,7 +711,7 @@
   <string name="group_link_copy">Copy</string>
   <string name="group_link_revoke">Change Link</string>
   <string name="join">Join</string>
-  <string name="do_you_want_to_join_to_this">"do you want to join this "</string>
+  <string name="do_you_want_to_join_to_this">"Do you want to join this "</string>
   <string name="block_user">Block User</string>
   <string name="un_block_user">"Unblock User"</string>
   <string name="spam">Spam</string>
@@ -826,7 +826,7 @@
   <string name="my_contacts">My Contacts</string>
   <string name="privacy_setting">Privacy Setting</string>
   <string name="igap_search">Look and Find</string>
-  <string name="set_color_to_default">Set Colors as Default</string>
+  <string name="set_color_to_default">Reset Colors Back to Default</string>
   <string name="empty_message">Please try to enter the first 5 characters of username</string>
   <string name="empty_message3">Enter at least 3 characters to search</string>
   <string name="there_is_no_any_result">No Result</string>
@@ -876,6 +876,8 @@
   <string name="password_Question_title_one">Question one (Required)</string>
   <string name="password_Question_one">eg: Who is your Favorite teacher?</string>
   <string name="password_Question_title_two">Question two (Required)</string>
+  <string name="title_toolbar_password_Question">New Security Questions</string>
+  <string name="password_Question_explain">Change old question with answers for recovering password.</string>
   <string name="password_Question_two">eg: Who is your best friend?</string>
   <string name="password_answer">Answer</string>
   <string name="password_Question_title">Password Question</string>
@@ -999,6 +1001,23 @@
   <string name="c_GB">GB</string>
   <string name="c_TB">TB</string>
 
+
+  <string name="audio">Audio</string>
+  <string name="total_size">Total Size</string>
+
+  <string name="manage_spacing">Manage Spacing</string>
+  <string name="local_database">Local Database</string>
+  <string name="data_storage">Data Storage</string>
+  <string name="keep_media">Keep Media</string>
+
+
+  <string name="invite_friend">This user dose not have iGap yet, send an invitation?</string>
+  <string name="clean_up_description">Clearing the local database will delete the texts of cached messages and compress the database to save internal disk space. iGap needs some data to work, so database size will not reach zero. \n\n this operation can take few minutes to complete.</string>
+  <string name="list_contacts">List of Phone Contacts</string>
+
+  <string name="limit_for_set_username">Limit time for change Username</string>
+  <string name="clear_cache_desc">Cached data on your device are the uploaded and/or downloaded files as photos, videos or documents, which must be cleared occasionally not to stop your device working or slow it down. Whenever you want to see them again, it is sufficient only to tap on them for downloading.</string>
+  <string name="name">Name</string>
 
   <string name="turn_on_gps_explain">The location status and other features of map are disabled. To use all the capabilities, turn the switch on first.</string>
   <string name="turn_off_map">turn off</string>

@@ -72,8 +72,11 @@ public class HelperConnectionState {
                 if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                     message = G.context.getResources().getString(R.string.waiting_for_network);
 
-                    if (G.iCallFinish != null) {
-                        G.iCallFinish.onFinish();
+                    if (G.iCallFinishChat != null) {
+                        G.iCallFinishChat.onFinish();
+                    }
+                    if (G.iCallFinishMain != null) {
+                        G.iCallFinishMain.onFinish();
                     }
 
                 } else if (G.connectionState == ConnectionState.CONNECTING) {

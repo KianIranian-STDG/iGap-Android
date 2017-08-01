@@ -65,9 +65,9 @@
   <dimen name="md_action_corner_radius" tools:override="true">12dp</dimen>
   <dimen name="md_bg_corner_radius" tools:override="true">12dp</dimen>
 
-  <dimen name="md_title_textsize" tools:override="true">40dp</dimen>
   <dimen name="md_content_textsize" tools:override="true">32dp</dimen>
   <dimen name="md_button_textsize" tools:override="true">28dp</dimen>
   <dimen name="md_listitem_textsize" tools:override="true">32dp</dimen>
-
+  <dimen name="md_title_textsize" tools:override="true">36dp</dimen>
+  <dimen name="md_content_padding_bottom" tools:override="true">12dp</dimen>
 </resources>

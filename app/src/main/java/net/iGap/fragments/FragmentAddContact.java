@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,6 +38,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperAddContact;
 import net.iGap.helper.HelperPermision;
+import net.iGap.interfaces.OnCountryCallBack;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructListOfContact;
@@ -53,17 +55,26 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
     private RippleView rippleSet;
     private MaterialDesignTextView txtSet;
     private FragmentActivity mActivity;
+    private TextView txtChooseCountry;
+    public static OnCountryCallBack onCountryCallBack;
+    private TextView txtCodeCountry;
 
     public static FragmentAddContact newInstance() {
         return new FragmentAddContact();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_add_contact, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         initComponent(view);
     }
 
@@ -72,7 +83,8 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_back);
         final RippleView rippleBack = (RippleView) view.findViewById(R.id.ac_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 changePage(rippleView);
             }
@@ -80,12 +92,28 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
         view.findViewById(R.id.fac_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
+
+
         txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
         txtSet.setTextColor(getResources().getColor(R.color.line_edit_text));
 
         parent = (ViewGroup) view.findViewById(R.id.ac_layoutParent);
         parent.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        txtCodeCountry = (TextView) view.findViewById(R.id.ac_txt_codeCountry);
+        txtChooseCountry = (TextView) view.findViewById(R.id.ac_txt_chooseCountry);
+        txtChooseCountry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentChooseCountry fragmentChooseCountry = new FragmentChooseCountry();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentChooseCountry, null).commit();
+                closeKeyboard(v);
 
             }
         });
@@ -98,7 +126,8 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         final View viewPhoneNumber = view.findViewById(R.id.ac_view_phoneNumber);
 
         edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View view, boolean b) {
+            @Override
+            public void onFocusChange(View view, boolean b) {
                 if (b) {
                     viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                 } else {
@@ -107,7 +136,8 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             }
         });
         edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View view, boolean b) {
+            @Override
+            public void onFocusChange(View view, boolean b) {
                 if (b) {
                     viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                 } else {
@@ -116,7 +146,8 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             }
         });
         edtPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View view, boolean b) {
+            @Override
+            public void onFocusChange(View view, boolean b) {
                 if (b) {
                     viewPhoneNumber.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                 } else {
@@ -126,42 +157,51 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         });
 
         edtFirstName.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
                 isEnableSetButton();
             }
         });
         edtLastName.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
                 isEnableSetButton();
             }
         });
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
                 isEnableSetButton();
             }
         });
@@ -177,41 +217,46 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         rippleSet = (RippleView) view.findViewById(R.id.ac_ripple_set);
         rippleSet.setEnabled(false);
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(final RippleView rippleView) {
+            @Override
+            public void onComplete(final RippleView rippleView) {
 
-                new MaterialDialog.Builder(mActivity).title(R.string.add_to_list_contact)
-                    .content(R.string.text_add_to_list_contact).positiveText(R.string.yes)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            addContactToServer();
-                            final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
-                            if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
-                                try {
-                                    HelperPermision.getContactPermision(mActivity, null);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                addToContactList(rippleView);
+                new MaterialDialog.Builder(mActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        addContactToServer();
+                        final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+                        if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
+                            try {
+                                HelperPermision.getContactPermision(mActivity, null);
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
+                        } else {
+                            addToContactList(rippleView);
                         }
-                    }).negativeText(R.string.no)
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    }
+                }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            dialog.dismiss();
-                        }
-                    })
-                    .show();
+                        dialog.dismiss();
+                    }
+                }).show();
             }
         });
 
-        //G.onContactImport = new OnUserContactImport() {
-        //    @Override
-        //    public void onContactImport() {
-        //
-        //    }
-        //};
+        onCountryCallBack = new OnCountryCallBack() {
+            @Override
+            public void countryName(final String nameCountry, final String code, String mask) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtChooseCountry.setText(nameCountry);
+                        txtCodeCountry.setText("+" + code);
+                    }
+                });
+            }
+        };
 
     }
 
@@ -240,15 +285,21 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
     private void addContactToServer() {
 
         String _phone = edtPhoneNumber.getText().toString();
-        if (_phone.startsWith("0")) _phone = _phone.substring(1, _phone.length());
+        String codeCountry = txtCodeCountry.getText().toString();
 
-        String ph = "+98" + _phone.replace("+98", "");
+        String saveNumber;
+
+        if (edtPhoneNumber.getText().toString().startsWith("0")) {
+            saveNumber = codeCountry + _phone.substring(1, _phone.length());
+        } else {
+            saveNumber = codeCountry + _phone;
+        }
 
         ArrayList<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
         contact.firstName = edtFirstName.getText().toString();
         contact.lastName = edtLastName.getText().toString();
-        contact.phone = ph;
+        contact.phone = saveNumber;
 
         contacts.add(contact);
 
@@ -262,8 +313,9 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
                 final String phone = edtPhoneNumber.getText().toString();
                 final String firstName = edtFirstName.getText().toString();
                 final String lastName = edtLastName.getText().toString();
+                final String codeNumber = txtCodeCountry.getText().toString();
                 String displayName = firstName + " " + lastName;
-                HelperAddContact.addContact(displayName, phone);
+                HelperAddContact.addContact(displayName, codeNumber, phone);
 
                 changePage(view);
             } else {
@@ -279,5 +331,15 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
     }
-    //***************************************************************************************
+
+    private void closeKeyboard(View v) {
+        if (isAdded()) {
+            try {
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            } catch (IllegalStateException e) {
+                e.getStackTrace();
+            }
+        }
+    }
 }

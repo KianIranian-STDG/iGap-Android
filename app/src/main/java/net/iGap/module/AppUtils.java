@@ -17,8 +17,11 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.view.View;
@@ -30,6 +33,7 @@ import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
@@ -548,7 +552,11 @@ public final class AppUtils {
             newIds[itemsId.indexOf(integer)] = integer;
         }
 
-        return new MaterialDialog.Builder(context).title("Resend Messages").negativeText(context.getString(R.string.cancel)).items(items).itemsIds(newIds).itemsCallback(new MaterialDialog.ListCallback() {
+        return new MaterialDialog.Builder(context).title(R.string.resend_chat_message)
+            .negativeText(context.getString(R.string.cancel))
+            .items(items)
+            .itemsIds(newIds)
+            .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
                 switch (itemView.getId()) {
@@ -602,6 +610,17 @@ public final class AppUtils {
         }
     }
 
+    public static Uri getUri(String path) {
 
+        Uri outputUri;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            outputUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(path));
+        } else {
+            outputUri = Uri.fromFile(new File(path));
+        }
+
+        return outputUri;
+    }
 
 }

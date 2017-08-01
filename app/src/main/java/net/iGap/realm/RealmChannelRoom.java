@@ -13,9 +13,9 @@ package net.iGap.realm;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import net.iGap.G;
 import net.iGap.helper.HelperString;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 
 public class RealmChannelRoom extends RealmObject {
@@ -72,8 +72,10 @@ public class RealmChannelRoom extends RealmObject {
                 if (channelName != null) {
                     realmRoom.setTitle(channelName);
                 }
+                realmRoom.setType(RoomType.CHANNEL);
                 RealmChannelRoom realmChannelRoom = realm.createObject(RealmChannelRoom.class);
                 realmChannelRoom.setInviteLink(inviteLink);
+                realmChannelRoom.setRole(ChannelChatRole.MEMBER);// set default role
 
                 realmRoom.setChannelRoom(realmChannelRoom);
             }
@@ -99,7 +101,7 @@ public class RealmChannelRoom extends RealmObject {
     }
 
     public String getParticipantsCountLabel() {
-        if (HelperString.isNumeric(participants_count_label) || G.selectedLanguage.equals("en")) {
+        if (HelperString.isNumeric(participants_count_label)) {
             return participants_count_label;
         }
         return Integer.toString(getParticipants_count());
@@ -109,13 +111,13 @@ public class RealmChannelRoom extends RealmObject {
         this.participants_count_label = participants_count_label;
     }
 
-    public String getParticipants_count_limit_label() {
-        return participants_count_limit_label;
-    }
-
-    public void setParticipants_count_limit_label(String participants_count_limit_label) {
-        this.participants_count_limit_label = participants_count_limit_label;
-    }
+    //public String getParticipants_count_limit_label() {
+    //    return participants_count_limit_label;
+    //}
+    //
+    //public void setParticipants_count_limit_label(String participants_count_limit_label) {
+    //    this.participants_count_limit_label = participants_count_limit_label;
+    //}
 
     public String getDescription() {
         return description;

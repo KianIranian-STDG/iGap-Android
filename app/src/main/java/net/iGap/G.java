@@ -43,6 +43,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperNotificationAndBadge;
+import net.iGap.interfaces.IActivityFinish;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IClientSearchUserName;
 import net.iGap.interfaces.IMainFinish;
@@ -265,6 +266,9 @@ public class G extends MultiDexApplication {
     public static boolean isInCall = false;
     public static boolean isShowRatingDialog = false;
 
+    public static String salectedTabInMainActivity = "";
+    public static boolean isMainRecreate = false;
+
     public static int ivSize;
     public static int userTextSize = 0;
     public static int COPY_BUFFER_SIZE = 1024;
@@ -398,8 +402,11 @@ public class G extends MultiDexApplication {
     public static OnPushTwoStepVerification onPushTwoStepVerification;
     public static IClientSearchUserName onClientSearchUserName;
     public static OnCallLeaveView onCallLeaveView;
-    public static ICallFinish iCallFinish;
+    public static ICallFinish iCallFinishChat;
+    public static ICallFinish iCallFinishMain;
     public static IMainFinish iMainFinish;
+    public static IActivityFinish iActivityFinish;
+
     public static OnLocationChanged onLocationChanged;
     public static OnGetNearbyCoordinate onGetNearbyCoordinate;
     public static OnGeoGetComment onGeoGetComment;
@@ -431,13 +438,25 @@ public class G extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
+        G.firstTimeEnterToApp = true;
+
         initEmoji();
 
-        Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+                CaocConfig.Builder.create()
+                    .backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT)
+                    .showErrorDetails(false)
+                    .showRestartButton(true)
+                    .trackActivities(true)
+                    .restartActivity(ActivityMain.class)
+                    .errorActivity(ActivityCustomError.class)
+                    .apply();
+            }
+        }).start();
 
-        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class)
-                //.eventListener(new CustomEventListener())
-                .apply();
 
         context = getApplicationContext();
         handler = new Handler();
@@ -447,25 +466,31 @@ public class G extends MultiDexApplication {
     }
 
     private void initEmoji() {
-        emojiProvider = new EmojiOneProvider();
 
-        EmojiCategory[] categories = emojiProvider.getCategories();
-        emojiTree.clear();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                emojiProvider = new EmojiOneProvider();
 
-        for (int i = 0; i < categories.length; i++) {
-            try {
-                final Emoji[] emojis = categories[i].getEmojis();
+                EmojiCategory[] categories = emojiProvider.getCategories();
+                emojiTree.clear();
 
-                //noinspection ForLoopReplaceableByForEach
-                for (int j = 0; j < emojis.length; j++) {
-                    emojiTree.add(emojis[j]);
+                for (int i = 0; i < categories.length; i++) {
+                    try {
+                        final Emoji[] emojis = categories[i].getEmojis();
+
+                        //noinspection ForLoopReplaceableByForEach
+                        for (int j = 0; j < emojis.length; j++) {
+                            emojiTree.add(emojis[j]);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
-        EmojiManager.install(emojiProvider); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
+                EmojiManager.install(emojiProvider); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
+            }
+        }).start();
     }
 
     @Override

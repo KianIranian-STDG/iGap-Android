@@ -42,7 +42,6 @@ import com.google.android.vending.licensing.LicenseCheckerCallback;
 import com.google.android.vending.licensing.Policy;
 import com.uncopt.android.widget.text.justify.JustifiedTextView;
 import io.realm.Realm;
-import java.io.File;
 import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
@@ -52,7 +51,6 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnReceivePageInfoTOS;
 import net.iGap.module.CustomCircleImage;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoLocation;
@@ -100,22 +98,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /**
-         * set true mFirstRun for get room history after logout and login again
-         */
-        G.firstTimeEnterToApp = true;
-        //licenceChecker();
 
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-        boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
-
-        if (deleteFolderBackground) {
-            deleteContentFolderChatBackground();
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
-            editor.apply();
-        }
 
         try {
             HelperPermision.getStoragePermision(this, new OnGetPermission() {
@@ -471,17 +454,7 @@ public class ActivityIntroduce extends ActivityEnhanced {
         realm.close();
     }
 
-    private void deleteContentFolderChatBackground() {
 
-        // delete  content of folder chat background in the first registeration
-        File root = new File(G.DIR_CHAT_BACKGROUND);
-        File[] Files = root.listFiles();
-        if (Files != null) {
-            for (int j = 0; j < Files.length; j++) {
-                Files[j].delete();
-            }
-        }
-    }
 
     private void startRegistration() {
 

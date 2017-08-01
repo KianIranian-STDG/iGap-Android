@@ -157,7 +157,7 @@ public class RealmRoom extends RealmObject {
         realmRoom.setType(RoomType.convert(room.getType()));
         realmRoom.setUnreadCount(room.getUnreadCount());
         realmRoom.setReadOnly(room.getReadOnly());
-        //realmRoom.setMute(false); //TODO [Saeed Mozaffari] [2016-09-07 9:59 AM] - after get mute state from server unComment this code and set server value
+        //realmRoom.setMute(false);
         realmRoom.setActionState(null, 0);
         switch (room.getType()) {
             case CHANNEL:
@@ -278,8 +278,12 @@ public class RealmRoom extends RealmObject {
                             for (RealmRoom item : deletedRoomsList) {
                                 /**
                                  * delete all message in deleted room
+                                 *
+                                 * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
+                                 * transaction and client can't use a transaction inside another
                                  */
                                 realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
+                                realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
                                 item.deleteFromRealm();
                             }
                         }
@@ -360,17 +364,6 @@ public class RealmRoom extends RealmObject {
             new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.justInfo);
         }
         realm.close();
-    }
-
-    public static boolean isCloudRoom(long roomId) {
-        boolean result = false;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null && realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == G.userId) {
-            result = true;
-        }
-        realm.close();
-        return result;
     }
 
     /**

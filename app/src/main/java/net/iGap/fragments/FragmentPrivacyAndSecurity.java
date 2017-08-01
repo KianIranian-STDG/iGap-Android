@@ -75,6 +75,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     private RealmChangeListener<RealmModel> privacyListener;
     private int poWhoCan;
     private FragmentActivity mActivity;
+
     public FragmentPrivacyAndSecurity() {
     }
 
@@ -131,8 +132,10 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         userInfoListener = new RealmChangeListener<RealmModel>() {
             @Override
             public void onChange(RealmModel element) {
-                selfRemove = ((RealmUserInfo) element).getSelfRemove();
-                setTextSelfDestructs();
+                if (((RealmUserInfo) element).isValid()) {
+                    selfRemove = ((RealmUserInfo) element).getSelfRemove();
+                    setTextSelfDestructs();
+                }
             }
         };
 
@@ -244,7 +247,8 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         });
 
         layoutWhoCanVoiceCallToMe.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 if (realmPrivacy != null) {
                     getStringFromEnumString(realmPrivacy.getWhoCanVoiceCallToMe());
                     openDialogWhoCan(ProtoGlobal.PrivacyType.VOICE_CALLING, poWhoCan, R.string.title_who_is_allowed_to_call);
@@ -358,12 +362,13 @@ public class FragmentPrivacyAndSecurity extends Fragment {
     }
 
     private void updatePrivacyUI(RealmPrivacy realmPrivacy) {
-
-        txtWhoCanSeeMyAvatar.setText(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyAvatar()));
-        txtWhoCanInviteMeToChannel.setText(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel()));
-        txtWhoCanInviteMeToGroup.setText(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup()));
-        txtWhoCanSeeMyLastSeen.setText(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyLastSeen()));
-        txtWhoCanVoiceCallToMe.setText(getStringFromEnumString(realmPrivacy.getWhoCanVoiceCallToMe()));
+        if (realmPrivacy.isValid()) {
+            txtWhoCanSeeMyAvatar.setText(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyAvatar()));
+            txtWhoCanInviteMeToChannel.setText(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel()));
+            txtWhoCanInviteMeToGroup.setText(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup()));
+            txtWhoCanSeeMyLastSeen.setText(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyLastSeen()));
+            txtWhoCanVoiceCallToMe.setText(getStringFromEnumString(realmPrivacy.getWhoCanVoiceCallToMe()));
+        }
     }
 
     private int getStringFromEnumString(String str) {

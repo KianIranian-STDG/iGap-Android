@@ -16,8 +16,9 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/dialog_icon_item1_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp26"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
@@ -46,9 +47,10 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/dialog_icon_item2_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp26"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/grayNew"
@@ -59,10 +61,10 @@
         android:id="@+id/dialog_text_item2_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/dialog_item_style"
         android:text="@string/mute_notification"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
+        style="@style/dialog_item_style"
         />
 
   </LinearLayout>
@@ -75,8 +77,9 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/dialog_icon_item3_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp26"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
@@ -104,8 +107,9 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/dialog_icon_item4_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp26"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
@@ -133,8 +137,9 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/dialog_icon_item5_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp26"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
@@ -162,8 +167,9 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/dialog_icon_item6_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp26"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"
@@ -191,8 +197,9 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/dialog_icon_item7_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp26"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:layout_gravity="center"
         android:text="@string/md_muted"
         android:textAppearance="@style/TextIconAppearance.all"

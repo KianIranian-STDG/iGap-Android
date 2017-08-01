@@ -31,6 +31,7 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
+import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestUserInfo;
 
 /**
@@ -48,7 +49,16 @@ public class HelperLogMessage {
         long updateID;
     }
 
-    public static void updateLogMessageAfterGetUserInfo(final StructLog item) {
+    public static void updateLogMessageAfterGetUserInfo(final long id) {
+
+        final StructLog item;
+
+        if (G.logMessageUpdatList.containsKey(id)) {
+
+            item = G.logMessageUpdatList.get(id);
+        } else {
+            return;
+        }
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -59,10 +69,18 @@ public class HelperLogMessage {
             if (roomMessage != null) {
 
                 realm.executeTransaction(new Realm.Transaction() {
-                    @Override public void execute(Realm realm) {
-                        roomMessage.setLogMessage(HelperLogMessage.logMessage(item.roomId, item.author, item.messageLog, item.messageID));
+                    @Override
+                    public void execute(Realm realm) {
+
+                        String LogText = HelperLogMessage.logMessage(item.roomId, item.author, item.messageLog, item.messageID);
+
+                        roomMessage.setLogMessage(LogText);
 
                         G.logMessageUpdatList.remove(item.updateID);
+
+                        if (ActivityChat.iUpdateLogItem != null) {
+                            ActivityChat.iUpdateLogItem.onUpdate(LogText, item.messageID);
+                        }
                     }
                 });
             }
@@ -108,7 +126,7 @@ public class HelperLogMessage {
 
                 G.logMessageUpdatList.put(updateID, item);
 
-                HelperInfo.needUpdateUser(author.getUser().getUserId(), author.getUser().getCacheId());
+                new RequestUserInfo().userInfoAvoidDuplicate(author.getUser().getUserId());
             }
         } else if (author.hasRoom()) {
 
@@ -128,6 +146,8 @@ public class HelperLogMessage {
                 G.logMessageUpdatList.put(updateID, item);
 
                 HelperInfo.needUpdateRoomInfo(author.getRoom().getRoomId());
+
+                new RequestClientGetRoom().clientGetRoom(author.getRoom().getRoomId(), RequestClientGetRoom.CreateRoomMode.justInfo);
             }
         }
 
@@ -216,12 +236,10 @@ public class HelperLogMessage {
                     persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
 
                     englishResult = "Channel" + " " + logMessage.replace("Created Room", "Created") + " " + targetName;
-
                 } else {
                     persianResult = finalTypeRoom + " توسط " + authorName + " " + logMessage;
 
                     englishResult = "Group" + " " + logMessage.replace("Room", "") + " " + targetName;
-
                 }
 
                 linkInfoEnglish = "";
@@ -269,16 +287,13 @@ public class HelperLogMessage {
             case ROOM_CONVERTED_TO_PUBLIC:
 
                 if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
-                    persianResult = finalTypeRoom + " " + authorName + " " + logMessage;
+                    persianResult = finalTypeRoom + " " + logMessage;
 
                     englishResult = "Channel" + " " + logMessage + " " + targetName;
-
                 } else {
                     persianResult = finalTypeRoom + " " + logMessage;
 
                     englishResult = "Group" + " " + logMessage + " " + targetName;
-
-
                 }
                 linlInfoPersian = "";
                 linkInfoEnglish = "";
@@ -288,11 +303,9 @@ public class HelperLogMessage {
                 if ((typeRoom == null) || (typeRoom.toString().equals("CHANNEL"))) {
                     persianResult = finalTypeRoom + " " + logMessage;
                     englishResult = "Channel" + " " + logMessage + " " + targetName;
-
                 } else {
                     persianResult = finalTypeRoom + " " + logMessage;
                     englishResult = "Group" + " " + logMessage + " " + targetName;
-
                 }
 
                 linlInfoPersian = "";
@@ -476,7 +489,8 @@ public class HelperLogMessage {
     public static void insertClickSpanLink(SpannableStringBuilder builder, int start, int end, final boolean isUser, final long id) {
 
         ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override public void onClick(View widget) {
+            @Override
+            public void onClick(View widget) {
 
                 if (isUser) {
 
@@ -490,7 +504,8 @@ public class HelperLogMessage {
                 }
             }
 
-            @Override public void updateDrawState(TextPaint ds) {
+            @Override
+            public void updateDrawState(TextPaint ds) {
                 ds.linkColor = Color.DKGRAY;
                 super.updateDrawState(ds);
             }
@@ -517,9 +532,11 @@ public class HelperLogMessage {
             G.currentActivity.startActivity(intent);
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
-                @Override public void onChatGetRoom(final long roomId) {
+                @Override
+                public void onChatGetRoom(final long roomId) {
                     G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
                             //intent.putExtra("peerId", id);
@@ -539,15 +556,18 @@ public class HelperLogMessage {
                     });
                 }
 
-                @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+                @Override
+                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
 
                 }
 
-                @Override public void onChatGetRoomTimeOut() {
+                @Override
+                public void onChatGetRoomTimeOut() {
 
                 }
 
-                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+                @Override
+                public void onChatGetRoomError(int majorCode, int minorCode) {
 
                 }
             };
@@ -563,10 +583,9 @@ public class HelperLogMessage {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
         if (realmRoom != null) {
-            Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-            intent.putExtra("RoomId", realmRoom.getId());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            G.currentActivity.startActivity(intent);
+
+            new GoToChatActivity(realmRoom.getId()).setContext(G.currentActivity).setNewTask(true).startActivity();
+
         } else {
             HelperInfo.needUpdateRoomInfo(id);
         }

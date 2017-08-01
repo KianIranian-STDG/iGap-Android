@@ -1,10 +1,8 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,10 +13,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,11 +33,11 @@ import java.util.List;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityProfile;
 import net.iGap.activities.MyDialog;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperClientCondition;
@@ -53,6 +49,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -150,7 +147,8 @@ public class FragmentMain extends Fragment implements OnComplete {
         // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setItemViewCacheSize(1000);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        mRecyclerView.setLayoutManager(new PreCachingLayoutManager(mActivity, 3000));
+
 
         RealmResults<RealmRoom> results = null;
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.UPDATED_TIME};
@@ -491,9 +489,10 @@ public class FragmentMain extends Fragment implements OnComplete {
                     progressBar.setVisibility(View.VISIBLE);
                 }
             });
-        } else {
-            mOffset = 0;
         }
+        //else {
+        //    mOffset = 0;
+        //}
 
 
 
@@ -690,67 +689,7 @@ public class FragmentMain extends Fragment implements OnComplete {
     }
     //**************************************************************************************************************************************
 
-    public static class PreCachingLayoutManager extends LinearLayoutManager {
-        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 600;
-        private int extraLayoutSpace = -1;
-        private Context context;
 
-        public PreCachingLayoutManager(Context context) {
-            super(context);
-            this.context = context;
-        }
-
-        public PreCachingLayoutManager(Context context, int extraLayoutSpace) {
-            super(context);
-            this.context = context;
-            this.extraLayoutSpace = extraLayoutSpace;
-        }
-
-        public PreCachingLayoutManager(Context context, int orientation, boolean reverseLayout) {
-            super(context, orientation, reverseLayout);
-            this.context = context;
-        }
-
-        public void setExtraLayoutSpace(int extraLayoutSpace) {
-            this.extraLayoutSpace = extraLayoutSpace;
-        }
-
-
-        @Override
-        public boolean supportsPredictiveItemAnimations() {
-            return false;
-        }
-
-        @Override
-        protected int getExtraLayoutSpace(RecyclerView.State state) {
-            if (extraLayoutSpace > 0) {
-                return extraLayoutSpace;
-            }
-            return DEFAULT_EXTRA_LAYOUT_SPACE;
-        }
-
-        private static final float MILLISECONDS_PER_INCH = 50f; //default is 25f (bigger = slower)
-
-        @Override
-        public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
-
-            final LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
-
-                @Override
-                public PointF computeScrollVectorForPosition(int targetPosition) {
-                    return PreCachingLayoutManager.this.computeScrollVectorForPosition(targetPosition);
-                }
-
-                @Override
-                protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-                    return MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
-                }
-            };
-
-            linearSmoothScroller.setTargetPosition(position);
-            startSmoothScroll(linearSmoothScroller);
-        }
-    }
 
     public class RoomAdapter extends RealmRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
 
@@ -768,9 +707,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
 
-            View v = ViewMaker.getViewItemRoom();
-
-            return new RoomAdapter.ViewHolder(v);
+            return new RoomAdapter.ViewHolder(ViewMaker.getViewItemRoom());
         }
 
         @Override
@@ -778,10 +715,21 @@ public class FragmentMain extends Fragment implements OnComplete {
 
 
             final RealmRoom mInfo = holder.mInfo = getItem(i);
+            if (mInfo == null) {
+                return;
+            }
 
-            final boolean isMyCloud = RealmRoom.isCloudRoom(mInfo.getId());
+            final boolean isMyCloud;
 
-            if (mInfo != null && mInfo.isValid()) {
+            if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == G.userId) {
+                isMyCloud = true;
+            } else {
+                isMyCloud = false;
+            }
+
+
+
+            if (mInfo.isValid()) {
 
                 setLastMessage(mInfo, holder, isMyCloud);
 
@@ -809,6 +757,15 @@ public class FragmentMain extends Fragment implements OnComplete {
                     holder.txtClude.setVisibility(View.VISIBLE);
                     holder.image.setVisibility(View.GONE);
                 } else {
+
+                    if (holder.txtClude != null) {
+                        holder.txtClude.setVisibility(View.GONE);
+                    }
+
+                    if (holder.image.getVisibility() == View.GONE) {
+                        holder.image.setVisibility(View.VISIBLE);
+                    }
+
                     setAvatar(mInfo, holder.image);
                 }
 
@@ -835,14 +792,12 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 if (mInfo.getUnreadCount() < 1) {
 
-                    holder.name.setTypeface(G.typeface_IRANSansMobile);
                     holder.txtUnread.setVisibility(View.GONE);
 
                 } else {
                     holder.txtUnread.setVisibility(View.VISIBLE);
-                    holder.name.setTypeface(G.typeface_IRANSansMobile_Bold);
                     holder.txtPinIcon.setVisibility(View.GONE);
-                    holder.txtUnread.setText(Integer.toString(mInfo.getUnreadCount()));
+                    holder.txtUnread.setText(mInfo.getUnreadCount() + "");
 
                     if (HelperCalander.isLanguagePersian) {
                         holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red);
@@ -871,11 +826,11 @@ public class FragmentMain extends Fragment implements OnComplete {
              */
             if (HelperCalander.isLanguagePersian) {
 
-                holder.txtLastMessage.setText(holder.txtLastMessage.getText().toString());
+                holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
 
                 holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));
 
-                holder.name.setText(holder.name.getText().toString());
+                holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
             }
 
 
@@ -892,6 +847,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             protected EmojiTextViewE name;
             protected ViewGroup rootChat;
             protected EmojiTextViewE txtLastMessage;
+            protected EmojiTextViewE txtLastMessageFileText;
             protected MaterialDesignTextView txtChatIcon;
             protected TextView txtTime;
             protected MaterialDesignTextView txtPinIcon;
@@ -907,8 +863,11 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                 image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
                 name = (EmojiTextViewE) view.findViewById(R.id.cs_txt_contact_name);
+                name.setTypeface(G.typeface_IRANSansMobile_Bold);
+
                 rootChat = (ViewGroup) view.findViewById(R.id.root_chat_sub_layout);
                 txtLastMessage = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message);
+                txtLastMessageFileText = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message_file_text);
                 txtChatIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_chat_icon);
 
                 txtTime = ((TextView) view.findViewById(R.id.cs_txt_contact_time));
@@ -918,6 +877,8 @@ public class FragmentMain extends Fragment implements OnComplete {
                 txtPinIcon.setTypeface(G.typeface_Fontico);
 
                 txtUnread = (TextView) view.findViewById(R.id.cs_txt_unread_message);
+                txtUnread.setTypeface(G.typeface_IRANSansMobile);
+
                 mute = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_mute);
 
                 lastMessageSender = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message_sender);
@@ -939,12 +900,10 @@ public class FragmentMain extends Fragment implements OnComplete {
                         if (ActivityMain.isMenuButtonAddShown) {
                             mComplete.complete(true, "closeMenuButton", "");
                         } else {
-                            if (mInfo.isValid()) {
+                            if (mInfo.isValid() && mActivity != null) {
 
-                                Intent intent = new Intent(mActivity, ActivityChat.class);
-                                intent.putExtra("RoomId", mInfo.getId());
+                                new GoToChatActivity(mInfo.getId()).setContext(mActivity).setFromCall(((ActivityMain) getActivity()).fromCall).startActivity();
 
-                                startActivity(intent);
                                 mActivity.overridePendingTransition(0, 0);
 
                                 if (((ActivityMain) mActivity).arcMenu != null && ((ActivityMain) mActivity).arcMenu.isMenuOpened()) {
@@ -960,9 +919,13 @@ public class FragmentMain extends Fragment implements OnComplete {
                     public boolean onLongClick(View v) {
 
                         if (ActivityMain.isMenuButtonAddShown) {
-                            mComplete.complete(true, "closeMenuButton", "");
+
+                            if (mComplete != null) {
+                                mComplete.complete(true, "closeMenuButton", "");
+                            }
+
                         } else {
-                            if (mInfo.isValid()) {
+                            if (mInfo.isValid() && mActivity != null) {
                                 String role = null;
                                 if (mInfo.getType() == GROUP) {
                                     role = mInfo.getGroupRoom().getRole().toString();
@@ -1003,6 +966,7 @@ public class FragmentMain extends Fragment implements OnComplete {
         private void setLastMessage(RealmRoom mInfo, ViewHolder holder, boolean isMyCloud) {
 
             holder.txtTic.setVisibility(View.GONE);
+            holder.txtLastMessageFileText.setVisibility(View.GONE);
             holder.txtLastMessage.setText("");
 
             if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((isMyCloud || (mInfo.getActionStateUserId() != userId))))) {
@@ -1023,8 +987,7 @@ public class FragmentMain extends Fragment implements OnComplete {
             } else {
 
                 if (mInfo.getLastMessage() != null) {
-                    String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(),
-                        mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                    String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
 
                     if (lastMessage == null) {
                         lastMessage = mInfo.getLastMessage().getMessage();
@@ -1054,8 +1017,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
 
-                                RealmRegisteredInfo realmRegisteredInfo =
-                                    G.getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
+                                RealmRegisteredInfo realmRegisteredInfo = G.getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
                                 if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
 
                                     String _name = realmRegisteredInfo.getDisplayName();
@@ -1090,20 +1052,32 @@ public class FragmentMain extends Fragment implements OnComplete {
                             ProtoGlobal.RoomMessageType _type, tmp;
 
                             _type = mInfo.getLastMessage().getMessageType();
+                            String fileText = mInfo.getLastMessage().getMessage();
 
-                            try {
-                                if (mInfo.getLastMessage().getReplyTo() != null) {
-                                    tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
-                                    if (tmp != null) _type = tmp;
-                                }
-                            } catch (NullPointerException e) {
-                                e.printStackTrace();
-                            }
-
+                            //don't use from reply , in reply message just get type and fileText from main message
+                            //try {
+                            //    if (mInfo.getLastMessage().getReplyTo() != null) {
+                            //        tmp = mInfo.getLastMessage().getReplyTo().getMessageType();
+                            //        if (tmp != null) {
+                            //            _type = tmp;
+                            //        }
+                            //        //if (mInfo.getLastMessage().getReplyTo().getMessage() != null) {
+                            //        //    fileText = mInfo.getLastMessage().getReplyTo().getMessage();
+                            //        //}
+                            //    }
+                            //} catch (NullPointerException e) {
+                            //    e.printStackTrace();
+                            //}
+                            //
                             try {
                                 if (mInfo.getLastMessage().getForwardMessage() != null) {
                                     tmp = mInfo.getLastMessage().getForwardMessage().getMessageType();
-                                    if (tmp != null) _type = tmp;
+                                    if (tmp != null) {
+                                        _type = tmp;
+                                    }
+                                    if (mInfo.getLastMessage().getForwardMessage().getMessage() != null) {
+                                        fileText = mInfo.getLastMessage().getForwardMessage().getMessage();
+                                    }
                                 }
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
@@ -1118,6 +1092,16 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 }
                                 holder.txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
                                 holder.txtLastMessage.setText(subStringInternal(lastMessage));
+                                holder.txtLastMessage.setEllipsize(TextUtils.TruncateAt.END);
+                            } else {
+                                if (fileText != null && !fileText.isEmpty()) {
+                                    holder.txtLastMessageFileText.setVisibility(View.VISIBLE);
+                                    holder.txtLastMessageFileText.setText(fileText);
+
+                                    holder.txtLastMessage.setText(holder.txtLastMessage.getText() + " : ");
+                                } else {
+                                    holder.txtLastMessageFileText.setVisibility(View.GONE);
+                                }
                             }
                         } else {
                             holder.txtLastMessage.setText(subStringInternal(lastMessage));

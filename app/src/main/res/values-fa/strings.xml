@@ -225,7 +225,7 @@
   <string name="st_title_reset">"بازنشانی"</string>
   <string name="st_reset_all_notification">"بازنشانی همهٔ اعلانات"</string>
   <string name="st_text_reset_all_notification">"تمامی تنظیمات معمول اعلانات را برای همهٔ مخاطبین و گروه های خود خنثی کنید."</string>
-  <string name="st_dialog_reset_all_notification">"آیا مطئنید که می‌خواهید تمامی تنظیمات معمول اعلانات را خنثی کنید؟"</string>
+  <string name="st_dialog_reset_all_notification">"آیا مایلید تمامی تنظیمات اعلانات برنامه را به حالت اولیه بازگردانید؟"</string>
   <string name="st_dialog_reset_all_notification_yes">"بلی"</string>
   <string name="st_dialog_reset_all_notification_no">"خیر"</string>
   <string name="st_title_Background">"پس زمينهٔ گفتگو"</string>
@@ -342,7 +342,7 @@
   <string name="please_enter_group_description">"لطفاً توضیح مختصری برای گروه وارد کنید."</string>
   <string name="do_you_want_to_delete_this_group">"آیا از حذف این گفتگو اطمینان دارید؟"</string>
   <string name="do_you_want_to_set_admin_role_to_member">"آیا از گرفتن نقش مدیر از این عضو اطمینان دارید؟"</string>
-  <string name="do_you_want_to_kick_this_member">"آیا از بیرون انداختن این عضو(ها) اطمینان دارید؟"</string>
+  <string name="do_you_want_to_kick_this_member">"آیا از بیرون انداختن این عضو اطمینان دارید؟"</string>
   <string name="do_you_want_to_set_modereator_role_to_member">"آیا از گرفتن نقش ناظر از این عضو اطمینان دارید؟"</string>
   <string name="waiting_for_network">"در انتظار اتصال به اینترنت"</string>
   <string name="connecting">"در حال برقراری ارتباط"</string>
@@ -679,7 +679,7 @@
   <string name="there_is_no_sheared_media">هیچ رسانه‌ای به اشتراک گذاشته نشده است.</string>
   <string name="pending">معلق</string>
   <string name="completed">کامل شده</string>
-  <string name="st_data_shams">تاریخ هجری شمسی</string>
+  <string name="st_data_shams">تاریخ پارسی</string>
   <string name="content_log_out">آیا از خروج از حساب کاربری خود اطمینان دارید؟</string>
   <string name="one_day">یک روز قبل</string>
   <string name="two_day">دو روز قبل</string>
@@ -715,7 +715,7 @@
   <string name="bahman">بهمن</string>
   <string name="esfand">اسفند</string>
   <string name="join">عضویت</string>
-  <string name="do_you_want_to_join_to_this">"آیا میخواهید عضو شوید در این  "</string>
+  <string name="do_you_want_to_join_to_this">"آیا مایلید در این "</string>
   <string name="txt_draft">پیش نویس: </string>
   <string name="st_signature">امضا</string>
   <string name="spam">Spam</string>
@@ -762,7 +762,7 @@
   <string name="permission_contact">لیست تماس ها را بدهید</string>
   <string name="permission_calender">تقویم را بدهید</string>
   <string name="permission_location">موقعیت یاب گوشی را بدهید</string>
-  <string name="permission_record_audio">ظبط صدا را بدهید</string>
+  <string name="permission_record_audio">ضبط صدا را بدهید</string>
   <string name="permission_phone">گوشی را بدهید</string>
   <string name="permission_sms">پیامک ها را بدهید</string>
   <string name="st_privacy_blog">بلاگ رسمی آی گپ</string>
@@ -786,7 +786,7 @@
   <string name="array_delete_photo_group">حذف عکس</string>
   <string name="group_link_hint_revoke">لینک دعوت گروه</string>
   <string name="channel_title_convert_to_private">تبدیل به کانال خصوصی</string>
-  <string name="channel_text_convert_to_private">آیا می خواهید این گروه را به گروه خصوصی تبدیل کنید؟</string>
+  <string name="channel_text_convert_to_private">آیا می خواهید این کانال را به کانال خصوصی تبدیل کنید؟</string>
   <string name="channel_title_convert_to_public">تبدیل به کانال عمومی</string>
   <string name="channel_text_convert_to_public">آیا می خواهید این کانال را به کانال عمومی تبدیل کنید؟</string>
   <string name="channel_title_channel_set_username">تخصیص لینک عمومی کانال</string>
@@ -830,7 +830,7 @@
   <string name="my_contacts">مخاطبین من</string>
   <string name="privacy_setting">تنظیمات خصوصی </string>
   <string name="igap_search">‫بگرد و کشف کن</string>‬‬‬‬‬‬
-  <string name="set_color_to_default">انتخاب رنگ پیش فرض برنامه</string>
+  <string name="set_color_to_default">برگرداندن رنگ ها به پیش فرض</string>
   <string name="empty_message"> لطفاً 5 کاراکتر ابتدایی نام کاربری را وارد کنید</string>‬‬‬‬‬‬
   <string name="empty_message3"> برای جستجو حداقل 3 کاراکتر وارد کنید</string>‬‬‬‬‬‬
   <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
@@ -870,7 +870,7 @@
   <string name="optional">اختیاری</string>
   <string name="desc_group_chanel">توضیحات (اختیاری)</string>
 
-  <string name="set_additional_password">رمزعبور را تعیین کنید </string>
+  <string name="set_additional_password">تعیین رمزعبور</string>
   <string name="two_step_verification_title">فعال سازی دو مرحله ای </string>
   <string name="two_step_verification_description">شما می توانید رمزعبوری برای حساب کاربری خود تعیین کنید، این رمز زمانی مورد نیاز است که بخواهید جهت ورود به حساب کاربریتان از دستگاه دیگری استفاده نمایید. بعلاوهٔ این رمز شما زمان ورود به حساب کاربری کد تأییدی نیز به صورت پیامک دریافت خواهید کرد. </string>
   <string name="enter_a_password"> رمز عبور را وارد کنید</string>
@@ -882,6 +882,8 @@
   <string name="password_Question_title_one">سؤال امنیتی شماره ۱ (الزامی) </string>
   <string name="password_Question_one">برای مثال: معلم مورد علاقه تان کیست؟ </string>
   <string name="password_Question_title_two"> سؤال امنیتی شماره ۲ (الزامی)</string>
+  <string name="title_toolbar_password_Question">سوالات امنیتی جدید</string>
+  <string name="password_Question_explain">لطفاً سؤالات و پاسخ های جدید را جهت بازیابی رمز عبور وارد نمایید.</string>
   <string name="password_Question_two">برای مثال: بهترین دوست شما کیست؟</string>
   <string name="password_answer">جواب </string>
   <string name="password_Question_title">پرسش رمزعبور</string>
@@ -1004,6 +1006,24 @@
   <string name="c_MB">مگابایت </string>
   <string name="c_GB">گیگابایت </string>
   <string name="c_TB">ترابایت </string>
+
+  <string name="audio">فایل صوتی</string>
+  <string name="total_size">حجم کل</string>
+
+  <string name="manage_spacing">کنترل حافظهٔ برنامه</string>
+  <string name="local_database">پایگاه دادهٔ محلی</string>
+  <string name="data_storage"> ذخیره سازی اطلاعات</string>
+  <string name="keep_media">نگهداری و حفظ رسانه ها</string>
+
+  <string name="invite_friend">این مخاطب هنوز به آی گپ نپیوسته. آیا مایلید ایشان را دعوت کنید؟</string>
+  <string name="clean_up_description">پاک کردن پایگاه دادهٔ برنامه منجر به حذف پیام های متنی ذخیره شده در حافظهٔ نهان و فشرده شدن پایگاه داده به منظور ذخیرهٔ فضای داخلی خواهد شد. آی گپ برای کارکردن به مقداری از اطلاعات نیاز دارد، بنابراین حجم پایگاه داده کاملاً خالی نخواهد شد و به صفر نمیرسد. تکمیل این عملیات چند دقیقه زمان می برد.</string>
+  <string name="list_contacts">لیست مخاطبین شما</string>
+
+  <string name="limit_for_set_username">محدودیت زمانی برای تغییر نام کاربری</string>
+
+  <string name="clear_cache_desc">اطلاعات ذخیره شده در حافظهٔ نهان همان فایل های تصویری، ویدیویی یا اسنادی هستند که بر روی دستگاه شما دریافت و یا از سویِ آن ارسال شده اند؛ هر از گاهی عملیات پاکسازی باید بر روی این فایل ها انجام شود تا مانع از کُندی یا توقف در اجرای برنامه ها شود. هر گاه مایل باشید به این اطلاعات دست پیدا کنید می توانید دوباره فایل ها بارگیری کرده و مشاهده نمایید.</string>
+  <string name="name">نام</string>
+
 
   <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
   <string name="turn_off_map">خاموش</string>

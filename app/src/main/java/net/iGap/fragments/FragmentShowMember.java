@@ -14,7 +14,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,11 +22,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +65,7 @@ import net.iGap.module.DeviceUtils;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
@@ -478,9 +476,8 @@ public class FragmentShowMember extends Fragment {
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
-        final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(mActivity);
+        final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(mActivity, DeviceUtils.getScreenHeight(mActivity));
         mRecyclerView.setLayoutManager(preCachingLayoutManager);
-        preCachingLayoutManager.setExtraLayoutSpace(DeviceUtils.getScreenHeight(mActivity));
 
         progressBar = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
         AppUtils.setProgresColler(progressBar);
@@ -860,61 +857,7 @@ public class FragmentShowMember extends Fragment {
         }
     }
 
-    public class PreCachingLayoutManager extends LinearLayoutManager {
-        private static final int DEFAULT_EXTRA_LAYOUT_SPACE = 600;
-        private int extraLayoutSpace = -1;
-        private Context context;
 
-        public PreCachingLayoutManager(Context context) {
-            super(context);
-            this.context = context;
-        }
-
-        public PreCachingLayoutManager(Context context, int extraLayoutSpace) {
-            super(context);
-            this.context = context;
-            this.extraLayoutSpace = extraLayoutSpace;
-        }
-
-        public PreCachingLayoutManager(Context context, int orientation, boolean reverseLayout) {
-            super(context, orientation, reverseLayout);
-            this.context = context;
-        }
-
-        public void setExtraLayoutSpace(int extraLayoutSpace) {
-            this.extraLayoutSpace = extraLayoutSpace;
-        }
-
-        @Override
-        protected int getExtraLayoutSpace(RecyclerView.State state) {
-            if (extraLayoutSpace > 0) {
-                return extraLayoutSpace;
-            }
-            return DEFAULT_EXTRA_LAYOUT_SPACE;
-        }
-
-        private static final float MILLISECONDS_PER_INCH = 2000f; //default is 25f (bigger = slower)
-
-        @Override
-        public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
-
-            final LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
-
-                @Override
-                public PointF computeScrollVectorForPosition(int targetPosition) {
-                    return PreCachingLayoutManager.this.computeScrollVectorForPosition(targetPosition);
-                }
-
-                @Override
-                protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-                    return MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
-                }
-            };
-
-            linearSmoothScroller.setTargetPosition(position);
-            startSmoothScroll(linearSmoothScroller);
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {

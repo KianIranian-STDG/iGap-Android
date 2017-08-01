@@ -54,20 +54,26 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getFileItem());
         }
 
+        holder.cslf_txt_file_name = (TextView) holder.itemView.findViewById(R.id.songArtist);
+        holder.cslf_txt_file_size = (TextView) holder.itemView.findViewById(R.id.fileSize);
+        holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
+
+
+
         super.bindView(holder, payloads);
 
         String text = "";
 
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
-                ((TextView) holder.itemView.findViewById(R.id.songArtist)).setText(mMessage.forwardedFrom.getAttachment().getName());
-                ((TextView) holder.itemView.findViewById(R.id.fileSize)).setText(AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
+                holder.cslf_txt_file_name.setText(mMessage.forwardedFrom.getAttachment().getName());
+                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
             }
             text = mMessage.forwardedFrom.getMessage();
         } else {
             if (mMessage.attachment != null) {
-                ((TextView) holder.itemView.findViewById(R.id.songArtist)).setText(mMessage.attachment.name);
-                ((TextView) holder.itemView.findViewById(R.id.fileSize)).setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
+                holder.cslf_txt_file_name.setText(mMessage.attachment.name);
+                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
             }
 
             text = mMessage.messageText;
@@ -81,30 +87,30 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
         RealmRoomMessage roomMessage = G.getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(mMessage.messageID)).findFirst();
         if (roomMessage != null) {
-            (holder.itemView.findViewById(R.id.thumbnail)).setVisibility(View.VISIBLE);
+            holder.thumbnail.setVisibility(View.VISIBLE);
             if (roomMessage.getForwardMessage() != null) {
                 if (roomMessage.getForwardMessage().getAttachment().getName().toLowerCase().endsWith(".pdf")) {
-                    ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.pdf_icon));
+                    holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.pdf_icon));
                 } else if (roomMessage.getForwardMessage().getAttachment().getName().toLowerCase().endsWith(".txt")) {
-                    ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
+                    holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
                 } else if (roomMessage.getForwardMessage().getAttachment().getName().toLowerCase().endsWith(".exe")) {
-                    ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
+                    holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
                 } else if (roomMessage.getForwardMessage().getAttachment().getName().toLowerCase().endsWith(".docs")) {
-                    ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
+                    holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
                 } else {
-                    ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
+                    holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
                 }
             } else {
                 if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".pdf")) {
-                    ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.pdf_icon));
+                    holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.pdf_icon));
                 } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".txt")) {
-                    ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
+                    holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
                 } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".exe")) {
-                    ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
+                    holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
                 } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".docs")) {
-                    ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
+                    holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
                 } else {
-                    ((ImageView) holder.itemView.findViewById(R.id.thumbnail)).setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
+                    holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.file_icon));
                 }
             }
         }
@@ -118,8 +124,8 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
-        ((TextView) holder.itemView.findViewById(R.id.songArtist)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-        ((TextView) holder.itemView.findViewById(R.id.fileSize)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        holder.cslf_txt_file_name.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        holder.cslf_txt_file_size.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
@@ -127,9 +133,9 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         /**
          * this commented code used with xml layout
          */
-        //protected TextView cslf_txt_file_name;
-        //protected TextView cslf_txt_file_size;
-        //protected ImageView thumbnail;
+        protected TextView cslf_txt_file_name;
+        protected TextView cslf_txt_file_size;
+        protected ImageView thumbnail;
 
         public ViewHolder(View view) {
             super(view);

@@ -51,9 +51,9 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         if (holder.itemView.findViewById(R.id.mainContainer) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getLocationItem());
 
-            holder.imgMapPosition = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
         }
 
+        holder.imgMapPosition = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
 
         super.bindView(holder, payloads);
 

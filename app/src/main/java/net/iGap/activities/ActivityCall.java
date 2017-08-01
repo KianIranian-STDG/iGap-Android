@@ -24,6 +24,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.OvershootInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -506,11 +507,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         btnChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HelperPublicMethod.goToChatRoom(true, userId, null, null);
 
-                if (!isConnected) {
+                boolean _fromCall = true;
+                if (!isConnected && isIncomingCall) {
                     endCall();
+                    _fromCall = false;
                 }
+
+                HelperPublicMethod.goToChatRoom(_fromCall, userId, null, null);
+
             }
         });
 
@@ -546,13 +551,14 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         if (isIncomingCall) {
             playRingtone();
+            layoutOption.setVisibility(View.GONE);
         } else {
 
             playSound(R.raw.igap_signaling);
 
             layoutAnswer.setVisibility(View.GONE);
             layoutChat.setVisibility(View.GONE);
-            layoutOption.setVisibility(View.INVISIBLE);
+
         }
 
         muteMusic();
@@ -601,8 +607,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         finish();
 
-        if (G.iCallFinish != null) {
-            G.iCallFinish.onFinish();
+        if (G.iCallFinishChat != null) {
+            G.iCallFinishChat.onFinish();
+        }
+
+        if (G.iCallFinishMain != null) {
+            G.iCallFinishMain.onFinish();
         }
 
         if (MusicPlayer.pauseSoundFromIGapCall) {
@@ -614,6 +624,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 setSpeakerphoneOn(true);
             }
         }
+
+        txtTimeChat = txtTimerMain = null;
+
     }
 
     private void answer(FrameLayout layoutAnswer, FrameLayout layoutChat) {
@@ -638,7 +651,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void startTimer() {
 
-        txtTimeChat = txtTimerMain = null;
 
         txtTimer.setVisibility(View.VISIBLE);
         secend = 0;
@@ -748,7 +760,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             ProtoFileDownload.FileDownload.Selector se = ProtoFileDownload.FileDownload.Selector.FILE;
             String dirPath = AndroidUtils.getFilePathWithCashId(av.getCacheId(), av.getName(), G.DIR_IMAGE_USER, false);
 
-            HelperDownloadFile.startDownload(av.getToken(), av.getCacheId(), av.getName(), av.getSize(), se, dirPath, 4, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(System.currentTimeMillis() + "", av.getToken(), av.getCacheId(), av.getName(), av.getSize(), se, dirPath, 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, int progress) {
 
@@ -839,7 +851,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             }
         }
 
-        //  startRingAnimation();
+        startRingAnimation();
     }
 
     private void playSound(final int resSound) {
@@ -920,44 +932,121 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         }
 
-        //  stopRingAnimation();
+        stopRingAnimation();
     }
 
     private void startRingAnimation() {
 
-        final int start = 2500;
-        final int duration = 500;
+        final int start = 1600;
+        final int duration = 700;
 
-        Animation animation1 = new TranslateAnimation(0, 0, 0, -getResources().getDimension(R.dimen.dp32));
+        final Animation animation1 = new TranslateAnimation(0, 0, 0, -getResources().getDimension(R.dimen.dp32));
         animation1.setStartOffset(start);
         animation1.setDuration(duration);
-        animation1.setRepeatMode(Animation.RESTART);
-        animation1.setRepeatCount(Animation.INFINITE);
-        animation1.setInterpolator(new OvershootInterpolator());
-        btnAnswer.setAnimation(animation1);
+        //animation1.setRepeatMode(Animation.RESTART);
+        //animation1.setRepeatCount(Animation.INFINITE);
+        animation1.setInterpolator(new BounceInterpolator());
 
-        Animation animation3 = new TranslateAnimation(0, 0, 0, -getResources().getDimension(R.dimen.dp32));
-        animation3.setStartOffset(start + 150);
-        animation3.setDuration(duration - 150);
-        animation3.setRepeatMode(Animation.RESTART);
-        animation3.setInterpolator(new OvershootInterpolator());
-        animation3.setRepeatCount(Animation.INFINITE);
-        btnCircleChat.setAnimation(animation3);
+        final Animation animation2 = new TranslateAnimation(0, 0, -getResources().getDimension(R.dimen.dp32), 0);
+        animation2.setDuration(duration);
+        animation2.setInterpolator(new BounceInterpolator());
 
-        Animation animation2 = new TranslateAnimation(0, 0, 0, -getResources().getDimension(R.dimen.dp32));
-        animation2.setStartOffset(start + 300);
-        animation2.setDuration(duration - 300);
-        animation2.setInterpolator(new OvershootInterpolator());
-        animation2.setRepeatMode(Animation.RESTART);
-        animation2.setRepeatCount(Animation.INFINITE);
-        btnEndCall.setAnimation(animation2);
+        animation1.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                btnAnswer.startAnimation(animation2);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        animation2.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                btnAnswer.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        btnAnswer.startAnimation(animation1);
+                    }
+                }, start);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        //AnimationSet animationSet = new AnimationSet(true);
+        //animationSet.addAnimation(animation1);
+        //animationSet.addAnimation(animation2);
+
+        btnAnswer.startAnimation(animation1);
+
+        //AnimationSet animationSet = new AnimationSet(true);
+        //
+        //TranslateAnimation a = new TranslateAnimation(Animation.ABSOLUTE,200, Animation.ABSOLUTE,200, Animation.ABSOLUTE,200, Animation.ABSOLUTE,200);
+        //a.setDuration(1000);
+        //
+        //RotateAnimation r = new RotateAnimation(0f, -90f,200,200);
+        //r.setStartOffset(1000);
+        //r.setDuration(1000);
+        //
+        //animationSet.addAnimation(a);
+        //animationSet.addAnimation(r);
+        //
+        //btnAnswer.setAnimation(animationSet);
+
+        //Animation animation3 = new TranslateAnimation(0, 0, 0, -getResources().getDimension(R.dimen.dp32));
+        //animation3.setStartOffset(start + 150);
+        //animation3.setDuration(duration - 150);
+        //animation3.setRepeatMode(Animation.RESTART);
+        //animation3.setInterpolator(new BounceInterpolator());
+        //animation3.setRepeatCount(Animation.INFINITE);
+        //btnCircleChat.setAnimation(animation3);
+        //
+        //Animation animation2 = new TranslateAnimation(0, 0, 0, -getResources().getDimension(R.dimen.dp32));
+        //animation2.setStartOffset(start + 300);
+        //animation2.setDuration(duration - 300);
+        //animation2.setInterpolator(new DecelerateInterpolator());
+        //animation2.setRepeatMode(Animation.RESTART);
+        //animation2.setRepeatCount(Animation.INFINITE);
+        //btnEndCall.setAnimation(animation2);
     }
 
     private void stopRingAnimation() {
 
-        btnAnswer.clearAnimation();
-        btnEndCall.clearAnimation();
-        btnCircleChat.clearAnimation();
+        try {
+
+            if (btnAnswer != null) {
+                btnAnswer.clearAnimation();
+            }
+
+            // btnEndCall.clearAnimation();
+            // btnCircleChat.clearAnimation();
+
+        } catch (Exception e) {
+
+            Log.e("debug", "activityCall     stopRingAnimation      " + e.toString());
+        }
+
+
+
+
     }
 
     //*****************************  distance sensor  **********************************************************
@@ -1090,7 +1179,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             canTouch = true;
             down = true;
 
-            //  stopRingAnimation();
+            stopRingAnimation();
         }
     }
 

@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.interfaces.IPopUpListener;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -71,8 +72,6 @@ import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-
-import static net.iGap.G.context;
 
 public class ActivityPopUpNotification extends ActivityEnhanced {
 
@@ -312,10 +311,7 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
 
     private void goToChatActivity() {
 
-        Intent intent = new Intent(context, ActivityChat.class);
-        intent.putExtra("RoomId", mList.get(viewPager.getCurrentItem()).getRoomId());
-        startActivity(intent);
-
+        new GoToChatActivity(mList.get(viewPager.getCurrentItem()).getRoomId()).setContext(ActivityPopUpNotification.this).startActivity();
         isGoingToChatFromPopUp = true;
 
         finish();
