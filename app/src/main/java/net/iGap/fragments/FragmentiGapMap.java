@@ -105,7 +105,6 @@ import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
-import static net.iGap.Config.URL_MAP;
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
@@ -242,10 +241,10 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
          * Use From Following Code For Custom Url Tile Server
          */
 
-        //String[] mStringArray = new String[mapUrls.size()];
-        //mStringArray = mapUrls.toArray(mStringArray);
+        String[] mStringArray = new String[mapUrls.size()];
+        mStringArray = mapUrls.toArray(mStringArray);
 
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{URL_MAP}) {
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", mStringArray) {
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;

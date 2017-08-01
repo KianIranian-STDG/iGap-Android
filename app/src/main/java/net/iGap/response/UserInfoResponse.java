@@ -25,9 +25,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserInfo;
 
-import static net.iGap.G.userId;
-import net.iGap.request.RequestUserInfo;
-
 public class UserInfoResponse extends MessageHandler {
 
     public int actionId;
@@ -120,14 +117,14 @@ public class UserInfoResponse extends MessageHandler {
                             FragmentShowMember.infoUpdateListenerCount.complete(true, "" + builder.getUser().getId(), "OK");
                         }
 
-                        // updata chat message header forward after get user or room info
+                        // update chat message header forward after get user or room info
                         if (AbstractMessage.updateForwardInfo != null) {
                             long _id = builder.getUser().getId();
                             if (AbstractMessage.updateForwardInfo.containsKey(_id)) {
-                                String messageid = AbstractMessage.updateForwardInfo.get(_id);
+                                String messageId = AbstractMessage.updateForwardInfo.get(_id);
                                 AbstractMessage.updateForwardInfo.remove(_id);
                                 if (ActivityChat.onUpdateUserOrRoomInfo != null) {
-                                    ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageid);
+                                    ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageId);
                                 }
                             }
                         }
@@ -139,7 +136,7 @@ public class UserInfoResponse extends MessageHandler {
                     G.handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            HelperLogMessage.updateLogMessageAfterGetUserInfo(G.logMessageUpdatList.get(builder.getUser().getId()));
+                            HelperLogMessage.updateLogMessageAfterGetUserInfo(builder.getUser().getId());
                         }
                     }, 500);
                 }
