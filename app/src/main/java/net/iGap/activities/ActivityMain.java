@@ -82,7 +82,6 @@ import net.iGap.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.interfaces.OnClientCondition;
 import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnConnectionChangeState;
-import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnRefreshActivity;
@@ -114,7 +113,6 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
-import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
@@ -123,7 +121,6 @@ import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
-import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
 
@@ -902,17 +899,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mapUrls == null || mapUrls.isEmpty()) {
-                    G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
-                        @Override
-                        public void onGetConfiguration() {
-                            openMapFragment();
-                        }
-                    };
-                    new RequestGeoGetConfiguration().getConfiguration();
-                } else {
+                //if (mapUrls == null || mapUrls.isEmpty()) {
+                //    G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
+                //        @Override
+                //        public void onGetConfiguration() {
+                //            openMapFragment();
+                //        }
+                //    };
+                //    new RequestGeoGetConfiguration().getConfiguration();
+                //} else {
                     openMapFragment();
-                }
+                //}
             }
         });
 

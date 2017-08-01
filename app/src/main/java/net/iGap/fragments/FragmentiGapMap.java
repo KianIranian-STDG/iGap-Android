@@ -163,6 +163,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private ProgressBar prgWatingSendMessage;
     private TextView txtSendMessageGps;
 
+    private boolean comment = true;
+
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -582,18 +584,21 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     private void drawMark(final OverlayItem mapItem, final boolean hasComment, final long userId) {
 
+
         G.handler.post(new Runnable() {
             @Override
             public void run() {
                 Marker marker = new Marker(map);
                 marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
                 if (G.userId != 0) {
-                    if (hasComment) {
-                        marker.setIcon(avatarMark());
+                    if (comment) {
+                        marker.setIcon(avatarMark(true));
                         //marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_yes));
+                        comment = false;
                     } else {
-                        marker.setIcon(avatarMark());
+                        marker.setIcon(avatarMark(false));
                         //marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_no));
+                        comment = true;
                     }
 
                     InfoWindow infoWindow = new MyInfoWindow(map, userId, hasComment, FragmentiGapMap.this, mActivity);
@@ -607,7 +612,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         });
     }
 
-    private Drawable avatarMark() {
+    private Drawable avatarMark(boolean hasComment) {
         String pathName = "";
         String initials = "";
         String color = "";
@@ -629,7 +634,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             bitmap = BitmapFactory.decodeFile(pathName);
         }
         realm.close();
-        return new BitmapDrawable(context.getResources(), getCircleBitmap(bitmap));
+        return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, hasComment));
     }
 
     private void currentLocation(Location location, boolean setDefaultZoom) {
@@ -657,23 +662,49 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         map.setScrollableAreaLimit(bBox);
     }
 
+    private Bitmap drawAvatar(Bitmap bm, boolean hasComment) {
+        Bitmap bitmap = getCircleBitmap(bm);
+        int firstBorderColor;
+        int firstBorderSize;
+        int secondBoarderColor;
+        int secondBoarderSize;
+        int thirdBoarderColor;
+        int thirdBoarderSize;
+        if (hasComment) {
+            firstBorderColor = Color.WHITE;
+            secondBoarderColor = Color.parseColor("#553dbcb3");
+            thirdBoarderColor = G.context.getResources().getColor(R.color.primary);
 
-    public static Bitmap getCircleBitmap(Bitmap bm) {
+            firstBorderSize = 2;
+            //firstBorderSize = (int) G.context.getResources().getDimension(R.dimen.dp4);
+            secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp18);
+            //thirdBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp4);
+            thirdBoarderSize = 2;
+        } else {
+            firstBorderColor = Color.WHITE;
+            secondBoarderColor = Color.parseColor("#554f4f4f");
+            thirdBoarderColor = G.context.getResources().getColor(R.color.colorOldBlack);
 
-        int sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp48), (int) G.context.getResources().getDimension(R.dimen.dp48));
+            firstBorderSize = 2;
+            //firstBorderSize = (int) G.context.getResources().getDimension(R.dimen.dp4);
+            secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp10);
+            //thirdBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp4);
+            thirdBoarderSize = 2;
+        }
+
+        bitmap = addBorderToCircularBitmap(bitmap, firstBorderSize, firstBorderColor);
+        bitmap = addBorderToCircularBitmap(bitmap, secondBoarderSize, secondBoarderColor);
+        bitmap = addBorderToCircularBitmap(bitmap, thirdBoarderSize, thirdBoarderColor);
+        return bitmap;
+    }
+
+    protected Bitmap getCircleBitmap(Bitmap bm) {
+        int sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp36), (int) G.context.getResources().getDimension(R.dimen.dp36));
         Bitmap bitmap = ThumbnailUtils.extractThumbnail(bm, sice, sice);
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        int halfWidth = bitmap.getWidth() / 2;
-        int halfWidth3 = bitmap.getWidth() / 3;
-        int halfHeight = bitmap.getHeight() / 2;
-        int halfHeight3 = bitmap.getHeight() / 3;
-
-        /**
-         * ******************* Avatar Start *******************
-         */
         Canvas canvas = new Canvas(output);
         Paint paint = new Paint();
-        Rect rect = new Rect(halfWidth - halfWidth3, halfHeight - halfHeight3, halfWidth + halfWidth3, halfHeight + halfHeight3);
+        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         RectF rectF = new RectF(rect);
 
         paint.setAntiAlias(true);
@@ -690,39 +721,22 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         paint.setStrokeWidth((float) 4);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
-        //******************* Avatar End *******************
-
-        /**
-         * ******************* Background Start *******************
-         */
-        Canvas canvasImage = new Canvas(output);
-        Paint paintImageStroke = new Paint();
-        Rect rectMain = new Rect(4, 4, bitmap.getWidth() - 4, bitmap.getHeight() - 4);
-        RectF rectFImage = new RectF(rectMain);
-
-        //===Stroke
-        paintImageStroke.setAntiAlias(true);
-        paintImageStroke.setDither(true);
-        paintImageStroke.setFilterBitmap(true);
-        canvasImage.drawARGB(0, 0, 0, 0);
-        paintImageStroke.setColor(Color.BLUE);
-        paintImageStroke.setStyle(Paint.Style.STROKE);
-        paintImageStroke.setStrokeWidth((float) 4);
-
-        //===Fill
-        Paint paintImageFill = new Paint();
-        paintImageFill.setAntiAlias(true);
-        paintImageFill.setDither(true);
-        paintImageFill.setFilterBitmap(true);
-        canvasImage.drawARGB(0, 0, 0, 0);
-        paintImageFill.setColor(Color.parseColor("#7f007fff"));
-        paintImageFill.setStyle(Paint.Style.FILL);
-        canvasImage.drawOval(rectFImage, paintImageFill);
-
-        canvasImage.drawOval(rectFImage, paintImageStroke);
-        //******************* Background End *******************
-
         return output;
+    }
+
+    protected Bitmap addBorderToCircularBitmap(Bitmap srcBitmap, int borderWidth, int borderColor) {
+        int dstBitmapWidth = srcBitmap.getWidth() + borderWidth * 2;
+        Bitmap dstBitmap = Bitmap.createBitmap(dstBitmapWidth, dstBitmapWidth, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(dstBitmap);
+        canvas.drawBitmap(srcBitmap, borderWidth, borderWidth, null);
+        Paint paint = new Paint();
+        paint.setColor(borderColor);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(borderWidth);
+        paint.setAntiAlias(true);
+        canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - borderWidth / 2, paint);
+        srcBitmap.recycle();
+        return dstBitmap;
     }
 
     /**
