@@ -172,7 +172,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private TextView txtGander;
     private TextView txtEmail;
     private EmojiTextViewE txtNickNameTitle;
-
+    static boolean isActiveRun = false;
     Realm mRealm;
 
     RealmUserInfo realmUserInfo;
@@ -2461,33 +2461,35 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     }
 
     private void dialogWaitTime(int title, long time, int majorCode) {
-        boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                dialog.dismiss();
-            }
-        }).show();
+        if (isActiveRun) {
+            boolean wrapInScrollView = true;
+            final MaterialDialog dialog = new MaterialDialog.Builder(ActivitySetting.this).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    dialog.dismiss();
+                }
+            }).show();
 
-        View v = dialog.getCustomView();
+            View v = dialog.getCustomView();
 
-        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
-        CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                int seconds = (int) ((millisUntilFinished) / 1000);
-                int minutes = seconds / 60;
-                seconds = seconds % 60;
-                remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-                //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
-            }
+            final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+            CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    int seconds = (int) ((millisUntilFinished) / 1000);
+                    int minutes = seconds / 60;
+                    seconds = seconds % 60;
+                    remindTime.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+                    //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                }
 
-            @Override
-            public void onFinish() {
-                //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
-            }
-        };
-        countWaitTimer.start();
+                @Override
+                public void onFinish() {
+                    //                dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                }
+            };
+            countWaitTimer.start();
+        }
     }
 
     private final CustomTabsActivityHelper.CustomTabsFallback mCustomTabsFallback = new CustomTabsActivityHelper.CustomTabsFallback() {
@@ -2525,5 +2527,17 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             super.onBackPressed();
         }
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isActiveRun = true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isActiveRun = false;
     }
 }
