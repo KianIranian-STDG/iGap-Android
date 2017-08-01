@@ -456,16 +456,19 @@ public class FragmentShowMember extends Fragment {
                 } else {
                     findMember = realm.where(RealmRegisteredInfo.class).equalTo(RealmRoomFields.ID, mRoomID).findAllSorted(RealmRegisteredInfoFields.DISPLAY_NAME);
                 }
-
-                RealmQuery<RealmMember> query = realm.where(RealmMember.class);
-                for (int i = 0; i < findMember.size(); i++) {
-                    if (i != 0) query = query.or();
-                    query = query.equalTo(RealmMemberFields.PEER_ID, findMember.get(i).getId());
+                try {
+                    RealmQuery<RealmMember> query = realmRoom.getGroupRoom().getMembers().where();
+                    for (int i = 0; i < findMember.size(); i++) {
+                        if (i != 0) query = query.or();
+                        query = query.equalTo(RealmMemberFields.PEER_ID, findMember.get(i).getId());
+                    }
+                    RealmResults<RealmMember> searchMember = query.findAll();
+                    mAdapter = new MemberAdapter(searchMember, realmRoom.getType(), mMainRole, userID);
+                    mRecyclerView.setAdapter(mAdapter);
+                } catch (Exception e) {
+                    e.getMessage();
                 }
-                RealmResults<RealmMember> searchMember = query.findAll();
-                mAdapter = new MemberAdapter(searchMember, realmRoom.getType(), mMainRole, userID);
-                mRecyclerView.setAdapter(mAdapter);
-                mAdapter.notifyDataSetChanged();
+
 
                 realm.close();
             }
