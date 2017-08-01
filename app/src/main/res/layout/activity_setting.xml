@@ -237,7 +237,7 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
-                android:text="@string/st_nickname"
+                android:text="@string/name"
                 android:textColor="@color/black_register"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal"

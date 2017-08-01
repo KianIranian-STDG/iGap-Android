@@ -1015,6 +1015,6 @@
 
   <string name="limit_for_set_username">Limit time for change Username</string>
   <string name="clear_cache_desc">Cached data on your device are the uploaded and/or downloaded files as photos, videos or documents, which must be cleared occasionally not to stop your device working or slow it down. Whenever you want to see them again, it is sufficient only to tap on them for downloading.</string>
-
+  <string name="name">Name</string>
 
 </resources>

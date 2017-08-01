@@ -113,6 +113,7 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
                 FragmentChooseCountry fragmentChooseCountry = new FragmentChooseCountry();
                 mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentChooseCountry, null).commit();
+                closeKeyboard(v);
 
             }
         });
@@ -330,5 +331,15 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
     }
-    //***************************************************************************************
+
+    private void closeKeyboard(View v) {
+        if (isAdded()) {
+            try {
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            } catch (IllegalStateException e) {
+                e.getStackTrace();
+            }
+        }
+    }
 }
