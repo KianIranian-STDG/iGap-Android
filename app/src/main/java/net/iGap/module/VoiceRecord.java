@@ -132,7 +132,7 @@ public class VoiceRecord {
     public void startVoiceRecord() {
 
         Vibrator v = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(200);
+        v.vibrate(35);
 
         canStop = false;
         startRecording();
