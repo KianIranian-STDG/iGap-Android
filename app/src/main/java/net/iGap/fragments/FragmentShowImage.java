@@ -776,9 +776,16 @@ public class FragmentShowImage extends Fragment {
                 return;
             }
 
-            mMediaPlayer.setSurface(surfaceTexture);
-            mMediaPlayer.setLooping(false);
-            mMediaPlayer.prepareAsync();
+            try {
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.setSurface(surfaceTexture);
+                    mMediaPlayer.setLooping(false);
+                    mMediaPlayer.prepareAsync();
+                }
+            } catch (IllegalStateException e) {
+                e.getMessage();
+            }
+
 
             mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -802,9 +809,6 @@ public class FragmentShowImage extends Fragment {
                     videoController.show();
                 }
             });
-
-
-
 
         }
 

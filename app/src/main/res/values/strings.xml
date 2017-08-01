@@ -681,7 +681,7 @@
   <string name="txt_draft">Draft: </string>
   <string name="txt_you">You: </string>
   <string name="you">You</string>
-  <string name="st_data_shams">Shamsi Date</string>
+  <string name="st_data_shams">Persian Date</string>
   <string name="do_you_want_left_this">"Are you sure you want to leave this room?"</string>
   <string name="do_you_want_delete_this">Are you sure you want to delete this room?</string>
   <string name="do_you_want_delete_this_channel">Are you sure you want to delete this channel?</string>
@@ -826,7 +826,7 @@
   <string name="my_contacts">My Contacts</string>
   <string name="privacy_setting">Privacy Setting</string>
   <string name="igap_search">Look and Find</string>
-  <string name="set_color_to_default">Set Colors as Default</string>
+  <string name="set_color_to_default">Reset Colors Back to Default</string>
   <string name="empty_message">Please try to enter the first 5 characters of username</string>
   <string name="empty_message3">Enter at least 3 characters to search</string>
   <string name="there_is_no_any_result">No Result</string>
