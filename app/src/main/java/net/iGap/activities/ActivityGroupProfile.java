@@ -1375,7 +1375,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
                 for (int i = 0; i < list.size(); i++) {
-                    new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, startMessageId);
+                    new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, getMessageId(message, countForShowLastMessage));
                 }
             }
         });
@@ -1387,6 +1387,42 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
 
         realm.close();
+    }
+
+    private Long getMessageId(String type, int count) {
+
+        long messageID;
+
+        if (type.equals("fromBegin")) {
+            messageID = 0;
+        } else if (type.equals("fromNow")) {
+
+            Realm realm = Realm.getDefaultInstance();
+            RealmRoomMessage realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).
+                findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).first();
+
+            if (realmRoomMessages != null) {
+                messageID = realmRoomMessages.getMessageId();
+            } else {
+                messageID = 0;
+            }
+            realm.close();
+        } else {
+
+            Realm realm = Realm.getDefaultInstance();
+            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).
+                findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+
+            if (realmRoomMessages.size() <= count) {
+                messageID = 0;
+            } else {
+                messageID = realmRoomMessages.get(count).getMessageId();
+            }
+
+            realm.close();
+        }
+
+        return messageID;
     }
 
     @Override

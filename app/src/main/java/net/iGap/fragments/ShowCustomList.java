@@ -238,15 +238,15 @@ public class ShowCustomList extends Fragment {
                     case 0:
                         count = 0;
                         if (onSelectedList != null) {
-                            onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                            onSelectedList.getSelectedList(true, "fromBegin", count, getSelectedList());
                         }
                         mActivity.getSupportFragmentManager().popBackStack();
                         break;
                     case 1:
-                        count = (int) lastId;
+                        count = 0;
                         if (onSelectedList != null) {
 
-                            onSelectedList.getSelectedList(true, "", count, getSelectedList());
+                            onSelectedList.getSelectedList(true, "fromNow", count, getSelectedList());
                         }
                         mActivity.getSupportFragmentManager().popBackStack();
                         break;
