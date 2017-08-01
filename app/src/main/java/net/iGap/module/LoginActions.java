@@ -17,6 +17,7 @@ import net.iGap.realm.RealmPhoneContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
+import net.iGap.request.RequestGeoGetRegisterStatus;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserInfo;
@@ -93,7 +94,7 @@ public class LoginActions extends Application {
                             new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
                         }
 
-                        //new RequestGeoGetConfiguration().getConfiguration();
+                        new RequestGeoGetRegisterStatus().getRegisterStatus();
                         //sendWaitingRequestWrappers();
                     }
                 });

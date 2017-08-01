@@ -1009,7 +1009,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
                         @Override
                         public void onGetConfiguration() {
-                            openMapFragment();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    openMapFragment();
+                                }
+                            });
                         }
                     };
                     new RequestGeoGetConfiguration().getConfiguration();

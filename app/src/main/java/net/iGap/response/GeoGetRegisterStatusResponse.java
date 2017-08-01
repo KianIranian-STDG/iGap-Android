@@ -11,8 +11,10 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.module.GPSTracker;
 import net.iGap.proto.ProtoGeoGetRegisterStatus;
+import net.iGap.request.RequestGeoGetRegisterStatus;
 import net.iGap.request.RequestGeoUpdatePosition;
 
 public class GeoGetRegisterStatusResponse extends MessageHandler {
@@ -35,11 +37,12 @@ public class GeoGetRegisterStatusResponse extends MessageHandler {
 
 
         final ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse.Builder builder = (ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse.Builder) message;
+        FragmentiGapMap.mapRegistrationStatus = builder.getEnable();
         G.handler.post(new Runnable() {
             @Override
             public void run() {
                 if (builder.getEnable()) {
-                    GPSTracker gps = new GPSTracker();
+                    GPSTracker gps = GPSTracker.getGpsTrackerInstance();
                     gps.detectLocation();
                     if (gps.canGetLocation()) {
                         new RequestGeoUpdatePosition().updatePosition(gps.getLatitude(), gps.getLongitude());
@@ -52,6 +55,12 @@ public class GeoGetRegisterStatusResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new RequestGeoGetRegisterStatus().getRegisterStatus();
+            }
+        }, 5000);
     }
 
     @Override

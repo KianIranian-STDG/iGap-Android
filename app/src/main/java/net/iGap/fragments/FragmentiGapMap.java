@@ -49,7 +49,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -57,7 +56,6 @@ import io.realm.Realm;
 import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
-import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperImageBackColor;
@@ -79,7 +77,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
-import net.iGap.request.RequestGeoGetRegisterStatus;
 import net.iGap.request.RequestGeoRegister;
 import net.iGap.request.RequestGeoUpdateComment;
 import org.osmdroid.api.IMapController;
@@ -132,9 +129,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     private boolean firstEnter = true;
     private boolean canUpdate = true;
-    private boolean mapRegisterState = true;
     private boolean isGpsOn = false;
     private boolean first = true;
+    public static boolean mapRegistrationStatus;
     private EditText edtMessageGps;
     private final double LONGITUDE_LIMIT = 0.011;
     private final double LATITUDE_LIMIT = 0.009;
@@ -152,18 +149,15 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     private int lastSpecialRequestsCursorPosition = 0;
     private final int DEFAULT_LOOP_TIME = (int) (10 * DateUtils.SECOND_IN_MILLIS);
-    private final int ZOOM_LEVEL_MIN = 15;
+    private final int ZOOM_LEVEL_MIN = 14;
     private final int ZOOM_LEVEL_NORMAL = 16;
-    private final int ZOOM_LEVEL_MAX = 17;
+    private final int ZOOM_LEVEL_MAX = 18;
 
     private long latestUpdateTime = 0;
     long firstTap = 0;
     private FloatingActionButton fabGps;
-    private ProgressBar prgWatingSendMessage;
+    private ProgressBar prgWaitingSendMessage;
     private TextView txtSendMessageGps;
-
-    private boolean comment = true;
-
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -186,10 +180,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         G.onGeoGetComment = this;
         startMap(view);
         //statusCheck();
-        clickDrawMarkActive();
+        //clickDrawMarkActive();
 
         page = 1;
-        new RequestGeoGetRegisterStatus().getRegisterStatus();
         new RequestGeoGetComment().getComment(userId);
     }
 
@@ -302,7 +295,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         });
 
-        prgWatingSendMessage = (ProgressBar) view.findViewById(R.id.prgWaitSendMessage);
+        prgWaitingSendMessage = (ProgressBar) view.findViewById(R.id.prgWaitSendMessage);
         txtSendMessageGps = (TextView) view.findViewById(R.id.txtSendMessageGps);
         txtSendMessageGps.setTextColor(Color.parseColor(G.appBarColor));
 
@@ -314,7 +307,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                     public void run() {
 
                         txtSendMessageGps.setVisibility(View.VISIBLE);
-                        prgWatingSendMessage.setVisibility(View.GONE);
+                        prgWaitingSendMessage.setVisibility(View.GONE);
                         edtMessageGps.setEnabled(true);
                         edtMessageGps.setText("");
                     }
@@ -328,7 +321,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                     public void run() {
 
                         txtSendMessageGps.setVisibility(View.VISIBLE);
-                        prgWatingSendMessage.setVisibility(View.GONE);
+                        prgWaitingSendMessage.setVisibility(View.GONE);
                         edtMessageGps.setEnabled(true);
                     }
                 });
@@ -341,7 +334,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                     public void run() {
 
                         txtSendMessageGps.setVisibility(View.VISIBLE);
-                        prgWatingSendMessage.setVisibility(View.GONE);
+                        prgWaitingSendMessage.setVisibility(View.GONE);
                         edtMessageGps.setEnabled(true);
                     }
                 });
@@ -353,7 +346,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             public void onClick(View v) {
 
                 txtSendMessageGps.setVisibility(View.GONE);
-                prgWatingSendMessage.setVisibility(View.VISIBLE);
+                prgWaitingSendMessage.setVisibility(View.VISIBLE);
                 edtMessageGps.setEnabled(false);
                 new RequestGeoUpdateComment().updateComment(edtMessageGps.getText().toString());
                 //edtMessageGps.setText("");
@@ -402,7 +395,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 if (location != null) {
                     currentLocation(location, false);
                 } else {
-                    new GPSTracker().detectLocation();
+                    GPSTracker.getGpsTrackerInstance().detectLocation();
                 }
             }
         });
@@ -581,7 +574,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         drawMark(mapItem, hasComment, userId);
     }
 
-    private void drawMark(final OverlayItem mapItem, final boolean hasComment, final long userId) {
+    private void drawMark(final OverlayItem mapItem, final boolean hasComment, final long userIdR) {
 
 
         G.handler.post(new Runnable() {
@@ -590,17 +583,15 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 Marker marker = new Marker(map);
                 marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
                 if (G.userId != 0) {
-                    if (comment) {
-                        marker.setIcon(avatarMark(true));
+                    if (hasComment) {
+                        marker.setIcon(avatarMark(userIdR, true));
                         //marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_yes));
-                        comment = false;
                     } else {
-                        marker.setIcon(avatarMark(false));
+                        marker.setIcon(avatarMark(userIdR, false));
                         //marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_no));
-                        comment = true;
                     }
 
-                    InfoWindow infoWindow = new MyInfoWindow(map, userId, hasComment, FragmentiGapMap.this, mActivity);
+                    InfoWindow infoWindow = new MyInfoWindow(map, userIdR, hasComment, FragmentiGapMap.this, mActivity);
                     marker.setInfoWindow(infoWindow);
                 }
 
@@ -611,19 +602,19 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         });
     }
 
-    private Drawable avatarMark(boolean hasComment) {
+    private Drawable avatarMark(long userId, boolean hasComment) {
         String pathName = "";
         String initials = "";
         String color = "";
         Bitmap bitmap = null;
         Realm realm = Realm.getDefaultInstance();
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, G.userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
             if (avatar.getFile() != null) {
                 pathName = avatar.getFile().getLocalFilePath();
             }
         }
         if (pathName == null || pathName.isEmpty()) {
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, G.userId).findFirst();
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
             if (realmRegisteredInfo != null) {
                 initials = realmRegisteredInfo.getInitials();
                 color = realmRegisteredInfo.getColor();
@@ -698,7 +689,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     }
 
     protected Bitmap getCircleBitmap(Bitmap bm) {
-        int sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp36), (int) G.context.getResources().getDimension(R.dimen.dp36));
+        int sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp24), (int) G.context.getResources().getDimension(R.dimen.dp24));
         Bitmap bitmap = ThumbnailUtils.extractThumbnail(bm, sice, sice);
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
@@ -874,14 +865,14 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         latestLocation = locationOverlay;
         map.getOverlays().add(locationOverlay);
 
-        if (BuildConfig.DEBUG) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context, "Update Position", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+        //if (BuildConfig.DEBUG) {
+        //    G.handler.post(new Runnable() {
+        //        @Override
+        //        public void run() {
+        //            Toast.makeText(context, "Update Position", Toast.LENGTH_SHORT).show();
+        //        }
+        //    });
+        //}
     }
 
     @Override
@@ -912,12 +903,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
         } else {// GPS is on
             isGpsOn = true;
-            if (mapRegisterState) {
+            if (mapRegistrationStatus) {
                 rootTurnOnGps.setVisibility(View.GONE);
                 fabGps.setVisibility(View.VISIBLE);
                 vgMessageGps.setVisibility(View.VISIBLE);
                 rippleMoreMap.setVisibility(View.VISIBLE);
-                new GPSTracker().detectLocation();
+                GPSTracker.getGpsTrackerInstance().detectLocation();
             } else {
                 visibleViewAttention(mActivity.getResources().getString(R.string.Visible_Status_text));
             }
@@ -954,8 +945,6 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     @Override
     public void onState(final boolean state) {
-        mapRegisterState = state;
-
         G.handler.post(new Runnable() {
             @Override
             public void run() {
