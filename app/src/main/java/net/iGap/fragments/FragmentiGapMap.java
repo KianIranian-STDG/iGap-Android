@@ -158,6 +158,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private final int ZOOM_LEVEL_MIN = 13;
     private final int ZOOM_LEVEL_NORMAL = 16;
     private final int ZOOM_LEVEL_MAX = 19;
+    private final int BOUND_LIMIT_METERS = 5000;
     private int lastSpecialRequestsCursorPosition = 0;
 
     private long latestUpdateTime = 0;
@@ -627,13 +628,34 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     private void mapBounding(Location location) {
         double extraBounding = 0.01;
-
-        northLimitation = location.getLatitude() + LATITUDE_LIMIT;
-        eastLimitation = location.getLongitude() + LONGITUDE_LIMIT;
-        southLimitation = location.getLatitude() - LATITUDE_LIMIT;
-        westLimitation = location.getLongitude() - LONGITUDE_LIMIT;
-        BoundingBoxE6 bBox = new BoundingBoxE6(northLimitation + extraBounding, eastLimitation + extraBounding, southLimitation - extraBounding, westLimitation - extraBounding);
+        double[] bound = getBoundingBox(location.getLatitude(), location.getLongitude(), BOUND_LIMIT_METERS);
+        northLimitation = bound[2];
+        eastLimitation = bound[3];
+        southLimitation = bound[0];
+        westLimitation = bound[1];
+        BoundingBoxE6 bBox = new BoundingBoxE6(bound[2] + extraBounding, bound[3] + extraBounding, bound[0] - extraBounding, bound[1] - extraBounding);
         map.setScrollableAreaLimit(bBox);
+    }
+
+    private double[] getBoundingBox(final double pLatitude, final double pLongitude, final int pDistanceInMeters) {
+        final double[] boundingBox = new double[4];
+        final double latRadian = Math.toRadians(pLatitude);
+        final double degLatKm = 110.574235;
+        final double degLongKm = 110.572833 * Math.cos(latRadian);
+        final double deltaLat = pDistanceInMeters / 1000.0 / degLatKm;
+        final double deltaLong = pDistanceInMeters / 1000.0 / degLongKm;
+
+        final double minLat = pLatitude - deltaLat;
+        final double minLong = pLongitude - deltaLong;
+        final double maxLat = pLatitude + deltaLat;
+        final double maxLong = pLongitude + deltaLong;
+
+        boundingBox[0] = minLat; // south
+        boundingBox[1] = minLong; // west
+        boundingBox[2] = maxLat; // north
+        boundingBox[3] = maxLong; // east
+
+        return boundingBox;
     }
 
     public static void deleteMapFileCash() {
@@ -933,10 +955,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         if (firstEnter) {
             firstEnter = false;
             currentLocation(location, true);
-            mapBounding(location);
             getCoordinateLoop(0, false);
         }
-
+        mapBounding(location);
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         OverlayItem overlayItem = new OverlayItem("title", "City", geoPoint);
 
@@ -1076,7 +1097,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
         if (map.getZoomLevel() == ZOOM_LEVEL_MAX) {
-            map.getController().zoomTo(ZOOM_LEVEL_NORMAL);
+            map.getController().zoomTo(ZOOM_LEVEL_MAX - 1);
         }
         return false;
     }
