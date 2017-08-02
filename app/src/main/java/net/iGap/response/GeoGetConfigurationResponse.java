@@ -10,9 +10,11 @@
 
 package net.iGap.response;
 
+import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.proto.ProtoGeoGetConfiguration;
+import net.iGap.realm.RealmGeoGetConfiguration;
 
 public class GeoGetConfigurationResponse extends MessageHandler {
 
@@ -31,11 +33,28 @@ public class GeoGetConfigurationResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoGeoGetConfiguration.GeoGetConfigurationResponse.Builder builder = (ProtoGeoGetConfiguration.GeoGetConfigurationResponse.Builder) message;
+        final ProtoGeoGetConfiguration.GeoGetConfigurationResponse.Builder builder = (ProtoGeoGetConfiguration.GeoGetConfigurationResponse.Builder) message;
 
         for (ProtoGeoGetConfiguration.GeoGetConfigurationResponse.TileServer tileServer : builder.getTileServerList()) {
             FragmentiGapMap.mapUrls.add(tileServer.getBaseUrl());
         }
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmGeoGetConfiguration realmGeoGetConfiguration = realm.where(RealmGeoGetConfiguration.class).findFirst();
+                if (realmGeoGetConfiguration == null) {
+                    realmGeoGetConfiguration = realm.createObject(RealmGeoGetConfiguration.class);
+                } else {
+                    if (realmGeoGetConfiguration.getMapCache() != null && !realmGeoGetConfiguration.getMapCache().equals(builder.getCacheId())) {
+                        FragmentiGapMap.deleteMapFileCash();
+                    }
+                }
+                realmGeoGetConfiguration.setMapCache(builder.getCacheId());
+            }
+        });
+        realm.close();
 
         if (G.onGeoGetConfiguration != null) {
             G.onGeoGetConfiguration.onGetConfiguration();

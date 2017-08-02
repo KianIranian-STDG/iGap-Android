@@ -243,6 +243,15 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         /**
          * Use From Following Code For Custom Url Tile Server
          */
+
+
+        //Random r = new Random();
+        //int randomNumber = r.nextInt(mapUrls.size());
+        //if (randomNumber >= mapUrls.size()) {
+        //    randomNumber = mapUrls.size() - 1;
+        //}
+        //String url = mapUrls.get(randomNumber);
+
         map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{URL_MAP}) { //mapUrls.toArray(new String[mapUrls.size()]), new String[]{URL_MAP}
             @Override
             public String getTileURLString(MapTile aTile) {

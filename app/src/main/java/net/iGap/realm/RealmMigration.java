@@ -144,6 +144,8 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 12) {
             RealmObjectSchema realmGeoNearbyDistance = schema.create(RealmGeoNearbyDistance.class.getSimpleName()).addField("userId", long.class).addField("hasComment", boolean.class).addField("distance", int.class).addField("comment", String.class);
             realmGeoNearbyDistance.addPrimaryKey("userId");
+
+            schema.create(RealmGeoGetConfiguration.class.getSimpleName()).addField("mapCache", String.class);
             oldVersion++;
         }
     }
