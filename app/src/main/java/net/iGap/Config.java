@@ -55,7 +55,7 @@ public class Config {
     public static String default_headerTextColor = "#00B0BF";
     public static String default_progressColor = "#00B0BF";
 
-    public static final String URL_WEBSOCKET = "wss://secure.igap.net/test/";
+    public static final String URL_WEBSOCKET = "wss://secure.igap.net/hybrid/";
     public static final String URL_MAP = "https://c.tile.openstreetmap.org/";
 
     public static final String PUBLIC_KEY_CLIENT = "-----BEGIN PUBLIC KEY-----\n"

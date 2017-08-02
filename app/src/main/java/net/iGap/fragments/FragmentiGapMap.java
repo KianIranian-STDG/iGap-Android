@@ -62,6 +62,7 @@ import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnGeoCommentResponse;
 import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
+import net.iGap.interfaces.OnInfo;
 import net.iGap.interfaces.OnLocationChanged;
 import net.iGap.interfaces.OnMapClose;
 import net.iGap.interfaces.OnMapRegisterState;
@@ -102,6 +103,7 @@ import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
+import static net.iGap.Config.URL_MAP;
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
@@ -137,8 +139,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private boolean first = true;
     public static boolean mapRegistrationStatus;
 
-    private final double LONGITUDE_LIMIT = 0.011;
-    private final double LATITUDE_LIMIT = 0.009;
+    private final double LONGITUDE_LIMIT = 0.011; // 0.0552 (5 KiloMeters) , 0.011 (1 KiloMeters)
+    private final double LATITUDE_LIMIT = 0.009; // 0.0451 (5 KiloMeters) , 0.009 (1 KiloMeters)
     private double northLimitation;
     private double eastLimitation;
     private double southLimitation;
@@ -152,9 +154,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public static final int pageiGapMap = 1;
     public static final int pageUserList = 2;
     private final int DEFAULT_LOOP_TIME = (int) (10 * DateUtils.SECOND_IN_MILLIS);
-    private final int ZOOM_LEVEL_MIN = 14;
+    private final int ZOOM_LEVEL_MIN = 13;
     private final int ZOOM_LEVEL_NORMAL = 16;
-    private final int ZOOM_LEVEL_MAX = 18;
+    private final int ZOOM_LEVEL_MAX = 19;
     private int lastSpecialRequestsCursorPosition = 0;
 
     private long latestUpdateTime = 0;
@@ -238,7 +240,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         /**
          * Use From Following Code For Custom Url Tile Server
          */
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", mapUrls.toArray(new String[mapUrls.size()])) {
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{URL_MAP}) { //mapUrls.toArray(new String[mapUrls.size()]), new String[]{URL_MAP}
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
@@ -677,9 +679,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         int thirdBoarderColor;
         int thirdBoarderSize;
         if (mineAvatar) {
-            firstBorderColor = G.context.getResources().getColor(R.color.primary);
-            secondBoarderColor = Color.parseColor("#553dbcb3");
-            thirdBoarderColor = G.context.getResources().getColor(R.color.primary);
+            firstBorderColor = Color.parseColor("#f23131");
+            secondBoarderColor = Color.parseColor("#55f23131");
+            thirdBoarderColor = Color.parseColor("#f23131");
 
             firstBorderSize = 2;
             secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp6);
@@ -905,13 +907,16 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     @Override
     public void onNearbyCoordinate(List<ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result> results) {
-        for (Marker marker : markers) {
-            map.getOverlays().remove(marker);
-        }
+        map.getOverlays().removeAll(markers);
 
-        for (ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result result : results) {
-            if (userId != result.getUserId()) { // don't show my account
-                drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+        for (final ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result result : results) {
+            if (G.userId != result.getUserId()) { // don't show mine
+                RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
+                    @Override
+                    public void onInfo(RealmRegisteredInfo registeredInfo) {
+                        drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+                    }
+                });
             }
         }
     }
