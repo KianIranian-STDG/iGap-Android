@@ -1431,9 +1431,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     editor.apply();
                 }
 
-                if (G.onRefreshActivity != null) {
-                    G.onRefreshActivity.refresh("");
-                }
+                G.isUpdateNotificaionColorMain = true;
+                G.isUpdateNotificaionColorChannel = true;
+                G.isUpdateNotificaionColorGroup = true;
+                G.isUpdateNotificaionColorChat = true;
+                G.isUpdateNotificaionCall = true;
+
+                //if (G.onRefreshActivity != null) {
+                //    G.onRefreshActivity.refresh("");
+                //}
             }
         });
 
@@ -2175,9 +2181,14 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
         editor.apply();
 
-        if (updateUi && G.onRefreshActivity != null) {
-            G.onRefreshActivity.refresh("");
-        }
+        G.isUpdateNotificaionColorMain = true;
+        G.isUpdateNotificaionColorChannel = true;
+        G.isUpdateNotificaionColorGroup = true;
+        G.isUpdateNotificaionColorChat = true;
+
+        //if (updateUi && G.onRefreshActivity != null) {
+        //    G.onRefreshActivity.refresh("");
+        //}
     }
 
     private void progressColorClick(int color, boolean updateUi) {
@@ -2189,9 +2200,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
         editor.apply();
 
-        if (updateUi && G.onRefreshActivity != null) {
-            G.onRefreshActivity.refresh("");
-        }
+        //if (updateUi && G.onRefreshActivity != null) {
+        //    G.onRefreshActivity.refresh("");
+        //}
     }
 
     private void toggleBottomClick(int color) {

@@ -266,6 +266,13 @@ public class G extends MultiDexApplication {
     public static boolean isInCall = false;
     public static boolean isShowRatingDialog = false;
 
+    public static boolean isUpdateNotificaionColorMain = false;
+    public static boolean isUpdateNotificaionColorChannel = false;
+    public static boolean isUpdateNotificaionColorGroup = false;
+    public static boolean isUpdateNotificaionColorChat = false;
+    public static boolean isUpdateNotificaionCall = false;
+
+
     public static String salectedTabInMainActivity = "";
     public static boolean isMainRecreate = false;
 

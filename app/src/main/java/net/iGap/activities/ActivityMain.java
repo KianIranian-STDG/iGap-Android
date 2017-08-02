@@ -681,7 +681,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
 
-                    navigationTabStrip.setViewPager(mViewPager, 0);
+                    mViewPager.setCurrentItem(4);
+                    navigationTabStrip.setViewPager(mViewPager);
 
                     setmViewPagerSelectedItem();
 
@@ -1461,7 +1462,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void initComponent() {
 
         contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
-        AppUtils.setProgresColler(contentLoading);
+
 
         RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
         rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -1699,6 +1700,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onResume() {
         super.onResume();
+
         /**
          * after change language in ActivitySetting this part refresh Activity main
          */
@@ -1739,6 +1741,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             return;
         }
+
+        if (contentLoading != null) {
+            AppUtils.setProgresColler(contentLoading);
+        }
+
 
 
         if (ActivityCall.isConnected || fromCall) {

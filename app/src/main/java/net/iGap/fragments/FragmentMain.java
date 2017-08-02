@@ -126,7 +126,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
 
         progressBar = (ProgressBar) view.findViewById(R.id.ac_progress_bar_waiting);
-        AppUtils.setProgresColler(progressBar);
+
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_main_swipe_refresh_layout);
         swipeRefreshLayout.setRefreshing(false);
@@ -1194,4 +1194,61 @@ public class FragmentMain extends Fragment implements OnComplete {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (progressBar != null) {
+            AppUtils.setProgresColler(progressBar);
+        }
+
+        boolean canUpdate = false;
+
+        if (mainType != null) {
+            switch (mainType) {
+
+                case all:
+                    if (G.isUpdateNotificaionColorMain) {
+                        canUpdate = true;
+                        G.isUpdateNotificaionColorMain = false;
+                    }
+                    break;
+                case chat:
+                    if (G.isUpdateNotificaionColorChat) {
+                        canUpdate = true;
+                        G.isUpdateNotificaionColorChat = false;
+                    }
+                    break;
+                case group:
+                    if (G.isUpdateNotificaionColorGroup) {
+                        canUpdate = true;
+                        G.isUpdateNotificaionColorGroup = false;
+                    }
+                    break;
+                case channel:
+                    if (G.isUpdateNotificaionColorChannel) {
+                        canUpdate = true;
+                        G.isUpdateNotificaionColorChannel = false;
+                    }
+                    break;
+            }
+        }
+
+        if (canUpdate) {
+
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mRecyclerView != null) {
+                        if (mRecyclerView.getAdapter() != null) {
+                            mRecyclerView.getAdapter().notifyDataSetChanged();
+                        }
+                    }
+                }
+            }, 200);
+        }
+    }
+
+
 }

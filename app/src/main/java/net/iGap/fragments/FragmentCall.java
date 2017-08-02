@@ -108,7 +108,7 @@ import net.iGap.request.RequestSignalingGetLog;
         imgCallEmpty = (AppCompatImageView) view.findViewById(R.id.img_icCall);
         empty_call = (TextView) view.findViewById(R.id.textEmptyCal);
         progressBar = (ProgressBar) view.findViewById(R.id.fc_progress_bar_waiting);
-        AppUtils.setProgresColler(progressBar);
+
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_call_ripple_txtBack);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -539,5 +539,31 @@ import net.iGap.request.RequestSignalingGetLog;
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (progressBar != null) {
+            AppUtils.setProgresColler(progressBar);
+        }
+
+        if (G.isUpdateNotificaionCall) {
+            G.isUpdateNotificaionCall = false;
+
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mRecyclerView != null) {
+                        if (mRecyclerView.getAdapter() != null) {
+                            mRecyclerView.getAdapter().notifyDataSetChanged();
+                        }
+                    }
+                }
+            }, 200);
+        }
+
+
     }
 }
