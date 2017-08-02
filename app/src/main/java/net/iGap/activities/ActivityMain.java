@@ -574,33 +574,58 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 if (G.salectedTabInMainActivity.length() > 0) {
 
-                    FragmentPagerAdapter _adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+                    if (HelperCalander.isLanguagePersian) {
 
-                    for (int i = 0; i < _adapter.getCount(); i++) {
-
-                        if (_adapter.getItem(i) instanceof FragmentMain) {
-
-                            FragmentMain fm = (FragmentMain) _adapter.getItem(i);
-
-                            if (G.salectedTabInMainActivity.equals(fm.mainType.toString())) {
-                                mViewPager.setCurrentItem(i, false);
-                                break;
-                            }
-                        } else if (_adapter.getItem(i) instanceof FragmentCall) {
-
-                            if (G.salectedTabInMainActivity.equals(_adapter.getItem(i).getClass().getName())) {
-                                mViewPager.setCurrentItem(i, false);
-                                break;
-                            }
+                        if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
+                            mViewPager.setCurrentItem(4, false);
+                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
+                            mViewPager.setCurrentItem(3, false);
+                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
+                            mViewPager.setCurrentItem(2, false);
+                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
+                            mViewPager.setCurrentItem(1, false);
+                        } else {
+                            mViewPager.setCurrentItem(0, false);
                         }
+                    } else {
+
+                        if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
+                            mViewPager.setCurrentItem(0, false);
+                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
+                            mViewPager.setCurrentItem(1, false);
+                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
+                            mViewPager.setCurrentItem(2, false);
+                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
+                            mViewPager.setCurrentItem(3, false);
+                        } else {
+                            mViewPager.setCurrentItem(4, false);
+                        }
+
                     }
+
+                    G.salectedTabInMainActivity = "";
+
+
                 } else {
 
                     if (HelperCalander.isLanguagePersian) {
-                        mViewPager.setCurrentItem(pages.size() - 1, false);
+                        mViewPager.setCurrentItem(4, false);
+                    } else {
+                        mViewPager.setCurrentItem(0, false);
                     }
                 }
-                G.salectedTabInMainActivity = "";
+
+                if (HelperCalander.isLanguagePersian) {
+
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewPager.setOffscreenPageLimit(5);
+                        }
+                    }, 300);
+                }
+
+
             }
         }, 50);
     }
@@ -632,19 +657,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        if (getSupportFragmentManager().getFragments() != null) {
-            for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                if (fragment != null && (fragment instanceof FragmentCall || fragment instanceof FragmentMain)) getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-            }
-        }
-
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        if (!HelperCalander.isLanguagePersian) {
+            mViewPager.setOffscreenPageLimit(5);
+        }
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
 
         if (HelperCalander.isLanguagePersian) {
-
-
 
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -659,8 +680,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
-
-                    mViewPager.setOffscreenPageLimit(pages.size());
 
                     navigationTabStrip.setViewPager(mViewPager, 0);
 
@@ -697,12 +716,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     pages.add(fragmentCall);
 
                     mViewPager.getAdapter().notifyDataSetChanged();
-                    mViewPager.setOffscreenPageLimit(pages.size());
 
                     setmViewPagerSelectedItem();
 
                 }
-            }, 1500);
+            }, 1000);
         }
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
@@ -1696,9 +1714,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (G.isMainRecreate) {
             G.isMainRecreate = false;
 
+            pages.clear();
+            mViewPager.setAdapter(null);
+            fragmentCall = null;
+            sampleFragmentPagerAdapter = null;
+            mViewPager.setOffscreenPageLimit(0);
+
+            if (getSupportFragmentManager().getFragments() != null) {
+                for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                    if (fragment != null && (fragment instanceof FragmentCall || fragment instanceof FragmentMain)) {
+                        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                    }
+                }
+            }
+
+
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+
                     recreate();
                 }
             }, 200);

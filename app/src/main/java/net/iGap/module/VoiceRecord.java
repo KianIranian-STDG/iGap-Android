@@ -328,6 +328,10 @@ public class VoiceRecord {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else {
+                if (onVoiceRecordListener != null) {
+                    onVoiceRecordListener.onVoiceRecordCancel();
+                }
             }
         }
     }
