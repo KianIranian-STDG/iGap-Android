@@ -165,10 +165,10 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:gravity="center"
-            android:text="@string/md_igap_check"
+            android:text="@string/md_close_button"
             android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@color/gray_4c"
-            android:visibility="gone"
+            android:visibility="visible"
             />
 
           <ProgressBar
