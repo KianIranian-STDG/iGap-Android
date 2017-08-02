@@ -16,6 +16,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityIntroduce;
 import net.iGap.activities.ActivityMain;
+import net.iGap.activities.ActivityManageSpace;
 import net.iGap.activities.ActivityProfile;
 import net.iGap.activities.ActivityRegister;
 import net.iGap.module.enums.ConnectionState;
@@ -51,7 +52,7 @@ public class HelperConnectionState {
             G.latestConnectionState = ConnectionState.UPDATING;
         }
 
-        if (G.currentActivity instanceof ActivityMain || G.currentActivity instanceof ActivityIntroduce || G.currentActivity instanceof ActivityRegister || G.currentActivity instanceof ActivityProfile || connectionState == ConnectionState.IGAP || connectionState == ConnectionState.UPDATING) {
+        if (G.currentActivity instanceof ActivityMain || G.currentActivity instanceof ActivityIntroduce || G.currentActivity instanceof ActivityRegister || G.currentActivity instanceof ActivityProfile || G.currentActivity instanceof ActivityManageSpace || connectionState == ConnectionState.IGAP || connectionState == ConnectionState.UPDATING) {
 
             if (snack != null) {
                 if (snack.isShown()) {

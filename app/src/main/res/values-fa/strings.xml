@@ -1033,14 +1033,15 @@
   <string name="list_user_map">لیست افراد</string>
   <string name="map_registration">نمایش موقعیت شما</string>
   <string name="comment_waiting">در حال دریافت یادداشت</string>
-  <string name="comment_no">یادداشتی وجود ندارد</string>
+  <string name="comment_no">بدون وضعیت</string>
   <string formatted="false" name="distance">حدود %d متر</string>
-  <string name="hint_gps">متن مورد نظر خود را وارد کنید</string>
+  <string name="hint_gps">وضعیت شما</string>
 
-
-  <string name="Visible_Status_title_dialog">موقعیت قابل مشاهده</string>
+  <string name="Visible_Status_title_dialog">قابلیت نمایش وضعیت</string>
   <string name="Visible_Status_text_dialog">آیا از اینکه موقعیتتان برای سایرین قابل مشاهده باشد، اطمینان دارید؟</string>
   <string name="Visible_Status_text_dialog_invisible">آیا از اینکه موقعیتتان برای سایرین غیر قابل مشاهده باشد، اطمینان دارید؟</string>
-  <string name="Visible_Status_text">توجه! با روشن کردن حالت نزدیک به من موقعیت شما برای سایرین قابل مشاهده می باشد، پس قبل از روشن کردن این حالت از انجام آن مطمئن شوید.</string>
-
+  <string name="Visible_Status_text">توجه! با انتخاب دکمۀ زیر، موقعیت شما برای سایرین قابل مشاهده می باشد. لطفاً پیش از روشن کردن این حالت از انجام آن مطمئن شوید.</string>
+  <string name="Clear_Status">حذف وضعیت</string>
+  <string name="Clear_Status_desc">شما وضعیتی برای خود تعیین نکرده اید. آیا مایلید برنامه بدون تعیین وضعیت ادامه دهید؟</string>
+  <string name="exceed_4_line">تعداد کاراکترهای تعیین وضعیت نباید از چهار خط بیشتر باشد.</string>
 </resources>

@@ -1024,17 +1024,20 @@
   <string name="turn_on_map">turn on</string>
   <string name="positioning">positioning</string>
   <string name="nearby">People Nearby</string>
-  <string name="list_user_map">List user</string>
-  <string name="map_registration">Map Registration</string>
+  <string name="list_user_map">Users List</string>
+  <string name="map_registration">Map Status</string>
   <string name="comment_waiting">Receiving notes...</string>
-  <string name="comment_no">There is no note</string>
+  <string name="comment_no">No Status</string>
   <string formatted="false" name="distance">about %d meters</string>
-  <string name="hint_gps">Write you\'r comment</string>
+  <string name="hint_gps">Your Status</string>
+  <string name="Clear_Status">Clear Status</string>
+  <string name="Clear_Status_desc">You will be visible to others with no status. Are you sure to continue?</string>
 
-  <string name="Visible_Status_title_dialog">Visible Status</string>
+  <string name="Visible_Status_title_dialog">Visibility Status</string>
   <string name="Visible_Status_text_dialog">Are you sure you want to make your status visible to others nearby?</string>
   <string name="Visible_Status_text_dialog_invisible">Are you sure you want to make your status invisible to others nearby?</string>
   <string name="Visible_Status_text">Notice! Activating "Map Registration" will result in making your status visible to others. Please be sure about it before turning on.</string>
 
+  <string name="exceed_4_line">Your status cannot exceed 4 lines.</string>
 
 </resources>
