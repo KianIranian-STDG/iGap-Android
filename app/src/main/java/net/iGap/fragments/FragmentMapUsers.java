@@ -150,6 +150,8 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
             holder.arrow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    if (btnBack != null) btnBack.performClick();
                     Intent intent = new Intent(G.currentActivity, ActivityContactsProfile.class);
                     intent.putExtra("peerId", item.getUserId());
                     intent.putExtra("enterFrom", "Others");
