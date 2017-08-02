@@ -140,6 +140,13 @@ public class FragmentShowMember extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (getArguments() != null) {
 
+            view.findViewById(R.id.rootShowMember).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
             mRoomID = getArguments().getLong(ROOMIDARGUMENT);
             mMainRole = getArguments().getString(MAINROOL);
             userID = getArguments().getLong(USERID);

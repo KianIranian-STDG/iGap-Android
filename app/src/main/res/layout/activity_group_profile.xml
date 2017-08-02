@@ -497,6 +497,7 @@
               />
 
           <LinearLayout
+              android:id="@+id/agp_layout_show_member"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="left|center"

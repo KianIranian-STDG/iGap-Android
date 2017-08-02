@@ -492,13 +492,15 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
         txtChannelName = (EmojiTextViewE) findViewById(R.id.txt_channel_name);
 
-        TextView txtShowMember = (TextView) findViewById(R.id.agp_txt_show_member);
-        txtShowMember.setOnClickListener(new View.OnClickListener() {
+        ViewGroup layoutShowMember = (ViewGroup) findViewById(R.id.agp_layout_show_member);
+        layoutShowMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
             }
         });
+
+        TextView txtShowMember = (TextView) findViewById(R.id.agp_txt_show_member);
 
         ViewGroup layoutAddMember = (ViewGroup) findViewById(R.id.agp_layout_add_member);
         layoutAddMember.setOnClickListener(new View.OnClickListener() {
@@ -672,7 +674,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         edtRevoke.setHint(getResources().getString(R.string.channel_link_hint_revoke));
         edtRevoke.setTypeface(G.typeface_IRANSansMobile);
         edtRevoke.setText(link);
-        edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
+        edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
         edtRevoke.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtRevoke.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
         edtRevoke.setPadding(0, 8, 0, 8);
@@ -732,7 +734,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         edtLink.setHint(getResources().getString(R.string.channel_public_hint_revoke));
         edtLink.setTypeface(G.typeface_IRANSansMobile);
         edtLink.setText(link);
-        edtLink.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
+        edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
         edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
         edtLink.setPadding(0, 8, 0, 8);
@@ -1107,7 +1109,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         final EmojiEditTextE edtNameChannel = new EmojiEditTextE(ActivityChannelProfile.this);
         edtNameChannel.setHint(getResources().getString(R.string.st_username));
         edtNameChannel.setTypeface(G.typeface_IRANSansMobile);
-        edtNameChannel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
+        edtNameChannel.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
         edtNameChannel.setText(txtChannelNameInfo.getText().toString());
         edtNameChannel.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtNameChannel.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -1586,7 +1588,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
         }
         edtUserName.setTypeface(G.typeface_IRANSansMobile);
-        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
+        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
 
         if (isPopup) {
             edtUserName.setText("iGap.net/");

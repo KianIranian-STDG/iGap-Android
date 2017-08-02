@@ -630,14 +630,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             }
         }
 
-        TextView txtShowMember = (TextView) findViewById(R.id.agp_txt_show_member);
-        txtShowMember.setOnClickListener(new View.OnClickListener() {
+        ViewGroup layoutShowMember = (ViewGroup) findViewById(R.id.agp_layout_show_member);
+        layoutShowMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
-
             }
         });
+
+        TextView txtShowMember = (TextView) findViewById(R.id.agp_txt_show_member);
 
         ViewGroup layoutAddMember = (ViewGroup) findViewById(R.id.agp_layout_add_member);
         layoutAddMember.setOnClickListener(new View.OnClickListener() {
@@ -801,7 +802,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         EditText edtLink = new EditText(ActivityGroupProfile.this);
         edtLink.setHint(getResources().getString(R.string.group_link_hint_revoke));
         edtLink.setTypeface(G.typeface_IRANSansMobile);
-        edtLink.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
+        edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
         edtLink.setText(link);
         edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
@@ -854,7 +855,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         edtRevoke.setHint(getResources().getString(R.string.group_link_hint_revoke));
         edtRevoke.setTypeface(G.typeface_IRANSansMobile);
         edtRevoke.setText(link);
-        edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
+        edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
         edtRevoke.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtRevoke.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
         edtRevoke.setPadding(0, 8, 0, 8);
@@ -975,8 +976,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
         }
         edtUserName.setTypeface(G.typeface_IRANSansMobile);
-        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
-
+        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
         if (isPopup) {
             edtUserName.setText("iGap.net/");
         } else {
@@ -1666,7 +1666,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         final EmojiEditTextE edtUserName = new EmojiEditTextE(ActivityGroupProfile.this);
         edtUserName.setHint(getResources().getString(R.string.st_username));
         edtUserName.setTypeface(G.typeface_IRANSansMobile);
-        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getResources().getDimension(R.dimen.dp8));
+        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
         edtUserName.setText(txtGroupNameTitle.getText().toString());
         edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
         edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
