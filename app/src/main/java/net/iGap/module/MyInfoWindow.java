@@ -20,6 +20,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestGeoGetComment;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 public class MyInfoWindow extends InfoWindow {
@@ -30,10 +31,14 @@ public class MyInfoWindow extends InfoWindow {
     private FragmentActivity mActivity;
     private FragmentiGapMap fragmentiGapMap;
     private String comment;
+    private Marker marker;
+    private static Marker latestClickedMarker;
+    private static long latestClickedUserId;
 
-    public MyInfoWindow(MapView mapView, long userId, boolean hasComment, FragmentiGapMap fragmentiGapMap, FragmentActivity mActivity) {
+    public MyInfoWindow(MapView mapView, Marker marker, long userId, boolean hasComment, FragmentiGapMap fragmentiGapMap, FragmentActivity mActivity) {
         super(R.layout.empty_info_map, mapView);
         this.map = mapView;
+        this.marker = marker;
         this.userId = userId;
         this.hasComment = hasComment;
         this.fragmentiGapMap = fragmentiGapMap;
@@ -48,6 +53,22 @@ public class MyInfoWindow extends InfoWindow {
     }
 
     public void onOpen(final Object arg) {
+        /**
+         * change latest clicked user marker color to GRAY and new clicker to GREEN
+         */
+        if (latestClickedMarker != null) {
+            latestClickedMarker.setIcon(FragmentiGapMap.avatarMark(latestClickedUserId, FragmentiGapMap.MarkerColor.GRAY));
+        }
+        marker.setIcon(FragmentiGapMap.avatarMark(userId, FragmentiGapMap.MarkerColor.GREEN));
+        latestClickedMarker = marker;
+        latestClickedUserId = userId;
+
+        /**
+         * don't show dialog for mine user
+         */
+        if (userId == G.userId) {
+            return;
+        }
 
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();

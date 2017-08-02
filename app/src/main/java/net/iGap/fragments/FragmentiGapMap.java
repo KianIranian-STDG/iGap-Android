@@ -111,6 +111,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private MapView map;
     private ItemizedOverlay<OverlayItem> latestLocation;
     private ArrayList<Marker> markers = new ArrayList<>();
+    public static ArrayList<String> mapUrls = new ArrayList<>();
     private ScrollView rootTurnOnGps;
     private ViewGroup vgMessageGps;
     public static Location location;
@@ -120,11 +121,14 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private ToggleButton toggleGps;
     private ToggleButton btnMapChangeRegistration;
     private TextView txtTextTurnOnOffGps;
+    private TextView txtSendMessageGps;
+    private EditText edtMessageGps;
+    private FloatingActionButton fabGps;
+    private ProgressBar prgWaitingSendMessage;
     private FragmentActivity mActivity;
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
     private GestureDetector mGestureDetector;
 
-    public static ArrayList<String> mapUrls = new ArrayList<>();
     private String specialRequests;
 
     private boolean firstEnter = true;
@@ -132,7 +136,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private boolean isGpsOn = false;
     private boolean first = true;
     public static boolean mapRegistrationStatus;
-    private EditText edtMessageGps;
+
     private final double LONGITUDE_LIMIT = 0.011;
     private final double LATITUDE_LIMIT = 0.009;
     private double northLimitation;
@@ -143,21 +147,23 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private double lastLongitude;
     private double lat1;
     private double lon1;
-    public static int page;
-    public static final int pageiGapmap = 1;
-    public static final int pageUserList = 2;
 
-    private int lastSpecialRequestsCursorPosition = 0;
+    public static int page;
+    public static final int pageiGapMap = 1;
+    public static final int pageUserList = 2;
     private final int DEFAULT_LOOP_TIME = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     private final int ZOOM_LEVEL_MIN = 14;
     private final int ZOOM_LEVEL_NORMAL = 16;
     private final int ZOOM_LEVEL_MAX = 18;
+    private int lastSpecialRequestsCursorPosition = 0;
 
     private long latestUpdateTime = 0;
     long firstTap = 0;
-    private FloatingActionButton fabGps;
-    private ProgressBar prgWaitingSendMessage;
-    private TextView txtSendMessageGps;
+
+
+    public enum MarkerColor {
+        GRAY, GREEN
+    }
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -179,7 +185,6 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         G.onMapClose = this;
         G.onGeoGetComment = this;
         startMap(view);
-        //statusCheck();
         //clickDrawMarkActive();
 
         page = 1;
@@ -233,11 +238,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         /**
          * Use From Following Code For Custom Url Tile Server
          */
-
-        String[] mStringArray = new String[mapUrls.size()];
-        mStringArray = mapUrls.toArray(mStringArray);
-
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", mStringArray) {
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", mapUrls.toArray(new String[mapUrls.size()])) {
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
@@ -416,7 +417,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 }
                 closeKeyboard(v);
                 isBackPress = false;
-                page = pageiGapmap;
+                page = pageiGapMap;
             }
         });
 
@@ -549,6 +550,45 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
      * ****************************** methods ******************************
      */
 
+    private void currentLocation(Location location, boolean setDefaultZoom) {
+        GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+        if (setDefaultZoom) {
+            map.getController().setZoom(16);
+        }
+        map.getController().animateTo(startPoint);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initMapListener();
+            }
+        }, 2000);
+    }
+
+    private void mapBounding(Location location) {
+        double extraBounding = 0.01;
+
+        northLimitation = location.getLatitude() + LATITUDE_LIMIT;
+        eastLimitation = location.getLongitude() + LONGITUDE_LIMIT;
+        southLimitation = location.getLatitude() - LATITUDE_LIMIT;
+        westLimitation = location.getLongitude() - LONGITUDE_LIMIT;
+        BoundingBoxE6 bBox = new BoundingBoxE6(northLimitation + extraBounding, eastLimitation + extraBounding, southLimitation - extraBounding, westLimitation - extraBounding);
+        map.setScrollableAreaLimit(bBox);
+    }
+
+    public static void deleteMapFileCash() {
+        try {
+
+            IConfigurationProvider configurationProvider = Configuration.getInstance();
+            FileUtils.deleteRecursive((configurationProvider.getOsmdroidBasePath()));
+        } catch (Exception e) {
+            Log.e("debug", "FragmentiGapMap     deleteMapFileCash()    " + e.toString());
+        }
+    }
+
+    /**
+     * ****************************** draw in map ******************************
+     */
+
     private void drawLine(ArrayList<Double[]> points) {
         Polyline line = new Polyline();
         line.setWidth(5f);
@@ -576,24 +616,19 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     private void drawMark(final OverlayItem mapItem, final boolean hasComment, final long userIdR) {
 
+        if (userIdR == 0) {
+            return;
+        }
 
         G.handler.post(new Runnable() {
             @Override
             public void run() {
                 Marker marker = new Marker(map);
                 marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
-                if (G.userId != 0) {
-                    if (hasComment) {
-                        marker.setIcon(avatarMark(userIdR, true));
-                        //marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_yes));
-                    } else {
-                        marker.setIcon(avatarMark(userIdR, false));
-                        //marker.setIcon(context.getResources().getDrawable(R.drawable.location_mark_comment_no));
-                    }
-
-                    InfoWindow infoWindow = new MyInfoWindow(map, userIdR, hasComment, FragmentiGapMap.this, mActivity);
-                    marker.setInfoWindow(infoWindow);
-                }
+                InfoWindow infoWindow;
+                marker.setIcon(avatarMark(userIdR, MarkerColor.GRAY));
+                infoWindow = new MyInfoWindow(map, marker, userIdR, hasComment, FragmentiGapMap.this, mActivity);
+                marker.setInfoWindow(infoWindow);
 
                 markers.add(marker);
                 map.getOverlays().add(marker);
@@ -602,7 +637,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         });
     }
 
-    private Drawable avatarMark(long userId, boolean hasComment) {
+    public static Drawable avatarMark(long userId, MarkerColor markerColor) {
         String pathName = "";
         String initials = "";
         String color = "";
@@ -624,62 +659,49 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             bitmap = BitmapFactory.decodeFile(pathName);
         }
         realm.close();
-        return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, hasComment));
-    }
 
-    private void currentLocation(Location location, boolean setDefaultZoom) {
-        GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-        if (setDefaultZoom) {
-            map.getController().setZoom(16);
+        boolean mineAvatar = false;
+        if (userId == G.userId) {
+            mineAvatar = true;
         }
-        map.getController().animateTo(startPoint);
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                initMapListener();
-            }
-        }, 2000);
+
+        return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, markerColor, mineAvatar));
     }
 
-    private void mapBounding(Location location) {
-        double extraBounding = 0.01;
-
-        northLimitation = location.getLatitude() + LATITUDE_LIMIT;
-        eastLimitation = location.getLongitude() + LONGITUDE_LIMIT;
-        southLimitation = location.getLatitude() - LATITUDE_LIMIT;
-        westLimitation = location.getLongitude() - LONGITUDE_LIMIT;
-        BoundingBoxE6 bBox = new BoundingBoxE6(northLimitation + extraBounding, eastLimitation + extraBounding, southLimitation - extraBounding, westLimitation - extraBounding);
-        map.setScrollableAreaLimit(bBox);
-    }
-
-    private Bitmap drawAvatar(Bitmap bm, boolean hasComment) {
-        Bitmap bitmap = getCircleBitmap(bm);
+    private static Bitmap drawAvatar(Bitmap bm, MarkerColor markerColor, boolean mineAvatar) {
+        Bitmap bitmap = getCircleBitmap(bm, mineAvatar);
         int firstBorderColor;
         int firstBorderSize;
         int secondBoarderColor;
         int secondBoarderSize;
         int thirdBoarderColor;
         int thirdBoarderSize;
-        if (hasComment) {
-            firstBorderColor = Color.WHITE;
+        if (mineAvatar) {
+            firstBorderColor = G.context.getResources().getColor(R.color.primary);
             secondBoarderColor = Color.parseColor("#553dbcb3");
             thirdBoarderColor = G.context.getResources().getColor(R.color.primary);
 
             firstBorderSize = 2;
-            //firstBorderSize = (int) G.context.getResources().getDimension(R.dimen.dp4);
-            secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp18);
-            //thirdBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp4);
+            secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp6);
             thirdBoarderSize = 2;
         } else {
-            firstBorderColor = Color.WHITE;
-            secondBoarderColor = Color.parseColor("#554f4f4f");
-            thirdBoarderColor = G.context.getResources().getColor(R.color.colorOldBlack);
+            if (markerColor == MarkerColor.GREEN) {
+                firstBorderColor = Color.WHITE;
+                secondBoarderColor = Color.parseColor("#553dbcb3");
+                thirdBoarderColor = G.context.getResources().getColor(R.color.primary);
 
-            firstBorderSize = 2;
-            //firstBorderSize = (int) G.context.getResources().getDimension(R.dimen.dp4);
-            secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp10);
-            //thirdBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp4);
-            thirdBoarderSize = 2;
+                firstBorderSize = 2;
+                secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp18);
+                thirdBoarderSize = 2;
+            } else {
+                firstBorderColor = Color.WHITE;
+                secondBoarderColor = Color.parseColor("#554f4f4f");
+                thirdBoarderColor = G.context.getResources().getColor(R.color.colorOldBlack);
+
+                firstBorderSize = 2;
+                secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp10);
+                thirdBoarderSize = 2;
+            }
         }
 
         bitmap = addBorderToCircularBitmap(bitmap, firstBorderSize, firstBorderColor);
@@ -688,8 +710,13 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         return bitmap;
     }
 
-    protected Bitmap getCircleBitmap(Bitmap bm) {
-        int sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp24), (int) G.context.getResources().getDimension(R.dimen.dp24));
+    protected static Bitmap getCircleBitmap(Bitmap bm, boolean mineAvatar) {
+        int sice;
+        if (mineAvatar) {
+            sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp10), (int) G.context.getResources().getDimension(R.dimen.dp10));
+        } else {
+            sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp24), (int) G.context.getResources().getDimension(R.dimen.dp24));
+        }
         Bitmap bitmap = ThumbnailUtils.extractThumbnail(bm, sice, sice);
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
@@ -701,20 +728,21 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         paint.setDither(true);
         paint.setFilterBitmap(true);
         canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(Color.BLUE);
+        paint.setColor(G.context.getResources().getColor(R.color.primary));
         canvas.drawOval(rectF, paint);
 
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth((float) 4);
-        paint.setColor(Color.BLUE);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth((float) 4);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        if (mineAvatar) {
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        } else {
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        }
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
     }
 
-    protected Bitmap addBorderToCircularBitmap(Bitmap srcBitmap, int borderWidth, int borderColor) {
+    protected static Bitmap addBorderToCircularBitmap(Bitmap srcBitmap, int borderWidth, int borderColor) {
         int dstBitmapWidth = srcBitmap.getWidth() + borderWidth * 2;
         Bitmap dstBitmap = Bitmap.createBitmap(dstBitmapWidth, dstBitmapWidth, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(dstBitmap);
@@ -733,7 +761,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
      * hint : call this method after fill location
      */
     private void getCoordinateLoop(final int delay, boolean loop) {
-        if (loop && page == pageiGapmap) {
+        if (loop && page == pageiGapMap) {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -851,8 +879,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         OverlayItem overlayItem = new OverlayItem("title", "City", geoPoint);
 
-        Drawable drawable = context.getResources().getDrawable(R.drawable.location_current);
-        overlayItem.setMarker(drawable);
+        //Drawable drawable = context.getResources().getDrawable(R.drawable.location_current);
+        overlayItem.setMarker(avatarMark(G.userId, MarkerColor.GRAY)); // marker color is not important in this line because for mineAvatar will be unused.
 
         ArrayList<OverlayItem> overlayItemArrayList = new ArrayList<>();
         overlayItemArrayList.add(overlayItem);
@@ -929,7 +957,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public void onResume() {
         super.onResume();
         statusCheck();
-        FragmentiGapMap.page = FragmentiGapMap.pageiGapmap;
+        FragmentiGapMap.page = FragmentiGapMap.pageiGapMap;
     }
 
     private void closeKeyboard(View v) {
@@ -1024,18 +1052,4 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         return false;
     }
-
-    public static void deleteMapFileCash() {
-        try {
-
-            IConfigurationProvider configurationProvider = Configuration.getInstance();
-            FileUtils.deleteRecursive((configurationProvider.getOsmdroidBasePath()));
-        } catch (Exception e) {
-            Log.e("debug", "FragmentiGapMap     deleteMapFileCash()    " + e.toString());
-        }
-    }
-
-
-
-
 }
