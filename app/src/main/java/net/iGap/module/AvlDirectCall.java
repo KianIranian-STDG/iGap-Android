@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -147,7 +148,7 @@ public class AvlDirectCall extends LinearLayout {
 
         TextView textView = new TextView(context);
         textView.setTextColor(Color.parseColor("#ffffff"));
-        textView.setTextSize(context.getResources().getDimension(R.dimen.dp10));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.dp16));
         LinearLayoutCompat.LayoutParams lp = new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(lp);
         textView.setPadding(0, -(ViewMaker.i_Dp(R.dimen.dp6)), 0, -(ViewMaker.i_Dp(R.dimen.dp6)));

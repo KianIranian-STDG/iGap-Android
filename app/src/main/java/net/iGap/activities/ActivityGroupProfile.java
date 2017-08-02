@@ -312,23 +312,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     @Override
     protected void onPause() {
-        if (ActivityChat.onComplete != null) {
-            if (!txtMemberNumber.getText().toString().equals(participantsCountLabel)) {
-                //ActivityChat.onComplete.complete(true, txtMemberNumber.getText().toString(), "");
-
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        if (realmRoom != null && realmRoom.getGroupRoom() != null) {
-                            realmRoom.getGroupRoom().setParticipantsCountLabel(txtMemberNumber.getText().toString());
-                        }
-                    }
-                });
-                realm.close();
-            }
-        }
 
         LocalBroadcastManager.getInstance(ActivityGroupProfile.this).unregisterReceiver(reciverOnGroupChangeName);
 

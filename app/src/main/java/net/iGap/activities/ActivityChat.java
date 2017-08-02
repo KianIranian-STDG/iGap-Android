@@ -1552,29 +1552,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
 
-                if (result) {
-
-
-                    if (messageOne != null && HelperString.isNumeric(messageOne) && Integer.parseInt(messageOne) == 1) {
-                        txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.one_member_chat));
-                    } else {
-                        txtLastSeen.setText(messageOne + " " + getResources().getString(R.string.member_chat));
-                    }
-
-                    // avi.setVisibility(View.GONE);
-                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                    //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                    //}
-                    ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
-
-                    // change english number to persian number
-                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
-                } else {
-                    clearHistory(Long.parseLong(messageOne));
-                }
-
-
+                clearHistory(Long.parseLong(messageOne));
 
             }
         };
