@@ -10,15 +10,13 @@
 
 package net.iGap.request;
 
-import net.iGap.proto.ProtoGeoGetComment;
+import net.iGap.proto.ProtoGeoGetConfiguration;
 
-public class RequestGeoGetComment {
+public class RequestGeoGetConfiguration {
 
-    public void getComment(long userId) {
-        ProtoGeoGetComment.GeoGetComment.Builder builder = ProtoGeoGetComment.GeoGetComment.newBuilder();
-        builder.setUserId(userId);
-
-        RequestWrapper requestWrapper = new RequestWrapper(1003, builder, userId + "");
+    public void getConfiguration() {
+        ProtoGeoGetConfiguration.GeoGetConfiguration.Builder builder = ProtoGeoGetConfiguration.GeoGetConfiguration.newBuilder();
+        RequestWrapper requestWrapper = new RequestWrapper(1007, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

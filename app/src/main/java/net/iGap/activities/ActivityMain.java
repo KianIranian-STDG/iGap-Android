@@ -60,6 +60,7 @@ import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentNewGroup;
+import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
 import net.iGap.helper.GoToChatActivity;
@@ -85,6 +86,7 @@ import net.iGap.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.interfaces.OnClientCondition;
 import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnConnectionChangeState;
+import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnRefreshActivity;
@@ -116,6 +118,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
+import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
@@ -124,10 +127,9 @@ import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
+import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced
-    implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom,
-    OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
 
     public static boolean isMenuButtonAddShown = false;
     LinearLayout mediaLayout;
@@ -350,10 +352,7 @@ public class ActivityMain extends ActivityEnhanced
                         fragmentNewGroup.setArguments(bundle);
 
                         try {
-                            getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment")
-                                .commitAllowingStateLoss();
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment").commitAllowingStateLoss();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -398,46 +397,17 @@ public class ActivityMain extends ActivityEnhanced
 
         G.onVerifyNewDevice = new OnVerifyNewDevice() {
             @Override
-            public void verifyNewDevice(String appName, int appId, int appBuildVersion, String appVersion, ProtoGlobal.Platform platform, String platformVersion, ProtoGlobal.Device device,
-                String deviceName, boolean twoStepVerification) {
+            public void verifyNewDevice(String appName, int appId, int appBuildVersion, String appVersion, ProtoGlobal.Platform platform, String platformVersion, ProtoGlobal.Device device, String deviceName, boolean twoStepVerification) {
 
-                final String content = ""
-                    + "App name: "
-                    + appName
-                    + "\n"
-                    + "Build version: "
-                    + appBuildVersion
-                    + "\n"
-                    + "App version: "
-                    + appVersion
-                    + "\n"
-                    + "Platform: "
-                    + platform
-                    + "\n"
-                    + "Platform version: "
-                    + platformVersion
-                    + "\n"
-                    + "Device: "
-                    + device
-                    + "\n"
-                    + "Device name: "
-                    + deviceName;
+                final String content = "" + "App name: " + appName + "\n" + "Build version: " + appBuildVersion + "\n" + "App version: " + appVersion + "\n" + "Platform: " + platform + "\n" + "Platform version: " + platformVersion + "\n" + "Device: " + device + "\n" + "Device name: " + deviceName;
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (HelperCalander.isLanguagePersian) {
-                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification)
-                                .contentGravity(GravityEnum.END)
-                                .content(content)
-                                .positiveText(R.string.B_ok)
-                                .show();
+                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.END).content(content).positiveText(R.string.B_ok).show();
                         } else {
-                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification)
-                                .contentGravity(GravityEnum.START)
-                                .content(content)
-                                .positiveText(R.string.B_ok)
-                                .show();
+                            new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.START).content(content).positiveText(R.string.B_ok).show();
                         }
                     }
                 });
@@ -481,11 +451,7 @@ public class ActivityMain extends ActivityEnhanced
                 fragment.setArguments(bundle);
 
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -507,10 +473,7 @@ public class ActivityMain extends ActivityEnhanced
                 fragment.setArguments(bundle);
 
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -532,10 +495,7 @@ public class ActivityMain extends ActivityEnhanced
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -654,11 +614,9 @@ public class ActivityMain extends ActivityEnhanced
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isLanguagePersian) {
-            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box),
-                getString(R.string.md_apps));
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
         } else {
-            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon),
-                getString(R.string.md_phone));
+            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
         }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
@@ -889,11 +847,7 @@ public class ActivityMain extends ActivityEnhanced
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -920,10 +874,7 @@ public class ActivityMain extends ActivityEnhanced
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -949,10 +900,7 @@ public class ActivityMain extends ActivityEnhanced
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragmentContainer, fragment, "newGroup_fragment")
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1005,11 +953,7 @@ public class ActivityMain extends ActivityEnhanced
                 bundle.putString("TITLE", "Contacts");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .addToBackStack(null)
-                        .replace(R.id.fragmentContainer, fragment)
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1042,11 +986,7 @@ public class ActivityMain extends ActivityEnhanced
 
                         Fragment fragment = FragmentCall.newInstance(false);
                         try {
-                            getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .addToBackStack(null)
-                                .replace(R.id.fragmentContainer, fragment)
-                                .commit();
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -1060,6 +1000,29 @@ public class ActivityMain extends ActivityEnhanced
         } else {
             new RequestSignalingGetConfiguration().signalingGetConfiguration();
         }
+
+        ViewGroup itemNavMap = (ViewGroup) findViewById(R.id.lm_ll_map);
+        itemNavMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mapUrls == null || mapUrls.isEmpty()) {
+                    G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
+                        @Override
+                        public void onGetConfiguration() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    openMapFragment();
+                                }
+                            });
+                        }
+                    };
+                    new RequestGeoGetConfiguration().getConfiguration();
+                } else {
+                    openMapFragment();
+                }
+            }
+        });
 
         ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
         itemNavSend.setOnClickListener(new View.OnClickListener() {
@@ -1159,64 +1122,64 @@ public class ActivityMain extends ActivityEnhanced
                 //
                 //pageDrawer = 11;
                 new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                    .content(R.string.content_log_out)
-                    .positiveText(getResources().getString(R.string.B_ok))
-                    .negativeText(getResources().getString(R.string.B_cancel))
-                    .iconRes(R.mipmap.exit_to_app_button)
-                    .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            G.onUserSessionLogout = new OnUserSessionLogout() {
-                                @Override
-                                public void onUserSessionLogout() {
+                        .content(R.string.content_log_out)
+                        .positiveText(getResources().getString(R.string.B_ok))
+                        .negativeText(getResources().getString(R.string.B_cancel))
+                        .iconRes(R.mipmap.exit_to_app_button)
+                        .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                G.onUserSessionLogout = new OnUserSessionLogout() {
+                                    @Override
+                                    public void onUserSessionLogout() {
 
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            HelperLogout.logout();
-                                        }
-                                    });
-                                }
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                HelperLogout.logout();
+                                            }
+                                        });
+                                    }
 
-                                @Override
-                                public void onError() {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
+                                    @Override
+                                    public void onError() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
 
-                                @Override
-                                public void onTimeOut() {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
-                            };
-                            new RequestUserSessionLogout().userSessionLogout();
-                        }
-                    })
-                    .show();
+                                    @Override
+                                    public void onTimeOut() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
+                                };
+                                new RequestUserSessionLogout().userSessionLogout();
+                            }
+                        })
+                        .show();
                 closeDrawer();
             }
         });
@@ -1451,6 +1414,35 @@ public class ActivityMain extends ActivityEnhanced
         }, 1000);
     }
 
+    private void openMapFragment() {
+        try {
+            HelperPermision.getLocationPermission(ActivityMain.this, new OnGetPermission() {
+                @Override
+                public void Allow() throws IOException {
+                    FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
+                    try {
+                        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap).commit();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            lockNavigation();
+                        }
+                    });
+                }
+
+                @Override
+                public void deny() {
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        closeDrawer();
+    }
+
     private void initComponent() {
 
         contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
@@ -1614,14 +1606,34 @@ public class ActivityMain extends ActivityEnhanced
         }
     }
 
+    protected OnBackPressedListener onBackPressedListener;
+
+    public interface OnBackPressedListener {
+        void doBack();
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener, boolean isDisable) {
+        if (!isDisable) {
+            this.onBackPressedListener = onBackPressedListener;
+        } else {
+            this.onBackPressedListener = null;
+        }
+    }
+
     @Override
     public void onBackPressed() {
         openNavigation();
+
+        if (onBackPressedListener != null) {
+            onBackPressedListener.doBack();
+        }
+
         SearchFragment myFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("Search_fragment");
         FragmentNewGroup fragmentNeGroup = (FragmentNewGroup) getSupportFragmentManager().findFragmentByTag("newGroup_fragment");
         FragmentCreateChannel fragmentCreateChannel = (FragmentCreateChannel) getSupportFragmentManager().findFragmentByTag("createChannel_fragment");
         ContactGroupFragment fragmentContactGroup = (ContactGroupFragment) getSupportFragmentManager().findFragmentByTag("contactGroup_fragment");
         FragmentIgapSearch fragmentIgapSearch = (FragmentIgapSearch) getSupportFragmentManager().findFragmentByTag("Search_fragment_igap");
+        FragmentiGapMap fragmentiGapMap = (FragmentiGapMap) getSupportFragmentManager().findFragmentByTag("map_fragment");
 
         if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
 
@@ -1647,6 +1659,12 @@ public class ActivityMain extends ActivityEnhanced
         } else if (fragmentIgapSearch != null && fragmentIgapSearch.isVisible()) {
             try {
                 getSupportFragmentManager().beginTransaction().remove(fragmentIgapSearch).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+        } else if (fragmentiGapMap != null && fragmentiGapMap.isVisible()) {
+            try {
+                getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
             } catch (Exception e) {
                 e.getStackTrace();
             }
@@ -1868,9 +1886,7 @@ public class ActivityMain extends ActivityEnhanced
                         if (imagePath == null || !new File(imagePath).exists()) {
                             Realm realm1 = Realm.getDefaultInstance();
                             RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
-                            imgNavImage.setImageBitmap(
-                                HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(),
-                                    realmUserInfo.getUserInfo().getColor()));
+                            imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
                             realm1.close();
                         } else {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);

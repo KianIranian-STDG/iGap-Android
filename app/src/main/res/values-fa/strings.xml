@@ -861,6 +861,8 @@
   <string name="text_limit_Create_Group">شما اجازه دارید نهایتاً ۲۵ گروه و یا کانال بسازید</string>
   <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
   <string name="calls">تماس صوتی</string>
+  <string name="map">نقشه</string>
+  <string name="igap_nearby">اطراف من</string>
   <string name="igap_call">تماس صوتی آی گپ</string>
   <string name="No_messages_here_yet">در حال حاضر پیامی وجود ندارد</string>
   <string name="clean_log">پاک کردن تاریخچه تماس صوتی</string>
@@ -1021,5 +1023,24 @@
 
   <string name="clear_cache_desc">اطلاعات ذخیره شده در حافظهٔ نهان همان فایل های تصویری، ویدیویی یا اسنادی هستند که بر روی دستگاه شما دریافت و یا از سویِ آن ارسال شده اند؛ هر از گاهی عملیات پاکسازی باید بر روی این فایل ها انجام شود تا مانع از کُندی یا توقف در اجرای برنامه ها شود. هر گاه مایل باشید به این اطلاعات دست پیدا کنید می توانید دوباره فایل ها بارگیری کرده و مشاهده نمایید.</string>
   <string name="name">نام</string>
+
+
+  <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
+  <string name="turn_off_map">خاموش</string>
+  <string name="turn_on_map">روشن</string>
+  <string name="positioning">تعیین وضعیت</string>
+  <string name="nearby">افراد نزدیک من</string>
+  <string name="list_user_map">لیست افراد</string>
+  <string name="map_registration">نمایش موقعیت شما</string>
+  <string name="comment_waiting">در حال دریافت یادداشت</string>
+  <string name="comment_no">یادداشتی وجود ندارد</string>
+  <string formatted="false" name="distance">حدود %d متر</string>
+  <string name="hint_gps">متن مورد نظر خود را وارد کنید</string>
+
+
+  <string name="Visible_Status_title_dialog">موقعیت قابل مشاهده</string>
+  <string name="Visible_Status_text_dialog">آیا از اینکه موقعیتتان برای سایرین قابل مشاهده باشد، اطمینان دارید؟</string>
+  <string name="Visible_Status_text_dialog_invisible">آیا از اینکه موقعیتتان برای سایرین غیر قابل مشاهده باشد، اطمینان دارید؟</string>
+  <string name="Visible_Status_text">توجه! با روشن کردن حالت نزدیک به من موقعیت شما برای سایرین قابل مشاهده می باشد، پس قبل از روشن کردن این حالت از انجام آن مطمئن شوید.</string>
 
 </resources>

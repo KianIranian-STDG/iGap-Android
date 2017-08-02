@@ -10,7 +10,12 @@
 
 package net.iGap.response;
 
+import io.realm.Realm;
+import net.iGap.G;
+import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoGeoGetNearbyDistance;
+import net.iGap.realm.RealmGeoNearbyDistance;
+import net.iGap.realm.RealmRegisteredInfo;
 
 public class GeoGetNearbyDistanceResponse extends MessageHandler {
 
@@ -30,12 +35,33 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder builder = (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder) message;
-        for (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Result result : builder.getResultList()) {
-            result.getUserId();
-            result.getHasComment();
-            result.getDistance();
-        }
+        final ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder builder = (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder) message;
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(final Realm realm) {
+                for (final ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Result result : builder.getResultList()) {
+                    if (G.userId != result.getUserId()) { // don't show my account
+                        RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
+                            @Override
+                            public void onInfo(RealmRegisteredInfo registeredInfo) {
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmGeoNearbyDistance geoNearbyDistance = realm.createObject(RealmGeoNearbyDistance.class, result.getUserId());
+                                        geoNearbyDistance.setHasComment(result.getHasComment());
+                                        geoNearbyDistance.setDistance(result.getDistance());
+                                    }
+                                });
+                                realm.close();
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        realm.close();
     }
 
     @Override

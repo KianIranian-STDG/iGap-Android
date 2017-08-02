@@ -857,6 +857,8 @@
   <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
   <string name="show_sender_name_in_group">Show Sender Name in Groups</string>
   <string name="calls">Voice Calls</string>
+  <string name="map">Map</string>
+  <string name="igap_nearby">Nearby</string>
   <string name="igap_call">iGap Voice Call</string>
   <string name="No_messages_here_yet">No messages here yet…</string>
   <string name="mandatory">(Required)</string>
@@ -1016,5 +1018,23 @@
   <string name="limit_for_set_username">Limit time for change Username</string>
   <string name="clear_cache_desc">Cached data on your device are the uploaded and/or downloaded files as photos, videos or documents, which must be cleared occasionally not to stop your device working or slow it down. Whenever you want to see them again, it is sufficient only to tap on them for downloading.</string>
   <string name="name">Name</string>
+
+  <string name="turn_on_gps_explain">The location status and other features of map are disabled. To use all the capabilities, turn the switch on first.</string>
+  <string name="turn_off_map">turn off</string>
+  <string name="turn_on_map">turn on</string>
+  <string name="positioning">positioning</string>
+  <string name="nearby">People Nearby</string>
+  <string name="list_user_map">List user</string>
+  <string name="map_registration">Map Registration</string>
+  <string name="comment_waiting">Receiving notes...</string>
+  <string name="comment_no">There is no note</string>
+  <string formatted="false" name="distance">about %d meters</string>
+  <string name="hint_gps">Write you\'r comment</string>
+
+  <string name="Visible_Status_title_dialog">Visible Status</string>
+  <string name="Visible_Status_text_dialog">Are you sure you want to make your status visible to others nearby?</string>
+  <string name="Visible_Status_text_dialog_invisible">Are you sure you want to make your status invisible to others nearby?</string>
+  <string name="Visible_Status_text">Notice! Activating "Map Registration" will result in making your status visible to others. Please be sure about it before turning on.</string>
+
 
 </resources>

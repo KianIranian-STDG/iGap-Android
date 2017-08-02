@@ -25,8 +25,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserInfo;
 
-import static net.iGap.G.userId;
-
 public class UserInfoResponse extends MessageHandler {
 
     public int actionId;
@@ -50,7 +48,7 @@ public class UserInfoResponse extends MessageHandler {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();
-
+                RealmRegisteredInfo realmRegisteredInfo;
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -83,7 +81,12 @@ public class UserInfoResponse extends MessageHandler {
                     }
                 }, RequestUserInfo.CLEAR_ARRAY_TIME);
 
-                if ((builder.getUser().getId() == userId)) {
+                if (identity != null && identity.equals(RequestUserInfo.InfoType.JUST_INFO.toString())) {
+                    G.onRegistrationInfo.onInfo(builder.getUser());
+                    return;
+                }
+
+                if ((builder.getUser().getId() == G.userId)) {
                     canGetInfo = true;
                 }
 
@@ -114,31 +117,31 @@ public class UserInfoResponse extends MessageHandler {
                             FragmentShowMember.infoUpdateListenerCount.complete(true, "" + builder.getUser().getId(), "OK");
                         }
 
-                        // updata chat message header forward after get user or room info
+                        // update chat message header forward after get user or room info
                         if (AbstractMessage.updateForwardInfo != null) {
                             long _id = builder.getUser().getId();
                             if (AbstractMessage.updateForwardInfo.containsKey(_id)) {
-                                String messageid = AbstractMessage.updateForwardInfo.get(_id);
+                                String messageId = AbstractMessage.updateForwardInfo.get(_id);
                                 AbstractMessage.updateForwardInfo.remove(_id);
                                 if (ActivityChat.onUpdateUserOrRoomInfo != null) {
-                                    ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageid);
+                                    ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageId);
                                 }
                             }
                         }
                     }
                 });
+
+                // update log message in realm room message after get user info
+                if (G.logMessageUpdatList.containsKey(builder.getUser().getId())) {
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            HelperLogMessage.updateLogMessageAfterGetUserInfo(builder.getUser().getId());
+                        }
+                    }, 500);
+                }
             }
         });
-
-        // update log message in realm room message after get user info
-        if (G.logMessageUpdatList.containsKey(builder.getUser().getId())) {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    HelperLogMessage.updateLogMessageAfterGetUserInfo(builder.getUser().getId());
-                }
-            }, 500);
-        }
     }
 
     @Override

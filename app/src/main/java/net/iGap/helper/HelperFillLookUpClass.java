@@ -203,6 +203,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(31004, "ProtoGeoUpdateComment.GeoUpdateCommentResponse");
         lookupMap.put(31005, "ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse");
         lookupMap.put(31006, "ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse");
+        lookupMap.put(31007, "ProtoGeoGetConfiguration.GeoGetConfigurationResponse");
 
         // Push 600xx
         lookupMap.put(60000, "ProtoPushLoginToken.PushLoginTokenResponse");

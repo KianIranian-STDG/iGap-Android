@@ -12,9 +12,16 @@ package net.iGap.request;
 
 import android.text.format.DateUtils;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.HashMap;
+import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserInfo;
 
 public class RequestUserInfo {
+    public static HashMap<Long, OnInfo> infoHashMap = new HashMap<>();
+
+    public enum InfoType {
+        JUST_INFO
+    }
 
     public static CopyOnWriteArrayList<String> userIdArrayList = new CopyOnWriteArrayList<>(); // ids that exist in list don't allowed to send request again
     public static final int CLEAR_ARRAY_TIME = (int) (3 * DateUtils.SECOND_IN_MILLIS);

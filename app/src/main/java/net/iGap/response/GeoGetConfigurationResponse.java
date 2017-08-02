@@ -11,15 +11,16 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.proto.ProtoGeoUpdateComment;
+import net.iGap.fragments.FragmentiGapMap;
+import net.iGap.proto.ProtoGeoGetConfiguration;
 
-public class GeoUpdateCommentResponse extends MessageHandler {
+public class GeoGetConfigurationResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
     public String identity;
 
-    public GeoUpdateCommentResponse(int actionId, Object protoClass, String identity) {
+    public GeoGetConfigurationResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -30,29 +31,25 @@ public class GeoUpdateCommentResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+        ProtoGeoGetConfiguration.GeoGetConfigurationResponse.Builder builder = (ProtoGeoGetConfiguration.GeoGetConfigurationResponse.Builder) message;
 
-        ProtoGeoUpdateComment.GeoUpdateCommentResponse.Builder builder = (ProtoGeoUpdateComment.GeoUpdateCommentResponse.Builder) message;
-        builder.getComment();
+        for (ProtoGeoGetConfiguration.GeoGetConfigurationResponse.TileServer tileServer : builder.getTileServerList()) {
+            FragmentiGapMap.mapUrls.add(tileServer.getBaseUrl());
+        }
 
-        if (G.onGeoCommentResponse != null) {
-            G.onGeoCommentResponse.commentResponse();
+        if (G.onGeoGetConfiguration != null) {
+            G.onGeoGetConfiguration.onGetConfiguration();
         }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        if (G.onGeoCommentResponse != null) {
-            G.onGeoCommentResponse.timeOutCommentResponse();
-        }
     }
 
     @Override
     public void error() {
         super.error();
-        if (G.onGeoCommentResponse != null) {
-            G.onGeoCommentResponse.errorCommentResponse();
-        }
     }
 }
 
