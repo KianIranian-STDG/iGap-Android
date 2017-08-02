@@ -57,6 +57,7 @@ import io.realm.Realm;
 import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperImageBackColor;
@@ -104,7 +105,6 @@ import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
-import static net.iGap.Config.URL_MAP;
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
@@ -243,16 +243,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         /**
          * Use From Following Code For Custom Url Tile Server
          */
-
-
-        //Random r = new Random();
-        //int randomNumber = r.nextInt(mapUrls.size());
-        //if (randomNumber >= mapUrls.size()) {
-        //    randomNumber = mapUrls.size() - 1;
-        //}
-        //String url = mapUrls.get(randomNumber);
-
-        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{URL_MAP}) { //mapUrls.toArray(new String[mapUrls.size()]), new String[]{URL_MAP}
+        String url = mapUrls.get(new Random().nextInt(mapUrls.size()));
+        map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {
             @Override
             public String getTileURLString(MapTile aTile) {
                 return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
