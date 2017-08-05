@@ -168,7 +168,7 @@
             android:text="@string/md_close_button"
             android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@color/gray_4c"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
           <ProgressBar
@@ -240,6 +240,22 @@
           android:background="@drawable/st_switch_button"
           android:textOff=""
           android:textOn=""
+          />
+
+      <TextView
+          android:id="@+id/txtDescriptionMap"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:lineSpacingExtra="@dimen/dp4"
+          android:paddingBottom="@dimen/dp8"
+          android:paddingLeft="@dimen/dp48"
+          android:paddingRight="@dimen/dp48"
+          android:paddingTop="@dimen/dp20"
+          android:text="@string/info_map"
+          android:textColor="@color/white"
+          android:textSize="@dimen/dp18"
+          fontPath="fonts/IRANSansMobile_Bold.ttf"
           />
     </LinearLayout>
   </ScrollView>

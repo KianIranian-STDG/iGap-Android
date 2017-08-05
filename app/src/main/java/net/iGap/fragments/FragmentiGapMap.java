@@ -124,6 +124,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private ToggleButton toggleGps;
     private ToggleButton btnMapChangeRegistration;
     private TextView txtTextTurnOnOffGps;
+    private TextView txtDescriptionMap;
     private TextView txtSendMessageGps;
     private EditText edtMessageGps;
     private FloatingActionButton fabGps;
@@ -269,6 +270,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         vgMessageGps = (ViewGroup) view.findViewById(R.id.vgMessageGps);
 
         txtTextTurnOnOffGps = (TextView) view.findViewById(R.id.txtTextTurnOnOffGps);
+        txtDescriptionMap = (TextView) view.findViewById(R.id.txtDescriptionMap);
         edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
 
         edtMessageGps.setOnTouchListener(new View.OnTouchListener() {
@@ -1025,7 +1027,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 
-            visibleViewAttention(mActivity.getResources().getString(R.string.turn_on_gps_explain));
+            visibleViewAttention(mActivity.getResources().getString(R.string.turn_on_gps_explain), true);
 
         } else {// GPS is on
             isGpsOn = true;
@@ -1036,19 +1038,25 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 GPSTracker.getGpsTrackerInstance().detectLocation();
             } else {
-                visibleViewAttention(mActivity.getResources().getString(R.string.Visible_Status_text));
+                visibleViewAttention(mActivity.getResources().getString(R.string.Visible_Status_text), false);
             }
 
         }
     }
 
-    private void visibleViewAttention(String text) {
+    private void visibleViewAttention(String text, boolean b) {
         rootTurnOnGps.setVisibility(View.VISIBLE);
         fabGps.setVisibility(View.GONE);
         toggleGps.setChecked(false);
         vgMessageGps.setVisibility(View.GONE);
         rippleMoreMap.setVisibility(View.GONE);
         txtTextTurnOnOffGps.setText(text);
+
+        if (!b) {
+            txtDescriptionMap.setVisibility(View.GONE);
+        } else {
+            txtDescriptionMap.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
