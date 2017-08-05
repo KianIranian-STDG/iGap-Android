@@ -234,7 +234,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         txtQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new RequestQrCodeNewDevice().qrCodeNewDevice();
+
                 dialogQrCode = new MaterialDialog.Builder(ActivityRegister.this).title(getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true).positiveText(R.string.share_item_dialog).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -271,9 +271,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                         dialog.dismiss();
                     }
                 }).build();
-                View view = dialogQrCode.getView();
-                imgQrCodeNewDevice = (ImageView) view.findViewById(R.id.imgQrCodeNewDevice);
-                prgQrCodeNewDevice = (ProgressBar) view.findViewById(R.id.prgWaitQrCode);
+
+                imgQrCodeNewDevice = (ImageView) dialogQrCode.findViewById(R.id.imgQrCodeNewDevice);
+                prgQrCodeNewDevice = (ProgressBar) dialogQrCode.findViewById(R.id.prgWaitQrCode);
                 prgQrCodeNewDevice.setVisibility(View.VISIBLE);
                 dialogQrCode.show();
 
@@ -285,6 +285,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                         }
                     }
                 });
+
+                new RequestQrCodeNewDevice().qrCodeNewDevice();
+
             }
         });
 

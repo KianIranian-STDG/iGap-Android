@@ -165,7 +165,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private long latestUpdateTime = 0;
     long firstTap = 0;
     private boolean isEndLine = true;
-    private String txtComment;
+    private String txtComment = "";
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();

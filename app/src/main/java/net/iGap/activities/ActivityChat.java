@@ -773,7 +773,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     @Override
-    public void onBackPressed() throws IllegalStateException {
+    public void onBackPressed() {
 
         FragmentShowImage fragment = (FragmentShowImage) getSupportFragmentManager().findFragmentByTag("ShowImageMessage");
         if (fragment != null) {
@@ -817,8 +817,12 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 startActivity(intent);
             }
 
+            try {
+                super.onBackPressed();
+            } catch (IllegalStateException e) {
 
-            super.onBackPressed();
+            }
+
         }
     }
 

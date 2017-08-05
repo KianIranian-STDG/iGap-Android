@@ -224,10 +224,12 @@ public class ActivityChatBackground extends ActivityEnhanced {
             @Override public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
 
                 RealmWallpaper.updateField(list, "");
-                fillList(false);
+
 
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
+
+                        fillList(false);
                         adapterChatBackgroundSetting.notifyDataSetChanged();
                     }
                 });
