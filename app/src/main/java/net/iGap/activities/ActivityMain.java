@@ -136,6 +136,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     MusicPlayer musicPlayer;
     FragmentCall fragmentCall;
     public boolean fromCall = false;
+    private NavigationTabStrip navigationTabStrip;
 
     public static MyAppBarLayout appBarLayout;
     private Typeface titleTypeface;
@@ -157,6 +158,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     FloatingActionButton btnStartNewChat;
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
+    private Realm mRealm;
 
     private ViewPager mViewPager;
     private ArrayList<Fragment> pages = new ArrayList<Fragment>();
@@ -168,6 +170,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public interface MainInterface {
         void onAction(MainAction action);
+    }
+
+    private Realm getRealm() {
+        if (mRealm == null || mRealm.isClosed()) {
+
+            mRealm = Realm.getDefaultInstance();
+        }
+
+        return mRealm;
     }
 
     public interface MainInterfaceGetRoomList {
@@ -183,9 +194,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onDestroy() {
         super.onDestroy();
 
-        if (G.getRealm() != null) {
-            G.getRealm().close();
-        }
+        getRealm().close();
+
     }
 
     private void deleteContentFolderChatBackground() {
@@ -214,14 +224,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return;
         }
 
-        RealmUserInfo userInfo = G.getRealm().where(RealmUserInfo.class).findFirst();
+        RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
         if (userInfo == null) { // user registered before
 
             Intent intent = new Intent(this, ActivityIntroduce.class);
             startActivity(intent);
 
-            G.getRealm().close();
+            getRealm().close();
             finish();
             return;
         }
@@ -618,15 +628,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
 
-                if (HelperCalander.isLanguagePersian) {
-
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mViewPager.setOffscreenPageLimit(5);
-                        }
-                    }, 300);
-                }
+                navigationTabStrip.setViewPager(mViewPager);
+                navigationTabStrip.setTabIndex(mViewPager.getCurrentItem());
 
 
             }
@@ -635,7 +638,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void initTabStrip() {
 
-        final NavigationTabStrip navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
+        navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isLanguagePersian) {
@@ -661,10 +664,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager.setOffscreenPageLimit(5);
 
-        if (!HelperCalander.isLanguagePersian) {
-            mViewPager.setOffscreenPageLimit(5);
-        }
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
 
@@ -684,8 +685,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
 
-                    mViewPager.setCurrentItem(4);
-                    navigationTabStrip.setViewPager(mViewPager);
 
                     setmViewPagerSelectedItem();
 
@@ -701,7 +700,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
-                    navigationTabStrip.setViewPager(mViewPager, 0);
 
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
 
@@ -985,7 +983,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ViewGroup itemNavCall = (ViewGroup) findViewById(R.id.lm_ll_call);
 
         // gone or visible view call
-        RealmCallConfig callConfig = G.getRealm().where(RealmCallConfig.class).findFirst();
+        RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
         if (callConfig != null) {
             if (callConfig.isVoice_calling()) {
                 itemNavCall.setVisibility(View.VISIBLE);
@@ -1603,7 +1601,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      * @param updateFromServer if is set true send request to sever for get own info
      */
     private void setDrawerInfo(boolean updateFromServer) {
-        RealmUserInfo realmUserInfo = G.getRealm().where(RealmUserInfo.class).findFirst();
+        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
             String username = realmUserInfo.getUserInfo().getDisplayName();
             String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
@@ -1713,37 +1711,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 G.isMainRecreate = true;
 
+                G.isUpdateNotificaionColorMain = false;
+                G.isUpdateNotificaionColorChannel = false;
+                G.isUpdateNotificaionColorGroup = false;
+                G.isUpdateNotificaionColorChat = false;
+                G.isUpdateNotificaionCall = false;
+
+                finish();
+
             }
         };
 
-        if (G.isMainRecreate) {
-            G.isMainRecreate = false;
-
-            pages.clear();
-            mViewPager.setAdapter(null);
-            fragmentCall = null;
-            sampleFragmentPagerAdapter = null;
-            mViewPager.setOffscreenPageLimit(0);
-
-            if (getSupportFragmentManager().getFragments() != null) {
-                for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-                    if (fragment != null && (fragment instanceof FragmentCall || fragment instanceof FragmentMain)) {
-                        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-                    }
-                }
-            }
-
-
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    recreate();
-                }
-            }, 200);
-
-            return;
-        }
 
         if (contentLoading != null) {
             AppUtils.setProgresColler(contentLoading);

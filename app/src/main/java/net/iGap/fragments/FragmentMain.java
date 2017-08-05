@@ -1237,16 +1237,11 @@ public class FragmentMain extends Fragment implements OnComplete {
 
         if (canUpdate) {
 
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mRecyclerView != null) {
-                        if (mRecyclerView.getAdapter() != null) {
-                            mRecyclerView.getAdapter().notifyDataSetChanged();
-                        }
-                    }
+            if (mRecyclerView != null) {
+                if (mRecyclerView.getAdapter() != null) {
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
                 }
-            }, 200);
+            }
         }
     }
 

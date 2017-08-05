@@ -455,7 +455,6 @@ import net.iGap.request.RequestSignalingGetLog;
             //  new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null));
 
             return new ViewHolder(ViewMaker.getViewItemCall());
-
         }
 
         @Override
@@ -552,16 +551,11 @@ import net.iGap.request.RequestSignalingGetLog;
         if (G.isUpdateNotificaionCall) {
             G.isUpdateNotificaionCall = false;
 
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mRecyclerView != null) {
-                        if (mRecyclerView.getAdapter() != null) {
-                            mRecyclerView.getAdapter().notifyDataSetChanged();
-                        }
-                    }
+            if (mRecyclerView != null) {
+                if (mRecyclerView.getAdapter() != null) {
+                    mRecyclerView.getAdapter().notifyDataSetChanged();
                 }
-            }, 200);
+            }
         }
 
 

@@ -174,6 +174,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private EmojiTextViewE txtNickNameTitle;
     static boolean isActiveRun = false;
     Realm mRealm;
+    boolean isBackPressed = false;
+
 
     RealmUserInfo realmUserInfo;
     RealmRegisteredInfo mRealmRegisteredInfo;
@@ -204,6 +206,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     protected void onResume() {
         super.onResume();
         G.onUserAvatarResponse = this;
+        isBackPressed = false;
 
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
@@ -235,6 +238,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     @Override
     protected void onPause() {
         super.onPause();
+
+        if (G.isMainRecreate && isBackPressed) {
+            startActivity(new Intent(ActivitySetting.this, ActivityMain.class));
+            G.isMainRecreate = false;
+        }
+
 
         if (realmUserInfo != null && realmUserInfo.isValid()) {
             realmUserInfo.removeAllChangeListeners();
@@ -1106,7 +1115,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                isBackPressed = false;
                 startDialog(R.array.profile);
             }
         });
@@ -1193,8 +1202,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         ltDataStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                isBackPressed = false;
                 startActivity(new Intent(ActivitySetting.this, ActivityManageSpace.class));
+
 
             }
         });
@@ -1504,7 +1514,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtChatBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isBackPressed = false;
                 startActivity(new Intent(ActivitySetting.this, ActivityChatBackground.class));
+
             }
         });
 
@@ -1677,7 +1689,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isBackPressed = false;
                 startActivity(new Intent(ActivitySetting.this, ActivitySettingNotification.class));
+
             }
         });
 
@@ -2295,6 +2309,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     }
                 } else {
                     try {
+                        isBackPressed = false;
                         new AttachFile(ActivitySetting.this).requestOpenGalleryForImageSingleSelect();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -2308,6 +2323,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
+                isBackPressed = false;
                 new AttachFile(ActivitySetting.this).dispatchTakePictureIntent();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -2321,7 +2337,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 uriIntent = Uri.fromFile(nameImageFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
+                isBackPressed = false;
                 startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
+
             } else {
                 Toast.makeText(ActivitySetting.this, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
             }
@@ -2343,6 +2361,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "setting");
                 intent.putExtra("ID", (int) (idAvatar + 1L));
+                isBackPressed = false;
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             } else {
                 Intent intent = new Intent(ActivitySetting.this, ActivityCrop.class);
@@ -2352,6 +2371,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                     intent.putExtra("TYPE", "camera");
                     intent.putExtra("PAGE", "setting");
                     intent.putExtra("ID", (int) (idAvatar + 1L));
+                    isBackPressed = false;
                     startActivityForResult(intent, IntentRequests.REQ_CROP);
                 }
             }
@@ -2365,6 +2385,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "setting");
                 intent.putExtra("ID", (int) (idAvatar + 1L));
+                isBackPressed = false;
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             }
         } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) { // save path image on data base ( realm )
@@ -2508,6 +2529,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         public void openUri(Activity activity, Uri uri) {
 
             try {
+                isBackPressed = false;
                 activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
@@ -2536,6 +2558,9 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             onBackPressedListener.doBack();
         } else {
             super.onBackPressed();
+            isBackPressed = true;
+
+
         }
 
     }
