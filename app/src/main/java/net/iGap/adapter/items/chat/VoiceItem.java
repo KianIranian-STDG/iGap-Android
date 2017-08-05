@@ -206,7 +206,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         RealmRegisteredInfo registeredInfo = G.getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID)).findFirst();
 
         if (registeredInfo != null) {
-            holder.author.setText(G.context.getString(R.string.recorded_by) + registeredInfo.getDisplayName());
+            holder.author.setText(G.context.getString(R.string.recorded_by) + " " + registeredInfo.getDisplayName());
         } else {
             holder.author.setText("");
         }
