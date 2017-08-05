@@ -1029,17 +1029,18 @@
   <string name="turn_off_map">خاموش</string>
   <string name="turn_on_map">روشن</string>
   <string name="positioning">تعیین وضعیت</string>
-  <string name="nearby">افراد نزدیک من</string>
-  <string name="list_user_map">لیست افراد</string>
-  <string name="map_registration">نمایش موقعیت شما</string>
+  <string name="nearby">بروزرسانی دستی</string>
+  <string name="list_user_map">نمایش بصورت لیست</string>
+  <string name="map_registration">غیرفعال کردن قابلیت اطراف من</string>
   <string name="comment_waiting">در حال دریافت یادداشت</string>
   <string name="comment_no">بدون وضعیت</string>
   <string formatted="false" name="distance">حدود %d متر</string>
   <string name="hint_gps">وضعیت شما</string>
 
-  <string name="Visible_Status_title_dialog">قابلیت نمایش وضعیت</string>
-  <string name="Visible_Status_text_dialog">آیا از اینکه موقعیتتان برای سایرین قابل مشاهده باشد، اطمینان دارید؟</string>
-  <string name="Visible_Status_text_dialog_invisible">آیا از اینکه موقعیتتان برای سایرین غیر قابل مشاهده باشد، اطمینان دارید؟</string>
+  <string name="Visible_Status_title_dialog">فعال سازی</string>
+  <string name="Visible_Status_title_dialog_invisible">غیر فعال سازی</string>
+  <string name="Visible_Status_text_dialog">فعال سازی قابلیت "اطراف من" باعث خواهد شد وضعیت شما و سایرین برای یکدیگر قابل مشاهده شود. آیا مایل به ادامهٔ کار هستید؟</string>
+  <string name="Visible_Status_text_dialog_invisible">با غیرفعال کردن این قابلیت موقعیت شما از سایرین مخفی خواهد شد و همچنین قادر به مشاهدهٔ افراد در محدودهٔ خود نخواهید بود. آیا همواره مایل به ادامهٔ کار هستید؟</string>
   <string name="Visible_Status_text">توجه! با انتخاب دکمۀ زیر، موقعیت شما برای سایرین قابل مشاهده می باشد. لطفاً پیش از روشن کردن این حالت از انجام آن مطمئن شوید.</string>
   <string name="Clear_Status">حذف وضعیت</string>
   <string name="Clear_Status_desc">شما وضعیتی برای خود تعیین نکرده اید. آیا مایلید برنامه را بدون تعیین وضعیت ادامه دهید؟</string>

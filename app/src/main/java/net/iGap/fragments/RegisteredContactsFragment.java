@@ -547,13 +547,15 @@ public class RegisteredContactsFragment extends Fragment {
     public class AdapterListContact extends AbstractItem<AdapterListContact, AdapterListContact.ViewHolder> {
 
         public String item;
+        public String phone;
 
         //public String getItem() {
         //    return item;
         //}
 
-        public AdapterListContact(String item) {
+        public AdapterListContact(String item, String phone) {
             this.item = item;
+            this.phone = phone;
         }
 
         //public void setItem(String item) {
@@ -645,7 +647,7 @@ public class RegisteredContactsFragment extends Fragment {
             //Collections.sort(structListOfContacts);
 
             for (int i = 0; i < structListOfContacts.size(); i++) {
-                fastItemAdapter.add(new AdapterListContact(structListOfContacts.get(i).getDisplayName()).withIdentifier(100 + i));
+                fastItemAdapter.add(new AdapterListContact(structListOfContacts.get(i).getDisplayName(), structListOfContacts.get(i).getPhone()).withIdentifier(100 + i));
             }
             prgWaitingLiadList.setVisibility(View.GONE);
             super.onPostExecute(structListOfContacts);

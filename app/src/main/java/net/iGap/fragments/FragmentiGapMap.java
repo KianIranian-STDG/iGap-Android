@@ -552,7 +552,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                         dialog.dismiss();
 
 
-                        new MaterialDialog.Builder(mActivity).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(mActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
