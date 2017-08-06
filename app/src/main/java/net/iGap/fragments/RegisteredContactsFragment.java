@@ -581,6 +581,7 @@ public class RegisteredContactsFragment extends Fragment {
             super.bindView(holder, payloads);
 
             holder.txtName.setText(item);
+            holder.txtPhone.setText(phone);
 
             holder.txtName.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -611,11 +612,13 @@ public class RegisteredContactsFragment extends Fragment {
 
 
             private TextView txtName;
+            private TextView txtPhone;
 
             public ViewHolder(View view) {
                 super(view);
 
-                txtName = (TextView) view.findViewById(R.id.txtTest);
+                txtName = (TextView) view.findViewById(R.id.txtName);
+                txtPhone = (TextView) view.findViewById(R.id.txtPhone);
 
             }
         }
