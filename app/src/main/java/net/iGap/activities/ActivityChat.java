@@ -3242,7 +3242,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     @Override
     public void onPlayMusic(String messageId) {
 
-        for (int i = mAdapter.getItemCount() - 1; i >= 0; i--) {
+        int _adapterCount = mAdapter.getItemCount();
+
+        for (int i = _adapterCount - 1; i >= 0; i--) {
+
+
 
             AbstractMessage item = mAdapter.getAdapterItem(i);
 
@@ -3252,40 +3256,40 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                     try {
 
-                        int j = i + 1;
+                        for (int k = i + 1; k < _adapterCount; k++) {
 
-                        AbstractMessage nextItem = mAdapter.getAdapterItem(j);
-                        if (nextItem instanceof TimeItem || nextItem instanceof UnreadMessage) {
-                            j++;
-                            nextItem = mAdapter.getAdapterItem(j);
-                        }
+                            AbstractMessage nextItem = mAdapter.getAdapterItem(k);
 
-                        if (nextItem instanceof VoiceItem || nextItem instanceof AudioItem) {
+                            if (nextItem instanceof VoiceItem || nextItem instanceof AudioItem) {
 
-                            ProtoGlobal.RoomMessageType _messageType = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getMessageType() : nextItem.mMessage.messageType;
-                            String _cashid = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getCacheId() : nextItem.mMessage.getAttachment().cashID;
-                            String _name = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getName() : nextItem.mMessage.getAttachment().name;
-                            String _token = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getToken() : nextItem.mMessage.getAttachment().token;
-                            Long _size = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getSize() : nextItem.mMessage.getAttachment().size;
+                                ProtoGlobal.RoomMessageType _messageType = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getMessageType() : nextItem.mMessage.messageType;
+                                String _cashid = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getCacheId() : nextItem.mMessage.getAttachment().cashID;
+                                String _name = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getName() : nextItem.mMessage.getAttachment().name;
+                                String _token = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getToken() : nextItem.mMessage.getAttachment().token;
+                                Long _size = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getSize() : nextItem.mMessage.getAttachment().size;
 
-                            if (_cashid == null) {
-                                return;
-                            }
-
-                            ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-
-                            final String _path = AndroidUtils.getFilePathWithCashId(_cashid, _name, _messageType);
-
-                            if (_token != null && _token.length() > 0 && _size > 0) {
-
-                                if (!new File(_path).exists()) {
-
-                                    HelperDownloadFile.startDownload(nextItem.mMessage.messageID, _token, _cashid, _name, _size, selector, _path, 0, null);
-                                    MusicPlayer.playNextMusic = true;
-                                    mAdapter.notifyItemChanged(j);
+                                if (_cashid == null) {
+                                    return;
                                 }
 
+                                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+
+                                final String _path = AndroidUtils.getFilePathWithCashId(_cashid, _name, _messageType);
+
+                                if (_token != null && _token.length() > 0 && _size > 0) {
+
+                                    if (!new File(_path).exists()) {
+
+                                        HelperDownloadFile.startDownload(nextItem.mMessage.messageID, _token, _cashid, _name, _size, selector, _path, 0, null);
+                                        MusicPlayer.playNextMusic = true;
+                                        mAdapter.notifyItemChanged(k);
+                                    }
+
+                                }
+
+                                break;
                             }
+
                         }
                     } catch (Exception e) {
 

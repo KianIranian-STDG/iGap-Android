@@ -99,6 +99,8 @@ public class ActivityIntroduce extends ActivityEnhanced {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        G.firstTimeEnterToApp = true;
+
 
         try {
             HelperPermision.getStoragePermision(this, new OnGetPermission() {

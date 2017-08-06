@@ -240,7 +240,16 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         super.onPause();
 
         if (G.isMainRecreate && isBackPressed) {
+
+            G.isUpdateNotificaionColorMain = false;
+            G.isUpdateNotificaionColorChannel = false;
+            G.isUpdateNotificaionColorGroup = false;
+            G.isUpdateNotificaionColorChat = false;
+            G.isUpdateNotificaionCall = false;
+
+
             startActivity(new Intent(ActivitySetting.this, ActivityMain.class));
+
             G.isMainRecreate = false;
         }
 
@@ -929,6 +938,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
 
             @Override
             public void onComplete(RippleView rippleView) {
+                isBackPressed = true;
                 finish();
             }
         });
@@ -2557,10 +2567,8 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         if (onBackPressedListener != null) {
             onBackPressedListener.doBack();
         } else {
-            super.onBackPressed();
             isBackPressed = true;
-
-
+            super.onBackPressed();
         }
 
     }

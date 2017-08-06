@@ -1787,7 +1787,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
             VoiceAdapter.ViewHolder vh = (VoiceAdapter.ViewHolder) holder;
 
-            MusicPlayer.startPlayer(vh.filePath, mList.get(position).item.getAttachment().getName(), roomId, true, mList.get(position).messageId + "");
+            String name = mList.get(position).item.getAttachment().getName();
+
+            MusicPlayer.startPlayer(name, vh.filePath, name, roomId, true, mList.get(position).messageId + "");
         }
     }
 

@@ -520,6 +520,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onClick(View v) {
 
+                if (mViewPager == null || mViewPager.getAdapter() == null) {
+                    return;
+                }
+
                 FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
                 if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
 
@@ -1711,12 +1715,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 G.isMainRecreate = true;
 
-                G.isUpdateNotificaionColorMain = false;
-                G.isUpdateNotificaionColorChannel = false;
-                G.isUpdateNotificaionColorGroup = false;
-                G.isUpdateNotificaionColorChat = false;
-                G.isUpdateNotificaionCall = false;
-
                 finish();
 
             }
@@ -1800,7 +1798,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onPause();
         HelperNotificationAndBadge.updateBadgeOnly();
 
-        if (mViewPager != null) {
+        if (mViewPager != null && mViewPager.getAdapter() != null) {
 
             try {
 

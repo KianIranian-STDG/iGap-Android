@@ -138,13 +138,19 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
                 if (holder.mFilePath.length() < 1) return;
 
+                String name = "";
+
+                if (mMessage != null && mMessage.getAttachment() != null) {
+                    name = mMessage.getAttachment().name;
+                }
+
                 if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                     MusicPlayer.onCompleteChat = holder.complete;
 
                     if (MusicPlayer.mp != null) {
                         MusicPlayer.playAndPause();
                     } else {
-                        MusicPlayer.startPlayer(holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+                        MusicPlayer.startPlayer(name, holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
                         messageClickListener.onPlayMusic(holder.mMessageID);
                     }
                 } else {
@@ -152,7 +158,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                     MusicPlayer.stopSound();
                     MusicPlayer.onCompleteChat = holder.complete;
 
-                    MusicPlayer.startPlayer(holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+                    MusicPlayer.startPlayer(name, holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
                     messageClickListener.onPlayMusic(holder.mMessageID);
                     holder.mTimeMusic = MusicPlayer.musicTime;
                 }

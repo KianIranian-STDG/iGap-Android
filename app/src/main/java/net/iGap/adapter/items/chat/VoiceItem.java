@@ -166,14 +166,14 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                         if (MusicPlayer.mp != null) {
                             MusicPlayer.playAndPause();
                         } else {
-                            MusicPlayer.startPlayer(holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+                            MusicPlayer.startPlayer("", holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
                             messageClickListener.onPlayMusic(holder.mMessageID);
                         }
                     } else {
 
                         MusicPlayer.stopSound();
                         MusicPlayer.onCompleteChat = holder.complete;
-                        MusicPlayer.startPlayer(holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+                        MusicPlayer.startPlayer("", holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
                         messageClickListener.onPlayMusic(holder.mMessageID);
 
                         holder.mTimeMusic = MusicPlayer.musicTime;

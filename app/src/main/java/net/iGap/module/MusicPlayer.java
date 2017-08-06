@@ -290,7 +290,7 @@ public class MusicPlayer {
                 updateProgress();
             }
         } else {
-            startPlayer(musicPath, roomName, roomId, false, MusicPlayer.messageId);
+            startPlayer(musicName, musicPath, roomName, roomId, false, MusicPlayer.messageId);
         }
     }
 
@@ -350,11 +350,11 @@ public class MusicPlayer {
 
             selectedMedia++;
             if (selectedMedia < mediaList.size()) {
-                startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+                startPlayer(musicName, mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
                 if (onComplete != null) onComplete.complete(true, "update", "");
             } else {
                 selectedMedia = 0;
-                startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+                startPlayer(musicName, mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
                 if (onComplete != null) onComplete.complete(true, "update", "");
             }
@@ -372,7 +372,7 @@ public class MusicPlayer {
             String beforMessageID = MusicPlayer.messageId;
             Random r = new Random();
             selectedMedia = r.nextInt(mediaList.size() - 1);
-            startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+            startPlayer(musicName, mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
             if (onComplete != null) onComplete.complete(true, "update", "");
 
@@ -391,14 +391,14 @@ public class MusicPlayer {
             String beforMessageID = MusicPlayer.messageId;
 
             if (selectedMedia >= 0) {
-                startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+                startPlayer(musicName, mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
                 if (onComplete != null) onComplete.complete(true, "update", "");
             } else {
                 int index = mediaList.size() - 1;
                 if (index >= 0) {
                     selectedMedia = index;
-                    startPlayer(mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+                    startPlayer(musicName, mediaList.get(selectedMedia).getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
                     if (onComplete != null) onComplete.complete(true, "update", "");
                 }
@@ -432,7 +432,7 @@ public class MusicPlayer {
         }
     }
 
-    public static void startPlayer(String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
+    public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
 
         isVoice = false;
         playNextMusic = false;
@@ -463,6 +463,12 @@ public class MusicPlayer {
         if (layoutTripMusic.getVisibility() == View.GONE) {
             layoutTripMusic.setVisibility(View.VISIBLE);
         }
+
+        if (name == null) {
+            name = "";
+        }
+
+        musicName = name.length() > 0 ? name : musicPath.substring(musicPath.lastIndexOf("/") + 1);
 
         if (mp != null) {
             mp.stop();
@@ -506,7 +512,6 @@ public class MusicPlayer {
                 musicTime = milliSecondsToTimer((long) mp.getDuration());
                 txt_music_time.setText(musicTime);
 
-                musicName = musicPath.substring(musicPath.lastIndexOf("/") + 1);
                 txt_music_name.setText(musicName);
 
                 updateNotification();
@@ -581,7 +586,6 @@ public class MusicPlayer {
                     }
                 });
 
-                musicName = musicPath.substring(musicPath.lastIndexOf("/") + 1);
                 txt_music_name.setText(musicName);
                 updateNotification();
             } catch (Exception e) {
