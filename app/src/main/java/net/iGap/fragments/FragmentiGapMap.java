@@ -132,6 +132,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private FragmentActivity mActivity;
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
     private GestureDetector mGestureDetector;
+    public static Location mineStaticLocation;
 
     private String specialRequests;
 
@@ -434,7 +435,6 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                     //edtMessageGps.setSelection(lastSpecialRequestsCursorPosition);
 
                     if (isEndLine) {
-                        Log.i("CCCCCCCCCC", "afterTextChanged: " + isEndLine);
                         isEndLine = false;
                         shoSnackBar(getResources().getString(R.string.exceed_4_line));
                     }
@@ -604,6 +604,10 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
             }
         });
+
+        if (FragmentiGapMap.mineStaticLocation != null) {
+            GPSTracker.getGpsTrackerInstance().onLocationChanged(FragmentiGapMap.mineStaticLocation);
+        }
     }
 
     private void shoSnackBar(final String message) {
@@ -794,7 +798,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             } else {
                 firstBorderColor = Color.WHITE;
                 secondBoarderColor = Color.parseColor("#554f4f4f");
-                thirdBoarderColor = G.context.getResources().getColor(R.color.colorOldBlack);
+                //thirdBoarderColor = G.context.getResources().getColor(R.color.colorOldBlack);
+                thirdBoarderColor = Color.parseColor("#004f4f4f");
 
                 firstBorderSize = 2;
                 secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp10);

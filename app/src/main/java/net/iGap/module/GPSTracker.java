@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.text.format.DateUtils;
 import android.util.Log;
 import net.iGap.G;
+import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.request.RequestGeoUpdatePosition;
 
@@ -65,7 +66,7 @@ public class GPSTracker extends Service implements LocationListener {
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             if (!isGPSEnabled && !isNetworkEnabled) {
-                Log.i("LLL", "no network provider is enabled");
+                Log.i("GPS", "no network provider is enabled");
                 // no network provider is enabled
             } else {
                 this.canGetLocation = true;
@@ -158,6 +159,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        FragmentiGapMap.mineStaticLocation = location;
         if (G.onLocationChanged != null) {
             G.onLocationChanged.onLocationChanged(location);
         }
