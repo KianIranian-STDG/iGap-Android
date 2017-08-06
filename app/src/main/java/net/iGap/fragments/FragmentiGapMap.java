@@ -19,6 +19,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -748,6 +749,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
             if (avatar.getFile() != null) {
                 pathName = avatar.getFile().getLocalFilePath();
+                if (pathName == null) {
+                    pathName = avatar.getFile().getLocalThumbnailPath();
+                }
             }
         }
         if (pathName == null || pathName.isEmpty()) {
@@ -808,7 +812,11 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         }
 
         bitmap = addBorderToCircularBitmap(bitmap, firstBorderSize, firstBorderColor);
-        bitmap = addBorderToCircularBitmap(bitmap, secondBoarderSize, secondBoarderColor);
+        if (mineAvatar) {
+            bitmap = addBorderToCircularBitmap(bitmap, secondBoarderSize, secondBoarderColor);
+        } else {
+            bitmap = addBorderToCircularBitmapSharp(bitmap, secondBoarderSize, secondBoarderColor);
+        }
         bitmap = addBorderToCircularBitmap(bitmap, thirdBoarderSize, thirdBoarderColor);
         return bitmap;
     }
@@ -856,6 +864,52 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         paint.setStrokeWidth(borderWidth);
         paint.setAntiAlias(true);
         canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - borderWidth / 2, paint);
+        srcBitmap.recycle();
+        return dstBitmap;
+    }
+
+    protected static Bitmap addBorderToCircularBitmapSharp(Bitmap srcBitmap, int borderWidth, int borderColor) {
+        int dstBitmapWidth = srcBitmap.getWidth() + borderWidth * 2;
+        Bitmap dstBitmap = Bitmap.createBitmap(dstBitmapWidth, dstBitmapWidth, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(dstBitmap);
+        canvas.drawBitmap(srcBitmap, borderWidth, borderWidth, null);
+        Paint paint = new Paint();
+        paint.setColor(borderColor);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(borderWidth);
+        paint.setAntiAlias(true);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));//DST_OUT
+        //canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - borderWidth / 2, paint);
+
+        Paint paintSharp = new Paint();
+        paintSharp.setColor(Color.WHITE);
+        paintSharp.setStyle(Paint.Style.FILL);
+        paintSharp.setStrokeWidth(borderWidth);
+        paintSharp.setAntiAlias(true);
+        srcBitmap.recycle();
+
+        Path path1 = new Path();
+        path1.moveTo(borderWidth + 3, canvas.getWidth() / 2 - borderWidth / 2);// first point
+        path1.lineTo(canvas.getWidth() - borderWidth - 3, canvas.getWidth() / 2 - borderWidth / 2);
+        path1.lineTo((canvas.getWidth() / 2), canvas.getWidth() - borderWidth / 3);
+        path1.lineTo(borderWidth + 3, canvas.getWidth() / 2 - borderWidth / 2);// last point
+        path1.close();
+        paintSharp.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));//DST_OVER
+        canvas.drawPath(path1, paintSharp);
+
+        canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - borderWidth / 2, paint);
+
+        //=========OK
+        //int sharpSize = 10;
+        //Path path1 = new Path();
+        //path1.moveTo(canvas.getWidth() / 2 - sharpSize,canvas.getWidth() / 2 - borderWidth / 2);// first point
+        //path1.lineTo(canvas.getWidth() / 2 + sharpSize, canvas.getWidth() / 2 - borderWidth / 2);
+        //path1.lineTo((canvas.getWidth() / 2), canvas.getWidth());
+        //path1.lineTo(canvas.getWidth() / 2 - sharpSize, canvas.getWidth() / 2 - borderWidth / 2);// last point
+        //path1.close();
+        //paintSharp.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
+        //canvas.drawPath(path1, paintSharp);
+
         srcBitmap.recycle();
         return dstBitmap;
     }
