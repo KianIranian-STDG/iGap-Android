@@ -16,10 +16,15 @@ import io.realm.Realm;
 import java.io.File;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.FileUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmRoomMessage;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.config.IConfigurationProvider;
+
+import static net.iGap.module.FileUtils.getFolderSize;
 
 public class ActivityManageSpace extends ActivityEnhanced {
     private SharedPreferences sharedPreferences;
@@ -96,13 +101,16 @@ public class ActivityManageSpace extends ActivityEnhanced {
             }
         });
 
+        final long sizeFolderPhoto = getFolderSize(new File(G.DIR_IMAGES));
+        final long sizeFolderVideo = getFolderSize(new File(G.DIR_VIDEOS));
+        final long sizeFolderDocument = getFolderSize(new File(G.DIR_DOCUMENT));
+        final long sizeFolderAudio = getFolderSize(new File(G.DIR_AUDIOS));
 
-        final long sizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
-        final long sizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
-        final long sizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
-        final long sizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
+        final IConfigurationProvider configurationProvider = Configuration.getInstance();
+        final File fileMap = configurationProvider.getOsmdroidBasePath();
+        final long sizeFolderMap = FileUtils.getFolderSize(fileMap);
 
-        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio;
+        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio + sizeFolderMap;
 
         final TextView txtSizeClearCach = (TextView) findViewById(R.id.st_txt_clearCache);
         txtSizeClearCach.setText(FileUtils.formatFileSize(total));
@@ -166,10 +174,12 @@ public class ActivityManageSpace extends ActivityEnhanced {
             @Override
             public void onClick(View v) {
 
-                final long sizeFolderPhotoDialog = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
-                final long sizeFolderVideoDialog = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
-                final long sizeFolderDocumentDialog = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
-                final long sizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
+                final long sizeFolderPhotoDialog = getFolderSize(new File(G.DIR_IMAGES));
+                final long sizeFolderVideoDialog = getFolderSize(new File(G.DIR_VIDEOS));
+                final long sizeFolderDocumentDialog = getFolderSize(new File(G.DIR_DOCUMENT));
+                final long sizeFolderAudio = getFolderSize(new File(G.DIR_AUDIOS));
+
+                final long sizeFolderMap = FileUtils.getFolderSize(fileMap);
 
                 boolean wrapInScrollView = true;
                 final MaterialDialog dialog = new MaterialDialog.Builder(ActivityManageSpace.this).title(getResources().getString(R.string.st_title_Clear_Cache)).customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText(getResources().getString(R.string.st_title_Clear_Cache)).show();
@@ -198,6 +208,11 @@ public class ActivityManageSpace extends ActivityEnhanced {
                 TextView txtAudio = (TextView) view.findViewById(R.id.st_txt_audio_dialogClearCash);
                 txtAudio.setText(FileUtils.formatFileSize(sizeFolderAudio));
                 final CheckBox checkBoxAudio = (CheckBox) view.findViewById(R.id.st_checkBox_audio_dialogClearCash);
+
+                //final File fileMap = new File(G.DIR_AUDIOS);
+                TextView txtMap = (TextView) view.findViewById(R.id.st_txt_map_dialogClearCash);
+                txtMap.setText(FileUtils.formatFileSize(sizeFolderMap));
+                final CheckBox checkBoxMap = (CheckBox) view.findViewById(R.id.st_checkBox_map_dialogClearCash);
 
                 long rTotalSize = sizeFolderPhotoDialog + sizeFolderVideoDialog + sizeFolderDocumentDialog + sizeFolderAudio;
                 final TextView txtTotalSize = (TextView) view.findViewById(R.id.st_txt_totalSize_dialogClearCash);
@@ -228,12 +243,16 @@ public class ActivityManageSpace extends ActivityEnhanced {
                                 if (!file.isDirectory()) file.delete();
                             }
                         }
+                        if (checkBoxMap.isChecked()) {
+                            FragmentiGapMap.deleteMapFileCash();
+                        }
 
                         long afterClearSizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
                         long afterClearSizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
                         long afterClearSizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
                         long afterClearSizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
-                        long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument + afterClearSizeFolderAudio;
+                        long afterClearSizeFolderMap = FileUtils.getFolderSize(fileMap);
+                        long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument + afterClearSizeFolderAudio + afterClearSizeFolderMap;
                         txtSizeClearCach.setText(FileUtils.formatFileSize(afterClearTotal));
                         txtTotalSize.setText(FileUtils.formatFileSize(afterClearTotal));
                         dialog.dismiss();
