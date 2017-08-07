@@ -23,6 +23,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -270,12 +271,16 @@ public class ShowCustomList extends Fragment {
                                     }
                                     mActivity.getSupportFragmentManager().popBackStack();
                                 }
-                            })
-                            .inputType(InputType.TYPE_CLASS_PHONE)
-                            .input(getString(R.string.count_of_show_message), "50", new MaterialDialog.InputCallback() {
+                            }).inputType(InputType.TYPE_CLASS_NUMBER).input(getString(R.string.count_of_show_message), null, new MaterialDialog.InputCallback() {
                                 @Override public void onInput(MaterialDialog dialog, CharSequence input) {
                                     if (input.toString() != null && !input.toString().isEmpty()) {
-                                        count = Integer.parseInt(input.toString());
+                                        Log.i("TAG", "onInput: " + input.length());
+                                        if (input.length() < 5) {
+                                            count = Integer.parseInt(input.toString());
+                                        } else {
+                                            count = 0;
+                                        }
+
                                     } else {
                                         count = 0;
                                     }
