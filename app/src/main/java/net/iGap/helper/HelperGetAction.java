@@ -85,22 +85,11 @@ public class HelperGetAction {
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, latestStruct.userId).findFirst();
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName().length() > 0) {
                     String action;
+
                     if (HelperCalander.isLanguagePersian) {
-                        if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                            action = realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
-                        } else if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_EUROPEAN_NUMBER) {
-                            action = "\u200F" + realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
-                        } else {
-                            action = "\u200F" + realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
-                        }
+                        action = "\u200F" + realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
                     } else {
-                        if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                            action = "\u200E" + realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
-                        } else if (Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_EUROPEAN_NUMBER) {
-                            action = "\u200E" + realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
-                        } else {
-                            action = realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
-                        }
+                        action = "\u200E" + realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
                     }
                     realm.close();
                     return action;
@@ -133,13 +122,9 @@ public class HelperGetAction {
                 concatenatedNames = concatenatedNames.substring(0, concatenatedNames.length() - 1);
 
                 if (HelperCalander.isLanguagePersian) {
-                    if (Character.getDirectionality(concatenatedNames.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT) {
 
-                        return "\u200F" + concatenatedNames + " " + HelperConvertEnumToString.convertActionEnum(latestAction);
-                    } else {
+                    return "\u200F" + concatenatedNames + " " + HelperConvertEnumToString.convertActionEnum(latestAction);
 
-                        return "\u200F" + concatenatedNames + " " + HelperConvertEnumToString.convertActionEnum(latestAction);
-                    }
                 } else {
                     return concatenatedNames + " " + G.context.getResources().getString(R.string.are) + " " + convertActionEnum(latestAction);
                 }
