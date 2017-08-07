@@ -231,7 +231,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                  * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
                  * so i need to (replyMessageId * (-1)) again for use this messageId
                  */
-                if (messageInfo.mMessage.forwardedFrom != null && (messageInfo.mMessage.forwardedFrom.getMessageId() * (-1)) == messageId) {
+                if (messageInfo.mMessage.forwardedFrom != null && messageInfo.mMessage.forwardedFrom.isValid() && (messageInfo.mMessage.forwardedFrom.getMessageId() * (-1)) == messageId) {
                     int pos = items.indexOf(messageInfo);
                     set(pos, messageInfo);
                 } else if (messageInfo.mMessage.messageID.equals(Long.toString(messageId))) {

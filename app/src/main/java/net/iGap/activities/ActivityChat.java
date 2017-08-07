@@ -154,6 +154,7 @@ import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelAddMessageReaction;
 import net.iGap.interfaces.OnChannelGetMessagesStats;
 import net.iGap.interfaces.OnChatClearMessageResponse;
+import net.iGap.interfaces.OnChatDelete;
 import net.iGap.interfaces.OnChatDeleteMessageResponse;
 import net.iGap.interfaces.OnChatEditMessageResponse;
 import net.iGap.interfaces.OnChatMessageRemove;
@@ -291,7 +292,8 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOG;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 
-public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats {
+public class ActivityChat extends ActivityEnhanced
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -628,6 +630,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.onSetAction = this;
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
+        G.onChatDelete = this;
         G.helperNotificationAndBadge.cancelNotification();
 
         finishActivity = new FinishActivity() {
@@ -1012,7 +1015,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                 }).start();
             }
 
-            if (listPathString.size() == 1) {
+            if (listPathString.size() == 1 && listPathString.get(0) != null) {
 
                 if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
 
@@ -1489,7 +1492,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
             @Override
             public void onChatEditMessage(long roomId, final long messageId, long messageVersion, final String message, ProtoResponse.Response response) {
-                if (mRoomId == roomId) {
+                if (mRoomId == roomId && mAdapter != null) {
                     // I'm in the room
                     runOnUiThread(new Runnable() {
                         @Override
@@ -3037,14 +3040,14 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
         if (userTriesReplay()) {
             messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
@@ -3951,6 +3954,19 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         }
     }
 
+
+    @Override
+    public void onChatDelete(long roomId) {
+        if (roomId == mRoomId) {
+            finish();
+        }
+    }
+
+    @Override
+    public void onChatDeleteError(int majorCode, int minorCode) {
+
+    }
+
     /**
      * *************************** common method ***************************
      */
@@ -3958,6 +3974,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
+
     /**
      * detect that editText have character or just have space
      */
@@ -4481,30 +4498,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
     }
 
     private void deleteChat(final int chatId) {
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatId).findFirst();
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(final Realm realm) {
-                if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, chatId).findFirst() == null) {
-                    RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
-                    realmOfflineDelete.setOfflineDelete(chatId);
-
-                    realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
-
-                    realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatId).findFirst().deleteFromRealm();
-                    realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, chatId).findAll().deleteAllFromRealm();
-
-                    new RequestChatDelete().chatDelete(chatId);
-
-                    finish();
-                }
-            }
-        });
-
-        realm.close();
-
+        new RequestChatDelete().chatDelete(chatId);
     }
 
     private void muteNotification(final int item) {
@@ -4710,7 +4704,7 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
@@ -4900,6 +4894,13 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
     private void setDraft() {
         if (!isNotJoin) {
+            Realm realm = Realm.getDefaultInstance();
+
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            if (realmRoom == null) {
+                return;
+            }
+
             if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
                 StructMessageInfo info = ((StructMessageInfo) mReplayLayout.getTag());
                 replyToMessageId = parseLong(info.messageID);
@@ -4916,37 +4917,33 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
 
                 hasDraft = true;
 
-                Realm realm = Realm.getDefaultInstance();
                 final String finalMessage = message;
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                        if (realmRoom != null) {
 
-                            RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
-                            draft.setMessage(finalMessage);
-                            draft.setReplyToMessageId(replyToMessageId);
+                        RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
+                        draft.setMessage(finalMessage);
+                        draft.setReplyToMessageId(replyToMessageId);
 
-                            realmRoom.setDraft(draft);
+                        realmRoom.setDraft(draft);
 
-                            if (chatType == CHAT) {
-                                new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, finalMessage, replyToMessageId);
-                            } else if (chatType == GROUP) {
-                                new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, finalMessage, replyToMessageId);
-                            } else if (chatType == CHANNEL) {
-                                new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, finalMessage, replyToMessageId);
-                            }
-                            if (G.onDraftMessage != null) {
-                                G.onDraftMessage.onDraftMessage(mRoomId, finalMessage);
-                            }
+                        if (chatType == CHAT) {
+                            new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, finalMessage, replyToMessageId);
+                        } else if (chatType == GROUP) {
+                            new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, finalMessage, replyToMessageId);
+                        } else if (chatType == CHANNEL) {
+                            new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, finalMessage, replyToMessageId);
+                        }
+                        if (G.onDraftMessage != null) {
+                            G.onDraftMessage.onDraftMessage(mRoomId, finalMessage);
                         }
                     }
                 });
-                realm.close();
             } else {
                 clearDraftRequest();
             }
+            realm.close();
         }
     }
 
@@ -5506,9 +5503,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                         public void run() {
 
                                             fotoapparatSwitcher = Fotoapparat.with(ActivityChat.this).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                .lensPosition(back())       // we want back camera
-                                                .build();
+                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                    .lensPosition(back())       // we want back camera
+                                                    .build();
 
                                             fotoapparatSwitcher.start();
 
@@ -5551,9 +5548,9 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                                         @Override
                                         public void run() {
                                             fotoapparatSwitcher = Fotoapparat.with(ActivityChat.this).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                .lensPosition(back())       // we want back camera
-                                                .build();
+                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                    .lensPosition(back())       // we want back camera
+                                                    .build();
 
                                             fotoapparatSwitcher.stop();
                                         }
@@ -5688,10 +5685,11 @@ public class ActivityChat extends ActivityEnhanced implements IMessageItem, OnCh
                         @Override
                         public void run() {
 
-                            for (String path : listPathString) {
+                            ArrayList<String> pathStrings = listPathString;
+                            for (String path : pathStrings) {
                                 //if (!path.toLowerCase().endsWith(".gif")) {
-                                String localpathNew = attachFile.saveGalleryPicToLocal(path);
-                                sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localpathNew);
+                                String localPathNew = attachFile.saveGalleryPicToLocal(path);
+                                sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localPathNew);
                                 //}
                             }
 
