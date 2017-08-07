@@ -278,7 +278,9 @@ public final class StartupActions {
      */
     private void mainUserInfo() {
 
-        RealmUserInfo userInfo = G.getRealm().where(RealmUserInfo.class).findFirst();
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
         if (userInfo != null) {
 
@@ -293,6 +295,8 @@ public final class StartupActions {
             }
 
         }
+
+        realm.close();
     }
 
     /**

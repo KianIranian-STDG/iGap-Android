@@ -159,6 +159,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
     private Realm mRealm;
+    private boolean isNeedToRegister = false;
 
     private ViewPager mViewPager;
     private ArrayList<Fragment> pages = new ArrayList<Fragment>();
@@ -172,7 +173,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         void onAction(MainAction action);
     }
 
-    private Realm getRealm() {
+    public Realm getRealm() {
         if (mRealm == null || mRealm.isClosed()) {
 
             mRealm = Realm.getDefaultInstance();
@@ -191,10 +192,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (mRealm != null && !mRealm.isClosed()) {
+            mRealm.close();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        getRealm().close();
+        if (G.mRealm != null && !G.mRealm.isClosed()) {
+            G.mRealm.close();
+        }
 
     }
 
@@ -217,6 +229,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onCreate(savedInstanceState);
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            isNeedToRegister = true;
             Intent intent = new Intent(this, ActivityIntroduce.class);
             startActivity(intent);
 
@@ -227,11 +240,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
         if (userInfo == null) { // user registered before
-
+            isNeedToRegister = true;
             Intent intent = new Intent(this, ActivityIntroduce.class);
             startActivity(intent);
 
-            getRealm().close();
+            if (mRealm != null && !mRealm.isClosed()) {
+                mRealm.close();
+            }
+
+
             finish();
             return;
         }
@@ -1796,6 +1813,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onPause() {
         super.onPause();
+
+        if (isNeedToRegister) {
+            return;
+        }
+
         HelperNotificationAndBadge.updateBadgeOnly();
 
         if (mViewPager != null && mViewPager.getAdapter() != null) {
