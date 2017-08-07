@@ -6267,7 +6267,11 @@ public class ActivityChat extends ActivityEnhanced
             StructCompress structCompress = new StructCompress();
             structCompress.path = params[1];
             structCompress.originalPath = params[0];
-            structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1]);
+            try {
+                structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1]);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
             structCompress.originalSize = originalSize;
             return structCompress;
         }
