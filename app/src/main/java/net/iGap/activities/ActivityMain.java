@@ -164,6 +164,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private ViewPager mViewPager;
     private ArrayList<Fragment> pages = new ArrayList<Fragment>();
     SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
+    boolean waitingForConfiguration = false;
 
     public enum MainAction {
         downScrool, clinetCondition
@@ -1036,25 +1037,52 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             new RequestSignalingGetConfiguration().signalingGetConfiguration();
         }
 
+
         ViewGroup itemNavMap = (ViewGroup) findViewById(R.id.lm_ll_map);
         itemNavMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mapUrls == null || mapUrls.isEmpty()) {
-                    G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
-                        @Override
-                        public void onGetConfiguration() {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    openMapFragment();
-                                }
-                            });
-                        }
-                    };
-                    new RequestGeoGetConfiguration().getConfiguration();
-                } else {
-                    openMapFragment();
+
+                if (!waitingForConfiguration) {
+                    waitingForConfiguration = true;
+                    if (mapUrls == null || mapUrls.isEmpty()) {
+                        G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
+                            @Override
+                            public void onGetConfiguration() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        G.handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                waitingForConfiguration = false;
+                                            }
+                                        }, 2000);
+                                        openMapFragment();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void getConfigurationTimeOut() {
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        waitingForConfiguration = false;
+                                    }
+                                }, 2000);
+                            }
+                        };
+                        new RequestGeoGetConfiguration().getConfiguration();
+                    } else {
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                waitingForConfiguration = false;
+                            }
+                        }, 2000);
+                        openMapFragment();
+                    }
                 }
             }
         });

@@ -12,4 +12,6 @@ package net.iGap.interfaces;
 
 public interface OnGeoGetConfiguration {
     void onGetConfiguration();
+
+    void getConfigurationTimeOut();
 }
