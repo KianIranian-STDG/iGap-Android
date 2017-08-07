@@ -1,6 +1,7 @@
 package net.iGap.module;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -105,6 +106,7 @@ public class MyInfoWindow extends InfoWindow {
         txtBack.setTextColor(Color.parseColor(G.appBarColor));
 
         txtName.setText(realmRegisteredInfo.getDisplayName());
+        txtName.setTypeface(G.typeface_IRANSansMobile_Bold, Typeface.BOLD);
 
         if (G.selectedLanguage.equals("en")) {
             txtOpenComment.setText(G.context.getResources().getString(R.string.md_back_arrow));
