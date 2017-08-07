@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="0dp"
     android:orientation="vertical"
     android:padding="0dp"
+    tools:ignore="MissingPrefix"
     >
 
   <LinearLayout
@@ -115,6 +117,7 @@
             android:maxLines="1"
             android:text="Comment"
             android:textSize="@dimen/dp16"
+            fontPath="fonts/IRANSansMobile.ttf"
             />
       </LinearLayout>
     </LinearLayout>
