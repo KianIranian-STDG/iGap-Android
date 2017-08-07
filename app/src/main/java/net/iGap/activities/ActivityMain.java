@@ -191,18 +191,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         void onTimeout();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
 
-        if (mRealm != null && !mRealm.isClosed()) {
-            mRealm.close();
-        }
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (mRealm != null && !mRealm.isClosed()) {
+            mRealm.close();
+        }
 
         if (G.mRealm != null && !G.mRealm.isClosed()) {
             G.mRealm.close();
