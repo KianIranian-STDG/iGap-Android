@@ -23,6 +23,7 @@ import io.realm.RealmRoomMessageRealmProxy;
 import io.realm.Sort;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
+import java.util.ArrayList;
 import java.util.Calendar;
 import net.iGap.Config;
 import net.iGap.G;
@@ -36,7 +37,14 @@ import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.request.RequestChannelDeleteMessage;
+import net.iGap.request.RequestChatDeleteMessage;
+import net.iGap.request.RequestGroupDeleteMessage;
 import org.parceler.Parcel;
+
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
+import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 @Parcel(implementations = {RealmRoomMessageRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessage.class}) public class RealmRoomMessage extends RealmObject {
     @PrimaryKey private long messageId;
@@ -916,5 +924,36 @@ import org.parceler.Parcel;
             }
         }
         realm.close();
+    }
+
+    public static void deleteSelectedMessages(Realm realm, final long RoomId, final ArrayList<Long> list, final ProtoGlobal.Room.Type chatType) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                // get offline delete list , add new deleted list and update in
+                // client condition , then send request for delete message to server
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, RoomId).findFirst();
+
+                for (final Long messageId : list) {
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                    if (roomMessage != null) {
+                        roomMessage.setDeleted(true);
+                    }
+
+                    RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
+                    realmOfflineDelete.setOfflineDelete(messageId);
+
+                    realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
+
+                    if (chatType == GROUP) {
+                        new RequestGroupDeleteMessage().groupDeleteMessage(RoomId, messageId);
+                    } else if (chatType == CHAT) {
+                        new RequestChatDeleteMessage().chatDeleteMessage(RoomId, messageId);
+                    } else if (chatType == CHANNEL) {
+                        new RequestChannelDeleteMessage().channelDeleteMessage(RoomId, messageId);
+                    }
+                }
+            }
+        });
     }
 }

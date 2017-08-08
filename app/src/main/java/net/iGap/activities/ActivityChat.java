@@ -4384,38 +4384,38 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-    public static void deleteSelectedMessages(final long RoomId, final ArrayList<Long> list, final ProtoGlobal.Room.Type chatType) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                // get offline delete list , add new deleted list and update in
-                // client condition , then send request for delete message to server
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, RoomId).findFirst();
-
-                for (final Long messageId : list) {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                    if (roomMessage != null) {
-                        roomMessage.setDeleted(true);
-                    }
-
-                    RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
-                    realmOfflineDelete.setOfflineDelete(messageId);
-
-                    realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
-
-                    if (chatType == GROUP) {
-                        new RequestGroupDeleteMessage().groupDeleteMessage(RoomId, messageId);
-                    } else if (chatType == CHAT) {
-                        new RequestChatDeleteMessage().chatDeleteMessage(RoomId, messageId);
-                    } else if (chatType == CHANNEL) {
-                        new RequestChannelDeleteMessage().channelDeleteMessage(RoomId, messageId);
-                    }
-                }
-            }
-        });
-        realm.close();
-    }
+    //public static void deleteSelectedMessages(final long RoomId, final ArrayList<Long> list, final ProtoGlobal.Room.Type chatType) {
+    //    Realm realm = Realm.getDefaultInstance();
+    //    realm.executeTransaction(new Realm.Transaction() {
+    //        @Override
+    //        public void execute(Realm realm) {
+    //            // get offline delete list , add new deleted list and update in
+    //            // client condition , then send request for delete message to server
+    //            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, RoomId).findFirst();
+    //
+    //            for (final Long messageId : list) {
+    //                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+    //                if (roomMessage != null) {
+    //                    roomMessage.setDeleted(true);
+    //                }
+    //
+    //                RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
+    //                realmOfflineDelete.setOfflineDelete(messageId);
+    //
+    //                realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
+    //
+    //                if (chatType == GROUP) {
+    //                    new RequestGroupDeleteMessage().groupDeleteMessage(RoomId, messageId);
+    //                } else if (chatType == CHAT) {
+    //                    new RequestChatDeleteMessage().chatDeleteMessage(RoomId, messageId);
+    //                } else if (chatType == CHANNEL) {
+    //                    new RequestChannelDeleteMessage().channelDeleteMessage(RoomId, messageId);
+    //                }
+    //            }
+    //        }
+    //    });
+    //    realm.close();
+    //}
 
 
     /**
@@ -5888,7 +5888,7 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 });
 
-                deleteSelectedMessages(mRoomId, list, chatType);
+                RealmRoomMessage.deleteSelectedMessages(realmChat, mRoomId, list, chatType);
 
                 int size = mAdapter.getItemCount();
                 for (int i = 0; i < size; i++) {
@@ -7804,8 +7804,7 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
-
-    private void isUiThread(String name, int line) {
+    public static void isUiThread(String name, int line) {
         if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
             Log.i("UUU", name + " in line : " + line + " is UI Thread");
         } else {
