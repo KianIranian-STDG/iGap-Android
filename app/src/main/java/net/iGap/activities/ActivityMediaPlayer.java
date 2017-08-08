@@ -10,8 +10,6 @@
 
 package net.iGap.activities;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -60,8 +58,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
 
         if (MusicPlayer.mp == null) {
             finish();
-            NotificationManager notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notifyManager.cancel(MusicPlayer.notificationId);
             return;
         }
 
@@ -127,7 +123,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         super.onPause();
         MusicPlayer.isShowMediaPlayer = false;
         MusicPlayer.onComplete = null;
-        MusicPlayer.updateNotification();
     }
 
     @Override protected void onResume() {
@@ -135,8 +130,6 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
         MusicPlayer.isShowMediaPlayer = true;
         MusicPlayer.onComplete = onComplete;
         updateUi();
-        NotificationManager notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notifyManager.cancel(MusicPlayer.notificationId);
     }
 
     //*****************************************************************************************

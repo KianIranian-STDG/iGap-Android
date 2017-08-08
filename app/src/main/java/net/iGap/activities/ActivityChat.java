@@ -296,7 +296,7 @@ public class ActivityChat extends ActivityEnhanced
         implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete {
 
     public static FinishActivity finishActivity;
-    public MusicPlayer musicPlayer;
+
     private AttachFile attachFile;
     private EditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
@@ -535,7 +535,8 @@ public class ActivityChat extends ActivityEnhanced
                 initLayoutHashNavigationCallback();
                 showSpamBar();
 
-                musicPlayer = new MusicPlayer(mediaLayout);
+                MusicPlayer.setMusicPlayer(mediaLayout);
+
                 if (MusicPlayer.mp != null) {
                     MusicPlayer.initLayoutTripMusic(mediaLayout);
                 }

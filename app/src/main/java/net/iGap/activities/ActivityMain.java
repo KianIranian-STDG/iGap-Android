@@ -133,7 +133,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public static boolean isMenuButtonAddShown = false;
     LinearLayout mediaLayout;
-    MusicPlayer musicPlayer;
+
     FragmentCall fragmentCall;
     public boolean fromCall = false;
     private NavigationTabStrip navigationTabStrip;
@@ -298,7 +298,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         new HelperGetDataFromOtherApp(getIntent());
 
         mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
-        musicPlayer = new MusicPlayer(mediaLayout);
+
+        MusicPlayer.setMusicPlayer(mediaLayout);
 
         appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
         final ViewGroup toolbar = (ViewGroup) findViewById(R.id.rootToolbar);

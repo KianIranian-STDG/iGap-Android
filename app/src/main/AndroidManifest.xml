@@ -62,7 +62,8 @@
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
     <activity
         android:name=".activities.ActivityMediaPlayer"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
+        android:launchMode="singleTask" />
     <activity
         android:name=".activities.ActivityPopUpNotification"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
@@ -240,6 +241,8 @@
 
     <service android:name=".helper.ServiceContact" />
     <service android:name=".module.UploadService" />
+    <service android:name=".module.MusicPlayer" />
+
     <service
         android:name=".helper.MyService"
         android:enabled="true"

@@ -126,7 +126,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private static long countOFLink = 0;
 
     private LinearLayout mediaLayout;
-    private MusicPlayer musicPlayer;
+
 
     private AppBarLayout appBarLayout;
 
@@ -216,7 +216,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         setContentView(R.layout.activity_sheared_media);
 
         mediaLayout = (LinearLayout) findViewById(R.id.asm_ll_music_layout);
-        musicPlayer = new MusicPlayer(mediaLayout);
+
+        MusicPlayer.setMusicPlayer(mediaLayout);
 
         roomId = getIntent().getExtras().getLong("RoomID");
         initComponent();
