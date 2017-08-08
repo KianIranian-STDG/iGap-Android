@@ -261,12 +261,12 @@ public class Contacts {
                             while (pCur.moveToNext()) {
                                 String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                                if (!tempList.contains(number.replace("[\\s\\-()]", ""))) {
+                                if (!tempList.contains(number.replace("[\\s\\-()]", "").replace(" ", ""))) {
                                     StructListOfContact itemContact = new StructListOfContact();
                                     itemContact.setDisplayName(name);
                                     itemContact.setPhone(number);
                                     contactList.add(itemContact);
-                                    tempList.add(number.replace("[\\s\\-()]", ""));
+                                    tempList.add(number.replace("[\\s\\-()]", "").replace(" ", ""));
                                 }
                             }
                             pCur.close();
