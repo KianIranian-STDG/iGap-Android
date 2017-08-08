@@ -83,6 +83,7 @@ import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoRegister;
 import net.iGap.request.RequestGeoUpdateComment;
+import net.iGap.request.RequestGeoUpdatePosition;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.config.IConfigurationProvider;
@@ -456,6 +457,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             public void onClick(View v) {
                 if (location != null) {
                     currentLocation(location, false);
+                    new RequestGeoUpdatePosition().updatePosition(location.getLatitude(), location.getLongitude());
                 } else {
                     GPSTracker.getGpsTrackerInstance().detectLocation();
                 }
@@ -783,7 +785,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         int thirdBoarderColor;
         int thirdBoarderSize;
         if (mineAvatar) {
-            firstBorderColor = Color.parseColor("#00f23131");
+            firstBorderColor = Color.parseColor("#f23131");
             secondBoarderColor = Color.parseColor("#55f23131");
             thirdBoarderColor = Color.parseColor("#00f23131");
 
@@ -813,7 +815,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
         bitmap = addBorderToCircularBitmap(bitmap, firstBorderSize, firstBorderColor);
         if (mineAvatar) {
-            bitmap = addBorderToCircularBitmap(bitmap, secondBoarderSize, secondBoarderColor);
+            //bitmap = addBorderToCircularBitmap(bitmap, secondBoarderSize, secondBoarderColor);
         } else {
             bitmap = addBorderToCircularBitmapSharp(bitmap, secondBoarderSize, secondBoarderColor);
         }
