@@ -293,7 +293,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                     new MaterialDialog.Builder(mActivity).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            new RequestGeoRegister().register(true);
+                            if (G.userLogin) {
+                                new RequestGeoRegister().register(true);
+                            } else {
+                                toggleGps.setChecked(false);
+                                showSnackBar(getResources().getString(R.string.please_check_your_connenction));
+                            }
                         }
                     }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override
@@ -438,7 +443,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
                     if (isEndLine) {
                         isEndLine = false;
-                        shoSnackBar(getResources().getString(R.string.exceed_4_line));
+                        showSnackBar(getResources().getString(R.string.exceed_4_line));
                     }
                 } else {
                     isEndLine = true;
@@ -613,7 +618,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         }
     }
 
-    private void shoSnackBar(final String message) {
+    private void showSnackBar(final String message) {
         G.currentActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
