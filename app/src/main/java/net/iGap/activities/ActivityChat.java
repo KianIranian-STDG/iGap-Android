@@ -296,7 +296,7 @@ public class ActivityChat extends ActivityEnhanced
         implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete {
 
     public static FinishActivity finishActivity;
-
+    public MusicPlayer musicPlayer;
     private AttachFile attachFile;
     private EditText edtSearchMessage;
     private SharedPreferences sharedPreferences;
@@ -368,7 +368,7 @@ public class ActivityChat extends ActivityEnhanced
 
     public static int forwardMessageCount = 0;
     public static ArrayList<Parcelable> mForwardMessages;
-
+    private Realm realmChat;
 
 
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
@@ -454,6 +454,8 @@ public class ActivityChat extends ActivityEnhanced
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        realmChat = Realm.getDefaultInstance();
+
         startPageFastInitialize();
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -478,7 +480,6 @@ public class ActivityChat extends ActivityEnhanced
 
                     @Override
                     public void resendMessageNeedsUpload(RealmRoomMessage message) {
-
                         HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(), RealmRoomMessage.getReplyMessageId(message), new HelperUploadFile.UpdateListener() {
                             @Override
                             public void OnProgress(int progress, FileUploadStructure struct) {
@@ -527,8 +528,6 @@ public class ActivityChat extends ActivityEnhanced
     protected void onResume() {
         super.onResume();
 
-
-
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -536,7 +535,6 @@ public class ActivityChat extends ActivityEnhanced
                 showSpamBar();
 
                 MusicPlayer.setMusicPlayer(mediaLayout);
-
                 if (MusicPlayer.mp != null) {
                     MusicPlayer.initLayoutTripMusic(mediaLayout);
                 }
@@ -551,8 +549,8 @@ public class ActivityChat extends ActivityEnhanced
                     new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
                 }
 
-                final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
-                updateUnreadCountRealm.executeTransactionAsync(new Realm.Transaction() {//ASYNC
+                //+final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
+                realmChat.executeTransactionAsync(new Realm.Transaction() {//ASYNC
                     @Override
                     public void execute(Realm realm) {
                         final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -607,7 +605,7 @@ public class ActivityChat extends ActivityEnhanced
                          */
                         checkAction();
 
-                        RealmRoom room = updateUnreadCountRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                        RealmRoom room = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
                             if (txtName == null) {
                                 txtName = (EmojiTextViewE) findViewById(R.id.chl_txt_name);
@@ -615,7 +613,7 @@ public class ActivityChat extends ActivityEnhanced
                             txtName.setText(room.getTitle());
                         }
 
-                        updateUnreadCountRealm.close();
+                        //updateUnreadCountRealm.close();
                     }
                 });
             }
@@ -765,6 +763,10 @@ public class ActivityChat extends ActivityEnhanced
         // room id have to be set to default, otherwise I'm in the room always!
         mRoomId = -1;
         super.onDestroy();
+
+        if (realmChat != null && !realmChat.isClosed()) {
+            realmChat.close();
+        }
     }
 
     @Override
@@ -824,9 +826,8 @@ public class ActivityChat extends ActivityEnhanced
             try {
                 super.onBackPressed();
             } catch (IllegalStateException e) {
-
+                e.printStackTrace();
             }
-
         }
     }
 
@@ -1150,7 +1151,7 @@ public class ActivityChat extends ActivityEnhanced
         attachFile = new AttachFile(this);
         backGroundSeenList.clear();
 
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -1158,7 +1159,7 @@ public class ActivityChat extends ActivityEnhanced
             chatPeerId = extras.getLong("peerId");
             fromCall = extras.getBoolean("FROM_CALL");
             fromCallMain = extras.getBoolean("FROM_CALL_Main");
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
             // avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
@@ -1173,7 +1174,7 @@ public class ActivityChat extends ActivityEnhanced
                 chatType = realmRoom.getType();
                 if (chatType == CHAT) {
                     chatPeerId = realmRoom.getChatRoom().getPeerId();
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = realmChat.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                     if (realmRegisteredInfo != null) {
                         title = realmRegisteredInfo.getDisplayName();
                         lastSeen = realmRegisteredInfo.getLastSeen();
@@ -1217,7 +1218,7 @@ public class ActivityChat extends ActivityEnhanced
                  * when user start new chat this block will be called
                  */
                 chatType = CHAT;
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realmChat.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                 title = realmRegisteredInfo.getDisplayName();
                 lastSeen = realmRegisteredInfo.getLastSeen();
                 userStatus = realmRegisteredInfo.getStatus();
@@ -1247,7 +1248,7 @@ public class ActivityChat extends ActivityEnhanced
             isCloudRoom = true;
         }
 
-        realm.close();
+        //+realm.close();
     }
 
     private void initMain() {
@@ -1306,27 +1307,23 @@ public class ActivityChat extends ActivityEnhanced
                                             viewAttachFile.setVisibility(View.VISIBLE);
                                             isChatReadOnly = false;
                                         }
+
+                                        final RealmRoom joinedRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                        if (joinedRoom != null) {
+                                            realmChat.executeTransaction(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    joinedRoom.setDeleted(false);
+                                                    if (joinedRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                                        joinedRoom.setReadOnly(false);
+                                                    }
+                                                }
+                                            });
+                                        }
                                     }
                                 });
-
-                                Realm realm = Realm.getDefaultInstance();
-                                final RealmRoom joinedRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                                if (joinedRoom != null) {
-
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override
-                                        public void execute(Realm realm) {
-                                            joinedRoom.setDeleted(false);
-                                            if (joinedRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                                joinedRoom.setReadOnly(false);
-                                            }
-
-
-                                        }
-                                    });
-                                }
-
-                                realm.close();
+                                //+Realm realm = Realm.getDefaultInstance();
+                                //realm.close();
                             }
 
                             @Override
@@ -1338,10 +1335,10 @@ public class ActivityChat extends ActivityEnhanced
                         /**
                          * if user joined to this room set lastMessage for that
                          */
-                        Realm realm = Realm.getDefaultInstance();
-                        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                        //+Realm realm = Realm.getDefaultInstance();
+                        final RealmResults<RealmRoomMessage> realmRoomMessages = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
                         if (realmRoomMessages.size() > 0 && realmRoomMessages.first() != null) {
-                            realm.executeTransaction(new Realm.Transaction() {
+                            realmChat.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
                                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -1351,7 +1348,7 @@ public class ActivityChat extends ActivityEnhanced
                                 }
                             });
                         }
-                        realm.close();
+                        //realm.close();
 
                         new RequestClientJoinByUsername().clientJoinByUsername(userName);
                     }
@@ -1363,16 +1360,16 @@ public class ActivityChat extends ActivityEnhanced
              * get userId . use in chat set action.
              */
 
-            Realm realm = Realm.getDefaultInstance();
+            //+Realm realm = Realm.getDefaultInstance();
 
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            RealmUserInfo realmUserInfo = realmChat.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo == null) {
                 finish();
                 return;
             }
             userId = realmUserInfo.getUserId();
 
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
 
             if (realmRoom != null) { // room exist
 
@@ -1391,7 +1388,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 if (chatType == CHAT) {
 
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = realmChat.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                     if (realmRegisteredInfo != null) {
                         initialize = realmRegisteredInfo.getInitials();
                         color = realmRegisteredInfo.getColor();
@@ -1414,7 +1411,7 @@ public class ActivityChat extends ActivityEnhanced
             } else {
                 chatPeerId = extras.getLong("peerId");
                 chatType = CHAT;
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = realmChat.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
                 if (realmRegisteredInfo != null) {
                     title = realmRegisteredInfo.getDisplayName();
                     initialize = realmRegisteredInfo.getInitials();
@@ -1424,7 +1421,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            realm.close();
+            //realm.close();
         }
 
         initComponent();
@@ -1432,18 +1429,6 @@ public class ActivityChat extends ActivityEnhanced
         getDraft();
         getUserInfo();
         insertShearedData();
-
-        G.onChatSendMessage = new OnChatSendMessage() {
-            @Override
-            public void Error(int majorCode, int minorCode, final int waitTime) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showErrorDialog(waitTime);
-                    }
-                });
-            }
-        };
     }
 
 
@@ -1489,6 +1474,18 @@ public class ActivityChat extends ActivityEnhanced
     public void initCallbacks() {
         chatSendMessageUtil.setOnChatSendMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+
+        G.onChatSendMessage = new OnChatSendMessage() {
+            @Override
+            public void Error(int majorCode, int minorCode, final int waitTime) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showErrorDialog(waitTime);
+                    }
+                });
+            }
+        };
 
         G.onChatEditMessageResponse = new OnChatEditMessageResponse() {
             @Override
@@ -1559,9 +1556,7 @@ public class ActivityChat extends ActivityEnhanced
         onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, String MessageTow) {
-
                 clearHistory(Long.parseLong(messageOne));
-
             }
         };
 
@@ -1609,7 +1604,7 @@ public class ActivityChat extends ActivityEnhanced
                             break;
                         }
                     } catch (Exception e) {
-                        Log.e("ddddd", "activity chat iUpdateLogItem    " + e.toString());
+                        e.printStackTrace();
                     }
                 }
             }
@@ -1690,8 +1685,8 @@ public class ActivityChat extends ActivityEnhanced
         RippleView rippleBackButton = (RippleView) findViewById(R.id.chl_ripple_back_Button);
 
 
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        //+final Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null) {
 
             iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
@@ -1704,7 +1699,7 @@ public class ActivityChat extends ActivityEnhanced
 
                 RippleView rippleCall = (RippleView) findViewById(R.id.acp_ripple_call);
                 // gone or visible view call
-                RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
+                RealmCallConfig callConfig = realmChat.where(RealmCallConfig.class).findFirst();
                 if (callConfig != null) {
                     if (callConfig.isVoice_calling()) {
                         rippleCall.setVisibility(View.VISIBLE);
@@ -1840,8 +1835,8 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
 
-                Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                //+Realm realm = Realm.getDefaultInstance();
+                RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
 
                     if (realmRoom.getMute()) {
@@ -1860,7 +1855,7 @@ public class ActivityChat extends ActivityEnhanced
                     root5.setVisibility(View.GONE);
                     root6.setVisibility(View.GONE);
                 }
-                realm.close();
+                //realm.close();
 
 
                 root1.setOnClickListener(new View.OnClickListener() {
@@ -2227,7 +2222,7 @@ public class ActivityChat extends ActivityEnhanced
                     resetAndGetFromEnd();
                 }
 
-                final Realm realmMessage = Realm.getDefaultInstance();
+                //final Realm realmMessage = Realm.getDefaultInstance();
 
                 HelperSetAction.setCancel(mRoomId);
 
@@ -2267,7 +2262,7 @@ public class ActivityChat extends ActivityEnhanced
                     final String message = getWrittenMessage();
                     if (!message.equals(messageInfo.messageText)) {
 
-                        realmMessage.executeTransaction(new Realm.Transaction() {
+                        realmChat.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
@@ -2338,11 +2333,11 @@ public class ActivityChat extends ActivityEnhanced
                         for (int i = 0; i < messages.length; i++) {
                             final String message = messages[i];
                             if (!message.isEmpty()) {
-                                final RealmRoom room = realmMessage.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                final RealmRoom room = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                 final String identity = Long.toString(SUID.id().get());
                                 final long currentTime = TimeUtils.currentLocalTime();
 
-                                realmMessage.executeTransaction(new Realm.Transaction() {
+                                realmChat.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
                                         RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, parseLong(identity));
@@ -2372,10 +2367,10 @@ public class ActivityChat extends ActivityEnhanced
                                     }
                                 });
 
-                                final RealmRoomMessage roomMessage = realmMessage.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(identity)).findFirst();
+                                final RealmRoomMessage roomMessage = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(identity)).findFirst();
 
                                 if (roomMessage != null) {
-                                    realmMessage.executeTransaction(new Realm.Transaction() {
+                                    realmChat.executeTransaction(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
                                             if (room != null) {
@@ -2386,7 +2381,7 @@ public class ActivityChat extends ActivityEnhanced
                                 }
 
                                 if (chatType == CHANNEL) {
-                                    realmMessage.executeTransaction(new Realm.Transaction() {
+                                    realmChat.executeTransaction(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
                                             RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
@@ -2437,7 +2432,7 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
 
-                realmMessage.close();
+                //realmMessage.close();
             }
         });
 
@@ -2574,7 +2569,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        realm.close();
+        //realm.close();
     }
 
     private void putExtra(Intent intent, StructMessageInfo messageInfo) {
@@ -2642,8 +2637,8 @@ public class ActivityChat extends ActivityEnhanced
 
         boolean clearMessage = false;
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        //+Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmRoomMessage> realmRoomMessages = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
                 clearMessage = true;
@@ -2651,7 +2646,7 @@ public class ActivityChat extends ActivityEnhanced
 
             if (clearMessage) {
                 final long messageId = realmRoomMessage.getMessageId();
-                realm.executeTransaction(new Realm.Transaction() {
+                realmChat.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         realmRoomMessage.deleteFromRealm();
@@ -2675,7 +2670,7 @@ public class ActivityChat extends ActivityEnhanced
                 });
             }
         }
-        realm.close();
+        //realm.close();
     }
 
     @Override
@@ -2719,12 +2714,12 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            Realm realm = Realm.getDefaultInstance();
+            //+Realm realm = Realm.getDefaultInstance();
 
             for (AbstractMessage message : selectedItems) {
 
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
 
                     long messageSender = 0;
@@ -2800,7 +2795,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            realm.close();
+            //realm.close();
 
             ll_AppBarSelected.setVisibility(View.VISIBLE);
         } else {
@@ -2814,9 +2809,9 @@ public class ActivityChat extends ActivityEnhanced
         if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
             // if was last message removed
             // update room last message
-            Realm realm = Realm.getDefaultInstance();
+            //Realm realm = Realm.getDefaultInstance();
 
-            realm.executeTransaction(new Realm.Transaction() {
+            realmChat.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     try {
@@ -2837,7 +2832,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             });
 
-            realm.close();
+            //realm.close();
         }
     }
 
@@ -2859,143 +2854,138 @@ public class ActivityChat extends ActivityEnhanced
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Realm realm = Realm.getDefaultInstance();
-                        final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                //final Realm realm = Realm.getDefaultInstance();
+                final RealmRoomMessage realmRoomMessage = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
-                        if (realmRoomMessage != null && realmRoomMessage.isValid()) {
-                            if (roomMessage.getAuthor().getUser() != null) {
-                                if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
-                                    // I'm in the room
-                                    if (roomId == mRoomId) {
-                                        // I'm in the room, so unread messages count is 0. it means, I read all messages
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
+                if (realmRoomMessage != null && realmRoomMessage.isValid()) {
+                    if (roomMessage.getAuthor().getUser() != null) {
+                        if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
+                            // I'm in the room
+                            if (roomId == mRoomId) {
+                                // I'm in the room, so unread messages count is 0. it means, I read all messages
+                                realmChat.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                        if (room != null) {
+                                            /**
+                                             * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                                             */
+                                            if (room.getUnreadCount() <= 1 && countNewMessage < 1) {
+                                                firstUnreadMessage = realmRoomMessage;
+                                            }
+                                            room.setUnreadCount(0);
+                                        }
+                                    }
+                                });
+
+                                /**
+                                 * when user receive message, I send update status as SENT to the message sender
+                                 * but imagine user is not in the room (or he is in another room) and received
+                                 * some messages when came back to the room with new messages, I make new update
+                                 * status request as SEEN to the message sender
+                                 */
+
+                                //Start ClientCondition OfflineSeen
+                                realmChat.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
+                                        if (!isNotJoin) {
+                                            // make update status to message sender that i've read his message
+
+                                            StructBackGroundSeen _BackGroundSeen = null;
+
+                                            ProtoGlobal.RoomMessageStatus roomMessageStatus;
+                                            if (G.isAppInFg && isEnd()) {
+
+                                                /**
+                                                 * I'm in the room, so unread messages count is 0. it means, I read all messages
+                                                 */
                                                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                                 if (room != null) {
-                                                    /**
-                                                     * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                                                     */
-                                                    if (room.getUnreadCount() <= 1 && countNewMessage < 1) {
-                                                        firstUnreadMessage = realmRoomMessage;
-                                                    }
                                                     room.setUnreadCount(0);
                                                 }
-                                            }
-                                        });
 
-                                        /**
-                                         * when user receive message, I send update status as SENT to the message sender
-                                         * but imagine user is not in the room (or he is in another room) and received
-                                         * some messages when came back to the room with new messages, I make new update
-                                         * status request as SEEN to the message sender
-                                         */
+                                                if (realmClientCondition != null) {
+                                                    if (realmRoomMessage.isValid() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                                                        realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
-                                        //Start ClientCondition OfflineSeen
-                                        realm.executeTransaction(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
-                                                if (!isNotJoin) {
-                                                    // make update status to message sender that i've read his message
-
-                                                    StructBackGroundSeen _BackGroundSeen = null;
-
-                                                    ProtoGlobal.RoomMessageStatus roomMessageStatus;
-                                                    if (G.isAppInFg && isEnd()) {
-
-                                                        /**
-                                                         * I'm in the room, so unread messages count is 0. it means, I read all messages
-                                                         */
-                                                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                                                        if (room != null) {
-                                                            room.setUnreadCount(0);
-                                                        }
-
-                                                        if (realmClientCondition != null) {
-                                                            if (realmRoomMessage.isValid() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                                                                realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-
-                                                                RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
-                                                                realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
-                                                                realm.copyToRealmOrUpdate(realmOfflineSeen);
-                                                                if (realmClientCondition.getOfflineSeen() != null) {
-                                                                    realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                                                } else {
-                                                                    RealmList<RealmOfflineSeen> offlineSeenList = new RealmList<>();
-                                                                    offlineSeenList.add(realmOfflineSeen);
-                                                                    realmClientCondition.setOfflineSeen(offlineSeenList);
-                                                                }
-                                                            }
-                                                        }
-
-
-                                                        roomMessageStatus = ProtoGlobal.RoomMessageStatus.SEEN;
-                                                    } else {
-
-                                                        roomMessageStatus = ProtoGlobal.RoomMessageStatus.DELIVERED;
-
-                                                        _BackGroundSeen = new StructBackGroundSeen();
-                                                        _BackGroundSeen.messageID = roomMessage.getMessageId();
-                                                        _BackGroundSeen.roomType = roomType;
-                                                    }
-
-                                                    if (chatType == CHAT) {
-                                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
-
-                                                        if (_BackGroundSeen != null) {
-                                                            backGroundSeenList.add(_BackGroundSeen);
-                                                        }
-
-                                                    } else if (chatType == GROUP && (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN)) {
-                                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
-
-                                                        if (_BackGroundSeen != null) {
-                                                            backGroundSeenList.add(_BackGroundSeen);
+                                                        RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
+                                                        realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
+                                                        realm.copyToRealmOrUpdate(realmOfflineSeen);
+                                                        if (realmClientCondition.getOfflineSeen() != null) {
+                                                            realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                                        } else {
+                                                            RealmList<RealmOfflineSeen> offlineSeenList = new RealmList<>();
+                                                            offlineSeenList.add(realmOfflineSeen);
+                                                            realmClientCondition.setOfflineSeen(offlineSeenList);
                                                         }
                                                     }
                                                 }
+
+
+                                                roomMessageStatus = ProtoGlobal.RoomMessageStatus.SEEN;
+                                            } else {
+
+                                                roomMessageStatus = ProtoGlobal.RoomMessageStatus.DELIVERED;
+
+                                                _BackGroundSeen = new StructBackGroundSeen();
+                                                _BackGroundSeen.messageID = roomMessage.getMessageId();
+                                                _BackGroundSeen.roomType = roomType;
                                             }
-                                        });
 
-                                        /**
-                                         * when client load item from unread and don't come down let's not add the message
-                                         * to the list and after insuring that not any more message in DOWN can add message
-                                         */
-                                        if (addToView) {
-                                            switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
-                                        }
+                                            if (chatType == CHAT) {
+                                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
 
-                                        setBtnDownVisible(realmRoomMessage);
-                                    } else {
-                                        if (!isNotJoin) {
-                                            // user has received the message, so I make a new delivered update status request
-                                            if (roomType == CHAT) {
-                                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                                            } else if (roomType == GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                                                if (_BackGroundSeen != null) {
+                                                    backGroundSeenList.add(_BackGroundSeen);
+                                                }
+
+                                            } else if (chatType == GROUP && (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN)) {
+                                                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), roomMessageStatus);
+
+                                                if (_BackGroundSeen != null) {
+                                                    backGroundSeenList.add(_BackGroundSeen);
+                                                }
                                             }
                                         }
                                     }
-                                } else {
+                                });
 
-                                    if (roomId == mRoomId) {
-                                        // I'm sender . but another account sent this message and i received it.
-                                        if (addToView) {
-                                            switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
-                                        }
-                                        setBtnDownVisible(realmRoomMessage);
+                                /**
+                                 * when client load item from unread and don't come down let's not add the message
+                                 * to the list and after insuring that not any more message in DOWN can add message
+                                 */
+                                if (addToView) {
+                                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
+                                }
+
+                                setBtnDownVisible(realmRoomMessage);
+                            } else {
+                                if (!isNotJoin) {
+                                    // user has received the message, so I make a new delivered update status request
+                                    if (roomType == CHAT) {
+                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                                    } else if (roomType == GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
                                     }
                                 }
                             }
-                        }
+                        } else {
 
-                        realm.close();
+                            if (roomId == mRoomId) {
+                                // I'm sender . but another account sent this message and i received it.
+                                if (addToView) {
+                                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(realmRoomMessage))), false);
+                                }
+                                setBtnDownVisible(realmRoomMessage);
+                            }
+                        }
                     }
-                });
+                }
+
+                //realm.close();
             }
         }, 400);
     }
@@ -3010,16 +3000,15 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onVoiceRecordDone(final String savedPath) {
-
         sendCancelAction();
 
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
         final long messageId = SUID.id().get();
         final long updateTime = TimeUtils.currentLocalTime();
         final long senderID = G.userId;
         final long duration = AndroidUtils.getAudioDuration(getApplicationContext(), savedPath) / 1000;
 
-        realm.executeTransaction(new Realm.Transaction() {
+        realmChat.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
@@ -3071,8 +3060,8 @@ public class ActivityChat extends ActivityEnhanced
         structChannelExtra.thumbsUp = "0";
         structChannelExtra.thumbsDown = "0";
         structChannelExtra.viewsLabel = "1";
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        realm.executeTransaction(new Realm.Transaction() {
+        final RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        realmChat.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 if (voiceLastMessage != null) {
@@ -3087,7 +3076,7 @@ public class ActivityChat extends ActivityEnhanced
         }
         messageInfo.channelExtra = structChannelExtra;
         mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo));
-        realm.close();
+        //realm.close();
         scrollToEnd();
         clearReplyView();
     }
@@ -3124,14 +3113,14 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
         ProtoGlobal.RoomMessageType messageType = message.forwardedFrom != null ? message.forwardedFrom.getMessageType() : message.messageType;
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == VIDEO_TEXT) {
             showImage(message, view);
         } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
 
             String _filePath = null;
             String _token = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token;
-            RealmAttachment _Attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, _token).findFirst();
+            RealmAttachment _Attachment = realmChat.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, _token).findFirst();
 
             if (_Attachment != null) {
                 _filePath = _Attachment.getLocalFilePath();
@@ -3154,7 +3143,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         }
-        realm.close();
+        //realm.close();
     }
 
     @Override
@@ -3197,8 +3186,8 @@ public class ActivityChat extends ActivityEnhanced
              */
             messageInfo.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
 
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
+            //+final Realm realm = Realm.getDefaultInstance();
+            realmChat.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     /**
@@ -3229,16 +3218,16 @@ public class ActivityChat extends ActivityEnhanced
                         G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                     }
                 }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    realm.close();
-                }
-            }, new Realm.Transaction.OnError() {
-                @Override
-                public void onError(Throwable error) {
-                    realm.close();
-                }
+                //}, new Realm.Transaction.OnSuccess() {
+                //    @Override
+                //    public void onSuccess() {
+                //        realm.close();
+                //    }
+                //}, new Realm.Transaction.OnError() {
+                //    @Override
+                //    public void onError(Throwable error) {
+                //        realm.close();
+                //    }
             });
         }
     }
@@ -3296,13 +3285,13 @@ public class ActivityChat extends ActivityEnhanced
 
                         }
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     }
 
                     break;
                 }
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
     }
@@ -3313,6 +3302,9 @@ public class ActivityChat extends ActivityEnhanced
         final MaterialDialog dialog = new MaterialDialog.Builder(this).customView(R.layout.chat_popup_dialog_custom, true).build();
 
         View v = dialog.getCustomView();
+        if (v == null) {
+            return;
+        }
 
         DialogAnimation.animationDown(dialog);
         dialog.show();
@@ -3441,8 +3433,8 @@ public class ActivityChat extends ActivityEnhanced
         // UnsupportedOperationException exception
         //List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.roomId).findFirst();
+        //+Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.roomId).findFirst();
         if (realmRoom != null) {
             // if user clicked on any message which he wasn't its sender, remove edit mList option
             if (chatType == CHANNEL) {
@@ -3523,7 +3515,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
 
-            realm.close();
+            //realm.close();
         }
         //}
 
@@ -3597,21 +3589,21 @@ public class ActivityChat extends ActivityEnhanced
                         }
                     }
                 });
-                final Realm realmCondition = Realm.getDefaultInstance();
-                final RealmClientCondition realmClientCondition = realmCondition.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, message.roomId).findFirst();
+                //final Realm realmCondition = Realm.getDefaultInstance();
+                final RealmClientCondition realmClientCondition = realmChat.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, message.roomId).findFirst();
 
                 if (realmClientCondition != null) {
 
-                    realmCondition.executeTransaction(new Realm.Transaction() {
+                    realmChat.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
 
-                            if (realmCondition.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
+                            if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
                                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
                                 if (roomMessage != null) {
                                     roomMessage.setDeleted(true);
                                 }
-                                RealmOfflineDelete realmOfflineDelete = realmCondition.createObject(RealmOfflineDelete.class, SUID.id().get());
+                                RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
                                 realmOfflineDelete.setOfflineDelete(parseLong(message.messageID));
                                 realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
                                 // delete message
@@ -3626,11 +3618,7 @@ public class ActivityChat extends ActivityEnhanced
                         }
                     });
                 }
-
-                realmCondition.close();
-
-
-
+                //realmCondition.close();
             }
         });
         rootEdit.setOnClickListener(new View.OnClickListener() {
@@ -3683,21 +3671,15 @@ public class ActivityChat extends ActivityEnhanced
                     if (_cashid == null) {
                         return;
                     }
-
                     ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-
-
                     final String _path = AndroidUtils.getFilePathWithCashId(_cashid, _name, _messageType);
-
                     if (_token != null && _token.length() > 0 && _size > 0) {
-
                         HelperDownloadFile.startDownload(message.messageID, _token, _cashid, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
 
                                 if (progress == 100) {
-
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -3729,7 +3711,6 @@ public class ActivityChat extends ActivityEnhanced
                     }
 
                     onDownloadAllEqualCashId(_cashid, message.messageID);
-
                 }
             }
         });
@@ -3784,9 +3765,8 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onSetAction(final long roomId, final long userIdR, final ProtoGlobal.ClientAction clientAction) {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        //Realm realm = Realm.getDefaultInstance();
+        realmChat.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
@@ -3850,7 +3830,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-        realm.close();
+        //realm.close();
     }
 
     @Override
@@ -4199,8 +4179,8 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void checkAction() {
-        Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        //+Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null && realmRoom.getActionState() != null) {
             runOnUiThread(new Runnable() {
                 @Override
@@ -4250,7 +4230,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             });
         }
-        realm.close();
+        //realm.close();
     }
 
     /**
@@ -4297,6 +4277,9 @@ public class ActivityChat extends ActivityEnhanced
         }).show();
 
         View v = dialogWait.getCustomView();
+        if (v == null) {
+            return;
+        }
         //dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(true);
         final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
         final TextView txtText = (TextView) v.findViewById(R.id.textRemindTime);
@@ -4350,8 +4333,8 @@ public class ActivityChat extends ActivityEnhanced
      */
     private void addItemAfterStartUpload(final FileUploadStructure struct) {
         try {
-            Realm realm = Realm.getDefaultInstance();
-            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
+            //Realm realm = Realm.getDefaultInstance();
+            RealmRoomMessage roomMessage = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
             if (roomMessage != null) {
                 AbstractMessage message = null;
 
@@ -4372,7 +4355,7 @@ public class ActivityChat extends ActivityEnhanced
                     }
                 }
             }
-            realm.close();
+            //realm.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -4470,8 +4453,8 @@ public class ActivityChat extends ActivityEnhanced
 
         mAdapter.removeMessage(position);
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        //+Realm realm = Realm.getDefaultInstance();
+        realmChat.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
@@ -4481,7 +4464,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-        realm.close();
+        //realm.close();
     }
 
     private void onSelectRoomMenu(String message, int item) {
@@ -4503,10 +4486,10 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     private void muteNotification(final int item) {
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
 
         isMuteNotification = !isMuteNotification;
-        realm.executeTransaction(new Realm.Transaction() {
+        realmChat.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item).findFirst();
@@ -4524,7 +4507,7 @@ public class ActivityChat extends ActivityEnhanced
             iconMute.setVisibility(View.GONE);
         }
 
-        realm.close();
+        //realm.close();
     }
 
     private void setBtnDownVisible(RealmRoomMessage realmRoomMessage) {
@@ -4612,33 +4595,6 @@ public class ActivityChat extends ActivityEnhanced
         }, 300);
     }
 
-    /**
-     * after load message call this method for go to bottom of chat list
-     */
-    private void scrollToLastPositionMessageId() {
-
-        Realm realm = Realm.getDefaultInstance();
-
-        try {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-            if (realmRoom != null) {
-                String lastScrolledMessageId = realmRoom.getLastScrollPositionMessageId() + "";
-                if (lastScrolledMessageId.length() > 0) {
-                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                        if (mAdapter.getAdapterItem(i).mMessage.messageID.equals(lastScrolledMessageId)) {
-                            recyclerView.scrollToPosition(i);
-                            break;
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        realm.close();
-    }
-
     private void storingLastPosition() {
         try {
             if (recyclerView != null && mAdapter != null) {
@@ -4657,15 +4613,14 @@ public class ActivityChat extends ActivityEnhanced
                     lastScrolledMessageID = Long.parseLong(mAdapter.getItem(firstVisiblePosition).mMessage.messageID);
                 }
 
-                Realm realm = Realm.getDefaultInstance();
+                //+Realm realm = Realm.getDefaultInstance();
 
-                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                final RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom != null) {
                     saveMessageIdPositionState(lastScrolledMessageID);
                 }
 
-                realm.close();
-
+                //realm.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -4677,9 +4632,9 @@ public class ActivityChat extends ActivityEnhanced
      */
     private void saveMessageIdPositionState(final long position) {
 
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
 
-        realm.executeTransaction(new Realm.Transaction() {
+        realmChat.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -4689,7 +4644,7 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        realm.close();
+        //realm.close();
     }
 
 
@@ -4895,9 +4850,9 @@ public class ActivityChat extends ActivityEnhanced
 
     private void setDraft() {
         if (!isNotJoin) {
-            Realm realm = Realm.getDefaultInstance();
+            //Realm realm = Realm.getDefaultInstance();
 
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+            final RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             if (realmRoom == null) {
                 return;
             }
@@ -4919,7 +4874,7 @@ public class ActivityChat extends ActivityEnhanced
                 hasDraft = true;
 
                 final String finalMessage = message;
-                realm.executeTransaction(new Realm.Transaction() {
+                realmChat.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
@@ -4944,13 +4899,13 @@ public class ActivityChat extends ActivityEnhanced
             } else {
                 clearDraftRequest();
             }
-            realm.close();
+            //realm.close();
         }
     }
 
     private void getDraft() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        //+Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null) {
             RealmRoomDraft draft = realmRoom.getDraft();
             if (draft != null) {
@@ -4958,13 +4913,13 @@ public class ActivityChat extends ActivityEnhanced
                 edtChat.setText(draft.getMessage());
             }
         }
-        realm.close();
+        //realm.close();
         clearLocalDraft();
     }
 
     private void clearLocalDraft() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        //+Realm realm = Realm.getDefaultInstance();
+        realmChat.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -4974,7 +4929,7 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-        realm.close();
+        //realm.close();
     }
 
     private void clearDraftRequest() {
@@ -5260,9 +5215,9 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void run() {
 
-                Realm realm = Realm.getDefaultInstance();
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
-                RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+                //+Realm realm = Realm.getDefaultInstance();
+                RealmRegisteredInfo realmRegisteredInfo = realmChat.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmContacts realmContacts = realmChat.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != G.userId) {
                     if (phoneNumber == null) {
                         if (realmContacts == null && chatType == CHAT && !isChatReadOnly) {
@@ -5299,7 +5254,7 @@ public class ActivityChat extends ActivityEnhanced
                         }
                     }
                 }
-                realm.close();
+                //realm.close();
             }
         });
     }
@@ -5317,16 +5272,16 @@ public class ActivityChat extends ActivityEnhanced
                 vgSpamUser.setVisibility(View.GONE);
                 if (registeredInfo != null) {
 
-                    Realm realm = Realm.getDefaultInstance();
+                    //+Realm realm = Realm.getDefaultInstance();
 
-                    realm.executeTransaction(new Realm.Transaction() {
+                    realmChat.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
                             registeredInfo.setDoNotshowSpamBar(true);
                         }
                     });
 
-                    realm.close();
+                    //realm.close();
                 }
             }
         });
@@ -5778,7 +5733,7 @@ public class ActivityChat extends ActivityEnhanced
                     clearReplyView();
                 }
             });
-            Realm realm = Realm.getDefaultInstance();
+            //+Realm realm = Realm.getDefaultInstance();
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
@@ -5793,7 +5748,7 @@ public class ActivityChat extends ActivityEnhanced
 
 
             } else {
-                RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(chatItem.messageID)).findFirst();
+                RealmRoomMessage message = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(chatItem.messageID)).findFirst();
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
 
                 String _text = AppUtils.conversionMessageType(chatItem.messageType);
@@ -5804,18 +5759,18 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
             if (chatType == CHANNEL) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.roomId).findFirst();
+                RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.roomId).findFirst();
                 if (realmRoom != null) {
                     replayFrom.setText(realmRoom.getTitle());
                 }
             } else {
-                RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(chatItem.senderID)).findFirst();
+                RealmRegisteredInfo userInfo = realmChat.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(chatItem.senderID)).findFirst();
                 if (userInfo != null) {
                     replayFrom.setText(userInfo.getDisplayName());
                 }
             }
 
-            realm.close();
+            //realm.close();
             // I set tag to retrieve it later when sending message
             mReplayLayout.setTag(chatItem);
         }
@@ -6651,7 +6606,7 @@ public class ActivityChat extends ActivityEnhanced
         });
 
         if (finalMessageType != VIDEO && finalMessageType != VIDEO_TEXT) {
-            if (finalFilePath != null && finalMessageType != CONTACT) {
+            if (finalMessageType != CONTACT) {
 
                 HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), StructMessageInfo.getReplyMessageId(finalMessageInfo), new HelperUploadFile.UpdateListener() {
                     @Override
@@ -6701,13 +6656,12 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     public void sendPosition(final Double latitude, final Double longitude, final String imagePath) {
-
         sendCancelAction();
 
-        Realm realm = Realm.getDefaultInstance();
+        //Realm realm = Realm.getDefaultInstance();
         final long id = SUID.id().get();
 
-        realm.executeTransaction(new Realm.Transaction() {
+        realmChat.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
@@ -6737,17 +6691,17 @@ public class ActivityChat extends ActivityEnhanced
                 }
             }
         });
-        realm.close();
+        //realm.close();
 
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Realm realm1 = Realm.getDefaultInstance();
-                RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
+                //+Realm realm1 = Realm.getDefaultInstance();
+                RealmRoomMessage roomMessage = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, id).findFirst();
                 switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(roomMessage))), false);
                 chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
                 scrollToEnd();
-                realm1.close();
+                //realm1.close();
             }
         }, 300);
 
@@ -6874,9 +6828,9 @@ public class ActivityChat extends ActivityEnhanced
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                final Realm realm = Realm.getDefaultInstance();
+                //final Realm realm = Realm.getDefaultInstance();
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
+                realmChat.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
@@ -6905,20 +6859,20 @@ public class ActivityChat extends ActivityEnhanced
                     @Override
                     public void onSuccess() {
 
-                        RealmRoomMessage forwardedMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                        RealmRoomMessage forwardedMessage = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                         if (forwardedMessage != null && forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
                             switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(forwardedMessage))), false);
                             scrollToEnd();
-                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
+                            RealmRoomMessage roomMessage = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
                             chatSendMessageUtil.buildForward(chatType, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
                         }
 
-                        realm.close();
+                        //realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override
                     public void onError(Throwable error) {
-                        realm.close();
+                        //realm.close();
                     }
                 });
             }
@@ -7118,7 +7072,7 @@ public class ActivityChat extends ActivityEnhanced
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
 
     private void getMessages() {
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
 
         ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction;
         ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
@@ -7132,7 +7086,7 @@ public class ActivityChat extends ActivityEnhanced
         if (hasUnread() || hasSavedState()) {
 
             if (firstUnreadMessage == null || !firstUnreadMessage.isManaged() || !firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
-                firstUnreadMessage = getFirstUnreadMessage(realm);
+                firstUnreadMessage = getFirstUnreadMessage(realmChat);
             }
 
             /**
@@ -7166,7 +7120,7 @@ public class ActivityChat extends ActivityEnhanced
             startFutureMessageIdUp = fetchMessageId;
 
             // we have firstUnreadMessage but for gapDetection method we need RealmResult so get this message with query; if we change gap detection method will be can use from firstUnreadMessage
-            resultsDown = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findAll();
+            resultsDown = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findAll();
 
             addToView = false;
             direction = DOWN;
@@ -7175,12 +7129,12 @@ public class ActivityChat extends ActivityEnhanced
             direction = UP;
         }
 
-        resultsUp = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        resultsUp = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
 
         long gapMessageId;
         if (direction == DOWN) {
-            resultsUp = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+            resultsUp = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
@@ -7259,7 +7213,7 @@ public class ActivityChat extends ActivityEnhanced
              */
             long oldMessageId = 0;
             if (direction == DOWN) {
-                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findFirst();
+                RealmRoomMessage realmRoomMessage = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findFirst();
                 if (realmRoomMessage != null) {
                     oldMessageId = realmRoomMessage.getMessageId();
                 }
@@ -7309,7 +7263,7 @@ public class ActivityChat extends ActivityEnhanced
         };
 
         recyclerView.addOnScrollListener(scrollListener);
-        realm.close();
+        //realm.close();
     }
 
     /**
@@ -7441,7 +7395,7 @@ public class ActivityChat extends ActivityEnhanced
                      */
                     progressItem(HIDE, directionString);
 
-                    Realm realm = Realm.getDefaultInstance();
+                    //Realm realm = Realm.getDefaultInstance();
                     RealmResults<RealmRoomMessage> realmRoomMessages;
                     Sort sort;
                     ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction directionEnum;
@@ -7458,9 +7412,8 @@ public class ActivityChat extends ActivityEnhanced
                         sort = Sort.ASCENDING;
                         isWaitingForHistoryDown = false;
                     }
-                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, sort);
-                    MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, realm);
-
+                    realmRoomMessages = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, sort);
+                    MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, realmChat);
 
                     if (realmRoomMessages.size() > 0) {
                         runOnUiThread(new Runnable() {
@@ -7512,7 +7465,7 @@ public class ActivityChat extends ActivityEnhanced
                         switchAddItem(structMessageInfos, false);
                     }
 
-                    realm.close();
+                    //realm.close();
                 }
 
                 @Override
@@ -7851,5 +7804,13 @@ public class ActivityChat extends ActivityEnhanced
         }
     }
 
+
+    private void isUiThread(String name, int line) {
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            Log.i("UUU", name + " in line : " + line + " is UI Thread");
+        } else {
+            Log.i("UUU", name + " in line : " + line + " is NOT UI Thread");
+        }
+    }
 }
 
