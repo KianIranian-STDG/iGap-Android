@@ -56,6 +56,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import io.realm.Sort;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -762,14 +763,25 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             }
         }
         if (pathName == null || pathName.isEmpty()) {
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
-            if (realmRegisteredInfo != null) {
-                initials = realmRegisteredInfo.getInitials();
-                color = realmRegisteredInfo.getColor();
-            }
-            bitmap = HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color);
+            bitmap = getInitials(realm, userId);
         } else {
-            bitmap = BitmapFactory.decodeFile(pathName);
+            try {
+                File imgFile = new File(pathName);
+                bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            } catch (OutOfMemoryError e) {
+                try {
+                    File imgFile = new File(pathName);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 2;
+                    bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+            if (bitmap == null) {
+                bitmap = getInitials(realm, userId);
+            }
         }
         realm.close();
 
@@ -779,6 +791,17 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         }
 
         return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, markerColor, mineAvatar));
+    }
+
+    private static Bitmap getInitials(Realm realm, long userId) {
+        String initials = "";
+        String color = "";
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        if (realmRegisteredInfo != null) {
+            initials = realmRegisteredInfo.getInitials();
+            color = realmRegisteredInfo.getColor();
+        }
+        return HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color);
     }
 
     private static Bitmap drawAvatar(Bitmap bm, MarkerColor markerColor, boolean mineAvatar) {
