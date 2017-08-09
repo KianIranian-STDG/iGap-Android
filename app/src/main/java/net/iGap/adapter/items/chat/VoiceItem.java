@@ -47,9 +47,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     private long roomId;
 
+
     public VoiceItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(realmChat, true, type, messageClickListener);
     }
+
 
     @Override
     public int getType() {
@@ -64,7 +66,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-
 
         if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
             holder.mFilePath = localPath;
@@ -99,7 +100,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.complete = new OnComplete() {
             @Override
-            public void complete(boolean result, String messageOne, final String MessageTow) {
+            public void complete(final boolean result, String messageOne, final String MessageTow) {
 
                 if (holder.musicSeekbar.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
                     if (messageOne.equals("play")) {
@@ -107,16 +108,35 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                     } else if (messageOne.equals("pause")) {
                         holder.btnPlayMusic.setText(R.string.md_pause_button);
                     } else if (messageOne.equals("updateTime")) {
-                        holder.txt_Timer.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
 
-                                if (HelperCalander.isLanguagePersian) holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+                        if (result) {
 
-                                holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
-                            }
-                        });
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if (mMessage.messageID.equals(MusicPlayer.messageId)) {
+                                        holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
+                                        if (HelperCalander.isLanguagePersian) {
+                                            holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+                                        }
+                                        holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
+                                    }
+                                }
+                            });
+                        } else {
+                            holder.btnPlayMusic.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
+                                    if (HelperCalander.isLanguagePersian) {
+                                        holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+                                    }
+                                    holder.musicSeekbar.setProgress(0);
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -128,7 +148,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             }
         });
-
 
         holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,8 +176,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                         }
                     }
                 });
-
-
 
                 if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                     MusicPlayer.onCompleteChat = holder.complete;
@@ -203,7 +220,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.mRoomId = mMessage.roomId;
 
-        RealmRegisteredInfo registeredInfo = realmChat.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID)).findFirst();
+        RealmRegisteredInfo registeredInfo = realmChat.where(RealmRegisteredInfo.class)
+            .equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID))
+            .findFirst();
 
         if (registeredInfo != null) {
             holder.author.setText(G.context.getString(R.string.recorded_by) + " " + registeredInfo.getDisplayName());
@@ -215,7 +234,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
 
-        if (mMessage.messageID.equals(MusicPlayer.messageId)) {
+        if (holder.musicSeekbar.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.onCompleteChat = holder.complete;
 
             holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);

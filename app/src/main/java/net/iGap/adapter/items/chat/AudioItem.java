@@ -39,7 +39,6 @@ import net.iGap.proto.ProtoGlobal;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 
-
 public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> {
 
     public AudioItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
@@ -95,12 +94,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
         holder.fileSize = (TextView) holder.itemView.findViewById(R.id.fileSize);
         holder.songArtist = (TextView) holder.itemView.findViewById(R.id.songArtist);
-
         holder.musicSeekbar.setTag(mMessage.messageID);
 
         holder.complete = new OnComplete() {
             @Override
-            public void complete(boolean result, String messageOne, final String MessageTow) {
+            public void complete(final boolean result, String messageOne, final String MessageTow) {
 
                 if (holder.musicSeekbar.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
                     if (messageOne.equals("play")) {
@@ -108,20 +106,42 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                     } else if (messageOne.equals("pause")) {
                         holder.btnPlayMusic.setText(R.string.md_pause_button);
                     } else if (messageOne.equals("updateTime")) {
-                        holder.btnPlayMusic.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
-                                holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
 
-                                if (HelperCalander.isLanguagePersian) {
-                                    holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber((holder.txt_Timer.getText().toString())));
+                        if (result) {
+
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (mMessage.messageID.equals(MusicPlayer.messageId)) {
+
+                                        holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
+
+                                        if (result) {
+                                            holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
+                                        } else {
+                                            holder.musicSeekbar.setProgress(0);
+                                        }
+
+                                        if (HelperCalander.isLanguagePersian) {
+                                            holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber((holder.txt_Timer.getText().toString())));
+                                        }
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            holder.btnPlayMusic.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
+                                    holder.musicSeekbar.setProgress(0);
+                                    if (HelperCalander.isLanguagePersian) {
+                                        holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber((holder.txt_Timer.getText().toString())));
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
-
             }
         };
 
@@ -131,7 +151,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
             }
         });
-
 
         holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,7 +267,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
 
-        if (mMessage.messageID.equals(MusicPlayer.messageId)) {
+        if (holder.musicSeekbar.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.onCompleteChat = holder.complete;
 
             holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);

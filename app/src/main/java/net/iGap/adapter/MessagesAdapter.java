@@ -124,24 +124,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         return failedMessages;
     }
 
-    public void updateChengedItem(ArrayList<String> list) {
-
-        int count = list.size();
-
-        for (int i = 0; i < count; i++) {
-            String id = list.get(i);
-
-            for (int j = getAdapterItemCount() - 1; j >= 0; j--) {
-                try {
-                    if (getItem(j).mMessage.messageID.equals(id)) {
-                        notifyItemChanged(j);
-                        break;
-                    }
-                } catch (NullPointerException e) {
-                }
-            }
-        }
-    }
 
     public void updateChatAvatar(long userId, RealmRegisteredInfo registeredInfo) {
         for (Item item : getAdapterItems()) {

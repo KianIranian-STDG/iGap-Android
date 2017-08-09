@@ -49,7 +49,8 @@ public class ServiceContact extends Service {
                 getApplicationContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contentObserver);
             }
         }, 10000);
-        return Service.START_STICKY;
+
+        return Service.START_NOT_STICKY;
     }
 
     private class MyContentObserver extends ContentObserver {

@@ -422,6 +422,7 @@ public class ActivityChat extends ActivityEnhanced
     private boolean fromCall = false;
     private boolean fromCallMain = false;
     private boolean isCloudRoom;
+    private boolean needUpdateView = false;
 
     private long replyToMessageId = 0;
     private long userId;
@@ -539,11 +540,10 @@ public class ActivityChat extends ActivityEnhanced
                     MusicPlayer.initLayoutTripMusic(mediaLayout);
                 }
 
-                /**
-                 * update view for played music
-                 */
-                mAdapter.updateChengedItem(MusicPlayer.playedList);
-                MusicPlayer.playedList.clear();
+                if (needUpdateView) {
+                    updateShowItemInScreen();
+                    needUpdateView = false;
+                }
 
                 if (isGoingFromUserLink) {
                     new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
@@ -658,10 +658,15 @@ public class ActivityChat extends ActivityEnhanced
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                                if (mAdapter.getItem(i).mMessage != null && mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
-                                    mAdapter.notifyItemChanged(i);
-                                    break;
+                            int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                            for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
+                                try {
+                                    if (mAdapter.getItem(i).mMessage != null && mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
+                                        mAdapter.notifyItemChanged(i);
+                                        break;
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
                             }
                         }
@@ -740,6 +745,8 @@ public class ActivityChat extends ActivityEnhanced
         onMusicListener = null;
         iUpdateLogItem = null;
         overridePendingTransition(0, 0);
+
+        needUpdateView = true;
     }
 
     @Override
@@ -784,26 +791,7 @@ public class ActivityChat extends ActivityEnhanced
         FragmentShowImage fragment = (FragmentShowImage) getSupportFragmentManager().findFragmentByTag("ShowImageMessage");
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-            // for update view that image download in fragment show image
-            int count = FragmentShowImage.downloadedList.size();
-
-            for (int i = 0; i < count; i++) {
-                String _cashId = FragmentShowImage.downloadedList.get(i) + "";
-
-                for (int j = mAdapter.getAdapterItemCount() - 1; j >= 0; j--) {
-                    try {
-
-                        String mCashID = mAdapter.getItem(j).mMessage.forwardedFrom != null ? mAdapter.getItem(j).mMessage.forwardedFrom.getAttachment().getCacheId() : mAdapter.getItem(j).mMessage.attachment.cashID;
-
-                        if (mCashID != null && mCashID.equals(_cashId)) {
-                            mAdapter.notifyItemChanged(j);
-                        }
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            FragmentShowImage.downloadedList.clear();
+            updateShowItemInScreen();
         } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
         } else if (emojiPopup != null && emojiPopup.isShowing()) {
@@ -1258,7 +1246,7 @@ public class ActivityChat extends ActivityEnhanced
 
     private void initMain() {
         HelperGetMessageState.clearMessageViews();
-        MusicPlayer.playedList.clear();
+
 
         /**
          * define views
@@ -1570,23 +1558,7 @@ public class ActivityChat extends ActivityEnhanced
             public void complete(boolean result, String messageID, String beforMessageID) {
 
                 if (result) {
-                    if (beforMessageID != null) {
-                        for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                            if (mAdapter.getItem(i).mMessage.messageID.equals(beforMessageID)) {
-                                mAdapter.notifyAdapterItemChanged(i);
-                                break;
-                            }
-                        }
-                    }
-
-                    if (messageID != null) {
-                        for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                            if (mAdapter.getItem(i).mMessage.messageID.equals(messageID)) {
-                                mAdapter.notifyAdapterItemChanged(i);
-                                break;
-                            }
-                        }
-                    }
+                    updateShowItemInScreen();
                 } else {
                     onPlayMusic(messageID);
                 }
@@ -1601,6 +1573,17 @@ public class ActivityChat extends ActivityEnhanced
                 for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
 
                     try {
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+                for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
+                    try {
+
                         AbstractMessage item = mAdapter.getAdapterItem(i);
 
                         if (item.mMessage != null && item.mMessage.messageID.equals(messageId + "")) {
@@ -3148,7 +3131,7 @@ public class ActivityChat extends ActivityEnhanced
 
         int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-        for (int i = start; i < mAdapter.getItemCount() && i < start + 6; i++) {
+        for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
             try {
                 AbstractMessage item = mAdapter.getAdapterItem(i);
                 if (item.mMessage.hasAttachment()) {
@@ -3960,6 +3943,19 @@ public class ActivityChat extends ActivityEnhanced
         return realmChat;
     }
 
+    private void updateShowItemInScreen() {
+
+        // after comback from other activity or background  the veiw should update
+
+        try {
+            // this only notify item that show on the screen and no more
+            recyclerView.getAdapter().notifyDataSetChanged();
+        } catch (Exception e) {
+
+        }
+    }
+
+
     /**
      * detect that editText have character or just have space
      */
@@ -4025,28 +4021,7 @@ public class ActivityChat extends ActivityEnhanced
         });
     }
 
-    /**
-     * change foreground color for selected message
-     */
-    private void selectMessage(int position) {
-        try {
-            mAdapter.getItem(position).mMessage.isSelected = true;
-            mAdapter.notifyItemChanged(position);
 
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * clear foreground color for deSelected message
-     */
-    private void deSelectMessage(int position) {
-        if (mAdapter != null && mAdapter.getItem(position) != null && mAdapter.getItem(position).mMessage != null) {
-            mAdapter.getItem(position).mMessage.isSelected = false;
-            mAdapter.notifyItemChanged(position);
-        }
-    }
 
     /**
      * clear all items that exist in view

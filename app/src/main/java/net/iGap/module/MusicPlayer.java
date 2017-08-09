@@ -97,7 +97,7 @@ public class MusicPlayer extends Service {
     private static double amoungToupdate;
     public static String strTimer = "";
     public static String messageId = "";
-    public static ArrayList<String> playedList = new ArrayList<>();
+
     public static boolean isVoice = false;
     public static boolean pauseSoundFromIGapCall = false;
     public static boolean isSpeakerON = false;
@@ -372,7 +372,11 @@ public class MusicPlayer extends Service {
 
                 if (onCompleteChat != null) {
                     onCompleteChat.complete(true, "play", "");
-                    onCompleteChat.complete(true, "updateTime", zeroTime);
+                    onCompleteChat.complete(false, "updateTime", zeroTime);
+                } else {
+                    if (ActivityChat.onMusicListener != null) {
+                        ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, "");
+                    }
                 }
             } else if (onComplete != null) {
                 onComplete.complete(true, "play", "");
@@ -410,7 +414,9 @@ public class MusicPlayer extends Service {
                     onComplete.complete(true, "update", "");
                 }
             }
-            if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+            if (ActivityChat.onMusicListener != null) {
+                ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+            }
         } catch (Exception e) {
 
             Log.e("dddd", "music player        nextMusic   " + e.toString());
@@ -431,7 +437,9 @@ public class MusicPlayer extends Service {
                 onComplete.complete(true, "update", "");
             }
 
-            if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+            if (ActivityChat.onMusicListener != null) {
+                ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+            }
         } catch (Exception e) {
 
             Log.e("dddd", "music player        nextRandomMusic   " + e.toString());
@@ -461,7 +469,9 @@ public class MusicPlayer extends Service {
                 }
             }
 
-            if (ActivityChat.onMusicListener != null) ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+            if (ActivityChat.onMusicListener != null) {
+                ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+            }
         } catch (Exception e) {
 
             Log.e("dddd", "music player        previousMusic   " + e.toString());
@@ -525,10 +535,6 @@ public class MusicPlayer extends Service {
         MusicPlayer.roomName = roomName;
         mediaThumpnail = null;
         MusicPlayer.roomId = roomId;
-
-        if (playedList.indexOf(messageID) == -1) {
-            playedList.add(messageID);
-        }
 
         if (layoutTripMusic != null) {
             layoutTripMusic.setVisibility(View.VISIBLE);
