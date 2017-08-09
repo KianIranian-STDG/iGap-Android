@@ -83,6 +83,8 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
                     setReplayButton();
                 } else if (messageOne.equals("Shuffel")) {
                     setShuffleButton();
+                } else if (messageOne.equals("finish")) {
+                    finish();
                 }
             }
         };

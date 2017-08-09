@@ -36,6 +36,7 @@ import com.larswerkman.holocolorpicker.SVBar;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.MyService;
+import net.iGap.helper.MyServiceTemporat;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 
@@ -872,9 +873,17 @@ public class ActivitySettingNotification extends ActivityEnhanced {
                 if (isChecked) {
                     editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
                     editor.apply();
+
+                    startService(new Intent(ActivitySettingNotification.this, MyServiceTemporat.class));
+
                 } else {
                     editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 0);
                     editor.apply();
+
+                    Intent intentService = new Intent(G.context, MyService.class);
+                    intentService.putExtra("ACTION", MyService.STOPFOREGROUND_ACTION);
+                    startService(intentService);
+
                 }
             }
         });
@@ -884,10 +893,8 @@ public class ActivitySettingNotification extends ActivityEnhanced {
 
                 if (tgKeep_alive_service.isChecked()) {
                     tgKeep_alive_service.setChecked(false);
-                    stopService(new Intent(ActivitySettingNotification.this, MyService.class));
                 } else {
                     tgKeep_alive_service.setChecked(true);
-                    startService(new Intent(ActivitySettingNotification.this, MyService.class));
                 }
             }
         });

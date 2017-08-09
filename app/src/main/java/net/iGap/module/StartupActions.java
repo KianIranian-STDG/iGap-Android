@@ -24,7 +24,7 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperUploadFile;
-import net.iGap.helper.MyService;
+import net.iGap.helper.MyServiceTemporat;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
@@ -116,7 +116,7 @@ public final class StartupActions {
          */
         int isStart = preferences.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
         if (isStart == 1) {
-            Intent intent = new Intent(context, MyService.class);
+            Intent intent = new Intent(context, MyServiceTemporat.class);
             context.startService(intent);
         }
 

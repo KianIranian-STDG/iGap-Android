@@ -206,6 +206,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             G.mRealm.close();
         }
 
+        G.imageLoader.clearMemoryCache();
+
     }
 
     private void deleteContentFolderChatBackground() {

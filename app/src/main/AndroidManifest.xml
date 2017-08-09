@@ -247,6 +247,7 @@
         android:name=".helper.MyService"
         android:enabled="true"
         android:exported="true" />
+    <service android:name=".helper.MyServiceTemporat" />
 
     <provider
         android:name="android.support.v4.content.FileProvider"

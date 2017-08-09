@@ -62,6 +62,7 @@ public class MusicPlayer extends Service {
     private static Sensor mProximity;
     private static SensorEventListener sensorEventListener;
     private static final int SENSOR_SENSITIVITY = 4;
+    private static boolean isRegisterReciver = false;
 
     public static final int notificationId = 19;
     public static String repeatMode = RepeatMode.noRepeat.toString();
@@ -319,7 +320,6 @@ public class MusicPlayer extends Service {
                 btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
             }
 
-
             if (!isShowMediaPlayer) {
 
                 if (onCompleteChat != null) {
@@ -354,7 +354,6 @@ public class MusicPlayer extends Service {
             txt_music_time_counter.setText(zeroTime + "/");
         }
 
-
         try {
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
             notificationManager.notify(notificationId, notification);
@@ -368,7 +367,6 @@ public class MusicPlayer extends Service {
             }
 
             musicProgress = 0;
-
 
             if (!isShowMediaPlayer) {
 
@@ -474,6 +472,15 @@ public class MusicPlayer extends Service {
         if (layoutTripMusic != null) {
             layoutTripMusic.setVisibility(View.GONE);
         }
+
+        if (onComplete != null) {
+            onComplete.complete(true, "finish", "");
+        }
+
+        if (onCompleteChat != null) {
+            onCompleteChat.complete(true, "pause", "");
+        }
+
         stopSound();
         if (mp != null) {
             mp.release();
@@ -485,7 +492,10 @@ public class MusicPlayer extends Service {
             intent.putExtra("ACTION", STOPFOREGROUND_ACTION);
             G.context.startService(intent);
 
-            G.context.unregisterReceiver(headsetPluginReciver);
+            if (isRegisterReciver) {
+                G.context.unregisterReceiver(headsetPluginReciver);
+                isRegisterReciver = false;
+            }
         } catch (RuntimeException e) {
         }
 
@@ -493,7 +503,6 @@ public class MusicPlayer extends Service {
             mRealm.close();
             mRealm = null;
         }
-
     }
 
     public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
@@ -510,8 +519,6 @@ public class MusicPlayer extends Service {
                 isVoice = true;
             }
         }
-
-
 
         MusicPlayer.messageId = messageID;
         MusicPlayer.musicPath = musicPath;
@@ -594,10 +601,11 @@ public class MusicPlayer extends Service {
                     }
                 });
 
-                IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-                G.context.registerReceiver(headsetPluginReciver, filter);
+                if (!isRegisterReciver) {
 
-
+                    IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+                    G.context.registerReceiver(headsetPluginReciver, filter);
+                }
             } catch (Exception e) {
             }
         }
@@ -710,7 +718,7 @@ public class MusicPlayer extends Service {
 
         notification = new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_audio).setContentTitle(musicName)
             //  .setContentText(place)
-            .setContent(remoteViews).setContentIntent(pi).setAutoCancel(false).setOngoing(true).build();
+            .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
 
         Intent intent = new Intent(G.context, MusicPlayer.class);
         intent.putExtra("ACTION", STARTFOREGROUND_ACTION);
@@ -731,7 +739,12 @@ public class MusicPlayer extends Service {
                     .toString()
                     .equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || realmRoomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
                     try {
-                        if (new File(realmRoomMessage.getAttachment().getLocalFilePath()).exists()) mediaList.add(realmRoomMessage);
+
+                        if (realmRoomMessage.getAttachment().getLocalFilePath() != null) {
+                            if (new File(realmRoomMessage.getAttachment().getLocalFilePath()).exists()) {
+                                mediaList.add(realmRoomMessage);
+                            }
+                        }
                     } catch (Exception e) {
                         Log.e("dddd", "music player   fillMediaList " + e.toString());
                     }

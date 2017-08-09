@@ -2028,6 +2028,9 @@ public class ActivityChat extends ActivityEnhanced
 
         });
 
+        llScrollNavigate = (FrameLayout) findViewById(R.id.ac_ll_scrool_navigate);
+        txtNewUnreadMessage = (TextView) findViewById(R.id.cs_txt_unread_message);
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -2036,8 +2039,6 @@ public class ActivityChat extends ActivityEnhanced
             }
         });
 
-        llScrollNavigate = (FrameLayout) findViewById(R.id.ac_ll_scrool_navigate);
-        txtNewUnreadMessage = (TextView) findViewById(R.id.cs_txt_unread_message);
         AndroidUtils.setBackgroundShapeColor(txtNewUnreadMessage, Color.parseColor(G.notificationColor));
 
         MaterialDesignTextView txtNavigationLayout = (MaterialDesignTextView) findViewById(R.id.ac_txt_down_navigation);

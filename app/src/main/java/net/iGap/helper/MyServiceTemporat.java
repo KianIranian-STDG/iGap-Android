@@ -14,32 +14,32 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import net.iGap.G;
 
-public class MyService extends Service {
+public class MyServiceTemporat extends Service {
 
-    public static String STARTFOREGROUND_ACTION = "STARTFOREGROUND_ACTION";
-    public static String STOPFOREGROUND_ACTION = "STOPFOREGROUND_ACTION";
-
-    public MyService() {
+    public MyServiceTemporat() {
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (intent != null && intent.getExtras() != null) {
+        if (intent != null) {
 
-            String action = intent.getExtras().getString("ACTION");
-            if (action != null) {
+            Notification note = new Notification(0, null, System.currentTimeMillis());
+            note.flags |= Notification.FLAG_NO_CLEAR;
+            startForeground(142, note);
 
-                if (action.equals(STARTFOREGROUND_ACTION)) {
+            Intent intentService = new Intent(G.context, MyService.class);
+            intentService.putExtra("ACTION", MyService.STARTFOREGROUND_ACTION);
+            startService(intentService);
 
-                    Notification note = new Notification(0, null, System.currentTimeMillis());
-                    note.flags |= Notification.FLAG_NO_CLEAR;
-                    startForeground(142, note);
-                } else if (action.equals(STOPFOREGROUND_ACTION)) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
                     stopSelf();
                 }
-            }
+            }, 100);
         }
 
         return Service.START_STICKY;
