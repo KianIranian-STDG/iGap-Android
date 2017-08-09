@@ -81,6 +81,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public boolean directionalBased = true;
     public View messageView;
     private int minWith = 0;
+    protected Realm realmChat;
 
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
 
@@ -101,7 +102,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     //@Override public void onPlayPauseVideo(VH holder, String localPath, int isHide, double time) {
     //    // empty
     //}
-    public AbstractMessage(boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+    public AbstractMessage(Realm realmChat, boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        this.realmChat = realmChat;
         this.directionalBased = directionalBased;
         this.type = type;
         this.messageClickListener = messageClickListener;
@@ -167,8 +169,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
-        // holder.setIsRecyclable(false);
-
         if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogItem.ViewHolder || holder instanceof TimeItem.ViewHolder) {
             return;
         }
@@ -224,7 +224,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (!mMessage.isTimeOrLogMessage()) {
-            RealmRoom realmRoom = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
+            RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
             if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                 ((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic)).setVisibility(View.GONE);
             } else {
@@ -249,8 +249,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.GONE);
         }
 
-        replyMessageIfNeeded(holder, G.getRealm());
-        forwardMessageIfNeeded(holder, G.getRealm());
+        replyMessageIfNeeded(holder, realmChat);
+        forwardMessageIfNeeded(holder, realmChat);
 
         if (holder.itemView.findViewById(R.id.messageSenderName) != null) {
             holder.itemView.findViewById(R.id.messageSenderName).setVisibility(View.GONE);
@@ -262,7 +262,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 LinearLayout mainContainer = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
                 if (mainContainer != null) {
 
-                    addSenderNameToGroupIfNeed(holder.itemView, G.getRealm());
+                    addSenderNameToGroupIfNeed(holder.itemView, realmChat);
 
                     if (holder.itemView.findViewById(R.id.messageSenderAvatar) == null) {
                         mainContainer.addView(ViewMaker.makeCircleImageView(), 0);
@@ -278,7 +278,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     });
 
                     //  String[] initialize =
-                    HelperAvatar.getAvatar(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, G.getRealm(), new OnAvatarGet() {
+                    HelperAvatar.getAvatar(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, realmChat, new OnAvatarGet() {
                         @Override
                         public void onAvatarGet(final String avatarPath, long ownerId) {
                             G.handler.post(new Runnable() {
@@ -320,7 +320,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        RealmRoomMessage roomMessage = G.getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
+        RealmRoomMessage roomMessage = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
         if (roomMessage != null) {
             prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
@@ -347,12 +347,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (G.showVoteChannelLayout) {
 
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
-                showVote(holder, G.getRealm());
+                showVote(holder, realmChat);
             } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
                 if (mMessage.forwardedFrom != null) {
-                    RealmRoom realmRoom = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+                    RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
                     if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                        showVote(holder, G.getRealm());
+                        showVote(holder, realmChat);
 
                         if (mMessage.isSenderMe()) {
                             holder.itemView.findViewById(R.id.cslm_view_left_dis).setVisibility(View.VISIBLE);
@@ -375,7 +375,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if ((mMessage.forwardedFrom != null)) {
 
                 ProtoGlobal.Room.Type roomType = null;
-                RealmRoom realmRoom = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+                RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
                 if (realmRoom != null) {
                     roomType = realmRoom.getType();
                 }
@@ -385,7 +385,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (mMessage.forwardedFrom.getMessageId() < 0) {
                         messageId = messageId * (-1);
                     }
-                    RealmChannelExtra realmChannelExtra = G.getRealm().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+                    RealmChannelExtra realmChannelExtra = realmChat.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
                     if (realmChannelExtra != null) {
                         txtViewsLabel.setText(realmChannelExtra.getViewsLabel());
                     }
@@ -423,7 +423,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private void getChannelMessageState() {
         if ((mMessage.forwardedFrom != null)) {
             ProtoGlobal.Room.Type roomType = null;
-            RealmRoom realmRoom = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+            RealmRoom realmRoom = realmChat.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
             if (realmRoom != null) {
                 roomType = realmRoom.getType();
             }
@@ -609,7 +609,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      */
     private void voteSend(final ProtoGlobal.RoomMessageReaction reaction) {
 
-        G.getRealm().executeTransaction(new Realm.Transaction() {
+        realmChat.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 

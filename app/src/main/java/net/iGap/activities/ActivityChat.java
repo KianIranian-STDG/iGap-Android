@@ -2072,7 +2072,7 @@ public class ActivityChat extends ActivityEnhanced
                         unreadMessage.setUserId(-1);
                         unreadMessage.setMessage(countNewMessage + " " + getString(R.string.unread_message));
                         unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                        mAdapter.add(position, new UnreadMessage(ActivityChat.this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
+                        mAdapter.add(position, new UnreadMessage(realmChat, ActivityChat.this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
 
                         LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
                         linearLayout.scrollToPositionWithOffset(position, 0);
@@ -2389,7 +2389,7 @@ public class ActivityChat extends ActivityEnhanced
                                         }
                                     });
                                 }
-                                mAdapter.add(new TextItem(chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(SUID.id().get()));
+                                mAdapter.add(new TextItem(realmChat, chatType, ActivityChat.this).setMessage(StructMessageInfo.convert(roomMessage)).withIdentifier(SUID.id().get()));
 
 
                                 scrollToEnd();
@@ -3067,7 +3067,7 @@ public class ActivityChat extends ActivityEnhanced
             structChannelExtra.signature = "";
         }
         messageInfo.channelExtra = structChannelExtra;
-        mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo));
+        mAdapter.add(new VoiceItem(realmChat, chatType, this).setMessage(messageInfo));
         //realm.close();
         scrollToEnd();
         clearReplyView();
@@ -6623,7 +6623,7 @@ public class ActivityChat extends ActivityEnhanced
 
             if (finalMessageType == CONTACT) {
                 messageInfo.channelExtra = new StructChannelExtra();
-                mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo));
+                mAdapter.add(new ContactItem(realmChat, chatType, this).setMessage(messageInfo));
             }
         }
 
@@ -6920,7 +6920,7 @@ public class ActivityChat extends ActivityEnhanced
                             break;
                         }
                     }
-                    mAdapter.add(0, new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                    mAdapter.add(0, new TimeItem(realmChat, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                     index = 1;
                 }
 
@@ -6928,106 +6928,106 @@ public class ActivityChat extends ActivityEnhanced
 
                     if (mAdapter.getItemCount() > 0) {
                         if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
-                            mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                            mAdapter.add(new TimeItem(realmChat, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                         }
                     } else {
-                        mAdapter.add(new TimeItem(this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                        mAdapter.add(new TimeItem(realmChat, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                     }
                 }
 
                 switch (messageType) {
                     case TEXT:
                         if (!addTop) {
-                            mAdapter.add(new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new TextItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new TextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new TextItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case IMAGE:
                         if (!addTop) {
-                            mAdapter.add(new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new ImageItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new ImageItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ImageItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case IMAGE_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new ImageWithTextItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new ImageWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ImageWithTextItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case VIDEO:
                         if (!addTop) {
-                            mAdapter.add(new VideoItem(chatType, this, ActivityChat.this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new VideoItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new VideoItem(chatType, this, ActivityChat.this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new VideoItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case VIDEO_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new VideoWithTextItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new VideoWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new VideoWithTextItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case LOCATION:
                         if (!addTop) {
-                            mAdapter.add(new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new LocationItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new LocationItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new LocationItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case FILE:
                     case FILE_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new FileItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new FileItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new FileItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case VOICE:
                         if (!addTop) {
-                            mAdapter.add(new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new VoiceItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new VoiceItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new VoiceItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case AUDIO:
                     case AUDIO_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new AudioItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new AudioItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new AudioItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case CONTACT:
                         if (!addTop) {
-                            mAdapter.add(new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new ContactItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new ContactItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ContactItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case GIF:
                         if (!addTop) {
-                            mAdapter.add(new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new GifItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new GifItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new GifItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case GIF_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new GifWithTextItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new GifWithTextItem(chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new GifWithTextItem(realmChat, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case LOG:
                         if (messageInfo.showMessage) {
                             if (!addTop) {
-                                mAdapter.add(new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new LogItem(realmChat, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(index, new LogItem(this).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(index, new LogItem(realmChat, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -7378,7 +7378,6 @@ public class ActivityChat extends ActivityEnhanced
             MessageLoader.getOnlineMessage(realmChat, mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
                 @Override
                 public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, String directionString) {
-                    ActivityChat.isUiThread("onMessage", 7380);
                     if (roomId != mRoomId) {
                         return;
                     }
@@ -7561,7 +7560,7 @@ public class ActivityChat extends ActivityEnhanced
             unreadMessage.setUserId(-1);
             unreadMessage.setMessage(unreadMessageCount + " " + getString(R.string.unread_message));
             unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-            mAdapter.add(0, new UnreadMessage(ActivityChat.this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
+            mAdapter.add(0, new UnreadMessage(realmChat, ActivityChat.this).setMessage(StructMessageInfo.convert(unreadMessage)).withIdentifier(SUID.id().get()));
             //}
         }
     }
@@ -7621,9 +7620,9 @@ public class ActivityChat extends ActivityEnhanced
                             @Override
                             public void run() {
                                 if (direction == DOWN) {
-                                    mAdapter.add(new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                                    mAdapter.add(new ProgressWaiting(realmChat, ActivityChat.this).withIdentifier(SUID.id().get()));
                                 } else {
-                                    mAdapter.add(0, new ProgressWaiting(ActivityChat.this).withIdentifier(SUID.id().get()));
+                                    mAdapter.add(0, new ProgressWaiting(realmChat, ActivityChat.this).withIdentifier(SUID.id().get()));
                                 }
                             }
                         });

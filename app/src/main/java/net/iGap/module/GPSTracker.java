@@ -35,10 +35,10 @@ public class GPSTracker extends Service implements LocationListener {
     double longitude; // longitude
 
     // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 50; // 10 meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 2;
 
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = (int) (DateUtils.MINUTE_IN_MILLIS);
+    private static final long MIN_TIME_BW_UPDATES = 1;
     private final int UPDATE_LOCATION_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);
 
     private long latestUpdateLocation = 0;

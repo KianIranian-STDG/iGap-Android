@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import io.realm.Realm;
 import java.util.List;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
@@ -21,19 +22,22 @@ import net.iGap.proto.ProtoGlobal;
 
 public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
 
-    public TimeItem(IMessageItem messageClickListener) {
-        super(false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
+    public TimeItem(Realm realmChat, IMessageItem messageClickListener) {
+        super(realmChat, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.chatSubLayoutTime;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_message;
     }
 
-    @Override public void bindView(ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
 
         if (holder.itemView.findViewById(R.id.cslt_txt_time_date) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getTimeItem());
@@ -60,7 +64,8 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
         }
     }
 
-    @Override public ViewHolder getViewHolder(View v) {
+    @Override
+    public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 }

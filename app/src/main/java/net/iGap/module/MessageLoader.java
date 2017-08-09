@@ -18,7 +18,6 @@ import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
-import net.iGap.activities.ActivityChat;
 import net.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import net.iGap.interfaces.OnMessageReceive;
 import net.iGap.module.structs.StructMessageInfo;
@@ -46,7 +45,6 @@ public final class MessageLoader {
      * @return Object[] ==> [0] -> ArrayList<StructMessageInfo>, [1] -> boolean hasMore, [2] -> boolean hasGap
      */
     public static Object[] getLocalMessage(Realm realm, long roomId, long messageId, long gapMessageId, boolean duplicateMessage, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        ActivityChat.isUiThread("getLocalMessage", 49);
         //+Realm realm = Realm.getDefaultInstance();
         boolean hasMore = true;
         boolean hasSpaceToGap = true;
@@ -195,7 +193,6 @@ public final class MessageLoader {
                 });
                 //realm.close();
 
-                ActivityChat.isUiThread("onGetRoomHistory", 198);
                 onMessageReceive.onMessage(roomId, startMessageId, endMessageId, gapReached, jumpOverLocal, historyDirection);
             }
 
@@ -247,7 +244,6 @@ public final class MessageLoader {
      */
     public static Object[] gapExist(Realm realm, long roomId, long messageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
         //Realm realm = Realm.getDefaultInstance();
-        ActivityChat.isUiThread("gapExist", 250);
         RealmRoomMessage realmRoomMessage = null;
         long gapMessageId = 0;
         long reachMessageId = 0;

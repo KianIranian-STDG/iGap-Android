@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import io.realm.Realm;
 import java.util.List;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
@@ -23,8 +24,8 @@ import net.iGap.proto.ProtoGlobal;
 
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
 
-    public ContactItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(true, type, messageClickListener);
+    public ContactItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(realmChat, true, type, messageClickListener);
     }
 
     @Override

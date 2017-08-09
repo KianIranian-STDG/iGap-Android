@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import io.realm.Realm;
 import java.io.File;
 import java.util.List;
 import net.iGap.G;
@@ -41,8 +42,8 @@ import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 
 public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> {
 
-    public AudioItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(true, type, messageClickListener);
+    public AudioItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(realmChat, true, type, messageClickListener);
     }
 
     @Override

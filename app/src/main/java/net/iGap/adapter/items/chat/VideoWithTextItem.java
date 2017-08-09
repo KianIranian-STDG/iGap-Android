@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -31,8 +32,8 @@ import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
 
-    public VideoWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(true, type, messageClickListener);
+    public VideoWithTextItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(realmChat, true, type, messageClickListener);
     }
 
     @Override

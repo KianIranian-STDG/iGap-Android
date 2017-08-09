@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.vanniktech.emoji.emoji.Emoji;
+import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -24,8 +25,8 @@ import net.iGap.proto.ProtoGlobal;
 
 public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
-    public TextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(true, type, messageClickListener);
+    public TextItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(realmChat, true, type, messageClickListener);
     }
 
     @Override

@@ -13,6 +13,7 @@ package net.iGap.adapter.items.chat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -26,8 +27,8 @@ import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> {
 
-    public ImageItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(true, type, messageClickListener);
+    public ImageItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(realmChat, true, type, messageClickListener);
     }
 
     @Override
@@ -93,6 +94,7 @@ public class ImageItem extends AbstractMessage<ImageItem, ImageItem.ViewHolder> 
          * this commented code used with xml layout
          */
         protected ReserveSpaceRoundedImageView image;
+
         public ViewHolder(View view) {
             super(view);
             //image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);

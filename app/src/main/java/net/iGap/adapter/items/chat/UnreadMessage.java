@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -23,19 +24,22 @@ import net.iGap.proto.ProtoGlobal;
 
 public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.ViewHolder> {
 
-    public UnreadMessage(IMessageItem messageClickListener) {
-        super(false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
+    public UnreadMessage(Realm realmChat, IMessageItem messageClickListener) {
+        super(realmChat, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.cslum_txt_unread_message;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.chat_sub_layout_message;
     }
 
-    @Override public void bindView(ViewHolder holder, List payloads) {
+    @Override
+    public void bindView(ViewHolder holder, List payloads) {
 
         if (holder.itemView.findViewById(R.id.cslum_txt_unread_message) == null) {
             ((ViewGroup) holder.itemView).addView(ViewMaker.getUnreadMessageItem());
@@ -63,7 +67,8 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
         setTextIfNeeded(holder.txtUnreadMessage, mMessage.messageText);
     }
 
-    @Override public ViewHolder getViewHolder(View v) {
+    @Override
+    public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 

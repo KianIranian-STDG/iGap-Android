@@ -47,8 +47,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     private long roomId;
 
-    public VoiceItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(true, type, messageClickListener);
+    public VoiceItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(realmChat, true, type, messageClickListener);
     }
 
     @Override
@@ -89,38 +89,38 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             ((ViewGroup) holder.itemView).addView(ViewMaker.getVoiceItem());
         }
 
-            holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
-            holder.author = (TextView) holder.itemView.findViewById(R.id.cslv_txt_author);
-            holder.btnPlayMusic = (TextView) holder.itemView.findViewById(R.id.csla_btn_play_music);
-            holder.txt_Timer = (TextView) holder.itemView.findViewById(R.id.csla_txt_timer);
-            holder.musicSeekbar = (SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1);
+        holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
+        holder.author = (TextView) holder.itemView.findViewById(R.id.cslv_txt_author);
+        holder.btnPlayMusic = (TextView) holder.itemView.findViewById(R.id.csla_btn_play_music);
+        holder.txt_Timer = (TextView) holder.itemView.findViewById(R.id.csla_txt_timer);
+        holder.musicSeekbar = (SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1);
         holder.musicSeekbar.setTag(mMessage.messageID);
-            //tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
+        //tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
-            holder.complete = new OnComplete() {
-                @Override
-                public void complete(boolean result, String messageOne, final String MessageTow) {
+        holder.complete = new OnComplete() {
+            @Override
+            public void complete(boolean result, String messageOne, final String MessageTow) {
 
-                    if (holder.musicSeekbar.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
-                        if (messageOne.equals("play")) {
-                            holder.btnPlayMusic.setText(R.string.md_play_arrow);
-                        } else if (messageOne.equals("pause")) {
-                            holder.btnPlayMusic.setText(R.string.md_pause_button);
-                        } else if (messageOne.equals("updateTime")) {
-                            holder.txt_Timer.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
+                if (holder.musicSeekbar.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
+                    if (messageOne.equals("play")) {
+                        holder.btnPlayMusic.setText(R.string.md_play_arrow);
+                    } else if (messageOne.equals("pause")) {
+                        holder.btnPlayMusic.setText(R.string.md_pause_button);
+                    } else if (messageOne.equals("updateTime")) {
+                        holder.txt_Timer.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
 
-                                    if (HelperCalander.isLanguagePersian) holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+                                if (HelperCalander.isLanguagePersian) holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
 
-                                    holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
-                                }
-                            });
-                        }
+                                holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
+                            }
+                        });
                     }
                 }
-            };
+            }
+        };
 
         holder.itemView.findViewById(R.id.mainContainer).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,70 +130,70 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         });
 
 
-            holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    if (holder.mFilePath.length() < 1) return;
+                if (holder.mFilePath.length() < 1) return;
 
-                    G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, Long.parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
+                G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, Long.parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
 
-                    G.getRealm().executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, holder.mRoomId).findFirst();
+                realmChat.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, holder.mRoomId).findFirst();
 
-                            if (realmClientCondition != null) {
+                        if (realmClientCondition != null) {
 
-                                RealmOfflineListen realmOfflineListen = realm.createObject(RealmOfflineListen.class, SUID.id().get());
-                                realmOfflineListen.setOfflineListen(Long.parseLong(holder.mMessageID));
-                                if (realmClientCondition.getOfflineListen() != null) {
-                                    realmClientCondition.getOfflineListen().add(realmOfflineListen);
-                                } else {
-                                    RealmList<RealmOfflineListen> offlineSeenListen = new RealmList<>();
-                                    offlineSeenListen.add(realmOfflineListen);
-                                    realmClientCondition.setOfflineListen(offlineSeenListen);
-                                }
+                            RealmOfflineListen realmOfflineListen = realm.createObject(RealmOfflineListen.class, SUID.id().get());
+                            realmOfflineListen.setOfflineListen(Long.parseLong(holder.mMessageID));
+                            if (realmClientCondition.getOfflineListen() != null) {
+                                realmClientCondition.getOfflineListen().add(realmOfflineListen);
+                            } else {
+                                RealmList<RealmOfflineListen> offlineSeenListen = new RealmList<>();
+                                offlineSeenListen.add(realmOfflineListen);
+                                realmClientCondition.setOfflineListen(offlineSeenListen);
                             }
                         }
-                    });
+                    }
+                });
 
 
 
-                    if (holder.mMessageID.equals(MusicPlayer.messageId)) {
-                        MusicPlayer.onCompleteChat = holder.complete;
+                if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+                    MusicPlayer.onCompleteChat = holder.complete;
 
-                        if (MusicPlayer.mp != null) {
-                            MusicPlayer.playAndPause();
-                        } else {
-                            MusicPlayer.startPlayer("", holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
-                            messageClickListener.onPlayMusic(holder.mMessageID);
-                        }
+                    if (MusicPlayer.mp != null) {
+                        MusicPlayer.playAndPause();
                     } else {
-
-                        MusicPlayer.stopSound();
-                        MusicPlayer.onCompleteChat = holder.complete;
                         MusicPlayer.startPlayer("", holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
                         messageClickListener.onPlayMusic(holder.mMessageID);
+                    }
+                } else {
 
-                        holder.mTimeMusic = MusicPlayer.musicTime;
+                    MusicPlayer.stopSound();
+                    MusicPlayer.onCompleteChat = holder.complete;
+                    MusicPlayer.startPlayer("", holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+                    messageClickListener.onPlayMusic(holder.mMessageID);
+
+                    holder.mTimeMusic = MusicPlayer.musicTime;
+                }
+            }
+        });
+
+        holder.musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+                        MusicPlayer.setMusicProgress(holder.musicSeekbar.getProgress());
                     }
                 }
-            });
-
-            holder.musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                        if (holder.mMessageID.equals(MusicPlayer.messageId)) {
-                            MusicPlayer.setMusicProgress(holder.musicSeekbar.getProgress());
-                        }
-                    }
-                    return false;
-                }
-            });
+                return false;
+            }
+        });
 
         super.bindView(holder, payloads);
 
@@ -203,7 +203,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.mRoomId = mMessage.roomId;
 
-        RealmRegisteredInfo registeredInfo = G.getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID)).findFirst();
+        RealmRegisteredInfo registeredInfo = realmChat.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID)).findFirst();
 
         if (registeredInfo != null) {
             holder.author.setText(G.context.getString(R.string.recorded_by) + " " + registeredInfo.getDisplayName());

@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import io.realm.Realm;
 import java.io.File;
 import java.util.List;
 import net.iGap.R;
@@ -33,8 +34,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTextItem.ViewHolder> {
 
-    public GifWithTextItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(true, type, messageClickListener);
+    public GifWithTextItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(realmChat, true, type, messageClickListener);
     }
 
     @Override

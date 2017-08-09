@@ -34,8 +34,8 @@ import static net.iGap.R.id.ac_ll_parent;
 
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
 
-    public LocationItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(true, type, messageClickListener);
+    public LocationItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(realmChat, true, type, messageClickListener);
     }
 
     @Override public int getType() {

@@ -10,12 +10,12 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.mikepenz.fastadapter.FastAdapter;
+import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -32,9 +32,13 @@ import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> {
 
-    public VideoItem(ProtoGlobal.Room.Type type, IMessageItem messageClickListener, Activity activity) {
-        super(true, type, messageClickListener);
+    public VideoItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(realmChat, true, type, messageClickListener);
     }
+
+    //public TextItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+    //    super(realmChat, true, type, messageClickListener);
+    //}
 
     @Override
     public int getType() {
