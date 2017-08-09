@@ -828,7 +828,7 @@ public class HelperUrl {
                         if (dialogWaiting != null && dialogWaiting.isShowing()) {
 
                         } else {
-                            dialogWaiting = new MaterialDialog.Builder(G.currentActivity).title(R.string.please_wait).content(R.string.please_wait).progress(true, 0).cancelable(false).progressIndeterminateStyle(false).show();
+                            dialogWaiting = new MaterialDialog.Builder(G.currentActivity).title("").content(R.string.please_wait).progress(true, 0).cancelable(false).progressIndeterminateStyle(false).show();
                         }
                     }
                 });

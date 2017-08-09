@@ -83,7 +83,7 @@
   <string name="contact_message">Contact Message</string>
   <string name="gif_message">Gif Message</string>
   <string name="voice_message">Voice Message</string>
-  <string name="typing">Typing…</string>
+  <string name="typing">typing…</string>
   <string name="sending_image">Sending image…</string>
   <string name="capturing_image">Capturing image…</string>
   <string name="sending_video">Sending video…</string>
@@ -518,7 +518,7 @@
   <string name="long_time_ago">long time ago</string>
   <string name="last_month">last month</string>
   <string name="last_week">last week</string>
-  <string name="online">Online</string>
+  <string name="online">online</string>
   <string name="exactly">Exactly</string>
   <string name="recently">Recently</string>
   <string name="support">Support</string>
