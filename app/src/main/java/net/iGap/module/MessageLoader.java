@@ -114,7 +114,7 @@ public final class MessageLoader {
          */
         for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
             if (realmRoomMessage.getMessageId() != 0) {
-                structMessageInfos.add(StructMessageInfo.convert(realmRoomMessage));
+                structMessageInfos.add(StructMessageInfo.convert(realm, realmRoomMessage));
             }
         }
 

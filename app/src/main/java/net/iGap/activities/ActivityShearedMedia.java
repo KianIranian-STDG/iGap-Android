@@ -386,7 +386,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     rm = mRealmList.where().equalTo(RealmRoomMessageFields.MESSAGE_ID, Id).findFirst();
                     if (rm != null) {
-                        messageInfos.add(Parcels.wrap(StructMessageInfo.convert(rm)));
+                        Realm realm = Realm.getDefaultInstance();
+                        messageInfos.add(Parcels.wrap(StructMessageInfo.convert(realm, rm)));
                     }
                 }
 

@@ -383,7 +383,8 @@ public class FragmentShowImage extends Fragment {
             if (file.exists()) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("image/*");
-                putExtra(intent, StructMessageInfo.convert(rm));
+                Realm realm = Realm.getDefaultInstance();
+                putExtra(intent, StructMessageInfo.convert(realm, rm));
                 startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
             }
         }
