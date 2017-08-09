@@ -97,6 +97,8 @@ public class FragmentMain extends Fragment implements OnComplete {
     public MainType mainType;
     private Activity mActivity;
     private long tagId;
+    private Realm realmFragmentMain;
+
 
     public enum MainType {
         all, chat, group, channel
@@ -114,6 +116,13 @@ public class FragmentMain extends Fragment implements OnComplete {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_main_rooms, container, false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        realmFragmentMain = Realm.getDefaultInstance();
     }
 
     @Override
@@ -156,7 +165,7 @@ public class FragmentMain extends Fragment implements OnComplete {
         switch (mainType) {
 
             case all:
-                results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
                 } else {
@@ -164,7 +173,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                 }
                 break;
             case chat:
-                results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
@@ -173,7 +182,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                 }
                 break;
             case group:
-                results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
@@ -182,7 +191,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                 }
                 break;
             case channel:
-                results = G.getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
                         equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
@@ -559,8 +568,8 @@ public class FragmentMain extends Fragment implements OnComplete {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
+                //+final Realm realm = Realm.getDefaultInstance();
+                getRealmFragmentMain().executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
@@ -575,16 +584,16 @@ public class FragmentMain extends Fragment implements OnComplete {
                         }
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
+                    //}, new Realm.Transaction.OnSuccess() {
+                    //    @Override
+                    //    public void onSuccess() {
+                    //        realm.close();
+                    //    }
+                    //}, new Realm.Transaction.OnError() {
+                    //    @Override
+                    //    public void onError(Throwable error) {
+                    //        realm.close();
+                    //    }
                 });
             }
         });
@@ -593,14 +602,14 @@ public class FragmentMain extends Fragment implements OnComplete {
     }
 
     private void muteNotification(final Long id, final boolean mute) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        //+Realm realm = Realm.getDefaultInstance();
+        getRealmFragmentMain().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst().setMute(!mute);
             }
         });
-        realm.close();
+        //realm.close();
     }
 
     private void clearHistory(Long id) {
@@ -644,9 +653,9 @@ public class FragmentMain extends Fragment implements OnComplete {
 
     private void pinToTop(final long id, final boolean isPinned) {
 
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
 
-        realm.executeTransaction(new Realm.Transaction() {
+        getRealmFragmentMain().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
@@ -654,7 +663,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                 goToTop();
             }
         });
-        realm.close();
+        //realm.close();
     }
 
     private void goToTop() {
@@ -1017,7 +1026,7 @@ public class FragmentMain extends Fragment implements OnComplete {
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
 
-                                RealmRegisteredInfo realmRegisteredInfo = G.getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
+                                RealmRegisteredInfo realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
                                 if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
 
                                     String _name = realmRegisteredInfo.getDisplayName();
@@ -1189,10 +1198,26 @@ public class FragmentMain extends Fragment implements OnComplete {
         }
     }
 
+    private Realm getRealmFragmentMain() {
+        if (realmFragmentMain == null || realmFragmentMain.isClosed()) {
+            realmFragmentMain = Realm.getDefaultInstance();
+        }
+        return realmFragmentMain;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (realmFragmentMain != null && !realmFragmentMain.isClosed()) {
+            realmFragmentMain.close();
+        }
     }
 
     @Override

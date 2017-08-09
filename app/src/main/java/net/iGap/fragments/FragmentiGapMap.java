@@ -1126,7 +1126,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 
-            visibleViewAttention(mActivity.getResources().getString(R.string.turn_on_gps_explain), true);
+            //visibleViewAttention(mActivity.getResources().getString(R.string.turn_on_gps_explain), true);
 
         } else {// GPS is on
             isGpsOn = true;

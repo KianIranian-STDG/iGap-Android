@@ -77,7 +77,6 @@ import net.iGap.request.RequestUserContactsGetList;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
-import static net.iGap.G.getRealm;
 import static net.iGap.R.string.contacts;
 
 public class RegisteredContactsFragment extends Fragment {
@@ -98,14 +97,14 @@ public class RegisteredContactsFragment extends Fragment {
     private FastItemAdapter fastItemAdapter;
     private ProgressBar prgWaitingLiadList;
 
-    private Realm mRealm;
+    private Realm realm;
 
-    private Realm getmRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
+    private Realm getRealm() {
+        if (realm == null || realm.isClosed()) {
+            realm = Realm.getDefaultInstance();
         }
 
-        return mRealm;
+        return realm;
     }
 
 
@@ -116,6 +115,7 @@ public class RegisteredContactsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
@@ -230,9 +230,9 @@ public class RegisteredContactsFragment extends Fragment {
 
 
                 if (s.length() > 0) {
-                    results = getmRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+                    results = getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAllSorted(RealmContactsFields.DISPLAY_NAME);
                 } else {
-                    results = getmRealm().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+                    results = getRealm().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
                 }
                 realmRecyclerView.setAdapter(new ContactListAdapter(results));
 
@@ -282,7 +282,7 @@ public class RegisteredContactsFragment extends Fragment {
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         realmRecyclerView.setNestedScrollingEnabled(false);
 
-        results = getmRealm().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+        results = getRealm().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
         realmRecyclerView.setAdapter(new ContactListAdapter(results));
 
         StickyHeader stickyHeader = new StickyHeader(results);
@@ -358,8 +358,15 @@ public class RegisteredContactsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         hideProgress();
+    }
 
-        getRealm().close();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (realm != null && !realm.isClosed()) {
+            realm.close();
+        }
     }
 
     //********************************************************************************************
@@ -470,7 +477,7 @@ public class RegisteredContactsFragment extends Fragment {
 
             viewHolder.title.setText(contact.getDisplay_name());
 
-            RealmRegisteredInfo realmRegisteredInfo = getmRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, contact.getId()).findFirst();
+            RealmRegisteredInfo realmRegisteredInfo = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, contact.getId()).findFirst();
             if (realmRegisteredInfo != null) {
                 viewHolder.subtitle.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
                 if (realmRegisteredInfo.getStatus() != null) {
@@ -588,7 +595,7 @@ public class RegisteredContactsFragment extends Fragment {
                 public void onClick(View v) {
                     new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.igap))
 
-                        .content(getResources().getString(R.string.invite_friend)).positiveText(getResources().getString(R.string.ok)).negativeText(getResources().getString(R.string.cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            .content(getResources().getString(R.string.invite_friend)).positiveText(getResources().getString(R.string.ok)).negativeText(getResources().getString(R.string.cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 

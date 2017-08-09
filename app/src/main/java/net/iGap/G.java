@@ -30,7 +30,6 @@ import com.vanniktech.emoji.emoji.EmojiCategory;
 import com.vanniktech.emoji.emoji.EmojiTree;
 import com.vanniktech.emoji.one.EmojiOneProvider;
 import io.fabric.sdk.android.Fabric;
-import io.realm.Realm;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -195,7 +194,7 @@ public class G extends MultiDexApplication {
     public static Handler handler;
     public static LayoutInflater inflater;
     private Tracker mTracker;
-    public static Realm mRealm;
+    //public static Realm mRealm;
 
     public static HelperNotificationAndBadge helperNotificationAndBadge;
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
@@ -515,11 +514,11 @@ public class G extends MultiDexApplication {
         return mTracker;
     }
 
-    public static Realm getRealm() {
-
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
-        }
-        return mRealm;
-    }
+    //public static Realm getRealm() {
+    //
+    //    if (mRealm == null || mRealm.isClosed()) {
+    //        mRealm = Realm.getDefaultInstance();
+    //    }
+    //    return mRealm;
+    //}
 }

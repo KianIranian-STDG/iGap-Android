@@ -205,9 +205,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             mRealm.close();
         }
 
-        if (G.mRealm != null && !G.mRealm.isClosed()) {
-            G.mRealm.close();
-        }
+        //if (G.mRealm != null && !G.mRealm.isClosed()) {
+        //    G.mRealm.close();
+        //}
 
         G.imageLoader.clearMemoryCache();
 
@@ -1898,8 +1898,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        //+Realm realm = Realm.getDefaultInstance();
+        getRealm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -1909,7 +1909,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
         });
-        realm.close();
+        //realm.close();
     }
 
     //******* GroupAvatar and ChannelAvatar
@@ -1959,10 +1959,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     @Override
                     public void run() {
                         if (imagePath == null || !new File(imagePath).exists()) {
-                            Realm realm1 = Realm.getDefaultInstance();
-                            RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
+                            //Realm realm1 = Realm.getDefaultInstance();
+                            RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
                             imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
-                            realm1.close();
+                            //realm1.close();
                         } else {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);
                         }
@@ -1988,8 +1988,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void chatGetRoom(final long peerId) {
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+        //final Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
         if (realmRoom != null) {
 
@@ -2024,7 +2024,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             new RequestChatGetRoom().chatGetRoom(peerId);
         }
-        realm.close();
+        //realm.close();
     }
 
     //*****************************************************************************************************************************
@@ -2035,61 +2035,66 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+    public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        //Realm realm = Realm.getDefaultInstance();
+        runOnUiThread(new Runnable() {
             @Override
-            public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-                if (room != null && realmRoomMessage != null) {
-                    /**
-                     * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                     */
-                    if (room.getUnreadCount() <= 1) {
-                        realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                        room.setFirstUnreadMessage(realmRoomMessage);
+            public void run() {
+                getRealm().executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                        final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                        if (room != null && realmRoomMessage != null) {
+                            /**
+                             * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                             */
+                            if (room.getUnreadCount() <= 1) {
+                                realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
+                                room.setFirstUnreadMessage(realmRoomMessage);
+                            }
+                        }
+                    }
+                });
+                //realm.close();
+
+                switch (roomType) {
+
+                    case CHAT:
+                        if (mainActionChat != null) {
+                            mainActionChat.onAction(MainAction.downScrool);
+                        }
+                        break;
+                    case GROUP:
+                        if (mainActionGroup != null) {
+                            mainActionGroup.onAction(MainAction.downScrool);
+                        }
+                        break;
+                    case CHANNEL:
+                        if (mainActionChannel != null) {
+                            mainActionChannel.onAction(MainAction.downScrool);
+                        }
+                        break;
+                }
+
+                if (mainActionApp != null) {
+                    mainActionApp.onAction(MainAction.downScrool);
+                }
+
+                /**
+                 * don't send update status for own message
+                 */
+                if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
+                    // user has received the message, so I make a new delivered update status request
+                    if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                    } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
                     }
                 }
             }
         });
-        realm.close();
-
-        switch (roomType) {
-
-            case CHAT:
-                if (mainActionChat != null) {
-                    mainActionChat.onAction(MainAction.downScrool);
-                }
-                break;
-            case GROUP:
-                if (mainActionGroup != null) {
-                    mainActionGroup.onAction(MainAction.downScrool);
-                }
-                break;
-            case CHANNEL:
-                if (mainActionChannel != null) {
-                    mainActionChannel.onAction(MainAction.downScrool);
-                }
-                break;
-        }
-
-        if (mainActionApp != null) {
-            mainActionApp.onAction(MainAction.downScrool);
-        }
-
-        /**
-         * don't send update status for own message
-         */
-        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
-            // user has received the message, so I make a new delivered update status request
-            if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-            } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-            }
-        }
     }
 
     @Override
