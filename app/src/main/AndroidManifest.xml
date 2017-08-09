@@ -30,6 +30,10 @@
   <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+  <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+  <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+  <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+
   <uses-feature
       android:glEsVersion="0x00020000"
       android:required="true" />
@@ -248,6 +252,15 @@
         android:enabled="true"
         android:exported="true" />
     <service android:name=".helper.MyServiceTemporat" />
+
+    <service android:name="net.iGap.module.AuthenticatorService">
+      <intent-filter>
+        <action android:name="android.accounts.AccountAuthenticator" />
+      </intent-filter>
+      <meta-data
+          android:name="android.accounts.AccountAuthenticator"
+          android:resource="@xml/authenticator" />
+    </service>
 
     <provider
         android:name="android.support.v4.content.FileProvider"

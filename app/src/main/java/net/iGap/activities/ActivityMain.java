@@ -11,6 +11,8 @@
 package net.iGap.activities;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -165,6 +167,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private ArrayList<Fragment> pages = new ArrayList<Fragment>();
     SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
     boolean waitingForConfiguration = false;
+    private String phoneNumber;
 
     public enum MainAction {
         downScrool, clinetCondition
@@ -227,6 +230,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+
+        //checkAppAccount();
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             isNeedToRegister = true;
@@ -398,6 +404,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         connectionState();
 
         initDrawerMenu();
+
+        verifyAccount();
 
         boolean keepMedia = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
         if (keepMedia && G.isCalculatKeepMedia) {// if Was selected keep media at 1week
@@ -1653,7 +1661,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
             String username = realmUserInfo.getUserInfo().getDisplayName();
-            String phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
+            phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
 
             imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
             EmojiTextViewE txtNavName = (EmojiTextViewE) findViewById(R.id.lm_txt_user_name);
@@ -2155,4 +2163,32 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void openNavigation() {
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
+
+    public void verifyAccount() {
+        boolean bereitsAngelegt = false;
+        String accountType;
+        accountType = this.getPackageName();
+
+        AccountManager accountManager = AccountManager.get(getApplicationContext());
+        Account[] accounts = accountManager.getAccounts();
+        for (int i = 0; i < accounts.length; i++) {
+            if ((accounts[i].type != null) && (accounts[i].type.contentEquals(accountType))) {
+                bereitsAngelegt = true;
+            }
+        }
+
+        if (!bereitsAngelegt) {
+            AccountManager accMgr = AccountManager.get(this);
+            String password = "some_password";
+
+
+            final Account account = new Account("" + phoneNumber, accountType);
+            try {
+                accMgr.addAccountExplicitly(account, password, null);
+            } catch (Exception e1) {
+                e1.getMessage();
+            }
+        }
+    } // end of
+
 }
