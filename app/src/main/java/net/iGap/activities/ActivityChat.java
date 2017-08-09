@@ -1424,8 +1424,8 @@ public class ActivityChat extends ActivityEnhanced
             //realm.close();
         }
 
-        initComponent();
         initAppbarSelected();
+        initComponent();
         getDraft();
         getUserInfo();
         insertShearedData();
@@ -2028,20 +2028,11 @@ public class ActivityChat extends ActivityEnhanced
 
         });
 
-
-        G.handler.post(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 getMessages();
                 manageForwardedMessage();
-
-                /**
-                 * show unread message
-                 */
-                if (chatType != CHANNEL) {
-                    //addLayoutUnreadMessage();
-                }
             }
         });
 
@@ -7154,7 +7145,7 @@ public class ActivityChat extends ActivityEnhanced
 
         if (results.size() > 0) {
 
-            Object[] object = MessageLoader.getLocalMessage(mRoomId, results.first().getMessageId(), gapMessageId, true, direction);
+            Object[] object = MessageLoader.getLocalMessage(realmChat, mRoomId, results.first().getMessageId(), gapMessageId, true, direction);
             messageInfos = (ArrayList<StructMessageInfo>) object[0];
             if (messageInfos.size() > 0) {
                 if (direction == UP) {
@@ -7280,7 +7271,7 @@ public class ActivityChat extends ActivityEnhanced
             startFutureMessageId = startFutureMessageIdDown;
         }
         if ((direction == UP && topMore) || (direction == DOWN && bottomMore)) {
-            Object[] object = getLocalMessage(mRoomId, startFutureMessageId, gapMessageId, false, direction);
+            Object[] object = getLocalMessage(realmChat, mRoomId, startFutureMessageId, gapMessageId, false, direction);
             if (direction == UP) {
                 topMore = (boolean) object[1];
             } else {
@@ -7383,9 +7374,10 @@ public class ActivityChat extends ActivityEnhanced
                 limit = Config.LIMIT_GET_HISTORY_LOW;
             }
 
-            MessageLoader.getOnlineMessage(mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
+            MessageLoader.getOnlineMessage(realmChat, mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
                 @Override
                 public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, String directionString) {
+                    ActivityChat.isUiThread("onMessage", 7380);
                     if (roomId != mRoomId) {
                         return;
                     }
@@ -7527,7 +7519,7 @@ public class ActivityChat extends ActivityEnhanced
      */
     private long gapDetection(RealmResults<RealmRoomMessage> results, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
         if (((direction == UP && gapMessageIdUp == 0) || (direction == DOWN && gapMessageIdDown == 0)) && results.size() > 0) {
-            Object[] objects = MessageLoader.gapExist(mRoomId, results.first().getMessageId(), direction);
+            Object[] objects = MessageLoader.gapExist(realmChat, mRoomId, results.first().getMessageId(), direction);
             if (direction == UP) {
                 reachMessageIdUp = (long) objects[1];
                 return gapMessageIdUp = (long) objects[0];

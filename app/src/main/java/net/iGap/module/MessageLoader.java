@@ -18,6 +18,7 @@ import io.realm.Sort;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
+import net.iGap.activities.ActivityChat;
 import net.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import net.iGap.interfaces.OnMessageReceive;
 import net.iGap.module.structs.StructMessageInfo;
@@ -44,16 +45,16 @@ public final class MessageLoader {
      * @param direction direction for load message up or down
      * @return Object[] ==> [0] -> ArrayList<StructMessageInfo>, [1] -> boolean hasMore, [2] -> boolean hasGap
      */
-    public static Object[] getLocalMessage(long roomId, long messageId, long gapMessageId, boolean duplicateMessage, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-
-        Realm realm = Realm.getDefaultInstance();
+    public static Object[] getLocalMessage(Realm realm, long roomId, long messageId, long gapMessageId, boolean duplicateMessage, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+        ActivityChat.isUiThread("getLocalMessage", 49);
+        //+Realm realm = Realm.getDefaultInstance();
         boolean hasMore = true;
         boolean hasSpaceToGap = true;
         List<RealmRoomMessage> realmRoomMessages;
         ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
 
         if (messageId == 0) {
-            realm.close();
+            //realm.close();
             return new Object[]{structMessageInfos, false, false};
         }
 
@@ -119,7 +120,7 @@ public final class MessageLoader {
             }
         }
 
-        realm.close();
+        //realm.close();
 
         return new Object[]{structMessageInfos, hasMore, hasSpaceToGap};
     }
@@ -127,7 +128,7 @@ public final class MessageLoader {
 
     //*********** get message from server
 
-    public static void getOnlineMessage(final long roomId, final long messageIdGetHistory, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
+    public static void getOnlineMessage(final Realm realm, final long roomId, final long messageIdGetHistory, final long reachMessageId, int limit, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, final OnMessageReceive onMessageReceive) {
         new RequestClientGetRoomHistory().getRoomHistory(roomId, messageIdGetHistory, limit, direction, Long.toString(roomId) + "*" + messageIdGetHistory + "*" + reachMessageId + "*" + direction);
 
         G.onClientGetRoomHistoryResponse = new OnClientGetRoomHistoryResponse() {
@@ -148,7 +149,7 @@ public final class MessageLoader {
                          * if gapReached now check that future gap is reached or no. if future gap reached this means
                          * that with get this history , client jumped from local messages and now is in another gap
                          */
-                        if (startMessageId <= (long) gapExist(roomId, reachMessageId, UP)[0]) {
+                        if (startMessageId <= (long) gapExist(realm, roomId, reachMessageId, UP)[0]) {
                             jumpOverLocal = true;
                         }
                     }
@@ -159,7 +160,7 @@ public final class MessageLoader {
                          * if gapReached now check that future gap is reached or no. if future gap reached this means
                          * that with get this history , client jumped from local messages and now is in another gap
                          */
-                        if (endMessageId >= (long) gapExist(roomId, reachMessageId, DOWN)[0]) {
+                        if (endMessageId >= (long) gapExist(realm, roomId, reachMessageId, DOWN)[0]) {
                             jumpOverLocal = true;
                         }
                     }
@@ -167,7 +168,7 @@ public final class MessageLoader {
 
                 final boolean gapReachedFinal = gapReached;
                 final boolean jumpOverLocalFinal = jumpOverLocal;
-                Realm realm = Realm.getDefaultInstance();
+                //+Realm realm = Realm.getDefaultInstance();
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -192,8 +193,9 @@ public final class MessageLoader {
                         }
                     }
                 });
-                realm.close();
+                //realm.close();
 
+                ActivityChat.isUiThread("onGetRoomHistory", 198);
                 onMessageReceive.onMessage(roomId, startMessageId, endMessageId, gapReached, jumpOverLocal, historyDirection);
             }
 
@@ -243,9 +245,9 @@ public final class MessageLoader {
      * @param direction direction for load message up or down
      * @return [0] -> gapMessageId, [1] -> reachMessageId
      */
-    public static Object[] gapExist(long roomId, long messageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        Realm realm = Realm.getDefaultInstance();
-
+    public static Object[] gapExist(Realm realm, long roomId, long messageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+        //Realm realm = Realm.getDefaultInstance();
+        ActivityChat.isUiThread("gapExist", 250);
         RealmRoomMessage realmRoomMessage = null;
         long gapMessageId = 0;
         long reachMessageId = 0;
@@ -322,7 +324,7 @@ public final class MessageLoader {
             }
         }
 
-        realm.close();
+        //realm.close();
 
         return new Object[]{gapMessageId, reachMessageId};
     }

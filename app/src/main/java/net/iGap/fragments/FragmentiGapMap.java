@@ -144,8 +144,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private boolean first = true;
     public static boolean mapRegistrationStatus;
 
-    private final double LONGITUDE_LIMIT = 0.011; // 0.0552 (5 KiloMeters) , 0.011 (1 KiloMeters)
-    private final double LATITUDE_LIMIT = 0.009; // 0.0451 (5 KiloMeters) , 0.009 (1 KiloMeters)
+    private final double LONGITUDE_LIMIT = 0.011;
+    private final double LATITUDE_LIMIT = 0.009;
     private double northLimitation;
     private double eastLimitation;
     private double southLimitation;
