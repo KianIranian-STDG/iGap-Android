@@ -830,7 +830,7 @@
   <string name="empty_message">Please try to enter the first 5 characters of username</string>
   <string name="empty_message3">Enter at least 3 characters to search</string>
   <string name="there_is_no_any_result">No Result</string>
-  <string name="there_is_no_connection_to_server">No Connection to the Server</string>
+  <string name="there_is_no_connection_to_server">Server not found</string>
   <string name="empty_room">No Messages Yet</string>
   <string name="empty_call">You didn\'t make any call yet</string>
   <string name="show_member">Show Members List</string>
