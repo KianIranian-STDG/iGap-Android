@@ -173,7 +173,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     private TextView txtEmail;
     private EmojiTextViewE txtNickNameTitle;
     static boolean isActiveRun = false;
-    Realm mRealm;
+    private Realm mRealm;
     boolean isBackPressed = false;
 
 
@@ -267,18 +267,15 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
     protected void onDestroy() {
         super.onDestroy();
 
-        if (mRealm != null) {
+        if (mRealm != null && !mRealm.isClosed()) {
             mRealm.close();
         }
     }
 
     private Realm getRealm() {
-
-        if (mRealm != null && !mRealm.isClosed()) {
-            return mRealm;
+        if (mRealm == null || mRealm.isClosed()) {
+            mRealm = Realm.getDefaultInstance();
         }
-
-        mRealm = Realm.getDefaultInstance();
         return mRealm;
     }
 
@@ -1487,33 +1484,33 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(ActivitySetting.this).title(getResources().getString(R.string.st_title_message_textSize))
-                    .titleGravity(GravityEnum.START)
-                    .titleColor(getResources().getColor(android.R.color.black))
-                    .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
-                    .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override
-                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        .titleGravity(GravityEnum.START)
+                        .titleColor(getResources().getColor(android.R.color.black))
+                        .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
+                        .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            if (text != null) {
-                                txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                                if (text != null) {
+                                    txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
 
-                                if (HelperCalander.isLanguagePersian) {
-                                    txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
+                                    if (HelperCalander.isLanguagePersian) {
+                                        txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
+                                    }
                                 }
+                                poRbDialogTextSize = which;
+                                int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                                editor.apply();
+
+                                StartupActions.textSizeDetection(sharedPreferences);
+
+                                return false;
                             }
-                            poRbDialogTextSize = which;
-                            int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-                            editor.apply();
-
-                            StartupActions.textSizeDetection(sharedPreferences);
-
-                            return false;
-                        }
-                    })
-                    .positiveText(getResources().getString(R.string.B_ok))
-                    .show();
+                        })
+                        .positiveText(getResources().getString(R.string.B_ok))
+                        .show();
             }
         });
 
@@ -1752,7 +1749,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 5);
 
                 new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                    KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
+                        KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -1803,7 +1800,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5);
 
                 new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                    KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
+                        KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -1857,7 +1854,7 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
                 KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
 
                 new MaterialDialog.Builder(ActivitySetting.this).title(R.string.title_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                    KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
+                        KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {

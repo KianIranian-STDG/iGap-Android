@@ -1058,7 +1058,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 if (!waitingForConfiguration) {
                     waitingForConfiguration = true;
-                    if (mapUrls == null || mapUrls.isEmpty()) {
+                    if (mapUrls == null || mapUrls.isEmpty() || mapUrls.size() == 0) {
                         G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
                             @Override
                             public void onGetConfiguration() {

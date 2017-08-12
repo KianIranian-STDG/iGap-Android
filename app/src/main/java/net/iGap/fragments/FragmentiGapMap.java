@@ -299,7 +299,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                                 new RequestGeoRegister().register(true);
                             } else {
                                 toggleGps.setChecked(false);
-                                showSnackBar(getResources().getString(R.string.please_check_your_connenction));
+                                showSnackBar(G.context.getResources().getString(R.string.please_check_your_connenction));
                             }
                         }
                     }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -317,7 +317,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         prgWaitingSendMessage = (ProgressBar) view.findViewById(R.id.prgWaitSendMessage);
         txtSendMessageGps = (TextView) view.findViewById(R.id.txtSendMessageGps);
         txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
-        txtSendMessageGps.setTextColor(getResources().getColor(R.color.gray_4c));
+        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
 
         G.onGeoCommentResponse = new OnGeoCommentResponse() {
             @Override
@@ -334,8 +334,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                             txtSendMessageGps.setVisibility(View.GONE);
                         }
                         prgWaitingSendMessage.setVisibility(View.GONE);
-                        txtSendMessageGps.setText(getString(R.string.md_close_button));
-                        txtSendMessageGps.setTextColor(getResources().getColor(R.color.gray_4c));
+                        txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
                         edtMessageGps.setEnabled(true);
                     }
                 });
@@ -349,8 +349,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
                         txtSendMessageGps.setVisibility(View.VISIBLE);
                         prgWaitingSendMessage.setVisibility(View.GONE);
-                        txtSendMessageGps.setText(getString(R.string.md_close_button));
-                        txtSendMessageGps.setTextColor(getResources().getColor(R.color.gray_4c));
+                        txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
                         edtMessageGps.setEnabled(true);
                     }
                 });
@@ -364,7 +364,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
                         txtSendMessageGps.setVisibility(View.VISIBLE);
                         txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
-                        txtSendMessageGps.setTextColor(getResources().getColor(R.color.gray_4c));
+                        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
                         prgWaitingSendMessage.setVisibility(View.GONE);
                         edtMessageGps.setEnabled(true);
                     }
@@ -377,7 +377,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             public void onClick(View v) {
 
 
-                if (txtSendMessageGps.getText().toString().contains(getResources().getString(R.string.md_close_button))) {
+                if (txtSendMessageGps.getText().toString().contains(G.context.getResources().getString(R.string.md_close_button))) {
                     new MaterialDialog.Builder(mActivity).title(R.string.Clear_Status).content(R.string.Clear_Status_desc).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -385,8 +385,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                             new RequestGeoUpdateComment().updateComment("");
                             edtMessageGps.setText("");
                             txtSendMessageGps.setVisibility(View.GONE);
-                            txtSendMessageGps.setText(getString(R.string.md_close_button));
-                            txtSendMessageGps.setTextColor(getResources().getColor(R.color.gray_4c));
+                            txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                            txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
 
                         }
                     }).negativeText(R.string.st_dialog_reset_all_notification_no).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -427,8 +427,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                         txtSendMessageGps.setTextColor(Color.parseColor(G.appBarColor));
                     } else {
                         txtSendMessageGps.setVisibility(View.VISIBLE);
-                        txtSendMessageGps.setText(getString(R.string.md_close_button));
-                        txtSendMessageGps.setTextColor(getResources().getColor(R.color.gray_4c));
+                        txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
                     }
                 } else {
                     txtSendMessageGps.setVisibility(View.GONE);
@@ -445,7 +445,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
                     if (isEndLine) {
                         isEndLine = false;
-                        showSnackBar(getResources().getString(R.string.exceed_4_line));
+                        showSnackBar(G.context.getResources().getString(R.string.exceed_4_line));
                     }
                 } else {
                     isEndLine = true;
@@ -514,19 +514,19 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
                 TextView txtItem1 = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
                 TextView icon1 = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-                txtItem1.setText(getResources().getString(R.string.list_user_map));
-                icon1.setText(getResources().getString(R.string.md_nearby));
+                txtItem1.setText(G.context.getResources().getString(R.string.list_user_map));
+                icon1.setText(G.context.getResources().getString(R.string.md_nearby));
 
                 TextView txtItem2 = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
                 TextView icon2 = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-                txtItem2.setText(getResources().getString(R.string.nearby));
-                icon2.setText(getResources().getString(R.string.md_refresh_button));
+                txtItem2.setText(G.context.getResources().getString(R.string.nearby));
+                icon2.setText(G.context.getResources().getString(R.string.md_refresh_button));
 
 
                 TextView txtItem3 = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
                 TextView icon3 = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-                txtItem3.setText(getResources().getString(R.string.map_registration));
-                icon3.setText(getResources().getString(R.string.md_igap_map_marker_off));
+                txtItem3.setText(G.context.getResources().getString(R.string.map_registration));
+                icon3.setText(G.context.getResources().getString(R.string.md_igap_map_marker_off));
 
 
                 root1.setOnClickListener(new View.OnClickListener() {
@@ -1127,7 +1127,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 
-            visibleViewAttention(mActivity.getResources().getString(R.string.turn_on_gps_explain), true);
+            visibleViewAttention(G.context.getResources().getString(R.string.turn_on_gps_explain), true);
 
         } else {// GPS is on
             isGpsOn = true;
@@ -1138,7 +1138,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 GPSTracker.getGpsTrackerInstance().detectLocation();
             } else {
-                visibleViewAttention(mActivity.getResources().getString(R.string.Visible_Status_text), false);
+                visibleViewAttention(G.context.getResources().getString(R.string.Visible_Status_text), false);
             }
 
         }
@@ -1207,8 +1207,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 txtComment = comment;
                 if (G.userId == userIdR && comment.length() > 0) {
                     edtMessageGps.setText(comment);
-                    txtSendMessageGps.setText(getString(R.string.md_close_button));
-                    txtSendMessageGps.setTextColor(getResources().getColor(R.color.gray_4c));
+                    txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
+                    txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
                 } else {
                     txtSendMessageGps.setVisibility(View.GONE);
                 }
