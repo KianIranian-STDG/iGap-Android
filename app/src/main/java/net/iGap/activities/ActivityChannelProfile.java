@@ -178,7 +178,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
     private boolean isNeedGetMemberList = true;
 
-    private Realm mRealm;
+    private Realm realmChannelProfile;
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
 
@@ -194,15 +194,16 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mRealm != null) mRealm.close();
+        if (realmChannelProfile != null && !realmChannelProfile.isClosed()) {
+            realmChannelProfile.close();
+        }
     }
 
     @Override
     protected void onResume() {
-
         super.onResume();
 
-        mRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom != null) {
 
             if (changeListener == null) {
@@ -246,7 +247,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_channel);
 
-        mRealm = Realm.getDefaultInstance();
+        realmChannelProfile = Realm.getDefaultInstance();
 
         G.onChannelAddMember = this;
         G.onChannelKickMember = this;
@@ -264,10 +265,10 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         Bundle extras = getIntent().getExtras();
         roomId = extras.getLong(PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString());
 
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
 
         //channel info
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getChannelRoom() == null) {
             //HelperError.showSnackMessage(getClientErrorCode(-2, 0));
             finish();
@@ -444,8 +445,8 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
         imgCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Realm realm = Realm.getDefaultInstance();
-                if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
+                //+Realm realm = Realm.getDefaultInstance();
+                if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
 
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
@@ -453,7 +454,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
                     ActivityChannelProfile.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
                 }
-                realm.close();
+                //realm.close();
             }
         });
 
@@ -645,7 +646,14 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
         ActivityShearedMedia.getCountOfSharedMedia(roomId);
 
-        realm.close();
+        //realm.close();
+    }
+
+    private Realm getRealm() {
+        if (realmChannelProfile == null || realmChannelProfile.isClosed()) {
+            realmChannelProfile = Realm.getDefaultInstance();
+        }
+        return realmChannelProfile;
     }
 
     private void setTextChannelLik() {
@@ -836,7 +844,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
     private void addMemberToChannel() {
         List<StructContactInfo> userList = Contacts.retrieve(null);
 
-        RealmRoom realmRoom = mRealm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         RealmList<RealmMember> memberList = realmRoom.getChannelRoom().getMembers();
 
         for (int i = 0; i < memberList.size(); i++) {
@@ -1024,8 +1032,8 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
     //********** update member count
 
     private void setMemberCount(final long roomId, final boolean plus) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        //Realm realm = Realm.getDefaultInstance();
+        getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -1042,7 +1050,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                 }
             }
         });
-        realm.close();
+        //realm.close();
     }
 
     //********** channel Add Member
@@ -1052,13 +1060,12 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
             setMemberCount(roomId, true);
 
-            Realm realm = Realm.getDefaultInstance();
-            RealmRegisteredInfo realmRegistered = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+            //+Realm realm = Realm.getDefaultInstance();
+            RealmRegisteredInfo realmRegistered = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
             if (realmRegistered == null) {
                 new RequestUserInfo().userInfo(userId, roomId + "");
             }
-
-            realm.close();
+            //realm.close();
         }
     }
 
@@ -1385,13 +1392,23 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
     //***Member
     @Override
-    public void onChannelAddMember(Long roomId, Long userId, ProtoGlobal.ChannelRoom.Role role) {
-        channelAddMemberResponse(roomId, userId, role);
+    public void onChannelAddMember(final Long roomId, final Long userId, final ProtoGlobal.ChannelRoom.Role role) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                channelAddMemberResponse(roomId, userId, role);
+            }
+        });
     }
 
     @Override
-    public void onChannelKickMember(long roomId, long memberId) {
-        channelKickMember(roomId, memberId);
+    public void onChannelKickMember(final long roomId, final long memberId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                channelKickMember(roomId, memberId);
+            }
+        });
     }
 
     //***Moderator
@@ -1419,7 +1436,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
     //***time out and errors for either of this interfaces
 
     @Override
-    public void onChannelRevokeLink(long roomId, final String inviteLink, final String inviteToken) {
+    public void onChannelRevokeLink(final long roomId, final String inviteLink, final String inviteToken) {
 
         hideProgressBar();
         runOnUiThread(new Runnable() {
@@ -1427,23 +1444,22 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             public void run() {
                 edtRevoke.setText("" + inviteLink);
                 txtChannelLink.setText("" + inviteLink);
+
+                //+Realm realm = Realm.getDefaultInstance();
+                //channel info
+                final RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                getRealm().executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+
+                        realmChannelRoom.setInviteLink(inviteLink);
+                        realmChannelRoom.setInvite_token(inviteToken);
+                    }
+                });
             }
         });
-
-        Realm realm = Realm.getDefaultInstance();
-
-        //channel info
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        final RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                realmChannelRoom.setInviteLink(inviteLink);
-                realmChannelRoom.setInvite_token(inviteToken);
-            }
-        });
-        realm.close();
+        //realm.close();
     }
 
     @Override
@@ -1532,9 +1548,8 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                     public void run() {
                         isPrivate = true;
                         setTextChannelLik();
-                        Realm realm = Realm.getDefaultInstance();
-
-                        realm.executeTransaction(new Realm.Transaction() {
+                        //+Realm realm = Realm.getDefaultInstance();
+                        getRealm().executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -1542,7 +1557,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                                 realmChannelRoom.setPrivate(true);
                             }
                         });
-                        realm.close();
+                        //realm.close();
                     }
                 });
             }
@@ -1699,8 +1714,8 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                         linkUsername = username;
                         setTextChannelLik();
 
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
+                        //+Realm realm = Realm.getDefaultInstance();
+                        getRealm().executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -1709,7 +1724,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                                 realmChannelRoom.setPrivate(false);
                             }
                         });
-                        realm.close();
+                        //realm.close();
                     }
                 });
             }

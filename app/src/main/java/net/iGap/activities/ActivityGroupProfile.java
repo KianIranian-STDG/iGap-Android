@@ -38,7 +38,6 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -192,7 +191,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
-    private Realm realm;
+    private Realm realmGroupProfile;
 
     @Override
     protected void onStop() {
@@ -201,20 +200,22 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         if (mRoom != null) {
             mRoom.removeAllChangeListeners();
         }
+    }
 
-        if (realm != null) {
-            realm.close();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (realmGroupProfile != null && !realmGroupProfile.isClosed()) {
+            realmGroupProfile.close();
         }
     }
 
     @Override
     protected void onResume() {
-
         super.onResume();
 
-        realm = Realm.getDefaultInstance();
-
-        mRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom != null) {
 
             if (changeListener == null) {
@@ -258,13 +259,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_profile);
+
+        realmGroupProfile = Realm.getDefaultInstance();
+
         Bundle extras = getIntent().getExtras();
         roomId = extras.getLong("RoomId");
 
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
 
         //group info
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             //HelperError.showSnackMessage(getClientErrorCode(-2, 0));
             finish();
@@ -307,7 +311,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         ActivityShearedMedia.getCountOfSharedMedia(roomId);
 
-        realm.close();
+        //realm.close();
     }
 
     @Override
@@ -318,11 +322,18 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         super.onPause();
     }
 
+    private Realm getRealm() {
+        if (realmGroupProfile == null || realmGroupProfile.isClosed()) {
+            realmGroupProfile = Realm.getDefaultInstance();
+        }
+        return realmGroupProfile;
+    }
+
     private int memberCount;
 
     private void setMemberCount(final long roomId, final boolean plus) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        //+Realm realm = Realm.getDefaultInstance();
+        getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -349,7 +360,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 }
             }
         });
-        realm.close();
+        //realm.close();
     }
 
     private BroadcastReceiver reciverOnGroupChangeName = new BroadcastReceiver() {
@@ -692,14 +703,14 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             @Override
             public void onComplete(RippleView rippleView) {
 
-                Realm realm = Realm.getDefaultInstance();
-                if (realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
+                //+Realm realm = Realm.getDefaultInstance();
+                if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.group);
                     fragment.appBarLayout = fab;
                     ActivityGroupProfile.this.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, null).commit();
                 }
-                realm.close();
+                //realm.close();
             }
         });
 
@@ -894,16 +905,16 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     public void run() {
                         isPrivate = true;
                         setTextGroupLik();
-                        Realm realm = Realm.getDefaultInstance();
+                        //Realm realm = Realm.getDefaultInstance();
 
-                        realm.executeTransaction(new Realm.Transaction() {
+                        getRealm().executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                 realmRoom.getGroupRoom().setPrivate(true);
                             }
                         });
-                        realm.close();
+                        //realm.close();
                     }
                 });
             }
@@ -1062,8 +1073,8 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                         linkUsername = username;
                         setTextGroupLik();
 
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
+                        //+Realm realm = Realm.getDefaultInstance();
+                        getRealm().executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -1072,7 +1083,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                                 realmRoom.getGroupRoom().setPrivate(false);
                             }
                         });
-                        realm.close();
+                        //realm.close();
                     }
                 });
             }
@@ -1118,40 +1129,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         // check each word with server
 
         dialog.show();
-    }
-
-    private void setAvatarGroup() {
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmAvatar> avatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findAll();
-
-        if (avatars.isEmpty()) {
-            imvGroupAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-            return;
-        }
-        RealmAvatar realmAvatar = null;
-        for (int i = avatars.size() - 1; i >= 0; i--) {
-            RealmAvatar avatar = avatars.get(i);
-            if (avatar.getFile() != null) {
-                realmAvatar = avatar;
-                break;
-            }
-        }
-
-        if (realmAvatar == null) {
-            imvGroupAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-            return;
-        }
-
-        if (realmAvatar.getFile().isFileExistsOnLocal()) {
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalFilePath()), imvGroupAvatar);
-        } else if (realmAvatar.getFile().isThumbnailExistsOnLocal()) {
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(realmAvatar.getFile().getLocalThumbnailPath()), imvGroupAvatar);
-        } else {
-            imvGroupAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvGroupAvatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-        }
-
-        realm.close();
     }
 
     private void initRecycleView() {
@@ -1240,7 +1217,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                     break;
 
-                case IntentRequests.REQ_CROP: { // save path image on data base ( realm )
+                case IntentRequests.REQ_CROP: { // save path image on data base ( realmGroupProfile )
 
                     String pathSaveImage = null;
                     if (data != null) {
@@ -1338,11 +1315,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
     private void addMemberToGroup() {
 
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
 
         List<StructContactInfo> userList = Contacts.retrieve(null);
 
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
 
         for (int i = 0; i < memberList.size(); i++) {
@@ -1356,10 +1333,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
         Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
             @Override
-            public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
-                for (int i = 0; i < list.size(); i++) {
-                    new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, getMessageId(message, countForShowLastMessage));
-                }
+            public void getSelectedList(boolean result, final String message, final int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < list.size(); i++) {
+                            new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, getMessageId(message, countForShowLastMessage));
+                        }
+                    }
+                });
             }
         });
 
@@ -1369,7 +1351,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
 
-        realm.close();
+        //realm.close();
     }
 
     private Long getMessageId(String type, int count) {
@@ -1380,21 +1362,21 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
             messageID = 0;
         } else if (type.equals("fromNow")) {
 
-            Realm realm = Realm.getDefaultInstance();
-            RealmRoomMessage realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).
-                findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).first();
+            //+Realm realm = Realm.getDefaultInstance();
+            RealmRoomMessage realmRoomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).
+                    findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).first();
 
             if (realmRoomMessages != null) {
                 messageID = realmRoomMessages.getMessageId();
             } else {
                 messageID = 0;
             }
-            realm.close();
+            //realm.close();
         } else {
 
-            Realm realm = Realm.getDefaultInstance();
-            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).
-                findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            //+Realm realm = Realm.getDefaultInstance();
+            RealmResults<RealmRoomMessage> realmRoomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).
+                    findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
             if (realmRoomMessages.size() <= count) {
                 messageID = 0;
@@ -1402,31 +1384,35 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                 messageID = realmRoomMessages.get(count).getMessageId();
             }
 
-            realm.close();
+            //realm.close();
         }
 
         return messageID;
     }
 
     @Override
-    public void onGroupRevokeLink(long roomId, final String inviteLink, final String inviteToken) {
+    public void onGroupRevokeLink(final long roomId, final String inviteLink, final String inviteToken) {
         hideProgressBar();
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-
-        realm.executeTransaction(new Realm.Transaction() {
+        runOnUiThread(new Runnable() {
             @Override
-            public void execute(Realm realm) {
+            public void run() {
+                //+Realm realm = Realm.getDefaultInstance();
+                RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
 
-                txtGroupLink.setText("" + inviteLink);
-                realmGroupRoom.setInvite_link(inviteLink);
-                realmGroupRoom.setInvite_token(inviteToken);
+                getRealm().executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        txtGroupLink.setText("" + inviteLink);
+                        realmGroupRoom.setInvite_link(inviteLink);
+                        realmGroupRoom.setInvite_token(inviteToken);
+                    }
+                });
+
+                //realm.close();
             }
         });
-
-        realm.close();
     }
 
     @Override
@@ -1557,82 +1543,6 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         private void setToModerator(Long peerId) {
             new RequestGroupAddModerator().groupAddModerator(roomId, peerId);
         }
-    }
-
-    //***********************************************************************************************************************
-
-    /**
-     * add member to realm and send request to server for really added this contacts to this group
-     */
-    private void memberRealmAndRequest(final ArrayList<StructContactInfo> list, int messageCount) {
-        Realm realm = Realm.getDefaultInstance();
-
-        if (messageCount == 0) {
-            startMessageId = 0;
-        } else {
-            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-
-            if (messageCount >= realmRoomMessages.size()) {
-                // if count is bigger than exist messages get first message id that exist
-                RealmResults<RealmRoomMessage> realmRoomMessageRealmResults = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
-                for (final RealmRoomMessage realmRoomMessage : realmRoomMessageRealmResults) {
-
-                    if (realmRoomMessage != null) {
-                        startMessageId = realmRoomMessage.getMessageId();
-                        break;
-                    }
-                }
-            } else {
-
-                for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-                    messageCount--;
-                    if (messageCount == 0) {
-                        startMessageId = realmRoomMessage.getMessageId();
-                    }
-                }
-            }
-        }
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                final RealmList<RealmMember> members = new RealmList<>();
-                for (int i = 0; i < list.size(); i++) {
-                    long peerId = list.get(i).peerId;
-                    //add member to realm
-                    RealmMember realmMember = new RealmMember();
-
-                    realmMember.setId(SUID.id().get());
-                    realmMember.setPeerId(peerId);
-                    realmMember.setRole(ProtoGlobal.GroupRoom.Role.MEMBER.toString());
-                    realmMember = realm.copyToRealm(realmMember);
-
-                    members.add(realmMember);
-
-                    //request for add member
-                    new RequestGroupAddMember().groupAddMember(roomId, peerId, startMessageId);
-                }
-
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                RealmList<RealmMember> memberList = realmRoom.getGroupRoom().getMembers();
-
-                for (int i = 0; i < members.size(); i++) {
-                    long id = members.get(i).getPeerId();
-                    boolean canAdd = true;
-                    for (int j = 0; j < memberList.size(); j++) {
-                        if (memberList.get(j).getPeerId() == id) {
-                            canAdd = false;
-                            break;
-                        }
-                    }
-                    if (canAdd) {
-                        memberList.add(members.get(i));
-                    }
-                }
-            }
-        });
-
-        realm.close();
     }
 
     //***********************************************************************************************************************
@@ -1949,19 +1859,21 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         G.onGroupAddMember = new OnGroupAddMember() {
             @Override
             public void onGroupAddMember(final Long roomIdUser, final Long UserId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setMemberCount(roomIdUser, true);
+                        //+Realm realm = Realm.getDefaultInstance();
+                        RealmRegisteredInfo realmRegistered = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, UserId).findFirst();
 
-                setMemberCount(roomIdUser, true);
-
-                Realm realm = Realm.getDefaultInstance();
-                RealmRegisteredInfo realmRegistered = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, UserId).findFirst();
-
-                if (realmRegistered == null) {
-                    if (roomIdUser == roomId) {
-                        new RequestUserInfo().userInfo(UserId, roomId + "");
+                        if (realmRegistered == null) {
+                            if (roomIdUser == roomId) {
+                                new RequestUserInfo().userInfo(UserId, roomId + "");
+                            }
+                        }
+                        //realm.close();
                     }
-                }
-
-                realm.close();
+                });
             }
 
             @Override
@@ -1975,8 +1887,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         G.onGroupKickMember = new OnGroupKickMember() {
             @Override
             public void onGroupKickMember(final long roomId, final long memberId) {
-                Log.i("WWW", "Kick Member memberId : " + memberId);
-                setMemberCount(roomId, false);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setMemberCount(roomId, false);
+                    }
+                });
             }
 
             @Override
