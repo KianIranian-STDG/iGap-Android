@@ -146,7 +146,7 @@ public class SearchFragment extends Fragment {
 
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
-                mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                mActivity.onBackPressed();
             }
         });
 

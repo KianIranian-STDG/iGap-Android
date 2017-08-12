@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.Random;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnGeoCommentResponse;
 import net.iGap.interfaces.OnGeoGetComment;
@@ -482,7 +483,8 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                     fabGps.setVisibility(View.VISIBLE);
                 }
                 if (!isBackPress) {
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    //getActivity().getSupportFragmentManager().popBackStack();
+                    mActivity.onBackPressed();
                 }
                 closeKeyboard(v);
                 isBackPress = false;
@@ -1160,6 +1162,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     @Override
     public void onResume() {
         super.onResume();
+        ActivityMain.lockNavigation();
         statusCheck();
         FragmentiGapMap.page = FragmentiGapMap.pageiGapMap;
     }

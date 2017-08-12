@@ -114,7 +114,7 @@ import net.iGap.request.RequestSignalingGetLog;
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.getSupportFragmentManager().popBackStack();
+                mActivity.onBackPressed();
             }
         });
 

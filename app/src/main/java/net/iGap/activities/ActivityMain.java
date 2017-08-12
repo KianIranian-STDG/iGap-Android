@@ -57,10 +57,12 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.ContactGroupFragment;
+import net.iGap.fragments.FragmentAddContact;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.fragments.FragmentMapUsers;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
@@ -144,7 +146,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private Typeface titleTypeface;
     private SharedPreferences sharedPreferences;
     private ImageView imgNavImage;
-    private DrawerLayout drawer;
+    private static DrawerLayout drawer;
     public static int currentMainRoomListPosition = 0;
     private int pageDrawer = 0;
     private ProgressBar contentLoading;
@@ -487,7 +489,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragment.setArguments(bundle);
 
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -894,7 +896,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1000,7 +1002,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TITLE", "Contacts");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1033,7 +1035,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         Fragment fragment = FragmentCall.newInstance(false);
                         try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment, "call_fragment").commit();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -1495,7 +1497,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void Allow() throws IOException {
                     FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
                     try {
-                        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap).commit();
+                        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap, "map_fragment").commit();
                     } catch (Exception e) {
                         e.getStackTrace();
                     }
@@ -1696,7 +1698,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-        openNavigation();
+
 
         if (onBackPressedListener != null) {
             onBackPressedListener.doBack();
@@ -1708,42 +1710,79 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ContactGroupFragment fragmentContactGroup = (ContactGroupFragment) getSupportFragmentManager().findFragmentByTag("contactGroup_fragment");
         FragmentIgapSearch fragmentIgapSearch = (FragmentIgapSearch) getSupportFragmentManager().findFragmentByTag("Search_fragment_igap");
         FragmentiGapMap fragmentiGapMap = (FragmentiGapMap) getSupportFragmentManager().findFragmentByTag("map_fragment");
+        FragmentMapUsers fragmentUserMap = (FragmentMapUsers) getSupportFragmentManager().findFragmentByTag("map_user_fragment");
+        RegisteredContactsFragment registeredContactsFragment = (RegisteredContactsFragment) getSupportFragmentManager().findFragmentByTag("register_contact_fragment");
+        FragmentAddContact fragmentAddContact = (FragmentAddContact) getSupportFragmentManager().findFragmentByTag("add_contact_fragment");
+        FragmentCall fragmentCall = (FragmentCall) getSupportFragmentManager().findFragmentByTag("call_fragment");
 
         if (fragmentNeGroup != null && fragmentNeGroup.isVisible()) {
 
             try {
+                openNavigation();
                 getSupportFragmentManager().beginTransaction().remove(fragmentNeGroup).commit();
             } catch (Exception e) {
                 e.getStackTrace();
             }
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        } else if (fragmentCall != null && fragmentCall.isVisible()) {
+            try {
+                openNavigation();
+                getSupportFragmentManager().beginTransaction().remove(fragmentCall).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+        } else if (fragmentAddContact != null && fragmentAddContact.isVisible()) {
+            try {
+                openNavigation();
+                getSupportFragmentManager().beginTransaction().remove(fragmentAddContact).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+        } else if (registeredContactsFragment != null && registeredContactsFragment.isVisible()) {
+            try {
+                openNavigation();
+                getSupportFragmentManager().beginTransaction().remove(registeredContactsFragment).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
         } else if (fragmentCreateChannel != null && fragmentCreateChannel.isVisible()) {
             try {
+                openNavigation();
                 getSupportFragmentManager().beginTransaction().remove(fragmentCreateChannel).commit();
             } catch (Exception e) {
                 e.getStackTrace();
             }
         } else if (fragmentContactGroup != null && fragmentContactGroup.isVisible()) {
             try {
+                openNavigation();
                 getSupportFragmentManager().beginTransaction().remove(fragmentContactGroup).commit();
             } catch (Exception e) {
                 e.getStackTrace();
             }
         } else if (fragmentIgapSearch != null && fragmentIgapSearch.isVisible()) {
             try {
+                openNavigation();
                 getSupportFragmentManager().beginTransaction().remove(fragmentIgapSearch).commit();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+        } else if (fragmentUserMap != null && fragmentUserMap.isVisible()) {
+            try {
+                getSupportFragmentManager().beginTransaction().remove(fragmentUserMap).commit();
             } catch (Exception e) {
                 e.getStackTrace();
             }
         } else if (fragmentiGapMap != null && fragmentiGapMap.isVisible()) {
             try {
+                openNavigation();
                 getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
             } catch (Exception e) {
                 e.getStackTrace();
             }
         } else if (myFragment != null && myFragment.isVisible()) {
             try {
+                openNavigation();
                 getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
             } catch (Exception e) {
                 e.getStackTrace();
@@ -2161,11 +2200,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //*************************************************************
 
-    public void lockNavigation() {
+    public static void lockNavigation() {
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
-    private void openNavigation() {
+    public static void openNavigation() {
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 

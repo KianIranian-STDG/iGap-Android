@@ -256,7 +256,7 @@ public class RegisteredContactsFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
                 fragment.setArguments(bundle);
-                mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).add(R.id.fragmentContainer, fragment).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).add(R.id.fragmentContainer, fragment, "add_contact_fragment").commit();
             }
         });
 
