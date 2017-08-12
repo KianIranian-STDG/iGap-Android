@@ -3443,7 +3443,7 @@ public class ActivityChat extends ActivityEnhanced
                         roleSenderMessage = ChannelChatRole.valueOf(rm.getRole());
                     }
                 }
-                if (senderId != Long.parseLong(message.senderID)) {  // if message dose'nt belong to owner
+                if (!G.authorHash.equals(message.authorHash)) {  // if message dose'nt belong to owner
                     if (channelRole == ChannelChatRole.MEMBER) {
 
                         //items.remove(getString(R.string.delete_item_dialog));
@@ -3474,7 +3474,7 @@ public class ActivityChat extends ActivityEnhanced
                         roleSenderMessage = GroupChatRole.valueOf(rm.getRole());
                     }
                 }
-                if (senderId != Long.parseLong(message.senderID)) {  // if message dose'nt belong to owner
+                if (!G.authorHash.equals(message.authorHash)) {  // if message dose'nt belong to owner
                     if (groupRole == GroupChatRole.MEMBER) {
                         //items.remove(getString(R.string.delete_item_dialog));
                         rootDelete.setVisibility(View.GONE);
