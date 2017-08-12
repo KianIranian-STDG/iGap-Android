@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import com.crashlytics.android.Crashlytics;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.fragments.FragmentiGapMap;
@@ -37,6 +38,10 @@ public class GeoGetConfigurationResponse extends MessageHandler {
 
         for (ProtoGeoGetConfiguration.GeoGetConfigurationResponse.TileServer tileServer : builder.getTileServerList()) {
             FragmentiGapMap.mapUrls.add(tileServer.getBaseUrl());
+        }
+
+        if (builder.getTileServerList().size() == 0) {
+            Crashlytics.logException(new Exception("TileServerList is zero"));
         }
 
         Realm realm = Realm.getDefaultInstance();
