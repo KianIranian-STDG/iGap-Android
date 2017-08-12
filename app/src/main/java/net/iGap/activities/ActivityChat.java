@@ -1614,7 +1614,11 @@ public class ActivityChat extends ActivityEnhanced
                 Double longitude = Double.parseDouble(split[1]);
 
                 FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
-                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap).commit();
+                getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
+                    .commitAllowingStateLoss();
             }
         };
 
@@ -3225,8 +3229,6 @@ public class ActivityChat extends ActivityEnhanced
         int _adapterCount = mAdapter.getItemCount();
 
         for (int i = _adapterCount - 1; i >= 0; i--) {
-
-
 
             AbstractMessage item = mAdapter.getAdapterItem(i);
 

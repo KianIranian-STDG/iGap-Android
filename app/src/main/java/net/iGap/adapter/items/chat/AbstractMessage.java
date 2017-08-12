@@ -1456,42 +1456,47 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             HelperDownloadFile.startDownload(mMessage.messageID, token, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progress) {
-                    if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
 
-                                if (progress == 100) {
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
 
-                                    progressBar.setVisibility(View.GONE);
-                                    contentLoading.setVisibility(View.GONE);
+                                    if (progress == 100) {
 
-                                    progressBar.performProgress();
+                                        progressBar.setVisibility(View.GONE);
+                                        contentLoading.setVisibility(View.GONE);
 
-                                    onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
-                                } else {
+                                        progressBar.performProgress();
 
-                                    progressBar.withProgress(progress);
+                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
+                                    } else {
+
+                                        progressBar.withProgress(progress);
+                                    }
                                 }
                             }
                         });
-                    }
+
                 }
 
                 @Override
                 public void OnError(String token) {
 
-                    if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                progressBar.withProgress(0);
-                                progressBar.withDrawable(R.drawable.ic_download, true);
-                                contentLoading.setVisibility(View.GONE);
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+
+                                    progressBar.withProgress(0);
+                                    progressBar.withDrawable(R.drawable.ic_download, true);
+                                    contentLoading.setVisibility(View.GONE);
+                                }
                             }
                         });
                     }
-                }
             });
 
             if (!_isDownloading) {
@@ -1535,19 +1540,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 HelperUploadFile.AddListener(mMessage.messageID, new HelperUploadFile.UpdateListener() {
                     @Override
                     public void OnProgress(final int progress, FileUploadStructure struct) {
-                        if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-                            G.handler.post(new Runnable() {
+
+                        G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    progressBar.withProgress(progress);
+                                    if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+                                        progressBar.withProgress(progress);
 
-                                    if (progress == 100) {
-                                        progressBar.performProgress();
-                                        contentLoading.setVisibility(View.GONE);
+                                        if (progress == 100) {
+                                            progressBar.performProgress();
+                                            contentLoading.setVisibility(View.GONE);
+                                        }
                                     }
                                 }
                             });
-                        }
                     }
 
                     @Override

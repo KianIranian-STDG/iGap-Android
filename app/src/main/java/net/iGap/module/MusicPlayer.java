@@ -15,6 +15,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -28,10 +29,15 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.session.MediaSession;
+import android.media.session.PlaybackState;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -51,7 +57,10 @@ import net.iGap.R;
 import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityMediaPlayer;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperLog;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
@@ -89,7 +98,7 @@ public class MusicPlayer extends Service {
     private static RemoteViews remoteViews;
     private static NotificationManager notificationManager;
     private static Notification notification;
-    private static boolean isPause = false;
+    public static boolean isPause = false;
     private static ArrayList<RealmRoomMessage> mediaList;
     private static int selectedMedia = 0;
     private static Timer mTimer, mTimeSecend;
@@ -111,6 +120,10 @@ public class MusicPlayer extends Service {
     public static String STOPFOREGROUND_ACTION = "STOPFOREGROUND_ACTION";
     private static HeadsetPluginReciver headsetPluginReciver;
 
+    //  private static RemoteControlClient remoteControlClient;
+    private static AudioManager audioManager;
+    private static ComponentName remoteComponentName;
+
     private static Realm mRealm;
 
     private static Realm getmRealm() {
@@ -129,22 +142,32 @@ public class MusicPlayer extends Service {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (intent == null) {
+        if (intent == null || intent.getExtras() == null) {
             stopForeground(true);
             stopSelf();
-        }
+        } else {
 
-        String action = intent.getExtras().getString("ACTION");
-        if (action != null) {
+            String action = intent.getExtras().getString("ACTION");
+            if (action != null) {
 
-            if (action.equals(STARTFOREGROUND_ACTION)) {
+                if (action.equals(STARTFOREGROUND_ACTION)) {
 
-                startForeground(notificationId, notification);
-            } else if (action.equals(STOPFOREGROUND_ACTION)) {
-                stopForeground(true);
-                stopSelf();
+                    startForeground(notificationId, notification);
+
+                    registerMediaBottom();
+                } else if (action.equals(STOPFOREGROUND_ACTION)) {
+                    stopForeground(true);
+                    stopSelf();
+                }
             }
         }
 
@@ -270,7 +293,7 @@ public class MusicPlayer extends Service {
                 playSound();
             }
         } else {
-            closeLayoutMediaPlayer();
+            playSound();
         }
     }
 
@@ -331,12 +354,11 @@ public class MusicPlayer extends Service {
         } catch (Exception e) {
         }
 
-        if (isPause) {
-            if (mp != null) {
-                mp.start();
-                isPause = false;
-                updateProgress();
-            }
+        if (isPause && mp != null) {
+
+            mp.start();
+            isPause = false;
+            updateProgress();
         } else {
             startPlayer(musicName, musicPath, roomName, roomId, false, MusicPlayer.messageId);
         }
@@ -519,6 +541,7 @@ public class MusicPlayer extends Service {
 
         isVoice = false;
         playNextMusic = false;
+        isPause = false;
 
         RealmRoomMessage realmRoomMessage = getmRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst();
 
@@ -586,6 +609,8 @@ public class MusicPlayer extends Service {
                             nextMusic();
                             if (ActivityChat.onMusicListener != null) {
                                 ActivityChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
+                            } else {
+                                downloadNextMusic(MusicPlayer.messageId);
                             }
                         } else {
 
@@ -948,6 +973,54 @@ public class MusicPlayer extends Service {
         }
     }
 
+    private static void downloadNextMusic(String messageId) {
+
+        RealmResults<RealmRoomMessage> roomMessages = getmRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+            equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAll();
+
+        if (!roomMessages.isEmpty()) {
+            for (RealmRoomMessage rm : roomMessages) {
+
+                if (rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString())
+                    || rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString())
+                    || rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
+                    try {
+
+                        if (rm.getAttachment().getLocalFilePath() == null || !new File(rm.getAttachment().getLocalFilePath()).exists()) {
+
+                            ProtoGlobal.RoomMessageType _messageType = rm.getForwardMessage() != null ? rm.getForwardMessage().getMessageType() : rm.getMessageType();
+                            String _cashid = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getCacheId() : rm.getAttachment().getCacheId();
+                            String _name = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getName() : rm.getAttachment().getName();
+                            String _token = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getToken() : rm.getAttachment().getToken();
+                            Long _size = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getSize() : rm.getAttachment().getSize();
+
+                            if (_cashid == null) {
+                                return;
+                            }
+
+                            ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+
+                            final String _path = AndroidUtils.getFilePathWithCashId(_cashid, _name, _messageType);
+
+                            if (_token != null && _token.length() > 0 && _size > 0) {
+
+                                if (!new File(_path).exists()) {
+
+                                    HelperDownloadFile.startDownload(rm.getMessageId() + "", _token, _cashid, _name, _size, selector, _path, 0, null);
+                                    MusicPlayer.playNextMusic = true;
+                                }
+                            }
+
+                            break;
+                        }
+                    } catch (Exception e) {
+                        Log.e("dddd", "music player   fillMediaList " + e.toString());
+                    }
+                }
+            }
+        }
+    }
+
     //***************************************************************************** sensor *********************************
 
     private static void initSensore() {
@@ -1098,6 +1171,76 @@ public class MusicPlayer extends Service {
                     }
                 }
             }
+        }
+    }
+
+    private static void registerMediaBottom() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                try {
+
+                    MediaSession mSession = new MediaSession(G.context, G.context.getPackageName());
+                    Intent intent = new Intent(G.context, MediaBottomReciver.class);
+                    PendingIntent pintent = PendingIntent.getBroadcast(G.context, 50, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    mSession.setMediaButtonReceiver(pintent);
+                    mSession.setActive(true);
+
+                    PlaybackState state = new PlaybackState.Builder().setActions(PlaybackStateCompat.ACTION_STOP
+                        | PlaybackStateCompat.ACTION_PAUSE
+                        | PlaybackStateCompat.ACTION_PLAY
+                        | PlaybackStateCompat.ACTION_PLAY_PAUSE
+                        | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+                        | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
+
+                        .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1, SystemClock.elapsedRealtime()).build();
+                    mSession.setPlaybackState(state);
+                } catch (Exception e) {
+
+                    HelperLog.setErrorLog(" music player   registerMediaBottom     " + e.toString());
+                }
+            } else {
+
+                remoteComponentName = new ComponentName(G.context, MediaBottomReciver.class.getName());
+
+                try {
+                    //if (remoteControlClient == null) {
+                    audioManager.registerMediaButtonEventReceiver(remoteComponentName);
+                    //
+                    //    Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+                    //    mediaButtonIntent.setComponent(remoteComponentName);
+                    //    PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(G.context, 50, mediaButtonIntent, 0);
+                    //    remoteControlClient = new RemoteControlClient(mediaPendingIntent);
+                    //    audioManager.registerRemoteControlClient(remoteControlClient);
+                    //}
+                    //remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY | RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
+                    //    RemoteControlClient.FLAG_KEY_MEDIA_STOP | RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS | RemoteControlClient.FLAG_KEY_MEDIA_NEXT);
+                    //
+                } catch (Exception e) {
+                    HelperLog.setErrorLog(" music plyer   registerMediaBottom    " + e.toString());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        try {
+
+            //if (remoteControlClient != null) {
+            //    //RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
+            //    //metadataEditor.clear();
+            //    //metadataEditor.apply();
+            //    audioManager.unregisterRemoteControlClient(remoteControlClient);
+            audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
+            //}
+
+        } catch (Exception e) {
+            Log.e("ddddd", "music plyer  onDestroy    " + e.toString());
         }
     }
 }

@@ -74,6 +74,7 @@ import net.iGap.helper.HelperCalculateKeepMedia;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperPermision;
@@ -552,28 +553,33 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     return;
                 }
 
-                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-                if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
+                try {
 
-                    FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
-                    switch (fm.mainType) {
+                    FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+                    if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
 
-                        case all:
-                            arcMenu.toggleMenu();
-                            break;
-                        case chat:
-                            btnStartNewChat.performClick();
-                            break;
-                        case group:
-                            btnCreateNewGroup.performClick();
-                            break;
-                        case channel:
-                            btnCreateNewChannel.performClick();
-                            break;
+                        FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
+                        switch (fm.mainType) {
+
+                            case all:
+                                arcMenu.toggleMenu();
+                                break;
+                            case chat:
+                                btnStartNewChat.performClick();
+                                break;
+                            case group:
+                                btnCreateNewGroup.performClick();
+                                break;
+                            case channel:
+                                btnCreateNewChannel.performClick();
+                                break;
+                        }
+                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
+
+                        ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
                     }
-                } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
-
-                    ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
+                } catch (Exception e) {
+                    HelperLog.setErrorLog(" Activity main   arcMenu.fabMenu.setOnClickListener   " + e.toString());
                 }
             }
         });
@@ -616,6 +622,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+
+                if (mViewPager == null || mViewPager.getAdapter() == null || mViewPager.getAdapter().getCount() == 0) {
+                    return;
+                }
 
                 if (G.salectedTabInMainActivity.length() > 0) {
 
@@ -661,11 +671,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
 
                 navigationTabStrip.setViewPager(mViewPager);
-                navigationTabStrip.setTabIndex(mViewPager.getCurrentItem());
+
+                try {
+
+                    if (mViewPager.getAdapter().getCount() > 0) {
+                        navigationTabStrip.setTabIndex(mViewPager.getCurrentItem());
+                    }
+                } catch (Exception e) {
+
+                    HelperLog.setErrorLog("Activity main     setmViewPagerSelectedItem    " + e.toString());
+                }
+
+
 
 
             }
-        }, 50);
+        }, 100);
     }
 
     private void initTabStrip() {
