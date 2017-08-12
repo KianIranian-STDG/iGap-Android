@@ -163,7 +163,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private final int ZOOM_LEVEL_MIN = 13;
     private final int ZOOM_LEVEL_NORMAL = 16;
     private final int ZOOM_LEVEL_MAX = 19;
-    private final int BOUND_LIMIT_METERS = 5000;
+    private final int BOUND_LIMIT_METERS = 10000;
     private int lastSpecialRequestsCursorPosition = 0;
 
     private long latestUpdateTime = 0;
@@ -750,8 +750,6 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
     public static Drawable avatarMark(long userId, MarkerColor markerColor) {
         String pathName = "";
-        String initials = "";
-        String color = "";
         Bitmap bitmap = null;
         Realm realm = Realm.getDefaultInstance();
         for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
@@ -760,6 +758,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                 if (pathName == null) {
                     pathName = avatar.getFile().getLocalThumbnailPath();
                 }
+                break;
             }
         }
         if (pathName == null || pathName.isEmpty()) {
@@ -1126,7 +1125,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 
-            //visibleViewAttention(mActivity.getResources().getString(R.string.turn_on_gps_explain), true);
+            visibleViewAttention(mActivity.getResources().getString(R.string.turn_on_gps_explain), true);
 
         } else {// GPS is on
             isGpsOn = true;

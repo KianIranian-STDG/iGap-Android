@@ -354,8 +354,8 @@ public class ActivityChat extends ActivityEnhanced
     private static List<StructBottomSheet> contacts;
     public static OnPathAdapterBottomSheet onPathAdapterBottomSheet;
     private View viewBottomSheet;
-
-    private RealmRoomMessage voiceLastMessage = null;
+    public static OnClickCamera onClickCamera;
+    private Fotoapparat fotoapparatSwitcher;
     public static OnComplete hashListener;
     public static OnComplete onComplete;
     public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
@@ -365,6 +365,7 @@ public class ActivityChat extends ActivityEnhanced
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private RealmRoomMessage firstUnreadMessage;
     private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
+    private RealmRoomMessage voiceLastMessage = null;
 
     public static int forwardMessageCount = 0;
     public static ArrayList<Parcelable> mForwardMessages;
@@ -424,6 +425,7 @@ public class ActivityChat extends ActivityEnhanced
     private boolean isCloudRoom;
     private boolean needUpdateView = false;
 
+    private long biggestMessageId = 0;
     private long replyToMessageId = 0;
     private long userId;
     private long lastSeen;
@@ -444,11 +446,11 @@ public class ActivityChat extends ActivityEnhanced
     private int selectedPosition = 0;
     private boolean isNoMessage = true;
     private boolean isEmojiSHow = false;
-    public static OnClickCamera onClickCamera;
-    Fotoapparat fotoapparatSwitcher;
     private boolean isCameraStart = false;
     private boolean isCameraAttached = false;
     private boolean isPermissionCamera = false;
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -2831,6 +2833,11 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
+
+        if (roomMessage.getMessageId() <= biggestMessageId) {
+            return;
+        }
+
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -6900,28 +6907,38 @@ public class ActivityChat extends ActivityEnhanced
 
             if (!messageInfo.isTimeOrLogMessage() || (messageType == LOG)) {
                 int index = 0;
-                if (addTop && messageInfo.showTime) {
-
-                    for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
-                        if (mAdapter.getAdapterItem(i) instanceof TimeItem) {
-                            if (!RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(i).mMessage.time)) {
-                                mAdapter.remove(i);
+                if (addTop) {
+                    if (messageInfo.showTime) {
+                        for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
+                            if (mAdapter.getAdapterItem(i) instanceof TimeItem) {
+                                if (!RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(i).mMessage.time)) {
+                                    mAdapter.remove(i);
+                                }
+                                break;
                             }
-                            break;
                         }
+                        mAdapter.add(0, new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                        index = 1;
                     }
-                    mAdapter.add(0, new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
-                    index = 1;
-                }
+                } else {
 
-                if (!addTop && messageInfo.showTime) {
+                    /**
+                     * don't allow for add lower messageId to bottom of list
+                     */
+                    if (Long.parseLong(messageInfo.messageID) > biggestMessageId) {
+                        biggestMessageId = Long.parseLong(messageInfo.messageID);
+                    } else {
+                        continue;
+                    }
 
-                    if (mAdapter.getItemCount() > 0) {
-                        if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
+                    if (messageInfo.showTime) {
+                        if (mAdapter.getItemCount() > 0) {
+                            if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
+                                mAdapter.add(new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                            }
+                        } else {
                             mAdapter.add(new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                         }
-                    } else {
-                        mAdapter.add(new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                     }
                 }
 
