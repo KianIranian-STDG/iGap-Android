@@ -112,6 +112,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     Handler handler;
     private int changesize = 0;
     ProgressBar progressBar;
+    private Realm realmShearedMedia;
 
     private boolean isChangeSelectType = false;
 
@@ -215,6 +216,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sheared_media);
 
+        realmShearedMedia = Realm.getDefaultInstance();
+
         mediaLayout = (LinearLayout) findViewById(R.id.asm_ll_music_layout);
 
         MusicPlayer.setMusicPlayer(mediaLayout);
@@ -263,6 +266,21 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (realmShearedMedia != null && !realmShearedMedia.isClosed()) {
+            realmShearedMedia.close();
+        }
+    }
+
+    private Realm getRealm() {
+        if (realmShearedMedia == null || realmShearedMedia.isClosed()) {
+            realmShearedMedia = Realm.getDefaultInstance();
+        }
+        return realmShearedMedia;
+    }
+
     private void initComponent() {
 
         progressBar = (ProgressBar) findViewById(R.id.asm_progress_bar_waiting);
@@ -286,7 +304,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                popUpMenuSharedMedai();
+                popUpMenuSharedMedia();
             }
         });
 
@@ -386,8 +404,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                     rm = mRealmList.where().equalTo(RealmRoomMessageFields.MESSAGE_ID, Id).findFirst();
                     if (rm != null) {
-                        Realm realm = Realm.getDefaultInstance();
-                        messageInfos.add(Parcels.wrap(StructMessageInfo.convert(realm, rm)));
+                        //+Realm realm = Realm.getDefaultInstance();
+                        messageInfos.add(Parcels.wrap(StructMessageInfo.convert(getRealm(), rm)));
                     }
                 }
 
@@ -412,11 +430,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                Realm realm = Realm.getDefaultInstance();
-                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                //+Realm realm = Realm.getDefaultInstance();
+                final RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
                 if (realmRoom != null) {
-                    RealmRoomMessage.deleteSelectedMessages(realm, roomId, SelectedList, realmRoom.getType());
+                    RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, realmRoom.getType());
                 }
 
                 switch (mFilter) {
@@ -447,7 +465,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                 adapter.resetSelected();
 
-                realm.close();
+                //realm.close();
             }
         });
 
@@ -473,10 +491,13 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     //********************************************************************************************
 
-    public void popUpMenuSharedMedai() {
+    public void popUpMenuSharedMedia() {
 
         final MaterialDialog dialog = new MaterialDialog.Builder(ActivityShearedMedia.this).customView(R.layout.chat_popup_dialog_custom, true).build();
         View v = dialog.getCustomView();
+        if (v == null) {
+            return;
+        }
 
         DialogAnimation.animationUp(dialog);
         dialog.show();
@@ -749,9 +770,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         if (mRealmList != null) {
             mRealmList.removeAllChangeListeners();
         }
-
-        Realm realm = Realm.getDefaultInstance();
-        mRealmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+        //+Realm realm = Realm.getDefaultInstance();
+        mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                 equalTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.TEXT.toString()).
                 equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
                 findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
@@ -772,7 +792,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         isChangeSelectType = false;
 
-        realm.close();
+        //realm.close();
     }
 
     //********************************************************************************************
@@ -783,9 +803,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
             mRealmList.removeAllChangeListeners();
         }
 
-        Realm realm = Realm.getDefaultInstance();
+        //+Realm realm = Realm.getDefaultInstance();
 
-        mRealmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+        mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                 contains(RealmRoomMessageFields.MESSAGE_TYPE, type).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 
         setListener();
@@ -797,7 +817,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         ArrayList<StructShearedMedia> list = addTimeToList(mRealmList);
 
-        realm.close();
+        //realm.close();
 
         return list;
     }
@@ -921,25 +941,25 @@ public class ActivityShearedMedia extends ActivityEnhanced {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                final Realm realm = Realm.getDefaultInstance();
+                //+final Realm realm = Realm.getDefaultInstance();
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
+                getRealm().executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
                             RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, false, false, realm);
                         }
                     }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
+                    //}, new Realm.Transaction.OnSuccess() {
+                    //    @Override
+                    //    public void onSuccess() {
+                    //        realm.close();
+                    //    }
+                    //}, new Realm.Transaction.OnError() {
+                    //    @Override
+                    //    public void onError(Throwable error) {
+                    //        realm.close();
+                    //    }
                 });
             }
         });

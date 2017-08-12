@@ -96,7 +96,7 @@ public class FragmentShowImage extends Fragment {
     private String type = null;
     private boolean isLockScreen = false;
     private FragmentActivity mActivity;
-    private Realm realm;
+    private Realm realmShowImage;
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
@@ -105,41 +105,47 @@ public class FragmentShowImage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realmShowImage = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getIntentData(this.getArguments())) initComponent(view);
+        if (getIntentData(this.getArguments())) {
+            initComponent(view);
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         if (appBarLayout != null) {
             appBarLayout.setVisibility(View.VISIBLE);
-        }
-
-        if (realm != null) {
-            realm.close();
         }
     }
 
     @Override
     public void onAttach(Context context) {
-        if (appBarLayout != null) appBarLayout.setVisibility(View.GONE);
-
+        if (appBarLayout != null) {
+            appBarLayout.setVisibility(View.GONE);
+        }
         super.onAttach(context);
     }
 
-    private boolean getIntentData(Bundle bundle) {
+    private Realm getRealm() {
+        if (realmShowImage == null || !realmShowImage.isClosed()) {
+            realmShowImage = Realm.getDefaultInstance();
+        }
+        return realmShowImage;
+    }
 
-        if (mActivity != null) mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    private boolean getIntentData(Bundle bundle) {
+        if (mActivity != null) {
+            mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
 
         if (bundle != null) { // get a list of image
-
             mRoomId = bundle.getLong("RoomId");
             selectedFileToken = bundle.getLong("SelectedImage");
             if (bundle.getString("TYPE") != null) type = bundle.getString("TYPE");
@@ -148,9 +154,7 @@ public class FragmentShowImage extends Fragment {
                 return false;
             }
 
-            realm = Realm.getDefaultInstance();
-
-            mRealmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+            mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
 
             if (mRealmList.size() < 1) {
                 mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
@@ -160,7 +164,6 @@ public class FragmentShowImage extends Fragment {
             for (RealmRoomMessage item : mRealmList) {
 
                 boolean isImage = false;
-
                 if (type == null) {
                     if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
                         isImage = true;
@@ -199,7 +202,6 @@ public class FragmentShowImage extends Fragment {
             }
             return false;
         }
-
     }
 
     private void initComponent(View view) {
@@ -296,8 +298,8 @@ public class FragmentShowImage extends Fragment {
             txtImageDesc.setVisibility(View.GONE);
         }
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessageFinal.getUserId()).findFirst();
+        //+Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, realmRoomMessageFinal.getUserId()).findFirst();
 
         if (realmRegisteredInfo != null) {
             txtImageName.setText(realmRegisteredInfo.getDisplayName());
@@ -321,7 +323,7 @@ public class FragmentShowImage extends Fragment {
             txtImageDate.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageDate.getText().toString()));
         }
 
-        realm.close();
+        //realm.close();
 
     }
 
@@ -383,8 +385,8 @@ public class FragmentShowImage extends Fragment {
             if (file.exists()) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("image/*");
-                Realm realm = Realm.getDefaultInstance();
-                putExtra(intent, StructMessageInfo.convert(realm, rm));
+                //+Realm realm = Realm.getDefaultInstance();
+                putExtra(intent, StructMessageInfo.convert(getRealm(), rm));
                 startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
             }
         }
@@ -951,6 +953,10 @@ public class FragmentShowImage extends Fragment {
         if (videoController != null) {
             videoController.hide();
             videoController = null;
+        }
+
+        if (realmShowImage != null && !realmShowImage.isClosed()) {
+            realmShowImage.close();
         }
     }
 
