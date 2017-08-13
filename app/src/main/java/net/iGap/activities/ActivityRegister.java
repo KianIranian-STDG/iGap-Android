@@ -313,7 +313,9 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                         //}
 
                         checkExpireTime(expireTime);
-                        prgQrCodeNewDevice.setVisibility(View.GONE);
+                        if (prgQrCodeNewDevice != null) {
+                            prgQrCodeNewDevice.setVisibility(View.GONE);
+                        }
 
                         G.imageLoader.clearMemoryCache();
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(_resultQrCode), imgQrCodeNewDevice);
@@ -964,7 +966,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
 
-        if (!isFinishing()) {
+        if (!isFinishing() && !isRestricted() && isTaskRoot()) {
             dialog.show();
             if (dialog.isShowing()) {
                 countDownTimer.cancel();
