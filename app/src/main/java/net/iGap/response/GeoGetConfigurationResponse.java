@@ -41,7 +41,7 @@ public class GeoGetConfigurationResponse extends MessageHandler {
         }
 
         if (builder.getTileServerList().size() == 0) {
-            Crashlytics.logException(new Exception("TileServerList is zero"));
+            Crashlytics.logException(new Exception("GeoGetConfigurationResponse -> TileServerList==0; time:" + System.currentTimeMillis()));
         }
 
         Realm realm = Realm.getDefaultInstance();

@@ -54,6 +54,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.crashlytics.android.Crashlytics;
 import io.realm.Realm;
 import io.realm.Sort;
 import java.io.File;
@@ -254,6 +255,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         if (mapUrls.size() > 0) {
             url = mapUrls.get(new Random().nextInt(mapUrls.size()));
         } else {
+            Crashlytics.logException(new Exception("FragmentiGapMap -> mapUrls==0; time:" + System.currentTimeMillis()));
             url = URL_MAP;
         }
         map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {

@@ -369,6 +369,12 @@ public class RegisteredContactsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //Override onSaveInstanceState method and comment 'super' from avoid from "Can not perform this action after onSaveInstanceState" error
+        //super.onSaveInstanceState(outState); //
+    }
+
     //********************************************************************************************
 
     public class ContactListAdapter extends RealmRecyclerViewAdapter<RealmContacts, ContactListAdapter.ViewHolder> {

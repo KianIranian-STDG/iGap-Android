@@ -272,6 +272,12 @@ public class ActivitySetting extends ActivityEnhanced implements OnUserAvatarRes
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //Override onSaveInstanceState method and comment 'super' from avoid from "Can not perform this action after onSaveInstanceState" error
+        //super.onSaveInstanceState(outState);
+    }
+
     private Realm getRealm() {
         if (mRealm == null || mRealm.isClosed()) {
             mRealm = Realm.getDefaultInstance();
