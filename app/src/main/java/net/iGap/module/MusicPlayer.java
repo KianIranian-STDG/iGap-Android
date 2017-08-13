@@ -639,8 +639,6 @@ public class MusicPlayer extends Service {
 
                     txt_music_name.setText(musicName);
 
-                    updateNotification();
-
                     updateProgress();
 
                     mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -655,6 +653,8 @@ public class MusicPlayer extends Service {
             mp.prepareAsync();
         } catch (Exception e) {
         }
+
+        updateNotification();
 
         if (!isShowMediaPlayer) {
 
