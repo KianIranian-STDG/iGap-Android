@@ -1614,11 +1614,7 @@ public class ActivityChat extends ActivityEnhanced
                 Double longitude = Double.parseDouble(split[1]);
 
                 FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
-                getSupportFragmentManager().beginTransaction()
-                    .addToBackStack(null)
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
-                    .commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap).commitAllowingStateLoss();
             }
         };
 
@@ -1923,7 +1919,7 @@ public class ActivityChat extends ActivityEnhanced
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        RealmRoomMessage.ClearAllMessage(false, mRoomId);
+                        RealmRoomMessage.ClearAllMessage(getRealmChat(), false, mRoomId);
                         mAdapter.clear();
                         recyclerView.removeAllViews();
 

@@ -147,8 +147,8 @@ public class ActivityManageSpace extends ActivityEnhanced {
                 txtOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        RealmRoomMessage.ClearAllMessage(true, 0);
                         Realm realm = Realm.getDefaultInstance();
+                        RealmRoomMessage.ClearAllMessage(realm, true, 0);
                         final long DbTotalSize = new File(realm.getConfiguration().getPath()).length();
                         realm.close();
                         txtDbTotalSize.setText(FileUtils.formatFileSize(DbTotalSize));

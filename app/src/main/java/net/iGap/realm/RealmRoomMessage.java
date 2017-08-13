@@ -712,12 +712,10 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         realm.close();
     }
 
-    public static void ClearAllMessage(boolean deleteAllMessage, final long roomId) {
+    public static void ClearAllMessage(Realm realm, boolean deleteAllMessage, final long roomId) {
 
-        Realm realm = Realm.getDefaultInstance();
-
+        //+Realm realm = Realm.getDefaultInstance();
         if (deleteAllMessage) {
-
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -735,7 +733,6 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                 }
             });
         } else {
-
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -752,7 +749,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
             });
         }
 
-        realm.close();
+        //realm.close();
     }
 
     public static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
