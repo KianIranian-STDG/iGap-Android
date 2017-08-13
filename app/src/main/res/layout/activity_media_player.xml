@@ -230,7 +230,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/ml_btn_play_music"
-        android:layout_width="@dimen/dp40"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp24"
         android:layout_marginRight="@dimen/dp24"

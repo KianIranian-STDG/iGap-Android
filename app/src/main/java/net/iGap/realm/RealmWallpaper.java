@@ -10,11 +10,11 @@
 
 package net.iGap.realm;
 
-import com.crashlytics.android.Crashlytics;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import java.util.ArrayList;
 import java.util.List;
+import net.iGap.helper.HelperLog;
 import net.iGap.module.SerializationUtils;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
@@ -31,7 +31,7 @@ public class RealmWallpaper extends RealmObject {
             return wallPaperList == null ? null : (List<net.iGap.proto.ProtoGlobal.Wallpaper>) SerializationUtils.deserialize(wallPaperList);
         } catch (Exception e) {
 
-            Crashlytics.log(" RealmWallpaper     getWallPaperList()       " + e.toString());
+            HelperLog.setErrorLog(" RealmWallpaper     getWallPaperList()       " + e.toString());
 
             return null;
         }

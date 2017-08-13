@@ -77,6 +77,13 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
                             musicSeekbar.setProgress(MusicPlayer.musicProgress);
 
                             if (HelperCalander.isLanguagePersian) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
+
+                            txt_MusicTime.setText(MusicPlayer.musicTime);
+                            if (HelperCalander.isLanguagePersian) {
+                                txt_MusicTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_MusicTime.getText().toString()));
+                            }
+
+
                         }
                     });
                 } else if (messageOne.equals("RepeatMode")) {

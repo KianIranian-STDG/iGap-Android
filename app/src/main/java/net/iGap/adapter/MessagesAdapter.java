@@ -400,15 +400,20 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         for (int i = items.size() - 1; i >= 0; i--) {
             Item messageInfo = items.get(i);
 
-            if (messageInfo.mMessage.messageID.equals(messageId)) {
-                messageInfo.mMessage.isSelected = select;
-                notifyItemChanged(i);
+            try {
 
-                if (select) {
-                    recyclerView.scrollToPosition(i);
+                if (messageInfo.mMessage.messageID.equals(messageId)) {
+                    messageInfo.mMessage.isSelected = select;
+                    notifyItemChanged(i);
+
+                    if (select) {
+                        recyclerView.scrollToPosition(i);
+                    }
+
+                    break;
                 }
-
-                break;
+            } catch (NullPointerException e) {
+                // some item can have no messageID
             }
         }
     }

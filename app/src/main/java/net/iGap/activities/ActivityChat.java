@@ -134,6 +134,7 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperGetMessageState;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperPermision;
@@ -1608,13 +1609,23 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void complete(boolean result, final String messageOne, String MessageTow) {
 
+                try {
 
-                String[] split = messageOne.split(",");
-                Double latitude = Double.parseDouble(split[0]);
-                Double longitude = Double.parseDouble(split[1]);
+                    String[] split = messageOne.split(",");
+                    Double latitude = Double.parseDouble(split[0]);
+                    Double longitude = Double.parseDouble(split[1]);
 
-                FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
-                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap).commitAllowingStateLoss();
+                    FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
+                    getSupportFragmentManager().beginTransaction()
+                        .addToBackStack(null)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
+                        .commit();
+                } catch (Exception e) {
+
+                    HelperLog.setErrorLog("Activity Chat   complete   " + e.toString());
+                }
+
             }
         };
 
