@@ -423,9 +423,7 @@ public class MusicPlayer extends Service {
                 RealmRoomMessage _rm = mediaList.get(selectedMedia).getForwardMessage() != null ? mediaList.get(selectedMedia).getForwardMessage() : mediaList.get(selectedMedia);
 
                 startPlayer(_rm.getAttachment().getName(), _rm.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
-                if (onComplete != null) {
-                    onComplete.complete(true, "update", "");
-                }
+
             } else {
                 selectedMedia = 0;
 
@@ -433,9 +431,6 @@ public class MusicPlayer extends Service {
 
                 startPlayer(_rm.getAttachment().getName(), _rm.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
-                if (onComplete != null) {
-                    onComplete.complete(true, "update", "");
-                }
             }
             if (ActivityChat.onMusicListener != null) {
                 ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
@@ -458,9 +453,6 @@ public class MusicPlayer extends Service {
 
             startPlayer(_rm.getAttachment().getName(), _rm.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
-            if (onComplete != null) {
-                onComplete.complete(true, "update", "");
-            }
 
             if (ActivityChat.onMusicListener != null) {
                 ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
@@ -500,7 +492,6 @@ public class MusicPlayer extends Service {
                 RealmRoomMessage _rm = mediaList.get(selectedMedia).getForwardMessage() != null ? mediaList.get(selectedMedia).getForwardMessage() : mediaList.get(selectedMedia);
                 startPlayer(_rm.getAttachment().getName(), _rm.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
-                if (onComplete != null) onComplete.complete(true, "update", "");
             } else {
                 int index = mediaList.size() - 1;
                 if (index >= 0) {
@@ -510,7 +501,6 @@ public class MusicPlayer extends Service {
 
                     startPlayer(_rm.getAttachment().getName(), _rm.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
-                    if (onComplete != null) onComplete.complete(true, "update", "");
                 }
             }
 
@@ -647,6 +637,23 @@ public class MusicPlayer extends Service {
                             OnCompleteMusic();
                         }
                     });
+
+                    if (onComplete != null) {
+                        onComplete.complete(true, "update", "");
+                    }
+
+                    try {
+                        if (mp.isPlaying()) {
+                            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
+                        } else {
+                            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
+                        }
+                        notificationManager.notify(notificationId, notification);
+                    } catch (RuntimeException e) {
+                    }
+
+
+
                 }
             });
 
