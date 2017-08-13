@@ -2244,7 +2244,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (!bereitsAngelegt) {
             AccountManager accMgr = AccountManager.get(this);
-            String password = "some_password";
+            String password = "";
 
 
             final Account account = new Account("" + phoneNumber, accountType);

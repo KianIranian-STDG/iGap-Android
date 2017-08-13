@@ -262,7 +262,9 @@
         android:exported="true" />
     <service android:name=".helper.MyServiceTemporat" />
 
-    <service android:name="net.iGap.module.AuthenticatorService">
+    <service
+        android:name="net.iGap.module.AuthenticatorService"
+        android:label="@string/app_name">
       <intent-filter>
         <action android:name="android.accounts.AccountAuthenticator" />
       </intent-filter>
