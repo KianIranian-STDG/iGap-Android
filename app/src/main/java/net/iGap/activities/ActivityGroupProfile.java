@@ -212,6 +212,12 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //Override onSaveInstanceState method and comment 'super' from avoid from "Can not perform this action after onSaveInstanceState" error
+        //super.onSaveInstanceState(outState); //
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -1363,11 +1369,15 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         } else if (type.equals("fromNow")) {
 
             //+Realm realm = Realm.getDefaultInstance();
-            RealmRoomMessage realmRoomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).
-                    findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING).first();
+            RealmResults<RealmRoomMessage> realmRoomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).
+                    findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
-            if (realmRoomMessages != null) {
-                messageID = realmRoomMessages.getMessageId();
+            RealmRoomMessage realmRoomMessage = null;
+            if (realmRoomMessages.size() > 0) {
+                realmRoomMessage = realmRoomMessages.first();
+            }
+            if (realmRoomMessage != null) {
+                messageID = realmRoomMessage.getMessageId();
             } else {
                 messageID = 0;
             }
