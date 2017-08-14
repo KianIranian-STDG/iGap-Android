@@ -371,6 +371,7 @@ public class ActivityChat extends ActivityEnhanced
     public static int forwardMessageCount = 0;
     public static ArrayList<Parcelable> mForwardMessages;
     private Realm realmChat;
+    public static boolean canUpdateAfterDownload = false;
 
 
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
@@ -531,6 +532,8 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     protected void onResume() {
         super.onResume();
+
+        canUpdateAfterDownload = true;
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -754,6 +757,9 @@ public class ActivityChat extends ActivityEnhanced
 
     @Override
     protected void onStop() {
+
+        canUpdateAfterDownload = false;
+
         setDraft();
         HelperNotificationAndBadge.isChatRoomNow = false;
 
@@ -3676,26 +3682,33 @@ public class ActivityChat extends ActivityEnhanced
                             public void OnProgress(String path, int progress) {
 
                                 if (progress == 100) {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
 
-                                                HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
-                                            } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
-                                                HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
-                                            } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
+                                    if (canUpdateAfterDownload) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
 
-                                                if (message.messageType.toString().contains("VIDEO")) {
-                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
-                                                } else if (message.messageType.toString().contains("GIF")) {
-                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
-                                                } else {
-                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
+                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download,
+                                                        R.string.file_save_to_download_folder);
+                                                } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
+                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
+                                                } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
+
+                                                    if (message.messageType.toString().contains("VIDEO")) {
+                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video,
+                                                            R.string.file_save_to_video_folder);
+                                                    } else if (message.messageType.toString().contains("GIF")) {
+                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif,
+                                                            R.string.file_save_to_picture_folder);
+                                                    } else {
+                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
+                                                    }
                                                 }
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
+
                                 }
                             }
 

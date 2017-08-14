@@ -32,6 +32,7 @@ import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityChat;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -1397,22 +1398,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void OnProgress(final String path, int progress) {
 
-                    if (progress == 100) {
+                    if (ActivityChat.canUpdateAfterDownload) {
+                        if (progress == 100) {
 
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                String type;
-                                if (mMessage.forwardedFrom != null) {
-                                    type = mMessage.forwardedFrom.getMessageType().toString().toLowerCase();
-                                } else {
-                                    type = mMessage.messageType.toString().toLowerCase();
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    String type;
+                                    if (mMessage.forwardedFrom != null) {
+                                        type = mMessage.forwardedFrom.getMessageType().toString().toLowerCase();
+                                    } else {
+                                        type = mMessage.messageType.toString().toLowerCase();
+                                    }
+                                    if (type.contains("image") || type.contains("video") || type.contains("gif")) {
+                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.THUMBNAIL);
+                                    }
                                 }
-                                if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-                                    onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.THUMBNAIL);
-                                }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
 
@@ -1457,6 +1460,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void OnProgress(final String path, final int progress) {
 
+                    if (ActivityChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1478,13 +1482,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 }
                             }
                         });
+                    }
+
+
 
                 }
 
                 @Override
                 public void OnError(String token) {
 
-
+                    if (ActivityChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1496,6 +1503,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 }
                             }
                         });
+                    }
+
+
+
                     }
             });
 

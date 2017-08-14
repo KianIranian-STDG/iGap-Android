@@ -568,7 +568,10 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
+                                                if (touchImageView != null) {
+                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
+                                                }
+
                                             }
                                         });
                                     }

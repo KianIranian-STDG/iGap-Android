@@ -85,7 +85,10 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                                     G.currentActivity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
+                                            if (holder2.img != null) {
+                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
+                                            }
+
                                         }
                                     });
                                 }

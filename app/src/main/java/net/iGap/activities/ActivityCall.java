@@ -766,12 +766,16 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
                     if (progress == 100) {
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), userCallerPicture);
-                            }
-                        });
+                        if (userCallerPicture != null) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), userCallerPicture);
+                                }
+                            });
+                        }
+
+
                     }
                 }
 

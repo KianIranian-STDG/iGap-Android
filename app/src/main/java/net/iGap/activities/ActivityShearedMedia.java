@@ -116,6 +116,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
     private boolean isChangeSelectType = false;
 
+    private boolean canUpdateAfterDownload = false;
+
     private RecyclerView.OnScrollListener onScrollListener;
 
     private static long countOFImage = 0;
@@ -149,6 +151,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     @Override
     protected void onResume() {
         super.onResume();
+
+        canUpdateAfterDownload = true;
+
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
         }
@@ -159,6 +164,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     @Override
     protected void onStop() {
         super.onStop();
+
+        canUpdateAfterDownload = false;
 
         if (mRealmList != null) {
             mRealmList.removeAllChangeListeners();
@@ -1262,37 +1269,42 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 @Override
                 public void OnProgress(String path, final int progress) {
 
-                    if (messageProgress != null && messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
+                    if (canUpdateAfterDownload) {
 
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (progress < 100) {
-                                    messageProgress.withProgress(progress);
-                                } else {
-                                    messageProgress.withProgress(0);
-                                    messageProgress.setVisibility(View.GONE);
-                                    contentLoading.setVisibility(View.GONE);
+                        if (messageProgress != null && messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
 
-                                    updateViewAfterDownload(at.getCacheId());
+                            G.currentActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (progress < 100) {
+                                        messageProgress.withProgress(progress);
+                                    } else {
+                                        messageProgress.withProgress(0);
+                                        messageProgress.setVisibility(View.GONE);
+                                        contentLoading.setVisibility(View.GONE);
+
+                                        updateViewAfterDownload(at.getCacheId());
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
 
                 @Override
                 public void OnError(String token) {
+                    if (canUpdateAfterDownload) {
 
-                    if (messageProgress != null && messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                messageProgress.withProgress(0);
-                                messageProgress.withDrawable(R.drawable.ic_download, true);
-                                contentLoading.setVisibility(View.GONE);
-                            }
-                        });
+                        if (messageProgress != null && messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
+                            G.currentActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    messageProgress.withProgress(0);
+                                    messageProgress.withDrawable(R.drawable.ic_download, true);
+                                    contentLoading.setVisibility(View.GONE);
+                                }
+                            });
+                        }
                     }
                 }
             });
@@ -1465,16 +1477,20 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                                 public void OnProgress(final String path, int progress) {
 
                                     if (progress == 100) {
-                                        G.currentActivity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
 
-                                                if (vh.imvPicFile.getTag() != null && vh.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), vh.imvPicFile);
+                                        if (canUpdateAfterDownload) {
+                                            G.currentActivity.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+
+                                                    if (vh.imvPicFile.getTag() != null && vh.imvPicFile.getTag().equals(mList.get(position).messageId)) {
+                                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), vh.imvPicFile);
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
+                                        }
                                     }
+
                                 }
 
                                 @Override
@@ -1596,15 +1612,17 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                                 public void OnProgress(final String path, int progress) {
 
                                     if (progress == 100) {
-                                        G.currentActivity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
+                                        if (canUpdateAfterDownload) {
+                                            G.currentActivity.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
 
-                                                if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder1.imvPicFile);
+                                                    if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
+                                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder1.imvPicFile);
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
+                                        }
                                     }
                                 }
 
@@ -1878,15 +1896,17 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                                     public void OnProgress(final String path, int progress) {
 
                                         if (progress == 100) {
-                                            G.currentActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
+                                            if (canUpdateAfterDownload) {
+                                                G.currentActivity.runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
 
-                                                    if (holder1.gifView.getTag() != null && holder1.gifView.getTag().equals(mList.get(position).messageId)) {
-                                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder1.gifView);
+                                                        if (holder1.gifView.getTag() != null && holder1.gifView.getTag().equals(mList.get(position).messageId)) {
+                                                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder1.gifView);
+                                                        }
                                                     }
-                                                }
-                                            });
+                                                });
+                                            }
                                         }
                                     }
 

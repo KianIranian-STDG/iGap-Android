@@ -527,7 +527,10 @@ public class FragmentShowImage extends Fragment {
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
+                                                if (touchImageView != null) {
+                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
+                                                }
+
                                             }
                                         });
                                     }
@@ -697,14 +700,17 @@ public class FragmentShowImage extends Fragment {
                 @Override
                 public void OnError(String token) {
 
-                    G.currentActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress.withProgress(0);
-                            progress.withDrawable(R.drawable.ic_download, true);
-                            contentLoading.setVisibility(View.GONE);
-                        }
-                    });
+                    if (progress != null) {
+
+                        G.currentActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progress.withProgress(0);
+                                progress.withDrawable(R.drawable.ic_download, true);
+                                contentLoading.setVisibility(View.GONE);
+                            }
+                        });
+                    }
                 }
             });
         }
