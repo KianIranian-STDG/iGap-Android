@@ -1888,7 +1888,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
 
                 case IntentRequests.REQ_CROP: { // save path image on data base ( realm )
 
-                    String pathSaveImage = null;
+                    pathSaveImage = null;
                     if (data != null) {
                         pathSaveImage = data.getData().toString();
                     }

@@ -1167,7 +1167,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
         }
     }
 
-    private String filePathAvatar;
+    private String pathSaveImage;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1225,10 +1225,11 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
 
                 case IntentRequests.REQ_CROP: { // save path image on data base ( realmGroupProfile )
 
-                    String pathSaveImage = null;
+                    pathSaveImage = null;
                     if (data != null) {
                         pathSaveImage = data.getData().toString();
                     }
+
 
                     long lastUploadedAvatarId = avatarId + 1L;
 
@@ -1967,10 +1968,10 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
          * if another account do this action we haven't avatar source and have
          *  to download avatars . for do this action call HelperAvatar.getAvatar
          */
-        if (filePathAvatar == null) {
+        if (pathSaveImage == null) {
             showAvatar();
         } else {
-            HelperAvatar.avatarAdd(roomId, filePathAvatar, avatar, new OnAvatarAdd() {
+            HelperAvatar.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
                 @Override
                 public void onAvatarAdd(final String avatarPath) {
                     runOnUiThread(new Runnable() {
@@ -1981,7 +1982,7 @@ public class ActivityGroupProfile extends ActivityEnhanced implements OnGroupAva
                     });
                 }
             });
-            filePathAvatar = null;
+            pathSaveImage = null;
         }
     }
 
