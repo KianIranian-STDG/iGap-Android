@@ -29,7 +29,7 @@
   <!-- WebRTC Start hint:other permissions was exist in before codes -->
   <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
+  <uses-permission android:name="android.permission.SET_WALLPAPER" />
   <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
   <uses-permission android:name="android.permission.GET_ACCOUNTS" />
   <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />

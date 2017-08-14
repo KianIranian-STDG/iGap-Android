@@ -14,6 +14,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -48,6 +49,7 @@ import android.widget.TextView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -551,6 +553,8 @@ public class MusicPlayer extends Service {
             mRealm.close();
             mRealm = null;
         }
+
+        clearWallpaperLockScrean();
     }
 
     public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
@@ -981,10 +985,13 @@ public class MusicPlayer extends Service {
                 byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
                 if (data != null) {
                     mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    setWallpaperLockScreen(mediaThumpnail);
+
                     int size = (int) G.context.getResources().getDimension(R.dimen.dp48);
                     remoteViews.setImageViewBitmap(R.id.mln_img_picture_music, Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
                 } else {
                     remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
+                    clearWallpaperLockScrean();
                 }
             } catch (Exception e) {
 
@@ -1292,6 +1299,30 @@ public class MusicPlayer extends Service {
             Log.e("ddddd", "music plyer  onDestroy    " + e.toString());
         }
     }
+
+    private static void setWallpaperLockScreen(Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+            WallpaperManager myWallpaperManager = WallpaperManager.getInstance(G.context);
+            try {
+
+                myWallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK);
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
+    private static void clearWallpaperLockScrean() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                WallpaperManager.getInstance(G.context).clear(WallpaperManager.FLAG_LOCK);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 
