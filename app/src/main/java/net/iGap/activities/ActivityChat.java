@@ -488,7 +488,10 @@ public class ActivityChat extends ActivityEnhanced
                         HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(), RealmRoomMessage.getReplyMessageId(message), new HelperUploadFile.UpdateListener() {
                             @Override
                             public void OnProgress(int progress, FileUploadStructure struct) {
-                                insertItemAndUpdateAfterStartUpload(progress, struct);
+                                if (canUpdateAfterDownload) {
+                                    insertItemAndUpdateAfterStartUpload(progress, struct);
+                                }
+
                             }
 
                             @Override
@@ -3048,7 +3051,9 @@ public class ActivityChat extends ActivityEnhanced
         HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), StructMessageInfo.getReplyMessageId(messageInfo), new HelperUploadFile.UpdateListener() {
             @Override
             public void OnProgress(int progress, FileUploadStructure struct) {
-                insertItemAndUpdateAfterStartUpload(progress, struct);
+                if (canUpdateAfterDownload) {
+                    insertItemAndUpdateAfterStartUpload(progress, struct);
+                }
             }
 
             @Override
@@ -6267,7 +6272,9 @@ public class ActivityChat extends ActivityEnhanced
                         HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, structUploadVideo.replyMessageId, new HelperUploadFile.UpdateListener() {
                             @Override
                             public void OnProgress(int progress, FileUploadStructure struct) {
-                                insertItemAndUpdateAfterStartUpload(progress, struct);
+                                if (canUpdateAfterDownload) {
+                                    insertItemAndUpdateAfterStartUpload(progress, struct);
+                                }
                             }
 
                             @Override
@@ -6573,7 +6580,9 @@ public class ActivityChat extends ActivityEnhanced
                         HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), StructMessageInfo.getReplyMessageId(finalMessageInfo), new HelperUploadFile.UpdateListener() {
                             @Override
                             public void OnProgress(int progress, FileUploadStructure struct) {
-                                insertItemAndUpdateAfterStartUpload(progress, struct);
+                                {
+                                    insertItemAndUpdateAfterStartUpload(progress, struct);
+                                }
                             }
 
                             @Override
@@ -6622,7 +6631,9 @@ public class ActivityChat extends ActivityEnhanced
                 HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), StructMessageInfo.getReplyMessageId(finalMessageInfo), new HelperUploadFile.UpdateListener() {
                     @Override
                     public void OnProgress(int progress, FileUploadStructure struct) {
-                        insertItemAndUpdateAfterStartUpload(progress, struct);
+                        if (canUpdateAfterDownload) {
+                            insertItemAndUpdateAfterStartUpload(progress, struct);
+                        }
                     }
 
                     @Override
