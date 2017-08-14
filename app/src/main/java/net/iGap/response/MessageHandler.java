@@ -37,7 +37,7 @@ public abstract class MessageHandler {
     @CallSuper
     public void handler() throws NullPointerException {
         if (BuildConfig.DEBUG) {
-            Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + message);
+            Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + G.lookupMap.get(actionId) + " || " + message);
         }
         latestResponse = System.currentTimeMillis();
     }
@@ -55,9 +55,9 @@ public abstract class MessageHandler {
             }
             WebSocketClient.reconnect(true);
         }
-        if (BuildConfig.DEBUG) {
-            Log.i("MSGT", "MessageHandler timeOut : " + actionId + " || " + message);
-        }
+        //if (BuildConfig.DEBUG) {
+        //    Log.i("MSGT", "MessageHandler timeOut : " + actionId + " || " + message);
+        //}
         error();
     }
 
@@ -71,7 +71,7 @@ public abstract class MessageHandler {
         HelperError.showSnackMessage(HelperError.getErrorFromCode(majorCode, minorCode));
 
         if (BuildConfig.DEBUG) {
-            Log.i("MSGE", "MessageHandler error : " + actionId + " || " + message);
+            Log.i("MSGE", "MessageHandler error : " + actionId + " || " + G.lookupMap.get(actionId) + " || " + message);
         }
     }
 }

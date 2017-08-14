@@ -178,7 +178,9 @@ public class RealmRoom extends RealmObject {
                  * update user info for detect current status(online,offline,...)
                  * and also update another info
                  */
-                realmRoom.setAvatar(RealmRegisteredInfo.putOrUpdate(room.getChatRoomExtra().getPeer()).getLastAvatar());
+
+                RealmRegisteredInfo.putOrUpdate(room.getChatRoomExtra().getPeer());
+                realmRoom.setAvatar(RealmAvatar.put(room.getChatRoomExtra().getPeer().getId(), room.getChatRoomExtra().getPeer().getAvatar(), true));
                 break;
             case GROUP:
                 realmRoom.setType(RoomType.GROUP);

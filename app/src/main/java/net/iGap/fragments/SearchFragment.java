@@ -37,6 +37,7 @@ import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -45,6 +46,7 @@ import net.iGap.adapter.items.SearchItemHeader;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
@@ -68,6 +70,7 @@ public class SearchFragment extends Fragment {
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
     private FragmentActivity mActivity;
+    public static HashMap<Long, CircleImageView> hashMapAvatarSearchFragment = new HashMap<>();
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -252,6 +255,11 @@ public class SearchFragment extends Fragment {
             item.name = realmRoom.getTitle();
             item.time = realmRoom.getUpdatedTime();
             item.id = realmRoom.getId();
+            if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
+                item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
+            } else {
+                item.idDetectAvatar = realmRoom.getId();
+            }
             item.type = SearchType.room;
             item.initials = realmRoom.getInitials();
             item.color = realmRoom.getColor();
@@ -285,6 +293,7 @@ public class SearchFragment extends Fragment {
                 item.time = contact.getLast_seen();
                 item.comment = str;
                 item.id = contact.getId();
+                item.idDetectAvatar = contact.getId();
                 item.type = SearchType.contact;
                 item.initials = contact.getInitials();
                 item.color = contact.getColor();
@@ -306,7 +315,6 @@ public class SearchFragment extends Fragment {
 
     private void fillMessages(String text) {
 
-        //TODO [Saeed Mozaffari] [2016-10-18 10:19 AM] - now load avatar just from local . shayad avatar download nashode bashe. inja download nemikonim faghat agar vojud dashte bashe neshun midim
         int size = list.size();
         Realm realm = Realm.getDefaultInstance();
 
@@ -329,6 +337,11 @@ public class SearchFragment extends Fragment {
                     item.color = realmRoom.getColor();
                     item.roomType = realmRoom.getType();
                     item.avatar = realmRoom.getAvatar();
+                    if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
+                        item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
+                    } else {
+                        item.idDetectAvatar = realmRoom.getId();
+                    }
                     list.add(item);
                 }
             }
@@ -414,6 +427,7 @@ public class SearchFragment extends Fragment {
         public String color;
         public long time = 0;
         public long id = 0;
+        public long idDetectAvatar = 0; // fill roomId for rooms and userId for contacts
         public long messageId = 0;
         public RealmAvatar avatar;
         public ProtoGlobal.Room.Type roomType;
