@@ -3283,7 +3283,19 @@ public class ActivityChat extends ActivityEnhanced
 
                                     if (!new File(_path).exists()) {
 
-                                        HelperDownloadFile.startDownload(nextItem.mMessage.messageID, _token, _cashid, _name, _size, selector, _path, 0, null);
+                                        HelperDownloadFile.startDownload(nextItem.mMessage.messageID, _token, _cashid, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                                            @Override
+                                            public void OnProgress(String path, int progress) {
+                                                if (progress == 100) {
+                                                    MusicPlayer.downloadNewItem = true;
+                                                }
+                                            }
+
+                                            @Override
+                                            public void OnError(String token) {
+
+                                            }
+                                        });
                                         MusicPlayer.playNextMusic = true;
                                         mAdapter.notifyItemChanged(k);
                                     }

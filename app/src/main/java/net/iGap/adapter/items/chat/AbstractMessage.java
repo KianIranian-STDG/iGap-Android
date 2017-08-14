@@ -53,6 +53,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
@@ -1447,7 +1448,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Long size = attachment.getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-        ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
+        final ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
 
         final String _path = AndroidUtils.getFilePathWithCashId(attachment.getCacheId(), name, messageType);
 
@@ -1459,6 +1460,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             HelperDownloadFile.startDownload(mMessage.messageID, token, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progress) {
+
+                    if (progress == 100) {
+                        if (messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT || messageType == ProtoGlobal.RoomMessageType.VOICE) {
+                            if (mMessage.roomId == MusicPlayer.roomId) {
+                                MusicPlayer.downloadNewItem = true;
+                            }
+                        }
+                    }
 
                     if (ActivityChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
