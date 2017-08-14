@@ -166,7 +166,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private final int ZOOM_LEVEL_MIN = 13;
     private final int ZOOM_LEVEL_NORMAL = 16;
     private final int ZOOM_LEVEL_MAX = 19;
-    private final int BOUND_LIMIT_METERS = 10000;
+    private final int BOUND_LIMIT_METERS = 5000;
     private int lastSpecialRequestsCursorPosition = 0;
 
     private long latestUpdateTime = 0;
