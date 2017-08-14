@@ -30,6 +30,7 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.RemoteControlClient;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.net.Uri;
@@ -122,7 +123,7 @@ public class MusicPlayer extends Service {
     public static String STOPFOREGROUND_ACTION = "STOPFOREGROUND_ACTION";
     private static HeadsetPluginReciver headsetPluginReciver;
 
-    //  private static RemoteControlClient remoteControlClient;
+    private static RemoteControlClient remoteControlClient;
     private static AudioManager audioManager;
     private static ComponentName remoteComponentName;
 
@@ -1259,25 +1260,56 @@ public class MusicPlayer extends Service {
                 }
             } else {
 
-                remoteComponentName = new ComponentName(G.context, MediaBottomReciver.class.getName());
-
                 try {
-                    //if (remoteControlClient == null) {
+                    remoteComponentName = new ComponentName(G.context, MediaBottomReciver.class.getName());
                     audioManager.registerMediaButtonEventReceiver(remoteComponentName);
-                    //
-                    //    Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-                    //    mediaButtonIntent.setComponent(remoteComponentName);
-                    //    PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(G.context, 50, mediaButtonIntent, 0);
-                    //    remoteControlClient = new RemoteControlClient(mediaPendingIntent);
-                    //    audioManager.registerRemoteControlClient(remoteControlClient);
-                    //}
-                    //remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY | RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
-                    //    RemoteControlClient.FLAG_KEY_MEDIA_STOP | RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS | RemoteControlClient.FLAG_KEY_MEDIA_NEXT);
-                    //
                 } catch (Exception e) {
                     HelperLog.setErrorLog(" music plyer   registerMediaBottom    " + e.toString());
                 }
             }
+
+            setMediaControl();
+
+
+        }
+    }
+
+    private static void setMediaControl() {
+
+        if (remoteComponentName != null) {
+            remoteComponentName = new ComponentName(G.context, MediaBottomReciver.class.getName());
+        }
+
+        try {
+
+            if (remoteControlClient == null) {
+
+                Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+                mediaButtonIntent.setComponent(remoteComponentName);
+                PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(G.context, 55, mediaButtonIntent, 0);
+                remoteControlClient = new RemoteControlClient(mediaPendingIntent);
+                audioManager.registerRemoteControlClient(remoteControlClient);
+            }
+            remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY
+                | RemoteControlClient.FLAG_KEY_MEDIA_PAUSE
+                | RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE
+                | RemoteControlClient.FLAG_KEY_MEDIA_STOP
+                | RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS
+                | RemoteControlClient.FLAG_KEY_MEDIA_NEXT);
+
+            RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
+            metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, musicName);
+            metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, musicInfoTitle);
+            if (mediaThumpnail != null) {
+                try {
+                    metadataEditor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, mediaThumpnail);
+                } catch (Throwable e) {
+
+                }
+            }
+            metadataEditor.apply();
+        } catch (Exception e) {
+            HelperLog.setErrorLog(" music plyer   setMediaControl    " + e.toString());
         }
     }
 
@@ -1287,13 +1319,14 @@ public class MusicPlayer extends Service {
 
         try {
 
-            //if (remoteControlClient != null) {
-            //    //RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
-            //    //metadataEditor.clear();
-            //    //metadataEditor.apply();
-            //    audioManager.unregisterRemoteControlClient(remoteControlClient);
+            if (remoteControlClient != null) {
+                RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
+                metadataEditor.clear();
+                metadataEditor.apply();
+                audioManager.unregisterRemoteControlClient(remoteControlClient);
+            }
+
             audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
-            //}
 
         } catch (Exception e) {
             Log.e("ddddd", "music plyer  onDestroy    " + e.toString());

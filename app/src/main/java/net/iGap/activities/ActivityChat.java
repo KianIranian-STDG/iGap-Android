@@ -547,6 +547,8 @@ public class ActivityChat extends ActivityEnhanced
                 MusicPlayer.setMusicPlayer(mediaLayout);
                 if (MusicPlayer.mp != null) {
                     MusicPlayer.initLayoutTripMusic(mediaLayout);
+                } else {
+                    mediaLayout.setVisibility(View.GONE);
                 }
 
                 if (needUpdateView) {
@@ -834,6 +836,7 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_CANCELED) {
             HelperSetAction.sendCancel(messageId);
 

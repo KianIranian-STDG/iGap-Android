@@ -1887,7 +1887,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
+        } else {
+            mediaLayout.setVisibility(View.GONE);
         }
+
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponse(this);

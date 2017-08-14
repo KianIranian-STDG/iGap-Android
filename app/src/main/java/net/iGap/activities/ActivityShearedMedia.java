@@ -156,6 +156,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         if (MusicPlayer.mp != null) {
             MusicPlayer.initLayoutTripMusic(mediaLayout);
+        } else {
+            mediaLayout.setVisibility(View.GONE);
         }
 
         setListener();
