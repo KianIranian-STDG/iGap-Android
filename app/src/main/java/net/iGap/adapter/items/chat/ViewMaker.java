@@ -1118,7 +1118,7 @@ public class ViewMaker {
         thumbnailParams.gravity = CENTER;
         imgThumbnail.setBackgroundColor(Color.TRANSPARENT);
         imgThumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imgThumbnail.setImageResource(R.drawable.file_icon);
+        AppUtils.setImageDrawable(imgThumbnail, R.drawable.file_icon);
         imgThumbnail.setLayoutParams(thumbnailParams);
 
         LinearLayout linearLayout_780 = new LinearLayout(G.context);
