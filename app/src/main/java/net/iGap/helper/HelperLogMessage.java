@@ -61,33 +61,24 @@ public class HelperLogMessage {
         }
 
         Realm realm = Realm.getDefaultInstance();
-
         try {
-
-            final RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, item.messageID).findFirst();
-
-            if (roomMessage != null) {
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, item.messageID).findFirst();
+                    if (roomMessage != null) {
                         String LogText = HelperLogMessage.logMessage(item.roomId, item.author, item.messageLog, item.messageID);
-
                         roomMessage.setLogMessage(LogText);
-
                         G.logMessageUpdatList.remove(item.updateID);
-
                         if (ActivityChat.iUpdateLogItem != null) {
                             ActivityChat.iUpdateLogItem.onUpdate(LogText, item.messageID);
                         }
                     }
-                });
-            }
+                }
+            });
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
         realm.close();
     }
 
@@ -207,19 +198,7 @@ public class HelperLogMessage {
 
         englishResult = "\u200E" + authorName + " " + logMessage + " " + targetName;
 
-        linkInfoEnglish = englishResult.indexOf(authorName)
-            + "@"
-            + authorName.length()
-            + "@"
-            + updateID
-            + "@"
-            + author.hasUser()
-            + "@"
-            + englishResult.lastIndexOf(targetName)
-            + "@"
-            + targetName.length()
-            + "@"
-            + messageLog.getTargetUser().getId();
+        linkInfoEnglish = englishResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser() + "@" + englishResult.lastIndexOf(targetName) + "@" + targetName.length() + "@" + messageLog.getTargetUser().getId();
 
         switch (messageLog.getType()) {
             case USER_JOINED:
@@ -248,36 +227,12 @@ public class HelperLogMessage {
                 break;
             case MEMBER_ADDED:
                 persianResult = "\u200F" + targetName + " توسط " + authorName + " " + logMessage;
-                linlInfoPersian = persianResult.lastIndexOf(authorName)
-                    + "@"
-                    + authorName.length()
-                    + "@"
-                    + updateID
-                    + "@"
-                    + author.hasUser()
-                    + "@"
-                    + persianResult.indexOf(targetName)
-                    + "@"
-                    + targetName.length()
-                    + "@"
-                    + messageLog.getTargetUser().getId();
+                linlInfoPersian = persianResult.lastIndexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser() + "@" + persianResult.indexOf(targetName) + "@" + targetName.length() + "@" + messageLog.getTargetUser().getId();
 
                 break;
             case MEMBER_KICKED:
                 persianResult = "\u200F" + targetName + " توسط " + authorName + " " + logMessage;
-                linlInfoPersian = persianResult.lastIndexOf(authorName)
-                    + "@"
-                    + authorName.length()
-                    + "@"
-                    + updateID
-                    + "@"
-                    + author.hasUser()
-                    + "@"
-                    + persianResult.indexOf(targetName)
-                    + "@"
-                    + targetName.length()
-                    + "@"
-                    + messageLog.getTargetUser().getId();
+                linlInfoPersian = persianResult.lastIndexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser() + "@" + persianResult.indexOf(targetName) + "@" + targetName.length() + "@" + messageLog.getTargetUser().getId();
 
                 break;
             case MEMBER_LEFT:
