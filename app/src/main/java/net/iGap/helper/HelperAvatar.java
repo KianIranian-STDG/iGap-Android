@@ -28,7 +28,6 @@ import net.iGap.interfaces.OnDownload;
 import net.iGap.interfaces.OnFileDownloaded;
 import net.iGap.interfaces.OnUserInfoForAvatar;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -75,7 +74,6 @@ public class HelperAvatar {
                 if (realmAvatar == null) {
                     realmAvatar = realm.createObject(RealmAvatar.class, avatar.getId());
                 }
-                realmAvatar.setUid(SUID.id().get());
                 realmAvatar.setOwnerId(ownerId);
                 realmAvatar.setFile(RealmAttachment.build(avatar.getFile(), AttachmentFor.AVATAR, null));
 
@@ -304,7 +302,7 @@ public class HelperAvatar {
                 realmRegisteredInfo.setMutual(registeredUser.getMutual());
                 realmRegisteredInfo.setCacheId(registeredUser.getCacheId());
 
-                RealmAvatar.put(registeredUser.getId(), registeredUser.getAvatar(), true);
+                RealmAvatar.putAndGet(realm, registeredUser.getId(), registeredUser.getAvatar());
             }
         });
     }

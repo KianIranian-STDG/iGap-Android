@@ -247,7 +247,6 @@ public final class StartupActions {
         //    }
         //}).start();
 
-        //TODO [Saeed Mozaffari] [2017-04-22 12:07 PM] - check this values and if don't need clear that
         IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");
         IMAGE_NEW_CHANEL = new File(G.DIR_IMAGE_USER, "image_new_chanel.jpg");
         imageFile = new File(DIR_IMAGE_USER, "image_user");

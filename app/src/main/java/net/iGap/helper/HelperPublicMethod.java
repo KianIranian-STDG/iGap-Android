@@ -109,7 +109,7 @@ public class HelperPublicMethod {
                                         realmRegisteredInfo.setDoNotshowSpamBar(false);
                                     }
 
-                                    RealmAvatar.put(user.getId(), user.getAvatar(), true);
+                                    RealmAvatar.putAndGet(realm, user.getId(), user.getAvatar());
                                     realmRegisteredInfo.setUsername(user.getUsername());
                                     realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
                                     realmRegisteredInfo.setFirstName(user.getFirstName());
