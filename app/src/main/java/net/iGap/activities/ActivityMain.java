@@ -108,6 +108,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.EmojiTextViewE;
+import net.iGap.module.FileUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
@@ -219,13 +220,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void deleteContentFolderChatBackground() {
 
         // delete  content of folder chat background in the first registeration
-        File root = new File(G.DIR_CHAT_BACKGROUND);
-        File[] Files = root.listFiles();
-        if (Files != null) {
-            for (int j = 0; j < Files.length; j++) {
-                Files[j].delete();
-            }
-        }
+
+        FileUtils.deleteRecursive(new File(G.DIR_CHAT_BACKGROUND));
+
     }
 
 

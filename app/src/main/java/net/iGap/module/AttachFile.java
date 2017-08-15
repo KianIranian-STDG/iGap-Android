@@ -502,9 +502,7 @@ public class AttachFile {
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("*/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                Intent intent = new Intent(context, ActivityExplorer.class);
                 ((Activity) context).startActivityForResult(intent, request_code_pic_file);
                 if (G.onHelperSetAction != null) {
                     G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);

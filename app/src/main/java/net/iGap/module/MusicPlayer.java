@@ -552,6 +552,7 @@ public class MusicPlayer extends Service {
         }
 
         clearWallpaperLockScrean();
+        removeMediaControl();
     }
 
     public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
@@ -654,7 +655,7 @@ public class MusicPlayer extends Service {
                 }
             });
 
-            mp.prepare();
+            mp.prepareAsync();
         } catch (Exception e) {
         }
 
@@ -979,12 +980,14 @@ public class MusicPlayer extends Service {
                 if (data != null) {
                     mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
                     setWallpaperLockScreen(mediaThumpnail);
+                    setMediaControl();
 
                     int size = (int) G.context.getResources().getDimension(R.dimen.dp48);
                     remoteViews.setImageViewBitmap(R.id.mln_img_picture_music, Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
                 } else {
                     remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
                     clearWallpaperLockScrean();
+                    removeMediaControl();
                 }
             } catch (Exception e) {
 
@@ -1273,7 +1276,7 @@ public class MusicPlayer extends Service {
                 }
             }
 
-            setMediaControl();
+
         }
     }
 
@@ -1281,7 +1284,7 @@ public class MusicPlayer extends Service {
 
         if (remoteComponentName != null) {
             remoteComponentName = new ComponentName(G.context, MediaBottomReciver.class.getName());
-        }
+            }
 
         try {
 
@@ -1292,7 +1295,7 @@ public class MusicPlayer extends Service {
                 PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(G.context, 55, mediaButtonIntent, 0);
                 remoteControlClient = new RemoteControlClient(mediaPendingIntent);
                 audioManager.registerRemoteControlClient(remoteControlClient);
-            }
+                }
             remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY
                 | RemoteControlClient.FLAG_KEY_MEDIA_PAUSE
                 | RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE
@@ -1303,16 +1306,32 @@ public class MusicPlayer extends Service {
             RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
             metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, musicName);
             metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, musicInfoTitle);
-            if (mediaThumpnail != null) {
-                try {
-                    metadataEditor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, mediaThumpnail);
-                } catch (Throwable e) {
 
-                }
+            try {
+                metadataEditor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, mediaThumpnail);
+            } catch (Throwable e) {
+
             }
+
             metadataEditor.apply();
         } catch (Exception e) {
             HelperLog.setErrorLog(" music plyer   setMediaControl    " + e.toString());
+            }
+    }
+
+    private static void removeMediaControl() {
+
+        try {
+            if (remoteControlClient != null) {
+                RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
+                metadataEditor.clear();
+                metadataEditor.apply();
+                audioManager.unregisterRemoteControlClient(remoteControlClient);
+
+                remoteControlClient = null;
+            }
+        } catch (Exception e) {
+
         }
     }
 
@@ -1321,15 +1340,10 @@ public class MusicPlayer extends Service {
         super.onDestroy();
 
         try {
-
-            if (remoteControlClient != null) {
-                RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
-                metadataEditor.clear();
-                metadataEditor.apply();
-                audioManager.unregisterRemoteControlClient(remoteControlClient);
+            if (remoteComponentName != null) {
+                audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
             }
 
-            audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
         } catch (Exception e) {
             Log.e("ddddd", "music plyer  onDestroy    " + e.toString());
         }

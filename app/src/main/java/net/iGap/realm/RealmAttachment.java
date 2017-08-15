@@ -16,6 +16,7 @@ import io.realm.RealmAttachmentRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import java.io.File;
+import java.io.IOException;
 import net.iGap.G;
 import net.iGap.helper.HelperString;
 import net.iGap.module.AndroidUtils;
@@ -102,12 +103,15 @@ import org.parceler.Parcel;
 
             String _filePath = realmAttachment.getLocalFilePath();
 
+            String _Dir = "";
+
             if (_filePath != null && _filePath.length() > 0) {
                 if (_filePath.contains(G.DIR_APP)) {
                     String _defaultFilePAth = "";
                     switch (attachmentFor) {
                         case MESSAGE_ATTACHMENT:
                             _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), messageType);
+                            _Dir = AndroidUtils.suitableAppFilePath(messageType);
                             break;
                         case AVATAR:
                             _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
@@ -115,6 +119,7 @@ import org.parceler.Parcel;
                             if (realmAttachment.getLocalThumbnailPath() == null) {
                                 realmAttachment.setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true));
                             }
+                            _Dir = G.DIR_IMAGE_USER;
 
                             break;
                     }
@@ -122,8 +127,25 @@ import org.parceler.Parcel;
                     if (!_filePath.equals(_defaultFilePAth)) {
                         File _File1 = new File(_filePath);
                         if (_File1.exists()) {
-                            _File1.renameTo(new File(_defaultFilePAth));
-                            realmAttachment.setLocalFilePath(_defaultFilePAth);
+
+                            if (_filePath.contains(_Dir)) {
+                                _File1.renameTo(new File(_defaultFilePAth));
+                                realmAttachment.setLocalFilePath(_defaultFilePAth);
+                            } else {
+                                try {
+                                    AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
+                                    realmAttachment.setLocalFilePath(_defaultFilePAth);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+
+
+
+
+
+
                         }
                     }
                 }

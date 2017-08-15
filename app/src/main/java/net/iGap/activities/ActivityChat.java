@@ -536,6 +536,13 @@ public class ActivityChat extends ActivityEnhanced
     protected void onResume() {
         super.onResume();
 
+        if (ActivityShearedMedia.list != null && ActivityShearedMedia.list.size() > 0) {
+
+            deleteSelectedMessageFromAdapter(ActivityShearedMedia.list);
+
+            ActivityShearedMedia.list.clear();
+        }
+
         canUpdateAfterDownload = true;
 
         G.handler.postDelayed(new Runnable() {
@@ -5902,44 +5909,59 @@ public class ActivityChat extends ActivityEnhanced
                                 if (messageID != null && messageID.mMessage != null && messageID.mMessage.messageID != null) {
                                     Long messageId = parseLong(messageID.mMessage.messageID);
                                     list.add(messageId);
-
-                                    // remove deleted message from adapter
-                                    mAdapter.removeMessage(messageId);
-                                    // remove tag from edtChat if the message has deleted
-                                    if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                        if (messageID.mMessage.messageID.equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                            edtChat.setTag(null);
-                                        }
-                                    }
                                 }
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
                             }
                         }
+
+                        deleteSelectedMessageFromAdapter(list);
+
+                        RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, chatType);
+
                     }
                 });
 
-                RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, chatType);
 
-                int size = mAdapter.getItemCount();
-                for (int i = 0; i < size; i++) {
-
-                    if (mAdapter.getItem(i) instanceof TimeItem) {
-                        if (i < size - 1) {
-                            if (mAdapter.getItem(i + 1) instanceof TimeItem) {
-                                mAdapter.remove(i);
-                            }
-                        } else {
-                            mAdapter.remove(i);
-                        }
-                    }
-                }
             }
         });
         txtNumberOfSelected = (TextView) findViewById(R.id.chl_txt_number_of_selected);
 
         if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
             initLayoutChannelFooter();
+        }
+    }
+
+    private void deleteSelectedMessageFromAdapter(ArrayList<Long> list) {
+
+        for (Long mId : list) {
+            try {
+
+                mAdapter.removeMessage(mId);
+
+                // remove tag from edtChat if the message has deleted
+                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                    if (mId.equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                        edtChat.setTag(null);
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("dddd", "activity chat    deleteSelectedMessageFromAdapter    " + e.toString());
+            }
+        }
+
+        int size = mAdapter.getItemCount();
+        for (int i = 0; i < size; i++) {
+
+            if (mAdapter.getItem(i) instanceof TimeItem) {
+                if (i < size - 1) {
+                    if (mAdapter.getItem(i + 1) instanceof TimeItem) {
+                        mAdapter.remove(i);
+                    }
+                } else {
+                    mAdapter.remove(i);
+                }
+            }
         }
     }
 

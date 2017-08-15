@@ -99,6 +99,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
     private boolean isSelectedMode = false;    // for determine user select some file
     private int numberOfSelected = 0;
     protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
+    public static ArrayList<Long> list = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private mAdapter adapter;
@@ -445,6 +446,11 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                 if (realmRoom != null) {
                     RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, realmRoom.getType());
                 }
+
+                for (Long Id : SelectedList) {
+                    list.add(Id);
+                }
+
 
                 switch (mFilter) {
                     case IMAGE:
