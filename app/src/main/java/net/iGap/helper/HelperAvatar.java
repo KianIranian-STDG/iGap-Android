@@ -47,6 +47,7 @@ public class HelperAvatar {
 
     private static HashMap<Long, ArrayList<OnAvatarGet>> onAvatarGetHashMap = new HashMap<>();
     private static HashMap<Long, Boolean> mRepeatList = new HashMap<>();
+    private static ArrayList<String> reDownloadFiles = new ArrayList<>();
 
     public enum AvatarType {
         USER, ROOM
@@ -533,8 +534,17 @@ public class HelperAvatar {
         }
 
         @Override
-        public void onError() {
-            //TODO [Saeed Mozaffari] [2016-12-13 9:28 AM] - do something on download error (( hint : if was timeout reDownload file))
+        public void onError(int major, String identity) {
+            if (major == 5 && identity != null) { //if is time out reDownload once
+                String[] identityParams = identity.split("\\*");
+                String token = identityParams[0];
+                if (!reDownloadFiles.contains(token)) {
+                    reDownloadFiles.add(token);
+                    ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
+                    long fileSize = Long.parseLong(identityParams[2]);
+                    new RequestFileDownload().download(token, 0, (int) fileSize, selector, identity);
+                }
+            }
         }
     }
 
