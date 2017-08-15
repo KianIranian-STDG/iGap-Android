@@ -43,7 +43,7 @@ public class RealmRoom extends RealmObject {
     private RealmRoomDraft draft;
     private long updatedTime;
     private String sharedMediaCount = "";
-    //TODO [Saeed Mozaffari] [2017-02-13 12:06 PM] - combine this two under fields in RealmAction
+    //if it was needed in the future we can combine this two under fields in RealmAction (actionStateUserId and actionState).
     private long actionStateUserId;
     private String actionState;
     private boolean isDeleted = false;

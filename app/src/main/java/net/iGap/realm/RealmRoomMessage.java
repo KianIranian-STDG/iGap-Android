@@ -71,7 +71,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
     private String authorHash;
     private boolean hasEmojiInText;
     private boolean showTime = false;
-    //TODO [Saeed Mozaffari] [2017-01-19 9:28 AM] - use RealmAuthor instead of author hash
+    //if it was needed in the future we can use RealmAuthor instead of author hash and also maybe authorRoomId
     private long authorRoomId;
     // for channel message should be exist in other rooms (forwarded message)
     private RealmChannelExtra channelExtra;
