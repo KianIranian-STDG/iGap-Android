@@ -3,9 +3,6 @@ package net.iGap.module;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import cat.ereza.customactivityoncrash.config.CaocConfig;
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -13,7 +10,6 @@ import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.emoji.Emoji;
 import com.vanniktech.emoji.emoji.EmojiCategory;
 import com.vanniktech.emoji.one.EmojiOneProvider;
-import io.fabric.sdk.android.Fabric;
 import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -23,13 +19,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
-import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
-import net.iGap.activities.ActivityCustomError;
-import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFillLookUpClass;
@@ -73,7 +66,6 @@ import static net.iGap.G.unSecureResponseActionId;
 import static net.iGap.G.userId;
 import static net.iGap.G.userTextSize;
 import static net.iGap.G.waitingActionIds;
-import static org.webrtc.ContextUtils.getApplicationContext;
 
 /**
  * all actions that need doing after open app
@@ -83,7 +75,6 @@ public final class StartupActions {
     public StartupActions() {
 
         initEmoji();
-        initFabric();
         initializeGlobalVariables();
         realmConfiguration();
         mainUserInfo();
@@ -130,16 +121,6 @@ public final class StartupActions {
                 }
 
                 EmojiManager.install(emojiProvider); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
-            }
-        }).start();
-    }
-
-    private void initFabric() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
-                CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
             }
         }).start();
     }

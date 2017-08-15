@@ -17,11 +17,15 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
 import android.view.LayoutInflater;
+import cat.ereza.customactivityoncrash.config.CaocConfig;
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vanniktech.emoji.EmojiProvider;
 import com.vanniktech.emoji.emoji.EmojiTree;
+import io.fabric.sdk.android.Fabric;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +33,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.spec.SecretKeySpec;
+import net.iGap.activities.ActivityCustomError;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperNotificationAndBadge;
@@ -239,7 +245,7 @@ public class G extends MultiDexApplication {
     public static boolean isChangeScrFg = false;
     public static boolean isUserStatusOnline = false;
     public static boolean isSecure = false;
-    public static boolean allowForConnect = true; // set allowForConnect to realm , if don't set client at least try for connect to server once and after that don't try again.
+    public static boolean allowForConnect = true; //set allowForConnect to realm , if don't set client try for connec
     public static boolean userLogin = false;
     public static boolean socketConnection = false;
     public static boolean canRunReceiver = false;
@@ -435,6 +441,16 @@ public class G extends MultiDexApplication {
         super.onCreate();
 
         G.firstTimeEnterToApp = true;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+                CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
+            }
+        }).start();
+
+
         context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
