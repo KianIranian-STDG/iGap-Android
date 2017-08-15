@@ -1275,12 +1275,12 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     @Override
     public void onStart() {
         super.onStart();
-        ActivityMain.isFragmentActive = true;
+        G.isFragmentMapActive = true;
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        ActivityMain.isFragmentActive = false;
+        G.isFragmentMapActive = false;
     }
 }

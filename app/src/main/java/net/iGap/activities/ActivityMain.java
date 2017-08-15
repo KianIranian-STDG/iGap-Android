@@ -166,7 +166,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     FloatingActionButton btnCreateNewChannel;
     private Realm mRealm;
     private boolean isNeedToRegister = false;
-    public static boolean isFragmentActive = false; // for check network
 
     private ViewPager mViewPager;
     private ArrayList<Fragment> pages = new ArrayList<Fragment>();

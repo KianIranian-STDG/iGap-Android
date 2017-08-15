@@ -435,6 +435,7 @@ public class G extends MultiDexApplication {
 
     public static EmojiProvider emojiProvider;
     public static EmojiTree emojiTree = new EmojiTree();
+    public static boolean isFragmentMapActive = false; // for check network
 
     @Override
     public void onCreate() {
