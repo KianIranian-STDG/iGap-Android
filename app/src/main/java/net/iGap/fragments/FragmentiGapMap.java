@@ -1271,4 +1271,16 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         return false;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ActivityMain.isFragmentActive = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ActivityMain.isFragmentActive = false;
+    }
 }

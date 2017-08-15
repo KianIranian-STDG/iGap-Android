@@ -52,7 +52,7 @@ public class HelperConnectionState {
             G.latestConnectionState = ConnectionState.UPDATING;
         }
 
-        if (G.currentActivity instanceof ActivityMain || G.currentActivity instanceof ActivityIntroduce || G.currentActivity instanceof ActivityRegister || G.currentActivity instanceof ActivityProfile || G.currentActivity instanceof ActivityManageSpace || connectionState == ConnectionState.IGAP || connectionState == ConnectionState.UPDATING) {
+        if ((G.currentActivity instanceof ActivityMain || G.currentActivity instanceof ActivityIntroduce || G.currentActivity instanceof ActivityRegister || G.currentActivity instanceof ActivityProfile || G.currentActivity instanceof ActivityManageSpace || connectionState == ConnectionState.IGAP || connectionState == ConnectionState.UPDATING) && !ActivityMain.isFragmentActive) {
 
             if (snack != null) {
                 if (snack.isShown()) {
