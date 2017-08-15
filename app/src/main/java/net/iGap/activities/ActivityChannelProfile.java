@@ -769,7 +769,7 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String copy;
-                        copy = txtChannelLink.getText().toString();
+                        copy = "iGap.net/" + txtChannelLink.getText().toString();
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
                         clipboard.setPrimaryClip(clip);
