@@ -275,6 +275,7 @@ import static java.lang.Long.parseLong;
 import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
+import static net.iGap.R.string.item;
 import static net.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
@@ -1635,11 +1636,7 @@ public class ActivityChat extends ActivityEnhanced
                     Double longitude = Double.parseDouble(split[1]);
 
                     FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
-                    getSupportFragmentManager().beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
-                        .commit();
+                    getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap).commit();
                 } catch (Exception e) {
 
                     HelperLog.setErrorLog("Activity Chat   complete   " + e.toString());
@@ -3716,18 +3713,15 @@ public class ActivityChat extends ActivityEnhanced
                                             public void run() {
                                                 if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
 
-                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download,
-                                                        R.string.file_save_to_download_folder);
+                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
                                                 } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
                                                     HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
                                                 } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
 
                                                     if (message.messageType.toString().contains("VIDEO")) {
-                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video,
-                                                            R.string.file_save_to_video_folder);
+                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
                                                     } else if (message.messageType.toString().contains("GIF")) {
-                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif,
-                                                            R.string.file_save_to_picture_folder);
+                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
                                                     } else {
                                                         HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
                                                     }
@@ -5421,7 +5415,7 @@ public class ActivityChat extends ActivityEnhanced
                     //send.setText(R.mipmap.send2);
                     send.setText(getResources().getString(R.string.md_send_button));
                     isCheckBottomSheet = true;
-                    txtCountItem.setText("" + listPathString.size() + " " + getResources().getString(R.string.item));
+                    txtCountItem.setText("" + listPathString.size() + " " + getResources().getString(item));
                 } else {
                     //send.setImageResource(R.mipmap.ic_close);
                     send.setText(getResources().getString(R.string.igap_chevron_double_down));
@@ -7135,6 +7129,8 @@ public class ActivityChat extends ActivityEnhanced
     private long reachMessageIdDown; // messageId that will be checked after getHistory for detect reached to that or no
     private long startFutureMessageIdUp; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
     private long startFutureMessageIdDown; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
+    private long progressIdentifierUp; // store identifier for Up progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
+    private long progressIdentifierDown; // store identifier for Down progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
     private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
@@ -7290,10 +7286,7 @@ public class ActivityChat extends ActivityEnhanced
             }
 
             getOnlineMessage(oldMessageId, direction);
-
         }
-
-
 
         if (direction == UP) {
             switchAddItem(messageInfos, true);
@@ -7683,7 +7676,6 @@ public class ActivityChat extends ActivityEnhanced
      * @param direction define direction for show progress in UP or DOWN
      */
     private void progressItem(final ProgressState progressState, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        //TODO [Saeed Mozaffari] [2017-05-07 11:16 AM] - don't need to check ten latest item for remove progress view
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -7693,14 +7685,15 @@ public class ActivityChat extends ActivityEnhanced
                 }
                 if (progressState == SHOW) {
                     if ((mAdapter.getAdapterItemCount() > 0) && !(mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
-                        //final int index = progressIndex;
                         recyclerView.post(new Runnable() {
                             @Override
                             public void run() {
                                 if (direction == DOWN) {
-                                    mAdapter.add(new ProgressWaiting(getRealmChat(), ActivityChat.this).withIdentifier(SUID.id().get()));
+                                    progressIdentifierDown = SUID.id().get();
+                                    mAdapter.add(new ProgressWaiting(getRealmChat(), ActivityChat.this).withIdentifier(progressIdentifierDown));
                                 } else {
-                                    mAdapter.add(0, new ProgressWaiting(getRealmChat(), ActivityChat.this).withIdentifier(SUID.id().get()));
+                                    progressIdentifierUp = SUID.id().get();
+                                    mAdapter.add(0, new ProgressWaiting(getRealmChat(), ActivityChat.this).withIdentifier(progressIdentifierUp));
                                 }
                             }
                         });
@@ -7711,60 +7704,33 @@ public class ActivityChat extends ActivityEnhanced
                      * for detect progress so client need delay for detect this instance
                      */
                     if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
-                        //mAdapter.remove(progressIndex);
-                        if (direction == DOWN) {
-                            int count = 0;
-                            if (mAdapter.getItemCount() > 10) {
-                                count = mAdapter.getItemCount() - 10;
-                            }
-                            for (int i = (mAdapter.getItemCount() - 1); i >= count; i--) {
-                                if ((mAdapter.getAdapterItem(i) instanceof ProgressWaiting)) {
-                                    mAdapter.remove(i);
-                                    break;
-                                }
-                            }
-                        } else {
-                            int count = 10;
-                            if (mAdapter.getItemCount() < 10) {
-                                count = mAdapter.getItemCount();
-                            }
-                            for (int i = 0; i < count; i++) {
-                                if ((mAdapter.getAdapterItem(i) instanceof ProgressWaiting)) {
-                                    mAdapter.remove(i);
-                                    break;
-                                }
-                            }
-                        }
+                        mAdapter.remove(progressIndex);
                     } else {
-                        //final int index = progressIndex;
-                        G.handler.postDelayed(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (direction == DOWN) {
-                                    int count = 0;
-                                    if (mAdapter.getItemCount() > 10) {
-                                        count = mAdapter.getItemCount() - 10;
-                                    }
-                                    for (int i = (mAdapter.getItemCount() - 1); i >= count; i--) {
-                                        if ((mAdapter.getAdapterItem(i) instanceof ProgressWaiting)) {
+                                /**
+                                 * if not detected progress item for remove use from item identifier and remove progress item
+                                 */
+                                if (direction == DOWN && progressIdentifierDown != 0) {
+                                    for (int i = (mAdapter.getItemCount() - 1); i >= 0; i--) {
+                                        if (mAdapter.getItem(i).getIdentifier() == progressIdentifierDown) {
                                             mAdapter.remove(i);
+                                            progressIdentifierDown = 0;
                                             break;
                                         }
                                     }
-                                } else {
-                                    int count = 10;
-                                    if (mAdapter.getItemCount() < 10) {
-                                        count = mAdapter.getItemCount();
-                                    }
-                                    for (int i = 0; i < count; i++) {
-                                        if ((mAdapter.getAdapterItem(i) instanceof ProgressWaiting)) {
+                                } else if (direction == UP && progressIdentifierUp != 0) {
+                                    for (int i = 0; i < (mAdapter.getItemCount() - 1); i++) {
+                                        if (mAdapter.getItem(i).getIdentifier() == progressIdentifierUp) {
                                             mAdapter.remove(i);
+                                            progressIdentifierUp = 0;
                                             break;
                                         }
                                     }
                                 }
                             }
-                        }, 500);
+                        });
                     }
                 }
             }

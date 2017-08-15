@@ -40,7 +40,6 @@ public class RealmAvatar extends RealmObject {
     public static RealmAvatar putAndGet(Realm realm, final long ownerId, final ProtoGlobal.Avatar input) {
         if (!input.hasFile()) {
             deleteAllAvatars(ownerId, realm);
-            realm.close();
             return null;
         }
 
