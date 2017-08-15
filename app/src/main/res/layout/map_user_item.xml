@@ -44,20 +44,17 @@
 
           <net.iGap.module.CustomTextViewMedium
               android:id="@+id/txt_user_name_map"
-              android:layout_width="wrap_content"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="wrap_content"
               android:gravity="left"
               android:singleLine="true"
-              android:text="NearBy User"
+              android:text="NearBy User "
               android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
               android:textColor="@color/black90"
               android:textSize="@dimen/dp16"
               />
-          <View
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              />
+
 
           <net.iGap.module.CustomTextViewMedium
               android:id="@+id/txt_user_distance_map"
