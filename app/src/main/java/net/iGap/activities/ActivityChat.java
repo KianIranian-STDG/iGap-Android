@@ -1659,6 +1659,13 @@ public class ActivityChat extends ActivityEnhanced
                     public void run() {
                         mAdapter.clear();
                         recyclerView.removeAllViews();
+
+                        /**
+                         * remove tag from edtChat if the message has deleted
+                         */
+                        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                            edtChat.setTag(null);
+                        }
                     }
                 });
             }
@@ -2645,40 +2652,15 @@ public class ActivityChat extends ActivityEnhanced
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                boolean clearMessage = false;
-                //+Realm realm = Realm.getDefaultInstance();
-                RealmResults<RealmRoomMessage> realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-                for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-                    if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
-                        clearMessage = true;
-                    }
+                mAdapter.clear();
+                recyclerView.removeAllViews();
 
-                    if (clearMessage) {
-                        final long messageId = realmRoomMessage.getMessageId();
-                        getRealmChat().executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                realmRoomMessage.deleteFromRealm();
-                            }
-                        });
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // remove deleted message from adapter
-                                mAdapter.removeMessage(messageId);
-
-                                // remove tag from edtChat if the message has deleted
-                                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                    if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                        edtChat.setTag(null);
-                                    }
-                                }
-                            }
-                        });
-                    }
+                /**
+                 * remove tag from edtChat if the message has deleted
+                 */
+                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                    edtChat.setTag(null);
                 }
-                //realm.close();
             }
         });
     }

@@ -816,30 +816,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 replayMessage.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 replyFrom.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                //replayView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                //    @Override
-                //    public void onGlobalLayout() {
-                //        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                //            replayView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                //        } else {
-                //            replayView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                //        }
-                //
-                //        if (replayView.getWidth() < mContainer.getWidth()) {
-                //            replayView.setMinimumWidth(mContainer.getWidth());
-                //
-                //            ((LinearLayout) replayMessage.getParent()).setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-                //
-                //
-                //        }
-                //
-                //        replayMessage.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                //        replyFrom.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                //
-                //    }
-                //});
-
             }
         }
     }
@@ -872,22 +848,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
             });
-
-            //final View finalForwardView = forwardView;
-            //forwardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            //    @Override
-            //    public void onGlobalLayout() {
-            //        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            //            finalForwardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            //        } else {
-            //            finalForwardView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-            //        }
-            //
-            //        if (finalForwardView.getWidth() < mContainer.getWidth()) {
-            //            finalForwardView.setMinimumWidth(mContainer.getWidth());
-            //        }
-            //    }
-            //});
 
             TextView txtPrefixForwardFrom = (TextView) forwardView.findViewById(R.id.cslr_txt_prefix_forward);
             txtPrefixForwardFrom.setTypeface(G.typeface_IRANSansMobile);
