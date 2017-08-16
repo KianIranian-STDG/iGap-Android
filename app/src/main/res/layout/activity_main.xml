@@ -101,6 +101,18 @@
                   android:textColor="@color/whit_background"
                   />
 
+
+              <net.iGap.module.MaterialDesignTextView
+                  android:id="@+id/am_btn_location"
+                  android:layout_width="@dimen/dp52"
+                  android:visibility="gone"
+                  android:layout_height="match_parent"
+                  android:gravity="center"
+                  android:text="@string/md_nearby"
+                  android:textAppearance="@style/TextIconAppearance_toolbar"
+                  android:textColor="@color/whit_background"
+                  />
+
               <net.iGap.libs.rippleeffect.RippleView
                   android:id="@+id/amr_ripple_search"
                   android:layout_width="wrap_content"

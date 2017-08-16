@@ -38,6 +38,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -94,6 +96,7 @@ import net.iGap.interfaces.OnConnectionChangeState;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
+import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnUpdateAvatar;
@@ -152,6 +155,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static int currentMainRoomListPosition = 0;
     private int pageDrawer = 0;
     private ProgressBar contentLoading;
+    private static TextView iconLocation;
 
     public MainInterface mainActionApp;
     public MainInterface mainActionChat;
@@ -1540,6 +1544,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
 
+        iconLocation = (TextView) findViewById(R.id.am_btn_location);
+
+        iconLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMapFragment();
+            }
+        });
+
+        G.onMapRegisterState = new OnMapRegisterState() {
+            @Override
+            public void onState(final boolean state) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (state) {
+                            startAnimationLocation();
+                        } else {
+                            stopAnimationLocation();
+                        }
+                    }
+                });
+            }
+        };
 
         RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
         rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -1560,6 +1588,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             titleTypeface = G.typeface_neuropolitical;
         } else {
             titleTypeface = G.typeface_IRANSansMobile;
+        }
+    }
+
+    public static void stopAnimationLocation() {
+        if (iconLocation != null) {
+            iconLocation.clearAnimation();
+            iconLocation.setVisibility(View.GONE);
+        }
+    }
+
+    public static void startAnimationLocation() {
+        if (iconLocation != null) {
+            iconLocation.setVisibility(View.VISIBLE);
+            Animation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(500); //You can manage the time
+            anim.setStartOffset(20);
+            anim.setRepeatMode(Animation.REVERSE);
+            anim.setRepeatCount(Animation.INFINITE);
+            iconLocation.startAnimation(anim);
         }
     }
 

@@ -1200,6 +1200,11 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         G.handler.post(new Runnable() {
             @Override
             public void run() {
+                if (state) {
+                    ActivityMain.startAnimationLocation();
+                } else {
+                    ActivityMain.stopAnimationLocation();
+                }
                 statusCheck();
                 if (btnMapChangeRegistration != null) {
                     btnMapChangeRegistration.setChecked(state);

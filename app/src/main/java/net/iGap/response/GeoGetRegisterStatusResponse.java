@@ -38,6 +38,11 @@ public class GeoGetRegisterStatusResponse extends MessageHandler {
 
         final ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse.Builder builder = (ProtoGeoGetRegisterStatus.GeoGetRegisterStatusResponse.Builder) message;
         FragmentiGapMap.mapRegistrationStatus = builder.getEnable();
+
+        if (G.onMapRegisterState != null) {
+            G.onMapRegisterState.onState(builder.getEnable());
+        }
+
         G.handler.post(new Runnable() {
             @Override
             public void run() {
