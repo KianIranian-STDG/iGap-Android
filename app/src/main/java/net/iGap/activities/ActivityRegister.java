@@ -177,6 +177,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
     private String unconfirmedEmailPattern;
     private boolean isConfirmedRecoveryEmail;
     private MaterialDialog dialogQrCode;
+    private boolean smsPermission = true;
 
     public enum Reason {
         SOCKET, TIME_OUT, INVALID_CODE
@@ -210,12 +211,13 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
             HelperPermision.getSmsPermision(ActivityRegister.this, new OnGetPermission() {
                 @Override
                 public void Allow() {
+                    smsPermission = true;
                     registerReceiver(smsReceiver, filter);
                 }
 
                 @Override
                 public void deny() {
-
+                    smsPermission = false;
                 }
             });
         } catch (IOException e) {
@@ -780,8 +782,10 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                             long time = 0;
                             if (BuildConfig.DEBUG) {
                                 time = 10 * DateUtils.SECOND_IN_MILLIS;
-                            } else {
+                            } else if (smsPermission) {
                                 time = Config.COUNTER_TIMER;
+                            } else {
+                                time = 5 * DateUtils.SECOND_IN_MILLIS;
                             }
 
                             int portrait_landscape = getResources().getConfiguration().orientation;

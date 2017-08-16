@@ -13,6 +13,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
@@ -147,20 +148,25 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
 
             holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
 
-            holder.arrow.setOnClickListener(new View.OnClickListener() {
+            holder.layoutMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    if (btnBack != null) btnBack.performClick();
+                    //for close FragmentMapUsers
+                    //if (btnBack != null){
+                    //    btnBack.performClick();
+                    //}
+
                     Intent intent = new Intent(G.currentActivity, ActivityContactsProfile.class);
                     intent.putExtra("peerId", item.getUserId());
                     intent.putExtra("enterFrom", "Others");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     G.currentActivity.startActivity(intent);
 
-                    if (G.onMapClose != null) {
-                        G.onMapClose.onClose();
-                    }
+                    //for close FragmentiGapMap
+                    //if (G.onMapClose != null) {
+                    //    G.onMapClose.onClose();
+                    //}
                 }
             });
 
@@ -209,6 +215,7 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
 
         class ViewHolder extends RecyclerView.ViewHolder {
 
+            public LinearLayout layoutMap;
             public CircleImageView avatar;
             public TextView username;
             public TextView comment;
@@ -218,6 +225,7 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
             public ViewHolder(View itemView) {
                 super(itemView);
 
+                layoutMap = (LinearLayout) itemView.findViewById(R.id.lyt_map_user);
                 avatar = (CircleImageView) itemView.findViewById(R.id.img_user_avatar_map);
                 username = (TextView) itemView.findViewById(R.id.txt_user_name_map);
                 comment = (TextView) itemView.findViewById(R.id.txt_user_comment_map);

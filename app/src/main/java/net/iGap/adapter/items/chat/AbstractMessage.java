@@ -335,8 +335,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-     /*    * show vote layout for channel otherwise hide layout
-         * also get message state for channel*/
+        /**
+         * show vote layout for channel otherwise hide layout also get message state for channel
+         */
 
         if (holder.itemView.findViewById(R.id.lyt_vote) != null) {
             holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.GONE);
@@ -660,7 +661,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        setTextcolor(imgTick, R.color.colorOldBlack);
+        setTextColor(imgTick, R.color.colorOldBlack);
 
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.LEFT;
 
@@ -676,7 +677,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
     }
 
-    private void setTextcolor(ImageView imageView, int color) {
+    private void setTextColor(ImageView imageView, int color) {
 
         try {
             imageView.setColorFilter(ContextCompat.getColor(G.context, color));
@@ -710,13 +711,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
         if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
-            setTextcolor(imgTick, R.color.iGapColor);
+            setTextColor(imgTick, R.color.iGapColor);
         } else if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
             // iconHearing.setVisibility(View.VISIBLE);
-            setTextcolor(imgTick, R.color.iGapColor);
+            setTextColor(imgTick, R.color.iGapColor);
             imgTick.setVisibility(View.VISIBLE);
         } else {
-            setTextcolor(imgTick, R.color.colorOldBlack);
+            setTextColor(imgTick, R.color.colorOldBlack);
         }
 
         (holder.itemView.findViewById(R.id.contentContainer)).setBackgroundResource(R.drawable.rectangle_send_round_color);
@@ -1476,7 +1477,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
 
-                    }
+                }
             });
 
             if (!_isDownloading) {
@@ -1522,18 +1523,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     public void OnProgress(final int progress, FileUploadStructure struct) {
 
                         G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-                                        progressBar.withProgress(progress);
+                            @Override
+                            public void run() {
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+                                    progressBar.withProgress(progress);
 
-                                        if (progress == 100) {
-                                            progressBar.performProgress();
-                                            contentLoading.setVisibility(View.GONE);
-                                        }
+                                    if (progress == 100) {
+                                        progressBar.performProgress();
+                                        contentLoading.setVisibility(View.GONE);
                                     }
                                 }
-                            });
+                            }
+                        });
                     }
 
                     @Override

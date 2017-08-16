@@ -1028,7 +1028,7 @@
   <string name="map_registration">Disable "Nearby" Visibility</string>
   <string name="comment_waiting">Receiving notes...</string>
   <string name="comment_no">No Status</string>
-  <string formatted="false" name="distance">about %d meters</string>
+  <string formatted="false" name="distance">about %d m</string>
   <string name="hint_gps">Your Status</string>
   <string name="Clear_Status">Clear Status</string>
   <string name="Clear_Status_desc">You will be visible to others with no status. Are you sure to continue?</string>
