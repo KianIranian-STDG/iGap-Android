@@ -2641,44 +2641,46 @@ public class ActivityChat extends ActivityEnhanced
     }
 
     @Override
-    public void onChatClearMessage(long roomId, long clearId, ProtoResponse.Response response) {
-
-        boolean clearMessage = false;
-
-        //+Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-        for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-            if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
-                clearMessage = true;
-            }
-
-            if (clearMessage) {
-                final long messageId = realmRoomMessage.getMessageId();
-                getRealmChat().executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmRoomMessage.deleteFromRealm();
+    public void onChatClearMessage(final long roomId, final long clearId, ProtoResponse.Response response) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                boolean clearMessage = false;
+                //+Realm realm = Realm.getDefaultInstance();
+                RealmResults<RealmRoomMessage> realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                for (final RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                    if (!clearMessage && realmRoomMessage.getMessageId() == clearId) {
+                        clearMessage = true;
                     }
-                });
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // remove deleted message from adapter
-
-                        mAdapter.removeMessage(messageId);
-
-                        // remove tag from edtChat if the message has deleted
-                        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                            if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                edtChat.setTag(null);
+                    if (clearMessage) {
+                        final long messageId = realmRoomMessage.getMessageId();
+                        getRealmChat().executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                realmRoomMessage.deleteFromRealm();
                             }
-                        }
+                        });
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // remove deleted message from adapter
+                                mAdapter.removeMessage(messageId);
+
+                                // remove tag from edtChat if the message has deleted
+                                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                                    if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                                        edtChat.setTag(null);
+                                    }
+                                }
+                            }
+                        });
                     }
-                });
+                }
+                //realm.close();
             }
-        }
-        //realm.close();
+        });
     }
 
     @Override

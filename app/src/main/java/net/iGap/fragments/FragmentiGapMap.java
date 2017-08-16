@@ -11,6 +11,7 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -298,7 +299,11 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
             @Override
             public void onClick(View v) {
                 if (!isGpsOn) {
-                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    try {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    } catch (ActivityNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     new MaterialDialog.Builder(mActivity).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
@@ -903,7 +908,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         paint.setStrokeWidth(borderWidth);
         paint.setAntiAlias(true);
         canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - borderWidth / 2, paint);
-        srcBitmap.recycle();
+        if (!srcBitmap.isRecycled()) {
+            srcBitmap.recycle();
+        }
         return dstBitmap;
     }
 
@@ -925,7 +932,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         paintSharp.setStyle(Paint.Style.FILL);
         paintSharp.setStrokeWidth(borderWidth);
         paintSharp.setAntiAlias(true);
-        srcBitmap.recycle();
+        //srcBitmap.recycle();
 
         Path path1 = new Path();
         path1.moveTo(borderWidth + 3, canvas.getWidth() / 2);// first point
@@ -959,7 +966,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         //paintSharp.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
         //canvas.drawPath(path1, paintSharp);
 
-        srcBitmap.recycle();
+        if (!srcBitmap.isRecycled()) {
+            srcBitmap.recycle();
+        }
         return dstBitmap;
     }
 
