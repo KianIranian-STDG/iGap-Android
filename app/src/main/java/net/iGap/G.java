@@ -245,7 +245,7 @@ public class G extends MultiDexApplication {
     public static boolean isChangeScrFg = false;
     public static boolean isUserStatusOnline = false;
     public static boolean isSecure = false;
-    public static boolean allowForConnect = true; //set allowForConnect to realm , if don't set client try for connec
+    public static boolean allowForConnect = true; //set allowForConnect to realm , if don't set client try for connect
     public static boolean userLogin = false;
     public static boolean socketConnection = false;
     public static boolean canRunReceiver = false;

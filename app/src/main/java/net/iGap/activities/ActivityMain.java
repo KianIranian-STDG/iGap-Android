@@ -1602,7 +1602,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (iconLocation != null) {
             iconLocation.setVisibility(View.VISIBLE);
             Animation anim = new AlphaAnimation(0.0f, 1.0f);
-            anim.setDuration(500); //You can manage the time
+            anim.setDuration(1000); //You can manage the time
             anim.setStartOffset(20);
             anim.setRepeatMode(Animation.REVERSE);
             anim.setRepeatCount(Animation.INFINITE);

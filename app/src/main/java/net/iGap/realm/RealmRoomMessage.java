@@ -211,12 +211,12 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         return message;
     }
 
-    public static RealmRoomMessage putOrUpdateForwardOrReply(ProtoGlobal.RoomMessage input, long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage message = putOrUpdate(input, roomId, true, true, true, realm);
-        realm.close();
-        return message;
-    }
+    //public static RealmRoomMessage putOrUpdateForwardOrReply(ProtoGlobal.RoomMessage input, long roomId) {
+    //    Realm realm = Realm.getDefaultInstance();
+    //    RealmRoomMessage message = putOrUpdate(input, roomId, true, true, true, realm);
+    //    realm.close();
+    //    return message;
+    //}
 
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId, boolean showMessage, boolean forwardOrReply, boolean setGap, Realm realm) {
         long messageId;
@@ -236,10 +236,12 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
             message.setRoomId(roomId);
 
             if (input.hasForwardFrom()) {
-                message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), -1));
+                //message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), -1));
+                message.setForwardMessage(putOrUpdate(input.getForwardFrom(), -1, true, true, true, realm));
             }
             if (input.hasReplyTo()) {
-                message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), -1));
+                //message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), -1));
+                message.setReplyTo(putOrUpdate(input.getForwardFrom(), -1, true, true, true, realm));
             }
             message.setShowMessage(true);
         }
