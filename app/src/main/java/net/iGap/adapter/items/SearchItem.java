@@ -99,7 +99,7 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         }
 
         hashMapAvatarSearchFragment.put(item.idDetectAvatar, holder.avatar);
-        HelperAvatar.getAvatar(item.idDetectAvatar, avatarType, new OnAvatarGet() {
+        HelperAvatar.getAvatar(item.idDetectAvatar, avatarType, false, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long roomId) {
                 G.handler.post(new Runnable() {

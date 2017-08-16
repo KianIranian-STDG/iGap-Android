@@ -663,7 +663,7 @@ public class HelperUrl {
                 TextView txtMemeberNumber = (TextView) dialog.findViewById(R.id.daj_txt_member_count);
                 txtMemeberNumber.setText(finalMemberNumber);
 
-                HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+                HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, false, new OnAvatarGet() {
                     @Override
                     public void onAvatarGet(final String avatarPath, long roomId) {
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);

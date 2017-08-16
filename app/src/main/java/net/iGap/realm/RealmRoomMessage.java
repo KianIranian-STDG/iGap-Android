@@ -199,37 +199,22 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
     public static RealmRoomMessage putOrUpdateGetRoom(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
-
         RealmRoomMessage message = putOrUpdate(input, roomId, true, false, false, realm);
-
-
-
         realm.close();
-
         return message;
     }
 
     public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
-
         RealmRoomMessage message = putOrUpdate(input, roomId, true, false, true, realm);
-
-
-
         realm.close();
-
         return message;
     }
 
     public static RealmRoomMessage putOrUpdateForwardOrReply(ProtoGlobal.RoomMessage input, long roomId) {
         Realm realm = Realm.getDefaultInstance();
-
         RealmRoomMessage message = putOrUpdate(input, roomId, true, true, true, realm);
-
-
-
         realm.close();
-
         return message;
     }
 

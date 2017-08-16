@@ -754,7 +754,7 @@ public class FragmentShowMember extends Fragment {
 
             hashMapAvatar.put(mContact.peerId, holder.image);
 
-            HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(String avatarPath, long userId) {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(userId));

@@ -1136,7 +1136,7 @@ public class FragmentMain extends Fragment implements OnComplete {
 
             hashMapAvatar.put(idForGetAvatar, imageView);
 
-            HelperAvatar.getAvatar(idForGetAvatar, avatarType, new OnAvatarGet() {
+            HelperAvatar.getAvatar(idForGetAvatar, avatarType, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(String avatarPath, long idForGetAvatar) {
                     if (hashMapAvatar.get(idForGetAvatar) != null) {

@@ -520,7 +520,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
             hashMapAvatar.put(item.getId(), viewHolder.image);
 
-            HelperAvatar.getAvatar(item.getPeer(), item.getPeer().getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
+            HelperAvatar.getAvatarCall(item.getPeer(), item.getPeer().getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, long ownerId) {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(item.getId()));

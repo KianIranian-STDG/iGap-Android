@@ -59,7 +59,7 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
 
         if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
 
-            HelperAvatar.getAvatar(item.getUser().getId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            HelperAvatar.getAvatar(item.getUser().getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, long roomId) {
 
@@ -87,7 +87,7 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
             holder.lastSeen.setText(item.getUser().getUsername());
         } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
 
-            HelperAvatar.getAvatar(item.getRoom().getId(), HelperAvatar.AvatarType.ROOM, new OnAvatarGet() {
+            HelperAvatar.getAvatar(item.getRoom().getId(), HelperAvatar.AvatarType.ROOM, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, long roomId) {
                     G.currentActivity.runOnUiThread(new Runnable() {

@@ -188,7 +188,7 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
             }
 
             hashMapAvatar.put(item.getUserId(), holder.avatar);
-            HelperAvatar.getAvatar(item.getUserId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            HelperAvatar.getAvatar(item.getUserId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, final long ownerId) {
                     G.handler.post(new Runnable() {

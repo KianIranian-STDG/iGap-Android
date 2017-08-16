@@ -178,7 +178,7 @@ public class FragmentBlockedUser extends Fragment {
                 viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
             }
 
-            HelperAvatar.getAvatar(registeredInfo.getId(), HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            HelperAvatar.getAvatar(registeredInfo.getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, long ownerId) {
                     G.handler.post(new Runnable() {

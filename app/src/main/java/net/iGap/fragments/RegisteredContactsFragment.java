@@ -508,7 +508,7 @@ public class RegisteredContactsFragment extends Fragment {
 
         private void setAvatar(final ViewHolder holder, final long userId) {
 
-            HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+            HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, long ownerId) {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));

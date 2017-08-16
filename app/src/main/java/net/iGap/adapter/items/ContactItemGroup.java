@@ -86,7 +86,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
 
         hashMapAvatar.put(mContact.peerId, holder.image);
 
-        HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, new OnAvatarGet() {
+        HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, final long ownerId) {
                 G.handler.post(new Runnable() {
