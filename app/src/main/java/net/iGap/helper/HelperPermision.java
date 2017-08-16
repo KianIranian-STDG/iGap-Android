@@ -313,7 +313,7 @@ public class HelperPermision {
     //************************************************************************************************************
     public static void getPermission(final Context context, final String[] needPermission, final int requestCode, String Text, final OnGetPermission onGetPermission) {
 
-        if (!ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermission[0])) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, needPermission[0])) {
 
             String message = context.getString(R.string.you_need_to_allow) + " " + Text;
 
@@ -331,9 +331,7 @@ public class HelperPermision {
             //    }
             //};
 
-
-
-            new MaterialDialog.Builder(context).content(message).positiveText(context.getString(R.string.ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
+            new MaterialDialog.Builder(context).cancelable(false).content(message).positiveText(context.getString(R.string.ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     ActivityCompat.requestPermissions((Activity) context, needPermission, requestCode);
