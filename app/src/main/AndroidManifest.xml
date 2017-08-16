@@ -50,6 +50,11 @@
       android:theme="@style/AppTheme">
     <receiver android:name=".module.MusicPlayer$customButtonListener" />
     <receiver android:name=".helper.HelperNotificationAndBadge$RemoteActionReceiver" />
+    <receiver android:name=".module.MyPhonStateService">
+      <intent-filter>
+        <action android:name="android.intent.action.PHONE_STATE" />
+      </intent-filter>
+    </receiver>
 
     <activity
         android:name=".activities.ActivityChat"
@@ -260,6 +265,7 @@
         android:name=".helper.MyService"
         android:enabled="true"
         android:exported="true" />
+
     <service android:name=".helper.MyServiceTemporat" />
 
     <service

@@ -247,6 +247,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return;
         }
 
+        try {
+            HelperPermision.getPhonePermision(this, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
         if (userInfo == null) { // user registered before

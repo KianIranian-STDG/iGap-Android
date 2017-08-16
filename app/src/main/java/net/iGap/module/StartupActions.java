@@ -90,11 +90,6 @@ public final class StartupActions {
          */
         new HelperDownloadFile();
         new HelperUploadFile();
-
-        /**
-         * get phone call receive to pause mediaPlayer if need
-         */
-        MusicPlayer.registerphoneState();
     }
 
     private void initEmoji() {

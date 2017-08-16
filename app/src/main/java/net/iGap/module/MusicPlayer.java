@@ -40,8 +40,6 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -109,13 +107,14 @@ public class MusicPlayer extends Service {
     private static double amoungToupdate;
     public static String strTimer = "";
     public static String messageId = "";
+    public static boolean isNearDistance = false;
 
     public static boolean isVoice = false;
     public static boolean pauseSoundFromIGapCall = false;
     public static boolean isSpeakerON = false;
 
     public static boolean pauseSoundFromCall = false;
-    public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
+
 
     public static boolean playNextMusic = false;
 
@@ -300,7 +299,7 @@ public class MusicPlayer extends Service {
         }
     }
 
-    private static void pauseSound() {
+    public static void pauseSound() {
 
         try {
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
@@ -557,8 +556,8 @@ public class MusicPlayer extends Service {
 
     public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
 
+
         isVoice = false;
-        playNextMusic = false;
         isPause = false;
 
         RealmRoomMessage realmRoomMessage = getmRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst();
@@ -675,15 +674,7 @@ public class MusicPlayer extends Service {
             downloadNewItem = false;
         }
 
-        if (isVoice) {
-            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-
-            if (am.isWiredHeadsetOn()) {
-                am.setSpeakerphoneOn(false);
-            } else {
-                am.setSpeakerphoneOn(true);
-            }
-        }
+        setSpeaker();
 
         if (HelperCalander.isLanguagePersian) {
             txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
@@ -694,6 +685,9 @@ public class MusicPlayer extends Service {
         try {
 
             if (playNextMusic) {
+
+                fillMediaList(true);
+
                 nextMusic();
                 if (ActivityChat.onMusicListener != null) {
                     ActivityChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
@@ -1073,6 +1067,8 @@ public class MusicPlayer extends Service {
                                         }
                                     });
                                     MusicPlayer.playNextMusic = true;
+                                } else {
+                                    MusicPlayer.playNextMusic = false;
                                 }
                             }
 
@@ -1100,10 +1096,18 @@ public class MusicPlayer extends Service {
                 if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
                     if (event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY) {
                         // near
-                        setAudioStreamType(true);
+                        isNearDistance = true;
+                        if (isVoice) {
+                            setSpeaker();
+                        }
+
                     } else {
                         //far
-                        setAudioStreamType(false);
+                        isNearDistance = false;
+                        if (isVoice) {
+                            setSpeaker();
+                        }
+
                     }
                 }
             }
@@ -1134,75 +1138,8 @@ public class MusicPlayer extends Service {
         }
     }
 
-    private static void setAudioStreamType(boolean fromVoiceCall) {
-
-        try {
-
-            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-
-            if (am.isWiredHeadsetOn()) {
-
-                am.setSpeakerphoneOn(false);
-                isSpeakerON = false;
-            } else {
-                if (fromVoiceCall) {
-                    am.setSpeakerphoneOn(false);
-                    isSpeakerON = false;
-                } else {
-
-                    am.setSpeakerphoneOn(true);
-                    isSpeakerON = true;
-                }
-            }
-        } catch (Exception e) {
-            Log.e("dddd", "music player setAudioStreamType   " + e.toString());
-        }
-    }
 
     //*************************************************************************************** getPhoneState
-
-    public static void registerphoneState() {
-
-        try {
-            PhoneStateListener phoneStateListener = new PhoneStateListener() {
-                @Override
-                public void onCallStateChanged(final int state, String incomingNumber) {
-
-                    if (lastPhoneState == state) {
-                        return;
-                    } else {
-
-                        lastPhoneState = state;
-
-                        if (state == TelephonyManager.CALL_STATE_RINGING) {
-
-                            if (mp != null && mp.isPlaying()) {
-
-                                pauseSound();
-                                pauseSoundFromCall = true;
-                            }
-                        } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-
-                            if (pauseSoundFromCall) {
-                                pauseSoundFromCall = false;
-
-                                playAndPause();
-                            }
-                        } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-
-                        }
-                    }
-                }
-            };
-
-            TelephonyManager mgr = (TelephonyManager) G.context.getSystemService(Context.TELEPHONY_SERVICE);
-            if (mgr != null) {
-                mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-            }
-        } catch (Exception e) {
-
-        }
-    }
 
     static class HeadsetPluginReciver extends BroadcastReceiver {
 
@@ -1213,21 +1150,17 @@ public class MusicPlayer extends Service {
 
                 if (isVoice) {
 
-                    AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-
                     int state = intent.getIntExtra("state", -1);
                     switch (state) {
                         case 0:
 
-                            am.setSpeakerphoneOn(true);
-                            isSpeakerON = true;
+                            setSpeaker();
 
                             //  Log.d("dddddd", "Headset is unplugged");
                             break;
                         case 1:
 
-                            am.setSpeakerphoneOn(false);
-                            isSpeakerON = false;
+                            setSpeaker();
 
                             //  Log.d("dddddd", "Headset is plugged");
                             break;
@@ -1370,6 +1303,34 @@ public class MusicPlayer extends Service {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void setSpeaker() {
+
+        if (pauseSoundFromCall || pauseSoundFromIGapCall) {
+            return;
+        }
+
+        AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+
+        if (isVoice) {
+
+            if (am.isWiredHeadsetOn()) {
+                am.setSpeakerphoneOn(false);
+            } else {
+
+                if (isNearDistance) {
+                    am.setSpeakerphoneOn(false);
+                } else {
+                    am.setSpeakerphoneOn(true);
+                }
+            }
+        } else {
+            am.setSpeakerphoneOn(false);
+        }
+
+        isSpeakerON = am.isSpeakerphoneOn();
+
     }
 }
 

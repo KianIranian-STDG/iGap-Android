@@ -460,6 +460,7 @@ public class ActivityChat extends ActivityEnhanced
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+
         realmChat = Realm.getDefaultInstance();
 
         startPageFastInitialize();
@@ -3285,6 +3286,8 @@ public class ActivityChat extends ActivityEnhanced
                                         });
                                         MusicPlayer.playNextMusic = true;
                                         mAdapter.notifyItemChanged(k);
+                                    } else {
+                                        MusicPlayer.playNextMusic = false;
                                     }
 
                                 }
