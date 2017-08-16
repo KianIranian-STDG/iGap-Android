@@ -763,7 +763,6 @@ public class ActivityChat extends ActivityEnhanced
         }
         onMusicListener = null;
         iUpdateLogItem = null;
-        overridePendingTransition(0, 0);
 
         needUpdateView = true;
     }

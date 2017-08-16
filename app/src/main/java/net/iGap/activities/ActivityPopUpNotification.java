@@ -122,7 +122,6 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
         super.onPause();
         isPopUpVisible = false;
 
-        overridePendingTransition(0, 0);
     }
 
     @Override public void onBackPressed() {

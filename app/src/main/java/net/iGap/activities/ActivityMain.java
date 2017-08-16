@@ -254,7 +254,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 mRealm.close();
             }
 
-
             finish();
             return;
         }

@@ -913,7 +913,6 @@ public class FragmentMain extends Fragment implements OnComplete {
 
                                 new GoToChatActivity(mInfo.getId()).setContext(mActivity).setFromCall(((ActivityMain) getActivity()).fromCall).startActivity();
 
-                                mActivity.overridePendingTransition(0, 0);
 
                                 if (((ActivityMain) mActivity).arcMenu != null && ((ActivityMain) mActivity).arcMenu.isMenuOpened()) {
                                     ((ActivityMain) mActivity).arcMenu.toggleMenu();

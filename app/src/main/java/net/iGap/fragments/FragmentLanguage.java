@@ -151,7 +151,6 @@ public class FragmentLanguage extends Fragment {
         config.locale = locale;
         mActivity.getBaseContext().getResources().updateConfiguration(config, mActivity.getBaseContext().getResources().getDisplayMetrics());
         startActivity(new Intent(mActivity, ActivitySetting.class));
-        mActivity.overridePendingTransition(0, 0);
         mActivity.finish();
     }
 
