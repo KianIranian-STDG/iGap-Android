@@ -1037,7 +1037,7 @@
   <string name="Visible_Status_title_dialog_invisible">Disable Nearby</string>
   <string name="Visible_Status_text_dialog">Enabling Nearby will result in getting your and others\' status visible to both. Are you sure to continue?</string>
   <string name="Visible_Status_text_dialog_invisible">Disabling Nearby will not only result in hiding your status from others, but you won\'t also be able to see others\' status within your certain range. Are you still sure to continue?</string>
-  <string name="Visible_Status_text">Notice! Activating "Map Registration" will result in making your status visible to others. Please be sure about it before turning on.</string>
+  <string name="Visible_Status_text">Notice! Activating "Map Status" will result in making your location visible to others. Please be sure about it before turning on.</string>
   <string name="info_map">Only the users within your 5KM radius distance are visible to you if their Map Status in ON.</string>
 
   <string name="exceed_4_line">Your status cannot exceed 4 lines.</string>

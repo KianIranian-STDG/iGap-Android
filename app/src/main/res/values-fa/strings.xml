@@ -1041,7 +1041,7 @@
   <string name="Visible_Status_title_dialog_invisible">غیر فعال سازی</string>
   <string name="Visible_Status_text_dialog">فعال سازی قابلیت "اطراف من" باعث خواهد شد وضعیت شما و سایرین برای یکدیگر قابل مشاهده شود. آیا مایل به ادامهٔ کار هستید؟</string>
   <string name="Visible_Status_text_dialog_invisible">با غیرفعال کردن این قابلیت موقعیت شما از سایرین مخفی خواهد شد و همچنین قادر به مشاهدهٔ افراد در محدودهٔ خود نخواهید بود. آیا همواره مایل به ادامهٔ کار هستید؟</string>
-  <string name="Visible_Status_text">توجه! با انتخاب دکمۀ زیر، موقعیت شما برای سایرین قابل مشاهده می باشد. لطفاً پیش از روشن کردن این حالت از انجام آن مطمئن شوید.</string>
+  <string name="Visible_Status_text">توجه! با فعال کردن دکمۀ زیر، موقعیت شما برای سایرین قابل مشاهده می باشد. لطفاً پیش از ادامه از انجام آن مطمئن شوید.</string>
   <string name="Clear_Status">حذف وضعیت</string>
   <string name="Clear_Status_desc">شما وضعیتی برای خود تعیین نکرده اید. آیا مایلید برنامه را بدون تعیین وضعیت ادامه دهید؟</string>
   <string name="exceed_4_line">تعداد کاراکترهای تعیین وضعیت نباید از چهار خط بیشتر باشد.</string>
