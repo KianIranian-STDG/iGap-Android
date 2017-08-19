@@ -781,18 +781,18 @@ public class FragmentShowMember extends Fragment {
             }
 
             if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                holder.btnMenu.setVisibility(View.GONE);
+                holder.btnMenu.setVisibility(View.INVISIBLE);
             } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
 
                 if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString()))) {
-                    holder.btnMenu.setVisibility(View.GONE);
+                    holder.btnMenu.setVisibility(View.INVISIBLE);
                 } else {
                     showPopup(holder, mContact);
                 }
             } else if (mainRole.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
 
                 if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString()) || (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString()))) {
-                    holder.btnMenu.setVisibility(View.GONE);
+                    holder.btnMenu.setVisibility(View.INVISIBLE);
                 } else {
                     showPopup(holder, mContact);
                 }
@@ -805,7 +805,7 @@ public class FragmentShowMember extends Fragment {
              * is for own user
              */
             if (mContact.peerId == mContact.userID) {
-                holder.btnMenu.setVisibility(View.GONE);
+                holder.btnMenu.setVisibility(View.INVISIBLE);
             }
         }
 

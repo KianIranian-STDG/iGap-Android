@@ -42,20 +42,25 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+                  <LinearLayout
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      >
 
                   <net.iGap.module.CustomTextViewMedium
                         android:id="@+id/cigp_txt_contact_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:gravity="left"
+                      android:gravity="start"
                         android:singleLine="true"
                         android:text="Dominika Faniz"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:textColor="#000000"
                       android:textSize="@dimen/dp16"
                       />
-
+                  </LinearLayout>
                   <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/cigp_txt_member_role"
                         style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
