@@ -123,6 +123,8 @@ public class SHP_SETTING {
 
     // ========================================================================================== Notifications and sound contact profile
 
+    public static final String REGISTER_STATUS = "REGISTER_STATUS";
+
     public static class Defaults {
         public static final int KEY_AUTOPLAY_GIFS = 1;
     }

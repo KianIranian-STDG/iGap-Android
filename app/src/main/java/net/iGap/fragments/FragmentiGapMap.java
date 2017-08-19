@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -78,6 +79,7 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.FileUtils;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.MyInfoWindow;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
@@ -111,6 +113,7 @@ import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
+import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
@@ -1200,10 +1203,18 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
         G.handler.post(new Runnable() {
             @Override
             public void run() {
+
+                SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
                 if (state) {
                     ActivityMain.startAnimationLocation();
+                    editor.putBoolean(SHP_SETTING.REGISTER_STATUS, true);
+                    editor.apply();
                 } else {
                     ActivityMain.stopAnimationLocation();
+                    editor.putBoolean(SHP_SETTING.REGISTER_STATUS, false);
+                    editor.apply();
                 }
                 statusCheck();
                 if (btnMapChangeRegistration != null) {

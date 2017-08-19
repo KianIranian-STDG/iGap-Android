@@ -338,6 +338,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
+        initComponent();
+
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         boolean isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
         /**
@@ -410,7 +412,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
-        initComponent();
+
         connectionState();
 
         initDrawerMenu();
@@ -1552,6 +1554,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
 
         iconLocation = (TextView) findViewById(R.id.am_btn_location);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        boolean isRegisterStatus = sharedPreferences.getBoolean(SHP_SETTING.REGISTER_STATUS, false);
+        if (isRegisterStatus) {
+            startAnimationLocation();
+        } else {
+            stopAnimationLocation();
+        }
 
         iconLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1559,7 +1570,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 openMapFragment();
             }
         });
-
         G.onMapRegisterState = new OnMapRegisterState() {
             @Override
             public void onState(final boolean state) {
@@ -1568,8 +1578,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     public void run() {
                         if (state) {
                             startAnimationLocation();
+                            editor.putBoolean(SHP_SETTING.REGISTER_STATUS, true);
+                            editor.apply();
                         } else {
                             stopAnimationLocation();
+                            editor.putBoolean(SHP_SETTING.REGISTER_STATUS, false);
+                            editor.apply();
                         }
                     }
                 });

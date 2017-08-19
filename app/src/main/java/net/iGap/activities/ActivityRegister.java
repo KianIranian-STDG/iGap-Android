@@ -970,7 +970,7 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
 
-        if (!isFinishing() && !isRestricted() && isTaskRoot()) {
+        if (!isFinishing() && !isRestricted()) {
             dialog.show();
             if (dialog.isShowing()) {
                 countDownTimer.cancel();
