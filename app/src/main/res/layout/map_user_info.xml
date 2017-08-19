@@ -85,6 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Display Name"
+            android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="@dimen/dp18"
             fontPath="fonts/IRANSansMobile_Bold.ttf"
