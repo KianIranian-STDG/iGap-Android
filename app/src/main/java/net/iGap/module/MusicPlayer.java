@@ -1029,10 +1029,12 @@ public class MusicPlayer extends Service {
         }
     }
 
-    private static void downloadNextMusic(String messageId) {
+    public static boolean downloadNextMusic(String messageId) {
+
+        boolean result = false;
 
         RealmResults<RealmRoomMessage> roomMessages = getmRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-            equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAll();
+            equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage rm : roomMessages) {
@@ -1051,7 +1053,7 @@ public class MusicPlayer extends Service {
                             Long _size = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getSize() : rm.getAttachment().getSize();
 
                             if (_cashid == null) {
-                                return;
+                                return result;
                             }
 
                             ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
@@ -1062,10 +1064,11 @@ public class MusicPlayer extends Service {
 
                                 if (!new File(_path).exists()) {
 
+                                    result = true;
+
                                     HelperDownloadFile.startDownload(rm.getMessageId() + "", _token, _cashid, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                                         @Override
                                         public void OnProgress(String path, int progress) {
-
                                             if (progress == 100) {
                                                 downloadNewItem = true;
                                             }
@@ -1076,6 +1079,7 @@ public class MusicPlayer extends Service {
 
                                         }
                                     });
+
                                     MusicPlayer.playNextMusic = true;
                                 } else {
                                     MusicPlayer.playNextMusic = false;
@@ -1092,6 +1096,8 @@ public class MusicPlayer extends Service {
                 }
             }
         }
+
+        return result;
     }
 
     //***************************************************************************** sensor *********************************

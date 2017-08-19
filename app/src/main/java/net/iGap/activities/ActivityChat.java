@@ -3239,75 +3239,14 @@ public class ActivityChat extends ActivityEnhanced
     @Override
     public void onPlayMusic(String messageId) {
 
-        int _adapterCount = mAdapter.getItemCount();
-
-        for (int i = _adapterCount - 1; i >= 0; i--) {
-
-            AbstractMessage item = mAdapter.getAdapterItem(i);
+        if (messageId != null && messageId.length() > 0) {
 
             try {
-
-                if (item.mMessage.messageID.equals(messageId)) {
-
-                    try {
-
-                        for (int k = i + 1; k < _adapterCount; k++) {
-
-                            AbstractMessage nextItem = mAdapter.getAdapterItem(k);
-
-                            if (nextItem instanceof VoiceItem || nextItem instanceof AudioItem) {
-
-                                ProtoGlobal.RoomMessageType _messageType = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getMessageType() : nextItem.mMessage.messageType;
-                                String _cashid = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getCacheId() : nextItem.mMessage.getAttachment().cashID;
-                                String _name = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getName() : nextItem.mMessage.getAttachment().name;
-                                String _token = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getToken() : nextItem.mMessage.getAttachment().token;
-                                Long _size = nextItem.mMessage.forwardedFrom != null ? nextItem.mMessage.forwardedFrom.getAttachment().getSize() : nextItem.mMessage.getAttachment().size;
-
-                                if (_cashid == null) {
-                                    return;
-                                }
-
-                                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-
-                                final String _path = AndroidUtils.getFilePathWithCashId(_cashid, _name, _messageType);
-
-                                if (_token != null && _token.length() > 0 && _size > 0) {
-
-                                    if (!new File(_path).exists()) {
-
-                                        HelperDownloadFile.startDownload(nextItem.mMessage.messageID, _token, _cashid, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
-                                            @Override
-                                            public void OnProgress(String path, int progress) {
-                                                if (progress == 100) {
-                                                    MusicPlayer.downloadNewItem = true;
-                                                }
-                                            }
-
-                                            @Override
-                                            public void OnError(String token) {
-
-                                            }
-                                        });
-                                        MusicPlayer.playNextMusic = true;
-                                        mAdapter.notifyItemChanged(k);
-                                    } else {
-                                        MusicPlayer.playNextMusic = false;
-                                    }
-
-                                }
-
-                                break;
-                            }
-
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    break;
+                if (MusicPlayer.downloadNextMusic(messageId)) {
+                    mAdapter.notifyDataSetChanged();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                HelperLog.setErrorLog("Activity chat  onPlayMusic    " + e.toString());
             }
         }
     }
