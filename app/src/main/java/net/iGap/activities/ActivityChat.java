@@ -2369,6 +2369,7 @@ public class ActivityChat extends ActivityEnhanced
                                         roomMessage.setShowMessage(true);
 
                                         roomMessage.setUserId(senderId);
+                                        roomMessage.setAuthorHash(G.authorHash);
                                         roomMessage.setCreateTime(currentTime);
 
                                         /**
@@ -6531,6 +6532,7 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setAttachment(finalMessageId, finalFilePath, finalImageDimens[0], finalImageDimens[1], finalFileSize, finalFileName, finalDuration, LocalFileType.FILE);
                 roomMessage.setUserId(senderID);
+                roomMessage.setAuthorHash(G.authorHash);
                 roomMessage.setShowMessage(true);
                 roomMessage.setCreateTime(updateTime);
                 if (userTriesReplay()) {
@@ -6714,6 +6716,7 @@ public class ActivityChat extends ActivityEnhanced
                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
                 roomMessage.setRoomId(mRoomId);
                 roomMessage.setUserId(userId);
+                roomMessage.setAuthorHash(G.authorHash);
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
 
                 if (userTriesReplay()) {
