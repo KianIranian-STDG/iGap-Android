@@ -252,5 +252,8 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
     public void onResume() {
         super.onResume();
         FragmentiGapMap.page = FragmentiGapMap.pageUserList;
+        if (FragmentiGapMap.rippleMoreMap != null) {
+            FragmentiGapMap.rippleMoreMap.setVisibility(View.GONE);
+        }
     }
 }
