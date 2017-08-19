@@ -255,5 +255,8 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
         if (FragmentiGapMap.rippleMoreMap != null) {
             FragmentiGapMap.rippleMoreMap.setVisibility(View.GONE);
         }
+        if (FragmentiGapMap.fabGps != null) {
+            FragmentiGapMap.fabGps.setVisibility(View.GONE);
+        }
     }
 }

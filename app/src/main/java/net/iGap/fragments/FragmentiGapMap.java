@@ -137,7 +137,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     private TextView txtDescriptionMap;
     private TextView txtSendMessageGps;
     private EditText edtMessageGps;
-    private FloatingActionButton fabGps;
+    public static FloatingActionButton fabGps;
     private ProgressBar prgWaitingSendMessage;
     private FragmentActivity mActivity;
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
