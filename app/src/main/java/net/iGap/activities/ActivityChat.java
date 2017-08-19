@@ -58,6 +58,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -5418,7 +5419,20 @@ public class ActivityChat extends ActivityEnhanced
         rcvBottomSheet.setAdapter(fastItemAdapter);
         bottomSheetDialog = new BottomSheetDialog(ActivityChat.this);
         bottomSheetDialog.setContentView(viewBottomSheet);
+        final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheet.getParent());
 
+        viewBottomSheet.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    mBehavior.setPeekHeight(viewBottomSheet.getHeight());
+                    viewBottomSheet.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            }
+        });
+        //height is ready
+
+        bottomSheetDialog.show();
         onClickCamera = new OnClickCamera() {
             @Override
             public void onclickCamera() {

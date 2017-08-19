@@ -12,17 +12,10 @@
     >
 
 
-  <android.support.v4.widget.NestedScrollView
-      android:id="@+id/test"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:fillViewport="true"
-      android:scrollbars="horizontal"
-
-      >
 
 
     <LinearLayout
+        android:id="@+id/layout_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -36,14 +29,13 @@
           />
 
     </LinearLayout>
-  </android.support.v4.widget.NestedScrollView>
 
 
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:layout_below="@+id/test"
+      android:layout_below="@+id/layout_recyclerView"
       >
 
     <View
