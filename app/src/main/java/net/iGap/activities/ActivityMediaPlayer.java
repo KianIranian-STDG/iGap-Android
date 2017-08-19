@@ -24,6 +24,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import java.io.File;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperSaveFile;
@@ -69,7 +70,13 @@ public class ActivityMediaPlayer extends ActivityEnhanced {
                 } else if (messageOne.equals("pause")) {
                     btnPlay.setText(R.string.md_round_pause_button);
                 } else if (messageOne.equals("update")) {
-                    updateUi();
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateUi();
+                        }
+                    });
+
                 } else if (messageOne.equals("updateTime")) {
                     txt_Timer.post(new Runnable() {
                         @Override public void run() {

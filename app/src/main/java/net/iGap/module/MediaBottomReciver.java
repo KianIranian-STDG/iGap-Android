@@ -10,6 +10,10 @@ public class MediaBottomReciver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        if (!MusicPlayer.isMusicPlyerEnable) {
+            return;
+        }
+
         if (intent.getAction().equals(Intent.ACTION_MEDIA_BUTTON)) {
             if (intent.getExtras() == null) {
                 return;

@@ -499,7 +499,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragment.setArguments(bundle);
 
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "register_contact_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -636,33 +639,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     return;
                 }
 
+                int index = 0;
+
                 if (G.salectedTabInMainActivity.length() > 0) {
 
                     if (HelperCalander.isLanguagePersian) {
 
                         if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
-                            mViewPager.setCurrentItem(4, false);
+                            index = 4;
                         } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
-                            mViewPager.setCurrentItem(3, false);
+                            index = 3;
                         } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
-                            mViewPager.setCurrentItem(2, false);
+                            index = 2;
                         } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
-                            mViewPager.setCurrentItem(1, false);
+                            index = 1;
                         } else {
-                            mViewPager.setCurrentItem(0, false);
+                            index = 0;
                         }
                     } else {
 
                         if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
-                            mViewPager.setCurrentItem(0, false);
+                            index = 0;
                         } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
-                            mViewPager.setCurrentItem(1, false);
+                            index = 1;
                         } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
-                            mViewPager.setCurrentItem(2, false);
+                            index = 2;
                         } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
-                            mViewPager.setCurrentItem(3, false);
+                            index = 3;
                         } else {
-                            mViewPager.setCurrentItem(4, false);
+                            index = 4;
                         }
 
                     }
@@ -673,13 +678,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } else {
 
                     if (HelperCalander.isLanguagePersian) {
-                        mViewPager.setCurrentItem(4, false);
+                        index = 4;
                     } else {
-                        mViewPager.setCurrentItem(0, false);
+                        index = 0;
                     }
                 }
 
-                navigationTabStrip.setViewPager(mViewPager);
+                navigationTabStrip.setViewPager(mViewPager, index);
 
                 try {
 
@@ -688,7 +693,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 } catch (Exception e) {
 
-                    HelperLog.setErrorLog("Activity main     setmViewPagerSelectedItem    " + e.toString());
+                    HelperLog.setErrorLog("Activity main     setmViewPagerSelectedItem    " + index + "     " + HelperCalander.isLanguagePersian + "    " + e.toString());
                 }
 
 
@@ -926,7 +931,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "register_contact_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1032,7 +1040,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TITLE", "Contacts");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
+                    getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragmentContainer, fragment, "register_contact_fragment")
+                        .commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1065,7 +1076,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         Fragment fragment = FragmentCall.newInstance(false);
                         try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment, "call_fragment").commit();
+                            getSupportFragmentManager().beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .replace(R.id.fragmentContainer, fragment, "call_fragment")
+                                .commit();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -1527,7 +1541,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void Allow() throws IOException {
                     FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
                     try {
-                        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentiGapMap, "map_fragment").commit();
+                        getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                            .replace(R.id.fragmentContainer, fragmentiGapMap, "map_fragment")
+                            .commit();
                     } catch (Exception e) {
                         e.getStackTrace();
                     }

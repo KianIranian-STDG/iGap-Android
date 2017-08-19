@@ -114,6 +114,7 @@ public class MusicPlayer extends Service {
     public static boolean isSpeakerON = false;
 
     public static boolean pauseSoundFromCall = false;
+    public static boolean isMusicPlyerEnable = false;
 
 
     public static boolean playNextMusic = false;
@@ -244,6 +245,7 @@ public class MusicPlayer extends Service {
         });
 
         txt_music_time = (TextView) layout.findViewById(R.id.mls_txt_music_time);
+
         txt_music_time_counter = (TextView) layout.findViewById(R.id.mls_txt_music_time_counter);
         txt_music_name = (TextView) layout.findViewById(R.id.mls_txt_music_name);
 
@@ -266,6 +268,8 @@ public class MusicPlayer extends Service {
         if (MusicPlayer.mp != null) {
             layout.setVisibility(View.VISIBLE);
             txt_music_name.setText(MusicPlayer.musicName);
+
+            txt_music_time.setText(musicTime);
 
             if (MusicPlayer.mp.isPlaying()) {
                 btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
@@ -512,6 +516,9 @@ public class MusicPlayer extends Service {
     }
 
     private static void closeLayoutMediaPlayer() {
+
+        isMusicPlyerEnable = false;
+
         if (layoutTripMusic != null) {
             layoutTripMusic.setVisibility(View.GONE);
         }
@@ -560,14 +567,23 @@ public class MusicPlayer extends Service {
         isVoice = false;
         isPause = false;
 
-        RealmRoomMessage realmRoomMessage = getmRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst();
+        if (messageID != null && messageID.length() > 0) {
 
-        if (realmRoomMessage != null) {
-            String type = realmRoomMessage.getForwardMessage() != null ? realmRoomMessage.getForwardMessage().getMessageType().toString() : realmRoomMessage.getMessageType().toString();
+            try {
 
-            if (type.equals("VOICE")) {
-                isVoice = true;
+                RealmRoomMessage realmRoomMessage = getmRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst();
+
+                if (realmRoomMessage != null) {
+                    String type = realmRoomMessage.getForwardMessage() != null ? realmRoomMessage.getForwardMessage().getMessageType().toString() : realmRoomMessage.getMessageType().toString();
+
+                    if (type.equals("VOICE")) {
+                        isVoice = true;
+                    }
+                }
+            } catch (Exception e) {
+                HelperLog.setErrorLog(" music plyer   startPlayer   setISVoice    " + messageID + "    " + e.toString());
             }
+
         }
 
         MusicPlayer.messageId = messageID;
@@ -617,44 +633,37 @@ public class MusicPlayer extends Service {
                 mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
             }
 
-            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            mp.prepare();
+
+            mp.start();
+
+            musicTime = milliSecondsToTimer((long) mp.getDuration());
+            txt_music_time.setText(musicTime);
+            btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
+            txt_music_name.setText(musicName);
+
+            updateProgress();
+
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
-                public void onPrepared(MediaPlayer mpf) {
-
-                    mp.start();
-
-                    musicTime = milliSecondsToTimer((long) mp.getDuration());
-                    txt_music_time.setText(musicTime);
-                    btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
-
-                    txt_music_name.setText(musicName);
-
-                    updateProgress();
-
-                    mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            OnCompleteMusic();
-                        }
-                    });
-
-                    if (onComplete != null) {
-                        onComplete.complete(true, "update", "");
-                    }
-
-                    try {
-                        if (mp.isPlaying()) {
-                            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
-                        } else {
-                            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
-                        }
-                        notificationManager.notify(notificationId, notification);
-                    } catch (RuntimeException e) {
-                    }
+                public void onCompletion(MediaPlayer mp) {
+                    OnCompleteMusic();
                 }
             });
 
-            mp.prepareAsync();
+            if (onComplete != null) {
+                onComplete.complete(true, "update", "");
+            }
+
+            try {
+                if (mp.isPlaying()) {
+                    remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
+                } else {
+                    remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
+                }
+                notificationManager.notify(notificationId, notification);
+            } catch (RuntimeException e) {
+            }
         } catch (Exception e) {
         }
 
@@ -679,6 +688,8 @@ public class MusicPlayer extends Service {
         if (HelperCalander.isLanguagePersian) {
             txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
         }
+
+        isMusicPlyerEnable = true;
     }
 
     private static void OnCompleteMusic() {
@@ -900,8 +911,7 @@ public class MusicPlayer extends Service {
         }
 
         if (txt_music_time_counter != null) {
-
-            txt_music_time_counter.post(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     txt_music_time_counter.setText(strTimer + "/");

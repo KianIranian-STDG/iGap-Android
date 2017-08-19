@@ -9,7 +9,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 
     public void onCallStateChanged(int state, String incomingNumber) {
 
-        if (lastPhoneState == state) {
+        if (lastPhoneState == state || !MusicPlayer.isMusicPlyerEnable) {
             return;
         } else {
 
