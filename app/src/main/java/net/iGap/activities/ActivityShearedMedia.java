@@ -827,6 +827,10 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
         changesize = mRealmList.size();
 
+        isSendRequestForLoading = false;
+        isThereAnyMoreItemToLoad = true;
+
+
         getDataFromServer(filter);
         mListcount = mRealmList.size();
 
@@ -935,9 +939,9 @@ public class ActivityShearedMedia extends ActivityEnhanced {
 
                             isThereAnyMoreItemToLoad = false;
 
-                            if (onScrollListener != null) {
-                                recyclerView.removeOnScrollListener(onScrollListener);
-                            }
+                            //if (onScrollListener != null) {
+                            //    recyclerView.removeOnScrollListener(onScrollListener);
+                            //}
                         } else {
                             isSendRequestForLoading = false;
                         }

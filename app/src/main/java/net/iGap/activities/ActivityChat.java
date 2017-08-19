@@ -2300,6 +2300,8 @@ public class ActivityChat extends ActivityEnhanced
                                     RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
                                     RealmRoomMessage.isEmojiInText(roomMessage, message);
 
+                                    messageInfo.hasEmojiInText = roomMessage.isHasEmojiInText();
+
                                 }
 
                                 RealmRoom rm = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
