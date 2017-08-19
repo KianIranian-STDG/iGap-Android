@@ -115,7 +115,7 @@ public class MusicPlayer extends Service {
 
     public static boolean pauseSoundFromCall = false;
     public static boolean isMusicPlyerEnable = false;
-
+    private static int stateHedset = -1;
 
     public static boolean playNextMusic = false;
 
@@ -1082,8 +1082,10 @@ public class MusicPlayer extends Service {
                                 }
                             }
 
-                            break;
                         }
+
+                        break;
+
                     } catch (Exception e) {
                         Log.e("dddd", "music player   fillMediaList " + e.toString());
                     }
@@ -1158,13 +1160,18 @@ public class MusicPlayer extends Service {
 
             if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
 
-                if (isVoice) {
+                int state = intent.getIntExtra("state", -1);
 
-                    int state = intent.getIntExtra("state", -1);
+                if (state != stateHedset) {
+
+                    stateHedset = state;
+
                     switch (state) {
                         case 0:
 
                             setSpeaker();
+
+                            pauseSound();
 
                             //  Log.d("dddddd", "Headset is unplugged");
                             break;
