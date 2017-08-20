@@ -45,9 +45,9 @@
       android:configChanges="locale"
       android:icon="@mipmap/icon"
       android:largeHeap="true"
-      android:supportsRtl="true"
       android:launchMode="singleTask"
       android:manageSpaceActivity=".activities.ActivityManageSpace"
+      android:supportsRtl="true"
       android:theme="@style/AppTheme">
     <receiver android:name=".module.MusicPlayer$customButtonListener" />
     <receiver android:name=".helper.HelperNotificationAndBadge$RemoteActionReceiver" />
@@ -59,14 +59,15 @@
 
     <activity
         android:name=".activities.ActivityChat"
-        android:screenOrientation="portrait"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
+        android:imeOptions="flagNoExtractUi"
         android:windowSoftInputMode="stateAlwaysHidden" />
     <activity
         android:name=".activities.ActivityChatBackground"
-        android:configChanges="keyboard|keyboardHidden|screenSize|locale" />
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
     <activity
         android:name=".activities.ActivityShearedMedia"
-        android:configChanges="keyboard|keyboardHidden|screenSize|locale" />
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
     <activity
         android:name=".activities.ActivityPaint"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
@@ -220,21 +221,28 @@
     </activity>
     <activity
         android:name=".activities.ActivityProfile"
-        android:configChanges="keyboard|keyboardHidden|screenSize|locale"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:windowSoftInputMode="adjustPan|stateHidden" />
-    <activity android:name=".activities.ActivityCrop" />
-    <activity android:name=".activities.ActivitySettingNotification" />
+    <activity
+        android:name=".activities.ActivityCrop"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+    <activity
+        android:name=".activities.ActivitySettingNotification"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
     <activity
         android:name=".activities.ActivityRegister"
-        android:configChanges="keyboard|keyboardHidden|screenSize|locale"
-        android:screenOrientation="portrait"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:windowSoftInputMode="adjustPan" />
     <activity
         android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:theme="@style/AppTheme22" />
-    <activity android:name=".activities.ActivitySetting" />
+    <activity
+        android:name=".activities.ActivitySetting"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
     <activity
         android:name=".activities.ActivityContactsProfile"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:exported="false" />
 
     <receiver android:name=".module.IncomingSms" />
@@ -255,8 +263,12 @@
     </receiver>
 
 
-    <activity android:name=".activities.ActivityNewChanelFinish" />
-    <activity android:name=".activities.ActivityChannelProfile" />
+    <activity
+        android:name=".activities.ActivityNewChanelFinish"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+    <activity
+        android:name=".activities.ActivityChannelProfile"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
 
     <service android:name=".helper.ServiceContact" />
     <service android:name=".module.UploadService" />
@@ -308,12 +320,15 @@
 
     <activity
         android:name=".activities.ActivityCustomError"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:process=":error_activity">
       <intent-filter>
         <action android:name="cat.ereza.customactivityoncrash.ERROR" />
       </intent-filter>
     </activity>
-    <activity android:name=".activities.ActivityManageSpace"></activity>
+    <activity
+        android:name=".activities.ActivityManageSpace"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
   </application>
 
 </manifest>

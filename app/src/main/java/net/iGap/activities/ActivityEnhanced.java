@@ -11,7 +11,6 @@
 package net.iGap.activities;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -63,7 +62,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         makeDirectoriesIfNotExist();
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
