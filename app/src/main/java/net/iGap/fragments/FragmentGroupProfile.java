@@ -257,7 +257,7 @@ public class FragmentGroupProfile extends Fragment implements OnGroupAvatarRespo
 
         initComponent(view);
 
-        attachFile = new AttachFile(mActivity); //TODO [Saeed Mozaffari] [2017-08-20 2:42 PM] - Is Need Activity
+        attachFile = new AttachFile(mActivity);
         G.onGroupAvatarResponse = this;
         G.onGroupAvatarDelete = this;
         G.onGroupRevokeLink = this;
@@ -492,7 +492,7 @@ public class FragmentGroupProfile extends Fragment implements OnGroupAvatarRespo
 
             @Override
             public void onComplete(RippleView rippleView) {
-                //finish(); //TODO [Saeed Mozaffari] [2017-08-20 2:44 PM] - finish fragment
+                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentGroupProfile.this).commit();
             }
         });
 
@@ -661,7 +661,8 @@ public class FragmentGroupProfile extends Fragment implements OnGroupAvatarRespo
                 G.iActivityFinish = new IActivityFinish() {
                     @Override
                     public void onFinish() {
-                        //finish(); //TODO [Saeed Mozaffari] [2017-08-20 3:16 PM] - Finish
+                        //finish(); don't need to do this in fragment state
+                        //mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentGroupProfile.this).commit();
                     }
                 };
 
@@ -1798,7 +1799,7 @@ public class FragmentGroupProfile extends Fragment implements OnGroupAvatarRespo
     }
 
     private void showListForCustomRole(String SelectedRole) {
-        FragmentShowMember fragment = FragmentShowMember.newInstance(roomId, role.toString(), G.userId, SelectedRole, isNeedgetContactlist);
+        FragmentShowMember fragment = FragmentShowMember.newInstance1(this.fragment, roomId, role.toString(), G.userId, SelectedRole, isNeedgetContactlist);
         mActivity.getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, "Show_member").commit();
 
         isNeedgetContactlist = false;

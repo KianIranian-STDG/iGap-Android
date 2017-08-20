@@ -46,7 +46,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityChannelProfile;
 import net.iGap.activities.ActivityContactsProfile;
-import net.iGap.activities.ActivityGroupProfile;
 import net.iGap.activities.ActivitySetting;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperImageBackColor;
@@ -116,8 +115,22 @@ public class FragmentShowMember extends Fragment {
     public static OnComplete infoUpdateListenerCount;
     private EndlessRecyclerViewScrollListener scrollListener;
     private boolean isDeleteMemberList = true;
+    private static Fragment fragment;
 
     public static FragmentShowMember newInstance(long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
+        Bundle bundle = new Bundle();
+        bundle.putLong(ROOMIDARGUMENT, roomId);
+        bundle.putString(MAINROOL, mainrool);
+        bundle.putLong(USERID, userid);
+        bundle.putString(SELECTEDROLE, selectedRole);
+        bundle.putBoolean(ISNEEDGETMEMBERLIST, isNeedGetMemberList);
+        FragmentShowMember fragmentShowMember = new FragmentShowMember();
+        fragmentShowMember.setArguments(bundle);
+        return fragmentShowMember;
+    }
+
+    public static FragmentShowMember newInstance1(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList) {
+        fragment = frg;
         Bundle bundle = new Bundle();
         bundle.putLong(ROOMIDARGUMENT, roomId);
         bundle.putString(MAINROOL, mainrool);
@@ -682,31 +695,31 @@ public class FragmentShowMember extends Fragment {
                 @Override
                 public boolean onLongClick(View v) {
 
-                    if (mActivity instanceof ActivityGroupProfile) {
+                    if (fragment instanceof FragmentGroupProfile) {
 
                         if (role.equals(GroupChatRole.OWNER.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
 
-                                ((ActivityGroupProfile) mActivity).kickMember(mContact.peerId);
+                                ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
 
-                                ((ActivityGroupProfile) mActivity).kickAdmin(mContact.peerId);
+                                ((FragmentGroupProfile) fragment).kickAdmin(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
 
-                                ((ActivityGroupProfile) mActivity).kickModerator(mContact.peerId);
+                                ((FragmentGroupProfile) fragment).kickModerator(mContact.peerId);
                             }
                         } else if (role.equals(GroupChatRole.ADMIN.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((ActivityGroupProfile) mActivity).kickMember(mContact.peerId);
+                                ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                                ((ActivityGroupProfile) mActivity).kickModerator(mContact.peerId);
+                                ((FragmentGroupProfile) fragment).kickModerator(mContact.peerId);
                             }
                         } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((ActivityGroupProfile) mActivity).kickMember(mContact.peerId);
+                                ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
                             }
                         }
                     } else if (mActivity instanceof ActivityChannelProfile) {
