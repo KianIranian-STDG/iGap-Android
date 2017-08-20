@@ -25,7 +25,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.regex.Pattern;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivitySetting;
 import net.iGap.interfaces.OnTwoStepPassword;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.enums.Security;
@@ -44,7 +43,7 @@ import static net.iGap.R.id.tsv_setRecoveryEmail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSecurity extends Fragment implements ActivitySetting.OnBackPressedListener {
+public class FragmentSecurity extends Fragment {
 
     private static String password;
     private boolean isChabgePassword = false;
@@ -95,10 +94,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((ActivitySetting) mActivity).setOnBackPressedListener(this, false);
-
         prgWaiting = (ProgressBar) view.findViewById(R.id.tsv_prgWaiting_addContact);
-
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
         txtTitleToolbar = (TextView) view.findViewById(R.id.stps_titleToolbar);
@@ -196,7 +192,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
 
                 isFirstArrive = false;
                 FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentSetSecurityPassword).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentSetSecurityPassword).commit();
             }
         });
 
@@ -230,7 +226,7 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
                         bundle.putBoolean("IS_CONFIRM_EMAIL", isConfirmedRecoveryEmail);
 
                         fragmentSecurityRecovery.setArguments(bundle);
-                        mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentSecurityRecovery).commit();
+                        mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentSecurityRecovery).commit();
 
                     }
                 }).show();
@@ -271,12 +267,11 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
             public void onClick(View v) {
 
                 isFirstArrive = false;
-                ((ActivitySetting) mActivity).setOnBackPressedListener(FragmentSecurity.this, true);
                 FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
                 Bundle bundle = new Bundle();
                 bundle.putString("OLD_PASSWORD", password);
                 fragmentSetSecurityPassword.setArguments(bundle);
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentSetSecurityPassword).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentSetSecurityPassword).commit();
             }
         });
 
@@ -811,15 +806,11 @@ public class FragmentSecurity extends Fragment implements ActivitySetting.OnBack
         return Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{2,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,64}" + "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" + ")+");
     }
 
-    @Override
-    public void doBack() {
-        btnBack.performClick();
-    }
+
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((ActivitySetting) mActivity).setOnBackPressedListener(FragmentSecurity.this, true);
     }
 
 }

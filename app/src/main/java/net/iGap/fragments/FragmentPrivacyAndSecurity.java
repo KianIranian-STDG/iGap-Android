@@ -172,7 +172,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentSecurity fragmentSecurity = new FragmentSecurity();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.st_layoutParent, fragmentSecurity).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentSecurity).commit();
             }
         });
 
@@ -181,7 +181,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentActiveSessions fragmentActiveSessions = new FragmentActiveSessions();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(st_layoutParent, fragmentActiveSessions, null).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(st_layoutParent, fragmentActiveSessions, null).commit();
             }
         });
 
@@ -190,7 +190,7 @@ public class FragmentPrivacyAndSecurity extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentBlockedUser fragmentBlockedUser = new FragmentBlockedUser();
-                mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null).commit();
+                mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null).commit();
             }
         });
 

@@ -66,6 +66,7 @@ import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMapUsers;
 import net.iGap.fragments.FragmentNewGroup;
+import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
@@ -398,7 +399,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         fragmentNewGroup.setArguments(bundle);
 
                         try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment").commitAllowingStateLoss();
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment").commitAllowingStateLoss();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -499,8 +500,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragment.setArguments(bundle);
 
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
                         .replace(R.id.fragmentContainer, fragment, "register_contact_fragment")
                         .commit();
                 } catch (Exception e) {
@@ -524,7 +524,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 fragment.setArguments(bundle);
 
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -546,7 +546,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -931,8 +931,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
                         .replace(R.id.fragmentContainer, fragment, "register_contact_fragment")
                         .commit();
                 } catch (Exception e) {
@@ -961,7 +960,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -987,7 +986,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1012,7 +1011,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 final Fragment fragment = FragmentIgapSearch.newInstance();
                 try {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "Search_fragment_igap").commit();
+
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "Search_fragment_igap").commit();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1040,8 +1040,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TITLE", "Contacts");
                 fragment.setArguments(bundle);
                 try {
-                    getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
                         .replace(R.id.fragmentContainer, fragment, "register_contact_fragment")
                         .commit();
                 } catch (Exception e) {
@@ -1076,8 +1075,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         Fragment fragment = FragmentCall.newInstance(false);
                         try {
-                            getSupportFragmentManager().beginTransaction()
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
                                 .replace(R.id.fragmentContainer, fragment, "call_fragment")
                                 .commit();
                         } catch (Exception e) {
@@ -1181,9 +1179,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
                         @Override
                         public void Allow() {
-                            Intent intent = new Intent(G.context, ActivitySetting.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                            //Intent intent = new Intent(G.context, ActivitySetting.class);
+                            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            //startActivity(intent);
+
+                            FragmentSetting fragmentSetting = new FragmentSetting();
+                            getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.fragmentContainer, fragmentSetting).commit();
                             //ActivityMain.mLeftDrawerLayout.closeDrawer();
                         }
 
@@ -1541,8 +1542,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void Allow() throws IOException {
                     FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
                     try {
-                        getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
                             .replace(R.id.fragmentContainer, fragmentiGapMap, "map_fragment")
                             .commit();
                     } catch (Exception e) {
