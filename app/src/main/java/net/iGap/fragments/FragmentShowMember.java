@@ -821,8 +821,8 @@ public class FragmentShowMember extends Fragment {
                             ActivityChannelProfile.onMenuClick.clicked(v, mContact);
                         }
                     } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
-                        if (ActivityGroupProfile.onMenuClick != null) {
-                            ActivityGroupProfile.onMenuClick.clicked(v, mContact);
+                        if (FragmentGroupProfile.onMenuClick != null) {
+                            FragmentGroupProfile.onMenuClick.clicked(v, mContact);
                         }
                     }
                 }

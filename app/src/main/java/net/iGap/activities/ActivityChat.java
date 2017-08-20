@@ -127,6 +127,7 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.fragments.FragmentCall;
+import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperAvatar;
@@ -4331,9 +4332,10 @@ public class ActivityChat extends ActivityEnhanced
             startActivity(intent);
         } else if (chatType == GROUP) {
             if (!isChatReadOnly) {
-                Intent intent = new Intent(G.context, ActivityGroupProfile.class);
-                intent.putExtra("RoomId", mRoomId);
-                startActivity(intent);
+                //Intent intent = new Intent(G.context, ActivityGroupProfile.class);
+                //intent.putExtra("RoomId", mRoomId);
+                //startActivity(intent);
+                getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentGroupProfile.newInstance(mRoomId), FragmentGroupProfile.FRAGMENT_TAG).addToBackStack(null).commit();
             }
         } else if (chatType == CHANNEL) {
             Intent intent = new Intent(G.context, ActivityChannelProfile.class);

@@ -31,6 +31,7 @@ import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.PopupWindow;
@@ -381,6 +382,24 @@ public class AttachFile {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
                 ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                isInAttach = true;
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
+    public void requestOpenGalleryForImageSingleSelectFragment(final Fragment fragment) throws IOException {
+
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                fragment.startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
                 isInAttach = true;
             }
 

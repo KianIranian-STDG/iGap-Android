@@ -5,6 +5,7 @@
     android:id="@+id/fragmentContainer_group_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:ignore="MissingPrefix"
     >
 
@@ -89,8 +90,8 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 >
               <TextView
                   android:id="@+id/agp_txt_titleToolbar"
@@ -101,8 +102,8 @@
                   android:textColor="@color/whit_background"
                   android:textSize="@dimen/dp18"
                   android:textStyle="normal"
-                  fontPath="fonts/IRANSansMobile_Bold.ttf"
                   android:visibility="gone"
+                  fontPath="fonts/IRANSansMobile_Bold.ttf"
                   />
 
             </LinearLayout>
@@ -170,15 +171,15 @@
               android:id="@+id/agp_txt_group_name_title"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:lineSpacingMultiplier=".8"
               android:maxLength="24"
+              android:padding="@dimen/dp4"
               android:singleLine="true"
               android:text="AM"
               android:textAppearance="?android:attr/textAppearanceMedium"
               android:textColor="@android:color/white"
               android:textSize="@dimen/dp18"
               app:emojiSize="@dimen/dp14"
-              android:lineSpacingMultiplier=".8"
-              android:padding="@dimen/dp4"
               />
 
         </LinearLayout>
@@ -260,6 +261,8 @@
                   android:id="@+id/agp_txt_group_name"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:lineSpacingMultiplier=".8"
+                  android:padding="@dimen/dp4"
                   android:paddingBottom="@dimen/dp12"
                   android:paddingEnd="@dimen/dp4"
                   android:paddingStart="@dimen/dp4"
@@ -269,8 +272,6 @@
                   android:textColor="@color/gray_5c"
                   android:textSize="@dimen/dp13"
                   app:emojiSize="@dimen/dp14"
-                  android:lineSpacingMultiplier=".8"
-                  android:padding="@dimen/dp4"
                   />
 
             </LinearLayout>
@@ -361,20 +362,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@string/group_description"
                 android:textColor="@color/black_register"
                 android:textSize="@dimen/dp15"
-                android:layout_gravity="center"
                 />
 
             <net.iGap.module.EmojiTextViewE
                 android:id="@+id/agp_txt_group_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:lineSpacingMultiplier=".8"
                 android:maxLength="255"
+                android:padding="@dimen/dp4"
                 android:paddingBottom="@dimen/dp12"
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
@@ -383,8 +386,6 @@
                 android:textColor="@color/gray_5c"
                 android:textSize="@dimen/dp13"
                 app:emojiSize="@dimen/dp14"
-                android:lineSpacingMultiplier=".8"
-                android:padding="@dimen/dp4"
                 />
           </LinearLayout>
 
