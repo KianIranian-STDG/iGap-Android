@@ -225,6 +225,7 @@ public class FragmentGroupProfile extends Fragment implements OnGroupAvatarRespo
         //group info
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
+            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentGroupProfile.this).commit();
             return;
         }
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();

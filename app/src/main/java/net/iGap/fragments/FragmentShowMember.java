@@ -44,7 +44,6 @@ import java.util.HashMap;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChannelProfile;
 import net.iGap.activities.ActivityContactsProfile;
 import net.iGap.activities.ActivitySetting;
 import net.iGap.helper.HelperAvatar;
@@ -722,31 +721,31 @@ public class FragmentShowMember extends Fragment {
                                 ((FragmentGroupProfile) fragment).kickMember(mContact.peerId);
                             }
                         }
-                    } else if (mActivity instanceof ActivityChannelProfile) {
+                    } else if (fragment instanceof FragmentChannelProfile) {
 
                         if (role.equals(GroupChatRole.OWNER.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
 
-                                ((ActivityChannelProfile) mActivity).kickMember(mContact.peerId);
+                                ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
 
-                                ((ActivityChannelProfile) mActivity).kickAdmin(mContact.peerId);
+                                ((FragmentChannelProfile) fragment).kickAdmin(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
 
-                                ((ActivityChannelProfile) mActivity).kickModerator(mContact.peerId);
+                                ((FragmentChannelProfile) fragment).kickModerator(mContact.peerId);
                             }
                         } else if (role.equals(GroupChatRole.ADMIN.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((ActivityChannelProfile) mActivity).kickMember(mContact.peerId);
+                                ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
                             } else if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                                ((ActivityChannelProfile) mActivity).kickModerator(mContact.peerId);
+                                ((FragmentChannelProfile) fragment).kickModerator(mContact.peerId);
                             }
                         } else if (role.equals(GroupChatRole.MODERATOR.toString())) {
 
                             if (mContact.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                                ((ActivityChannelProfile) mActivity).kickMember(mContact.peerId);
+                                ((FragmentChannelProfile) fragment).kickMember(mContact.peerId);
                             }
                         }
                     }
@@ -830,8 +829,8 @@ public class FragmentShowMember extends Fragment {
                 public void onClick(View v) {
 
                     if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                        if (ActivityChannelProfile.onMenuClick != null) {
-                            ActivityChannelProfile.onMenuClick.clicked(v, mContact);
+                        if (FragmentChannelProfile.onMenuClick != null) {
+                            FragmentChannelProfile.onMenuClick.clicked(v, mContact);
                         }
                     } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
                         if (FragmentGroupProfile.onMenuClick != null) {

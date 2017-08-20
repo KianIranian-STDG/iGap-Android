@@ -127,6 +127,7 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.fragments.FragmentCall;
+import net.iGap.fragments.FragmentChannelProfile;
 import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.fragments.FragmentShowImage;
@@ -213,7 +214,6 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.ProgressState;
-import net.iGap.module.enums.PutExtraKeys;
 import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructBackGroundSeen;
 import net.iGap.module.structs.StructBottomSheet;
@@ -4338,9 +4338,10 @@ public class ActivityChat extends ActivityEnhanced
                 getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentGroupProfile.newInstance(mRoomId), FragmentGroupProfile.FRAGMENT_TAG).addToBackStack(null).commit();
             }
         } else if (chatType == CHANNEL) {
-            Intent intent = new Intent(G.context, ActivityChannelProfile.class);
-            intent.putExtra(PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
-            startActivity(intent);
+            //Intent intent = new Intent(G.context, ActivityChannelProfile.class);
+            //intent.putExtra(PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
+            //startActivity(intent);
+            getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentChannelProfile.newInstance(mRoomId), FragmentChannelProfile.FRAGMENT_TAG).addToBackStack(null).commit();
         }
     }
 
