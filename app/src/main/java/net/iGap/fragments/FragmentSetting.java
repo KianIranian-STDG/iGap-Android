@@ -5,6 +5,7 @@ package net.iGap.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -1385,6 +1386,43 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onClick(View view) {
                 toggleEnableDataShams.setChecked(!toggleEnableDataShams.isChecked());
+            }
+        });
+
+        // Auto-Rotate screen
+
+        final TextView txtAutoRotate = (TextView) view.findViewById(R.id.st_txt_st_toggle_auto_rotate);
+        final ToggleButton toggleEnableAutoRotate = (ToggleButton) view.findViewById(R.id.st_toggle__auto_rotate);
+
+        boolean checkedEnableAutoRotate = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
+        if (checkedEnableAutoRotate) {
+            toggleEnableAutoRotate.setChecked(true);
+        } else {
+            toggleEnableAutoRotate.setChecked(false);
+        }
+
+        toggleEnableAutoRotate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (isChecked) {
+                    editor.putBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
+                    editor.apply();
+                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
+                } else {
+                    editor.putBoolean(SHP_SETTING.KEY_AUTO_ROTATE, false);
+                    editor.apply();
+                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+                }
+            }
+        });
+
+        txtAutoRotate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleEnableAutoRotate.setChecked(!toggleEnableAutoRotate.isChecked());
             }
         });
 

@@ -1042,4 +1042,6 @@
 
   <string name="exceed_4_line">Your status cannot exceed 4 lines.</string>
 
+  <string name="st_Auto_Rotate">Auto-Rotate Screen</string>
+
 </resources>

@@ -11,6 +11,8 @@
 package net.iGap.activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -30,6 +32,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AttachFile;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.proto.ProtoUserUpdateStatus;
@@ -64,6 +67,14 @@ public class ActivityEnhanced extends AppCompatActivity {
         makeDirectoriesIfNotExist();
 
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
+        if (!checkedEnableDataShams) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        }
+
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
