@@ -141,7 +141,7 @@ import static net.iGap.R.id.fragmentContainer_group_profile;
 * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
 * All rights reserved.
 */
-public class FragmentGroupProfile extends Fragment implements OnGroupAvatarResponse, OnGroupAvatarDelete, OnGroupRevokeLink {
+public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarResponse, OnGroupAvatarDelete, OnGroupRevokeLink {
 
     LinearLayout layoutSetting;
     NestedScrollView nestedScrollView;

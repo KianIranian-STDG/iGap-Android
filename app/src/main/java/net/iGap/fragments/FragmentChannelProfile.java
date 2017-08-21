@@ -132,7 +132,7 @@ import net.iGap.request.RequestUserInfo;
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
 
-public class FragmentChannelProfile extends Fragment implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
+public class FragmentChannelProfile extends BaseFragment implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelRevokeLink {
 
 
     private AppBarLayout appBarLayout;
