@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import net.iGap.G;
+import net.iGap.helper.HelperLog;
 
 public class MyPhoneStateListener extends PhoneStateListener {
 
@@ -31,6 +32,13 @@ public class MyPhoneStateListener extends PhoneStateListener {
                     if (am.isBluetoothScoOn()) {
                         isBlutoothOn = true;
                         am.setBluetoothScoOn(false);
+
+                        try {
+                            am.stopBluetoothSco();
+                        } catch (Exception e) {
+                            HelperLog.setErrorLog("myPhoneStateListener    " + e.toString());
+                        }
+
                     }
                 }
             } else if (state == TelephonyManager.CALL_STATE_IDLE) {

@@ -194,7 +194,12 @@ public class HelperNotificationAndBadge {
                 }
             }
             if (avatarPath != null) {
-                Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+
+                BitmapFactory.Options option = new BitmapFactory.Options();
+                option.outHeight = 64;
+                option.outWidth = 64;
+
+                Bitmap bitmap = BitmapFactory.decodeFile(avatarPath, option);
                 if (bitmap != null) {
                     mBitmapIcon = bitmap;
                 }
