@@ -5192,6 +5192,10 @@ public class ActivityChat extends ActivityEnhanced
                                 blockUser = true;
                                 txtSpamUser.setText(getResources().getString(R.string.un_block_user));
                                 vgSpamUser.setVisibility(View.VISIBLE);
+                            } else {
+                                if (vgSpamUser != null) {
+                                    vgSpamUser.setVisibility(View.GONE);
+                                }
                             }
                         }
                     }
@@ -5208,6 +5212,10 @@ public class ActivityChat extends ActivityEnhanced
                                 blockUser = true;
                                 txtSpamUser.setText(getResources().getString(R.string.un_block_user));
                                 vgSpamUser.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            if (vgSpamUser != null) {
+                                vgSpamUser.setVisibility(View.GONE);
                             }
                         }
                     }
