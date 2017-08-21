@@ -236,14 +236,17 @@ public final class StartupActions {
             case "فارسی":
                 selectedLanguage = "fa";
                 HelperCalander.isLanguagePersian = true;
+                G.isAppRtl = true;
                 break;
             case "English":
                 selectedLanguage = "en";
                 HelperCalander.isLanguagePersian = false;
+                G.isAppRtl = false;
                 break;
             case "العربی":
                 selectedLanguage = "ar";
                 HelperCalander.isLanguagePersian = false;
+                G.isAppRtl = false;
                 break;
         }
 

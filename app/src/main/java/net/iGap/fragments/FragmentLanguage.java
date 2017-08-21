@@ -101,6 +101,7 @@ public class FragmentLanguage extends Fragment {
                     editor.apply();
                     setLocale("en");
                     HelperCalander.isLanguagePersian = false;
+                    G.isAppRtl = false;
 
                     if (onRefreshActivity != null) {
                         onRefreshActivity.refresh("en");
@@ -126,6 +127,7 @@ public class FragmentLanguage extends Fragment {
                     G.selectedLanguage = "fa";
                     setLocale("fa");
                     HelperCalander.isLanguagePersian = true;
+                    G.isAppRtl = true;
 
                     if (onRefreshActivity != null) {
                         onRefreshActivity.refresh("fa");

@@ -271,6 +271,7 @@ public class G extends MultiDexApplication {
 
     public static boolean twoPaneMode = false;
     public static boolean isLandscape = false;
+    public static boolean isAppRtl = false;
 
 
     public static String salectedTabInMainActivity = "";

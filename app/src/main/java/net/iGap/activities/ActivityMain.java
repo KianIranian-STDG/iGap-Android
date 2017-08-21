@@ -31,6 +31,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -294,6 +295,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
         setContentView(R.layout.activity_main);
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        if (G.isAppRtl) {
+            ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_RTL);
+        } else {
+            ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_LTR);
+        }
+
+
 
         frameChatContainer = (FrameLayout) findViewById(R.id.am_frame_chat_container);
 
@@ -912,7 +923,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
