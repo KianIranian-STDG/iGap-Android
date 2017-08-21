@@ -44,9 +44,9 @@ import java.util.HashMap;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityContactsProfile;
 import net.iGap.activities.ActivitySetting;
 import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnAvatarGet;
@@ -82,6 +82,7 @@ import net.iGap.request.RequestGroupGetMemberList;
 import net.iGap.request.RequestUserInfo;
 
 import static net.iGap.G.inflater;
+import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class FragmentShowMember extends Fragment {
 
@@ -213,7 +214,7 @@ public class FragmentShowMember extends Fragment {
                                 public void execute(Realm realm) {
                                     final RealmList<RealmMember> newMemberList = new RealmList<>();
                                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
-                                    if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                    if (realmRoom.getType() == GROUP) {
                                         for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : listMembers) {
                                             if (Long.parseLong(messageOne) == member.getUserId()) {
                                                 mCurrentUpdateCount++;
@@ -363,7 +364,7 @@ public class FragmentShowMember extends Fragment {
 
                 final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
                 if (realmRoom != null) {
-                    if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                    if (realmRoom.getType() == GROUP) {
 
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
@@ -510,7 +511,6 @@ public class FragmentShowMember extends Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-
                 mActivity.getSupportFragmentManager().popBackStack();
             }
         });
@@ -555,7 +555,7 @@ public class FragmentShowMember extends Fragment {
             offset += limit;
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
             if (realmRoom != null) {
-                if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                if (realmRoom.getType() == GROUP) {
                     new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
                 } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                     new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
@@ -573,7 +573,7 @@ public class FragmentShowMember extends Fragment {
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
         if (realmRoom != null) {
 
-            if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+            if (realmRoom.getType() == GROUP) {
                 memberList = realmRoom.getGroupRoom().getMembers();
                 role = realmRoom.getGroupRoom().getRole().toString();
             } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
@@ -665,18 +665,20 @@ public class FragmentShowMember extends Fragment {
                                 if (mContact.peerId == userID) {
                                     intent = new Intent(mActivity, ActivitySetting.class);
                                 } else {
-                                    intent = new Intent(mActivity, ActivityContactsProfile.class);
+                                    //intent = new Intent(mActivity, ActivityContactsProfile.class);
+                                    //intent.putExtra("peerId", mContact.peerId);
+                                    //intent.putExtra("RoomId", mRoomID);
+                                    //intent.putExtra("enterFrom", ProtoGlobal.Room.Type.GROUP.toString());
 
-                                    intent.putExtra("peerId", mContact.peerId);
-                                    intent.putExtra("RoomId", mRoomID);
-                                    intent.putExtra("enterFrom", ProtoGlobal.Room.Type.GROUP.toString());
+                                    //mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
+                                    HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString()), false, R.id.ac_ll_parent);
                                 }
 
                                 //mActivity.finish();
                                 //if (ActivityChat.activityChat != null) ActivityChat.activityChat.finish();
 
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
+                                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                //startActivity(intent);
                             }
 
                             @Override
@@ -832,7 +834,7 @@ public class FragmentShowMember extends Fragment {
                         if (FragmentChannelProfile.onMenuClick != null) {
                             FragmentChannelProfile.onMenuClick.clicked(v, mContact);
                         }
-                    } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                    } else if (roomType == GROUP) {
                         if (FragmentGroupProfile.onMenuClick != null) {
                             FragmentGroupProfile.onMenuClick.clicked(v, mContact);
                         }

@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,10 +20,10 @@ import io.realm.RealmResults;
 import java.util.HashMap;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityContactsProfile;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
@@ -157,11 +156,14 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
                     //    btnBack.performClick();
                     //}
 
-                    Intent intent = new Intent(G.currentActivity, ActivityContactsProfile.class);
-                    intent.putExtra("peerId", item.getUserId());
-                    intent.putExtra("enterFrom", "Others");
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    G.currentActivity.startActivity(intent);
+                    //Intent intent = new Intent(G.currentActivity, ActivityContactsProfile.class);
+                    //intent.putExtra("peerId", item.getUserId());
+                    //intent.putExtra("enterFrom", "Others");
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //G.currentActivity.startActivity(intent);
+
+                    //mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, FragmentContactsProfile.newInstance(0, item.getUserId(), "Others"), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
+                    HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, item.getUserId(), "Others"));
 
                     //for close FragmentiGapMap
                     //if (G.onMapClose != null) {

@@ -128,12 +128,14 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChannelProfile;
+import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperGetMessageState;
@@ -2623,11 +2625,14 @@ public class ActivityChat extends ActivityEnhanced
          */
         G.onClearChatHistory = null;
 
-        Intent intent = new Intent(G.context, ActivityContactsProfile.class);
-        intent.putExtra("peerId", parseLong(messageInfo.senderID));
-        intent.putExtra("RoomId", mRoomId);
-        intent.putExtra("enterFrom", GROUP.toString());
-        startActivity(intent);
+        //Intent intent = new Intent(G.context, ActivityContactsProfile.class);
+        //intent.putExtra("peerId", parseLong(messageInfo.senderID));
+        //intent.putExtra("RoomId", mRoomId);
+        //intent.putExtra("enterFrom", GROUP.toString());
+        //startActivity(intent);
+
+        HelperFragment.loadFragment(getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString()));
+        //getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
     }
 
     @Override
@@ -4325,12 +4330,16 @@ public class ActivityChat extends ActivityEnhanced
      */
     private void goToProfile() {
         if (chatType == CHAT) {
-            Intent intent = new Intent(G.context, ActivityContactsProfile.class);
-            intent.putExtra("peerId", chatPeerId);
-            intent.putExtra("RoomId", mRoomId);
-            intent.putExtra("enterFrom", CHAT.toString());
-            startActivity(intent);
+            //Intent intent = new Intent(G.context, ActivityContactsProfile.class);
+            //intent.putExtra("peerId", chatPeerId);
+            //intent.putExtra("RoomId", mRoomId);
+            //intent.putExtra("enterFrom", CHAT.toString());
+            //startActivity(intent);
+
+            //getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
+            HelperFragment.loadFragment(getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()));
         } else if (chatType == GROUP) {
+
             if (!isChatReadOnly) {
                 //Intent intent = new Intent(G.context, ActivityGroupProfile.class);
                 //intent.putExtra("RoomId", mRoomId);

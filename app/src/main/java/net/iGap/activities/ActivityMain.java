@@ -441,7 +441,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         try {
                             // getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment").commitAllowingStateLoss();
 
-                            HelperFragment.loadFragment(getSupportFragmentManager(), fragmentNewGroup, true);
+                            HelperFragment.loadFragment(getSupportFragmentManager(), fragmentNewGroup, true, 0);
 
                         } catch (Exception e) {
                             e.getStackTrace();

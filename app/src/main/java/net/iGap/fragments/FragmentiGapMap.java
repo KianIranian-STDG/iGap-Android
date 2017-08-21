@@ -559,7 +559,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                             //    R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.replace, fragmentMapUsers, "map_user_fragment")
                             //    .commitAllowingStateLoss();
 
-                            HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragmentMapUsers, true);
+                            HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragmentMapUsers, true, 0);
 
                         } catch (Exception e) {
                             e.getStackTrace();

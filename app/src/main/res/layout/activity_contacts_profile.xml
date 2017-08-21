@@ -5,6 +5,7 @@
     android:id="@+id/chi_layoutParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:ignore="MissingPrefix"
     >
 
@@ -70,8 +71,8 @@
 
           <LinearLayout
               android:layout_width="0dp"
-              android:layout_weight="1"
               android:layout_height="match_parent"
+              android:layout_weight="1"
               android:gravity="center|left"
               android:orientation="vertical"
               >
@@ -85,8 +86,8 @@
                 android:text="@string/st_titleToolbar"
                 android:textColor="@color/whit_background"
                 android:textSize="@dimen/dp16"
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
                 android:visibility="gone"
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
                 />
 
 
@@ -103,9 +104,6 @@
                 android:visibility="gone"
                 />
           </LinearLayout>
-
-
-
 
 
           <net.iGap.libs.rippleeffect.RippleView
@@ -186,14 +184,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/dp4"
+            android:lineSpacingMultiplier=".8"
             android:maxLength="24"
+            android:padding="@dimen/dp4"
             android:text="Last Seen at 14:20 "
             android:textColor="@android:color/white"
             android:textSize="@dimen/dp14"
             android:textStyle="bold"
             app:emojiSize="@dimen/dp14"
-            android:lineSpacingMultiplier=".8"
-            android:padding="@dimen/dp4"
             />
 
       </LinearLayout>
@@ -270,6 +268,8 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:gravity="center_vertical"
+              android:lineSpacingMultiplier=".8"
+              android:padding="@dimen/dp4"
               android:paddingEnd="@dimen/dp4"
               android:paddingLeft="@dimen/dp4"
               android:paddingRight="@dimen/dp4"
@@ -278,8 +278,6 @@
               android:textColor="@color/gray_5c"
               android:textSize="@dimen/dp13"
               app:emojiSize="@dimen/dp14"
-              android:lineSpacingMultiplier=".8"
-              android:padding="@dimen/dp4"
               />
 
         </LinearLayout>

@@ -23,10 +23,10 @@ public class HelperFragment {
 
     public static void loadFragment(FragmentManager fragmentManager, Fragment fragment) {
 
-        loadFragment(fragmentManager, fragment, false);
+        loadFragment(fragmentManager, fragment, false, 0);
     }
 
-    public static void loadFragment(FragmentManager fragmentManager, Fragment fragment, boolean stateLoose) {
+    public static void loadFragment(FragmentManager fragmentManager, Fragment fragment, boolean stateLoose, int resourceId) {
 
         if (fragment == null) {
             return;
@@ -38,12 +38,17 @@ public class HelperFragment {
 
         String tag = fragment.getClass().getName();
 
-        int resId = getResContainer(tag);
+        int resId;
+        if (resourceId != 0) {
+            resId = resourceId;
+        } else {
+            resId = getResContainer(tag);
+        }
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
 
         ft.addToBackStack(tag).replace(resId, fragment, tag).
-            setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
+                setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
 
         if (stateLoose) {
             ft.commitAllowingStateLoss();
