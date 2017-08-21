@@ -9,246 +9,310 @@
     tools:openDrawer="start"
     >
 
-  <net.iGap.module.NotTouchableCoordinatorLayout
-      android:id="@+id/fragmentContainer"
+
+  <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:orientation="horizontal"
       >
 
 
-    <net.iGap.module.MyAppBarLayout
-        android:id="@+id/appBarLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         >
 
-      <RelativeLayout
-          android:id="@+id/rootToolbar"
-        android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:layout_scrollFlags="scroll|enterAlways"
-        >
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/main_toolbar"
+      <FrameLayout
+          android:id="@+id/am_frame_main_container"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="match_parent"
+          >
+
+        <net.iGap.module.NotTouchableCoordinatorLayout
+            android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
-
+            android:layout_height="match_parent"
             >
 
 
-          <LinearLayout
+          <net.iGap.module.MyAppBarLayout
+              android:id="@+id/appBarLayout"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
+              android:layout_height="wrap_content"
               >
 
-            <LinearLayout
-                android:id="@+id/amr_toolbar"
+            <RelativeLayout
+                android:id="@+id/rootToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp60"
-                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways"
                 >
-
-              <LinearLayout
-                  android:id="@+id/amr_ripple_menu"
-                  android:layout_width="@dimen/dp52"
-                  android:layout_height="match_parent"
-                  android:gravity="center"
-
-                  >
-
-                <ImageView
-                    android:id="@+id/amr_btn_menu"
-                    android:layout_width="@dimen/dp28"
-                    android:layout_height="@dimen/dp28"
-                    app:srcCompat="@drawable/hamburger_menu"
-                    android:adjustViewBounds="true"
-                    android:layout_gravity="center"
-                    android:tint="@color/white"
-                    />
-              </LinearLayout>
-
-
-
-              <TextView
-                  android:id="@+id/cl_txt_igap"
-                  android:layout_width="0dp"
-                  android:layout_height="match_parent"
-                  android:layout_weight="1"
-                  android:gravity="start|center_vertical"
-                  android:singleLine="true"
-                  android:text="@string/app_name"
-                  android:textAppearance="?android:attr/textAppearanceMedium"
-                  android:textColor="@android:color/white"
-                  fontPath="fonts/IRANSansMobile_Bold.ttf"
-                  android:textSize="@dimen/dp18"
-                  android:paddingStart="@dimen/dp15"
-                  android:paddingLeft="@dimen/dp15"
-                  tools:ignore="MissingPrefix"
-                  />
-
-              <net.iGap.module.MaterialDesignTextView
-                  android:id="@+id/am_btn_location"
-                  android:layout_width="@dimen/dp52"
-                  android:visibility="gone"
-                  android:layout_height="match_parent"
-                  android:gravity="center"
-                  android:text="@string/md_nearby"
-                  android:textAppearance="@style/TextIconAppearance_toolbar"
-                  android:textColor="@color/whit_background"
-                  />
-
-              <net.iGap.module.MaterialDesignTextView
-                  android:id="@+id/am_btn_menu"
-                  android:layout_width="@dimen/dp52"
-                  android:visibility="gone"
-                  android:layout_height="match_parent"
-                  android:gravity="center"
-                  android:text="@string/md_show_more_button"
-                  android:textAppearance="@style/TextIconAppearance_toolbar"
-                  android:textColor="@color/whit_background"
-                  />
-
-              <net.iGap.libs.rippleeffect.RippleView
-                  android:id="@+id/amr_ripple_search"
-                  android:layout_width="wrap_content"
+              <android.support.v7.widget.Toolbar
+                  android:id="@+id/main_toolbar"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  app:rv_alpha="200"
-                  app:rv_centered="true"
-                  app:rv_rippleDuration="100"
-                  rv_centered="true"
+                  app:contentInsetLeft="0dp"
+                  app:contentInsetStart="0dp"
+
                   >
 
 
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/amr_btn_search"
-                    android:layout_width="@dimen/dp52"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="center"
-                    android:text="@string/md_searching_magnifying_glass"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/dp22"
-                    />
+                    android:orientation="vertical"
+                    >
 
-              </net.iGap.libs.rippleeffect.RippleView>
-            </LinearLayout>
+                  <LinearLayout
+                      android:id="@+id/amr_toolbar"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/dp60"
+                      android:orientation="horizontal"
+                      >
 
+                    <LinearLayout
+                        android:id="@+id/amr_ripple_menu"
+                        android:layout_width="@dimen/dp52"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
 
-          </LinearLayout>
+                        >
 
-
-        </android.support.v7.widget.Toolbar>
-
-      </RelativeLayout>
-
-      <com.gigamole.navigationtabstrip.NavigationTabStrip
-          android:id="@+id/nts"
-          android:layout_width="wrap_content"
-          android:layout_height="@dimen/dp60"
-          app:nts_active_color="@color/white"
-          app:nts_animation_duration="300"
-          app:nts_color="#000"
-          app:nts_corners_radius="1.5dp"
-          app:nts_factor="1.5"
-          app:nts_gravity="bottom"
-          app:nts_inactive_color="#adffffff"
-          app:nts_type="point"
-          app:nts_typeface="fonts/iGap-Fontico.ttf"
-          app:nts_weight="3dp"
-          tools:ignore="MissingConstraints"
-          android:layoutDirection="ltr"
-          tools:layout_editor_absoluteX="8dp"
-          tools:layout_editor_absoluteY="0dp"
-          />
+                      <ImageView
+                          android:id="@+id/amr_btn_menu"
+                          android:layout_width="@dimen/dp28"
+                          android:layout_height="@dimen/dp28"
+                          app:srcCompat="@drawable/hamburger_menu"
+                          android:adjustViewBounds="true"
+                          android:layout_gravity="center"
+                          android:tint="@color/white"
+                          />
+                    </LinearLayout>
 
 
-      <include
-          layout="@layout/music_layout_small"
-          android:id="@+id/amr_ll_music_layout"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:visibility="gone"
-          />
+                    <TextView
+                        android:id="@+id/cl_txt_igap"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="start|center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/app_name"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@android:color/white"
+                        fontPath="fonts/IRANSansMobile_Bold.ttf"
+                        android:textSize="@dimen/dp18"
+                        android:paddingStart="@dimen/dp15"
+                        android:paddingLeft="@dimen/dp15"
+                        tools:ignore="MissingPrefix"
+                        />
 
-      <include
-          layout="@layout/chat_sub_layout_strip_call"
-          android:id="@+id/ac_ll_strip_call"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:visibility="gone"
-          />
+                    <net.iGap.module.MaterialDesignTextView
+                        android:id="@+id/am_btn_location"
+                        android:layout_width="@dimen/dp52"
+                        android:visibility="gone"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/md_nearby"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
+                        android:textColor="@color/whit_background"
+                        />
+
+                    <net.iGap.module.MaterialDesignTextView
+                        android:id="@+id/am_btn_menu"
+                        android:layout_width="@dimen/dp52"
+                        android:visibility="gone"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/md_show_more_button"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
+                        android:textColor="@color/whit_background"
+                        />
+
+                    <net.iGap.libs.rippleeffect.RippleView
+                        android:id="@+id/amr_ripple_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rv_alpha="200"
+                        app:rv_centered="true"
+                        app:rv_rippleDuration="100"
+                        rv_centered="true"
+                        >
 
 
-    </net.iGap.module.MyAppBarLayout>
+                      <net.iGap.module.MaterialDesignTextView
+                          android:id="@+id/amr_btn_search"
+                          android:layout_width="@dimen/dp52"
+                          android:layout_height="match_parent"
+                          android:background="?attr/selectableItemBackgroundBorderless"
+                          android:gravity="center"
+                          android:text="@string/md_searching_magnifying_glass"
+                          android:textAppearance="@style/TextIconAppearance_toolbar"
+                          android:textColor="@android:color/white"
+                          android:textSize="@dimen/dp22"
+                          />
+
+                    </net.iGap.libs.rippleeffect.RippleView>
+                  </LinearLayout>
 
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                </LinearLayout>
+
+
+              </android.support.v7.widget.Toolbar>
+
+            </RelativeLayout>
+
+            <com.gigamole.navigationtabstrip.NavigationTabStrip
+                android:id="@+id/nts"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp60"
+                app:nts_active_color="@color/white"
+                app:nts_animation_duration="300"
+                app:nts_color="#000"
+                app:nts_corners_radius="1.5dp"
+                app:nts_factor="1.5"
+                app:nts_gravity="bottom"
+                app:nts_inactive_color="#adffffff"
+                app:nts_type="point"
+                app:nts_typeface="fonts/iGap-Fontico.ttf"
+                app:nts_weight="3dp"
+                tools:ignore="MissingConstraints"
+                android:layoutDirection="ltr"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="0dp"
+                />
+
+
+            <include
+                layout="@layout/music_layout_small"
+                android:id="@+id/amr_ll_music_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
+
+            <include
+                layout="@layout/chat_sub_layout_strip_call"
+                android:id="@+id/ac_ll_strip_call"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
+
+
+          </net.iGap.module.MyAppBarLayout>
+
+
+          <android.support.v4.view.ViewPager
+              android:id="@+id/viewpager"
+              app:layout_behavior="@string/appbar_scrolling_view_behavior"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layoutDirection="ltr"
+              android:background="@color/white"
+              android:overScrollMode="never"
+              />
+
+
+          <net.iGap.libs.floatingAddButton.ArcMenu
+              android:id="@+id/ac_arc_button_add"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="bottom|end"
+              app:borderWidth="0dp"
+              app:menu_color="@color/green"
+              app:menu_scr="@mipmap/plus"
+              >
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/ac_fab_start_new_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/single_chat"
+                app:backgroundTint="@color/green"
+                app:elevation="@dimen/dp6"
+                />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/ac_fab_crate_new_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/group_chat"
+                app:backgroundTint="@color/green"
+                app:elevation="@dimen/dp6"
+                />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/ac_fab_crate_new_channel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/channel_white"
+                app:backgroundTint="@color/green"
+                app:elevation="@dimen/dp6"
+                />
+
+          </net.iGap.libs.floatingAddButton.ArcMenu>
+
+
+          <ProgressBar
+              android:id="@+id/loadingContent"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerInParent="true"
+              android:layout_gravity="center"
+              android:indeterminate="true"
+              android:visibility="gone"
+              />
+
+
+        </net.iGap.module.NotTouchableCoordinatorLayout>
+
+      </FrameLayout>
+
+
+      <FrameLayout
+          android:id="@+id/am_frame_chat_container"
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="match_parent"
+          >
+
+      </FrameLayout>
+
+
+    </LinearLayout>
+
+
+    <FrameLayout
+
+        android:id="@+id/am_frame_fragment_back"
+        android:visibility="gone"
         android:layout_width="match_parent"
+        android:background="#90000000"
         android:layout_height="match_parent"
-        android:layoutDirection="ltr"
-        android:background="@color/white"
-        android:overScrollMode="never"
-        />
-
-
-    <net.iGap.libs.floatingAddButton.ArcMenu
-        android:id="@+id/ac_arc_button_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:borderWidth="0dp"
-        app:menu_color="@color/green"
-        app:menu_scr="@mipmap/plus"
+        android:clickable="true"
         >
 
-      <android.support.design.widget.FloatingActionButton
-          android:id="@+id/ac_fab_start_new_chat"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@mipmap/single_chat"
-          app:backgroundTint="@color/green"
-          app:elevation="@dimen/dp6"
-          />
 
-      <android.support.design.widget.FloatingActionButton
-          android:id="@+id/ac_fab_crate_new_group"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@mipmap/group_chat"
-          app:backgroundTint="@color/green"
-          app:elevation="@dimen/dp6"
-          />
-
-      <android.support.design.widget.FloatingActionButton
-          android:id="@+id/ac_fab_crate_new_channel"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@mipmap/channel_white"
-          app:backgroundTint="@color/green"
-          app:elevation="@dimen/dp6"
-          />
-
-    </net.iGap.libs.floatingAddButton.ArcMenu>
+      <FrameLayout
+          android:id="@+id/am_frame_fragment_container"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:clickable="true"
+          android:layout_margin="50dp"
+          >
 
 
-    <ProgressBar
-        android:id="@+id/loadingContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:visibility="gone"
-        />
+      </FrameLayout>
 
 
-  </net.iGap.module.NotTouchableCoordinatorLayout>
+    </FrameLayout>
+
+
+  </FrameLayout>
+
 
   <android.support.design.widget.NavigationView
       android:id="@+id/nav_view"

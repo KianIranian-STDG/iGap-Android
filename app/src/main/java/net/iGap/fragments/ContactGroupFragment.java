@@ -112,7 +112,7 @@ public class ContactGroupFragment extends Fragment {
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
-                mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+                mActivity.onBackPressed();
             }
         });
 

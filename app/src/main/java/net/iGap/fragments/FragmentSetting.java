@@ -223,7 +223,9 @@ public class FragmentSetting extends Fragment implements OnUserAvatarResponse {
 
         if (realmUserInfo == null) {
             //finish();
-            mActivity.getSupportFragmentManager().popBackStack();
+
+            mActivity.onBackPressed();
+
             return;
         }
 
@@ -854,7 +856,7 @@ public class FragmentSetting extends Fragment implements OnUserAvatarResponse {
             public void onComplete(RippleView rippleView) {
                 isBackPressed = true;
                 //finish();
-                mActivity.getSupportFragmentManager().popBackStack();
+                mActivity.onBackPressed();
             }
         });
 
@@ -1618,7 +1620,12 @@ public class FragmentSetting extends Fragment implements OnUserAvatarResponse {
 
                 //startActivity(new Intent(mActivity, ActivitySettingNotification.class));
                 FragmentNotificationAndSound fragmentNotificationAndSound = new FragmentNotificationAndSound();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.fragmentContainer, fragmentNotificationAndSound).commit();
+                mActivity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
+                    .add(R.id.st_layoutParent, fragmentNotificationAndSound)
+                    .commit();
 
             }
         });
@@ -2418,7 +2425,7 @@ public class FragmentSetting extends Fragment implements OnUserAvatarResponse {
 
         if (realmUserInfo == null) {
             //finish();
-            mActivity.getSupportFragmentManager().popBackStack();
+            mActivity.onBackPressed();
             return;
         }
 

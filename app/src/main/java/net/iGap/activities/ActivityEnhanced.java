@@ -26,6 +26,7 @@ import java.util.Locale;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AttachFile;
@@ -116,6 +117,28 @@ public class ActivityEnhanced extends AppCompatActivity {
                 }
             }
         }, Config.UPDATE_STATUS_TIME);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        if (G.twoPaneMode) {
+
+            boolean beforeState = G.isLandscape;
+
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                G.isLandscape = true;
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                G.isLandscape = false;
+            }
+
+            if (beforeState != G.isLandscape) {
+                HelperFragment.changeFragmentResurceContainer(getSupportFragmentManager());
+            }
+        }
+
+        super.onConfigurationChanged(newConfig);
+
     }
 
     /**

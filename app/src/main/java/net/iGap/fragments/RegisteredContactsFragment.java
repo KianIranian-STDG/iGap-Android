@@ -54,6 +54,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
@@ -256,11 +257,11 @@ public class RegisteredContactsFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
                 fragment.setArguments(bundle);
-                mActivity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    .add(R.id.fragmentContainer, fragment, "add_contact_fragment")
-                    .commit();
+                //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                //    R.anim.slide_in_right, R.anim.slide_out_left).add(R.id.fragmentContainer, fragment, "add_contact_fragment").commit();
+
+                HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragment);
+
             }
         });
 

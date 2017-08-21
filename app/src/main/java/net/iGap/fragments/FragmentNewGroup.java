@@ -50,6 +50,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
 import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUploadFile;
@@ -85,7 +86,6 @@ import net.iGap.request.RequestGroupAvatarAdd;
 import net.iGap.request.RequestGroupCreate;
 
 import static net.iGap.G.context;
-import static net.iGap.R.id.fragmentContainer;
 import static net.iGap.module.AttachFile.isInAttach;
 import static net.iGap.module.AttachFile.request_code_TAKE_PICTURE;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
@@ -285,7 +285,6 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                 } else {
                     G.IMAGE_NEW_CHANEL.delete();
                 }
-                //mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                 mActivity.onBackPressed();
             }
         });
@@ -447,7 +446,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                     G.IMAGE_NEW_CHANEL.delete();
                 }
                 try {
-                    mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                    mActivity.onBackPressed();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -476,8 +475,11 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                             bundle.putString("INVITE_LINK", inviteLink);
                             bundle.putString("TOKEN", token);
                             fragmentCreateChannel.setArguments(bundle);
-                            mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment").commitAllowingStateLoss();
-                            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+
+                            mActivity.onBackPressed();
+                            HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragmentCreateChannel, true);
+
+                            // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                         }
                     }
                 });
@@ -653,8 +655,11 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                                     bundle.putString("TYPE", typeCreate.toString());
                                     bundle.putBoolean("NewRoom", true);
                                     fragment.setArguments(bundle);
-                                    mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragment, "contactGroup_fragment").commitAllowingStateLoss();
-                                    mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+
+                                    mActivity.onBackPressed();
+                                    HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragment, true);
+
+                                    //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                                     //ActivityMain.mLeftDrawerLayout.closeDrawer();
                                 }
                             }
@@ -770,8 +775,11 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
 
         bundle.putBoolean("NewRoom", true);
         fragment.setArguments(bundle);
-        mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragment, "contactGroup_fragment").commitAllowingStateLoss();
-        mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+
+        mActivity.onBackPressed();
+        HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragment, true);
+
+        // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
     }
 
     private void startChannelRoom(long roomId) {
@@ -782,8 +790,11 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         bundle.putString("INVITE_LINK", mInviteLink);
         bundle.putString("TOKEN", token);
         fragmentCreateChannel.setArguments(bundle);
-        mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer, fragmentCreateChannel, "createChannel_fragment").commitAllowingStateLoss();
-        mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+
+        mActivity.onBackPressed();
+        HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragmentCreateChannel, true);
+
+        // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
     }
 
     //=======================result for picture
