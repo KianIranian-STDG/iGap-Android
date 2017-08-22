@@ -10,9 +10,10 @@
 
 package net.iGap.response;
 
-import android.content.Intent;
 import net.iGap.G;
-import net.iGap.activities.ActivityRatingBar;
+import net.iGap.R;
+import net.iGap.fragments.FragmentRatingBar;
+import net.iGap.helper.HelperFragment;
 import net.iGap.proto.ProtoPushRateSignaling;
 
 public class PushRateSignalingResponse extends MessageHandler {
@@ -31,38 +32,33 @@ public class PushRateSignalingResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
         ProtoPushRateSignaling.PushRateSignalingResponse.Builder builder = (ProtoPushRateSignaling.PushRateSignalingResponse.Builder) message;
 
         id = builder.getId();
-        showRaingBar(id);
+        showRatingBar(id);
     }
 
-    private void showRaingBar(final long id) {
-
+    private void showRatingBar(final long id) {
         if (id > 0 && !G.isShowRatingDialog) {
-
             G.handler.postDelayed(new Runnable() {
-                @Override public void run() {
-
-                    Intent intent = new Intent(G.context, ActivityRatingBar.class);
-                    intent.putExtra(ActivityRatingBar.ID_EXTRA, id);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    G.context.startActivity(intent);
+                @Override
+                public void run() {
+                    HelperFragment.loadFragment(G.fragmentActivity.getSupportFragmentManager(), FragmentRatingBar.newInstance(id), false, R.id.fragmentContainer);
                 }
             }, 1000);
-
-
-
         }
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
     }
 }

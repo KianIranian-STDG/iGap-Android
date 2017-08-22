@@ -41,13 +41,14 @@ public class BaseFragment extends Fragment {
 
     private boolean isOnGetPermission = false;
     //private FragmentActivity fragmentActivity;
+    protected Fragment currentFragment;
 
     @Override
     public void onAttach(Context context) {
         //super.onAttach(context);
         super.onAttach(CalligraphyContextWrapper.wrap(context));
         G.fragmentActivity = (FragmentActivity) context;
-        G.currentFragment = this;
+        currentFragment = this;
     }
 
     @Override
@@ -184,7 +185,7 @@ public class BaseFragment extends Fragment {
 
                 @Override
                 public void deny() {
-                    fragmentActivity.getSupportFragmentManager().beginTransaction().remove(G.currentFragment).commit();
+                    fragmentActivity.getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
                 }
             });
         } catch (IOException e) {

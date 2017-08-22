@@ -16,7 +16,6 @@ import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
@@ -214,7 +213,6 @@ public class G extends MultiDexApplication {
     public static HashMap<Long, HelperLogMessage.StructLog> logMessageUpdatList = new HashMap<>();
 
     public static Activity currentActivity;
-    public static Fragment currentFragment;
     public static FragmentActivity fragmentActivity;
     public static String latestActivityName;
 
