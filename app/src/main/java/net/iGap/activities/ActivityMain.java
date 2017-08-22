@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -64,6 +65,7 @@ import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentNewGroup;
+import net.iGap.fragments.FragmentQrCodeNewDevice;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
@@ -1284,20 +1286,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //G.handler.post(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        drawer.closeDrawer(GravityCompat.START);
-                //    }
-                //});
-                //
-                //pageDrawer = 10;
-
                 try {
                     HelperPermision.getCameraPermission(ActivityMain.this, new OnGetPermission() {
                         @Override
                         public void Allow() throws IOException {
-                            startActivity(new Intent(ActivityMain.this, ActivityQrCodeNewDevice.class));
+                            HelperFragment.loadFragment(getSupportFragmentManager(), FragmentQrCodeNewDevice.newInstance(), false, R.id.fragmentContainer);
                         }
 
                         @Override
@@ -2341,6 +2334,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         accountType = this.getPackageName();
 
         AccountManager accountManager = AccountManager.get(getApplicationContext());
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         Account[] accounts = accountManager.getAccounts();
         for (int i = 0; i < accounts.length; i++) {
             if ((accounts[i].type != null) && (accounts[i].type.contentEquals(accountType))) {
