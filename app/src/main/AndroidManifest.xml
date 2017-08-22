@@ -254,7 +254,6 @@
       </intent-filter>
     </receiver>
 
-
     <receiver android:name=".module.MediaBottomReciver">
       <intent-filter>
         <action android:name="android.intent.action.MEDIA_BUTTON" />
@@ -262,10 +261,6 @@
       </intent-filter>
     </receiver>
 
-
-    <activity
-        android:name=".activities.ActivityNewChanelFinish"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
     <activity
         android:name=".activities.ActivityChannelProfile"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />

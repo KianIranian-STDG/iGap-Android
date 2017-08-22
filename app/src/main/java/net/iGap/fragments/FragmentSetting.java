@@ -57,12 +57,12 @@ import java.util.Locale;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChatBackground;
 import net.iGap.activities.ActivityCrop;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPermision;
@@ -1481,8 +1481,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onClick(View view) {
                 isBackPressed = false;
-                startActivity(new Intent(mActivity, ActivityChatBackground.class));
-
+                HelperFragment.loadFragment(G.fragmentActivity.getSupportFragmentManager(), FragmentChatBackground.newInstance(), false, R.id.st_layoutParent);
             }
         });
 
@@ -1659,12 +1658,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                 //startActivity(new Intent(mActivity, ActivitySettingNotification.class));
                 FragmentNotificationAndSound fragmentNotificationAndSound = new FragmentNotificationAndSound();
-                mActivity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .addToBackStack(null)
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
-                    .add(R.id.st_layoutParent, fragmentNotificationAndSound)
-                    .commit();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.st_layoutParent, fragmentNotificationAndSound).commit();
 
             }
         });

@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChatBackground;
+import net.iGap.fragments.FragmentChatBackground;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
@@ -39,10 +39,10 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
     //  int selected_position = 1;
 
-    private ArrayList<ActivityChatBackground.StructWallpaper> mList;
-    private ActivityChatBackground.OnImageClick onImageClick;
+    private ArrayList<FragmentChatBackground.StructWallpaper> mList;
+    private FragmentChatBackground.OnImageClick onImageClick;
 
-    public AdapterChatBackground(ArrayList<ActivityChatBackground.StructWallpaper> List, ActivityChatBackground.OnImageClick onImageClick) {
+    public AdapterChatBackground(ArrayList<FragmentChatBackground.StructWallpaper> List, FragmentChatBackground.OnImageClick onImageClick) {
         this.mList = List;
         this.onImageClick = onImageClick;
     }
@@ -69,9 +69,9 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             if (mList.size() < (position + 1)) {
                 return;
             }
-            ActivityChatBackground.StructWallpaper wallpaper = mList.get(position);
+            FragmentChatBackground.StructWallpaper wallpaper = mList.get(position);
 
-            if (wallpaper.getWallpaperType() == ActivityChatBackground.WallpaperType.proto) {
+            if (wallpaper.getWallpaperType() == FragmentChatBackground.WallpaperType.proto) {
                 ProtoGlobal.File pf = wallpaper.getProtoWallpaper().getFile();
 
                 final String path = G.DIR_CHAT_BACKGROUND + "/" + "thumb_" + pf.getCacheId() + "_" + pf.getName();
@@ -106,7 +106,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             }
 
             String bigImagePath;
-            if (wallpaper.getWallpaperType() == ActivityChatBackground.WallpaperType.proto) {
+            if (wallpaper.getWallpaperType() == FragmentChatBackground.WallpaperType.proto) {
                 ProtoGlobal.File pf = wallpaper.getProtoWallpaper().getFile();
                 bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
             } else {

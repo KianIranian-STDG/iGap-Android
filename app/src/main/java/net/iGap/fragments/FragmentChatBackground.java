@@ -8,16 +8,19 @@
 * All rights reserved.
 */
 
-package net.iGap.activities;
+package net.iGap.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import io.realm.Realm;
 import java.io.File;
@@ -39,7 +42,10 @@ import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.realm.RealmWallpaper;
 import net.iGap.request.RequestInfoWallpaper;
 
-public class ActivityChatBackground extends ActivityEnhanced {
+import static android.app.Activity.RESULT_CANCELED;
+import static android.content.Context.MODE_PRIVATE;
+
+public class FragmentChatBackground extends BaseFragment {
 
     private String savePath;
     private RippleView rippleBack;
@@ -49,67 +55,36 @@ public class ActivityChatBackground extends ActivityEnhanced {
     private ImageView imgFullImage;
     private AdapterChatBackground adapterChatBackgroundSetting;
     private ArrayList<StructWallpaper> wList;
+    private Realm realmChatBackground;
 
-    //**************************************************
-
-    public enum WallpaperType {
-        addNew, lockal, proto
+    public static FragmentChatBackground newInstance() {
+        return new FragmentChatBackground();
     }
 
-    public interface OnImageClick {
-        void onClick(String imagePath);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realmChatBackground = Realm.getDefaultInstance();
+        return inflater.inflate(R.layout.activity_chat_background, container, false);
     }
 
-    public class StructWallpaper {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        private WallpaperType wallpaperType;
-        private String path;
-        private ProtoGlobal.Wallpaper protoWallpaper;
+        view.findViewById(R.id.stcb_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        public WallpaperType getWallpaperType() {
-            return wallpaperType;
-        }
-
-        public void setWallpaperType(WallpaperType wallpaperType) {
-            this.wallpaperType = wallpaperType;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public ProtoGlobal.Wallpaper getProtoWallpaper() {
-            return protoWallpaper;
-        }
-
-        public void setProtoWallpaper(ProtoGlobal.Wallpaper protoWallpaper) {
-            this.protoWallpaper = protoWallpaper;
-        }
-    }
-
-    //**************************************************
-
-
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_background);
-
-        findViewById(R.id.stcb_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        rippleBack = (RippleView) findViewById(R.id.stcb_ripple_back);
+        rippleBack = (RippleView) view.findViewById(R.id.stcb_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
-                finish();
+            @Override
+            public void onComplete(RippleView rippleView) {
+                closeFragment();
             }
         });
 
-        imgFullImage = (ImageView) findViewById(R.id.stchf_fullImage);
+        imgFullImage = (ImageView) view.findViewById(R.id.stchf_fullImage);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         if (backGroundPath.length() > 0) {
             File f = new File(backGroundPath);
@@ -118,60 +93,64 @@ public class ActivityChatBackground extends ActivityEnhanced {
             }
         }
 
-        rippleSetDefault = (RippleView) findViewById(R.id.stcbf_ripple_set_default);
+        rippleSetDefault = (RippleView) view.findViewById(R.id.stcbf_ripple_set_default);
 
         rippleSetDefault.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) throws IOException {
 
-                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
                 editor.apply();
 
-                finish();
+                closeFragment();
             }
         });
 
-        rippleSet = (RippleView) findViewById(R.id.stcbf_ripple_set);
+        rippleSet = (RippleView) view.findViewById(R.id.stcbf_ripple_set);
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
-
+            @Override
+            public void onComplete(RippleView rippleView) {
                 if (savePath != null && savePath.length() > 0) {
-
-                    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, savePath);
                     editor.apply();
-
-                    finish();
+                    closeFragment();
                 }
             }
         });
 
-
         fillList(true);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rcvContent);
-        //adapterChatBackgroundSetting = new AdapterChatBackground(wList, new OnImageClick() {
-        //    @Override public void onClick(String imagePath) {
-        //
-        //        G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgFullImage);
-        //
-        //        savePath = imagePath;
-        //
-        //        rippleSet.setVisibility(View.VISIBLE);
-        //        rippleSetDefault.setVisibility(View.GONE);
-        //    }
-        //});
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rcvContent);
+        adapterChatBackgroundSetting = new AdapterChatBackground(wList, new OnImageClick() {
+            @Override
+            public void onClick(String imagePath) {
+
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgFullImage);
+
+                savePath = imagePath;
+
+                rippleSet.setVisibility(View.VISIBLE);
+                rippleSetDefault.setVisibility(View.GONE);
+            }
+        });
         mRecyclerView.setAdapter(adapterChatBackgroundSetting);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity, LinearLayoutManager.HORIZONTAL, false));
         mRecyclerView.clearAnimation();
 
 
     }
 
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_CANCELED) {
@@ -195,8 +174,8 @@ public class ActivityChatBackground extends ActivityEnhanced {
 
                 if (data != null && data.getData() != null) {
 
-                    if (ActivityChatBackground.this != null) {
-                        AttachFile attachFile = new AttachFile(ActivityChatBackground.this);
+                    if (G.fragmentActivity != null) {
+                        AttachFile attachFile = new AttachFile(G.fragmentActivity);
                         filePath = attachFile.saveGalleryPicToLocal(AttachFile.getFilePathFromUri(data.getData()));
                     }
                 }
@@ -216,17 +195,21 @@ public class ActivityChatBackground extends ActivityEnhanced {
         }
     }
 
+    private Realm getRealmChatBackground() {
+        if (realmChatBackground == null || realmChatBackground.isClosed()) {
+            realmChatBackground = Realm.getDefaultInstance();
+        }
+        return realmChatBackground;
+    }
+
     private void getImageListFromServer() {
-
         G.onGetWallpaper = new OnGetWallpaper() {
-            @Override public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
-
+            @Override
+            public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
                 RealmWallpaper.updateField(list, "");
-
-
-                runOnUiThread(new Runnable() {
-                    @Override public void run() {
-
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
                         fillList(false);
                         adapterChatBackgroundSetting.notifyDataSetChanged();
                     }
@@ -298,5 +281,44 @@ public class ActivityChatBackground extends ActivityEnhanced {
         }
 
         realm.close();
+    }
+
+    public enum WallpaperType {
+        addNew, lockal, proto
+    }
+
+    public interface OnImageClick {
+        void onClick(String imagePath);
+    }
+
+    public class StructWallpaper {
+
+        private WallpaperType wallpaperType;
+        private String path;
+        private ProtoGlobal.Wallpaper protoWallpaper;
+
+        public WallpaperType getWallpaperType() {
+            return wallpaperType;
+        }
+
+        public void setWallpaperType(WallpaperType wallpaperType) {
+            this.wallpaperType = wallpaperType;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public ProtoGlobal.Wallpaper getProtoWallpaper() {
+            return protoWallpaper;
+        }
+
+        public void setProtoWallpaper(ProtoGlobal.Wallpaper protoWallpaper) {
+            this.protoWallpaper = protoWallpaper;
+        }
     }
 }
