@@ -12,6 +12,7 @@ package net.iGap.helper;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.FragmentActivity;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -20,8 +21,8 @@ import android.view.View;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityContactsProfile;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -70,8 +71,8 @@ public class HelperLogMessage {
                         String LogText = HelperLogMessage.logMessage(item.roomId, item.author, item.messageLog, item.messageID);
                         roomMessage.setLogMessage(LogText);
                         G.logMessageUpdatList.remove(item.updateID);
-                        if (ActivityChat.iUpdateLogItem != null) {
-                            ActivityChat.iUpdateLogItem.onUpdate(LogText, item.messageID);
+                        if (FragmentChat.iUpdateLogItem != null) {
+                            FragmentChat.iUpdateLogItem.onUpdate(LogText, item.messageID);
                         }
                     }
                 }
@@ -539,7 +540,7 @@ public class HelperLogMessage {
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
         if (realmRoom != null) {
 
-            new GoToChatActivity(realmRoom.getId()).setContext(G.currentActivity).setNewTask(true).startActivity();
+            new GoToChatActivity(realmRoom.getId(), ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).startActivity();
 
         } else {
             HelperInfo.needUpdateRoomInfo(id);

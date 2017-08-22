@@ -52,7 +52,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.GoToChatActivity;
 import net.iGap.interfaces.IPopUpListener;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -79,7 +78,6 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
 
     public static IPopUpListener popUpListener;
 
-    public static boolean isGoingToChatFromPopUp = false;
     public static String ARGUMENTLIST = "argument_list";
 
     //////////////////////////////////////////   appbar component
@@ -310,8 +308,9 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
 
     private void goToChatActivity() {
 
-        new GoToChatActivity(mList.get(viewPager.getCurrentItem()).getRoomId()).setContext(ActivityPopUpNotification.this).startActivity();
-        isGoingToChatFromPopUp = true;
+        Intent intent = new Intent(ActivityPopUpNotification.this, ActivityMain.class);
+        intent.putExtra("SelectedRoomid", mList.get(viewPager.getCurrentItem()).getRoomId());
+        startActivity(intent);
 
         finish();
     }

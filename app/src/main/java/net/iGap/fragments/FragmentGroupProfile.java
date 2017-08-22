@@ -56,7 +56,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityCrop;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
@@ -559,8 +558,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                if (ActivityChat.onComplete != null) {
-                                    ActivityChat.onComplete.complete(false, roomId + "", "");
+                                if (FragmentChat.onComplete != null) {
+                                    FragmentChat.onComplete.complete(false, roomId + "", "");
                                 }
                             }
                         }).negativeText(R.string.no).show();
@@ -1602,8 +1601,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                             @Override
                             public void run() {
                                 mActivity.finish();
-                                if (ActivityChat.finishActivity != null) {
-                                    ActivityChat.finishActivity.finishActivity();
+                                if (FragmentChat.finishActivity != null) {
+                                    FragmentChat.finishActivity.finishActivity();
                                 }
                                 mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 prgWait.setVisibility(View.GONE);
@@ -1642,8 +1641,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                             @Override
                             public void run() {
                                 mActivity.finish();
-                                if (ActivityChat.finishActivity != null) {
-                                    ActivityChat.finishActivity.finishActivity();
+                                if (FragmentChat.finishActivity != null) {
+                                    FragmentChat.finishActivity.finishActivity();
                                 }
 
                                 mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

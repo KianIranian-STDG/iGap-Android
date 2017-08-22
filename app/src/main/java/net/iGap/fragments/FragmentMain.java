@@ -897,8 +897,6 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                 txtClude = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_contact_initials);
 
 
-
-
                 //AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
 
                 view.setOnClickListener(new View.OnClickListener() {
@@ -910,7 +908,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                         } else {
                             if (mInfo.isValid() && mActivity != null) {
 
-                                new GoToChatActivity(mInfo.getId()).setContext(mActivity).setFromCall(((ActivityMain) getActivity()).fromCall).startActivity();
+                                new GoToChatActivity(mInfo.getId(), ((FragmentActivity) mActivity).getSupportFragmentManager()).setFromCall(((ActivityMain) getActivity()).fromCall).startActivity();
 
 
                                 if (((ActivityMain) mActivity).arcMenu != null && ((ActivityMain) mActivity).arcMenu.isMenuOpened()) {

@@ -10,12 +10,11 @@
 
 package net.iGap.helper;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.FragmentActivity;
 import io.realm.Realm;
 import net.iGap.G;
-import net.iGap.activities.ActivityChat;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.proto.ProtoGlobal;
@@ -165,19 +164,11 @@ public class HelperPublicMethod {
 
     private static void goToRoom(boolean fromcall, long roomid, long peerId) {
 
-        Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-        intent.putExtra("RoomId", roomid);
-
-        if (fromcall) {
-            intent.putExtra("FROM_CALL", true);
-        }
-
+        GoToChatActivity go = new GoToChatActivity(roomid, ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).setFromCall(fromcall);
         if (peerId >= 0) {
-            intent.putExtra("peerId", peerId);
+            go.setPeerID(peerId);
         }
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        G.currentActivity.startActivity(intent);
+        go.startActivity();
     }
 
     //**************************************************************************************************************************************

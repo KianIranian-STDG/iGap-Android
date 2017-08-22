@@ -19,7 +19,7 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.module.structs.StructBottomSheet;
 
 public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, AdapterBottomSheet.ViewHolder> {
@@ -69,12 +69,12 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
                 if (holder.checkBoxSelect.isChecked()) {
                     holder.checkBoxSelect.setChecked(false);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                    ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
+                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
                     mList.setSelected(true);
                 } else {
                     holder.checkBoxSelect.setChecked(true);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-                    ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
+                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
                     mList.setSelected(false);
                 }
             }
@@ -85,12 +85,12 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
                 if (holder.checkBoxSelect.isChecked()) {
                     holder.checkBoxSelect.setChecked(false);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                    ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
+                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
                     mList.setSelected(false);
                 } else {
                     holder.checkBoxSelect.setChecked(true);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-                    ActivityChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
+                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
                     mList.setSelected(true);
                 }
             }

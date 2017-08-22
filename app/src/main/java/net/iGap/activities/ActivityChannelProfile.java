@@ -57,6 +57,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentNotification;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowMember;
@@ -1381,8 +1382,8 @@ public class ActivityChannelProfile extends ActivityEnhanced implements OnChanne
             public void run() {
                 hideProgressBar();
                 ActivityChannelProfile.this.finish();
-                if (ActivityChat.finishActivity != null) {
-                    ActivityChat.finishActivity.finishActivity();
+                if (FragmentChat.finishActivity != null) {
+                    FragmentChat.finishActivity.finishActivity();
                 }
             }
         });

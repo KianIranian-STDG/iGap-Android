@@ -26,7 +26,7 @@ import java.io.File;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
@@ -183,14 +183,14 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                     if (MusicPlayer.mp != null) {
                         MusicPlayer.playAndPause();
                     } else {
-                        MusicPlayer.startPlayer("", holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+                        MusicPlayer.startPlayer("", holder.mFilePath, FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, true, holder.mMessageID);
                         messageClickListener.onPlayMusic(holder.mMessageID);
                     }
                 } else {
 
                     MusicPlayer.stopSound();
                     MusicPlayer.onCompleteChat = holder.complete;
-                    MusicPlayer.startPlayer("", holder.mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, holder.mMessageID);
+                    MusicPlayer.startPlayer("", holder.mFilePath, FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, true, holder.mMessageID);
                     messageClickListener.onPlayMusic(holder.mMessageID);
 
                     holder.mTimeMusic = MusicPlayer.musicTime;

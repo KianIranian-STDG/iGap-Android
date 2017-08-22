@@ -38,6 +38,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -307,7 +308,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
 
-
         frameChatContainer = (FrameLayout) findViewById(R.id.am_frame_chat_container);
 
         if (G.twoPaneMode) {
@@ -333,6 +333,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             frameChatContainer.setVisibility(View.GONE);
         }
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            fromCall = extras.getBoolean("FROM_CALL");
+
+            long _roomid = extras.getLong("SelectedRoomid");
+
+            if (_roomid > 0) {
+                new GoToChatActivity(_roomid, getSupportFragmentManager()).startActivity();
+            }
+        }
+
 
 
 
@@ -351,10 +362,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mTracker.setScreenName("RoomList");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            fromCall = extras.getBoolean("FROM_CALL");
-        }
+
 
         new HelperGetDataFromOtherApp(getIntent());
 
@@ -1879,7 +1887,23 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        if (G.dispatchTochEventChat != null) {
+            G.dispatchTochEventChat.getToch(ev);
+        }
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
     public void onBackPressed() {
+
+        if (G.onBackPressedChat != null) {
+            if (G.onBackPressedChat.onBack()) {
+                return;
+            }
+        }
 
 
         if (onBackPressedListener != null) {
@@ -2152,7 +2176,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (realmRoom != null) {
 
-            new GoToChatActivity(realmRoom.getId()).setNewTask(true).startActivity();
+            new GoToChatActivity(realmRoom.getId(), getSupportFragmentManager()).startActivity();
 
         } else {
 
@@ -2160,7 +2184,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public void onChatGetRoom(final long roomId) {
 
-                    new GoToChatActivity(roomId).setPeerID(peerId).setNewTask(true).startActivity();
+                    new GoToChatActivity(roomId, getSupportFragmentManager()).setPeerID(peerId).startActivity();
 
                     G.onChatGetRoom = null;
                 }

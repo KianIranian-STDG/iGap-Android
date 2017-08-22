@@ -369,9 +369,9 @@ public class SearchFragment extends Fragment {
         if (realmRoom != null) {
 
             if (type == SearchType.message) {
-                new GoToChatActivity(realmRoom.getId()).setNewTask(true).setMessageID(messageId).startActivity();
+                new GoToChatActivity(realmRoom.getId(), mActivity.getSupportFragmentManager()).setMessageID(messageId).startActivity();
             } else {
-                new GoToChatActivity(realmRoom.getId()).setNewTask(true).startActivity();
+                new GoToChatActivity(realmRoom.getId(), mActivity.getSupportFragmentManager()).startActivity();
             }
 
             //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
@@ -385,7 +385,7 @@ public class SearchFragment extends Fragment {
                         @Override
                         public void run() {
 
-                            new GoToChatActivity(roomId).setPeerID(id).setNewTask(true).startActivity();
+                            new GoToChatActivity(roomId, mActivity.getSupportFragmentManager()).setPeerID(id).startActivity();
 
                             if (mActivity != null) {
                                 //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();

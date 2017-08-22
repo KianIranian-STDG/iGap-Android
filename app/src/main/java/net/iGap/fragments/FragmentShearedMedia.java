@@ -58,7 +58,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperMimeType;
@@ -340,11 +339,11 @@ public class FragmentShearedMedia extends BaseFragment {
                         messageInfos.add(Parcels.wrap(StructMessageInfo.convert(getRealm(), rm)));
                     }
                 }
-                ActivityChat.mForwardMessages = messageInfos;
+                FragmentChat.mForwardMessages = messageInfos;
 
                 closeFragment();
-                if (ActivityChat.finishActivity != null) {
-                    ActivityChat.finishActivity.finishActivity();
+                if (FragmentChat.finishActivity != null) {
+                    FragmentChat.finishActivity.finishActivity();
                 }
                 adapter.resetSelected();
             }

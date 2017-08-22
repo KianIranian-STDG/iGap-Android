@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentCall;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentNotification;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.GoToChatActivity;
@@ -338,7 +339,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                     if (realmRoom != null) {
 
-                        new GoToChatActivity(realmRoom.getId()).setContext(ActivityContactsProfile.this).startActivity();
+                        new GoToChatActivity(realmRoom.getId(), getSupportFragmentManager()).startActivity();
 
                         finish();
                     } else {
@@ -349,7 +350,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                     @Override
                                     public void run() {
 
-                                        new GoToChatActivity(roomId).setContext(ActivityContactsProfile.this).setPeerID(userId).startActivity();
+                                        new GoToChatActivity(roomId, getSupportFragmentManager()).setPeerID(userId).startActivity();
 
                                         finish();
                                         G.onChatGetRoom = null;
@@ -1008,8 +1009,8 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        if (ActivityChat.onComplete != null) {
-                            ActivityChat.onComplete.complete(false, roomId + "", "");
+                        if (FragmentChat.onComplete != null) {
+                            FragmentChat.onComplete.complete(false, roomId + "", "");
                         }
                     }
                 }).negativeText(R.string.B_cancel).show();

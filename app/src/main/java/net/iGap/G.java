@@ -42,7 +42,10 @@ import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.interfaces.IActivityFinish;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IClientSearchUserName;
+import net.iGap.interfaces.IDispatchTochEvent;
 import net.iGap.interfaces.IMainFinish;
+import net.iGap.interfaces.IOnBackPressed;
+import net.iGap.interfaces.ISendPosition;
 import net.iGap.interfaces.ISignalingAccept;
 import net.iGap.interfaces.ISignalingCallBack;
 import net.iGap.interfaces.ISignalingCandidate;
@@ -269,7 +272,7 @@ public class G extends MultiDexApplication {
     public static boolean isUpdateNotificaionColorChat = false;
     public static boolean isUpdateNotificaionCall = false;
 
-    public static boolean twoPaneMode = false;
+    public static boolean twoPaneMode = true;
     public static boolean isLandscape = false;
     public static boolean isAppRtl = false;
 
@@ -414,6 +417,10 @@ public class G extends MultiDexApplication {
     public static ICallFinish iCallFinishMain;
     public static IMainFinish iMainFinish;
     public static IActivityFinish iActivityFinish;
+
+    public static IDispatchTochEvent dispatchTochEventChat;
+    public static IOnBackPressed onBackPressedChat;
+    public static ISendPosition iSendPositionChat;
 
     public static OnLocationChanged onLocationChanged;
     public static OnGetNearbyCoordinate onGetNearbyCoordinate;

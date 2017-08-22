@@ -149,7 +149,7 @@ public class ContactGroupFragment extends Fragment {
                     } else {
 
                         if (isAdded()) {
-                            new GoToChatActivity(ContactGroupFragment.this.roomId).setContext(mActivity).startActivity();
+                            new GoToChatActivity(ContactGroupFragment.this.roomId, mActivity.getSupportFragmentManager()).startActivity();
                             mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                         }
 
@@ -184,7 +184,7 @@ public class ContactGroupFragment extends Fragment {
                     } else {
 
                         if (isAdded()) {
-                            new GoToChatActivity(ContactGroupFragment.this.roomId).setContext(mActivity).startActivity();
+                            new GoToChatActivity(ContactGroupFragment.this.roomId, mActivity.getSupportFragmentManager()).startActivity();
 
                             mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                         }
@@ -306,7 +306,7 @@ public class ContactGroupFragment extends Fragment {
         realm.close();
 
         if (isAdded()) {
-            new GoToChatActivity(roomId).setContext(mActivity).startActivity();
+            new GoToChatActivity(roomId, mActivity.getSupportFragmentManager()).startActivity();
             mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
         }
 
@@ -326,7 +326,7 @@ public class ContactGroupFragment extends Fragment {
         realm.close();
 
         if (isAdded()) {
-            new GoToChatActivity(roomId).setContext(mActivity).startActivity();
+            new GoToChatActivity(roomId, mActivity.getSupportFragmentManager()).startActivity();
             mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
         }
 

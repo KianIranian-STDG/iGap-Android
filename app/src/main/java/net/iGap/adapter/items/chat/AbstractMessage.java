@@ -32,7 +32,7 @@ import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -75,7 +75,6 @@ import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.activities.ActivityChat.compressingFiles;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
     public IMessageItem messageClickListener;
@@ -1291,7 +1290,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         } else if (HelperDownloadFile.isDownLoading(attachment.getCacheId())) {
             HelperDownloadFile.stopDownLoad(attachment.getCacheId());
-        } else if (compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
+        } else if (FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
             messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.COMPRESSING);
         } else {
             if (thumbnail != null) {
@@ -1360,7 +1359,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void OnProgress(final String path, int progress) {
 
-                    if (ActivityChat.canUpdateAfterDownload) {
+                    if (FragmentChat.canUpdateAfterDownload) {
                         if (progress == 100) {
 
                             G.handler.post(new Runnable() {
@@ -1430,7 +1429,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     }
 
-                    if (ActivityChat.canUpdateAfterDownload) {
+                    if (FragmentChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1461,7 +1460,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void OnError(String token) {
 
-                    if (ActivityChat.canUpdateAfterDownload) {
+                    if (FragmentChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -1515,7 +1514,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * update progress when user trying to upload or download also if
              * file is compressing do this action for add listener and use later
              */
-            if (HelperUploadFile.isUploading(mMessage.messageID) || compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
+            if (HelperUploadFile.isUploading(mMessage.messageID) || FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
                 hideThumbnailIf(holder);
 
                 HelperUploadFile.AddListener(mMessage.messageID, new HelperUploadFile.UpdateListener() {

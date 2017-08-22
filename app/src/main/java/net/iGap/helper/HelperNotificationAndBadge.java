@@ -214,14 +214,14 @@ public class HelperNotificationAndBadge {
     private void setNotification() {
 
         PendingIntent pi;
+        Intent intent = new Intent(context, ActivityMain.class);
 
         if (isFromOnRoom) {
-
-            pi = PendingIntent.getActivity(context, notificationId, new GoToChatActivity(roomId).getIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
-            ActivityPopUpNotification.isGoingToChatFromPopUp = true;
-        } else {
-            pi = PendingIntent.getActivity(context, notificationId, new Intent(context, ActivityMain.class), PendingIntent.FLAG_UPDATE_CURRENT);
+            intent.putExtra("SelectedRoomid", roomId);
         }
+
+        pi = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
 
         getNotificationSmallInfo();
 

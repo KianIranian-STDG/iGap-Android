@@ -56,6 +56,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -419,7 +420,7 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     }
                 }
 
-                ActivityChat.mForwardMessages = messageInfos;
+                FragmentChat.mForwardMessages = messageInfos;
 
                 finish();
 
@@ -427,8 +428,8 @@ public class ActivityShearedMedia extends ActivityEnhanced {
                     G.iActivityFinish.onFinish();
                 }
 
-                if (ActivityChat.finishActivity != null) {
-                    ActivityChat.finishActivity.finishActivity();
+                if (FragmentChat.finishActivity != null) {
+                    FragmentChat.finishActivity.finishActivity();
                 }
 
                 adapter.resetSelected();

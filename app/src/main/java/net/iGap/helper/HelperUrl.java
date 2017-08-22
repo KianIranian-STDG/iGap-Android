@@ -39,8 +39,8 @@ import java.util.regex.Pattern;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityContactsProfile;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnClientCheckInviteLink;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
@@ -332,8 +332,8 @@ public class HelperUrl {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                if (ActivityChat.hashListener != null) {
-                    ActivityChat.hashListener.complete(true, "#" + text, messageID);
+                if (FragmentChat.hashListener != null) {
+                    FragmentChat.hashListener.complete(true, "#" + text, messageID);
                 }
             }
 
@@ -568,7 +568,7 @@ public class HelperUrl {
 
         if (realmRoom != null) {
 
-            new GoToChatActivity(room.getId()).setContext(G.currentActivity).startActivity();
+            new GoToChatActivity(room.getId(), ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).startActivity();
 
             realm.close();
 
@@ -710,7 +710,7 @@ public class HelperUrl {
 
                     realm.close();
 
-                    new GoToChatActivity(room.getId()).setContext(G.currentActivity).startActivity();
+                    new GoToChatActivity(room.getId(), ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).startActivity();
                 }
 
                 @Override
@@ -778,7 +778,7 @@ public class HelperUrl {
         switch (chatEntery) {
             case chat:
 
-                new GoToChatActivity(Roomid).setPeerID(peerId).setContext(G.currentActivity).startActivity();
+                new GoToChatActivity(Roomid, ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).setPeerID(peerId).startActivity();
 
                 break;
 
@@ -900,7 +900,7 @@ public class HelperUrl {
             } else {
                 closeDialogWaiting();
 
-                new GoToChatActivity(room.getId()).setContext(G.currentActivity).startActivity();
+                new GoToChatActivity(room.getId(), ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).startActivity();
 
             }
 
@@ -932,7 +932,10 @@ public class HelperUrl {
                     @Override
                     public void onSuccess() {
 
-                        new GoToChatActivity(room.getId()).setContext(G.currentActivity).setfromUserLink(true).setisNotJoin(true).setuserName(username).startActivity();
+                        new GoToChatActivity(room.getId(), ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).setfromUserLink(true)
+                            .setisNotJoin(true)
+                            .setuserName(username)
+                            .startActivity();
 
                         realm.close();
                     }

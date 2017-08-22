@@ -14,8 +14,8 @@ import android.os.Handler;
 import android.os.Looper;
 import io.realm.Realm;
 import net.iGap.G;
-import net.iGap.activities.ActivityChat;
 import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperGetUserInfo;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.interfaces.OnGetUserInfo;
@@ -127,8 +127,8 @@ public class ClientGetRoomResponse extends MessageHandler {
             if (AbstractMessage.updateForwardInfo.containsKey(clientGetRoom.getRoom().getId())) {
                 String messageId = AbstractMessage.updateForwardInfo.get(clientGetRoom.getRoom().getId());
                 AbstractMessage.updateForwardInfo.remove(clientGetRoom.getRoom().getId());
-                if (ActivityChat.onUpdateUserOrRoomInfo != null) {
-                    ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageId);
+                if (FragmentChat.onUpdateUserOrRoomInfo != null) {
+                    FragmentChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageId);
                 }
             }
         }

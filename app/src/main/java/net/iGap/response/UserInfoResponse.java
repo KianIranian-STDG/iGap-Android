@@ -14,8 +14,8 @@ import android.os.Handler;
 import android.os.Looper;
 import io.realm.Realm;
 import net.iGap.G;
-import net.iGap.activities.ActivityChat;
 import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentShowMember;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.proto.ProtoError;
@@ -123,8 +123,8 @@ public class UserInfoResponse extends MessageHandler {
                             if (AbstractMessage.updateForwardInfo.containsKey(_id)) {
                                 String messageId = AbstractMessage.updateForwardInfo.get(_id);
                                 AbstractMessage.updateForwardInfo.remove(_id);
-                                if (ActivityChat.onUpdateUserOrRoomInfo != null) {
-                                    ActivityChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageId);
+                                if (FragmentChat.onUpdateUserOrRoomInfo != null) {
+                                    FragmentChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageId);
                                 }
                             }
                         }

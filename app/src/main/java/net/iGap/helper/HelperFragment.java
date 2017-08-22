@@ -7,12 +7,12 @@ import android.view.View;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityMain;
+import net.iGap.fragments.FragmentChat;
 
 public class HelperFragment {
 
-    public static String chatName = ActivityChat.class.getName();
+    public static String chatName = FragmentChat.class.getName();
 
     static class StructFrag {
         String tag = null;
@@ -32,9 +32,6 @@ public class HelperFragment {
             return;
         }
 
-        if (ActivityMain.frameFragmentBack != null) {
-            ActivityMain.frameFragmentBack.setVisibility(View.VISIBLE);
-        }
 
         String tag = fragment.getClass().getName();
 
@@ -46,7 +43,10 @@ public class HelperFragment {
         }
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.addToBackStack(tag).replace(resId, fragment, tag).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
+
+        ft.addToBackStack(tag).add(resId, fragment, tag).
+            setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
+
         if (stateLoose) {
             ft.commitAllowingStateLoss();
         } else {
@@ -120,6 +120,12 @@ public class HelperFragment {
                     resId = R.id.am_frame_fragment_container;
                 }
             }
+
+            if (ActivityMain.frameFragmentBack != null && resId == R.id.am_frame_fragment_container) {
+                ActivityMain.frameFragmentBack.setVisibility(View.VISIBLE);
+            }
+
+
         } else {
             resId = R.id.am_frame_main_container;
         }

@@ -50,7 +50,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityShearedMedia;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
@@ -290,7 +289,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
                     if (realmRoom != null) {
 
-                        new GoToChatActivity(realmRoom.getId()).setContext(mActivity).startActivity();
+                        new GoToChatActivity(realmRoom.getId(), mActivity.getSupportFragmentManager()).startActivity();
 
                         closeFragment();
                     } else {
@@ -301,7 +300,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                     @Override
                                     public void run() {
 
-                                        new GoToChatActivity(roomId).setContext(mActivity).setPeerID(userId).startActivity();
+                                        new GoToChatActivity(roomId, mActivity.getSupportFragmentManager()).setPeerID(userId).startActivity();
 
                                         closeFragment();
                                         G.onChatGetRoom = null;
@@ -1011,8 +1010,8 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        if (ActivityChat.onComplete != null) {
-                            ActivityChat.onComplete.complete(false, roomId + "", "");
+                        if (FragmentChat.onComplete != null) {
+                            FragmentChat.onComplete.complete(false, roomId + "", "");
                         }
                     }
                 }).negativeText(R.string.B_cancel).show();

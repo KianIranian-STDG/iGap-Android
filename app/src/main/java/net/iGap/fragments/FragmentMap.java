@@ -45,7 +45,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
+import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoGlobal;
 
@@ -115,8 +115,7 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     public void onDetach() {
         super.onDetach();
 
-        ActivityChat activity = (ActivityChat) mActivity;
-        activity.sendCancelAction();
+        HelperSetAction.sendCancel(FragmentChat.messageId);
     }
 
     private void close() {
@@ -166,15 +165,24 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
                                     close();
 
                                     if (path.length() > 0) {
-                                        ActivityChat activity = (ActivityChat) mActivity;
-                                        activity.sendPosition(latitude, longitude, path);
+                                        //ActivityChat activity = (ActivityChat) mActivity;
+                                        //activity.sendPosition(latitude, longitude, path);
+
+                                        if (G.iSendPositionChat != null) {
+                                            G.iSendPositionChat.send(latitude, longitude, path);
+                                        }
+
                                     }
                                 }
                             });
                         } catch (Exception e) {
                             close();
-                            ActivityChat activity = (ActivityChat) mActivity;
-                            activity.sendPosition(latitude, longitude, null);
+                            //ActivityChat activity = (ActivityChat) mActivity;
+                            //activity.sendPosition(latitude, longitude, null);
+
+                            if (G.iSendPositionChat != null) {
+                                G.iSendPositionChat.send(latitude, longitude, null);
+                            }
                         }
                     }
                 }

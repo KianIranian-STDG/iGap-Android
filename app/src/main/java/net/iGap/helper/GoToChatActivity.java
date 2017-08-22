@@ -1,12 +1,12 @@
 package net.iGap.helper;
 
-import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 
@@ -14,8 +14,7 @@ public class GoToChatActivity {
 
     private long roomid = 0;
     private long peerID = 0;
-    private Context context = null;
-    private boolean AddNewTask = false;
+    private FragmentManager fragmentManager;
     private boolean fromCall = false;
 
     private boolean fromUserLink = false;
@@ -23,9 +22,9 @@ public class GoToChatActivity {
     private String userName = "";
     private long messageId = 0;
 
-    public GoToChatActivity(long roomid) {
-        context = G.context;
+    public GoToChatActivity(long roomid, FragmentManager fragmentManager) {
         this.roomid = roomid;
+        this.fragmentManager = fragmentManager;
     }
 
     public GoToChatActivity setPeerID(long peerID) {
@@ -33,15 +32,6 @@ public class GoToChatActivity {
         return this;
     }
 
-    public GoToChatActivity setContext(Context context) {
-        this.context = context;
-        return this;
-    }
-
-    public GoToChatActivity setNewTask(boolean AddNewTask) {
-        this.AddNewTask = AddNewTask;
-        return this;
-    }
 
     public GoToChatActivity setFromCall(boolean fromCall) {
         this.fromCall = fromCall;
@@ -70,7 +60,7 @@ public class GoToChatActivity {
 
     public void startActivity() {
 
-        if (ActivityChat.mForwardMessages != null) {
+        if (FragmentChat.mForwardMessages != null) {
             Realm realm = Realm.getDefaultInstance();
 
             RealmRoom _realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
@@ -89,46 +79,47 @@ public class GoToChatActivity {
             realm.close();
         }
 
-        context.startActivity(getIntent());
+        FragmentChat fragmentChat = new FragmentChat();
+        fragmentChat.setArguments(getBundle());
+
+        HelperFragment.loadFragment(fragmentManager, fragmentChat);
+
     }
 
-    public Intent getIntent() {
+    public Bundle getBundle() {
 
         if (roomid == 0) {
             return null;
         }
 
-        Intent intent = new Intent(context, ActivityChat.class);
-        intent.putExtra("RoomId", roomid);
+        Bundle bundle = new Bundle();
+
+        bundle.putLong("RoomId", roomid);
 
         if (peerID > 0) {
-            intent.putExtra("peerId", peerID);
+            bundle.putLong("peerId", peerID);
         }
 
         if (fromCall) {
-            intent.putExtra("FROM_CALL_Main", true);
-        }
-
-        if (AddNewTask) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            bundle.putBoolean("FROM_CALL_Main", true);
         }
 
         if (fromUserLink) {
-            intent.putExtra("GoingFromUserLink", true);
+            bundle.putBoolean("GoingFromUserLink", true);
         }
 
         if (isNotJoin) {
-            intent.putExtra("ISNotJoin", true);
+            bundle.putBoolean("ISNotJoin", true);
         }
 
         if (userName.length() > 0) {
-            intent.putExtra("UserName", userName);
+            bundle.putString("UserName", userName);
         }
 
         if (messageId > 0) {
-            intent.putExtra("MessageId", messageId);
+            bundle.putLong("MessageId", messageId);
         }
 
-        return intent;
+        return bundle;
     }
 }

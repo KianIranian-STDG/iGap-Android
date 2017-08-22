@@ -55,8 +55,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityMediaPlayer;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
@@ -402,8 +402,8 @@ public class MusicPlayer extends Service {
                     onCompleteChat.complete(true, "play", "");
                     onCompleteChat.complete(false, "updateTime", zeroTime);
                 } else {
-                    if (ActivityChat.onMusicListener != null) {
-                        ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, "");
+                    if (FragmentChat.onMusicListener != null) {
+                        FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, "");
                     }
                 }
             } else if (onComplete != null) {
@@ -437,8 +437,8 @@ public class MusicPlayer extends Service {
 
                 startPlayer(_rm.getAttachment().getName(), _rm.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             }
-            if (ActivityChat.onMusicListener != null) {
-                ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+            if (FragmentChat.onMusicListener != null) {
+                FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
             }
         } catch (Exception e) {
 
@@ -458,8 +458,8 @@ public class MusicPlayer extends Service {
 
             startPlayer(_rm.getAttachment().getName(), _rm.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
 
-            if (ActivityChat.onMusicListener != null) {
-                ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+            if (FragmentChat.onMusicListener != null) {
+                FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
             }
         } catch (Exception e) {
 
@@ -506,8 +506,8 @@ public class MusicPlayer extends Service {
                 }
             }
 
-            if (ActivityChat.onMusicListener != null) {
-                ActivityChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+            if (FragmentChat.onMusicListener != null) {
+                FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
             }
         } catch (Exception e) {
 
@@ -700,8 +700,8 @@ public class MusicPlayer extends Service {
                 fillMediaList(true);
 
                 nextMusic();
-                if (ActivityChat.onMusicListener != null) {
-                    ActivityChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
+                if (FragmentChat.onMusicListener != null) {
+                    FragmentChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
                 } else {
                     downloadNextMusic(MusicPlayer.messageId);
                 }
