@@ -168,7 +168,7 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
     private EmojiPopup emojiPopup;
 
     private void setUpEmojiPopup() {
-        emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent_notification)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override public void onEmojiBackspaceClicked(final View v) {
 
             }

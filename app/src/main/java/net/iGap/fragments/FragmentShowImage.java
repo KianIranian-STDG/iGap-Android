@@ -19,7 +19,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -65,7 +64,7 @@ import net.iGap.realm.RealmRoomMessageFields;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
-public class FragmentShowImage extends Fragment {
+public class FragmentShowImage extends BaseFragment {
 
     private TextView txtImageNumber;
     private TextView txtImageName;
@@ -97,10 +96,26 @@ public class FragmentShowImage extends Fragment {
     private boolean isLockScreen = false;
     private FragmentActivity mActivity;
     private Realm realmShowImage;
+    public final String ROOM_ID = "roomId";
+    public final String SELECTED_IMAGE = "selectedImage";
+    public final String TYPE = "type";
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
     }
+
+    //public static FragmentShowImage newInstance(long roomId, long selectedFileToken, @Nullable ProtoGlobal.RoomMessageType roomMessageType, View appBarLayout) {
+    //    FragmentShowImage fragment = new FragmentShowImage();
+    //    Bundle bundle = new Bundle();
+    //    bundle.putLong(ROOM_ID, roomId);
+    //    bundle.putLong(SELECTED_IMAGE, selectedFileToken);
+    //    if (roomMessageType != null) {
+    //        bundle.putString(TYPE, roomMessageType.toString());
+    //    }
+    //    fragment.setArguments(bundle);
+    //    fragment.appBarLayout = appBarLayout;
+    //    return fragment;
+    //}
 
     @Nullable
     @Override

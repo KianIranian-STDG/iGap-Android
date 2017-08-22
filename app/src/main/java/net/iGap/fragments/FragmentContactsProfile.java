@@ -27,7 +27,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -56,8 +55,8 @@ import net.iGap.activities.ActivityShearedMedia;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
-import net.iGap.interfaces.IActivityFinish;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnGetPermission;
@@ -100,7 +99,7 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
 
 
-public class FragmentContactsProfile extends Fragment implements OnUserUpdateStatus {
+public class FragmentContactsProfile extends BaseFragment implements OnUserUpdateStatus {
 
     private long userId = 0;
     private long roomId = 0;
@@ -275,8 +274,7 @@ public class FragmentContactsProfile extends Fragment implements OnUserUpdateSta
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                //mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentContactsProfile.this).commit();
-                mActivity.getSupportFragmentManager().popBackStack();
+                closeFragment();
             }
         });
 
@@ -294,8 +292,7 @@ public class FragmentContactsProfile extends Fragment implements OnUserUpdateSta
 
                         new GoToChatActivity(realmRoom.getId()).setContext(mActivity).startActivity();
 
-                        //finish();
-                        mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentContactsProfile.this).commit();
+                        closeFragment();
                     } else {
                         G.onChatGetRoom = new OnChatGetRoom() {
                             @Override
@@ -306,8 +303,7 @@ public class FragmentContactsProfile extends Fragment implements OnUserUpdateSta
 
                                         new GoToChatActivity(roomId).setContext(mActivity).setPeerID(userId).startActivity();
 
-                                        //finish();
-                                        mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentContactsProfile.this).commit();
+                                        closeFragment();
                                         G.onChatGetRoom = null;
                                     }
                                 });
@@ -333,8 +329,7 @@ public class FragmentContactsProfile extends Fragment implements OnUserUpdateSta
                     }
                     realm.close();
                 } else {
-                    //finish();
-                    mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentContactsProfile.this).commit();
+                    closeFragment();
                 }
             }
         });
@@ -662,7 +657,6 @@ public class FragmentContactsProfile extends Fragment implements OnUserUpdateSta
         vgPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 try {
                     HelperPermision.getContactPermision(mActivity, new OnGetPermission() {
                         @Override
@@ -678,8 +672,6 @@ public class FragmentContactsProfile extends Fragment implements OnUserUpdateSta
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                //popUpMenu(R.menu.chi_popup_phone_number, v);
             }
         });
 
@@ -688,30 +680,9 @@ public class FragmentContactsProfile extends Fragment implements OnUserUpdateSta
         vgSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
             @Override
             public void onClick(View view) {
-
-                G.iActivityFinish = new IActivityFinish() {
-                    @Override
-                    public void onFinish() {
-                        //finish();
-                    }
-                };
-
-                Intent intent = new Intent(mActivity, ActivityShearedMedia.class);
-                intent.putExtra("RoomID", shearedId);
-                startActivity(intent);
+                HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentShearedMedia.newInstance(shearedId), false, R.id.ac_ll_parent);
             }
         });
-
-        //txtBlockContact = (TextView) view.findViewById(R.id.chi_txt_blockContact);
-        //
-        //txtBlockContact.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        showAlertDialog(getString(R.string.block_this_contact), getString(R.string.block), getString(R.string.cancel));
-        //    }
-        //});
-        //
-
 
         txtClearChat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -719,9 +690,7 @@ public class FragmentContactsProfile extends Fragment implements OnUserUpdateSta
                 showAlertDialog(getString(R.string.clear_this_chat), getString(R.string.clear), getString(R.string.cancel));
             }
         });
-
         txtNotifyAndSound = (TextView) view.findViewById(R.id.chi_txtNotifyAndSound);
-
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

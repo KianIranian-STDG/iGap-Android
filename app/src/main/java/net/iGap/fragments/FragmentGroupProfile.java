@@ -58,15 +58,14 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityChat;
 import net.iGap.activities.ActivityCrop;
-import net.iGap.activities.ActivityShearedMedia;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.IActivityFinish;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
@@ -225,7 +224,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         //group info
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
-            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentGroupProfile.this).commit();
+            closeFragment();
             return;
         }
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -263,7 +262,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         G.onGroupAvatarDelete = this;
         G.onGroupRevokeLink = this;
 
-        ActivityShearedMedia.getCountOfSharedMedia(roomId);
+        FragmentShearedMedia.getCountOfSharedMedia(roomId);
     }
 
     @Override
@@ -493,7 +492,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentGroupProfile.this).commit();
+                closeFragment();
             }
         });
 
@@ -659,17 +658,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             @Override
             public void onClick(View view) {
 
-                G.iActivityFinish = new IActivityFinish() {
-                    @Override
-                    public void onFinish() {
-                        //finish(); don't need to do this in fragment state
-                        //mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentGroupProfile.this).commit();
-                    }
-                };
 
-                Intent intent = new Intent(mActivity, ActivityShearedMedia.class);
-                intent.putExtra("RoomID", roomId);
-                startActivity(intent);
+                HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentShearedMedia.newInstance(roomId), false, R.id.ac_ll_parent);
             }
         });
 

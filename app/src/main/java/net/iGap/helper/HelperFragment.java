@@ -46,10 +46,7 @@ public class HelperFragment {
         }
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
-
-        ft.addToBackStack(tag).replace(resId, fragment, tag).
-                setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
-
+        ft.addToBackStack(tag).replace(resId, fragment, tag).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
         if (stateLoose) {
             ft.commitAllowingStateLoss();
         } else {
@@ -59,7 +56,7 @@ public class HelperFragment {
 
     //*****************************************************************************************************************
 
-    public static void changeFragmentResurceContainer(FragmentManager fm) {
+    public static void changeFragmentResourceContainer(FragmentManager fm) {
 
         Fragment fragmentChat = fm.findFragmentByTag(chatName);
 

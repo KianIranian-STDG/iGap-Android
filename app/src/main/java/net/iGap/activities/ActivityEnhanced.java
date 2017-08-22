@@ -144,7 +144,7 @@ public class ActivityEnhanced extends AppCompatActivity {
             }
 
             if (beforeState != G.isLandscape) {
-                HelperFragment.changeFragmentResurceContainer(getSupportFragmentManager());
+                HelperFragment.changeFragmentResourceContainer(getSupportFragmentManager());
             }
         }
 

@@ -4330,27 +4330,13 @@ public class ActivityChat extends ActivityEnhanced
      */
     private void goToProfile() {
         if (chatType == CHAT) {
-            //Intent intent = new Intent(G.context, ActivityContactsProfile.class);
-            //intent.putExtra("peerId", chatPeerId);
-            //intent.putExtra("RoomId", mRoomId);
-            //intent.putExtra("enterFrom", CHAT.toString());
-            //startActivity(intent);
-
-            //getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
-            HelperFragment.loadFragment(getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()));
+            HelperFragment.loadFragment(getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()), false, R.id.ac_ll_parent);
         } else if (chatType == GROUP) {
-
             if (!isChatReadOnly) {
-                //Intent intent = new Intent(G.context, ActivityGroupProfile.class);
-                //intent.putExtra("RoomId", mRoomId);
-                //startActivity(intent);
-                getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentGroupProfile.newInstance(mRoomId), FragmentGroupProfile.FRAGMENT_TAG).addToBackStack(null).commit();
+                HelperFragment.loadFragment(getSupportFragmentManager(), FragmentGroupProfile.newInstance(mRoomId), false, R.id.ac_ll_parent);
             }
         } else if (chatType == CHANNEL) {
-            //Intent intent = new Intent(G.context, ActivityChannelProfile.class);
-            //intent.putExtra(PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
-            //startActivity(intent);
-            getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentChannelProfile.newInstance(mRoomId), FragmentChannelProfile.FRAGMENT_TAG).addToBackStack(null).commit();
+            HelperFragment.loadFragment(getSupportFragmentManager(), FragmentChannelProfile.newInstance(mRoomId), false, R.id.ac_ll_parent);
         }
     }
 
@@ -4516,22 +4502,16 @@ public class ActivityChat extends ActivityEnhanced
      */
     private void showImage(final StructMessageInfo messageInfo, View view) {
         // for gone app bar
-
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-
-
         long selectedFileToken = Long.parseLong(messageInfo.messageID);
-
         FragmentShowImage fragment = FragmentShowImage.newInstance();
         Bundle bundle = new Bundle();
         bundle.putLong("RoomId", mRoomId);
         bundle.putLong("SelectedImage", selectedFileToken);
         fragment.setArguments(bundle);
-
         fragment.appBarLayout = appBarLayout;
-
         getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.ac_ll_parent, fragment, "ShowImageMessage").commit();
     }
 

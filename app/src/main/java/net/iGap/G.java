@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import com.crashlytics.android.Crashlytics;
@@ -214,6 +215,7 @@ public class G extends MultiDexApplication {
 
     public static Activity currentActivity;
     public static Fragment currentFragment;
+    public static FragmentActivity fragmentActivity;
     public static String latestActivityName;
 
     public static File IMAGE_NEW_GROUP;

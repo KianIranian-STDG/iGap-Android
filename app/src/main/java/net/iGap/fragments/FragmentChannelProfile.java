@@ -57,12 +57,12 @@ import net.iGap.activities.ActivityCrop;
 import net.iGap.activities.ActivityShearedMedia;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.IActivityFinish;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
@@ -222,7 +222,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         //channel info
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getChannelRoom() == null) {
-            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentChannelProfile.this).commit();
+            closeFragment();
             return;
         }
         RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
@@ -345,7 +345,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentChannelProfile.this).commit();
+                closeFragment();
             }
         });
         appBarLayout = (AppBarLayout) view.findViewById(R.id.pch_appbar);
@@ -414,17 +414,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         lytSharedMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                G.iActivityFinish = new IActivityFinish() {
-                    @Override
-                    public void onFinish() {
-                        //finish();
-                    }
-                };
-
-                Intent intent = new Intent(mActivity, ActivityShearedMedia.class);
-                intent.putExtra("RoomID", roomId);
-                startActivity(intent);
+                HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentShearedMedia.newInstance(roomId), false, R.id.ac_ll_parent);
             }
         });
 

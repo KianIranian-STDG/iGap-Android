@@ -35,17 +35,18 @@ import net.iGap.request.RequestUserUpdateStatus;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static net.iGap.G.context;
+import static net.iGap.G.fragmentActivity;
 
 public class BaseFragment extends Fragment {
 
     private boolean isOnGetPermission = false;
-    private FragmentActivity fragmentActivity;
+    //private FragmentActivity fragmentActivity;
 
     @Override
     public void onAttach(Context context) {
         //super.onAttach(context);
         super.onAttach(CalligraphyContextWrapper.wrap(context));
-        fragmentActivity = (FragmentActivity) context;
+        G.fragmentActivity = (FragmentActivity) context;
         G.currentFragment = this;
     }
 
@@ -200,5 +201,9 @@ public class BaseFragment extends Fragment {
         } else {
             StartupActions.makeFolder();
         }
+    }
+
+    public void closeFragment() {
+        fragmentActivity.getSupportFragmentManager().popBackStack();
     }
 }
