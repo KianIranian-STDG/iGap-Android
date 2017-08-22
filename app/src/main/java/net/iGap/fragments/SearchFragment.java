@@ -44,6 +44,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.SearchItem;
 import net.iGap.adapter.items.SearchItemHeader;
 import net.iGap.helper.GoToChatActivity;
+import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
@@ -373,7 +374,9 @@ public class SearchFragment extends Fragment {
                 new GoToChatActivity(realmRoom.getId()).setNewTask(true).startActivity();
             }
 
-            mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+            //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+            HelperFragment.removeFreagment(mActivity.getSupportFragmentManager(), SearchFragment.this);
+
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
@@ -385,7 +388,8 @@ public class SearchFragment extends Fragment {
                             new GoToChatActivity(roomId).setPeerID(id).setNewTask(true).startActivity();
 
                             if (mActivity != null) {
-                                mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                                //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                                HelperFragment.removeFreagment(mActivity.getSupportFragmentManager(), SearchFragment.this);
                             }
 
                             G.onChatGetRoom = null;

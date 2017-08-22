@@ -138,4 +138,14 @@ public class HelperFragment {
             return false;
         }
     }
+
+    public static void removeFreagment(FragmentManager fragmentManager, Fragment fragment) {
+
+        if (fragmentManager == null || fragment == null) {
+            return;
+        }
+
+        fragmentManager.beginTransaction().remove(fragment).commit();
+        fragmentManager.popBackStack();
+    }
 }
