@@ -146,9 +146,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean isMenuButtonAddShown = false;
     LinearLayout mediaLayout;
 
-    FrameLayout frameChatContainer;
+    public static FrameLayout frameChatContainer;
+    public static FrameLayout frameMainContainer;
     public static FrameLayout frameFragmentBack;
-    FrameLayout frameFragmentContainer;
+
+    static FrameLayout frameFragmentContainer;
 
     FragmentCall fragmentCall;
     public boolean fromCall = false;
@@ -309,18 +311,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
         frameChatContainer = (FrameLayout) findViewById(R.id.am_frame_chat_container);
+        frameMainContainer = (FrameLayout) findViewById(R.id.am_frame_main_container);
 
         if (G.twoPaneMode) {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 G.isLandscape = true;
-                frameChatContainer.setVisibility(View.VISIBLE);
             } else {
                 G.isLandscape = false;
-                frameChatContainer.setVisibility(View.GONE);
             }
 
             frameFragmentBack = (FrameLayout) findViewById(R.id.am_frame_fragment_back);
             frameFragmentContainer = (FrameLayout) findViewById(R.id.am_frame_fragment_container);
+
+            desighnLayout(false);
 
             frameFragmentBack.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -530,12 +533,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 
+
         if (G.twoPaneMode) {
+
+            boolean beforeState = G.isLandscape;
+
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                frameChatContainer.setVisibility(View.VISIBLE);
+                G.isLandscape = true;
             } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                frameChatContainer.setVisibility(View.GONE);
+                G.isLandscape = false;
             }
+
+            if (beforeState != G.isLandscape) {
+                desighnLayout(false);
+            }
+
+
         }
 
         super.onConfigurationChanged(newConfig);
@@ -1919,14 +1932,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             // this call for create group   getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
             super.onBackPressed();
-        }
 
-        if (G.twoPaneMode) {
-            if (frameFragmentContainer.getChildCount() == 0) {
-                frameFragmentBack.setVisibility(View.GONE);
-            }
+            desighnLayout(false);
         }
-
     }
 
     @Override
@@ -1947,11 +1955,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        if (G.twoPaneMode) {
-            if (frameFragmentContainer.getChildCount() == 0) {
-                frameFragmentBack.setVisibility(View.GONE);
-            }
-        }
+        desighnLayout(false);
 
 
         if (contentLoading != null) {
@@ -2381,5 +2385,40 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         }
     } // end of
+
+    public static void setWeight(View view, int value) {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+        params.weight = value;
+        view.setLayoutParams(params);
+    }
+
+    public static void desighnLayout(boolean chatExist) {
+
+        if (G.twoPaneMode) {
+
+            if (G.isLandscape) {
+
+                setWeight(frameChatContainer, 1);
+                setWeight(frameMainContainer, 1);
+            } else {
+
+                if (frameChatContainer.getChildCount() > 0 || chatExist) {
+                    setWeight(frameChatContainer, 1);
+                    setWeight(frameMainContainer, 0);
+                } else {
+                    setWeight(frameChatContainer, 0);
+                    setWeight(frameMainContainer, 1);
+                }
+            }
+
+            if (frameFragmentContainer.getChildCount() == 0) {
+                frameFragmentBack.setVisibility(View.GONE);
+            }
+        }
+    }
+
+
+
+
 
 }

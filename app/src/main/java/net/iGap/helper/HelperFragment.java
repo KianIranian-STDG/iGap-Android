@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -56,45 +55,45 @@ public class HelperFragment {
 
     //*****************************************************************************************************************
 
-    public static void changeFragmentResourceContainer(FragmentManager fm) {
-
-        Fragment fragmentChat = fm.findFragmentByTag(chatName);
-
-        if (fragmentChat != null) {
-
-            ArrayList<StructFrag> list = new ArrayList<>();
-
-            for (int i = fm.getFragments().size() - 1; i >= 0; i--) {
-
-                Fragment f = fm.getFragments().get(i);
-
-                if (f == null) {
-                    continue;
-                }
-
-                StructFrag st = new StructFrag();
-                st.fragment = f;
-                st.tag = f.getTag();
-                list.add(st);
-
-                fm.beginTransaction().remove(f).commit();
-                fm.executePendingTransactions();
-
-                if (f == fragmentChat) {
-                    break;
-                }
-            }
-
-            fm.popBackStackImmediate(chatName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-            for (int j = list.size() - 1; j >= 0; j--) {
-
-                StructFrag st = list.get(j);
-
-                fm.beginTransaction().addToBackStack(st.tag).replace(getResContainer(st.fragment.getClass().getName()), st.fragment, st.tag).commit();
-            }
-        }
-    }
+    //public static void changeFragmentResourceContainer(FragmentManager fm) {
+    //
+    //    Fragment fragmentChat = fm.findFragmentByTag(chatName);
+    //
+    //    if (fragmentChat != null) {
+    //
+    //        ArrayList<StructFrag> list = new ArrayList<>();
+    //
+    //        for (int i = fm.getFragments().size() - 1; i >= 0; i--) {
+    //
+    //            Fragment f = fm.getFragments().get(i);
+    //
+    //            if (f == null) {
+    //                continue;
+    //            }
+    //
+    //            StructFrag st = new StructFrag();
+    //            st.fragment = f;
+    //            st.tag = f.getTag();
+    //            list.add(st);
+    //
+    //            fm.beginTransaction().remove(f).commit();
+    //            fm.executePendingTransactions();
+    //
+    //            if (f == fragmentChat) {
+    //                break;
+    //            }
+    //        }
+    //
+    //        fm.popBackStackImmediate(chatName, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    //
+    //        for (int j = list.size() - 1; j >= 0; j--) {
+    //
+    //            StructFrag st = list.get(j);
+    //
+    //            fm.beginTransaction().addToBackStack(st.tag).replace(getResContainer(st.fragment.getClass().getName()), st.fragment, st.tag).commit();
+    //        }
+    //    }
+    //}
 
     public static int getResContainer(String fragmentClassName) {
 
@@ -106,26 +105,19 @@ public class HelperFragment {
 
         if (G.twoPaneMode) {
 
-            if (G.isLandscape) {
+            if (isChatFragment(fragmentClassName)) {
 
-                if (isChatFragment(fragmentClassName)) {
-                    resId = R.id.am_frame_chat_container;
-                } else {
-                    resId = R.id.am_frame_fragment_container;
-                }
+                resId = R.id.am_frame_chat_container;
+                ActivityMain.desighnLayout(true);
+
             } else {
-                if (isChatFragment(fragmentClassName)) {
-                    resId = R.id.am_frame_main_container;
-                } else {
-                    resId = R.id.am_frame_fragment_container;
+
+                resId = R.id.am_frame_fragment_container;
+
+                if (ActivityMain.frameFragmentBack != null) {
+                    ActivityMain.frameFragmentBack.setVisibility(View.VISIBLE);
                 }
             }
-
-            if (ActivityMain.frameFragmentBack != null && resId == R.id.am_frame_fragment_container) {
-                ActivityMain.frameFragmentBack.setVisibility(View.VISIBLE);
-            }
-
-
         } else {
             resId = R.id.am_frame_main_container;
         }
