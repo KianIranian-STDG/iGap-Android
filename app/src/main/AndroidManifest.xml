@@ -143,7 +143,8 @@
     <activity
         android:name=".activities.ActivityMain"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-        android:theme="@style/AppThemeTranslucent">
+        android:theme="@style/AppThemeTranslucent"
+        android:launchMode="singleTask">
 
 
       <intent-filter>

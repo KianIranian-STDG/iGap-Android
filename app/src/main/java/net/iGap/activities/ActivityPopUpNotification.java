@@ -309,7 +309,7 @@ public class ActivityPopUpNotification extends ActivityEnhanced {
     private void goToChatActivity() {
 
         Intent intent = new Intent(ActivityPopUpNotification.this, ActivityMain.class);
-        intent.putExtra("SelectedRoomid", mList.get(viewPager.getCurrentItem()).getRoomId());
+        intent.putExtra(ActivityMain.openChat, mList.get(viewPager.getCurrentItem()).getRoomId());
         startActivity(intent);
 
         finish();

@@ -55,7 +55,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMediaPlayer;
+import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -238,8 +238,10 @@ public class MusicPlayer extends Service {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(G.context, ActivityMediaPlayer.class);
+                Intent intent = new Intent(G.context, ActivityMain.class);
+                intent.putExtra(ActivityMain.openMediaPlyer, true);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 G.context.startActivity(intent);
             }
         });
@@ -760,7 +762,10 @@ public class MusicPlayer extends Service {
 
         getMusicInfo();
 
-        PendingIntent pi = PendingIntent.getActivity(G.context, 555, new Intent(G.context, ActivityMediaPlayer.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intentFragmentMusic = new Intent(G.context, ActivityMain.class);
+        intentFragmentMusic.putExtra(ActivityMain.openMediaPlyer, true);
+
+        PendingIntent pi = PendingIntent.getActivity(G.context, 555, intentFragmentMusic, PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
         remoteViews.setTextViewText(R.id.mln_txt_music_outher, MusicPlayer.musicInfoTitle);

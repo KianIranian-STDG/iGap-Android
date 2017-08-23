@@ -217,7 +217,7 @@ public class HelperNotificationAndBadge {
         Intent intent = new Intent(context, ActivityMain.class);
 
         if (isFromOnRoom) {
-            intent.putExtra("SelectedRoomid", roomId);
+            intent.putExtra(ActivityMain.openChat, roomId);
         }
 
         pi = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);

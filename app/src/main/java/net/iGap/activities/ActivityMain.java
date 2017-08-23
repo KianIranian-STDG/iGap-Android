@@ -37,6 +37,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,6 +66,7 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentQrCodeNewDevice;
 import net.iGap.fragments.FragmentSetting;
@@ -142,6 +144,10 @@ import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
+
+    public static final String openChat = "openChat";
+    public static final String openMediaPlyer = "openMediaPlyer";
+
 
     public static boolean isMenuButtonAddShown = false;
     LinearLayout mediaLayout;
@@ -238,6 +244,32 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        chechIntent(intent);
+    }
+
+    private void chechIntent(Intent intent) {
+
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            fromCall = extras.getBoolean("FROM_CALL");
+
+            long _roomid = extras.getLong(ActivityMain.openChat);
+
+            if (_roomid > 0) {
+                new GoToChatActivity(_roomid, getSupportFragmentManager()).startActivity();
+            }
+
+            boolean openMediaPlyer = extras.getBoolean(ActivityMain.openMediaPlyer);
+            if (openMediaPlyer) {
+                FragmentMediaPlayer fragmant = new FragmentMediaPlayer();
+                HelperFragment.loadFragment(getSupportFragmentManager(), fragmant);
+            }
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -323,7 +355,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             frameFragmentBack = (FrameLayout) findViewById(R.id.am_frame_fragment_back);
             frameFragmentContainer = (FrameLayout) findViewById(R.id.am_frame_fragment_container);
 
-            desighnLayout(false);
+            desighnLayout(chatLayoutMode.none);
 
             frameFragmentBack.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -336,18 +368,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             frameChatContainer.setVisibility(View.GONE);
         }
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            fromCall = extras.getBoolean("FROM_CALL");
-
-            long _roomid = extras.getLong("SelectedRoomid");
-
-            if (_roomid > 0) {
-                new GoToChatActivity(_roomid, getSupportFragmentManager()).startActivity();
-            }
-        }
-
-
+        chechIntent(getIntent());
 
 
         initTabStrip();
@@ -545,7 +566,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             if (beforeState != G.isLandscape) {
-                desighnLayout(false);
+                desighnLayout(chatLayoutMode.none);
             }
 
 
@@ -1933,7 +1954,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             super.onBackPressed();
 
-            desighnLayout(false);
+            desighnLayout(chatLayoutMode.none);
         }
     }
 
@@ -1955,7 +1976,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        desighnLayout(false);
+        desighnLayout(chatLayoutMode.none);
 
 
         if (contentLoading != null) {
@@ -2392,32 +2413,86 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         view.setLayoutParams(params);
     }
 
-    public static void desighnLayout(boolean chatExist) {
+    public enum chatLayoutMode {
+        none, show, hide
+    }
+
+    public static void desighnLayout(chatLayoutMode mode) {
 
         if (G.twoPaneMode) {
-
-            if (G.isLandscape) {
-
-                setWeight(frameChatContainer, 1);
-                setWeight(frameMainContainer, 1);
-            } else {
-
-                if (frameChatContainer.getChildCount() > 0 || chatExist) {
-                    setWeight(frameChatContainer, 1);
-                    setWeight(frameMainContainer, 0);
-                } else {
-                    setWeight(frameChatContainer, 0);
-                    setWeight(frameMainContainer, 1);
-                }
-            }
 
             if (frameFragmentContainer.getChildCount() == 0) {
                 frameFragmentBack.setVisibility(View.GONE);
             }
+
+            if (G.isLandscape) {
+                setWeight(frameChatContainer, 1);
+                setWeight(frameMainContainer, 1);
+
+            } else {
+
+                if (mode == chatLayoutMode.show) {
+                    setWeight(frameChatContainer, 1);
+                    setWeight(frameMainContainer, 0);
+                } else if (mode == chatLayoutMode.hide) {
+                    setWeight(frameChatContainer, 0);
+                    setWeight(frameMainContainer, 1);
+                } else {
+                    if (frameChatContainer.getChildCount() > 0) {
+                        setWeight(frameChatContainer, 1);
+                        setWeight(frameMainContainer, 0);
+                    } else {
+                        setWeight(frameChatContainer, 0);
+                        setWeight(frameMainContainer, 1);
+                    }
+
+                }
+
+            }
+
+            //  setMediaLayout();
+
+
+
+
         }
     }
 
+    public static void setMediaLayout() {
 
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+
+                    if (MusicPlayer.mp != null) {
+
+                        boolean showMainMediaPlyer = false;
+
+                        View smallLayoutMediaPlyerChat = frameChatContainer.findViewById(R.id.ac_ll_music_layout);
+                        if (smallLayoutMediaPlyerChat != null) {
+                            smallLayoutMediaPlyerChat.setVisibility(View.VISIBLE);
+                        }
+
+                        View smallLayoutMediaPlyerMain = frameMainContainer.findViewById(R.id.amr_ll_music_layout);
+                        if (smallLayoutMediaPlyerMain != null) {
+
+                            if (showMainMediaPlyer) {
+                                smallLayoutMediaPlyerMain.setVisibility(View.VISIBLE);
+                            } else {
+                                smallLayoutMediaPlyerMain.setVisibility(View.GONE);
+                            }
+                        }
+                    } else {
+
+                    }
+                } catch (Exception e) {
+                    Log.e("dddddd", "activity main  setMediaLayout " + e.toString());
+                }
+            }
+        }, 200);
+    }
 
 
 

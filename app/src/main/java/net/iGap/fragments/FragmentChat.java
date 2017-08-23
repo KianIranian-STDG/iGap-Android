@@ -432,6 +432,7 @@ public class FragmentChat extends BaseFragment
     private boolean isCloudRoom;
     private boolean needUpdateView = false;
 
+
     private long biggestMessageId = 0;
     private long replyToMessageId = 0;
     private long userId;
@@ -7869,5 +7870,7 @@ public class FragmentChat extends BaseFragment
         Fragment fragment = ft.findFragmentByTag(FragmentChat.class.getName());
 
         HelperFragment.removeFreagment(ft, fragment);
+
+        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.hide);
     }
 }

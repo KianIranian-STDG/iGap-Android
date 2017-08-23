@@ -108,7 +108,7 @@ public class HelperFragment {
             if (isChatFragment(fragmentClassName)) {
 
                 resId = R.id.am_frame_chat_container;
-                ActivityMain.desighnLayout(true);
+                ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.show);
 
             } else {
 
