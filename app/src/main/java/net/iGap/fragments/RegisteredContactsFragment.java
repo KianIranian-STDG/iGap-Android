@@ -73,6 +73,7 @@ import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsGetList;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -470,7 +471,7 @@ public class RegisteredContactsFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ContactListAdapter.ViewHolder viewHolder, int i) {
 
-            RealmContacts contact = viewHolder.realmContacts = getItem(i);
+            final RealmContacts contact = viewHolder.realmContacts = getItem(i);
             if (contact == null) {
                 return;
             }
@@ -487,7 +488,7 @@ public class RegisteredContactsFragment extends Fragment {
 
             viewHolder.title.setText(contact.getDisplay_name());
 
-            RealmRegisteredInfo realmRegisteredInfo = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, contact.getId()).findFirst();
+            final RealmRegisteredInfo realmRegisteredInfo = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, contact.getId()).findFirst();
             if (realmRegisteredInfo != null) {
                 viewHolder.subtitle.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
                 if (realmRegisteredInfo.getStatus() != null) {
@@ -505,6 +506,22 @@ public class RegisteredContactsFragment extends Fragment {
                     viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
                 }
             }
+
+            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    new MaterialDialog.Builder(mActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            new RequestUserContactsDelete().contactsDelete(realmRegisteredInfo.getPhoneNumber());
+                        }
+                    }).negativeText(R.string.B_cancel).show();
+
+                    return false;
+                }
+            });
 
             hashMapAvatar.put(contact.getId(), viewHolder.image);
             setAvatar(viewHolder, contact.getId());
