@@ -90,7 +90,7 @@ public class ActivityProfile extends ActivityEnhanced implements OnUserAvatarRes
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.fragment_registration_nickname);
         delete();
         txtTitlInformation = (TextView) findViewById(R.id.pu_txt_title_information);
 
