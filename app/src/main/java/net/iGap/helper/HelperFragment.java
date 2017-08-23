@@ -125,6 +125,14 @@ public class HelperFragment {
         return resId;
     }
 
+    //public static void removeAllFragment(FragmentManager ft){
+    //
+    //    for(Fragment f:ft.getFragments()){
+    //        f.
+    //    }
+    //
+    //}
+
     private static boolean isChatFragment(String fragmentClassName) {
 
         if (fragmentClassName.equals(chatName)) {
