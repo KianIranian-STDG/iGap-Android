@@ -211,6 +211,41 @@ public class AttachFile {
         });
     }
 
+    public void requestTakePictureFragment(final Fragment fragment) throws IOException {
+
+        PackageManager packageManager = context.getPackageManager();
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
+            Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        HelperPermision.getCameraPermission(context, new OnGetPermission() {
+            @Override
+            public void Allow() throws IOException {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    dispatchTakePictureIntent();
+                } else {
+                    Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 0);
+
+                    if (outPath != null) {
+                        imagePath = outPath.getPath();
+                        imageUri = outPath;
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
+                        fragment.startActivityForResult(intent, request_code_TAKE_PICTURE);
+                        isInAttach = true;
+                    }
+                }
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
     private Uri getOutputMediaFileUri(int type, int camera) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && camera == 0) {
             return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", getOutputMediaFile(type));
@@ -239,6 +274,27 @@ public class AttachFile {
                 Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", createImageFile());
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 ((Activity) context).startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
+            }
+        }
+    }
+
+    public void dispatchTakePictureIntentFragment(Fragment fragment) throws IOException {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(G.context.getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                return;
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", createImageFile());
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                fragment.startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
             }
         }
     }

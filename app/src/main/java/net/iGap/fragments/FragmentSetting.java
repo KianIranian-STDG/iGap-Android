@@ -62,7 +62,6 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPermision;
@@ -1481,7 +1480,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onClick(View view) {
                 isBackPressed = false;
-                HelperFragment.loadFragment(G.fragmentActivity.getSupportFragmentManager(), FragmentChatBackground.newInstance(), false, R.id.st_layoutParent);
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.st_layoutParent, FragmentChatBackground.newInstance()).commit();
             }
         });
 

@@ -11,6 +11,7 @@
 package net.iGap.adapter;
 
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,12 +38,12 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     private final int CHOOSE = 0;
     private final int ALL = 1;
 
-    //  int selected_position = 1;
-
     private ArrayList<FragmentChatBackground.StructWallpaper> mList;
     private FragmentChatBackground.OnImageClick onImageClick;
+    private Fragment fragment;
 
-    public AdapterChatBackground(ArrayList<FragmentChatBackground.StructWallpaper> List, FragmentChatBackground.OnImageClick onImageClick) {
+    public AdapterChatBackground(Fragment fragment, ArrayList<FragmentChatBackground.StructWallpaper> List, FragmentChatBackground.OnImageClick onImageClick) {
+        this.fragment = fragment;
         this.mList = List;
         this.onImageClick = onImageClick;
     }
@@ -77,27 +78,25 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 final String path = G.DIR_CHAT_BACKGROUND + "/" + "thumb_" + pf.getCacheId() + "_" + pf.getName();
 
                 if (!new File(path).exists()) {
-                    HelperDownloadFile.startDownload(System.currentTimeMillis() + "", pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSmallThumbnail().getSize(),
-                        ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4, new HelperDownloadFile.UpdateListener() {
-                            @Override
-                            public void OnProgress(String mPath, int progress) {
-                                if (progress == 100) {
-                                    G.currentActivity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (holder2.img != null) {
-                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
-                                            }
-
+                    HelperDownloadFile.startDownload(System.currentTimeMillis() + "", pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4, new HelperDownloadFile.UpdateListener() {
+                        @Override
+                        public void OnProgress(String mPath, int progress) {
+                            if (progress == 100) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (holder2.img != null) {
+                                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
                                         }
-                                    });
-                                }
+                                    }
+                                });
                             }
+                        }
 
-                            @Override
-                            public void OnError(String token) {
-                            }
-                        });
+                        @Override
+                        public void OnError(String token) {
+                        }
+                    });
                 } else {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
                 }
@@ -115,29 +114,12 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
             if (new File(bigImagePath).exists()) {
                 holder2.messageProgress.setVisibility(View.GONE);
-                // G.imageLoader.displayImage(AndroidUtils.suitablePath(bigImagePath), holder2.img);
                 holder2.mPath = bigImagePath;
             } else {
                 holder2.mPath = "";
                 holder2.messageProgress.setVisibility(View.VISIBLE);
-                //  if (HelperDownloadFile.isDownLoading(wallpaper.getProtoWallpaper().getFile().getCacheId())) {
                 startDownload(position, holder2.messageProgress, holder2.contentLoading);
-                //   }
-
-                //holder2.messageProgress.setOnClickListener(new View.OnClickListener() {
-                //    @Override
-                //    public void onClick(View view) {
-                //        downloadFile(position, holder2.messageProgress, holder2.contentLoading);
-                //    }
-                //});
             }
-
-            //if (selected_position == position) {
-            //    holder2.itemView.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-            //    holder2.itemView.setPadding((int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4), (int) G.context.getResources().getDimension(R.dimen.dp4));
-            //} else {
-            //    holder2.itemView.setBackgroundColor(Color.TRANSPARENT);
-            //}
         }
     }
 
@@ -156,7 +138,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         return mList.size();
     }
 
-    public class ViewHolderImage extends RecyclerView.ViewHolder {
+    private class ViewHolderImage extends RecyclerView.ViewHolder {
 
         private ImageView imageView;
 
@@ -168,33 +150,29 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new MaterialDialog.Builder(G.currentActivity).title(G.context.getString(R.string.choose_picture))
-                        .negativeText(G.context.getString(R.string.cancel))
-                        .items(R.array.profile)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getString(R.string.choose_picture)).negativeText(G.context.getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                AttachFile attachFile = new AttachFile(G.currentActivity);
+                            AttachFile attachFile = new AttachFile(G.fragmentActivity);
 
-                                if (text.toString().equals(G.context.getString(R.string.from_camera))) {
-                                    try {
-                                        attachFile.requestTakePicture();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                } else {
-                                    try {
-                                        attachFile.requestOpenGalleryForImageSingleSelect();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                            if (text.toString().equals(G.context.getString(R.string.from_camera))) {
+                                try {
+                                    attachFile.requestTakePictureFragment(fragment);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
-
-                                dialog.dismiss();
+                            } else {
+                                try {
+                                    attachFile.requestOpenGalleryForImageSingleSelectFragment(fragment);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        })
-                        .show();
+
+                            dialog.dismiss();
+                        }
+                    }).show();
                 }
             });
         }
@@ -223,13 +201,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     if (mPath.length() > 0) {
-
-                        // Updating old as well as new positions
-                        //  notifyItemChanged(selected_position);
-                        //  selected_position = getLayoutPosition();
-                        //  notifyItemChanged(selected_position);
                         if (onImageClick != null) {
                             onImageClick.onClick(mPath);
                         }
@@ -238,8 +210,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             });
         }
     }
-
-    //*******************************************************************************
 
     private void startDownload(final int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
 
@@ -250,63 +220,40 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
         String path = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
 
-        HelperDownloadFile.startDownload(System.currentTimeMillis() + "", pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2,
-            new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(String mPath, final int progress) {
+        HelperDownloadFile.startDownload(System.currentTimeMillis() + "", pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2, new HelperDownloadFile.UpdateListener() {
+            @Override
+            public void OnProgress(String mPath, final int progress) {
 
-                    if (messageProgress != null) {
-
-                        messageProgress.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                if (progress < 100) {
-                                    messageProgress.withProgress(progress);
-                                } else {
-                                    messageProgress.withProgress(0);
-                                    messageProgress.setVisibility(View.GONE);
-                                    contentLoading.setVisibility(View.GONE);
-                                    notifyItemChanged(position);
-                                }
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void OnError(String token) {
-
-                    if (messageProgress != null) {
-                        messageProgress.post(new Runnable() {
-                            @Override
-                            public void run() {
-
+                if (messageProgress != null) {
+                    messageProgress.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (progress < 100) {
+                                messageProgress.withProgress(progress);
+                            } else {
                                 messageProgress.withProgress(0);
-                                messageProgress.withDrawable(R.drawable.ic_download, true);
+                                messageProgress.setVisibility(View.GONE);
                                 contentLoading.setVisibility(View.GONE);
+                                notifyItemChanged(position);
                             }
-                        });
-                    }
+                        }
+                    });
                 }
-            });
-    }
+            }
 
-    private void stopDownload(int position) {
-
-        HelperDownloadFile.stopDownLoad(mList.get(position).getProtoWallpaper().getFile().getCacheId());
-    }
-
-    private void downloadFile(int position, MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
-
-        if (mList.get(position) == null || mList.get(position).getProtoWallpaper() == null) {
-            return;
-        }
-
-        if (HelperDownloadFile.isDownLoading(mList.get(position).getProtoWallpaper().getFile().getCacheId())) {
-            stopDownload(position);
-        } else {
-            startDownload(position, messageProgress, contentLoading);
-        }
+            @Override
+            public void OnError(String token) {
+                if (messageProgress != null) {
+                    messageProgress.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageProgress.withProgress(0);
+                            messageProgress.withDrawable(R.drawable.ic_download, true);
+                            contentLoading.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }
+        });
     }
 }
