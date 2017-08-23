@@ -13,6 +13,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import io.realm.Realm;
@@ -49,7 +50,8 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
     private MapUserAdapter mAdapter;
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
     private final int DEFAULT_LOOP_TIME = (int) (10 * DateUtils.SECOND_IN_MILLIS);
-
+    private ImageView imvNothingFound;
+    private TextView txtEmptyListComment;
     public FragmentMapUsers() {
         // Required empty public constructor
     }
@@ -74,6 +76,10 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
     }
 
     private void initComponent(View view) {
+
+        imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
+        txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rcy_map_user);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
@@ -95,6 +101,44 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
 
             }
         });
+
+        if (mAdapter.getItemCount() > 0) {
+            imvNothingFound.setVisibility(View.GONE);
+            txtEmptyListComment.setVisibility(View.GONE);
+        } else {
+            imvNothingFound.setVisibility(View.VISIBLE);
+            txtEmptyListComment.setVisibility(View.VISIBLE);
+        }
+
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+
+                if (mAdapter.getItemCount() > 0) {
+                    imvNothingFound.setVisibility(View.GONE);
+                    txtEmptyListComment.setVisibility(View.GONE);
+                } else {
+                    imvNothingFound.setVisibility(View.VISIBLE);
+                    txtEmptyListComment.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                if (mAdapter.getItemCount() > 0) {
+                    imvNothingFound.setVisibility(View.GONE);
+                    txtEmptyListComment.setVisibility(View.GONE);
+                } else {
+                    imvNothingFound.setVisibility(View.VISIBLE);
+                    txtEmptyListComment.setVisibility(View.VISIBLE);
+                }
+            }
+
+        });
+
     }
 
     private void getDistanceLoop(final int delay, boolean loop) {

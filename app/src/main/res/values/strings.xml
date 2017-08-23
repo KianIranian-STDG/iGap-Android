@@ -1042,4 +1042,6 @@
 
   <string name="exceed_4_line">Your status cannot exceed 4 lines.</string>
 
+  <string name="text_empty_user_map">Oops! No user nearby has turned on her/his map yet</string>
+
 </resources>
