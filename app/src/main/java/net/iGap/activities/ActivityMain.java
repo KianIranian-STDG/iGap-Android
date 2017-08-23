@@ -1933,7 +1933,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onBackPressed() {
 
-        if (G.onBackPressedChat != null) {
+        if (G.onBackPressedExplorer != null) {
+            if (G.onBackPressedExplorer.onBack()) {
+                return;
+            }
+        } else if (G.onBackPressedChat != null) {
             if (G.onBackPressedChat.onBack()) {
                 return;
             }

@@ -32,6 +32,7 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.PopupWindow;
@@ -40,6 +41,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,11 +49,13 @@ import java.util.List;
 import java.util.Locale;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityExplorer;
 import net.iGap.activities.ActivityPaint;
+import net.iGap.fragments.FragmentExplorer;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
+import net.iGap.interfaces.IPickFile;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoGlobal;
@@ -573,12 +577,20 @@ public class AttachFile {
         });
     }
 
-    public void requestPickFile() throws IOException {
+    public void requestPickFile(final IPickFile listener) throws IOException {
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
-                Intent intent = new Intent(context, ActivityExplorer.class);
-                ((Activity) context).startActivityForResult(intent, request_code_pic_file);
+                //Intent intent = new Intent(context, ActivityExplorer.class);
+                //((Activity) context).startActivityForResult(intent, request_code_pic_file);
+
+                FragmentExplorer fragment = new FragmentExplorer();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Listener", (Serializable) listener);
+                fragment.setArguments(bundle);
+
+                HelperFragment.loadFragment(((FragmentActivity) context).getSupportFragmentManager(), fragment);
+
                 if (G.onHelperSetAction != null) {
                     G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
                 }
@@ -668,17 +680,28 @@ public class AttachFile {
         }
     }
 
-    public void requestOpenDocumentFolder() throws IOException {
+    public void requestOpenDocumentFolder(final IPickFile listener) throws IOException {
 
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
-                Intent intent = new Intent(context, ActivityExplorer.class);
-                intent.putExtra("Mode", "documnet");
-                ((Activity) context).startActivityForResult(intent, request_code_open_document);
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
-                }
+                //Intent intent = new Intent(context, ActivityExplorer.class);
+                //intent.putExtra("Mode", "documnet");
+                //((Activity) context).startActivityForResult(intent, request_code_open_document);
+                //if (G.onHelperSetAction != null) {
+                //    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
+                //}
+
+                FragmentExplorer fragment = new FragmentExplorer();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Listener", (Serializable) listener);
+                bundle.putString("Mode", "documnet");
+                fragment.setArguments(bundle);
+
+                HelperFragment.loadFragment(((FragmentActivity) context).getSupportFragmentManager(), fragment);
+
+
+
             }
 
             @Override

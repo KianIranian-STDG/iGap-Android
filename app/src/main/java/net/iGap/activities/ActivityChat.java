@@ -5581,11 +5581,11 @@ public class ActivityChat extends ActivityEnhanced
             public void onClick(View v) {
 
                 bottomSheetDialog.dismiss();
-                try {
-                    attachFile.requestOpenDocumentFolder();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                //try {
+                //    attachFile.requestOpenDocumentFolder();
+                //} catch (IOException e) {
+                //    e.printStackTrace();
+                //}
             }
         });
         close.setOnClickListener(new View.OnClickListener() {
@@ -5629,11 +5629,11 @@ public class ActivityChat extends ActivityEnhanced
             @Override
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
-                try {
-                    attachFile.requestPickFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                //try {
+                //    attachFile.requestPickFile();
+                //} catch (IOException e) {
+                //    e.printStackTrace();
+                //}
             }
         });
         paint.setOnClickListener(new View.OnClickListener() {

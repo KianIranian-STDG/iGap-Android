@@ -148,6 +148,7 @@ import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IDispatchTochEvent;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.IOnBackPressed;
+import net.iGap.interfaces.IPickFile;
 import net.iGap.interfaces.IResendMessage;
 import net.iGap.interfaces.ISendPosition;
 import net.iGap.interfaces.IUpdateLogItem;
@@ -283,6 +284,8 @@ import static net.iGap.R.string.item;
 import static net.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
+import static net.iGap.module.AttachFile.request_code_open_document;
+import static net.iGap.module.AttachFile.request_code_pic_file;
 import static net.iGap.module.MessageLoader.getLocalMessage;
 import static net.iGap.module.enums.ProgressState.HIDE;
 import static net.iGap.module.enums.ProgressState.SHOW;
@@ -5640,7 +5643,17 @@ public class FragmentChat extends BaseFragment
 
                 bottomSheetDialog.dismiss();
                 try {
-                    attachFile.requestOpenDocumentFolder();
+                    attachFile.requestOpenDocumentFolder(new IPickFile() {
+                        @Override
+                        public void onPick(ArrayList<String> selectedPathList) {
+
+                            for (String path : selectedPathList) {
+                                Intent data = new Intent();
+                                data.setData(Uri.parse(path));
+                                onActivityResult(request_code_open_document, Activity.RESULT_OK, data);
+                            }
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -5685,7 +5698,16 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
-                    attachFile.requestPickFile();
+                    attachFile.requestPickFile(new IPickFile() {
+                        @Override
+                        public void onPick(ArrayList<String> selectedPathList) {
+                            for (String path : selectedPathList) {
+                                Intent data = new Intent();
+                                data.setData(Uri.parse(path));
+                                onActivityResult(request_code_pic_file, Activity.RESULT_OK, data);
+                            }
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

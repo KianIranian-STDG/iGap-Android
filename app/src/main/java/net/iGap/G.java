@@ -422,6 +422,8 @@ public class G extends MultiDexApplication {
     public static IOnBackPressed onBackPressedChat;
     public static ISendPosition iSendPositionChat;
 
+    public static IOnBackPressed onBackPressedExplorer;
+
     public static OnLocationChanged onLocationChanged;
     public static OnGetNearbyCoordinate onGetNearbyCoordinate;
     public static OnGeoGetComment onGeoGetComment;
