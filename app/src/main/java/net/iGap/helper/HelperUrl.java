@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -39,8 +40,8 @@ import java.util.regex.Pattern;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityContactsProfile;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnClientCheckInviteLink;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
@@ -784,12 +785,22 @@ public class HelperUrl {
 
             case profile:
 
-                intent = new Intent(G.context, ActivityContactsProfile.class);
-                intent.putExtra("peerId", peerId);
-                intent.putExtra("RoomId", Roomid);
-                intent.putExtra("enterFrom", GROUP.toString());
-                //  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                G.currentActivity.startActivity(intent);
+                //intent = new Intent(G.context, ActivityContactsProfile.class);
+                //intent.putExtra("peerId", peerId);
+                //intent.putExtra("RoomId", Roomid);
+                //intent.putExtra("enterFrom", GROUP.toString());
+                ////  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //G.currentActivity.startActivity(intent);
+
+                FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
+                Bundle bundle = new Bundle();
+                bundle.putLong("peerId", peerId);
+                bundle.putLong("RoomId", Roomid);
+                bundle.putString("enterFrom", GROUP.toString());
+                contactsProfile.setArguments(bundle);
+
+                HelperFragment.loadFragment(contactsProfile);
+
 
                 break;
         }

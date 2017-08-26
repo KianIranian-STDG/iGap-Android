@@ -12,7 +12,6 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -44,7 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivitySetting;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
@@ -660,10 +658,13 @@ public class FragmentShowMember extends Fragment {
                             @Override
                             public void Allow() {
 
-                                Intent intent = null;
+                                //  Intent intent = null;
 
                                 if (mContact.peerId == userID) {
-                                    intent = new Intent(mActivity, ActivitySetting.class);
+                                    //   intent = new Intent(mActivity, ActivitySetting.class);
+
+                                    HelperFragment.loadFragment(new FragmentSetting());
+
                                 } else {
                                     //intent = new Intent(mActivity, ActivityContactsProfile.class);
                                     //intent.putExtra("peerId", mContact.peerId);

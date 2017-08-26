@@ -1,9 +1,6 @@
 package net.iGap.fragments;
 
-
-
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -18,8 +15,8 @@ import android.widget.TextView;
 import java.util.Locale;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivitySetting;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 
@@ -110,8 +107,8 @@ public class FragmentLanguage extends Fragment {
                     G.selectedLanguage = "en";
                 }
 
+                HelperFragment.removeFreagment(FragmentLanguage.this);
 
-                mActivity.getSupportFragmentManager().popBackStack();
             }
         });
 
@@ -134,8 +131,9 @@ public class FragmentLanguage extends Fragment {
                     }
                 }
 
+                HelperFragment.removeFreagment(FragmentLanguage.this);
 
-                mActivity.getSupportFragmentManager().popBackStack();
+
             }
         });
 
@@ -152,8 +150,9 @@ public class FragmentLanguage extends Fragment {
         Configuration config = new Configuration();
         config.locale = locale;
         mActivity.getBaseContext().getResources().updateConfiguration(config, mActivity.getBaseContext().getResources().getDisplayMetrics());
-        startActivity(new Intent(mActivity, ActivitySetting.class));
-        mActivity.finish();
+
+        // startActivity(new Intent(mActivity, ActivitySetting.class));
+
     }
 
     @Override

@@ -60,37 +60,19 @@
     </receiver>
 
     <activity
-        android:name=".activities.ActivityChat"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-        android:imeOptions="flagNoExtractUi"
-        android:windowSoftInputMode="stateAlwaysHidden" />
-    <activity
-        android:name=".activities.ActivityChatBackground"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
         android:name=".activities.ActivityShearedMedia"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
     <activity
         android:name=".activities.ActivityPaint"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
-        android:name=".activities.ActivityMediaPlayer"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-        android:launchMode="singleTask" />
+
     <activity
         android:name=".activities.ActivityPopUpNotification"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:theme="@style/Theme.AppCompat.Translucent"
         android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-    <activity
-        android:name=".activities.ActivityExplorer"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
-        android:name=".activities.ActivityGroupProfile"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
-        android:name=".activities.ActivityComment"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+
+
     <activity android:name=".activities.ActivityTrimVideo" />
 
     <activity
@@ -113,15 +95,12 @@
 
     </activity>
 
-    <activity
-        android:name=".activities.ActivityQrCodeNewDevice"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-        android:theme="@style/Theme.AppCompat.Translucent" />
+
     <activity
         android:name=".activities.ActivityMain"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-        android:theme="@style/AppThemeTranslucent"
-        android:launchMode="singleTask">
+        android:launchMode="singleTask"
+        android:theme="@style/AppThemeTranslucent">
 
 
       <intent-filter>
@@ -204,9 +183,7 @@
     <activity
         android:name=".activities.ActivityCrop"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
-        android:name=".activities.ActivitySettingNotification"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+
     <activity
         android:name=".activities.ActivityRegister"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
@@ -215,13 +192,6 @@
         android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:theme="@style/AppTheme22" />
-    <activity
-        android:name=".activities.ActivitySetting"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
-        android:name=".activities.ActivityContactsProfile"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-        android:exported="false" />
 
     <receiver android:name=".module.IncomingSms" />
     <receiver
@@ -239,9 +209,6 @@
       </intent-filter>
     </receiver>
 
-    <activity
-        android:name=".activities.ActivityChannelProfile"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
 
     <service android:name=".helper.ServiceContact" />
     <service android:name=".module.UploadService" />

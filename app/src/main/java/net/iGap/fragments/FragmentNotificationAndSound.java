@@ -31,7 +31,7 @@ import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivitySettingNotification;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.MyService;
 import net.iGap.helper.MyServiceTemporat;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -1051,9 +1051,12 @@ public class FragmentNotificationAndSound extends Fragment {
                         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
                         editor.apply();
                         Toast.makeText(mActivity, getResources().getString(R.string.st_reset_all_notification), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(mActivity, ActivitySettingNotification.class));
-                        //finish();
-                        mActivity.getSupportFragmentManager().popBackStack();
+
+                        HelperFragment.removeFreagment(FragmentNotificationAndSound.this);
+
+                        HelperFragment.loadFragment(new FragmentNotificationAndSound());
+
+
                     }
                 }).show();
             }

@@ -280,7 +280,6 @@ public class G extends MultiDexApplication {
 
 
     public static String salectedTabInMainActivity = "";
-    public static boolean isMainRecreate = false;
 
     public static int ivSize;
     public static int userTextSize = 0;

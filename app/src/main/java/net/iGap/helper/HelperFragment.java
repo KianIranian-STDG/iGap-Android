@@ -1,6 +1,7 @@
 package net.iGap.helper;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import net.iGap.G;
@@ -125,13 +126,16 @@ public class HelperFragment {
         return resId;
     }
 
-    //public static void removeAllFragment(FragmentManager ft){
-    //
-    //    for(Fragment f:ft.getFragments()){
-    //        f.
-    //    }
-    //
-    //}
+    public static void removeAllFragment() {
+
+        for (Fragment f : G.fragmentManager.getFragments()) {
+            if (f != null) {
+                G.fragmentManager.beginTransaction().remove(f).commit();
+            }
+        }
+
+        G.fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
 
     private static boolean isChatFragment(String fragmentClassName) {
 

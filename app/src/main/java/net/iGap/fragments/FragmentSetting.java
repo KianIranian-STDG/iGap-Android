@@ -58,10 +58,10 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
-import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPermision;
@@ -176,7 +176,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     private EmojiTextViewE txtNickNameTitle;
     static boolean isActiveRun = false;
     private Realm mRealm;
-    boolean isBackPressed = false;
     private Fragment fragment;
 
 
@@ -855,7 +854,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
             @Override
             public void onComplete(RippleView rippleView) {
-                isBackPressed = true;
                 //finish();
                 mActivity.onBackPressed();
             }
@@ -1043,7 +1041,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isBackPressed = false;
                 startDialog(R.array.profile);
             }
         });
@@ -1119,8 +1116,12 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onClick(View view) {
 
-                FragmentLanguage fragmentLanguage = new FragmentLanguage();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentLanguage, null).commit();
+                //FragmentLanguage fragmentLanguage = new FragmentLanguage();
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left
+                //    , R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentLanguage, null).commit();
+
+                HelperFragment.loadFragment(new FragmentLanguage());
+
             }
         });
 
@@ -1130,7 +1131,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         ltDataStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isBackPressed = false;
                 startActivity(new Intent(mActivity, ActivityManageSpace.class));
 
 
@@ -1479,7 +1479,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         txtChatBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isBackPressed = false;
                 mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.st_layoutParent, FragmentChatBackground.newInstance()).commit();
             }
         });
@@ -1653,11 +1652,14 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isBackPressed = false;
 
                 //startActivity(new Intent(mActivity, ActivitySettingNotification.class));
-                FragmentNotificationAndSound fragmentNotificationAndSound = new FragmentNotificationAndSound();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.st_layoutParent, fragmentNotificationAndSound).commit();
+
+                //FragmentNotificationAndSound fragmentNotificationAndSound = new FragmentNotificationAndSound();
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right,
+                //    R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.st_layoutParent, fragmentNotificationAndSound).commit();
+
+                HelperFragment.loadFragment(new FragmentNotificationAndSound());
 
             }
         });
@@ -2372,7 +2374,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     }
                 } else {
                     try {
-                        isBackPressed = false;
                         //new AttachFile(mActivity).requestOpenGalleryForImageSingleSelect();
 
                         // this part should transform to attach file
@@ -2402,7 +2403,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
-                isBackPressed = false;
                 new AttachFile(mActivity).dispatchTakePictureIntent();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -2416,7 +2416,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 uriIntent = Uri.fromFile(nameImageFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uriIntent);
-                isBackPressed = false;
                 startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
 
             } else {
@@ -2451,7 +2450,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     public void onResume() {
         super.onResume();
         G.onUserAvatarResponse = this;
-        isBackPressed = false;
 
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
@@ -2485,21 +2483,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     public void onPause() {
         super.onPause();
 
-        if (G.isMainRecreate && isBackPressed) {
-
-            G.isUpdateNotificaionColorMain = false;
-            G.isUpdateNotificaionColorChannel = false;
-            G.isUpdateNotificaionColorGroup = false;
-            G.isUpdateNotificaionColorChat = false;
-            G.isUpdateNotificaionCall = false;
-
-
-            startActivity(new Intent(mActivity, ActivityMain.class));
-
-            G.isMainRecreate = false;
-        }
-
-
         if (realmUserInfo != null && realmUserInfo.isValid()) {
             realmUserInfo.removeAllChangeListeners();
         }
@@ -2522,7 +2505,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", "setting");
                 intent.putExtra("ID", (int) (idAvatar + 1L));
-                isBackPressed = false;
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             } else {
                 Intent intent = new Intent(mActivity, ActivityCrop.class);
@@ -2532,7 +2514,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     intent.putExtra("TYPE", "camera");
                     intent.putExtra("PAGE", "setting");
                     intent.putExtra("ID", (int) (idAvatar + 1L));
-                    isBackPressed = false;
                     startActivityForResult(intent, IntentRequests.REQ_CROP);
                 }
             }
@@ -2546,7 +2527,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "setting");
                 intent.putExtra("ID", (int) (idAvatar + 1L));
-                isBackPressed = false;
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             }
         } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) { // save path image on data base ( realm )

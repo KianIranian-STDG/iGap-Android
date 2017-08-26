@@ -2031,9 +2031,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void refresh(String changeLanguag) {
 
-                G.isMainRecreate = true;
+                G.isUpdateNotificaionColorMain = false;
+                G.isUpdateNotificaionColorChannel = false;
+                G.isUpdateNotificaionColorGroup = false;
+                G.isUpdateNotificaionColorChat = false;
+                G.isUpdateNotificaionCall = false;
 
-                finish();
+                HelperFragment.removeAllFragment();
+
+                ActivityMain.this.recreate();
 
             }
         };
