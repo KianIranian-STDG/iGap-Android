@@ -10,7 +10,6 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -911,15 +910,14 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                         } else {
                             if (mInfo.isValid() && mActivity != null) {
 
-                                FragmentManager ft = ((FragmentActivity) mActivity).getSupportFragmentManager();
                                 if (G.twoPaneMode) {
-                                    Fragment fragment = ft.findFragmentByTag(FragmentChat.class.getName());
+                                    Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
                                     if (fragment != null) {
-                                        HelperFragment.removeFreagment(ft, fragment);
+                                        HelperFragment.removeFreagment(fragment);
                                     }
                                 }
 
-                                new GoToChatActivity(mInfo.getId(), ft).setFromCall(((ActivityMain) getActivity()).fromCall).startActivity();
+                                new GoToChatActivity(mInfo.getId()).setFromCall(((ActivityMain) getActivity()).fromCall).startActivity();
 
 
                                 if (((ActivityMain) mActivity).arcMenu != null && ((ActivityMain) mActivity).arcMenu.isMenuOpened()) {

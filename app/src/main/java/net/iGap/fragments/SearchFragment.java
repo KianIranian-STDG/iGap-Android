@@ -369,13 +369,13 @@ public class SearchFragment extends Fragment {
         if (realmRoom != null) {
 
             if (type == SearchType.message) {
-                new GoToChatActivity(realmRoom.getId(), mActivity.getSupportFragmentManager()).setMessageID(messageId).startActivity();
+                new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity();
             } else {
-                new GoToChatActivity(realmRoom.getId(), mActivity.getSupportFragmentManager()).startActivity();
+                new GoToChatActivity(realmRoom.getId()).startActivity();
             }
 
             //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
-            HelperFragment.removeFreagment(mActivity.getSupportFragmentManager(), SearchFragment.this);
+            HelperFragment.removeFreagment(SearchFragment.this);
 
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
@@ -385,11 +385,11 @@ public class SearchFragment extends Fragment {
                         @Override
                         public void run() {
 
-                            new GoToChatActivity(roomId, mActivity.getSupportFragmentManager()).setPeerID(id).startActivity();
+                            new GoToChatActivity(roomId).setPeerID(id).startActivity();
 
                             if (mActivity != null) {
                                 //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
-                                HelperFragment.removeFreagment(mActivity.getSupportFragmentManager(), SearchFragment.this);
+                                HelperFragment.removeFreagment(SearchFragment.this);
                             }
 
                             G.onChatGetRoom = null;

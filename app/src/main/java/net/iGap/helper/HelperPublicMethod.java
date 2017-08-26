@@ -12,7 +12,6 @@ package net.iGap.helper;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.FragmentActivity;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.interfaces.OnChatGetRoom;
@@ -164,7 +163,7 @@ public class HelperPublicMethod {
 
     private static void goToRoom(boolean fromcall, long roomid, long peerId) {
 
-        GoToChatActivity go = new GoToChatActivity(roomid, ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).setFromCall(fromcall);
+        GoToChatActivity go = new GoToChatActivity(roomid).setFromCall(fromcall);
         if (peerId >= 0) {
             go.setPeerID(peerId);
         }

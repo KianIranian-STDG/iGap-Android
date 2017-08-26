@@ -32,7 +32,6 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.PopupWindow;
@@ -589,7 +588,7 @@ public class AttachFile {
                 bundle.putSerializable("Listener", (Serializable) listener);
                 fragment.setArguments(bundle);
 
-                HelperFragment.loadFragment(((FragmentActivity) context).getSupportFragmentManager(), fragment);
+                HelperFragment.loadFragment(fragment);
 
                 if (G.onHelperSetAction != null) {
                     G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
@@ -698,7 +697,7 @@ public class AttachFile {
                 bundle.putString("Mode", "documnet");
                 fragment.setArguments(bundle);
 
-                HelperFragment.loadFragment(((FragmentActivity) context).getSupportFragmentManager(), fragment);
+                HelperFragment.loadFragment(fragment);
 
 
 

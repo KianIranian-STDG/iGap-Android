@@ -1,7 +1,6 @@
 package net.iGap.helper;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import net.iGap.G;
@@ -20,28 +19,29 @@ public class HelperFragment {
 
     //*****************************************************************************************************************
 
-    public static void loadFragment(FragmentManager fragmentManager, Fragment fragment) {
+    public static void loadFragment(Fragment fragment) {
 
-        loadFragment(fragmentManager, fragment, false, 0);
+        loadFragment(fragment, false);
     }
 
-    public static void loadFragment(FragmentManager fragmentManager, Fragment fragment, boolean stateLoose, int resourceId) {
+    public static void loadFragment(Fragment fragment, boolean stateLoose) {
 
         if (fragment == null) {
+            return;
+        }
+
+        if (G.fragmentManager == null) {
+
+            HelperLog.setErrorLog("helper fragment    loadFragment     " + fragment.getClass().getName());
             return;
         }
 
 
         String tag = fragment.getClass().getName();
 
-        int resId;
-        if (resourceId != 0) {
-            resId = resourceId;
-        } else {
-            resId = getResContainer(tag);
-        }
+        int resId = getResContainer(tag);
 
-        FragmentTransaction ft = fragmentManager.beginTransaction();
+        FragmentTransaction ft = G.fragmentManager.beginTransaction();
 
         ft.addToBackStack(tag).add(resId, fragment, tag).
             setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
@@ -142,13 +142,13 @@ public class HelperFragment {
         }
     }
 
-    public static void removeFreagment(FragmentManager fragmentManager, Fragment fragment) {
+    public static void removeFreagment(Fragment fragment) {
 
-        if (fragmentManager == null || fragment == null) {
+        if (G.fragmentManager == null || fragment == null) {
             return;
         }
 
-        fragmentManager.beginTransaction().remove(fragment).commit();
-        fragmentManager.popBackStack();
+        G.fragmentManager.beginTransaction().remove(fragment).commit();
+        G.fragmentManager.popBackStack();
     }
 }

@@ -163,7 +163,7 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
                     //G.currentActivity.startActivity(intent);
 
                     //mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, FragmentContactsProfile.newInstance(0, item.getUserId(), "Others"), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
-                    HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, item.getUserId(), "Others"));
+                    HelperFragment.loadFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others"));
 
                     //for close FragmentiGapMap
                     //if (G.onMapClose != null) {

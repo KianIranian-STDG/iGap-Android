@@ -12,7 +12,6 @@ package net.iGap.helper;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.app.FragmentActivity;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
@@ -540,7 +539,7 @@ public class HelperLogMessage {
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
         if (realmRoom != null) {
 
-            new GoToChatActivity(realmRoom.getId(), ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).startActivity();
+            new GoToChatActivity(realmRoom.getId()).startActivity();
 
         } else {
             HelperInfo.needUpdateRoomInfo(id);

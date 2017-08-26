@@ -339,7 +339,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
 
                     if (realmRoom != null) {
 
-                        new GoToChatActivity(realmRoom.getId(), getSupportFragmentManager()).startActivity();
+                        new GoToChatActivity(realmRoom.getId()).startActivity();
 
                         finish();
                     } else {
@@ -350,7 +350,7 @@ public class ActivityContactsProfile extends ActivityEnhanced implements OnUserU
                                     @Override
                                     public void run() {
 
-                                        new GoToChatActivity(roomId, getSupportFragmentManager()).setPeerID(userId).startActivity();
+                                        new GoToChatActivity(roomId).setPeerID(userId).startActivity();
 
                                         finish();
                                         G.onChatGetRoom = null;

@@ -477,7 +477,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                             fragmentCreateChannel.setArguments(bundle);
 
                             mActivity.onBackPressed();
-                            HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragmentCreateChannel, true, 0);
+                            HelperFragment.loadFragment(fragmentCreateChannel, true);
 
                             // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                         }
@@ -657,7 +657,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                                     fragment.setArguments(bundle);
 
                                     mActivity.onBackPressed();
-                                    HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragment, true, 0);
+                                    HelperFragment.loadFragment(fragment, true);
 
                                     //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
                                     //ActivityMain.mLeftDrawerLayout.closeDrawer();
@@ -777,7 +777,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         fragment.setArguments(bundle);
 
         mActivity.onBackPressed();
-        HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragment, true, 0);
+        HelperFragment.loadFragment(fragment, true);
 
         // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
     }
@@ -792,7 +792,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         fragmentCreateChannel.setArguments(bundle);
 
         mActivity.onBackPressed();
-        HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragmentCreateChannel, true, 0);
+        HelperFragment.loadFragment(fragmentCreateChannel, true);
 
         // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
     }

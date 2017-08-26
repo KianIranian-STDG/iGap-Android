@@ -35,7 +35,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatDelegate;
@@ -847,7 +846,7 @@ public class FragmentChat extends BaseFragment
 
         FragmentShowImage fragment = (FragmentShowImage) mActivity.getSupportFragmentManager().findFragmentByTag("ShowImageMessage");
         if (fragment != null) {
-            HelperFragment.removeFreagment(mActivity.getSupportFragmentManager(), fragment);
+            HelperFragment.removeFreagment(fragment);
             updateShowItemInScreen();
         } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
@@ -1673,7 +1672,7 @@ public class FragmentChat extends BaseFragment
                     //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                     //    .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap).commit();
 
-                    HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragment);
+                    HelperFragment.loadFragment(fragment);
                 } catch (Exception e) {
 
                     HelperLog.setErrorLog("Activity Chat   complete   " + e.toString());
@@ -2663,7 +2662,7 @@ public class FragmentChat extends BaseFragment
         //intent.putExtra("enterFrom", GROUP.toString());
         //startActivity(intent);
 
-        HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString()));
+        HelperFragment.loadFragment(FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString()));
         //getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
     }
 
@@ -4375,7 +4374,7 @@ public class FragmentChat extends BaseFragment
             //startActivity(intent);
 
             //getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
-            HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()));
+            HelperFragment.loadFragment(FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()));
         } else if (chatType == GROUP) {
 
             if (!isChatReadOnly) {
@@ -4574,7 +4573,7 @@ public class FragmentChat extends BaseFragment
 
         fragment.appBarLayout = appBarLayout;
 
-        HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragment);
+        HelperFragment.loadFragment(fragment);
     }
 
     /**
@@ -7887,11 +7886,9 @@ public class FragmentChat extends BaseFragment
 
     public void finishChat() {
 
-        FragmentManager ft = mActivity.getSupportFragmentManager();
+        Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
 
-        Fragment fragment = ft.findFragmentByTag(FragmentChat.class.getName());
-
-        HelperFragment.removeFreagment(ft, fragment);
+        HelperFragment.removeFreagment(fragment);
 
         ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.hide);
     }

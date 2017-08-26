@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import com.crashlytics.android.Crashlytics;
@@ -451,6 +452,8 @@ public class G extends MultiDexApplication {
     public static EmojiProvider emojiProvider;
     public static EmojiTree emojiTree = new EmojiTree();
     public static boolean isFragmentMapActive = false; // for check network
+
+    public static FragmentManager fragmentManager;
 
     @Override
     public void onCreate() {

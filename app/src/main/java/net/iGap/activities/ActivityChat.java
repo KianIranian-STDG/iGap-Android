@@ -2631,7 +2631,7 @@ public class ActivityChat extends ActivityEnhanced
         //intent.putExtra("enterFrom", GROUP.toString());
         //startActivity(intent);
 
-        HelperFragment.loadFragment(getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString()));
+        HelperFragment.loadFragment(FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString()));
         //getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
     }
 
@@ -4330,13 +4330,13 @@ public class ActivityChat extends ActivityEnhanced
      */
     private void goToProfile() {
         if (chatType == CHAT) {
-            HelperFragment.loadFragment(getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()), false, R.id.ac_ll_parent);
+            HelperFragment.loadFragment(FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()));
         } else if (chatType == GROUP) {
             if (!isChatReadOnly) {
-                HelperFragment.loadFragment(getSupportFragmentManager(), FragmentGroupProfile.newInstance(mRoomId), false, R.id.ac_ll_parent);
+                HelperFragment.loadFragment(FragmentGroupProfile.newInstance(mRoomId));
             }
         } else if (chatType == CHANNEL) {
-            HelperFragment.loadFragment(getSupportFragmentManager(), FragmentChannelProfile.newInstance(mRoomId), false, R.id.ac_ll_parent);
+            HelperFragment.loadFragment(FragmentChannelProfile.newInstance(mRoomId));
         }
     }
 

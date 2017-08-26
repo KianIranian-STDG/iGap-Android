@@ -289,7 +289,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
                     if (realmRoom != null) {
 
-                        new GoToChatActivity(realmRoom.getId(), mActivity.getSupportFragmentManager()).startActivity();
+                        new GoToChatActivity(realmRoom.getId()).startActivity();
 
                         closeFragment();
                     } else {
@@ -300,7 +300,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                     @Override
                                     public void run() {
 
-                                        new GoToChatActivity(roomId, mActivity.getSupportFragmentManager()).setPeerID(userId).startActivity();
+                                        new GoToChatActivity(roomId).setPeerID(userId).startActivity();
 
                                         closeFragment();
                                         G.onChatGetRoom = null;
@@ -679,7 +679,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         vgSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
             @Override
             public void onClick(View view) {
-                HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentShearedMedia.newInstance(shearedId), false, R.id.ac_ll_parent);
+                HelperFragment.loadFragment(FragmentShearedMedia.newInstance(shearedId));
             }
         });
 

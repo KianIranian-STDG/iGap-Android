@@ -568,7 +568,7 @@ public class HelperUrl {
 
         if (realmRoom != null) {
 
-            new GoToChatActivity(room.getId(), ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).startActivity();
+            new GoToChatActivity(room.getId()).startActivity();
 
             realm.close();
 
@@ -710,7 +710,7 @@ public class HelperUrl {
 
                     realm.close();
 
-                    new GoToChatActivity(room.getId(), ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).startActivity();
+                    new GoToChatActivity(room.getId()).startActivity();
                 }
 
                 @Override
@@ -778,7 +778,7 @@ public class HelperUrl {
         switch (chatEntery) {
             case chat:
 
-                new GoToChatActivity(Roomid, ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).setPeerID(peerId).startActivity();
+                new GoToChatActivity(Roomid).setPeerID(peerId).startActivity();
 
                 break;
 
@@ -900,7 +900,7 @@ public class HelperUrl {
             } else {
                 closeDialogWaiting();
 
-                new GoToChatActivity(room.getId(), ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).startActivity();
+                new GoToChatActivity(room.getId()).startActivity();
 
             }
 
@@ -932,7 +932,7 @@ public class HelperUrl {
                     @Override
                     public void onSuccess() {
 
-                        new GoToChatActivity(room.getId(), ((FragmentActivity) G.currentActivity).getSupportFragmentManager()).setfromUserLink(true)
+                        new GoToChatActivity(room.getId()).setfromUserLink(true)
                             .setisNotJoin(true)
                             .setuserName(username)
                             .startActivity();

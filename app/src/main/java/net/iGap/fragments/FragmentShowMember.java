@@ -671,7 +671,7 @@ public class FragmentShowMember extends Fragment {
                                     //intent.putExtra("enterFrom", ProtoGlobal.Room.Type.GROUP.toString());
 
                                     //mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
-                                    HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString()), false, R.id.ac_ll_parent);
+                                    HelperFragment.loadFragment(FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString()));
                                 }
 
                                 //mActivity.finish();

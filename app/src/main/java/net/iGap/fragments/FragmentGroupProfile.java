@@ -657,8 +657,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             @Override
             public void onClick(View view) {
 
-
-                HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), FragmentShearedMedia.newInstance(roomId), false, R.id.ac_ll_parent);
+                HelperFragment.loadFragment(FragmentShearedMedia.newInstance(roomId));
             }
         });
 

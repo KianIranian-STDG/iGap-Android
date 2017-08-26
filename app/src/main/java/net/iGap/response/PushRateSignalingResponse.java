@@ -11,7 +11,6 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.R;
 import net.iGap.fragments.FragmentRatingBar;
 import net.iGap.helper.HelperFragment;
 import net.iGap.proto.ProtoPushRateSignaling;
@@ -46,7 +45,7 @@ public class PushRateSignalingResponse extends MessageHandler {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    HelperFragment.loadFragment(G.fragmentActivity.getSupportFragmentManager(), FragmentRatingBar.newInstance(id), false, R.id.fragmentContainer);
+                    HelperFragment.loadFragment(FragmentRatingBar.newInstance(id));
                 }
             }, 1000);
         }

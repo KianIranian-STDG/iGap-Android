@@ -1,7 +1,6 @@
 package net.iGap.helper;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import net.iGap.G;
@@ -14,7 +13,6 @@ public class GoToChatActivity {
 
     private long roomid = 0;
     private long peerID = 0;
-    private FragmentManager fragmentManager;
     private boolean fromCall = false;
 
     private boolean fromUserLink = false;
@@ -22,9 +20,9 @@ public class GoToChatActivity {
     private String userName = "";
     private long messageId = 0;
 
-    public GoToChatActivity(long roomid, FragmentManager fragmentManager) {
+    public GoToChatActivity(long roomid) {
         this.roomid = roomid;
-        this.fragmentManager = fragmentManager;
+
     }
 
     public GoToChatActivity setPeerID(long peerID) {
@@ -82,7 +80,7 @@ public class GoToChatActivity {
         FragmentChat fragmentChat = new FragmentChat();
         fragmentChat.setArguments(getBundle());
 
-        HelperFragment.loadFragment(fragmentManager, fragmentChat);
+        HelperFragment.loadFragment(fragmentChat);
 
     }
 

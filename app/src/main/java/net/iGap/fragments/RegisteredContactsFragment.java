@@ -260,7 +260,7 @@ public class RegisteredContactsFragment extends Fragment {
                 //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                 //    R.anim.slide_in_right, R.anim.slide_out_left).add(R.id.fragmentContainer, fragment, "add_contact_fragment").commit();
 
-                HelperFragment.loadFragment(mActivity.getSupportFragmentManager(), fragment);
+                HelperFragment.loadFragment(fragment);
 
             }
         });
