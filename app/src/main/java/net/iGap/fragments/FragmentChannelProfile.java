@@ -53,7 +53,6 @@ import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
-import net.iGap.activities.ActivityShearedMedia;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
@@ -584,7 +583,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             }
         });
 
-        ActivityShearedMedia.getCountOfSharedMedia(roomId);
+        FragmentShearedMedia.getCountOfSharedMedia(roomId);
 
     }
 

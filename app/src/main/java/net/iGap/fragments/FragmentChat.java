@@ -102,7 +102,6 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityCrop;
 import net.iGap.activities.ActivityMain;
-import net.iGap.activities.ActivityShearedMedia;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterBottomSheet;
 import net.iGap.adapter.MessagesAdapter;
@@ -552,11 +551,11 @@ public class FragmentChat extends BaseFragment
     public void onResume() {
         super.onResume();
 
-        if (ActivityShearedMedia.list != null && ActivityShearedMedia.list.size() > 0) {
+        if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
 
-            deleteSelectedMessageFromAdapter(ActivityShearedMedia.list);
+            deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
 
-            ActivityShearedMedia.list.clear();
+            FragmentShearedMedia.list.clear();
         }
 
         canUpdateAfterDownload = true;

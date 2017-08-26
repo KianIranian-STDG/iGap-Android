@@ -50,7 +50,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityShearedMedia;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
@@ -708,7 +707,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
         setAvatar();
 
-        ActivityShearedMedia.getCountOfSharedMedia(shearedId);
+        FragmentShearedMedia.getCountOfSharedMedia(shearedId);
     }
 
     @Override
