@@ -90,15 +90,7 @@
         android:name=".activities.ActivityComment"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
     <activity android:name=".activities.ActivityTrimVideo" />
-    <activity
-        android:name=".activities.Activity_QrPayment"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
-      <intent-filter>
-        <action android:name="com.company.package.FOO" />
 
-        <category android:name="android.intent.category.DEFAULT" />
-      </intent-filter>
-    </activity>
     <activity
         android:name=".activities.ActivityRatingBar"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
@@ -118,24 +110,7 @@
             -->
 
     </activity>
-    <activity
-        android:name=".activities.Activity_charge_balance"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
-        android:name=".activities.Activity_Transfer_mony"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
-        android:name=".activities.Activity_CreateQRCode"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
-        android:name=".activities.Activity_ChargeOut"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
-        android:name=".activities.Activity_payViaQRCode"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
-    <activity
-        android:name=".activities.Activity_transactionHistory"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+
     <activity
         android:name=".activities.ActivityQrCodeNewDevice"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
