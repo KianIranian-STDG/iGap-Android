@@ -126,6 +126,9 @@
   <string name="md_igap_alert">\uf026</string> <!-- igap_eye_off  -->
   <string name="md_igap_map_marker_multiple">\uf350</string>
   <string name="md_igap_map_marker_off">\uf351</string>
+  <string name="md_igap_lock">\uf33e</string>
+  <string name="md_igap_lock_open_outline">\uf33f</string>
+  <string name="md_igap_fingerprint">\uf237</string>
 
 
 </resources>

@@ -167,6 +167,15 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         });
 
 
+        TextView txtPassCode = (TextView) view.findViewById(R.id.stps_passCode);
+        txtPassCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentPassCode fragmentPassCode = new FragmentPassCode();
+                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentPassCode).commit();
+            }
+        });
+
         TextView txtSecurity = (TextView) view.findViewById(R.id.stps_twoStepVerification);
         txtSecurity.setOnClickListener(new View.OnClickListener() {
             @Override

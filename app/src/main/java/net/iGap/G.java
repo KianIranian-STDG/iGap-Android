@@ -40,6 +40,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperNotificationAndBadge;
+import net.iGap.interfaces.FingerPrint;
 import net.iGap.interfaces.IActivityFinish;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IClientSearchUserName;
@@ -448,6 +449,8 @@ public class G extends MultiDexApplication {
     public static Typeface typeface_IRANSansMobile_Bold;
     public static Typeface typeface_Fontico;
     public static Typeface typeface_neuropolitical;
+    public static boolean isPassCode;
+    public static FingerPrint fingerPrint;
 
     public static EmojiProvider emojiProvider;
     public static EmojiTree emojiTree = new EmojiTree();

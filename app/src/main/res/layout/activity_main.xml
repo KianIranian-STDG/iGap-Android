@@ -108,6 +108,18 @@
                         tools:ignore="MissingPrefix"
                         />
 
+
+                    <net.iGap.module.MaterialDesignTextView
+                        android:id="@+id/am_btn_lock"
+                        android:layout_width="@dimen/dp52"
+                        android:visibility="gone"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/md_igap_lock_open_outline"
+                        android:textAppearance="@style/TextIconAppearance_toolbar"
+                        android:textColor="@color/whit_background"
+                        />
+
                     <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/am_btn_location"
                         android:layout_width="@dimen/dp52"

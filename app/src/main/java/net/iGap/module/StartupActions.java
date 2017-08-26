@@ -317,6 +317,7 @@ public final class StartupActions {
         if (userInfo != null) {
 
             userId = userInfo.getUserId();
+            G.isPassCode = userInfo.isPassCode();
 
             if (userInfo.getAuthorHash() != null) {
                 authorHash = userInfo.getAuthorHash();
