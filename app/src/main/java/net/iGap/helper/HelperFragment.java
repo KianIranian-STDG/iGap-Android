@@ -135,6 +135,8 @@ public class HelperFragment {
         }
 
         G.fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
     }
 
     private static boolean isChatFragment(String fragmentClassName) {
@@ -154,5 +156,7 @@ public class HelperFragment {
 
         G.fragmentManager.beginTransaction().remove(fragment).commit();
         G.fragmentManager.popBackStack();
+
+        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
     }
 }

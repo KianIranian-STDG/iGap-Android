@@ -15,7 +15,6 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -26,6 +25,7 @@ import java.util.Locale;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AttachFile;
@@ -113,15 +113,6 @@ public class BaseFragment extends Fragment {
         super.onStop();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        try {
-            HelperPermision.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * check the selected language user and set the language if change it
@@ -185,7 +176,9 @@ public class BaseFragment extends Fragment {
 
                 @Override
                 public void deny() {
-                    fragmentActivity.getSupportFragmentManager().beginTransaction().remove(currentFragment).commit();
+                    // G.fragmentManager.beginTransaction().remove(currentFragment).commit();
+
+                    HelperFragment.removeFreagment(currentFragment);
                 }
             });
         } catch (IOException e) {
@@ -205,6 +198,8 @@ public class BaseFragment extends Fragment {
     }
 
     public void closeFragment() {
-        fragmentActivity.getSupportFragmentManager().popBackStack();
+        //  fragmentActivity.getSupportFragmentManager().popBackStack();
+
+        HelperFragment.removeFreagment(currentFragment);
     }
 }

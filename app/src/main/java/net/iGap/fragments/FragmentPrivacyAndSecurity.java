@@ -31,6 +31,7 @@ import io.realm.RealmModel;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperFragment;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructSessions;
@@ -42,12 +43,11 @@ import net.iGap.request.RequestUserProfileGetSelfRemove;
 import net.iGap.request.RequestUserProfileSetSelfRemove;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.R.id.st_layoutParent;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentPrivacyAndSecurity extends Fragment {
+public class FragmentPrivacyAndSecurity extends BaseFragment {
 
     int poSelfRemove;
     private SharedPreferences sharedPreferences;
@@ -162,7 +162,9 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentPrivacyAndSecurity.this).commit();
+                // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentPrivacyAndSecurity.this).commit();
+
+                closeFragment();
             }
         });
 
@@ -171,8 +173,11 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         txtPassCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentPassCode fragmentPassCode = new FragmentPassCode();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentPassCode).commit();
+                //FragmentPassCode fragmentPassCode = new FragmentPassCode();
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentPassCode).commit();
+
+                HelperFragment.loadFragment(new FragmentPassCode());
             }
         });
 
@@ -180,8 +185,11 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         txtSecurity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentSecurity fragmentSecurity = new FragmentSecurity();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentSecurity).commit();
+                //FragmentSecurity fragmentSecurity = new FragmentSecurity();
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentSecurity).commit();
+
+                HelperFragment.loadFragment(new FragmentSecurity());
             }
         });
 
@@ -189,8 +197,11 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         txtActiveSessions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentActiveSessions fragmentActiveSessions = new FragmentActiveSessions();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(st_layoutParent, fragmentActiveSessions, null).commit();
+                //FragmentActiveSessions fragmentActiveSessions = new FragmentActiveSessions();
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(st_layoutParent, fragmentActiveSessions, null).commit();
+
+                HelperFragment.loadFragment(new FragmentActiveSessions());
             }
         });
 
@@ -198,8 +209,11 @@ public class FragmentPrivacyAndSecurity extends Fragment {
         txtBlockedUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentBlockedUser fragmentBlockedUser = new FragmentBlockedUser();
-                mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null).commit();
+                //FragmentBlockedUser fragmentBlockedUser = new FragmentBlockedUser();
+                //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right,
+                //    R.anim.slide_exit_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragmentBlockedUser, null).commit();
+
+                HelperFragment.loadFragment(new FragmentBlockedUser());
             }
         });
 

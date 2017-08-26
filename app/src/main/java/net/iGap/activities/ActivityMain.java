@@ -874,7 +874,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
 
-                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
+                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(G.fragmentManager);
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
 
 
@@ -890,7 +890,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void run() {
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
 
-                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
+                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(G.fragmentManager);
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
 
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
@@ -2126,8 +2126,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void enterPassword() {
 
         closeDrawer();
-        FragmentEnterPassCode fragmentEnterPassCode = new FragmentEnterPassCode();
-        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragmentEnterPassCode).commitAllowingStateLoss();
+
+        //FragmentEnterPassCode fragmentEnterPassCode = new FragmentEnterPassCode();
+        //getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+        //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragmentEnterPassCode).commitAllowingStateLoss();
+
+        HelperFragment.loadFragment(new FragmentEnterPassCode(), true);
+
     }
 
     @Override

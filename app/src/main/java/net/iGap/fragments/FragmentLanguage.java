@@ -26,7 +26,7 @@ import static net.iGap.G.onRefreshActivity;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentLanguage extends Fragment {
+public class FragmentLanguage extends BaseFragment {
 
     private FragmentActivity mActivity;
     private SharedPreferences sharedPreferences;
@@ -62,7 +62,8 @@ public class FragmentLanguage extends Fragment {
         rippleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActivity.getSupportFragmentManager().popBackStack();
+                // mActivity.getSupportFragmentManager().popBackStack();
+                closeFragment();
             }
         });
 

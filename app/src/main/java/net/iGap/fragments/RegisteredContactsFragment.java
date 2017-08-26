@@ -19,7 +19,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -80,7 +79,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
 import static net.iGap.R.string.contacts;
 
-public class RegisteredContactsFragment extends Fragment {
+public class RegisteredContactsFragment extends BaseFragment {
 
     private TextView menu_txt_titleToolbar;
     private ViewGroup vgAddContact, vgRoot;
@@ -413,7 +412,9 @@ public class RegisteredContactsFragment extends Fragment {
                     public void onClick(View v) {
 
                         if (isCallAction) {
-                            mActivity.getSupportFragmentManager().popBackStack();
+                            //  mActivity.getSupportFragmentManager().popBackStack();
+
+                            closeFragment();
 
                             long userId = realmContacts.getId();
                             if (userId != 134 && G.userId != userId) {
@@ -428,7 +429,10 @@ public class RegisteredContactsFragment extends Fragment {
                                 @Override
                                 public void complete() {
                                     hideProgress();
-                                    mActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
+                                    //  mActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
+
+                                    closeFragment();
+
                                 }
                             }, new HelperPublicMethod.OnError() {
                                 @Override

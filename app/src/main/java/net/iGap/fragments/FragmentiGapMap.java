@@ -1234,7 +1234,9 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     @Override
     public void onClose() {
         if (mActivity != null) {
-            mActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
+            //   mActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
+
+            HelperFragment.removeFreagment(this);
         }
     }
 

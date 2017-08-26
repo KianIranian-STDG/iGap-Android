@@ -13,6 +13,7 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGeoGetComment;
@@ -141,7 +142,9 @@ public class MyInfoWindow extends InfoWindow {
                 HelperPublicMethod.goToChatRoom(false, userId, new HelperPublicMethod.OnComplete() {
                     @Override
                     public void complete() {
-                        mActivity.getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
+                        //   mActivity.getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
+
+                        HelperFragment.removeFreagment(fragmentiGapMap);
                     }
                 }, null);
             }

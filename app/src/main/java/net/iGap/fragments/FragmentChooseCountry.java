@@ -1,7 +1,5 @@
 package net.iGap.fragments;
 
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -29,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperFragment;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
@@ -78,7 +77,9 @@ public class FragmentChooseCountry extends Fragment {
         rippleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActivity.getSupportFragmentManager().popBackStack();
+                //   mActivity.getSupportFragmentManager().popBackStack();
+
+                HelperFragment.removeFreagment(FragmentChooseCountry.this);
             }
         });
 
@@ -266,7 +267,10 @@ public class FragmentChooseCountry extends Fragment {
                     @Override
                     public void onClick(View v) {
                         if (onCountryCallBack != null) {
-                            mActivity.getSupportFragmentManager().popBackStack();
+                            //  mActivity.getSupportFragmentManager().popBackStack();
+
+                            HelperFragment.removeFreagment(FragmentChooseCountry.this);
+
                             closeKeyboard(v);
                             FragmentAddContact.onCountryCallBack.countryName(txtNameCountry.getText().toString(), txtCodeCountry.getText().toString(), item.getPhonePattern());
                         }

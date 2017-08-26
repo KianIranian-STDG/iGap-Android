@@ -43,7 +43,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentNotificationAndSound extends Fragment {
+public class FragmentNotificationAndSound extends BaseFragment {
     private TextView txtVibrateMessage;
     private TextView txtPopupNotification;
     private TextView txtVibrateGroup;
@@ -87,7 +87,9 @@ public class FragmentNotificationAndSound extends Fragment {
             @Override
             public void onComplete(RippleView rippleView) {
                 //finish();
-                mActivity.getSupportFragmentManager().popBackStack();
+                // mActivity.getSupportFragmentManager().popBackStack();
+
+                closeFragment();
             }
         });
 

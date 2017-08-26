@@ -401,7 +401,10 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
                     fragment.appBarLayout = fab;
 
-                    mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
+                    //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                    //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
+
+                    HelperFragment.loadFragment(fragment);
                 }
                 //realm.close();
             }
@@ -826,7 +829,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
     private void showListForCustomRole(String SelectedRole) {
         FragmentShowMember fragment = FragmentShowMember.newInstance1(this.fragment, roomId, role.toString(), G.userId, SelectedRole, isNeedGetMemberList);
-        mActivity.getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, "Show_member").commit();
+
+        //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+        //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, "Show_member").commit();
+
+        HelperFragment.loadFragment(fragment);
 
         isNeedGetMemberList = false;
     }
@@ -873,7 +880,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         bundle.putBoolean("DIALOG_SHOWING", false);
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
-        mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.coordinator, fragment).commit();
+
+        //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
+        //    R.anim.slide_out_left).addToBackStack(null).replace(R.id.coordinator, fragment).commit();
+
+        HelperFragment.loadFragment(fragment);
     }
 
     //****** create popup
@@ -1830,7 +1841,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         bundle.putString("PAGE", "CHANNEL");
         bundle.putLong("ID", roomId);
         fragmentNotification.setArguments(bundle);
-        mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_channel_profile, fragmentNotification).commit();
+
+        //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
+        //    R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_channel_profile, fragmentNotification).commit();
+
+        HelperFragment.loadFragment(fragmentNotification);
     }
 
     //*** onActivityResult

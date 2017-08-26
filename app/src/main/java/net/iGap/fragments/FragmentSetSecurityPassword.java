@@ -29,7 +29,7 @@ import net.iGap.request.RequestUserTwoStepVerificationVerifyRecoveryEmail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSetSecurityPassword extends Fragment {
+public class FragmentSetSecurityPassword extends BaseFragment {
 
     private int page = 1;
     private EditText edtSetPassword;
@@ -80,7 +80,10 @@ public class FragmentSetSecurityPassword extends Fragment {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActivity.getSupportFragmentManager().popBackStack();
+                //  mActivity.getSupportFragmentManager().popBackStack();
+
+                closeFragment();
+
                 closeKeyboard(v);
             }
         });
@@ -111,7 +114,10 @@ public class FragmentSetSecurityPassword extends Fragment {
             @Override
             public void onClick(View v) {
                 closeKeyboard(v);
-                mActivity.getSupportFragmentManager().popBackStack();
+                //mActivity.getSupportFragmentManager().popBackStack();
+
+                closeFragment();
+
                 edtSetRePassword.setText("");
                 edtSetHintPassword.setText("");
                 edtSetQuestionPassOne.setText("");
@@ -212,8 +218,12 @@ public class FragmentSetSecurityPassword extends Fragment {
                         page = 0;
                         FragmentSecurity.isSetRecoveryEmail = false;
                         new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
+
                         closeKeyboard(v);
-                        mActivity.getSupportFragmentManager().popBackStack();
+
+                        //mActivity.getSupportFragmentManager().popBackStack();
+                        closeFragment();
+
                         edtSetPassword.setText("");
                         edtSetRePassword.setText("");
                         edtSetHintPassword.setText("");
@@ -258,7 +268,9 @@ public class FragmentSetSecurityPassword extends Fragment {
                     @Override
                     public void run() {
 
-                        mActivity.getSupportFragmentManager().popBackStack();
+                        //mActivity.getSupportFragmentManager().popBackStack();
+                        closeFragment();
+
                         edtSetRePassword.setText("");
                         edtSetHintPassword.setText("");
                         edtSetQuestionPassOne.setText("");

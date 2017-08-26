@@ -261,7 +261,11 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     }
 
                     fragment.appBarLayout = fab;
-                    mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, fragment).commit();
+
+                    //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                    //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, fragment).commit();
+
+                    HelperFragment.loadFragment(fragment);
                 }
                 realm.close();
             }
@@ -697,7 +701,11 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                 bundle.putString("PAGE", "CONTACT");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, fragmentNotification).commit();
+
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, fragmentNotification).commit();
+
+                HelperFragment.loadFragment(fragmentNotification);
             }
         });
 

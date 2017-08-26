@@ -1393,7 +1393,11 @@ public class ActivityRegister extends ActivityEnhanced implements OnSecurityChec
                                 bundle.putBoolean("IS_EMAIL", isRecoveryByEmail);
                                 bundle.putBoolean("IS_CONFIRM_EMAIL", isConfirmedRecoveryEmail);
                                 fragmentSecurityRecovery.setArguments(bundle);
-                                getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.rg_rootActivityRegister, fragmentSecurityRecovery).commit();
+                                getSupportFragmentManager().beginTransaction()
+                                    .addToBackStack(null)
+                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                    .replace(R.id.rg_rootActivityRegister, fragmentSecurityRecovery)
+                                    .commit();
                             }
                         }).show();
                     }

@@ -37,6 +37,7 @@ import android.widget.TextView;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnChannelCheckUsername;
 import net.iGap.interfaces.OnChannelUpdateUsername;
@@ -52,7 +53,6 @@ import net.iGap.request.RequestChannelUpdateUsername;
 import net.iGap.request.RequestClientGetRoom;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
-import static net.iGap.R.id.fragmentContainer;
 
 public class FragmentCreateChannel extends Fragment implements OnChannelCheckUsername {
 
@@ -108,14 +108,18 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         TextView txtBack = (TextView) view.findViewById(R.id.fch_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+                //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+
+                HelperFragment.removeFreagment(FragmentCreateChannel.this);
             }
         });
 
         TextView txtCancel = (TextView) view.findViewById(R.id.fch_txt_cancel);
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+                //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+
+                HelperFragment.removeFreagment(FragmentCreateChannel.this);
             }
         });
 
@@ -305,12 +309,19 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                                 bundle.putString("TYPE", type.toString());
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);
-                                mActivity.getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                    .replace(fragmentContainer, fragment, "contactGroup_fragment")
-                                    .commitAllowingStateLoss();
-                                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+
+                                //mActivity.getSupportFragmentManager()
+                                //    .beginTransaction()
+                                //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                //    .replace(fragmentContainer, fragment, "contactGroup_fragment")
+                                //    .commitAllowingStateLoss();
+
+                                HelperFragment.loadFragment(fragment, true);
+
+                                //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+
+                                HelperFragment.removeFreagment(FragmentCreateChannel.this);
+
                                 //ActivityMain.mLeftDrawerLayout.closeDrawer();
                             }
                         });

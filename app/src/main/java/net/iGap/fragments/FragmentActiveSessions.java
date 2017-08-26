@@ -38,6 +38,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.AdapterActiveSessions;
 import net.iGap.adapter.items.chat.AdapterActiveSessionsHeader;
+import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnUserSessionGetActiveList;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.interfaces.OnUserSessionTerminate;
@@ -92,7 +93,9 @@ public class FragmentActiveSessions extends Fragment {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                mActivity.getSupportFragmentManager().popBackStack();
+                HelperFragment.removeFreagment(FragmentActiveSessions.this);
+
+                //  mActivity.getSupportFragmentManager().popBackStack();
                 //                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentActiveSessions.this).commit();
             }
         });

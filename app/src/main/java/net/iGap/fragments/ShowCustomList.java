@@ -15,7 +15,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,7 +49,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructContactInfo;
 
-public class ShowCustomList extends Fragment {
+public class ShowCustomList extends BaseFragment {
     private static List<StructContactInfo> contacts;
     private static OnSelectedList onSelectedList;
     private FastAdapter fastAdapter;
@@ -104,7 +103,9 @@ public class ShowCustomList extends Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
 
-                mActivity.getSupportFragmentManager().popBackStack();
+                // mActivity.getSupportFragmentManager().popBackStack();
+
+                closeFragment();
             }
         });
 
@@ -118,7 +119,9 @@ public class ShowCustomList extends Fragment {
                     if (onSelectedList != null) {
                         onSelectedList.getSelectedList(true, "", 0, getSelectedList());
                     }
-                    mActivity.getSupportFragmentManager().popBackStack();
+                    //  mActivity.getSupportFragmentManager().popBackStack();
+
+                    closeFragment();
                 }
             }
         });
@@ -147,7 +150,9 @@ public class ShowCustomList extends Fragment {
                     if (onSelectedList != null) {
                         onSelectedList.getSelectedList(true, "", 0, getSelectedList());
                     }
-                    mActivity.getSupportFragmentManager().popBackStack();
+                    // mActivity.getSupportFragmentManager().popBackStack();
+
+                    closeFragment();
                 }
 
                 refreshView();
@@ -241,7 +246,9 @@ public class ShowCustomList extends Fragment {
                         if (onSelectedList != null) {
                             onSelectedList.getSelectedList(true, "fromBegin", count, getSelectedList());
                         }
-                        mActivity.getSupportFragmentManager().popBackStack();
+                        // mActivity.getSupportFragmentManager().popBackStack();
+
+                        closeFragment();
                         break;
                     case 1:
                         count = 0;
@@ -249,14 +256,20 @@ public class ShowCustomList extends Fragment {
 
                             onSelectedList.getSelectedList(true, "fromNow", count, getSelectedList());
                         }
-                        mActivity.getSupportFragmentManager().popBackStack();
+                        //  mActivity.getSupportFragmentManager().popBackStack();
+
+                        closeFragment();
+
                         break;
                     case 2:
                         count = 50;
                         if (onSelectedList != null) {
                             onSelectedList.getSelectedList(true, "", count, getSelectedList());
                         }
-                        mActivity.getSupportFragmentManager().popBackStack();
+                        // mActivity.getSupportFragmentManager().popBackStack();
+
+                        closeFragment();
+
                         break;
                     case 3:
                         dialog.dismiss();
@@ -269,7 +282,10 @@ public class ShowCustomList extends Fragment {
                                     if (onSelectedList != null) {
                                         onSelectedList.getSelectedList(true, "", count, getSelectedList());
                                     }
-                                    mActivity.getSupportFragmentManager().popBackStack();
+                                    //  mActivity.getSupportFragmentManager().popBackStack();
+
+                                    closeFragment();
+
                                 }
                             }).inputType(InputType.TYPE_CLASS_NUMBER).input(getString(R.string.count_of_show_message), null, new MaterialDialog.InputCallback() {
                                 @Override public void onInput(MaterialDialog dialog, CharSequence input) {

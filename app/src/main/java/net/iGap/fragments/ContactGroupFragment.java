@@ -44,6 +44,7 @@ import net.iGap.R;
 import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
+import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnChannelAddMember;
 import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -149,8 +150,11 @@ public class ContactGroupFragment extends Fragment {
                     } else {
 
                         if (isAdded()) {
+
+                            HelperFragment.removeFreagment(ContactGroupFragment.this);
+
                             new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
-                            mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+                            //  mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                         }
 
                     }
@@ -184,9 +188,10 @@ public class ContactGroupFragment extends Fragment {
                     } else {
 
                         if (isAdded()) {
+                            HelperFragment.removeFreagment(ContactGroupFragment.this);
                             new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
 
-                            mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+                            // mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                         }
 
                     }
@@ -306,8 +311,9 @@ public class ContactGroupFragment extends Fragment {
         realm.close();
 
         if (isAdded()) {
+            HelperFragment.removeFreagment(ContactGroupFragment.this);
             new GoToChatActivity(roomId).startActivity();
-            mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+            // mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
         }
 
     }
@@ -326,8 +332,9 @@ public class ContactGroupFragment extends Fragment {
         realm.close();
 
         if (isAdded()) {
+            HelperFragment.removeFreagment(ContactGroupFragment.this);
             new GoToChatActivity(roomId).startActivity();
-            mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
+            // mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
         }
 
     }

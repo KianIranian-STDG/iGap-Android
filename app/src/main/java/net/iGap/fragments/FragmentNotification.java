@@ -53,7 +53,7 @@ import static net.iGap.R.string.array_Disable;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentNotification extends Fragment {
+public class FragmentNotification extends BaseFragment {
 
     private static final int DEFAULT = 0;
     private static final int ENABLE = 1;
@@ -165,7 +165,10 @@ public class FragmentNotification extends Fragment {
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 try {
-                    mActivity.getSupportFragmentManager().popBackStack();
+                    //  mActivity.getSupportFragmentManager().popBackStack();
+
+                    closeFragment();
+
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }

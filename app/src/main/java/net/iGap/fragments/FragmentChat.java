@@ -843,7 +843,7 @@ public class FragmentChat extends BaseFragment
 
         boolean stopSuperPress = true;
 
-        FragmentShowImage fragment = (FragmentShowImage) mActivity.getSupportFragmentManager().findFragmentByTag("ShowImageMessage");
+        FragmentShowImage fragment = (FragmentShowImage) mActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
         if (fragment != null) {
             HelperFragment.removeFreagment(fragment);
             updateShowItemInScreen();
@@ -4380,21 +4380,23 @@ public class FragmentChat extends BaseFragment
                 //Intent intent = new Intent(G.context, ActivityGroupProfile.class);
                 //intent.putExtra("RoomId", mRoomId);
                 //startActivity(intent);
-                mActivity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(ac_ll_parent, FragmentGroupProfile.newInstance(mRoomId), FragmentGroupProfile.FRAGMENT_TAG)
-                    .addToBackStack(null)
-                    .commit();
+
+                //mActivity.getSupportFragmentManager()
+                //    .beginTransaction().replace(ac_ll_parent, FragmentGroupProfile.newInstance(mRoomId), FragmentGroupProfile.FRAGMENT_TAG)
+                //    .addToBackStack(null).commit();
+
+                HelperFragment.loadFragment(FragmentGroupProfile.newInstance(mRoomId));
             }
         } else if (chatType == CHANNEL) {
             //Intent intent = new Intent(G.context, ActivityChannelProfile.class);
             //intent.putExtra(PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
             //startActivity(intent);
-            mActivity.getSupportFragmentManager()
-                .beginTransaction()
-                .replace(ac_ll_parent, FragmentChannelProfile.newInstance(mRoomId), FragmentChannelProfile.FRAGMENT_TAG)
-                .addToBackStack(null)
-                .commit();
+
+            //mActivity.getSupportFragmentManager()
+            //    .beginTransaction().replace(ac_ll_parent, FragmentChannelProfile.newInstance(mRoomId), FragmentChannelProfile.FRAGMENT_TAG).
+            //    addToBackStack(null).commit();
+
+            HelperFragment.loadFragment(FragmentChannelProfile.newInstance(mRoomId));
         }
     }
 

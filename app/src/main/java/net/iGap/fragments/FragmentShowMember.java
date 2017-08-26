@@ -82,7 +82,7 @@ import net.iGap.request.RequestUserInfo;
 import static net.iGap.G.inflater;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentShowMember extends Fragment {
+public class FragmentShowMember extends BaseFragment {
 
     public static final String ROOMIDARGUMENT = "ROOMID_ARGUMENT";
     public static final String MAINROOL = "MAIN_ROOL";
@@ -509,7 +509,10 @@ public class FragmentShowMember extends Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.getSupportFragmentManager().popBackStack();
+                // mActivity.getSupportFragmentManager().popBackStack();
+
+                closeFragment();
+
             }
         });
 

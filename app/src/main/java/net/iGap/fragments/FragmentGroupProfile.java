@@ -128,7 +128,6 @@ import net.iGap.request.RequestUserInfo;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
-import static net.iGap.R.id.fragmentContainer_group_profile;
 
 /*
 * This is the source code of iGap for Android
@@ -777,7 +776,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 bundle.putString("PAGE", "GROUP");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer_group_profile, fragmentNotification).commit();
+
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                //    R.anim.slide_in_right, R.anim.slide_out_left).replace(fragmentContainer_group_profile, fragmentNotification).commit();
+
+                HelperFragment.loadFragment(fragmentNotification);
             }
         });
 
@@ -804,7 +807,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.group);
                     fragment.appBarLayout = fab;
-                    mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, null).commit();
+
+                    //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                    //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, null).commit();
+
+                    HelperFragment.loadFragment(fragment);
                 }
                 //realm.close();
             }
@@ -1372,8 +1379,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         bundle.putBoolean("DIALOG_SHOWING", true);
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
-        mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
 
+        //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
+        //    R.anim.slide_out_left).addToBackStack(null).replace(fragmentContainer_group_profile, fragment).commit();
+
+        HelperFragment.loadFragment(fragment);
         //realm.close();
     }
 
@@ -1789,7 +1799,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
     private void showListForCustomRole(String SelectedRole) {
         FragmentShowMember fragment = FragmentShowMember.newInstance1(this.fragment, roomId, role.toString(), G.userId, SelectedRole, isNeedgetContactlist);
-        mActivity.getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, "Show_member").commit();
+
+        //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+        //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_group_profile, fragment, "Show_member").commit();
+
+        HelperFragment.loadFragment(fragment);
 
         isNeedgetContactlist = false;
     }

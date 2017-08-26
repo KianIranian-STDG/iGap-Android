@@ -11,7 +11,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Bitmap;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentMap;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnGetPermission;
@@ -29,8 +29,6 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessageLocation;
-
-import static net.iGap.R.id.ac_ll_parent;
 
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
 
@@ -112,13 +110,13 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                                     @Override
                                     public void run() {
                                         FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition);
-                                        FragmentActivity activity = (FragmentActivity) G.currentActivity;
-                                        activity.getSupportFragmentManager()
-                                            .beginTransaction()
-                                            .addToBackStack(null)
-                                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                            .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
-                                            .commit();
+                                        //FragmentActivity activity = (FragmentActivity) G.currentActivity;
+                                        //activity.getSupportFragmentManager().beginTransaction().addToBackStack(null)
+                                        //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                        //    .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap)
+                                        //    .commit();
+
+                                        HelperFragment.loadFragment(fragment);
                                     }
                                 });
 

@@ -115,7 +115,10 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             @Override
             public void onClick(View v) {
 
-                mActivity.getSupportFragmentManager().popBackStack();
+                //mActivity.getSupportFragmentManager().popBackStack();
+
+                closeFragment();
+
                 closeKeyboard(v);
 
             }

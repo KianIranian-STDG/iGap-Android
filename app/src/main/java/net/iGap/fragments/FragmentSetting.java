@@ -1021,7 +1021,11 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                                 Bundle bundle = new Bundle();
                                 bundle.putString("PHONE", phoneName);
                                 fragmentDeleteAccount.setArguments(bundle);
-                                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentDeleteAccount, null).commit();
+                                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right,
+                                //    R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent,
+                                //    fragmentDeleteAccount, null).commit();
+
+                                HelperFragment.loadFragment(fragmentDeleteAccount);
                             }
                         });
 
@@ -1090,7 +1094,11 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
                     fragment.appBarLayout = fab;
-                    mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragment, null).commit();
+
+                    //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                    //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragment, null).commit();
+
+                    HelperFragment.loadFragment(fragment);
                 }
             }
         });
@@ -1339,7 +1347,11 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onClick(View view) {
                 FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity = new FragmentPrivacyAndSecurity();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity, null).commit();
+
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity, null).commit();
+
+                HelperFragment.loadFragment(fragmentPrivacyAndSecurity);
             }
         });
 
@@ -1479,7 +1491,11 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         txtChatBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.st_layoutParent, FragmentChatBackground.newInstance()).commit();
+
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.st_layoutParent, FragmentChatBackground.newInstance()).commit();
+
+                HelperFragment.loadFragment(FragmentChatBackground.newInstance());
             }
         });
 

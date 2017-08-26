@@ -1,7 +1,5 @@
 package net.iGap.fragments;
 
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -26,6 +24,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.util.regex.Pattern;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnTwoStepPassword;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.enums.Security;
@@ -44,7 +43,7 @@ import static net.iGap.R.id.tsv_setRecoveryEmail;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSecurity extends Fragment {
+public class FragmentSecurity extends BaseFragment {
 
     private static String password;
     private boolean isChabgePassword = false;
@@ -170,7 +169,9 @@ public class FragmentSecurity extends Fragment {
                         break;
                     default:
                         isFirstArrive = true;
-                        mActivity.getSupportFragmentManager().popBackStack();
+                        //mActivity.getSupportFragmentManager().popBackStack();
+
+                        closeFragment();
 
                 }
                 closeKeyboard(v);
@@ -193,7 +194,12 @@ public class FragmentSecurity extends Fragment {
 
                 isFirstArrive = false;
                 FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentSetSecurityPassword).commit();
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right,
+                //    R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent,
+                //    fragmentSetSecurityPassword).commit();
+
+                HelperFragment.loadFragment(fragmentSetSecurityPassword);
+
             }
         });
 
@@ -227,7 +233,13 @@ public class FragmentSecurity extends Fragment {
                         bundle.putBoolean("IS_CONFIRM_EMAIL", isConfirmedRecoveryEmail);
 
                         fragmentSecurityRecovery.setArguments(bundle);
-                        mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentSecurityRecovery).commit();
+
+                        //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right,
+                        //    R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent,
+                        //    fragmentSecurityRecovery).commit();
+
+                        HelperFragment.loadFragment(fragmentSecurityRecovery);
+
 
                     }
                 }).show();
@@ -272,7 +284,13 @@ public class FragmentSecurity extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("OLD_PASSWORD", password);
                 fragmentSetSecurityPassword.setArguments(bundle);
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentSetSecurityPassword).commit();
+
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right,
+                //    R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent,
+                //    fragmentSetSecurityPassword).commit();
+
+                HelperFragment.loadFragment(fragmentSetSecurityPassword);
+
             }
         });
 
@@ -387,7 +405,9 @@ public class FragmentSecurity extends Fragment {
                             if (majorCode == 188 && minorCode == 1) {  //USER DON'T SET A PASSWORD
                                 setFirstView();
                             } else { // CAN'T CONNECT TO SERVER
-                                mActivity.getSupportFragmentManager().popBackStack();
+                                //  mActivity.getSupportFragmentManager().popBackStack();
+
+                                closeFragment();
                             }
                         }
                     });
@@ -400,7 +420,9 @@ public class FragmentSecurity extends Fragment {
                     mActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mActivity.getSupportFragmentManager().popBackStack();
+                            // mActivity.getSupportFragmentManager().popBackStack();
+
+                            closeFragment();
                         }
                     });
                 }

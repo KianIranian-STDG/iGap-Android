@@ -60,6 +60,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnClientSearchRoomHistory;
@@ -1516,7 +1517,10 @@ public class FragmentShearedMedia extends BaseFragment {
 
             fragment.appBarLayout = appBarLayout;
 
-            mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
+            //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
+            //    R.anim.slide_out_left).replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
+
+            HelperFragment.loadFragment(fragment);
         }
     }
 
@@ -1656,7 +1660,10 @@ public class FragmentShearedMedia extends BaseFragment {
             bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
             fragment.setArguments(bundle);
 
-            mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
+            //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
+            //    R.anim.slide_out_left).replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
+
+            HelperFragment.loadFragment(fragment);
         }
     }
 

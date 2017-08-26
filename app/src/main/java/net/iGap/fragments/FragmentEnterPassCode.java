@@ -1,7 +1,5 @@
 package net.iGap.fragments;
 
-
-
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
 import android.content.Context;
@@ -44,6 +42,7 @@ import javax.crypto.SecretKey;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLogout;
 import net.iGap.interfaces.FingerPrint;
 import net.iGap.interfaces.OnUserSessionLogout;
@@ -158,7 +157,9 @@ public class FragmentEnterPassCode extends Fragment {
                         public void run() {
 
                             if (dialog != null) dialog.dismiss();
-                            mActivity.getSupportFragmentManager().popBackStack();
+                            //  mActivity.getSupportFragmentManager().popBackStack();
+
+                            HelperFragment.removeFreagment(FragmentEnterPassCode.this);
 
                         }
                     });
@@ -207,7 +208,10 @@ public class FragmentEnterPassCode extends Fragment {
                 if (enterPassword.length() > 0) {
 
                     if (enterPassword.equals(password)) {
-                        mActivity.getSupportFragmentManager().popBackStack();
+                        //  mActivity.getSupportFragmentManager().popBackStack();
+
+                        HelperFragment.removeFreagment(FragmentEnterPassCode.this);
+
                         ActivityMain.openNavigation();
                         //G.isPassCode = false;
                         closeKeyboard(v);

@@ -15,7 +15,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -53,7 +52,7 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientSearchUsername;
 
-public class FragmentIgapSearch extends Fragment {
+public class FragmentIgapSearch extends BaseFragment {
 
     private FastAdapter fastAdapter;
     private EditText edtSearch;
@@ -233,7 +232,9 @@ public class FragmentIgapSearch extends Fragment {
                     }
                 }
 
-                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIgapSearch.this).commit();
+                //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIgapSearch.this).commit();
+
+                closeFragment();
 
                 return false;
             }

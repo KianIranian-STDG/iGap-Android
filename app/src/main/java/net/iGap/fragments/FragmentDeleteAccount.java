@@ -34,6 +34,7 @@ import java.io.IOException;
 import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnGetPermission;
@@ -171,7 +172,10 @@ public class FragmentDeleteAccount extends Fragment {
             @Override public void onClick(View view) {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
+
+                //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
+
+                HelperFragment.removeFreagment(FragmentDeleteAccount.this);
             }
         });
 
@@ -365,7 +369,10 @@ public class FragmentDeleteAccount extends Fragment {
             .onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     dialog.dismiss();
-                    mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
+                    //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentDeleteAccount.this).commit();
+
+                    HelperFragment.removeFreagment(FragmentDeleteAccount.this);
+
                 }
             })
             .canceledOnTouchOutside(false)

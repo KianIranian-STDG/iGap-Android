@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Display;
@@ -45,13 +44,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoGlobal;
 
-import static net.iGap.R.id.mf_fragment_map_view;
-
-public class FragmentMap extends Fragment implements OnMapReadyCallback {
+public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
 
     public static String Latitude = "latitude";
     public static String Longitude = "longitude";
@@ -119,13 +117,20 @@ public class FragmentMap extends Fragment implements OnMapReadyCallback {
     }
 
     private void close() {
-        mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentMap.this).commit();
+        //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentMap.this).commit();
+
+        closeFragment();
     }
 
     private void initComponent(View view) {
 
         SupportMapFragment mapFragment = new SupportMapFragment();
-        mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(mf_fragment_map_view, mapFragment, null).commit();
+
+        //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
+        //    R.anim.slide_out_left).replace(mf_fragment_map_view, mapFragment, null).commit();
+
+        HelperFragment.loadFragment(mapFragment);
+
         mapFragment.getMapAsync(FragmentMap.this);
 
         Button btnSendPosition = (Button) view.findViewById(R.id.mf_btn_send_position);

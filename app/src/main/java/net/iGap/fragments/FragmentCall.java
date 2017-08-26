@@ -259,7 +259,12 @@ import net.iGap.request.RequestSignalingGetLog;
         fragment.setArguments(bundle);
 
         try {
-            mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
+            mActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                .addToBackStack(null)
+                .replace(R.id.fragmentContainer, fragment)
+                .commit();
         } catch (Exception e) {
             e.getStackTrace();
         }

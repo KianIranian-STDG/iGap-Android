@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperAddContact;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnCountryCallBack;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -111,8 +112,12 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
 
-                FragmentChooseCountry fragmentChooseCountry = new FragmentChooseCountry();
-                mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentChooseCountry, null).commit();
+                //FragmentChooseCountry fragmentChooseCountry = new FragmentChooseCountry();
+                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
+                //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentChooseCountry, null).commit();
+
+                HelperFragment.loadFragment(new FragmentChooseCountry());
+
                 closeKeyboard(v);
 
             }
@@ -276,7 +281,10 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
 
         InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        mActivity.getSupportFragmentManager().popBackStack();
+
+        //  mActivity.getSupportFragmentManager().popBackStack();
+
+        HelperFragment.removeFreagment(FragmentAddContact.this);
     }
 
     /**

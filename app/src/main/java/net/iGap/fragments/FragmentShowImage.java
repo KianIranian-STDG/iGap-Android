@@ -165,14 +165,20 @@ public class FragmentShowImage extends BaseFragment {
             selectedFileToken = bundle.getLong("SelectedImage");
             if (bundle.getString("TYPE") != null) type = bundle.getString("TYPE");
             if (mRoomId == null) {
-                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+
+                closeFragment();
+
                 return false;
             }
 
             mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
 
             if (mRealmList.size() < 1) {
-                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+
+                closeFragment();
+
                 return false;
             }
 
@@ -213,7 +219,9 @@ public class FragmentShowImage extends BaseFragment {
             return true;
         } else {
             if (mActivity != null) {
-                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+
+                closeFragment();
             }
             return false;
         }

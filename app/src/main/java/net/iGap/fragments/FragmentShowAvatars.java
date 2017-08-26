@@ -67,7 +67,7 @@ import net.iGap.request.RequestUserAvatarGetList;
 import static net.iGap.R.string.array_Delete_photo;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
-public class FragmentShowAvatars extends android.support.v4.app.Fragment {
+public class FragmentShowAvatars extends BaseFragment {
 
     private static final String ARG_PEER_ID = "arg_peer_id";
     private static final String ARG_Type = "arg_type";
@@ -135,7 +135,9 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
         if (getIntentData(this.getArguments())) {
             initComponent(view);
         } else {
-            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+            //   mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+
+            closeFragment();
         }
     }
 
@@ -351,7 +353,9 @@ public class FragmentShowAvatars extends android.support.v4.app.Fragment {
                                 txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
                             }
                         } else {
-                            mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+                            //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+
+                            closeFragment();
                         }
                     }
                 }
