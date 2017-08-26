@@ -1050,6 +1050,7 @@
   <string name="allow_screen_capture">Allow Screen Capture</string>
   <string name="Confirm_fingerPrint_continue">Confirm fingerPrint to continue</string>
   <string name="Touch_sensor">Touch sensor</string>
+  <string name="FingerPrint">FingerPrint</string>
   <string name="Fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
 
 

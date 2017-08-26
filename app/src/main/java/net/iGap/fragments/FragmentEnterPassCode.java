@@ -12,6 +12,7 @@ import android.os.Vibrator;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -24,7 +25,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import java.io.IOException;
@@ -43,10 +44,13 @@ import javax.crypto.SecretKey;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.helper.HelperLogout;
 import net.iGap.interfaces.FingerPrint;
+import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.FingerprintHandler;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestUserSessionLogout;
 
 import static android.content.Context.FINGERPRINT_SERVICE;
 import static android.content.Context.KEYGUARD_SERVICE;
@@ -73,6 +77,7 @@ public class FragmentEnterPassCode extends Fragment {
     private MaterialDialog dialog;
     private TextView iconFingerPrint;
     private TextView textFingerPrint;
+    private RealmUserInfo realmUserInfo;
 
     public FragmentEnterPassCode() {
         // Required empty public constructor
@@ -109,7 +114,7 @@ public class FragmentEnterPassCode extends Fragment {
 
         realm = Realm.getDefaultInstance();
 
-        final RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
 
         if (realmUserInfo != null) {
             password = realmUserInfo.getPassCode();
@@ -125,7 +130,7 @@ public class FragmentEnterPassCode extends Fragment {
 
         if (isFingerPrint) {
 
-            dialog = new MaterialDialog.Builder(mActivity).title("FingerPrint").customView(R.layout.dialog_finger_print, true).negativeText(getResources().getString(R.string.B_cancel)).build();
+            dialog = new MaterialDialog.Builder(mActivity).title(getString(R.string.FingerPrint)).customView(R.layout.dialog_finger_print, true).negativeText(getResources().getString(R.string.B_cancel)).build();
 
             View viewDialog = dialog.getView();
 
@@ -161,7 +166,6 @@ public class FragmentEnterPassCode extends Fragment {
 
                 @Override
                 public void error() {
-
                     if (dialog != null) {
                         if (dialog.isShowing()) {
                             if (iconFingerPrint != null && textFingerPrint != null) {
@@ -175,6 +179,27 @@ public class FragmentEnterPassCode extends Fragment {
             };
         }
 
+        TextView txtForgotPassword = (TextView) view.findViewById(R.id.setPassword_forgotPassword);
+        txtForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                new MaterialDialog.Builder(mActivity).title(R.string.forgot_password).content(R.string.forgot_password).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        logout(v);
+
+
+                    }
+                }).negativeText(R.string.cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    }
+                }).show();
+            }
+        });
+
         txtOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,12 +211,66 @@ public class FragmentEnterPassCode extends Fragment {
                         ActivityMain.openNavigation();
                         //G.isPassCode = false;
                         closeKeyboard(v);
+                    } else {
+                        closeKeyboard(v);
+                        error(getString(R.string.invalid_password));
                     }
                 } else {
-                    Toast.makeText(mActivity, "Please enter your password", Toast.LENGTH_SHORT).show();
+                    closeKeyboard(v);
+                    error(getString(R.string.enter_a_password));
                 }
             }
         });
+    }
+
+    private void logout(final View v) {
+        G.onUserSessionLogout = new OnUserSessionLogout() {
+            @Override
+            public void onUserSessionLogout() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        HelperLogout.logout();
+                    }
+                });
+            }
+
+            @Override
+            public void onError() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(v.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Snackbar snack = Snackbar.make(v.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                snack.dismiss();
+                            }
+                        });
+                        snack.show();
+                    }
+                });
+            }
+        };
+
+        new RequestUserSessionLogout().userSessionLogout();
     }
 
     @Override

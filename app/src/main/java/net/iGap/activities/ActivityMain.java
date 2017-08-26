@@ -173,7 +173,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private int pageDrawer = 0;
     private ProgressBar contentLoading;
     private static TextView iconLocation;
-    private static TextView iconLock;
+    public static TextView iconLock;
 
     public MainInterface mainActionApp;
     public MainInterface mainActionChat;
@@ -323,6 +323,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             finish();
             return;
         }
+
+        G.isPassCode = userInfo.isPassCode();
 
         if (G.firstTimeEnterToApp) {
             /**

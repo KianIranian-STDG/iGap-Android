@@ -14,16 +14,19 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
       android:orientation="vertical"
       android:visibility="visible"
+      android:paddingBottom="@dimen/dp80"
+      android:layout_centerVertical="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
       >
 
     <ImageView
-        android:layout_width="@dimen/dp70"
-        android:layout_height="@dimen/dp70"
+        android:layout_width="@dimen/dp140"
+        android:layout_height="@dimen/dp140"
         android:layout_gravity="center"
-        android:src="@mipmap/logo"
+        app:srcCompat="@drawable/ic_passcode"
         />
 
 
@@ -36,7 +39,6 @@
         android:text="@string/enter_a_password"
         android:textColor="@color/white"
         android:textSize="@dimen/dp18"
-
         />
 
     <RelativeLayout
@@ -81,7 +83,7 @@
           android:singleLine="true"
           android:text=""
           android:textColor="@color/white"
-          android:textSize="@dimen/dp13"
+          android:textSize="@dimen/dp15"
           android:maxLength="20"
           android:focusable="true"
           android:padding="@dimen/dp10"
@@ -95,6 +97,21 @@
         android:layout_marginLeft="@dimen/dp24"
         android:layout_marginRight="@dimen/dp24"
         android:background="@color/white"
+        />
+
+    <TextView
+        android:id="@+id/setPassword_forgotPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="@string/forgot_password"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp18"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp24"
+        android:padding="@dimen/dp10"
+
         />
 
   </LinearLayout>

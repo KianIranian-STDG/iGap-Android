@@ -157,7 +157,10 @@
             android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true"
-            android:textSize="@dimen/dp13"
+            android:textSize="@dimen/dp15"
+            android:maxLength="20"
+            android:padding="@dimen/dp10"
+            android:focusable="true"
             />
 
       </LinearLayout>

@@ -28,13 +28,13 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
@@ -121,7 +121,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             }
         });
 
-        final TextView txtAutoPassCode = (TextView) view.findViewById(R.id.st_txt_st_toggle_passCode);
+        final TextView txtPassCode = (TextView) view.findViewById(R.id.st_txt_st_toggle_passCode);
         final ToggleButton togglePassCode = (ToggleButton) view.findViewById(R.id.st_toggle_passCode);
 
         final TextView txtAutoFingerPrint = (TextView) view.findViewById(R.id.st_txt_st_toggle_FingerPrint);
@@ -177,6 +177,9 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // set password;
+
+                if (realmUserInfo != null) isPassCode = realmUserInfo.isPassCode();
+
                 if (!isPassCode) {
                     vgTogglePassCode.setVisibility(View.GONE);
                     rootEnterPassword.setVisibility(View.VISIBLE);
@@ -197,6 +200,11 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     rootEnterPassword.setVisibility(View.GONE);
                     rootSettingPassword.setVisibility(View.GONE);
                     rippleOk.setVisibility(View.GONE);
+                    staticSpinner.setVisibility(View.GONE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, false);
+                    editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 0);
+                    editor.apply();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -207,11 +215,10 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         }
                     });
                 }
-
             }
         });
 
-        txtAutoPassCode.setOnClickListener(new View.OnClickListener() {
+        txtPassCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 togglePassCode.setChecked(!togglePassCode.isChecked());
@@ -326,7 +333,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
 
                     password = edtSetPassword.getText().toString();
                     edtSetPassword.setText("");
-                    txtSetPassword.setText("Repeat password");
+                    txtSetPassword.setText(getString(R.string.please_re_enter_your_password));
 
                     page = 1;
 
@@ -345,7 +352,11 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         titlePassCode.setText(getResources().getString(R.string.two_step_pass_code));
                         titlePassCode.setVisibility(View.VISIBLE);
                         staticSpinner.setVisibility(View.GONE);
+                        if (ActivityMain.iconLock != null) {
+                            ActivityMain.iconLock.setVisibility(View.VISIBLE);
+                        }
                         closeKeyboard(v);
+
 
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
@@ -356,8 +367,10 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                                 }
                             }
                         });
+                        edtSetPassword.setText("");
                     } else {
-                        Toast.makeText(mActivity, "password not match", Toast.LENGTH_SHORT).show();
+                        closeKeyboard(v);
+                        error(getString(R.string.Password_dose_not_match));
                     }
 
 
@@ -379,11 +392,13 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         staticSpinner.setVisibility(View.GONE);
                         closeKeyboard(v);
                     } else {
-                        error("you'r password is wrong");
+                        closeKeyboard(v);
+                        error(getString(R.string.invalid_password));
                     }
 
                 } else {
-                    Toast.makeText(mActivity, "error", Toast.LENGTH_SHORT).show();
+                    closeKeyboard(v);
+                    error(getString(R.string.enter_a_password));
                 }
 
 
@@ -409,7 +424,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             public void onClick(View view) {
 
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title("Auto-lock").customView(R.layout.dialog_auto_lock, wrapInScrollView).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title(getString(R.string.auto_lock)).customView(R.layout.dialog_auto_lock, wrapInScrollView).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).build();
 
                 View view1 = dialog.getCustomView();
 
