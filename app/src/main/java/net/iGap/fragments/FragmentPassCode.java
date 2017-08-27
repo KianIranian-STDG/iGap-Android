@@ -442,6 +442,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                 numberPickerMinutes.setMinValue(0);
                 numberPickerMinutes.setMaxValue(4);
                 numberPickerMinutes.setWrapSelectorWheel(true);
+                numberPickerMinutes.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
                 //numberPickerMinutes.setDisplayedValues(new String[]{"in 1 hour", "in 5 hours", "in 1 minute", "in 5 minutes", "Disable"});
 
 

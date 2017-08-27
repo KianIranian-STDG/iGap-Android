@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -32,12 +31,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -128,16 +124,14 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
             textFingerPrint = (TextView) viewDialog.findViewById(R.id.txtDialogTitle);
 
             dialog.show();
-
-            generateKey();
-            if (cipherInit()) {
-                FingerprintManager.CryptoObject cryptoObject = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                generateKey();
+                if (cipherInit()) {
+                    FingerprintManager.CryptoObject cryptoObject = null;
                     cryptoObject = new FingerprintManager.CryptoObject(cipher);
+                    FingerprintHandler helper = new FingerprintHandler(this);
+                    helper.startAuth(fingerprintManager, cryptoObject);
                 }
-                FingerprintHandler helper = new FingerprintHandler(this);
-                helper.startAuth(fingerprintManager, cryptoObject);
-
             }
 
             G.fingerPrint = new FingerPrint() {
@@ -294,16 +288,12 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         KeyGenerator keyGenerator;
         try {
             keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
         } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
             throw new RuntimeException("Failed to get KeyGenerator instance", e);
         }
-
-
         try {
             keyStore.load(null);
             keyGenerator.init(new KeyGenParameterSpec.Builder(KEY_NAME, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT).setBlockModes(KeyProperties.BLOCK_MODE_CBC).setUserAuthenticationRequired(true).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7).build());
@@ -321,17 +311,13 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new RuntimeException("Failed to get Cipher", e);
         }
-
-
         try {
             keyStore.load(null);
             SecretKey key = (SecretKey) keyStore.getKey(KEY_NAME, null);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return true;
-        } catch (KeyPermanentlyInvalidatedException e) {
+        } catch (Exception e) {
             return false;
-        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException | NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new RuntimeException("Failed to init Cipher", e);
         }
     }
 
