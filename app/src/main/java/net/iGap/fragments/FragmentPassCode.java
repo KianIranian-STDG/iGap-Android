@@ -216,6 +216,11 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     editor.putBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, false);
                     editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 0);
                     editor.apply();
+                    if (ActivityMain.iconLock != null) {
+                        ActivityMain.iconLock.setVisibility(View.GONE);
+                    }
+                    G.isPassCode = false;
+                    edtSetPassword.setText("");
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -362,8 +367,9 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         if (ActivityMain.iconLock != null) {
                             ActivityMain.iconLock.setVisibility(View.VISIBLE);
                         }
+                        G.isPassCode = true;
+                        ActivityMain.isLock = false;
                         closeKeyboard(v);
-
 
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
