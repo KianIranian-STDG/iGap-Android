@@ -14,7 +14,8 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.Intent;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -24,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -37,7 +39,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityRegister;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnReceivePageInfoTOS;
@@ -81,10 +82,24 @@ public class FragmentIntroduce extends BaseFragment {
     private String isoCode = "", countryName = "", pattern = "", regex = "", body = null;
     private int callingCode;
 
+    private FragmentActivity mActivity;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_introduce, container, false);
+
+        if (G.twoPaneMode) {
+            return inflater.inflate(R.layout.activity_introduce, container, false);
+        } else {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                G.isLandscape = true;
+                return inflater.inflate(R.layout.activity_introduce_land, container, false);
+            } else {
+                G.isLandscape = false;
+                return inflater.inflate(R.layout.activity_introduce, container, false);
+            }
+        }
+
     }
 
     @Override
@@ -92,6 +107,31 @@ public class FragmentIntroduce extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         goToProgram(view, savedInstanceState);
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        if (!G.twoPaneMode) {
+
+            boolean beforeState = G.isLandscape;
+
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                G.isLandscape = true;
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                G.isLandscape = false;
+            }
+
+            if (beforeState != G.isLandscape) {
+
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
+
+                FragmentIntroduce fragment = new FragmentIntroduce();
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
+                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+            }
+        }
+
+        super.onConfigurationChanged(newConfig);
     }
 
     private void goToProgram(View view, Bundle savedInstanceState) {
@@ -387,16 +427,26 @@ public class FragmentIntroduce extends BaseFragment {
                 if (G.socketConnection) {
                     if (body != null & enableRegistration & (!isoCode.equals("") || !locationFound)) {
                         enableRegistration = false;
-                        Intent intent = new Intent(G.context, ActivityRegister.class);
-                        intent.putExtra("ISO_CODE", isoCode);
-                        intent.putExtra("CALLING_CODE", callingCode);
-                        intent.putExtra("COUNTRY_NAME", countryName);
-                        intent.putExtra("PATTERN", pattern);
-                        intent.putExtra("REGEX", regex);
-                        intent.putExtra("TERMS_BODY", body);
-                        startActivity(intent);
-                        //finish();
-                        closeFragment(); //TODO [Saeed Mozaffari] [2017-08-23 12:31 PM] - after close should close app
+
+                        FragmentRegister fragment = new FragmentRegister();
+                        Bundle bundle = new Bundle();
+
+                        bundle.putString("ISO_CODE", isoCode);
+                        bundle.putInt("CALLING_CODE", callingCode);
+                        bundle.putString("COUNTRY_NAME", countryName);
+                        bundle.putString("PATTERN", pattern);
+                        bundle.putString("REGEX", regex);
+                        bundle.putString("TERMS_BODY", body);
+
+                        fragment.setArguments(bundle);
+
+                        mActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
+                            setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+
+                        mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
+
+
+
                     } else {
                         G.handler.post(new Runnable() {
                             @Override
@@ -1003,5 +1053,12 @@ public class FragmentIntroduce extends BaseFragment {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mActivity = (FragmentActivity) context;
     }
 }

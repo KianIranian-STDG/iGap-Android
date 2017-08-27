@@ -34,7 +34,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.activities.ActivityProfile;
+import net.iGap.activities.ActivityRegisteration;
 import net.iGap.activities.MyDialog;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.GoToChatActivity;
@@ -346,7 +346,8 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                             if (G.currentActivity != null) {
                                 G.currentActivity.finish();
                             }
-                            Intent intent = new Intent(G.context, ActivityProfile.class);
+                            Intent intent = new Intent(G.context, ActivityRegisteration.class);
+                            intent.putExtra(ActivityRegisteration.showProfile, true);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             G.context.startActivity(intent);
                         }

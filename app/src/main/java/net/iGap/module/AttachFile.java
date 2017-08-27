@@ -179,7 +179,7 @@ public class AttachFile {
         });
     }
 
-    public void requestTakePicture() throws IOException {
+    public void requestTakePicture(final Fragment fragment) throws IOException {
 
         PackageManager packageManager = context.getPackageManager();
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
@@ -193,7 +193,7 @@ public class AttachFile {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    dispatchTakePictureIntent();
+                    dispatchTakePictureIntent(fragment);
                 } else {
                     Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 0);
 
@@ -201,7 +201,13 @@ public class AttachFile {
                         imagePath = outPath.getPath();
                         imageUri = outPath;
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
-                        ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
+
+                        if (fragment != null) {
+                            fragment.startActivityForResult(intent, request_code_TAKE_PICTURE);
+                        } else {
+                            ((Activity) context).startActivityForResult(intent, request_code_TAKE_PICTURE);
+                        }
+
                         isInAttach = true;
                     }
                 }
@@ -212,41 +218,11 @@ public class AttachFile {
 
             }
         });
+
     }
 
-    public void requestTakePictureFragment(final Fragment fragment) throws IOException {
-
-        PackageManager packageManager = context.getPackageManager();
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
-            Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        HelperPermision.getCameraPermission(context, new OnGetPermission() {
-            @Override
-            public void Allow() throws IOException {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    dispatchTakePictureIntent();
-                } else {
-                    Uri outPath = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 0);
-
-                    if (outPath != null) {
-                        imagePath = outPath.getPath();
-                        imageUri = outPath;
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, outPath);
-                        fragment.startActivityForResult(intent, request_code_TAKE_PICTURE);
-                        isInAttach = true;
-                    }
-                }
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
+    public void requestTakePicture() throws IOException {
+        requestTakePicture(null);
     }
 
     private Uri getOutputMediaFileUri(int type, int camera) {
@@ -260,7 +236,7 @@ public class AttachFile {
     //=================================== Start Android 7
     public static String mCurrentPhotoPath;
 
-    public void dispatchTakePictureIntent() throws IOException {
+    public void dispatchTakePictureIntent(Fragment fragment) throws IOException {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(G.context.getPackageManager()) != null) {
@@ -276,30 +252,20 @@ public class AttachFile {
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", createImageFile());
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                ((Activity) context).startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
+
+                if (fragment != null) {
+                    fragment.startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
+                } else {
+                    ((Activity) context).startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
+                }
+
+
             }
         }
     }
 
-    public void dispatchTakePictureIntentFragment(Fragment fragment) throws IOException {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(G.context.getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                return;
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", createImageFile());
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                fragment.startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
-            }
-        }
+    public void dispatchTakePictureIntent() throws IOException {
+        dispatchTakePictureIntent(null);
     }
 
     private File createImageFile() throws IOException {
@@ -433,41 +399,35 @@ public class AttachFile {
     }
 
     //*************************************************************************************************************
+    public void requestOpenGalleryForImageSingleSelect(final Fragment fragment) throws IOException {
+
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+
+                if (fragment != null) {
+                    fragment.startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                } else {
+                    ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                }
+
+
+                isInAttach = true;
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
     public void requestOpenGalleryForImageSingleSelect() throws IOException {
-
-        HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-                ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
-                isInAttach = true;
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
+        requestOpenGalleryForImageSingleSelect(null);
     }
 
-    public void requestOpenGalleryForImageSingleSelectFragment(final Fragment fragment) throws IOException {
-
-        HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-                fragment.startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
-                isInAttach = true;
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
 
     //*************************************************************************************************************
 

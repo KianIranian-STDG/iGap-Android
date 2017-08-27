@@ -158,13 +158,13 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
                             if (text.toString().equals(G.context.getString(R.string.from_camera))) {
                                 try {
-                                    attachFile.requestTakePictureFragment(fragment);
+                                    attachFile.requestTakePicture(fragment);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
                             } else {
                                 try {
-                                    attachFile.requestOpenGalleryForImageSingleSelectFragment(fragment);
+                                    attachFile.requestOpenGalleryForImageSingleSelect(fragment);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }

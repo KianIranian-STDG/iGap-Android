@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -34,15 +36,16 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import java.io.File;
 import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityCrop;
 import net.iGap.activities.ActivityMain;
-import net.iGap.activities.ActivityProfile;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserAvatarResponse;
@@ -52,14 +55,19 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.EditTextAdjustPan;
+import net.iGap.module.FileUploadStructure;
+import net.iGap.module.IntentRequests;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserProfileSetNickname;
 
+import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.context;
+import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class FragmentRegistrationNickname extends BaseFragment implements OnUserAvatarResponse {
 
@@ -72,16 +80,18 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     private EditTextAdjustPan edtNikName;
     private Uri uriIntent;
     private String pathImageUser;
-    private File pathImageFromCamera = new File(G.imageFile.toString() + "_" + 0 + ".jpg");
     private int idAvatar;
     private int lastUploadedAvatarId;
     private ProgressBar prgWait;
     private boolean existAvatar = false;
     private Typeface titleTypeface;
 
+    FragmentActivity mActivity;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_registration_nickname, container, false);
     }
 
@@ -160,14 +170,13 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                 if (!nickName.equals("")) {
 
                     showProgressBar();
-                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
                             setNickName();
                         }
                     });
-
                 } else {
                     G.handler.post(new Runnable() {
                         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -197,6 +206,63 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
+                intent.putExtra("TYPE", "camera");
+                intent.putExtra("PAGE", "profile");
+                intent.putExtra("ID", (int) getArguments().getLong(ARG_USER_ID, -1));
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
+            } else {
+                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
+                intent.putExtra("TYPE", "camera");
+                intent.putExtra("PAGE", "profile");
+                intent.putExtra("ID", (int) getArguments().getLong(ARG_USER_ID, -1));
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
+            }
+        } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
+            if (data != null) {
+                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                if (data.getData() == null) {
+                    return;
+                }
+                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                intent.putExtra("TYPE", "gallery");
+                intent.putExtra("PAGE", "profile");
+                intent.putExtra("ID", (int) getArguments().getLong(ARG_USER_ID, -1));
+                startActivityForResult(intent, IntentRequests.REQ_CROP);
+            }
+        } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) {
+            if (data != null) {
+                pathImageUser = data.getData().toString();
+            }
+
+            lastUploadedAvatarId = idAvatar + 1;
+
+            showProgressBar();
+            HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                @Override
+                public void OnProgress(int progress, FileUploadStructure struct) {
+                    if (progress < 100) {
+                        prgWait.setProgress(progress);
+                    } else {
+                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                    }
+                }
+
+                @Override
+                public void OnError() {
+                    hideProgressBar();
+                }
+            });
+        }
     }
 
     private void setNickName() {
@@ -239,7 +305,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
@@ -260,9 +326,9 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                                         G.onUserInfoResponse = null;
                                         hideProgressBar();
                                         Intent intent = new Intent(context, ActivityMain.class);
-                                        intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
+                                        intent.putExtra(ARG_USER_ID, userId);
                                         startActivity(intent);
-                                        //finish();
+                                        mActivity.finish();
                                     }
                                 });
                             }
@@ -295,19 +361,18 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
         };
 
         new RequestUserInfo().userInfo(G.userId);
-
     }
 
     public void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
-                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent();
+                new AttachFile(mActivity).dispatchTakePictureIntent(FragmentRegistrationNickname.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                new AttachFile(G.fragmentActivity).requestTakePicture();
+                new AttachFile(mActivity).requestTakePicture(FragmentRegistrationNickname.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -323,8 +388,8 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                 @Override
                 public void Allow() {
                     try {
-                        new AttachFile(G.fragmentActivity).requestOpenGalleryForImageSingleSelect();
-                    } catch (IOException e) {
+                        new AttachFile(mActivity).requestOpenGalleryForImageSingleSelect(FragmentRegistrationNickname.this);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -341,64 +406,68 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
     private void startDialog() {
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.choose_picture)).negativeText(getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
-                                                                                                                                                                                                                   @Override
-                                                                                                                                                                                                                   public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+        new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.choose_picture))
+            .negativeText(getResources().getString(R.string.B_cancel))
+            .items(R.array.profile)
+            .itemsCallback(new MaterialDialog.ListCallback() {
+                               @Override
+                               public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                                                                                                                                                                                                       switch (which) {
-                                                                                                                                                                                                                           case 0: {
-                                                                                                                                                                                                                               useGallery();
-                                                                                                                                                                                                                               dialog.dismiss();
-                                                                                                                                                                                                                               break;
-                                                                                                                                                                                                                           }
-                                                                                                                                                                                                                           case 1: {
-                                                                                                                                                                                                                               if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                                                                                                                                                                                                                                   try {
+                                   switch (which) {
+                                       case 0: {
+                                           useGallery();
+                                           dialog.dismiss();
+                                           break;
+                                       }
+                                       case 1: {
+                                           if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                               try {
 
-                                                                                                                                                                                                                                       HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
-                                                                                                                                                                                                                                           @Override
-                                                                                                                                                                                                                                           public void Allow() throws IOException {
-                                                                                                                                                                                                                                               HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                                                                                                                                                                                                                                   @Override
-                                                                                                                                                                                                                                                   public void Allow() {
-                                                                                                                                                                                                                                                       // this dialog show 2 way for choose image : gallery and camera
-                                                                                                                                                                                                                                                       dialog.dismiss();
-                                                                                                                                                                                                                                                       useCamera();
-                                                                                                                                                                                                                                                   }
+                                                   HelperPermision.getStoragePermision(mActivity, new OnGetPermission() {
+                                                       @Override
+                                                       public void Allow() throws IOException {
+                                                           HelperPermision.getCameraPermission(mActivity, new OnGetPermission() {
+                                                               @Override
+                                                               public void Allow() {
+                                                                   // this dialog show 2 way for choose image : gallery and camera
+                                                                   dialog.dismiss();
+                                                                   useCamera();
+                                                               }
 
-                                                                                                                                                                                                                                                   @Override
-                                                                                                                                                                                                                                                   public void deny() {
+                                                               @Override
+                                                               public void deny() {
 
-                                                                                                                                                                                                                                                   }
-                                                                                                                                                                                                                                               });
-                                                                                                                                                                                                                                           }
+                                                               }
+                                                           });
+                                                       }
 
-                                                                                                                                                                                                                                           @Override
-                                                                                                                                                                                                                                           public void deny() {
+                                                       @Override
+                                                       public void deny() {
 
-                                                                                                                                                                                                                                           }
-                                                                                                                                                                                                                                       });
-                                                                                                                                                                                                                                   } catch (IOException e) {
-                                                                                                                                                                                                                                       e.printStackTrace();
-                                                                                                                                                                                                                                   }
-                                                                                                                                                                                                                               } else {
-                                                                                                                                                                                                                                   final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), getResources().getString(R.string.please_check_your_camera), Snackbar.LENGTH_LONG);
+                                                       }
+                                                   });
+                                               } catch (IOException e) {
+                                                   e.printStackTrace();
+                                               }
+                                           } else {
+                                               final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.please_check_your_camera), Snackbar.LENGTH_LONG);
 
-                                                                                                                                                                                                                                   snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                                                                                                                                                                                                       @Override
-                                                                                                                                                                                                                                       public void onClick(View view) {
-                                                                                                                                                                                                                                           snack.dismiss();
-                                                                                                                                                                                                                                       }
-                                                                                                                                                                                                                                   });
-                                                                                                                                                                                                                                   snack.show();
-                                                                                                                                                                                                                               }
-                                                                                                                                                                                                                               break;
-                                                                                                                                                                                                                           }
-                                                                                                                                                                                                                       }
-                                                                                                                                                                                                                   }
-                                                                                                                                                                                                               }
+                                               snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                   @Override
+                                                   public void onClick(View view) {
+                                                       snack.dismiss();
+                                                   }
+                                               });
+                                               snack.show();
+                                           }
+                                           break;
+                                       }
+                                   }
+                               }
+                           }
 
-        ).
+            )
+            .
 
                 show();
     }
@@ -437,7 +506,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
             public void run() {
                 if (prgWait != null) {
                     prgWait.setVisibility(View.VISIBLE);
-                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -449,7 +518,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
             public void run() {
                 if (prgWait != null) {
                     prgWait.setVisibility(View.GONE);
-                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -486,5 +555,12 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     @Override
     public void onAvatarError() {
         hideProgressBar();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mActivity = (FragmentActivity) context;
     }
 }

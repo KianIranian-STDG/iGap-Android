@@ -296,7 +296,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             isNeedToRegister = true;
-            Intent intent = new Intent(this, ActivityIntroduce.class);
+            Intent intent = new Intent(this, ActivityRegisteration.class);
             startActivity(intent);
 
             finish();
@@ -314,7 +314,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (userInfo == null) { // user registered before
             isNeedToRegister = true;
-            Intent intent = new Intent(this, ActivityIntroduce.class);
+            Intent intent = new Intent(this, ActivityRegisteration.class);
             startActivity(intent);
 
             if (mRealm != null && !mRealm.isClosed()) {

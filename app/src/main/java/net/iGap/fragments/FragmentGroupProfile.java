@@ -1273,7 +1273,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 if (which == 0) {
                     try {
                         //attachFile.requestOpenGalleryForImageSingleSelect();
-                        attachFile.requestOpenGalleryForImageSingleSelectFragment(fragment);
+                        attachFile.requestOpenGalleryForImageSingleSelect(fragment);
                         //HelperPermision.getStoragePermision(context, new OnGetPermission() {
                         //    @Override
                         //    public void Allow() {

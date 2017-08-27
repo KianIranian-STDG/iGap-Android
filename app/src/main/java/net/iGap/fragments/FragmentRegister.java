@@ -45,9 +45,9 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
@@ -65,8 +65,6 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.activities.ActivityProfile;
-import net.iGap.activities.ActivityRegister;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLogout;
@@ -181,6 +179,11 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
     private MaterialDialog dialogQrCode;
     private boolean smsPermission = true;
     private FragmentActivity mActivity;
+
+    public enum Reason {
+        SOCKET, TIME_OUT, INVALID_CODE
+    }
+
 
     @Nullable
     @Override
@@ -731,10 +734,10 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 int marginBottomChooseCountry = (int) getResources().getDimension(R.dimen.dp8);
                 int marginBottomStart = 0;
 
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btnChoseCountry.getLayoutParams();
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) btnChoseCountry.getLayoutParams();
                 params.setMargins(marginLeft, marginTopChooseCountry, marginRight, marginBottomChooseCountry); //left, top, right, bottom
                 btnChoseCountry.setLayoutParams(params);
-                RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) btnStart.getLayoutParams();
+                LinearLayout.LayoutParams params2 = (LinearLayout.LayoutParams) btnStart.getLayoutParams();
                 params2.setMargins(marginLeft, marginTopStart, marginRight, marginBottomStart); //left, top, right, bottom
                 btnStart.setLayoutParams(params2);
             }
@@ -847,7 +850,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                             txtTimerLand.setVisibility(View.INVISIBLE);
                                         }
                                     }
-                                    errorVerifySms(ActivityRegister.Reason.TIME_OUT); // open rg_dialog for enter sms code
+                                    errorVerifySms(FragmentRegister.Reason.TIME_OUT); // open rg_dialog for enter sms code
                                 }
                             };
                         }
@@ -926,7 +929,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
     }
 
     // error verify sms and open rg_dialog for enter sms code
-    private void errorVerifySms(ActivityRegister.Reason reason) { //when don't receive sms and open rg_dialog for enter code
+    private void errorVerifySms(FragmentRegister.Reason reason) { //when don't receive sms and open rg_dialog for enter code
 
         rg_prg_verify_sms.setVisibility(View.GONE);
         rg_img_verify_sms.setImageResource(R.mipmap.alert);
@@ -947,11 +950,11 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
         TextView txtShowReason = (TextView) dialog.findViewById(R.id.txt_show_reason);
 
-        if (reason == ActivityRegister.Reason.SOCKET) {
+        if (reason == FragmentRegister.Reason.SOCKET) {
             txtShowReason.setText(getResources().getString(R.string.verify_socket_message));
-        } else if (reason == ActivityRegister.Reason.TIME_OUT) {
+        } else if (reason == FragmentRegister.Reason.TIME_OUT) {
             txtShowReason.setText(getResources().getString(R.string.verify_time_out_message));
-        } else if (reason == ActivityRegister.Reason.INVALID_CODE) {
+        } else if (reason == FragmentRegister.Reason.INVALID_CODE) {
             txtShowReason.setText(getResources().getString(R.string.verify_invalid_code_message));
         }
 
@@ -1022,7 +1025,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         G.smsNumbers = smsNumbersR;
 
                         if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
-                            errorVerifySms(ActivityRegister.Reason.SOCKET);
+                            errorVerifySms(FragmentRegister.Reason.SOCKET);
                             countDownTimer.cancel();
                         }
 
@@ -1280,7 +1283,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            errorVerifySms(ActivityRegister.Reason.INVALID_CODE);
+                            errorVerifySms(FragmentRegister.Reason.INVALID_CODE);
                         }
                     });
                 } else if (majorCode == 102 && minorCode == 2) {
@@ -1309,7 +1312,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         @Override
                         public void run() {
                             // Verification code is invalid
-                            errorVerifySms(ActivityRegister.Reason.INVALID_CODE);
+                            errorVerifySms(FragmentRegister.Reason.INVALID_CODE);
                         }
                     });
                 } else if (majorCode == 107) {
@@ -1414,14 +1417,11 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                 bundle.putBoolean("IS_CONFIRM_EMAIL", isConfirmedRecoveryEmail);
                                 fragmentSecurityRecovery.setArguments(bundle);
 
-                                G.fragmentActivity.getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .addToBackStack(null)
-                                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                    .replace(R.id.rg_rootActivityRegister, fragmentSecurityRecovery)
-                                    .commit();
+                                G.fragmentActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).
+                                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).
+                                    replace(R.id.ar_layout_root, fragmentSecurityRecovery).commit();
 
-                                //  HelperFragment.loadFragment(fragmentSecurityRecovery);
+
 
                             }
                         }).show();
@@ -1490,10 +1490,19 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         }
 
                         if (newUser) {
-                            Intent intent = new Intent(context, ActivityProfile.class);
-                            intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
-                            startActivity(intent);
-                            //finish();
+
+                            FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
+                            fragment.setArguments(bundle);
+
+                            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
+                                setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentRegister.this).commit();
+
+
                         } else {
                             // get user info for set nick name and after from that go to ActivityMain
                             getUserInfo();
@@ -1553,9 +1562,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             public void run() {
                                 G.onUserInfoResponse = null;
                                 Intent intent = new Intent(context, ActivityMain.class);
-                                intent.putExtra(ActivityProfile.ARG_USER_ID, userId);
+                                intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
                                 startActivity(intent);
-                                //finish();
+                                getActivity().finish();
                             }
                         });
                     }

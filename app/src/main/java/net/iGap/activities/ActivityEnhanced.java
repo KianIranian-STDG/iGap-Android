@@ -179,7 +179,7 @@ public class ActivityEnhanced extends AppCompatActivity {
             return;
         }
 
-        if (this instanceof ActivityIntroduce) {
+        if (this instanceof ActivityRegisteration) {
             return;
         }
 
