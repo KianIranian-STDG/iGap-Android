@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/green"
     android:orientation="vertical"
-    tools:context="net.iGap.fragments.FragmentEnterPassCode"
     tools:ignore="MissingPrefix"
     android:elevation="1999dp"
     >

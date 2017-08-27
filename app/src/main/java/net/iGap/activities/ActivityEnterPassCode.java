@@ -1,4 +1,13 @@
-package net.iGap.fragments;
+package net.iGap.activities;
+/*
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+*/
 
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
@@ -11,13 +20,8 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.InputType;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -41,8 +45,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLogout;
 import net.iGap.interfaces.FingerPrint;
 import net.iGap.interfaces.OnUserSessionLogout;
@@ -51,15 +53,9 @@ import net.iGap.module.FingerprintHandler;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 
-import static android.content.Context.FINGERPRINT_SERVICE;
-import static android.content.Context.KEYGUARD_SERVICE;
+public class ActivityEnterPassCode extends ActivityEnhanced {
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class FragmentEnterPassCode extends Fragment {
 
-    private FragmentActivity mActivity;
     private Realm realm;
     private String password;
     private boolean isFingerPrint;
@@ -79,30 +75,20 @@ public class FragmentEnterPassCode extends Fragment {
     private RealmUserInfo realmUserInfo;
     MaterialDialog dialogForgot;
 
-    public FragmentEnterPassCode() {
-        // Required empty public constructor
-    }
-
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_enter_pass_code, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_enter_pass_code);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            fingerprintManager = (FingerprintManager) mActivity.getSystemService(FINGERPRINT_SERVICE);
-            keyguardManager = (KeyguardManager) mActivity.getSystemService(KEYGUARD_SERVICE);
+            fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+            keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
         }
 
-        ViewGroup rootEnterPassword = (ViewGroup) view.findViewById(R.id.mainRootEnterPassword);
-        RippleView txtOk = (RippleView) view.findViewById(R.id.enterPassword_rippleOk);
-        final EditText edtPassword = (EditText) view.findViewById(R.id.enterPassword_edtSetPassword);
+        ViewGroup rootEnterPassword = (ViewGroup) findViewById(R.id.mainRootEnterPassword);
+        RippleView txtOk = (RippleView) findViewById(R.id.enterPassword_rippleOk);
+        final EditText edtPassword = (EditText) findViewById(R.id.enterPassword_edtSetPassword);
 
         ActivityMain.lockNavigation();
         rootEnterPassword.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +120,7 @@ public class FragmentEnterPassCode extends Fragment {
 
         if (isFingerPrint) {
 
-            dialog = new MaterialDialog.Builder(mActivity).title(getString(R.string.FingerPrint)).customView(R.layout.dialog_finger_print, true).negativeText(getResources().getString(R.string.B_cancel)).build();
+            dialog = new MaterialDialog.Builder(this).title(getString(R.string.FingerPrint)).customView(R.layout.dialog_finger_print, true).negativeText(getResources().getString(R.string.B_cancel)).build();
 
             View viewDialog = dialog.getView();
 
@@ -149,7 +135,7 @@ public class FragmentEnterPassCode extends Fragment {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                     cryptoObject = new FingerprintManager.CryptoObject(cipher);
                 }
-                FingerprintHandler helper = new FingerprintHandler(mActivity);
+                FingerprintHandler helper = new FingerprintHandler(this);
                 helper.startAuth(fingerprintManager, cryptoObject);
 
             }
@@ -162,9 +148,12 @@ public class FragmentEnterPassCode extends Fragment {
                         public void run() {
 
                             if (dialog != null) dialog.dismiss();
-                            //  mActivity.getSupportFragmentManager().popBackStack();
 
-                            HelperFragment.removeFreagment(FragmentEnterPassCode.this);
+                            if (ActivityMain.iconLock != null) {
+                                ActivityMain.iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
+                            }
+                            ActivityMain.isLock = false;
+                            finish();
 
                         }
                     });
@@ -185,11 +174,11 @@ public class FragmentEnterPassCode extends Fragment {
             };
         }
 
-        TextView txtForgotPassword = (TextView) view.findViewById(R.id.setPassword_forgotPassword);
+        TextView txtForgotPassword = (TextView) findViewById(R.id.setPassword_forgotPassword);
         txtForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                dialogForgot = new MaterialDialog.Builder(mActivity).title(R.string.forgot_pin_title).content(R.string.forgot_pin_desc).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                dialogForgot = new MaterialDialog.Builder(ActivityEnterPassCode.this).title(R.string.forgot_pin_title).content(R.string.forgot_pin_desc).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -215,10 +204,11 @@ public class FragmentEnterPassCode extends Fragment {
                 if (enterPassword.length() > 0) {
 
                     if (enterPassword.equals(password)) {
-                        //  mActivity.getSupportFragmentManager().popBackStack();
-
-                        HelperFragment.removeFreagment(FragmentEnterPassCode.this);
-
+                        finish();
+                        if (ActivityMain.iconLock != null) {
+                            ActivityMain.iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
+                        }
+                        ActivityMain.isLock = false;
                         ActivityMain.openNavigation();
                         //G.isPassCode = false;
                         closeKeyboard(v);
@@ -287,31 +277,8 @@ public class FragmentEnterPassCode extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (getView() != null) {
-
-            getView().setFocusableInTouchMode(true);
-            getView().requestFocus();
-            getView().setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                        getActivity().finish();
-                        System.exit(0);
-                        return true;
-                    }
-                    return false;
-                }
-            });
-        }
 
     }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mActivity = (FragmentActivity) context;
-    }
-
 
     @Override
     public void onDestroy() {
@@ -369,32 +336,38 @@ public class FragmentEnterPassCode extends Fragment {
     }
 
     private void closeKeyboard(View v) {
-        if (isAdded()) {
-            try {
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            } catch (IllegalStateException e) {
-                e.getStackTrace();
-            }
+
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        } catch (IllegalStateException e) {
+            e.getStackTrace();
         }
+
     }
 
     private void error(String error) {
-        if (isAdded()) {
-            try {
-                Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                vShort.vibrate(200);
-                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
-                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
-            } catch (IllegalStateException e) {
-                e.getStackTrace();
-            }
+
+        try {
+            Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+            vShort.vibrate(200);
+            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    snack.dismiss();
+                }
+            });
+            snack.show();
+        } catch (IllegalStateException e) {
+            e.getStackTrace();
         }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.exit(0);
     }
 }

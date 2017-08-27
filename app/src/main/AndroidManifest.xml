@@ -62,6 +62,10 @@
     <activity
         android:name=".activities.ActivityPaint"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+    <activity
+
+        android:name=".activities.ActivityEnterPassCode"
+        android:configChanges="keyboard|orientation|screenSize|locale" />
 
     <activity
         android:name=".activities.ActivityPopUpNotification"

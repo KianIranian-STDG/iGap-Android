@@ -65,7 +65,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentCall;
-import net.iGap.fragments.FragmentEnterPassCode;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
@@ -197,7 +196,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private boolean isPassCode;
     private static long oldTime;
     private static long currentTime;
-    private static boolean isLock = false;
+    public static boolean isLock = true;
 
     public enum MainAction {
         downScrool, clinetCondition
@@ -230,6 +229,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        isLock = true;
 
         if (mRealm != null && !mRealm.isClosed()) {
             mRealm.close();
@@ -969,24 +970,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (G.isPassCode && isLock) {
             enterPassword();
-            isLock = false;
+        } else {
+            currentTime = System.currentTimeMillis();
 
-            if (iconLock != null) {
-                iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
+            SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            long timeLock = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
+            long calculatorTimeLock = currentTime - oldTime;
+
+            if (timeLock > 0 && calculatorTimeLock > (timeLock * 1000)) {
+                enterPassword();
             }
-
         }
-
-        currentTime = System.currentTimeMillis();
-
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        long timeLock = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
-        long calculatorTimeLock = currentTime - oldTime;
-
-        if (timeLock > 0 && calculatorTimeLock > (timeLock * 1000)) {
-            enterPassword();
-        }
-
         //RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
         //    @Override
         //    public void sendDeliveredStatus(RealmRoom room, RealmRoomMessage message) {
@@ -1684,7 +1678,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                drawer.closeDrawer(GravityCompat.START);
+                if (drawer != null) drawer.closeDrawer(GravityCompat.START);
             }
         }, 1000);
     }
@@ -2126,13 +2120,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void enterPassword() {
 
         closeDrawer();
-
-        //FragmentEnterPassCode fragmentEnterPassCode = new FragmentEnterPassCode();
-        //getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-        //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragmentEnterPassCode).commitAllowingStateLoss();
-
-        HelperFragment.loadFragment(new FragmentEnterPassCode(), true);
-
+        Intent intent = new Intent(ActivityMain.this, ActivityEnterPassCode.class);
+        startActivity(intent);
     }
 
     @Override

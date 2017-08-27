@@ -55,6 +55,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     private String passCode;
     private EditText edtSetPassword;
     private TextView txtSetPassword;
+    private TextView txtChangePassCode;
     private TextView titlePassCode;
     private TextView txtAutoLock;
     private RippleView rippleOk;
@@ -96,6 +97,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         final ViewGroup vgAutoLock = (ViewGroup) view.findViewById(R.id.st_layout_autoLock);
         vgFingerPrint = (ViewGroup) view.findViewById(R.id.vgToggleFingerPrint);
 
+        txtChangePassCode = (TextView) view.findViewById(R.id.st_txt_ChangePassCode);
         edtSetPassword = (EditText) view.findViewById(R.id.setPassword_edtSetPassword);
         txtSetPassword = (TextView) view.findViewById(R.id.setPassword_txtSetPassword);
         titlePassCode = (TextView) view.findViewById(R.id.titlePassCode);
@@ -169,11 +171,15 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             rootSettingPassword.setVisibility(View.GONE);
             rippleOk.setVisibility(View.VISIBLE);
             txtSetPassword.setText(getResources().getString(R.string.enter_a_password));
+            txtChangePassCode.setEnabled(true);
+            txtChangePassCode.setTextColor(getResources().getColor(R.color.black_register));
             togglePassCode.setChecked(true);
 
         } else {
             rootSettingPassword.setVisibility(View.GONE);
             togglePassCode.setChecked(false);
+            txtChangePassCode.setEnabled(false);
+            txtChangePassCode.setTextColor(getResources().getColor(R.color.gray_5c));
         }
 
         togglePassCode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -204,6 +210,8 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     rootSettingPassword.setVisibility(View.GONE);
                     rippleOk.setVisibility(View.GONE);
                     staticSpinner.setVisibility(View.GONE);
+                    txtChangePassCode.setEnabled(false);
+                    txtChangePassCode.setTextColor(getResources().getColor(R.color.gray_5c));
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, false);
                     editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 0);
@@ -228,7 +236,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             }
         });
 
-        changePassCode.setOnClickListener(new View.OnClickListener() {
+        txtChangePassCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 vgTogglePassCode.setVisibility(View.GONE);
@@ -340,6 +348,8 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         vgTogglePassCode.setVisibility(View.VISIBLE);
                         rootEnterPassword.setVisibility(View.GONE);
                         rootSettingPassword.setVisibility(View.VISIBLE);
+                        txtChangePassCode.setEnabled(true);
+                        txtChangePassCode.setTextColor(getResources().getColor(R.color.black_register));
                         if (deviceHasFingerPrint) {
                             vgFingerPrint.setVisibility(View.VISIBLE);
                         } else {
@@ -385,6 +395,8 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         titlePassCode.setText(getResources().getString(R.string.two_step_pass_code));
                         titlePassCode.setVisibility(View.VISIBLE);
                         staticSpinner.setVisibility(View.GONE);
+                        txtChangePassCode.setEnabled(true);
+                        txtChangePassCode.setTextColor(getResources().getColor(R.color.black_register));
                         closeKeyboard(v);
                     } else {
                         closeKeyboard(v);

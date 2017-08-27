@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootPassCode"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_f2"
+    android:elevation="999dp"
     android:orientation="vertical"
     tools:context="net.iGap.activities.ActivityManageSpace"
     tools:ignore="MissingPrefix"
-    android:background="@color/gray_f2"
-    android:id="@+id/rootPassCode"
-    android:elevation="999dp"
     >
 
 
@@ -87,13 +87,13 @@
             android:id="@+id/setPassword_rippleOk"
             android:layout_width="@dimen/dp52"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
             app:rv_alpha="200"
             app:rv_centered="true"
             app:rv_rippleDuration="0"
             app:rv_ripplePadding="5dp"
             rv_centered="true"
-            android:visibility="gone"
-            android:layout_alignParentRight="true"
             >
           <net.iGap.module.MaterialDesignTextView
               android:layout_width="@dimen/dp52"
@@ -114,13 +114,13 @@
 
 
   <android.support.v4.widget.NestedScrollView
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       >
 
     <LinearLayout
         android:id="@+id/scrollPassCode"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
 
@@ -153,71 +153,70 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp32"
+            android:focusable="true"
             android:gravity="center"
             android:inputType="textPassword"
+            android:maxLength="20"
             android:maxLines="1"
+            android:padding="@dimen/dp10"
             android:singleLine="true"
             android:textSize="@dimen/dp15"
-            android:maxLength="20"
-            android:padding="@dimen/dp10"
-            android:focusable="true"
             />
 
       </LinearLayout>
-
 
       <LinearLayout
           android:id="@+id/vgTogglePassCode"
           android:layout_width="match_parent"
-          android:layout_height="@dimen/dp48"
-          android:background="@color/white"
-          android:orientation="horizontal"
-          android:paddingEnd="@dimen/dp16"
-          android:paddingLeft="@dimen/dp16"
-          android:paddingRight="@dimen/dp16"
-          android:paddingStart="@dimen/dp16"
-          >
-
-        <TextView
-            android:id="@+id/st_txt_st_toggle_passCode"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:paddingTop="@dimen/dp4"
-            android:text="@string/two_step_pass_code"
-            android:textColor="@color/black_register"
-            android:textSize="@dimen/dp15"
-            android:textStyle="normal"
-            fontPath="fonts/IRANSansMobile.ttf"
-            />
-
-
-        <ToggleButton
-            android:id="@+id/st_toggle_passCode"
-            android:layout_width="@dimen/dp44"
-            android:layout_height="@dimen/dp40"
-            android:background="@drawable/st_switch_button"
-            android:textOff=""
-            android:textOn=""
-            />
-
-      </LinearLayout>
-
-
-      <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          android:background="@color/background_editText"
-          />
-
-      <LinearLayout
-          android:id="@+id/rootSettingPassword"
-          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:orientation="vertical"
           android:visibility="visible"
           >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/dp16"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingStart="@dimen/dp16"
+            >
+
+          <TextView
+              android:id="@+id/st_txt_st_toggle_passCode"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1"
+              android:gravity="center_vertical"
+              android:paddingTop="@dimen/dp4"
+              android:text="@string/two_step_pass_code"
+              android:textColor="@color/black_register"
+              android:textSize="@dimen/dp15"
+              android:textStyle="normal"
+              fontPath="fonts/IRANSansMobile.ttf"
+              />
+
+
+          <ToggleButton
+              android:id="@+id/st_toggle_passCode"
+              android:layout_width="@dimen/dp44"
+              android:layout_height="@dimen/dp40"
+              android:background="@drawable/st_switch_button"
+              android:textOff=""
+              android:textOn=""
+              />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background_editText"
+            />
+
 
         <LinearLayout
             android:id="@+id/st_layout_ChangePassCode"
@@ -228,16 +227,17 @@
             >
 
           <TextView
-              android:id="@+id/textView10"
+              android:id="@+id/st_txt_ChangePassCode"
               android:layout_width="0dp"
               android:layout_height="match_parent"
               android:layout_weight="1"
+              android:enabled="false"
               android:gravity="center_vertical"
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp8"
               android:text="@string/change_pass_code"
-              android:textColor="@color/black_register"
+              android:textColor="@color/gray_5c"
               android:textSize="@dimen/dp15"
               android:textStyle="normal"
               fontPath="fonts/IRANSansMobile.ttf"
@@ -250,6 +250,7 @@
             android:layout_height="1dp"
             android:background="@color/background_editText"
             />
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -269,6 +270,14 @@
             android:layout_height="1dp"
             android:background="@color/background_editText"
             />
+      </LinearLayout>
+      <LinearLayout
+          android:id="@+id/rootSettingPassword"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:visibility="gone"
+          >
 
         <LinearLayout
 
