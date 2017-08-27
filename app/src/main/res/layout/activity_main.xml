@@ -286,7 +286,7 @@
 
       <FrameLayout
           android:id="@+id/am_frame_chat_container"
-          android:layout_width="0dp"
+          android:layout_width="1px"
           android:layout_weight="1"
           android:layout_height="match_parent"
           >
