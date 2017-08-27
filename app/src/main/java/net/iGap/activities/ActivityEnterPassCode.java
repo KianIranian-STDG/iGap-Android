@@ -49,6 +49,9 @@ import net.iGap.module.FingerprintHandler;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 
+import static android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD;
+import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
+
 public class ActivityEnterPassCode extends ActivityEnhanced {
 
 
@@ -105,9 +108,9 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         }
 
         if (kindPassCode == PIN) {
-            edtPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
+            edtPassword.setInputType((InputType.TYPE_CLASS_NUMBER | TYPE_NUMBER_VARIATION_PASSWORD));
         } else {
-            edtPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+            edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
         }
 
         if (dialogForgot != null) {
@@ -177,6 +180,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                         logout(v);
+                        finish();
 
 
                     }

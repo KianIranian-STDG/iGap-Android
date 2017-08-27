@@ -1052,13 +1052,15 @@
   <string name="Touch_sensor">Touch sensor</string>
   <string name="FingerPrint">FingerPrint</string>
   <string name="Fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
-  <string name="Auto_lock_description">The app will be locked after each time you chose and you need to unlock it first.</string>
-  <string name="Allow_Screen_Capture_description">If enabled, you can take screenshots of the app, but the system will display your chats in the task switcher even when the passcode is on.</string>
+  <string name="Auto_lock_description">The app will be locked after each time you choose and you need to unlock it at the beginning.</string>
+  <string name="Allow_Screen_Capture_description">If enabled, you can take screenshots of the app, but the system will display your chats in the task switcher even when the passcode is on. You may need to restart the app for this to take effect.</string>
   <string name="set_pass_code_description">When you set a passcode, a lock icon will appear on top of the main chats page. Tap it to lock or unlock the app.
-For locking you can use only numbers as a PIN or a combination of numbers and letters as a Password.
-\nNote: if you forget your PIN/Password, you only need to log out and log in again to recover your app. Please consider that the next you log in again, there is no need to enter any passcode lock. You have to set a passcode lock again if you want to reuse this capability.</string>
+    Note: you can set only numbers as a PIN or a combination of numbers and letters as a Password with no restriction. If you forget your passcode, you just need to log out once and log in again with no need to enter the PIN/Password.</string>
 
   <string name="forgot_pin_desc">If you have forgotten your PIN/Password, there is no way to recover but only to log out and log in again. Are you sure to log out?</string>
   <string name="forgot_pin_title">Forgot PIN/Password?</string>
+  <string name="enter_pass_code">Enter your passcode</string>
+  <string name="re_enter_pass_code">Re-enter your passcode</string>
+
 
 </resources>

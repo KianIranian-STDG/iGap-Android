@@ -170,7 +170,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             rootEnterPassword.setVisibility(View.VISIBLE);
             rootSettingPassword.setVisibility(View.GONE);
             rippleOk.setVisibility(View.VISIBLE);
-            txtSetPassword.setText(getResources().getString(R.string.enter_a_password));
+            txtSetPassword.setText(getResources().getString(R.string.enter_pass_code));
             txtChangePassCode.setEnabled(true);
             txtChangePassCode.setTextColor(getResources().getColor(R.color.black_register));
             togglePassCode.setChecked(true);
@@ -343,7 +343,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
 
                     password = edtSetPassword.getText().toString();
                     edtSetPassword.setText("");
-                    txtSetPassword.setText(getString(R.string.please_re_enter_your_password));
+                    txtSetPassword.setText(getString(R.string.re_enter_pass_code));
 
                     page = 1;
 
@@ -411,7 +411,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
 
                 } else {
                     closeKeyboard(v);
-                    error(getString(R.string.enter_a_password));
+                    error(getString(R.string.enter_pass_code));
                 }
             }
         });

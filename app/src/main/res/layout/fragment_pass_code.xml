@@ -135,14 +135,13 @@
           android:visibility="gone"
           >
 
-
         <TextView
             android:id="@+id/setPassword_txtSetPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"
             android:gravity="center"
-            android:text="@string/enter_a_password"
+            android:text="@string/enter_pass_code"
             android:textColor="@color/gray_4c"
             android:textSize="@dimen/dp16"
             />
