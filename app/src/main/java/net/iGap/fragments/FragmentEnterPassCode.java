@@ -77,6 +77,7 @@ public class FragmentEnterPassCode extends Fragment {
     private TextView iconFingerPrint;
     private TextView textFingerPrint;
     private RealmUserInfo realmUserInfo;
+    MaterialDialog dialogForgot;
 
     public FragmentEnterPassCode() {
         // Required empty public constructor
@@ -125,6 +126,10 @@ public class FragmentEnterPassCode extends Fragment {
             edtPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
         } else {
             edtPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+        }
+
+        if (dialogForgot != null) {
+            dialogForgot.dismiss();
         }
 
         if (isFingerPrint) {
@@ -184,7 +189,7 @@ public class FragmentEnterPassCode extends Fragment {
         txtForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                new MaterialDialog.Builder(mActivity).title(R.string.forgot_password).content(R.string.forgot_password).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                dialogForgot = new MaterialDialog.Builder(mActivity).title(R.string.forgot_pin_title).content(R.string.forgot_pin_desc).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -197,7 +202,9 @@ public class FragmentEnterPassCode extends Fragment {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                     }
-                }).show();
+                }).build();
+
+                dialogForgot.show();
             }
         });
 

@@ -322,12 +322,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         });
 
 
-
-
-
-
-
-
         rippleOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -376,8 +370,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         error(getString(R.string.Password_dose_not_match));
                     }
 
-
-
                 } else if (page == 3 && edtSetPassword.getText().length() > 0) {
 
                     if (edtSetPassword.getText().toString().contains(password)) {
@@ -403,8 +395,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     closeKeyboard(v);
                     error(getString(R.string.enter_a_password));
                 }
-
-
             }
         });
         long valuNumberPic = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
@@ -419,8 +409,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         } else if (valuNumberPic == 60 * 60 * 5) {
             txtAutoLock.setText("in 5 hours");
         }
-
-
 
         vgAutoLock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -469,7 +457,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         return "";
                     }
                 });
-
 
                 View btnPositive = dialog.getActionButton(DialogAction.POSITIVE);
                 btnPositive.setOnClickListener(new View.OnClickListener() {

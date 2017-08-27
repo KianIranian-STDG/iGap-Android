@@ -167,7 +167,6 @@
 
 
       <LinearLayout
-
           android:id="@+id/vgTogglePassCode"
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp48"
@@ -259,7 +258,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:padding="@dimen/dp14"
-              android:text="@string/clear_cache_desc"
+              android:text="@string/set_pass_code_description"
               android:textColor="@color/black_register"
               android:textSize="@dimen/dp12"
               fontPath="fonts/IRANSansMobile.ttf"
@@ -370,7 +369,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:padding="@dimen/dp14"
-              android:text="@string/clean_up_description"
+              android:text="@string/Auto_lock_description"
               android:textColor="@color/black_register"
               android:textSize="@dimen/dp12"
               fontPath="fonts/IRANSansMobile.ttf"
@@ -422,7 +421,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:padding="@dimen/dp14"
-              android:text="@string/clean_up_description"
+              android:text="@string/Allow_Screen_Capture_description"
               android:textColor="@color/black_register"
               android:textSize="@dimen/dp12"
               fontPath="fonts/IRANSansMobile.ttf"
