@@ -148,5 +148,10 @@ public class RealmMigration implements io.realm.RealmMigration {
             schema.create(RealmGeoGetConfiguration.class.getSimpleName()).addField("mapCache", String.class);
             oldVersion++;
         }
+
+        if (oldVersion == 13) {
+            schema.get(RealmUserInfo.class.getSimpleName()).addField(RealmUserInfoFields.IS_PASS_CODE, boolean.class).addField(RealmUserInfoFields.IS_FINGER_PRINT, boolean.class).addField(RealmUserInfoFields.KIND_PASS_CODE, int.class).addField(RealmUserInfoFields.PASS_CODE, String.class);
+            oldVersion++;
+        }
     }
 }

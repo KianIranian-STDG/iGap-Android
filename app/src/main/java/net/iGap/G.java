@@ -274,7 +274,7 @@ public class G extends MultiDexApplication {
     public static boolean isUpdateNotificaionColorChat = false;
     public static boolean isUpdateNotificaionCall = false;
 
-    public static boolean twoPaneMode = true;
+    public static boolean twoPaneMode;
     public static boolean isLandscape = false;
     public static boolean isAppRtl = false;
 

@@ -2102,7 +2102,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
-        G.chatSendMessageUtil.setOnChatSendMessageResponse(this);
+        G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
         G.onSetActionInRoom = this;
         G.onClientCondition = this;
         G.onClientGetRoomListResponse = this;

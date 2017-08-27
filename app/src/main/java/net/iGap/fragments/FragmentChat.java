@@ -1520,7 +1520,7 @@ public class FragmentChat extends BaseFragment
      * initialize some callbacks that used in this page
      */
     public void initCallbacks() {
-        chatSendMessageUtil.setOnChatSendMessageResponse(this);
+        chatSendMessageUtil.setOnChatSendMessageResponseChatPage(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         G.onChatSendMessage = new OnChatSendMessage() {

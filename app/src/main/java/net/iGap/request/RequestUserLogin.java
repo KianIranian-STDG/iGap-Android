@@ -17,6 +17,7 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import java.util.Locale;
+import net.iGap.G;
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoRequest;
@@ -95,9 +96,11 @@ public class RequestUserLogin {
         float xInches = metrics.widthPixels / metrics.xdpi;
         double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
         if (diagonalInches >= 6.5) {
+            G.twoPaneMode = true;
             return ProtoGlobal.Device.TABLET;
         } else {
             // smaller device
+            G.twoPaneMode = false;
             return ProtoGlobal.Device.MOBILE;
         }
     }
