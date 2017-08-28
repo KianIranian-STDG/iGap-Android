@@ -1,8 +1,11 @@
 package net.iGap.module;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -74,6 +77,7 @@ public final class StartupActions {
 
     public StartupActions() {
 
+        detectDeviceType();
         initEmoji();
         initializeGlobalVariables();
         realmConfiguration();
@@ -90,6 +94,24 @@ public final class StartupActions {
          */
         new HelperDownloadFile();
         new HelperUploadFile();
+    }
+
+    /**
+     * if device is tablet twoPaneMode will be enabled
+     */
+    private void detectDeviceType() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+        if (diagonalInches >= 6.5) {
+            //G.twoPaneMode = true;
+        } else {
+            //G.twoPaneMode = false;
+        }
     }
 
     private void initEmoji() {
