@@ -361,7 +361,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (kindPassCode == PIN) {
+                if (kindPassword == PIN) {
                     if (s.length() == 4) {
                         rippleOk.performClick();
                     }
@@ -381,11 +381,15 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
 
                 if (page == 0 && edtSetPassword.getText().length() > 0) {
 
-                    password = edtSetPassword.getText().toString();
-                    edtSetPassword.setText("");
-                    txtSetPassword.setText(getString(R.string.re_enter_pass_code));
-
-                    page = 1;
+                    if (edtSetPassword.getText().length() >= 4) {
+                        password = edtSetPassword.getText().toString();
+                        edtSetPassword.setText("");
+                        txtSetPassword.setText(getString(R.string.re_enter_pass_code));
+                        page = 1;
+                    } else {
+                        closeKeyboard(v);
+                        error(getString(R.string.limit_passcode));
+                    }
 
                 } else if (page == 1 && edtSetPassword.getText().length() > 0) {
 
@@ -430,7 +434,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
 
                 } else if (page == 3 && edtSetPassword.getText().length() > 0) {
 
-                    if (edtSetPassword.getText().toString().contains(password)) {
+                    if (edtSetPassword.getText().toString().equals(password)) {
                         vgTogglePassCode.setVisibility(View.VISIBLE);
                         rootEnterPassword.setVisibility(View.GONE);
                         rootSettingPassword.setVisibility(View.VISIBLE);

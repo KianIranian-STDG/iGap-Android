@@ -1073,5 +1073,6 @@
   <string name="password">Password</string>
   <string name="Unlock_with_your_passcode">Unlock with your passcode</string>
   <string name="forgot_Unlock_with_your_passcode">Forgot Passcode?</string>
+  <string name="limit_passcode">The passcode must contain at least 4 numbers and/or letters.</string>
 
 </resources>

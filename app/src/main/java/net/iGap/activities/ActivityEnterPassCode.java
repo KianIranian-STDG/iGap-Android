@@ -101,6 +101,8 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
             }
         });
 
+        RippleView rippleView = (RippleView) findViewById(R.id.enterPassword_rippleOk);
+
         realm = Realm.getDefaultInstance();
 
         realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -114,9 +116,11 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         if (kindPassCode == PIN) {
             edtPassword.setInputType((InputType.TYPE_CLASS_NUMBER | TYPE_NUMBER_VARIATION_PASSWORD));
             maxLengthEditText(4);
+            rippleView.setVisibility(View.GONE);
         } else {
             edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
             maxLengthEditText(20);
+            rippleView.setVisibility(View.VISIBLE);
         }
 
         if (dialogForgot != null) {
