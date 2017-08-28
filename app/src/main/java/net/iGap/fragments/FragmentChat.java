@@ -566,12 +566,6 @@ public class FragmentChat extends BaseFragment
                 initLayoutHashNavigationCallback();
                 showSpamBar();
 
-                MusicPlayer.setMusicPlayer(mediaLayout);
-                if (MusicPlayer.mp != null) {
-                    MusicPlayer.initLayoutTripMusic(mediaLayout);
-                } else {
-                    mediaLayout.setVisibility(View.GONE);
-                }
 
                 if (needUpdateView) {
                     updateShowItemInScreen();
@@ -613,7 +607,7 @@ public class FragmentChat extends BaseFragment
                                             if (finalMembers != null && HelperString.isNumeric(finalMembers) && Integer.parseInt(finalMembers) == 1) {
                                                 txtLastSeen.setText(finalMembers + " " + getResources().getString(R.string.one_member_chat));
                                             } else {
-                                                txtLastSeen.setText(finalMembers + " " + getResources().getString(R.string.member_chat));
+                                                txtLastSeen.setText(finalMembers + " " + G.context.getResources().getString(R.string.member_chat));
                                             }
                                             //    avi.setVisibility(View.GONE);
 
@@ -792,6 +786,7 @@ public class FragmentChat extends BaseFragment
         //     */
         //    RealmRoom.deleteRoom(mRoomId);
         //}
+
         super.onStop();
     }
 
@@ -804,6 +799,8 @@ public class FragmentChat extends BaseFragment
         if (realmChat != null && !realmChat.isClosed()) {
             realmChat.close();
         }
+
+        MusicPlayer.chatLayout = null;
     }
 
     private void registerListener() {
@@ -1309,6 +1306,10 @@ public class FragmentChat extends BaseFragment
          * define views
          */
         mediaLayout = (LinearLayout) rootView.findViewById(R.id.ac_ll_music_layout);
+        MusicPlayer.setMusicPlayer(mediaLayout);
+        MusicPlayer.chatLayout = mediaLayout;
+
+
         lyt_user = (LinearLayout) rootView.findViewById(R.id.lyt_user);
         viewAttachFile = rootView.findViewById(R.id.layout_attach_file);
         viewMicRecorder = rootView.findViewById(R.id.layout_mic_recorde);

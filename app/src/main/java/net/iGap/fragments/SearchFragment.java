@@ -368,6 +368,8 @@ public class SearchFragment extends Fragment {
 
         if (realmRoom != null) {
 
+            HelperFragment.removeFreagment(SearchFragment.this);
+
             if (type == SearchType.message) {
                 new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity();
             } else {
@@ -375,7 +377,7 @@ public class SearchFragment extends Fragment {
             }
 
             //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
-            HelperFragment.removeFreagment(SearchFragment.this);
+
 
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
@@ -385,12 +387,14 @@ public class SearchFragment extends Fragment {
                         @Override
                         public void run() {
 
+                            HelperFragment.removeFreagment(SearchFragment.this);
+
                             new GoToChatActivity(roomId).setPeerID(id).startActivity();
 
-                            if (mActivity != null) {
-                                //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
-                                HelperFragment.removeFreagment(SearchFragment.this);
-                            }
+                            //if (mActivity != null) {
+                            //    //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
+                            //
+                            //}
 
                             G.onChatGetRoom = null;
                         }

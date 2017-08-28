@@ -128,6 +128,11 @@ public class MusicPlayer extends Service {
     private static ComponentName remoteComponentName;
     public static boolean downloadNewItem = false;
 
+    public static LinearLayout mainLayout;
+    public static LinearLayout chatLayout;
+    public static LinearLayout shearedMediaLayout;
+
+
     private static Realm mRealm;
 
     private static Realm getmRealm() {

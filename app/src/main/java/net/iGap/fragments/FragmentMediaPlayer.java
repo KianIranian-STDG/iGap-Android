@@ -365,6 +365,8 @@ public class FragmentMediaPlayer extends BaseFragment {
     }
 
     private void finish() {
-        mActivity.onBackPressed();
+
+        closeFragment();
+
     }
 }

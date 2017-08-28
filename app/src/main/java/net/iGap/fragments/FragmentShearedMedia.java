@@ -167,6 +167,7 @@ public class FragmentShearedMedia extends BaseFragment {
         realmShearedMedia = Realm.getDefaultInstance();
         mediaLayout = (LinearLayout) view.findViewById(R.id.asm_ll_music_layout);
         MusicPlayer.setMusicPlayer(mediaLayout);
+        MusicPlayer.shearedMediaLayout = mediaLayout;
         roomId = getArguments().getLong(ROOM_ID);
         initComponent(view);
     }
@@ -177,11 +178,6 @@ public class FragmentShearedMedia extends BaseFragment {
 
         canUpdateAfterDownload = true;
 
-        if (MusicPlayer.mp != null) {
-            MusicPlayer.initLayoutTripMusic(mediaLayout);
-        } else {
-            mediaLayout.setVisibility(View.GONE);
-        }
 
         setListener();
     }
@@ -203,6 +199,8 @@ public class FragmentShearedMedia extends BaseFragment {
         if (realmShearedMedia != null && !realmShearedMedia.isClosed()) {
             realmShearedMedia.close();
         }
+
+        MusicPlayer.shearedMediaLayout = null;
     }
 
     @Override

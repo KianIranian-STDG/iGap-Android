@@ -245,6 +245,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.fragmentManager = null;
 
+        MusicPlayer.mainLayout = null;
+
     }
 
     private void deleteContentFolderChatBackground() {
@@ -276,8 +278,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             boolean openMediaPlyer = extras.getBoolean(ActivityMain.openMediaPlyer);
             if (openMediaPlyer) {
-                FragmentMediaPlayer fragmant = new FragmentMediaPlayer();
-                HelperFragment.loadFragment(fragmant);
+
+                if (G.fragmentManager.findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
+                    FragmentMediaPlayer fragmant = new FragmentMediaPlayer();
+                    HelperFragment.loadFragment(fragmant);
+                }
+
+
             }
         }
     }
@@ -411,6 +418,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
 
         MusicPlayer.setMusicPlayer(mediaLayout);
+        MusicPlayer.mainLayout = mediaLayout;
+
 
         appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
         final ViewGroup toolbar = (ViewGroup) findViewById(R.id.rootToolbar);
@@ -2095,11 +2104,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        if (MusicPlayer.mp != null) {
-            MusicPlayer.initLayoutTripMusic(mediaLayout);
-        } else {
-            mediaLayout.setVisibility(View.GONE);
-        }
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
@@ -2520,9 +2524,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
 
-                    //  setMediaLayout();
 
                 }
+
+                setMediaLayout();
+
             }
         });
 
@@ -2539,37 +2545,52 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     if (MusicPlayer.mp != null) {
 
-                        boolean showMainMediaPlyer = false;
+                        if (MusicPlayer.shearedMediaLayout != null) {
+                            MusicPlayer.initLayoutTripMusic(MusicPlayer.shearedMediaLayout);
 
-                        View smallLayoutMediaPlyerChat = frameChatContainer.findViewById(R.id.ac_ll_music_layout);
-                        if (smallLayoutMediaPlyerChat != null) {
-                            smallLayoutMediaPlyerChat.setVisibility(View.VISIBLE);
-                        }
-
-                        View smallLayoutMediaPlyerMain = frameMainContainer.findViewById(R.id.amr_ll_music_layout);
-                        if (smallLayoutMediaPlyerMain != null) {
-
-                            if (showMainMediaPlyer) {
-                                smallLayoutMediaPlyerMain.setVisibility(View.VISIBLE);
-                            } else {
-                                smallLayoutMediaPlyerMain.setVisibility(View.GONE);
+                            if (MusicPlayer.chatLayout != null) {
+                                MusicPlayer.chatLayout.setVisibility(View.GONE);
                             }
+
+                            if (MusicPlayer.mainLayout != null) {
+                                MusicPlayer.mainLayout.setVisibility(View.GONE);
+                            }
+                        } else if (MusicPlayer.chatLayout != null) {
+                            MusicPlayer.initLayoutTripMusic(MusicPlayer.chatLayout);
+
+                            if (MusicPlayer.mainLayout != null) {
+                                MusicPlayer.mainLayout.setVisibility(View.GONE);
+                            }
+                        } else if (MusicPlayer.mainLayout != null) {
+                            MusicPlayer.initLayoutTripMusic(MusicPlayer.mainLayout);
                         }
                     } else {
+
+                        if (MusicPlayer.mainLayout != null) {
+                            MusicPlayer.mainLayout.setVisibility(View.GONE);
+                        }
+
+                        if (MusicPlayer.chatLayout != null) {
+                            MusicPlayer.chatLayout.setVisibility(View.GONE);
+                        }
+
+                        if (MusicPlayer.shearedMediaLayout != null) {
+                            MusicPlayer.shearedMediaLayout.setVisibility(View.GONE);
+                        }
+
 
                     }
                 } catch (Exception e) {
                     Log.e("dddddd", "activity main  setMediaLayout " + e.toString());
                 }
             }
-        }, 200);
+        }, 250);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         oldTime = System.currentTimeMillis();
-
     }
 
 }

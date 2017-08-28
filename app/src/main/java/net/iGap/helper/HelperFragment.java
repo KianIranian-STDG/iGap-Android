@@ -118,9 +118,12 @@ public class HelperFragment {
                 if (ActivityMain.frameFragmentBack != null) {
                     ActivityMain.frameFragmentBack.setVisibility(View.VISIBLE);
                 }
+
+                ActivityMain.setMediaLayout();
             }
         } else {
             resId = R.id.am_frame_main_container;
+            ActivityMain.setMediaLayout();
         }
 
         return resId;
