@@ -1733,6 +1733,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (G.isPassCode) {
             iconLock.setVisibility(View.VISIBLE);
+        } else {
+            iconLock.setVisibility(View.GONE);
         }
         iconLock.setOnClickListener(new View.OnClickListener() {
             @Override
