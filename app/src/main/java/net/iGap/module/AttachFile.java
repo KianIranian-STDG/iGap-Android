@@ -85,7 +85,7 @@ public class AttachFile {
     private Boolean sendPosition = false;
     public static String imagePath = "";
     public static Uri imageUri;
-
+    public static String mCurrentPhotoPath;
     public static String videoPath = "";
 
     LocationListener locationListener = new LocationListener() {
@@ -136,37 +136,54 @@ public class AttachFile {
         }
     };
 
-    //*************************************************************************************************************
+    //=================================== Start Android 7
 
-    public AttachFile(Context context) {
-        this.context = context;
-        locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+    public void dispatchTakePictureIntent(Fragment fragment) throws IOException {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(G.context.getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                return;
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", createImageFile());
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+                if (fragment != null) {
+                    fragment.startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
+                } else {
+                    ((Activity) context).startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
+                }
+            }
+        }
     }
 
-    public static String getFilePathFromUri(Uri uri) {
-
-        if (uri == null) {
-            return null;
-        }
-
-        String path;
-
-        if (uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
-            path = FileUtils.getPath(G.context, uri);
-        } else {
-            path = uri.getPath();
-        }
-
-        return path;
+    public void dispatchTakePictureIntent() throws IOException {
+        dispatchTakePictureIntent(null);
     }
 
-    public void requestPaint() throws IOException {
+    //=================================== End Android 7
+
+    public void requestPaint(final Fragment fragment) throws IOException {
 
         HelperPermision.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
                 Intent intent = new Intent(context, ActivityPaint.class);
-                ((Activity) context).startActivityForResult(intent, request_code_paint);
+
+                if (fragment != null) {
+                    fragment.startActivityForResult(intent, request_code_paint);
+                } else {
+                    ((Activity) context).startActivityForResult(intent, request_code_paint);
+                }
+
+
                 if (G.onHelperSetAction != null) {
                     G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.PAINTING);
                 }
@@ -179,6 +196,11 @@ public class AttachFile {
         });
     }
 
+    public void requestPaint() throws IOException {
+        requestPaint(null);
+    }
+
+    //*************************************************************************************************************
     public void requestTakePicture(final Fragment fragment) throws IOException {
 
         PackageManager packageManager = context.getPackageManager();
@@ -220,9 +242,429 @@ public class AttachFile {
         });
 
     }
-
     public void requestTakePicture() throws IOException {
         requestTakePicture(null);
+    }
+    //*************************************************************************************************************
+    public void requestOpenGalleryForImageMultipleSelect(final Fragment fragment) throws IOException {
+
+        //this code use for open galary for image and video together
+        //Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
+        //((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
+
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+
+                if (fragment != null) {
+                    fragment.startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
+                } else {
+                    ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
+                }
+
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
+                }
+                isInAttach = true;
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
+    public void requestOpenGalleryForImageMultipleSelect() throws IOException {
+        requestOpenGalleryForImageMultipleSelect(null);
+    }
+    //*************************************************************************************************************
+    public void requestOpenGalleryForVideoMultipleSelect(final Fragment fragment) throws IOException {
+
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent();
+                intent.setType("video/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+
+                if (fragment != null) {
+                    fragment.startActivityForResult(intent, requestOpenGalleryForVideoMultipleSelect);
+                } else {
+                    ((Activity) context).startActivityForResult(intent, requestOpenGalleryForVideoMultipleSelect);
+                }
+
+
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_VIDEO);
+                }
+                isInAttach = true;
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
+    public void requestOpenGalleryForVideoMultipleSelect() throws IOException {
+        requestOpenGalleryForVideoMultipleSelect(null);
+    }
+    //*************************************************************************************************************
+    public void requestOpenGalleryForImageSingleSelect(final Fragment fragment) throws IOException {
+
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+
+                if (fragment != null) {
+                    fragment.startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                } else {
+                    ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                }
+
+
+                isInAttach = true;
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+    public void requestOpenGalleryForImageSingleSelect() throws IOException {
+        requestOpenGalleryForImageSingleSelect(null);
+    }
+    //*************************************************************************************************************
+    public void requestVideoCapture(final Fragment fragment) throws IOException {
+
+        PackageManager packageManager = context.getPackageManager();
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
+            Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        HelperPermision.getCameraPermission(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                videoPath = G.DIR_VIDEOS + File.separator + "VID_" + timeStamp + ".mp4";
+
+                Uri outputUri;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    outputUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(videoPath));
+                } else {
+                    outputUri = Uri.fromFile(new File(videoPath));
+                }
+
+
+                Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
+
+                if (fragment != null) {
+                    fragment.startActivityForResult(intent, request_code_VIDEO_CAPTURED);
+                } else {
+                    ((Activity) context).startActivityForResult(intent, request_code_VIDEO_CAPTURED);
+                }
+
+
+                isInAttach = true;
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
+    public void requestVideoCapture() throws IOException {
+        requestVideoCapture(null);
+    }
+    //*************************************************************************************************************
+    public void requestPickAudio(final Fragment fragment) throws IOException {
+        //Intent intent = new Intent();
+        //intent.setActionTyping(Intent.ACTION_PICK);
+        //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        //intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+        //((Activity) context).startActivityForResult(intent, request_code_pic_audi);
+
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("audio/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+
+                if (fragment != null) {
+                    fragment.startActivityForResult(intent, request_code_pic_audi);
+                } else {
+                    ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
+                }
+
+
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_AUDIO);
+                }
+                isInAttach = true;
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
+    public void requestPickAudio() throws IOException {
+        requestPickAudio(null);
+    }
+
+    //*************************************************************************************************************
+    public void requestPickFile(final IPickFile listener) throws IOException {
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+                //Intent intent = new Intent(context, ActivityExplorer.class);
+                //((Activity) context).startActivityForResult(intent, request_code_pic_file);
+
+                FragmentExplorer fragment = new FragmentExplorer();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Listener", (Serializable) listener);
+                fragment.setArguments(bundle);
+
+                HelperFragment.loadFragment(fragment);
+
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
+                }
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
+    public void requestOpenDocumentFolder(final IPickFile listener) throws IOException {
+
+        HelperPermision.getStoragePermision(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+                //Intent intent = new Intent(context, ActivityExplorer.class);
+                //intent.putExtra("Mode", "documnet");
+                //((Activity) context).startActivityForResult(intent, request_code_open_document);
+                //if (G.onHelperSetAction != null) {
+                //    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
+                //}
+
+                FragmentExplorer fragment = new FragmentExplorer();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Listener", (Serializable) listener);
+                bundle.putString("Mode", "documnet");
+                fragment.setArguments(bundle);
+
+                HelperFragment.loadFragment(fragment);
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
+    //*************************************************************************************************************
+    public void requestPickContact(final Fragment fragment) throws IOException {
+
+        HelperPermision.getContactPermision(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+
+                if (fragment != null) {
+                    fragment.startActivityForResult(intent, request_code_contact_phone);
+                } else {
+                    ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
+                }
+
+
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CHOOSING_CONTACT);
+                }
+                isInAttach = true;
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
+    public void requestPickContact() throws IOException {
+        requestPickContact(null);
+    }
+
+    //*************************************************************************************************************
+    public void requestGetPosition(OnComplete complete, final Fragment fragment) throws IOException {
+
+        this.complete = complete;
+
+        HelperPermision.getLocationPermission(context, new OnGetPermission() {
+            @Override
+            public void Allow() {
+                getPosition(fragment);
+            }
+
+            @Override
+            public void deny() {
+
+            }
+        });
+    }
+
+    private void getPosition(Fragment fragment) {
+
+        try {
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                showSettingsAlert(fragment);
+            } else {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location == null) {
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
+                if (location != null) {
+                    location.getLatitude();
+                    location.getLongitude();
+
+                    String position = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
+
+                    if (complete != null) complete.complete(true, position, "");
+                } else {
+                    sendPosition = true;
+                    pd = new ProgressDialog(context);
+                    pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    pd.setMessage(context.getString(R.string.just_wait_en));
+                    pd.setIndeterminate(false);
+                    pd.setCancelable(true);
+                    pd.show();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void showSettingsAlert(final Fragment fragment) {
+
+        new MaterialDialog.Builder(context).title(context.getString(R.string.do_you_want_to_turn_on_gps)).positiveText(R.string.yes).negativeText(R.string.no).callback(new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(MaterialDialog dialog) {
+                super.onPositive(dialog);
+
+                turnOnGps(fragment);
+            }
+        }).show();
+    }
+
+    private void turnOnGps(Fragment fragment) {
+
+        if (fragment != null) {
+            fragment.startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), request_code_position);
+        } else {
+            ((Activity) context).startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), request_code_position);
+        }
+
+
+        isInAttach = true;
+    }
+    //*************************************************************************************************************
+
+    public static ArrayList<String> getClipData(ClipData clipData) {
+
+        if (clipData != null) {
+            ArrayList<String> list = new ArrayList<>();
+
+            for (int i = 0; i < clipData.getItemCount(); i++) {
+                ClipData.Item item = clipData.getItemAt(i);
+                if (item.getUri() == null) {
+                    continue;
+                }
+                String path = getFilePathFromUri(item.getUri());
+                list.add(path);
+            }
+
+            if (list.size() < 1) return null;
+
+            return list;
+        }
+
+        return null;
+    }
+    public String saveGalleryPicToLocal(String galleryPath) {
+
+        String result = "";
+        if (galleryPath == null) return "";
+
+        if (ImageHelper.isNeedToCompress(new File(galleryPath))) {
+
+            Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
+            bitmap = ImageHelper.correctRotate(galleryPath, bitmap);
+
+            if (bitmap != null) {
+                result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 1).getPath();
+                ImageHelper.SaveBitmapToFile(result, bitmap);
+            }
+
+            return result;
+        } else {
+
+            return galleryPath;
+        }
+    }
+
+    public AttachFile(Context context) {
+        this.context = context;
+        locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+    }
+
+    public static String getFilePathFromUri(Uri uri) {
+
+        if (uri == null) {
+            return null;
+        }
+
+        String path;
+
+        if (uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            path = FileUtils.getPath(G.context, uri);
+        } else {
+            path = uri.getPath();
+        }
+
+        return path;
     }
 
     private Uri getOutputMediaFileUri(int type, int camera) {
@@ -233,39 +675,70 @@ public class AttachFile {
         }
     }
 
-    //=================================== Start Android 7
-    public static String mCurrentPhotoPath;
+    private File getOutputMediaFile(int type) {
 
-    public void dispatchTakePictureIntent(Fragment fragment) throws IOException {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(G.context.getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                return;
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", createImageFile());
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+        // External sdcard location
+        File mediaStorageDir = new File(G.DIR_IMAGES);
 
-                if (fragment != null) {
-                    fragment.startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
-                } else {
-                    ((Activity) context).startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
-                }
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            mediaStorageDir.mkdirs();
 
-
-            }
+            //if (!mediaStorageDir.mkdirs()) {
+            //    return null;
+            //}
         }
+
+        File mediaFile;
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
+        } else {
+            return null;
+        }
+        return mediaFile;
     }
 
-    public void dispatchTakePictureIntent() throws IOException {
-        dispatchTakePictureIntent(null);
+    public void showDialogOpenCamera(View view, final ProgressBar prgWaiting, final Fragment fragment) {
+
+        new MaterialDialog.Builder(context).items(R.array.capture).itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                switch (which) {
+                    case 0:
+
+                        try {
+                            requestTakePicture(fragment);
+                            if (G.onHelperSetAction != null) {
+                                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_IMAGE);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        dialog.dismiss();
+
+                        if (prgWaiting != null) {
+                            prgWaiting.setVisibility(View.VISIBLE);
+                        }
+
+                        break;
+                    case 1:
+                        try {
+                            requestVideoCapture(fragment);
+                            if (G.onHelperSetAction != null) {
+                                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_VIDEO);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        }).negativeText(R.string.B_cancel).show();
     }
 
     private File createImageFile() throws IOException {
@@ -274,8 +747,8 @@ public class AttachFile {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
         File image = File.createTempFile(imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */);
+            ".jpg",         /* suffix */
+            storageDir      /* directory */);
 
         // Save a file: path for use with ACTION_VIEW intents
         //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
@@ -313,406 +786,6 @@ public class AttachFile {
         }
     }
 
-    //=================================== End Android 7
-
-    private File getOutputMediaFile(int type) {
-
-        // External sdcard location
-        File mediaStorageDir = new File(G.DIR_IMAGES);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            mediaStorageDir.mkdirs();
-
-            //if (!mediaStorageDir.mkdirs()) {
-            //    return null;
-            //}
-        }
-
-        File mediaFile;
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "image_" + HelperString.getRandomFileName(3) + ".jpg");
-        } else {
-            return null;
-        }
-        return mediaFile;
-    }
-
-    //*************************************************************************************************************
-
-    //*************************************************************************************************************
-    public void requestOpenGalleryForImageMultipleSelect() throws IOException {
-
-        //this code use for open galary for image and video together
-        //Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://media/internal/images/media"));
-        //((Activity) context).startActivityForResult(intent, request_code_media_from_gallery);
-
-        HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
-                }
-                isInAttach = true;
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
-    //*************************************************************************************************************
-    public void requestOpenGalleryForVideoMultipleSelect() throws IOException {
-
-        HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                Intent intent = new Intent();
-                intent.setType("video/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                ((Activity) context).startActivityForResult(intent, requestOpenGalleryForVideoMultipleSelect);
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_VIDEO);
-                }
-                isInAttach = true;
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
-    //*************************************************************************************************************
-    public void requestOpenGalleryForImageSingleSelect(final Fragment fragment) throws IOException {
-
-        HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-
-                if (fragment != null) {
-                    fragment.startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
-                } else {
-                    ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
-                }
-
-
-                isInAttach = true;
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
-    public void requestOpenGalleryForImageSingleSelect() throws IOException {
-        requestOpenGalleryForImageSingleSelect(null);
-    }
-
-
-    //*************************************************************************************************************
-
-    //*************************************************************************************************************
-    public void requestVideoCapture() throws IOException {
-
-        PackageManager packageManager = context.getPackageManager();
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
-            Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        HelperPermision.getCameraPermission(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                videoPath = G.DIR_VIDEOS + File.separator + "VID_" + timeStamp + ".mp4";
-
-                Uri outputUri;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    outputUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(videoPath));
-                } else {
-                    outputUri = Uri.fromFile(new File(videoPath));
-                }
-
-
-                Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
-                ((Activity) context).startActivityForResult(intent, request_code_VIDEO_CAPTURED);
-                isInAttach = true;
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
-    public void showDialogOpenCamera(View view, final ProgressBar prgWaiting) {
-
-        new MaterialDialog.Builder(context).items(R.array.capture).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                switch (which) {
-                    case 0:
-
-                        try {
-                            requestTakePicture();
-                            if (G.onHelperSetAction != null) {
-                                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_IMAGE);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        dialog.dismiss();
-
-                        if (prgWaiting != null) {
-                            prgWaiting.setVisibility(View.VISIBLE);
-                        }
-
-                        break;
-                    case 1:
-                        try {
-                            requestVideoCapture();
-                            if (G.onHelperSetAction != null) {
-                                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CAPTURING_VIDEO);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        dialog.dismiss();
-                        break;
-                }
-            }
-        }).negativeText(R.string.B_cancel).show();
-    }
-
-    //*************************************************************************************************************
-
-    public void requestPickAudio() throws IOException {
-        //Intent intent = new Intent();
-        //intent.setActionTyping(Intent.ACTION_PICK);
-        //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        //intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-        //((Activity) context).startActivityForResult(intent, request_code_pic_audi);
-
-        HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("audio/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                ((Activity) context).startActivityForResult(intent, request_code_pic_audi);
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_AUDIO);
-                }
-                isInAttach = true;
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
-    public void requestPickFile(final IPickFile listener) throws IOException {
-        HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                //Intent intent = new Intent(context, ActivityExplorer.class);
-                //((Activity) context).startActivityForResult(intent, request_code_pic_file);
-
-                FragmentExplorer fragment = new FragmentExplorer();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Listener", (Serializable) listener);
-                fragment.setArguments(bundle);
-
-                HelperFragment.loadFragment(fragment);
-
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
-                }
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
-    public void requestPickContact() throws IOException {
-
-        HelperPermision.getContactPermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                ((Activity) context).startActivityForResult(intent, request_code_contact_phone);
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.CHOOSING_CONTACT);
-                }
-                isInAttach = true;
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
-    public void requestGetPosition(OnComplete complete) throws IOException {
-
-        this.complete = complete;
-
-        HelperPermision.getLocationPermission(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                getPosition();
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
-    private void getPosition() {
-
-        try {
-            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                showSettingsAlert();
-            } else {
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (location == null) {
-                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                }
-                if (location != null) {
-                    location.getLatitude();
-                    location.getLongitude();
-
-                    String position = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
-
-                    if (complete != null) complete.complete(true, position, "");
-                } else {
-                    sendPosition = true;
-                    pd = new ProgressDialog(context);
-                    pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    pd.setMessage(context.getString(R.string.just_wait_en));
-                    pd.setIndeterminate(false);
-                    pd.setCancelable(true);
-                    pd.show();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void requestOpenDocumentFolder(final IPickFile listener) throws IOException {
-
-        HelperPermision.getStoragePermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                //Intent intent = new Intent(context, ActivityExplorer.class);
-                //intent.putExtra("Mode", "documnet");
-                //((Activity) context).startActivityForResult(intent, request_code_open_document);
-                //if (G.onHelperSetAction != null) {
-                //    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
-                //}
-
-                FragmentExplorer fragment = new FragmentExplorer();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Listener", (Serializable) listener);
-                bundle.putString("Mode", "documnet");
-                fragment.setArguments(bundle);
-
-                HelperFragment.loadFragment(fragment);
-
-
-
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
-    //*************************************************************************************************************
-
-    void showSettingsAlert() {
-
-        new MaterialDialog.Builder(context).title(context.getString(R.string.do_you_want_to_turn_on_gps)).positiveText(R.string.yes).negativeText(R.string.no).callback(new MaterialDialog.ButtonCallback() {
-            @Override
-            public void onPositive(MaterialDialog dialog) {
-                super.onPositive(dialog);
-
-                turnOnGps();
-            }
-        }).show();
-    }
-
-    private void turnOnGps() {
-        ((Activity) context).startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), request_code_position);
-        isInAttach = true;
-    }
-
-    //*************************************************************************************************************
-
-    public static ArrayList<String> getClipData(ClipData clipData) {
-
-        if (clipData != null) {
-            ArrayList<String> list = new ArrayList<>();
-
-            for (int i = 0; i < clipData.getItemCount(); i++) {
-                ClipData.Item item = clipData.getItemAt(i);
-                if (item.getUri() == null) {
-                    continue;
-                }
-                String path = getFilePathFromUri(item.getUri());
-                list.add(path);
-            }
-
-            if (list.size() < 1) return null;
-
-            return list;
-        }
-
-        return null;
-    }
-
     public String getFileName(String path) {
 
         if (path == null) return "";
@@ -721,27 +794,5 @@ public class AttachFile {
         String filename = path.substring(path.lastIndexOf("/") + 1);
 
         return filename;
-    }
-
-    public String saveGalleryPicToLocal(String galleryPath) {
-
-        String result = "";
-        if (galleryPath == null) return "";
-
-        if (ImageHelper.isNeedToCompress(new File(galleryPath))) {
-
-            Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
-            bitmap = ImageHelper.correctRotate(galleryPath, bitmap);
-
-            if (bitmap != null) {
-                result = getOutputMediaFileUri(MEDIA_TYPE_IMAGE, 1).getPath();
-                ImageHelper.SaveBitmapToFile(result, bitmap);
-            }
-
-            return result;
-        } else {
-
-            return galleryPath;
-        }
     }
 }

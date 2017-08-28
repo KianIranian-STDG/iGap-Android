@@ -880,7 +880,7 @@ public class FragmentChat extends BaseFragment
 
         if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             try {
-                attachFile.requestGetPosition(complete);
+                attachFile.requestGetPosition(complete, FragmentChat.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -1814,7 +1814,7 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.2);
+        // final int screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.2);
 
         RippleView rippleMenuButton = (RippleView) rootView.findViewById(R.id.chl_ripple_menu_button);
         rippleMenuButton.setOnClickListener(new View.OnClickListener() {
@@ -5437,7 +5437,7 @@ public class FragmentChat extends BaseFragment
             public void onclickCamera() {
                 try {
                     bottomSheetDialog.dismiss();
-                    new AttachFile(mActivity).requestTakePicture();
+                    new AttachFile(mActivity).requestTakePicture(FragmentChat.this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -5598,9 +5598,9 @@ public class FragmentChat extends BaseFragment
                 bottomSheetDialog.dismiss();
 
                 if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
-                    attachFile.showDialogOpenCamera(toolbar, null);
+                    attachFile.showDialogOpenCamera(toolbar, null, FragmentChat.this);
                 } else {
-                    attachFile.showDialogOpenCamera(toolbar, null);
+                    attachFile.showDialogOpenCamera(toolbar, null, FragmentChat.this);
                 }
             }
         });
@@ -5609,7 +5609,7 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
-                    attachFile.requestOpenGalleryForImageMultipleSelect();
+                    attachFile.requestOpenGalleryForImageMultipleSelect(FragmentChat.this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -5620,7 +5620,7 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
-                    attachFile.requestOpenGalleryForVideoMultipleSelect();
+                    attachFile.requestOpenGalleryForVideoMultipleSelect(FragmentChat.this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -5631,7 +5631,7 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
-                    attachFile.requestPickAudio();
+                    attachFile.requestPickAudio(FragmentChat.this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -5718,7 +5718,7 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
-                    attachFile.requestPaint();
+                    attachFile.requestPaint(FragmentChat.this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -5729,7 +5729,7 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
-                    attachFile.requestGetPosition(complete);
+                    attachFile.requestGetPosition(complete, FragmentChat.this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -5740,7 +5740,7 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 bottomSheetDialog.dismiss();
                 try {
-                    attachFile.requestPickContact();
+                    attachFile.requestPickContact(FragmentChat.this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

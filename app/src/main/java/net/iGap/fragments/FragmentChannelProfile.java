@@ -1017,7 +1017,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     }
                 } else {
                     try {
-                        new AttachFile(mActivity).requestOpenGalleryForImageSingleSelect();
+                        new AttachFile(mActivity).requestOpenGalleryForImageSingleSelect(FragmentChannelProfile.this);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -1030,13 +1030,13 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
-                new AttachFile(mActivity).dispatchTakePictureIntent();
+                new AttachFile(mActivity).dispatchTakePictureIntent(FragmentChannelProfile.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                new AttachFile(mActivity).requestTakePicture();
+                new AttachFile(mActivity).requestTakePicture(FragmentChannelProfile.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }

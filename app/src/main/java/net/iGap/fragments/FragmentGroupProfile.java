@@ -1330,13 +1330,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
-                new AttachFile(mActivity).dispatchTakePictureIntent();
+                new AttachFile(mActivity).dispatchTakePictureIntent(FragmentGroupProfile.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                new AttachFile(mActivity).requestTakePicture();
+                new AttachFile(mActivity).requestTakePicture(FragmentGroupProfile.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }

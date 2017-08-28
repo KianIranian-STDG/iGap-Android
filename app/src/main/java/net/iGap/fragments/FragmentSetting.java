@@ -2399,7 +2399,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                             public void Allow() {
                                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                                 intent.setType("image/*");
-                                fragment.startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                                startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
                             }
 
                             @Override
@@ -2419,7 +2419,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
-                new AttachFile(mActivity).dispatchTakePictureIntent();
+                new AttachFile(mActivity).dispatchTakePictureIntent(FragmentSetting.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }

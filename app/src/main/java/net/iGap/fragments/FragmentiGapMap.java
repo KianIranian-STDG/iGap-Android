@@ -555,11 +555,14 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
                         page = pageUserList;
                         FragmentMapUsers fragmentMapUsers = FragmentMapUsers.newInstance();
                         try {
-                            //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right,
-                            //    R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.replace, fragmentMapUsers, "map_user_fragment")
-                            //    .commitAllowingStateLoss();
+                            mActivity.getSupportFragmentManager()
+                                .beginTransaction()
+                                .addToBackStack(FragmentMapUsers.class.getName())
+                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+                                .replace(R.id.replace, fragmentMapUsers, FragmentMapUsers.class.getName())
+                                .commitAllowingStateLoss();
 
-                            HelperFragment.loadFragment(fragmentMapUsers, true);
+                            //   HelperFragment.loadFragment(fragmentMapUsers, true);
 
                         } catch (Exception e) {
                             e.getStackTrace();
