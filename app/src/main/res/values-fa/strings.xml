@@ -1071,4 +1071,10 @@
   <string name="enter_pass_code">کد قفل گشا را وارد کنید</string>
   <string name="re_enter_pass_code">کد قفل گشا را مجدداً وارد کنید</string>
 
+  <string name="Disable">غیرفعال</string>
+  <string name="in_1_minutes">یک دقیقه</string>
+  <string name="in_5_minutes">5 دقیقه</string>
+  <string name="in_1_hours">یک ساعت</string>
+  <string name="in_5_hours">5 ساعت</string>
+
 </resources>

@@ -1063,4 +1063,12 @@
   <string name="re_enter_pass_code">Re-enter your passcode</string>
 
 
+  <string name="Disable">Disable</string>
+  <string name="in_1_minutes">in 1 minute</string>
+  <string name="in_5_minutes">in 5 minutes</string>
+  <string name="in_1_hours">in 1 hour</string>
+  <string name="in_5_hours">in 5 hours</string>
+  <string name="PIN">PIN</string>
+  <string name="password">Password</string>
+
 </resources>

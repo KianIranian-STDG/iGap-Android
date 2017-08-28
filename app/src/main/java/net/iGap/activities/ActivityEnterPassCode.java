@@ -20,6 +20,7 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,8 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     private TextView iconFingerPrint;
     private TextView textFingerPrint;
     private RealmUserInfo realmUserInfo;
-    MaterialDialog dialogForgot;
+    private MaterialDialog dialogForgot;
+    private EditText edtPassword;
 
 
     @Override
@@ -86,8 +88,8 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         }
 
         ViewGroup rootEnterPassword = (ViewGroup) findViewById(R.id.mainRootEnterPassword);
-        RippleView txtOk = (RippleView) findViewById(R.id.enterPassword_rippleOk);
-        final EditText edtPassword = (EditText) findViewById(R.id.enterPassword_edtSetPassword);
+        final RippleView txtOk = (RippleView) findViewById(R.id.enterPassword_rippleOk);
+        edtPassword = (EditText) findViewById(R.id.enterPassword_edtSetPassword);
 
         ActivityMain.lockNavigation();
         rootEnterPassword.setOnClickListener(new View.OnClickListener() {
@@ -109,13 +111,16 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
 
         if (kindPassCode == PIN) {
             edtPassword.setInputType((InputType.TYPE_CLASS_NUMBER | TYPE_NUMBER_VARIATION_PASSWORD));
+            maxLengthEditText(4);
         } else {
             edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
+            maxLengthEditText(20);
         }
 
         if (dialogForgot != null) {
             dialogForgot.dismiss();
         }
+
 
         if (isFingerPrint) {
 
@@ -171,7 +176,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
             };
         }
 
-        TextView txtForgotPassword = (TextView) findViewById(R.id.setPassword_forgotPassword);
+        final TextView txtForgotPassword = (TextView) findViewById(R.id.setPassword_forgotPassword);
         txtForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -282,6 +287,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     public void onDestroy() {
         super.onDestroy();
         realm.close();
+        ActivityMain.isActivityEnterPassCode = false;
     }
 
 
@@ -360,4 +366,15 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         super.onBackPressed();
         System.exit(0);
     }
+
+    private void maxLengthEditText(int numberOfLenth) {
+        edtPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(numberOfLenth)});
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ActivityMain.isActivityEnterPassCode = true;
+    }
+
 }

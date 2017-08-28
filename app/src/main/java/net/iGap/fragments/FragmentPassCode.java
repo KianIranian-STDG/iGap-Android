@@ -16,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,8 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     private final int PASSWORD = 1;
     private int kindPassword = 0;
     SharedPreferences sharedPreferences;
+    private int kindPassCode = 0;
+
 
     public FragmentPassCode() {
         // Required empty public constructor
@@ -149,8 +152,10 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
 
         if (kindPassword == PIN) {
             edtSetPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
+            maxLengthEditText(4);
         } else {
             edtSetPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+            maxLengthEditText(20);
         }
 
 
@@ -162,7 +167,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         staticSpinner.setAdapter(adapter);
         staticSpinner.setOnItemSelectedListener(this);
-
+        staticSpinner.setSelection(0);
         if (isPassCode) {
 
             page = 3;
@@ -187,6 +192,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // set password;
 
+                edtSetPassword.setText("");
                 if (realmUserInfo != null) isPassCode = realmUserInfo.isPassCode();
 
                 if (!isPassCode) {
@@ -244,6 +250,9 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         txtChangePassCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                page = 0;
+                staticSpinner.setSelection(0);
+                edtSetPassword.setText("");
                 vgTogglePassCode.setVisibility(View.GONE);
                 rootEnterPassword.setVisibility(View.VISIBLE);
                 rootSettingPassword.setVisibility(View.GONE);
@@ -258,7 +267,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                 }
             }
         });
-
 
         if (isFingerPrintCode) {
             toggleEnableFingerPrint.setChecked(true);
@@ -334,7 +342,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             }
         });
 
-
         rippleOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -377,10 +384,12 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                                 if (realmUserInfo != null) {
                                     realmUserInfo.setPassCode(true);
                                     realmUserInfo.setPassCode(edtSetPassword.getText().toString());
+                                    realmUserInfo.setKindPassCode(kindPassCode);
                                 }
                             }
                         });
                         edtSetPassword.setText("");
+                        staticSpinner.setSelection(0);
                     } else {
                         closeKeyboard(v);
                         error(getString(R.string.Password_dose_not_match));
@@ -417,15 +426,15 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         });
         long valuNumberPic = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
         if (valuNumberPic == 0) {
-            txtAutoLock.setText("Disable");
+            txtAutoLock.setText(getString(R.string.Disable));
         } else if (valuNumberPic == 60) {
-            txtAutoLock.setText("in 1 minute");
+            txtAutoLock.setText(getString(R.string.in_1_minutes));
         } else if (valuNumberPic == 60 * 5) {
-            txtAutoLock.setText("in 5 minutes");
+            txtAutoLock.setText(getString(R.string.in_5_minutes));
         } else if (valuNumberPic == 60 * 60) {
-            txtAutoLock.setText("in 1 hour");
+            txtAutoLock.setText(getString(R.string.in_1_hours));
         } else if (valuNumberPic == 60 * 60 * 5) {
-            txtAutoLock.setText("in 5 hours");
+            txtAutoLock.setText(getString(R.string.in_1_hours));
         }
 
         vgAutoLock.setOnClickListener(new View.OnClickListener() {
@@ -445,7 +454,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                 numberPickerMinutes.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
                 //numberPickerMinutes.setDisplayedValues(new String[]{"in 1 hour", "in 5 hours", "in 1 minute", "in 5 minutes", "Disable"});
 
-
                 long valueNumberPic = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
                 if (valueNumberPic == 0) {
                     numberPickerMinutes.setValue(0);
@@ -463,15 +471,15 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     @Override
                     public String format(int value) {
                         if (value == 0) {
-                            return "Disable";
+                            return getString(R.string.Disable);
                         } else if (value == 1) {
-                            return "in 1 minute";
+                            return getString(R.string.in_1_minutes);
                         } else if (value == 2) {
-                            return "in 5 minutes";
+                            return getString(R.string.in_5_minutes);
                         } else if (value == 3) {
-                            return "in 1 hour";
+                            return getString(R.string.in_1_hours);
                         } else if (value == 4) {
-                            return "in 5 hours";
+                            return getString(R.string.in_5_hours);
                         }
                         return "";
                     }
@@ -481,28 +489,26 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                 btnPositive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        txtAutoLock.setText("in " + numberPickerMinutes.getDisplayedValues());
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putLong(SHP_SETTING.KEY_TIME_LOCK, numberPickerMinutes.getValue());
                         editor.apply();
 
-
                         int which = numberPickerMinutes.getValue();
                         if (which == 0) {
                             editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 0);
-                            txtAutoLock.setText("Disable");
+                            txtAutoLock.setText(getString(R.string.Disable));
                         } else if (which == 1) {
                             editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 60);
-                            txtAutoLock.setText("in 1 minute");
+                            txtAutoLock.setText(getString(R.string.in_1_minutes));
                         } else if (which == 2) {
                             editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 60 * 5);
-                            txtAutoLock.setText("in 5 minutes");
+                            txtAutoLock.setText(getString(R.string.in_5_minutes));
                         } else if (which == 3) {
                             editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 60 * 60);
-                            txtAutoLock.setText("in 1 hour");
+                            txtAutoLock.setText(getString(R.string.in_1_hours));
                         } else if (which == 4) {
                             editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 60 * 60 * 5);
-                            txtAutoLock.setText("in 5 hours");
+                            txtAutoLock.setText(getString(R.string.in_5_hours));
                         }
                         editor.apply();
                         dialog.dismiss();
@@ -593,10 +599,14 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             case 0:
                 // Whatever you want to happen when the first item gets selected
                 edtSetPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
+                maxLengthEditText(4);
+                kindPassCode = PIN;
                 break;
             case 1:
                 // Whatever you want to happen when the second item gets selected
                 edtSetPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                maxLengthEditText(20);
+                kindPassCode = PASSWORD;
                 break;
         }
     }
@@ -604,5 +614,9 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private void maxLengthEditText(int numberOfLenth) {
+        edtSetPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(numberOfLenth)});
     }
 }

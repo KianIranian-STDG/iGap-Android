@@ -197,6 +197,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private static long oldTime;
     private static long currentTime;
     public static boolean isLock = true;
+    public static boolean isActivityEnterPassCode = false;
 
     public enum MainAction {
         downScrool, clinetCondition
@@ -970,7 +971,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (G.isPassCode && isLock) {
             enterPassword();
-        } else {
+        } else if (!isActivityEnterPassCode) {
             currentTime = System.currentTimeMillis();
 
             SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
