@@ -190,6 +190,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
+                        G.isPassCode = false;
                         logout(v);
                         finish();
 
