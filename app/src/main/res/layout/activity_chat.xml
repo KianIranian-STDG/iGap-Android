@@ -514,20 +514,34 @@
         android:layout_weight="1"
         >
 
-      <android.support.v7.widget.RecyclerView
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          >
+
+        <ImageView
+            android:id="@+id/chl_img_view_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#f7f7f7"
+            android:scaleType="centerCrop"
+            />
+
+        <android.support.v7.widget.RecyclerView
           android:id="@+id/chl_recycler_view_chat"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:background="#f7f7f7"
+            android:background="@android:color/transparent"
           android:scrollbars="vertical"
           android:fadeScrollbars="false"
           android:scrollbarStyle="outsideOverlay"
           android:scrollbarSize="@dimen/dp4"
           >
+
         <!-- android:scrollbars="none"   android:overScrollMode="never"-->
       </android.support.v7.widget.RecyclerView>
 
-
+      </RelativeLayout>
       <FrameLayout
           android:id="@+id/ac_ll_scrool_navigate"
           android:layout_width="wrap_content"

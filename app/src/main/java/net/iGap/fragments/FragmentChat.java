@@ -1508,10 +1508,13 @@ public class FragmentChat extends BaseFragment
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         if (backGroundPath.length() > 0) {
 
+            ImageView imgBackGround = (ImageView) rootView.findViewById(R.id.chl_img_view_chat);
+
+
             File f = new File(backGroundPath);
             if (f.exists()) {
                 Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                recyclerView.setBackgroundDrawable(d);
+                imgBackGround.setImageDrawable(d);
             }
         }
 
