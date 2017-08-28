@@ -14,7 +14,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,7 +43,6 @@ import net.iGap.R;
 import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
-import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnChannelAddMember;
 import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -60,7 +58,7 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelAddMember;
 import net.iGap.request.RequestGroupAddMember;
 
-public class ContactGroupFragment extends Fragment {
+public class ContactGroupFragment extends BaseFragment {
     private FastAdapter fastAdapter;
     private TextView txtStatus;
     private TextView txtNumberOfMember;
@@ -82,11 +80,14 @@ public class ContactGroupFragment extends Fragment {
         return new ContactGroupFragment();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_contact_group, container, false);
     }
 
-    @Override public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         hideProgressBar(); // some times touch screen remind lock so this method do unlock
@@ -112,32 +113,37 @@ public class ContactGroupFragment extends Fragment {
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
                 mActivity.onBackPressed();
             }
         });
 
         RippleView rippleDone = (RippleView) view.findViewById(R.id.fcg_ripple_done);
         rippleDone.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 if (typeCreate.equals("CHANNEL")) { // addMemberChannel
                     G.onChannelAddMember = new OnChannelAddMember() {
-                        @Override public void onChannelAddMember(Long RoomId, Long UserId, ProtoGlobal.ChannelRoom.Role role) {
+                        @Override
+                        public void onChannelAddMember(Long RoomId, Long UserId, ProtoGlobal.ChannelRoom.Role role) {
                             countAddMemberResponse++;
                             if (countAddMemberResponse == countAddMemberRequest) {
                                 channelAddMember(RoomId);
                             }
                         }
 
-                        @Override public void onError(int majorCode, int minorCode) {
+                        @Override
+                        public void onError(int majorCode, int minorCode) {
                             countAddMemberResponse++;
                             if (countAddMemberResponse == countAddMemberRequest) {
                                 channelAddMember(roomId);
                             }
                         }
 
-                        @Override public void onTimeOut() {
+                        @Override
+                        public void onTimeOut() {
 
                         }
                     };
@@ -148,28 +154,25 @@ public class ContactGroupFragment extends Fragment {
                             new RequestChannelAddMember().channelAddMember(roomId, peerId, 0);
                         }
                     } else {
-
                         if (isAdded()) {
-
-                            HelperFragment.removeFreagment(ContactGroupFragment.this);
-
+                            removeFromBaseFragment(ContactGroupFragment.this);
                             new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
-                            //  mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                         }
-
                     }
                 }
 
                 if (typeCreate.equals("GROUP")) { //  addMemberGroup
                     G.onGroupAddMember = new OnGroupAddMember() {
-                        @Override public void onGroupAddMember(Long roomId, Long UserId) {
+                        @Override
+                        public void onGroupAddMember(Long roomId, Long UserId) {
                             countAddMemberResponse++;
                             if (countAddMemberResponse == countAddMemberRequest) {
                                 groupAddMember(roomId);
                             }
                         }
 
-                        @Override public void onError(int majorCode, int minorCode) {
+                        @Override
+                        public void onError(int majorCode, int minorCode) {
                             countAddMemberResponse++;
                             if (countAddMemberResponse == countAddMemberRequest) {
                                 groupAddMember(roomId);
@@ -188,7 +191,7 @@ public class ContactGroupFragment extends Fragment {
                     } else {
 
                         if (isAdded()) {
-                            HelperFragment.removeFreagment(ContactGroupFragment.this);
+                            removeFromBaseFragment(ContactGroupFragment.this);
                             new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
 
                             // mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
@@ -208,12 +211,14 @@ public class ContactGroupFragment extends Fragment {
         final HeaderAdapter headerAdapter = new HeaderAdapter();
         final ItemAdapter itemAdapter = new ItemAdapter();
         itemAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroup>() {
-            @Override public boolean filter(ContactItemGroup item, CharSequence constraint) {
+            @Override
+            public boolean filter(ContactItemGroup item, CharSequence constraint) {
                 return !item.mContact.displayName.toLowerCase().startsWith(String.valueOf(constraint).toLowerCase());
             }
         });
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroup>() {
-            @Override public boolean onClick(View v, IAdapter adapter, ContactItemGroup item, int position) {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, ContactItemGroup item, int position) {
 
                 item.mContact.isSelected = !item.mContact.isSelected;
                 fastAdapter.notifyItemChanged(position);
@@ -225,11 +230,13 @@ public class ContactGroupFragment extends Fragment {
         });
 
         edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (charSequence.length() + i + i1 + i2 > 0) itemAdapter.filter(charSequence);
 
@@ -243,13 +250,15 @@ public class ContactGroupFragment extends Fragment {
                 //edtSearch.setSelection(edtSearch.getText().length());
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
             }
         });
 
         edtSearch.setOnKeyListener(new View.OnKeyListener() {
-            @Override public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                 if ((keyCode == KeyEvent.KEYCODE_DEL)) {
                     if (edtSearch.getText().length() <= sizeTextEditText) {
                         return true;
@@ -287,7 +296,8 @@ public class ContactGroupFragment extends Fragment {
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override public void onChanged() {
+            @Override
+            public void onChanged() {
                 decoration.invalidateHeaders();
             }
         });
@@ -303,7 +313,8 @@ public class ContactGroupFragment extends Fragment {
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 realmRoom.getGroupRoom().setParticipantsCountLabel(realmRoom.getGroupRoom().getMembers().size() + "");
                 //realmRoom.getGroupRoom().setParticipants_count_limit_label(participantsLimit);
             }
@@ -311,7 +322,7 @@ public class ContactGroupFragment extends Fragment {
         realm.close();
 
         if (isAdded()) {
-            HelperFragment.removeFreagment(ContactGroupFragment.this);
+            removeFromBaseFragment(ContactGroupFragment.this);
             new GoToChatActivity(roomId).startActivity();
             // mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
         }
@@ -325,14 +336,15 @@ public class ContactGroupFragment extends Fragment {
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 realmRoom.getChannelRoom().setParticipantsCountLabel(realmRoom.getChannelRoom().getMembers().size() + "");
             }
         });
         realm.close();
 
         if (isAdded()) {
-            HelperFragment.removeFreagment(ContactGroupFragment.this);
+            removeFromBaseFragment(ContactGroupFragment.this);
             new GoToChatActivity(roomId).startActivity();
             // mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
         }
@@ -359,7 +371,8 @@ public class ContactGroupFragment extends Fragment {
                     realmMember.setRole(ProtoGlobal.ChannelRoom.Role.OWNER.toString());
 
                     realm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
                             members.add(realmMember);
                         }
                     });
@@ -375,7 +388,8 @@ public class ContactGroupFragment extends Fragment {
                     realmMember.setRole(ProtoGlobal.GroupRoom.Role.OWNER.toString());
 
                     realm.executeTransaction(new Realm.Transaction() {
-                        @Override public void execute(Realm realm) {
+                        @Override
+                        public void execute(Realm realm) {
                             members.add(realmMember);
                         }
                     });
@@ -419,7 +433,8 @@ public class ContactGroupFragment extends Fragment {
         return list;
     }
 
-    @Override public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
@@ -427,7 +442,8 @@ public class ContactGroupFragment extends Fragment {
 
     private void showProgressBar() {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 //                prgWaiting.setVisibility(View.VISIBLE);
                 if (mActivity != null) {
                     mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -438,7 +454,8 @@ public class ContactGroupFragment extends Fragment {
 
     private void hideProgressBar() {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 //                prgWaiting.setVisibility(View.GONE);
                 if (mActivity != null) {

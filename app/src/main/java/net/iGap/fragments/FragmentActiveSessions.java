@@ -38,13 +38,11 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.AdapterActiveSessions;
 import net.iGap.adapter.items.chat.AdapterActiveSessionsHeader;
-import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnUserSessionGetActiveList;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.interfaces.OnUserSessionTerminate;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructSessions;
 import net.iGap.proto.ProtoUserSessionGetActiveList;
@@ -55,7 +53,7 @@ import net.iGap.request.RequestUserSessionTerminate;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentActiveSessions extends Fragment {
+public class FragmentActiveSessions extends BaseFragment {
 
     private FastAdapter fastAdapter;
     private RecyclerView rcvContent;
@@ -87,24 +85,11 @@ public class FragmentActiveSessions extends Fragment {
         AppUtils.setProgresColler(prgWaiting);
 
         prgWaiting.setVisibility(View.VISIBLE);
-        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.stas_txt_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.stas_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-
-                HelperFragment.removeFreagment(FragmentActiveSessions.this);
-
-                //  mActivity.getSupportFragmentManager().popBackStack();
-                //                mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentActiveSessions.this).commit();
-            }
-        });
-
-        ViewGroup root = (ViewGroup) view.findViewById(R.id.stas_rootActiveSession);
-        root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
+                removeFromBaseFragment(FragmentActiveSessions.this);
             }
         });
 

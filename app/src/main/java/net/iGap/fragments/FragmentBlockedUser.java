@@ -49,7 +49,7 @@ import net.iGap.request.RequestUserContactsUnblock;
 
 import static net.iGap.G.inflater;
 
-public class FragmentBlockedUser extends Fragment {
+public class FragmentBlockedUser extends BaseFragment {
     private FragmentActivity mActivity;
 
 
@@ -69,9 +69,7 @@ public class FragmentBlockedUser extends Fragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentBlockedUser.this).commit();
-
-                HelperFragment.removeFreagment(FragmentBlockedUser.this);
+                removeFromBaseFragment(FragmentBlockedUser.this);
             }
         });
 
@@ -95,13 +93,8 @@ public class FragmentBlockedUser extends Fragment {
 
                 Bundle bundle = new Bundle();
                 // if you want to have  single select in select list
-                //  bundle.putBoolean("SINGLE_SELECT", true);
                 fragment.setArguments(bundle);
-                //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
-                //    R.anim.slide_out_left).addToBackStack(null).replace(R.id.parentPrivacySecurity, fragment).commit();
-
-                HelperFragment.loadFragment(fragment);
-
+                new HelperFragment(fragment).load();
             }
         });
 

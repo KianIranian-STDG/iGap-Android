@@ -511,7 +511,7 @@ public class FragmentShowMember extends BaseFragment {
             public void onComplete(RippleView rippleView) {
                 // mActivity.getSupportFragmentManager().popBackStack();
 
-                closeFragment();
+                popBackStackFragment();
 
             }
         });
@@ -660,29 +660,11 @@ public class FragmentShowMember extends BaseFragment {
                         HelperPermision.getStoragePermision(mActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
-
-                                //  Intent intent = null;
-
                                 if (mContact.peerId == userID) {
-                                    //   intent = new Intent(mActivity, ActivitySetting.class);
-
-                                    HelperFragment.loadFragment(new FragmentSetting());
-
+                                    new HelperFragment(new FragmentSetting()).load();
                                 } else {
-                                    //intent = new Intent(mActivity, ActivityContactsProfile.class);
-                                    //intent.putExtra("peerId", mContact.peerId);
-                                    //intent.putExtra("RoomId", mRoomID);
-                                    //intent.putExtra("enterFrom", ProtoGlobal.Room.Type.GROUP.toString());
-
-                                    //mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
-                                    HelperFragment.loadFragment(FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString()));
+                                    new HelperFragment(FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).load();
                                 }
-
-                                //mActivity.finish();
-                                //if (ActivityChat.activityChat != null) ActivityChat.activityChat.finish();
-
-                                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                //startActivity(intent);
                             }
 
                             @Override

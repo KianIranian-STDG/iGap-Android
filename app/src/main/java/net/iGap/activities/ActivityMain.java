@@ -278,13 +278,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             boolean openMediaPlyer = extras.getBoolean(ActivityMain.openMediaPlyer);
             if (openMediaPlyer) {
-
                 if (G.fragmentManager.findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
                     FragmentMediaPlayer fragmant = new FragmentMediaPlayer();
-                    HelperFragment.loadFragment(fragmant);
+                    new HelperFragment(fragmant).load();
                 }
-
-
             }
         }
     }
@@ -500,10 +497,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         fragmentNewGroup.setArguments(bundle);
 
                         try {
-                            // getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragmentNewGroup, "newGroup_fragment").commitAllowingStateLoss();
-
-                            HelperFragment.loadFragment(fragmentNewGroup, true);
-
+                            new HelperFragment(fragmentNewGroup).setStateLoss(true).load();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -632,7 +626,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
                     //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
 
-                    HelperFragment.loadFragment(fragment);
+                    new HelperFragment(fragment).load();
 
                 } catch (Exception e) {
                     e.getStackTrace();
@@ -653,12 +647,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
-
                 try {
-                    //    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
-
-                    HelperFragment.loadFragment(fragment);
-
+                    new HelperFragment(fragment).load();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -680,9 +670,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    //  getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
-
-                    HelperFragment.loadFragment(fragment);
+                    new HelperFragment(fragment).load();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1068,22 +1056,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //G.handler.post(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        drawer.closeDrawer(GravityCompat.START);
-                //    }
-                //});
-                //pageDrawer = 2;
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "New Chat");
                 fragment.setArguments(bundle);
                 try {
-                    //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right,
-                    //    R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
-
-                    HelperFragment.loadFragment(fragment);
+                    new HelperFragment(fragment).load();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1096,23 +1074,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //G.handler.post(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        drawer.closeDrawer(GravityCompat.START);
-                //    }
-                //});
-                //
-                //pageDrawer = 3;
-
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewGroup");
                 fragment.setArguments(bundle);
                 try {
-                    //    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
-
-                    HelperFragment.loadFragment(fragment);
+                    new HelperFragment(fragment).load();
 
                 } catch (Exception e) {
                     e.getStackTrace();
@@ -1127,22 +1094,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavChanel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //G.handler.post(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        drawer.closeDrawer(GravityCompat.START);
-                //    }
-                //});
-                //pageDrawer = 4;
                 FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TYPE", "NewChanel");
                 fragment.setArguments(bundle);
                 try {
-                    // getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "newGroup_fragment").commit();
-
-                    HelperFragment.loadFragment(fragment);
-
+                    new HelperFragment(fragment).load();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1156,23 +1113,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         igapSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //G.handler.post(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        drawer.closeDrawer(GravityCompat.START);
-                //    }
-                //});
-                //
-                //pageDrawer = 5;
-
                 final Fragment fragment = FragmentIgapSearch.newInstance();
                 try {
-
-                    //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                    //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "Search_fragment_igap").commit();
-
-                    HelperFragment.loadFragment(fragment);
-
+                    new HelperFragment(fragment).load();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1186,25 +1129,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //G.handler.post(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        drawer.closeDrawer(GravityCompat.START);
-                //    }
-                //});
-                //
-                //pageDrawer = 6;
-
                 Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", "Contacts");
                 fragment.setArguments(bundle);
                 try {
-                    //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right,
-                    //    R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
-
-                    HelperFragment.loadFragment(fragment);
-
+                    new HelperFragment(fragment).load();
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -1226,22 +1156,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     @Override
                     public void onClick(View v) {
 
-                        //G.handler.post(new Runnable() {
-                        //    @Override
-                        //    public void run() {
-                        //        drawer.closeDrawer(GravityCompat.START);
-                        //    }
-                        //});
-                        //
-                        //pageDrawer = 7;
-
                         Fragment fragment = FragmentCall.newInstance(false);
                         try {
-                            //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left
-                            //    , R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "call_fragment").commit();
-
-                            HelperFragment.loadFragment(fragment);
-
+                            new HelperFragment(fragment).load();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
@@ -1310,14 +1227,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //G.handler.post(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        drawer.closeDrawer(GravityCompat.START);
-                //    }
-                //});
-                //
-                //pageDrawer = 8;
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net I'm waiting for you!");
@@ -1330,29 +1239,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //G.handler.post(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        drawer.closeDrawer(GravityCompat.START);
-                //    }
-                //});
-                //
-                //pageDrawer = 9;
-
                 try {
                     HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
                         @Override
                         public void Allow() {
-                            //Intent intent = new Intent(G.context, ActivitySetting.class);
-                            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            //startActivity(intent);
-
-                            FragmentSetting fragmentSetting = new FragmentSetting();
-                            //     getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.fragmentContainer, fragmentSetting).commit();
-
-                            HelperFragment.loadFragment(fragmentSetting);
-
-                            //ActivityMain.mLeftDrawerLayout.closeDrawer();
+                            new HelperFragment(new FragmentSetting()).load();
                         }
 
                         @Override
@@ -1373,7 +1264,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     HelperPermision.getCameraPermission(ActivityMain.this, new OnGetPermission() {
                         @Override
                         public void Allow() throws IOException {
-                            HelperFragment.loadFragment(FragmentQrCodeNewDevice.newInstance());
+                            new HelperFragment(FragmentQrCodeNewDevice.newInstance()).load();
                         }
 
                         @Override
@@ -1392,73 +1283,65 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //G.handler.post(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        drawer.closeDrawer(GravityCompat.START);
-                //    }
-                //});
-                //
-                //pageDrawer = 11;
                 new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                    .content(R.string.content_log_out)
-                    .positiveText(getResources().getString(R.string.B_ok))
-                    .negativeText(getResources().getString(R.string.B_cancel))
-                    .iconRes(R.mipmap.exit_to_app_button)
-                    .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            G.onUserSessionLogout = new OnUserSessionLogout() {
-                                @Override
-                                public void onUserSessionLogout() {
+                        .content(R.string.content_log_out)
+                        .positiveText(getResources().getString(R.string.B_ok))
+                        .negativeText(getResources().getString(R.string.B_cancel))
+                        .iconRes(R.mipmap.exit_to_app_button)
+                        .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                G.onUserSessionLogout = new OnUserSessionLogout() {
+                                    @Override
+                                    public void onUserSessionLogout() {
 
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            HelperLogout.logout();
-                                        }
-                                    });
-                                }
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                HelperLogout.logout();
+                                            }
+                                        });
+                                    }
 
-                                @Override
-                                public void onError() {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
+                                    @Override
+                                    public void onError() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
 
-                                @Override
-                                public void onTimeOut() {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    snack.dismiss();
-                                                }
-                                            });
-                                            snack.show();
-                                        }
-                                    });
-                                }
-                            };
-                            new RequestUserSessionLogout().userSessionLogout();
-                        }
-                    })
-                    .show();
+                                    @Override
+                                    public void onTimeOut() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
+                                                    }
+                                                });
+                                                snack.show();
+                                            }
+                                        });
+                                    }
+                                };
+                                new RequestUserSessionLogout().userSessionLogout();
+                            }
+                        })
+                        .show();
                 closeDrawer();
             }
         });
@@ -1698,13 +1581,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             HelperPermision.getLocationPermission(ActivityMain.this, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
-                    FragmentiGapMap fragmentiGapMap = FragmentiGapMap.getInstance();
                     try {
-                        //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                        //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragmentiGapMap, "map_fragment").commit();
-
-                        HelperFragment.loadFragment(fragmentiGapMap);
-
+                        new HelperFragment(FragmentiGapMap.getInstance()).load();
                     } catch (Exception e) {
                         e.getStackTrace();
                     }
@@ -1801,7 +1679,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 try {
                     //  getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
-                    HelperFragment.loadFragment(fragment);
+                    new HelperFragment(fragment).load();
 
 
                 } catch (Exception e) {
@@ -2045,7 +1923,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.isUpdateNotificaionColorChat = false;
                 G.isUpdateNotificaionCall = false;
 
-                HelperFragment.removeAllFragment();
+                new HelperFragment().removeAll();
 
                 ActivityMain.this.recreate();
 

@@ -15,7 +15,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,7 +43,6 @@ import net.iGap.R;
 import net.iGap.adapter.items.SearchItem;
 import net.iGap.adapter.items.SearchItemHeader;
 import net.iGap.helper.GoToChatActivity;
-import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
@@ -59,7 +57,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends BaseFragment {
 
     private FastAdapter fastAdapter;
     private EditText edtSearch;
@@ -367,35 +365,24 @@ public class SearchFragment extends Fragment {
         }
 
         if (realmRoom != null) {
-
-            HelperFragment.removeFreagment(SearchFragment.this);
-
+            removeFromBaseFragment(SearchFragment.this);
             if (type == SearchType.message) {
                 new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity();
             } else {
                 new GoToChatActivity(realmRoom.getId()).startActivity();
             }
 
-            //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
-
-
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final long roomId) {
-                    G.currentActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-
-                            HelperFragment.removeFreagment(SearchFragment.this);
-
+                            if (mActivity != null) {
+                                removeFromBaseFragment(SearchFragment.this);
+                            }
                             new GoToChatActivity(roomId).setPeerID(id).startActivity();
-
-                            //if (mActivity != null) {
-                            //    //  mActivity.getSupportFragmentManager().beginTransaction().remove(SearchFragment.this).commit();
-                            //
-                            //}
-
                             G.onChatGetRoom = null;
                         }
                     });

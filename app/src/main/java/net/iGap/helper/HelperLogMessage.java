@@ -493,8 +493,7 @@ public class HelperLogMessage {
             bundle.putString("enterFrom", "GROUP");
             contactsProfile.setArguments(bundle);
 
-            HelperFragment.loadFragment(contactsProfile);
-
+            new HelperFragment(contactsProfile).load();
 
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
@@ -503,32 +502,13 @@ public class HelperLogMessage {
                     G.currentActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-                            //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-                            //intent.putExtra("peerId", id);
-                            //intent.putExtra("RoomId", roomId);
-                            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            //G.currentActivity.startActivity(intent);
-
-                            //Intent intent = new Intent(G.context, ActivityContactsProfile.class);
-                            //intent.putExtra("peerId", id);
-                            //intent.putExtra("RoomId", roomId);
-                            //intent.putExtra("enterFrom", "GROUP");
-                            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            //G.currentActivity.startActivity(intent);
-
                             FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
                             Bundle bundle = new Bundle();
                             bundle.putLong("peerId", id);
                             bundle.putLong("RoomId", roomId);
                             bundle.putString("enterFrom", "GROUP");
                             contactsProfile.setArguments(bundle);
-
-                            HelperFragment.loadFragment(contactsProfile);
-
-
-
-
+                            new HelperFragment(contactsProfile).load();
                             G.onChatGetRoom = null;
                         }
                     });

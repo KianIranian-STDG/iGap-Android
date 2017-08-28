@@ -847,7 +847,7 @@ public class FragmentChat extends BaseFragment
 
         FragmentShowImage fragment = (FragmentShowImage) mActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
         if (fragment != null) {
-            HelperFragment.removeFreagment(fragment);
+            removeFromBaseFragment(fragment);
             updateShowItemInScreen();
         } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
@@ -1667,22 +1667,13 @@ public class FragmentChat extends BaseFragment
         complete = new OnComplete() {
             @Override
             public void complete(boolean result, final String messageOne, String MessageTow) {
-
                 try {
-
                     String[] split = messageOne.split(",");
                     Double latitude = Double.parseDouble(split[0]);
                     Double longitude = Double.parseDouble(split[1]);
-
                     FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
-
-                    //mActivity. getSupportFragmentManager().beginTransaction().addToBackStack(null)
-                    //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                    //    .replace(ac_ll_parent, fragment, FragmentMap.flagFragmentMap).commit();
-
-                    HelperFragment.loadFragment(fragment);
+                    new HelperFragment(fragment).load();
                 } catch (Exception e) {
-
                     HelperLog.setErrorLog("Activity Chat   complete   " + e.toString());
                 }
             }
@@ -2664,14 +2655,7 @@ public class FragmentChat extends BaseFragment
          */
         G.onClearChatHistory = null;
 
-        //Intent intent = new Intent(G.context, ActivityContactsProfile.class);
-        //intent.putExtra("peerId", parseLong(messageInfo.senderID));
-        //intent.putExtra("RoomId", mRoomId);
-        //intent.putExtra("enterFrom", GROUP.toString());
-        //startActivity(intent);
-
-        HelperFragment.loadFragment(FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString()));
-        //getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
+        new HelperFragment(FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString())).load();
     }
 
     @Override
@@ -4375,72 +4359,16 @@ public class FragmentChat extends BaseFragment
      */
     private void goToProfile() {
         if (chatType == CHAT) {
-            //Intent intent = new Intent(G.context, ActivityContactsProfile.class);
-            //intent.putExtra("peerId", chatPeerId);
-            //intent.putExtra("RoomId", mRoomId);
-            //intent.putExtra("enterFrom", CHAT.toString());
-            //startActivity(intent);
-
-            //getSupportFragmentManager().beginTransaction().replace(R.id.ac_ll_parent, FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
-            HelperFragment.loadFragment(FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString()));
+            new HelperFragment(FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString())).setReplace(false).load();
         } else if (chatType == GROUP) {
 
             if (!isChatReadOnly) {
-                //Intent intent = new Intent(G.context, ActivityGroupProfile.class);
-                //intent.putExtra("RoomId", mRoomId);
-                //startActivity(intent);
-
-                //mActivity.getSupportFragmentManager()
-                //    .beginTransaction().replace(ac_ll_parent, FragmentGroupProfile.newInstance(mRoomId), FragmentGroupProfile.FRAGMENT_TAG)
-                //    .addToBackStack(null).commit();
-
-                HelperFragment.loadFragment(FragmentGroupProfile.newInstance(mRoomId));
+                new HelperFragment(FragmentGroupProfile.newInstance(mRoomId)).setReplace(false).load();
             }
         } else if (chatType == CHANNEL) {
-            //Intent intent = new Intent(G.context, ActivityChannelProfile.class);
-            //intent.putExtra(PutExtraKeys.CHANNEL_PROFILE_ROOM_ID_LONG.toString(), mRoomId);
-            //startActivity(intent);
-
-            //mActivity.getSupportFragmentManager()
-            //    .beginTransaction().replace(ac_ll_parent, FragmentChannelProfile.newInstance(mRoomId), FragmentChannelProfile.FRAGMENT_TAG).
-            //    addToBackStack(null).commit();
-
-            HelperFragment.loadFragment(FragmentChannelProfile.newInstance(mRoomId));
+            new HelperFragment(FragmentChannelProfile.newInstance(mRoomId)).setReplace(false).load();
         }
     }
-
-    //public static void deleteSelectedMessages(final long RoomId, final ArrayList<Long> list, final ProtoGlobal.Room.Type chatType) {
-    //    Realm realm = Realm.getDefaultInstance();
-    //    realm.executeTransaction(new Realm.Transaction() {
-    //        @Override
-    //        public void execute(Realm realm) {
-    //            // get offline delete list , add new deleted list and update in
-    //            // client condition , then send request for delete message to server
-    //            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, RoomId).findFirst();
-    //
-    //            for (final Long messageId : list) {
-    //                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-    //                if (roomMessage != null) {
-    //                    roomMessage.setDeleted(true);
-    //                }
-    //
-    //                RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
-    //                realmOfflineDelete.setOfflineDelete(messageId);
-    //
-    //                realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
-    //
-    //                if (chatType == GROUP) {
-    //                    new RequestGroupDeleteMessage().groupDeleteMessage(RoomId, messageId);
-    //                } else if (chatType == CHAT) {
-    //                    new RequestChatDeleteMessage().chatDeleteMessage(RoomId, messageId);
-    //                } else if (chatType == CHANNEL) {
-    //                    new RequestChannelDeleteMessage().channelDeleteMessage(RoomId, messageId);
-    //                }
-    //            }
-    //        }
-    //    });
-    //    realm.close();
-    //}
 
     /**
      * copy text
@@ -4583,7 +4511,7 @@ public class FragmentChat extends BaseFragment
 
         fragment.appBarLayout = appBarLayout;
 
-        HelperFragment.loadFragment(fragment);
+        new HelperFragment(fragment).load();
     }
 
     /**
@@ -7895,11 +7823,8 @@ public class FragmentChat extends BaseFragment
     }
 
     public void finishChat() {
-
         Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
-
-        HelperFragment.removeFreagment(fragment);
-
+        removeFromBaseFragment(fragment);
         ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.hide);
     }
 }

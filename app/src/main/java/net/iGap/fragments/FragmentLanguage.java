@@ -16,7 +16,6 @@ import java.util.Locale;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperFragment;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 
@@ -63,7 +62,7 @@ public class FragmentLanguage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 // mActivity.getSupportFragmentManager().popBackStack();
-                closeFragment();
+                popBackStackFragment();
             }
         });
 
@@ -108,7 +107,7 @@ public class FragmentLanguage extends BaseFragment {
                     G.selectedLanguage = "en";
                 }
 
-                HelperFragment.removeFreagment(FragmentLanguage.this);
+                removeFromBaseFragment(FragmentLanguage.this);
 
             }
         });
@@ -131,29 +130,17 @@ public class FragmentLanguage extends BaseFragment {
                         onRefreshActivity.refresh("fa");
                     }
                 }
-
-                HelperFragment.removeFreagment(FragmentLanguage.this);
-
-
+                removeFromBaseFragment(FragmentLanguage.this);
             }
         });
-
-         /*
-         choose language farsi or english ,arabic , .....
-         */
-
     }
 
     public void setLocale(String lang) {
-
         Locale locale = new Locale(lang);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
         mActivity.getBaseContext().getResources().updateConfiguration(config, mActivity.getBaseContext().getResources().getDisplayMetrics());
-
-        // startActivity(new Intent(mActivity, ActivitySetting.class));
-
     }
 
     @Override
@@ -161,5 +148,4 @@ public class FragmentLanguage extends BaseFragment {
         super.onAttach(activity);
         mActivity = (FragmentActivity) activity;
     }
-
 }

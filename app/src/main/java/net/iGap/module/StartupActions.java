@@ -108,9 +108,9 @@ public final class StartupActions {
         float xInches = metrics.widthPixels / metrics.xdpi;
         double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
         if (diagonalInches >= 6.5) {
-            //G.twoPaneMode = true;
+            G.twoPaneMode = true;
         } else {
-            //G.twoPaneMode = false;
+            G.twoPaneMode = false;
         }
     }
 

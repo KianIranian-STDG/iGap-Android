@@ -171,7 +171,7 @@ public class FragmentSecurity extends BaseFragment {
                         isFirstArrive = true;
                         //mActivity.getSupportFragmentManager().popBackStack();
 
-                        closeFragment();
+                        popBackStackFragment();
 
                 }
                 closeKeyboard(v);
@@ -193,13 +193,7 @@ public class FragmentSecurity extends BaseFragment {
             public void onClick(View v) {
 
                 isFirstArrive = false;
-                FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
-                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right,
-                //    R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent,
-                //    fragmentSetSecurityPassword).commit();
-
-                HelperFragment.loadFragment(fragmentSetSecurityPassword);
-
+                new HelperFragment(new FragmentSetSecurityPassword()).load();
             }
         });
 
@@ -233,14 +227,7 @@ public class FragmentSecurity extends BaseFragment {
                         bundle.putBoolean("IS_CONFIRM_EMAIL", isConfirmedRecoveryEmail);
 
                         fragmentSecurityRecovery.setArguments(bundle);
-
-                        //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right,
-                        //    R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent,
-                        //    fragmentSecurityRecovery).commit();
-
-                        HelperFragment.loadFragment(fragmentSecurityRecovery);
-
-
+                        new HelperFragment(fragmentSecurityRecovery).load();
                     }
                 }).show();
             }
@@ -284,13 +271,7 @@ public class FragmentSecurity extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("OLD_PASSWORD", password);
                 fragmentSetSecurityPassword.setArguments(bundle);
-
-                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right,
-                //    R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent,
-                //    fragmentSetSecurityPassword).commit();
-
-                HelperFragment.loadFragment(fragmentSetSecurityPassword);
-
+                new HelperFragment(fragmentSetSecurityPassword).load();
             }
         });
 
@@ -407,7 +388,7 @@ public class FragmentSecurity extends BaseFragment {
                             } else { // CAN'T CONNECT TO SERVER
                                 //  mActivity.getSupportFragmentManager().popBackStack();
 
-                                closeFragment();
+                                popBackStackFragment();
                             }
                         }
                     });
@@ -422,7 +403,7 @@ public class FragmentSecurity extends BaseFragment {
                         public void run() {
                             // mActivity.getSupportFragmentManager().popBackStack();
 
-                            closeFragment();
+                            popBackStackFragment();
                         }
                     });
                 }

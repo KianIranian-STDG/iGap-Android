@@ -167,7 +167,7 @@ public class FragmentShowImage extends BaseFragment {
             if (mRoomId == null) {
                 // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
 
-                closeFragment();
+                popBackStackFragment();
 
                 return false;
             }
@@ -177,7 +177,7 @@ public class FragmentShowImage extends BaseFragment {
             if (mRealmList.size() < 1) {
                 // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
 
-                closeFragment();
+                popBackStackFragment();
 
                 return false;
             }
@@ -221,7 +221,7 @@ public class FragmentShowImage extends BaseFragment {
             if (mActivity != null) {
                 // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
 
-                closeFragment();
+                popBackStackFragment();
             }
             return false;
         }

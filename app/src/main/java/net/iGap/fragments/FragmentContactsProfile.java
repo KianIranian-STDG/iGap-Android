@@ -261,11 +261,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     }
 
                     fragment.appBarLayout = fab;
-
-                    //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                    //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, fragment).commit();
-
-                    HelperFragment.loadFragment(fragment);
+                    new HelperFragment(fragment).setReplace(false).load();
                 }
                 realm.close();
             }
@@ -276,7 +272,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                closeFragment();
+                popBackStackFragment();
             }
         });
 
@@ -294,7 +290,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
                         new GoToChatActivity(realmRoom.getId()).startActivity();
 
-                        closeFragment();
+                        popBackStackFragment();
                     } else {
                         G.onChatGetRoom = new OnChatGetRoom() {
                             @Override
@@ -305,7 +301,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
                                         new GoToChatActivity(roomId).setPeerID(userId).startActivity();
 
-                                        closeFragment();
+                                        popBackStackFragment();
                                         G.onChatGetRoom = null;
                                     }
                                 });
@@ -331,7 +327,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     }
                     realm.close();
                 } else {
-                    closeFragment();
+                    popBackStackFragment();
                 }
             }
         });
@@ -682,7 +678,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         vgSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
             @Override
             public void onClick(View view) {
-                HelperFragment.loadFragment(FragmentShearedMedia.newInstance(shearedId));
+                new HelperFragment(FragmentShearedMedia.newInstance(shearedId)).load();
             }
         });
 
@@ -701,11 +697,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                 bundle.putString("PAGE", "CONTACT");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-
-                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.chi_layoutParent, fragmentNotification).commit();
-
-                HelperFragment.loadFragment(fragmentNotification);
+                new HelperFragment(fragmentNotification).load();
             }
         });
 
@@ -783,6 +775,15 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        FragmentChat fragment = (FragmentChat) getFragmentManager().findFragmentByTag(FragmentChat.class.getSimpleName());
+        if (fragment != null && fragment.isVisible()) {
+            fragment.onResume();
+        }
     }
 
     @Override

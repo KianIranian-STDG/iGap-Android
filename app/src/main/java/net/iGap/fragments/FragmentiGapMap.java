@@ -37,7 +37,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -66,7 +65,6 @@ import java.util.Random;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnGeoCommentResponse;
 import net.iGap.interfaces.OnGeoGetComment;
@@ -120,7 +118,7 @@ import static net.iGap.G.context;
 import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
 
-public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
+public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
 
     private MapView map;
     private ItemizedOverlay<OverlayItem> latestLocation;
@@ -1237,9 +1235,7 @@ public class FragmentiGapMap extends Fragment implements OnLocationChanged, OnGe
     @Override
     public void onClose() {
         if (mActivity != null) {
-            //   mActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
-
-            HelperFragment.removeFreagment(this);
+            removeFromBaseFragment(this);
         }
     }
 

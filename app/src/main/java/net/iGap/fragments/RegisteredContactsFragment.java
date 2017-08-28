@@ -65,7 +65,6 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.LastSeenTimeUtil;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoGlobal;
@@ -251,34 +250,23 @@ public class RegisteredContactsFragment extends BaseFragment {
         vgAddContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 FragmentAddContact fragment = FragmentAddContact.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
                 fragment.setArguments(bundle);
-                //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                //    R.anim.slide_in_right, R.anim.slide_out_left).add(R.id.fragmentContainer, fragment, "add_contact_fragment").commit();
-
-                HelperFragment.loadFragment(fragment);
-
+                new HelperFragment(fragment).load();
             }
         });
 
-        MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.menu_txtBack);
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.menu_ripple_txtBack);
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                // close and remove fragment from stack
-
-                //mActivity.getSupportFragmentManager().popBackStack();
                 mActivity.onBackPressed();
                 InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleView.getWindowToken(), 0);
             }
         });
-
-
 
         realmRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         realmRecyclerView.setItemViewCacheSize(1000);
@@ -414,7 +402,7 @@ public class RegisteredContactsFragment extends BaseFragment {
                         if (isCallAction) {
                             //  mActivity.getSupportFragmentManager().popBackStack();
 
-                            closeFragment();
+                            popBackStackFragment();
 
                             long userId = realmContacts.getId();
                             if (userId != 134 && G.userId != userId) {
@@ -431,7 +419,7 @@ public class RegisteredContactsFragment extends BaseFragment {
                                     hideProgress();
                                     //  mActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
 
-                                    closeFragment();
+                                    popBackStackFragment();
 
                                 }
                             }, new HelperPublicMethod.OnError() {

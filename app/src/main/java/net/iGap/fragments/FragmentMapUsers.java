@@ -150,21 +150,11 @@ public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPre
             holder.layoutMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     //for close FragmentMapUsers
                     //if (btnBack != null){
                     //    btnBack.performClick();
                     //}
-
-                    //Intent intent = new Intent(G.currentActivity, ActivityContactsProfile.class);
-                    //intent.putExtra("peerId", item.getUserId());
-                    //intent.putExtra("enterFrom", "Others");
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    //G.currentActivity.startActivity(intent);
-
-                    //mActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, FragmentContactsProfile.newInstance(0, item.getUserId(), "Others"), FragmentContactsProfile.FRAGMENT_TAG).addToBackStack(null).commit();
-                    HelperFragment.loadFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others"));
-
+                    new HelperFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).load();
                     //for close FragmentiGapMap
                     //if (G.onMapClose != null) {
                     //    G.onMapClose.onClose();

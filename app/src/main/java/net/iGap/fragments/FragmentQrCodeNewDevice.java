@@ -76,7 +76,7 @@ public class FragmentQrCodeNewDevice extends BaseFragment implements QRCodeReade
         root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeFragment();
+                popBackStackFragment();
                 G.fragmentActivity.overridePendingTransition(0, 0);
             }
         });
@@ -95,6 +95,6 @@ public class FragmentQrCodeNewDevice extends BaseFragment implements QRCodeReade
             new RequestUserVerifyNewDevice().verifyNewDevice(text);
         }
         pointsOverlayView.setPoints(points);
-        closeFragment();
+        popBackStackFragment();
     }
 }

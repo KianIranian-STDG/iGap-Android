@@ -79,9 +79,7 @@ public class GoToChatActivity {
 
         FragmentChat fragmentChat = new FragmentChat();
         fragmentChat.setArguments(getBundle());
-
-        HelperFragment.loadFragment(fragmentChat);
-
+        new HelperFragment(fragmentChat).setReplace(false).load();
     }
 
     public Bundle getBundle() {

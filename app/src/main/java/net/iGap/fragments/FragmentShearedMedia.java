@@ -234,7 +234,7 @@ public class FragmentShearedMedia extends BaseFragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                closeFragment();
+                popBackStackFragment();
             }
         });
 
@@ -344,7 +344,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 }
                 FragmentChat.mForwardMessages = messageInfos;
 
-                closeFragment();
+                popBackStackFragment();
                 if (FragmentChat.finishActivity != null) {
                     FragmentChat.finishActivity.finishActivity();
                 }
@@ -1518,11 +1518,7 @@ public class FragmentShearedMedia extends BaseFragment {
             fragment.setArguments(bundle);
 
             fragment.appBarLayout = appBarLayout;
-
-            //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
-            //    R.anim.slide_out_left).replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
-
-            HelperFragment.loadFragment(fragment);
+            new HelperFragment(fragment).load();
         }
     }
 
@@ -1661,11 +1657,7 @@ public class FragmentShearedMedia extends BaseFragment {
             bundle.putLong("SelectedImage", selectedFileToken);
             bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
             fragment.setArguments(bundle);
-
-            //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
-            //    R.anim.slide_out_left).replace(R.id.asm_ll_parent, fragment, "Show_Image_fragment_shared_media").commit();
-
-            HelperFragment.loadFragment(fragment);
+            new HelperFragment(fragment).load();
         }
     }
 

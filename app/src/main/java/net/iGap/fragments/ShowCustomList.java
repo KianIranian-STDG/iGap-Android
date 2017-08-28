@@ -105,7 +105,7 @@ public class ShowCustomList extends BaseFragment {
 
                 // mActivity.getSupportFragmentManager().popBackStack();
 
-                closeFragment();
+                popBackStackFragment();
             }
         });
 
@@ -121,7 +121,7 @@ public class ShowCustomList extends BaseFragment {
                     }
                     //  mActivity.getSupportFragmentManager().popBackStack();
 
-                    closeFragment();
+                    popBackStackFragment();
                 }
             }
         });
@@ -152,7 +152,7 @@ public class ShowCustomList extends BaseFragment {
                     }
                     // mActivity.getSupportFragmentManager().popBackStack();
 
-                    closeFragment();
+                    popBackStackFragment();
                 }
 
                 refreshView();
@@ -248,7 +248,7 @@ public class ShowCustomList extends BaseFragment {
                         }
                         // mActivity.getSupportFragmentManager().popBackStack();
 
-                        closeFragment();
+                        popBackStackFragment();
                         break;
                     case 1:
                         count = 0;
@@ -258,7 +258,7 @@ public class ShowCustomList extends BaseFragment {
                         }
                         //  mActivity.getSupportFragmentManager().popBackStack();
 
-                        closeFragment();
+                        popBackStackFragment();
 
                         break;
                     case 2:
@@ -268,7 +268,7 @@ public class ShowCustomList extends BaseFragment {
                         }
                         // mActivity.getSupportFragmentManager().popBackStack();
 
-                        closeFragment();
+                        popBackStackFragment();
 
                         break;
                     case 3:
@@ -284,7 +284,7 @@ public class ShowCustomList extends BaseFragment {
                                     }
                                     //  mActivity.getSupportFragmentManager().popBackStack();
 
-                                    closeFragment();
+                                    popBackStackFragment();
 
                                 }
                             }).inputType(InputType.TYPE_CLASS_NUMBER).input(getString(R.string.count_of_show_message), null, new MaterialDialog.InputCallback() {

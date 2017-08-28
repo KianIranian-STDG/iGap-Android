@@ -45,7 +45,7 @@ public class PushRateSignalingResponse extends MessageHandler {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    HelperFragment.loadFragment(FragmentRatingBar.newInstance(id));
+                    new HelperFragment(FragmentRatingBar.newInstance(id)).load();
                 }
             }, 1000);
         }

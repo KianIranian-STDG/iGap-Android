@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperFragment;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
@@ -39,7 +38,7 @@ import static net.iGap.fragments.FragmentAddContact.onCountryCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentChooseCountry extends Fragment {
+public class FragmentChooseCountry extends BaseFragment {
     private FragmentActivity mActivity;
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private ArrayList<StructCountry> items = new ArrayList<>();
@@ -77,9 +76,7 @@ public class FragmentChooseCountry extends Fragment {
         rippleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //   mActivity.getSupportFragmentManager().popBackStack();
-
-                HelperFragment.removeFreagment(FragmentChooseCountry.this);
+                removeFromBaseFragment(FragmentChooseCountry.this);
             }
         });
 
@@ -267,10 +264,7 @@ public class FragmentChooseCountry extends Fragment {
                     @Override
                     public void onClick(View v) {
                         if (onCountryCallBack != null) {
-                            //  mActivity.getSupportFragmentManager().popBackStack();
-
-                            HelperFragment.removeFreagment(FragmentChooseCountry.this);
-
+                            removeFromBaseFragment(FragmentChooseCountry.this);
                             closeKeyboard(v);
                             FragmentAddContact.onCountryCallBack.countryName(txtNameCountry.getText().toString(), txtCodeCountry.getText().toString(), item.getPhonePattern());
                         }
