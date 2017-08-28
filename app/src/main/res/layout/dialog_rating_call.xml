@@ -22,7 +22,7 @@
         android:rating="5"
         android:stepSize="1"
         />
-    <EditText
+    <net.iGap.module.MEditText
         android:id="@+id/arb_edt_resone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

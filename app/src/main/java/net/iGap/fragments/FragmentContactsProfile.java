@@ -34,7 +34,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -69,6 +68,7 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.LastSeenTimeUtil;
+import net.iGap.module.MEditText;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.module.structs.StructMessageAttachment;
@@ -408,7 +408,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
 
                     TextInputLayout inputLastName = new TextInputLayout(mActivity);
-                    final EditText edtLastName = new EditText(mActivity);
+                    final MEditText edtLastName = new MEditText(mActivity);
                     edtLastName.setHint(R.string.last_name);
                     edtLastName.setTypeface(G.typeface_IRANSansMobile);
                     edtLastName.setText(lastName);

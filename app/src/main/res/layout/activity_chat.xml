@@ -439,7 +439,7 @@
               />
         </net.iGap.libs.rippleeffect.RippleView>
 
-        <EditText
+        <net.iGap.module.MEditText
             android:id="@+id/chl_edt_search_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

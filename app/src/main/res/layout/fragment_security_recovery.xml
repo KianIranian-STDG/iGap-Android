@@ -131,7 +131,7 @@
         android:textSize="@dimen/dp13"
 
         />
-    <EditText
+    <net.iGap.module.MEditText
         android:id="@+id/edtSetRecoveryAnswerPassOne"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
         android:singleLine="true"
         android:textSize="@dimen/dp13"
         />
-    <EditText
+    <net.iGap.module.MEditText
         android:id="@+id/edtSetRecoveryAnswerPassTwo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -208,7 +208,7 @@
         />
 
 
-    <EditText
+    <net.iGap.module.MEditText
         android:id="@+id/edtSetRecoveryEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

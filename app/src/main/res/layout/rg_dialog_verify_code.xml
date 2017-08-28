@@ -35,7 +35,7 @@
       />
 
 
-  <EditText
+  <net.iGap.module.MEditText
       android:id="@+id/rg_edt_dialog_verifyCode"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

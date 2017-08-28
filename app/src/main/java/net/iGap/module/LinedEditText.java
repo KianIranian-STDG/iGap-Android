@@ -17,11 +17,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.widget.EditText;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import net.iGap.G;
 import net.iGap.R;
 
-public class LinedEditText extends EditText {
+public class LinedEditText extends android.support.v7.widget.AppCompatEditText {
 
     // the vertical offset scaling factor (10% of the height of the text)
     private static final float VERTICAL_OFFSET_SCALING_FACTOR = 0.1f;
@@ -102,5 +103,12 @@ public class LinedEditText extends EditText {
         } else {
             dashedLinePaint.setColor(G.context.getResources().getColor(R.color.line_edit_text));
         }
+    }
+
+    @Override
+    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+        InputConnection conn = super.onCreateInputConnection(outAttrs);
+        outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_FULLSCREEN;
+        return conn;
     }
 }

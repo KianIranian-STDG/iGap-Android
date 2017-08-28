@@ -33,7 +33,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -95,6 +94,7 @@ import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.IntentRequests;
+import net.iGap.module.MEditText;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.ChannelChatRole;
@@ -143,7 +143,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
     private TextView titleToolbar;
     private EmojiTextViewE txtChannelName;
     TextView txtSharedMedia;
-    private EditText edtRevoke;
+    private MEditText edtRevoke;
 
     private String title;
     private String initials;
@@ -684,7 +684,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
         final TextInputLayout inputRevoke = new TextInputLayout(mActivity);
-        edtRevoke = new EditText(mActivity);
+        edtRevoke = new MEditText(mActivity);
         edtRevoke.setHint(getResources().getString(R.string.channel_link_hint_revoke));
         edtRevoke.setTypeface(G.typeface_IRANSansMobile);
         edtRevoke.setText(link);
@@ -744,7 +744,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
         final TextInputLayout inputChannelLink = new TextInputLayout(mActivity);
-        EditText edtLink = new EditText(mActivity);
+        MEditText edtLink = new MEditText(mActivity);
         edtLink.setHint(getResources().getString(R.string.channel_public_hint_revoke));
         edtLink.setTypeface(G.typeface_IRANSansMobile);
         edtLink.setText(link);
@@ -1611,7 +1611,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
         final TextInputLayout inputUserName = new TextInputLayout(mActivity);
-        final EditText edtUserName = new EditText(mActivity);
+        final MEditText edtUserName = new MEditText(mActivity);
         edtUserName.setHint(getResources().getString(R.string.channel_title_channel_set_username));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);

@@ -198,7 +198,7 @@
                 android:orientation="horizontal"
                 >
 
-              <EditText
+              <net.iGap.module.MEditText
                   android:id="@+id/rg_edt_CodeNumber"
                   android:layout_width="0dp"
                   android:layout_height="@dimen/dp40"
@@ -229,6 +229,7 @@
                   android:textSize="@dimen/dp14"
                   android:textAlignment="gravity"
                   app:mask="###-###-####"
+                  android:imeOptions="flagNoExtractUi"
                   />
 
             </LinearLayout>
@@ -506,7 +507,7 @@
               />
 
 
-          <EditText
+          <net.iGap.module.MEditText
               android:id="@+id/rg_edtCheckPassword"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"

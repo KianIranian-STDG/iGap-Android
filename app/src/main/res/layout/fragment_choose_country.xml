@@ -54,7 +54,7 @@
               />
         </net.iGap.libs.rippleeffect.RippleView>
 
-        <EditText
+        <net.iGap.module.MEditText
             android:id="@+id/edtCountrySearch"
             android:layout_width="0dp"
             android:layout_height="match_parent"

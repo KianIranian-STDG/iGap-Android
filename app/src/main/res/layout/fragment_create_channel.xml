@@ -197,7 +197,7 @@
               app:hintTextAppearance="@style/Hint_appearance"
               >
 
-            <EditText
+            <net.iGap.module.MEditText
                 android:id="@+id/fch_edt_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

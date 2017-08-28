@@ -34,7 +34,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -90,6 +89,7 @@ import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.IntentRequests;
+import net.iGap.module.MEditText;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.module.StartupActions;
@@ -529,7 +529,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
                 final TextInputLayout inputEmail = new TextInputLayout(mActivity);
-                final EditText edtEmail = new EditText(mActivity);
+                final MEditText edtEmail = new MEditText(mActivity);
                 edtEmail.setHint(getResources().getString(R.string.set_email));
                 edtEmail.setTypeface(G.typeface_IRANSansMobile);
                 edtEmail.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
@@ -659,7 +659,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
                 final TextInputLayout inputUserName = new TextInputLayout(mActivity);
-                final EditText edtUserName = new EditText(mActivity);
+                final MEditText edtUserName = new MEditText(mActivity);
                 edtUserName.setHint(getResources().getString(R.string.st_username));
                 edtUserName.setText(txtUserName.getText().toString());
                 edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
