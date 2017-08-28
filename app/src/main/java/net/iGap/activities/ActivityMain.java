@@ -969,7 +969,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onStart() {
         super.onStart();
 
-        if (G.isPassCode && isLock) {
+        if (!isActivityEnterPassCode && G.isPassCode && isLock) {
             enterPassword();
         } else if (!isActivityEnterPassCode) {
             currentTime = System.currentTimeMillis();

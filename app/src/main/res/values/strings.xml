@@ -1060,6 +1060,7 @@
   <string name="forgot_pin_desc">If you have forgotten your PIN/Password, there is no way to recover but only to log out and log in again. Are you sure to log out?</string>
   <string name="forgot_pin_title">Forgot PIN/Password?</string>
   <string name="enter_pass_code">Enter your passcode</string>
+  <string name="enter_change_pass_code">Enter your new passcode</string>
   <string name="re_enter_pass_code">Re-enter your passcode</string>
 
 
@@ -1070,5 +1071,7 @@
   <string name="in_5_hours">in 5 hours</string>
   <string name="PIN">PIN</string>
   <string name="password">Password</string>
+  <string name="Unlock_with_your_passcode">Unlock with your passcode</string>
+  <string name="forgot_Unlock_with_your_passcode">Forgot Passcode?</string>
 
 </resources>

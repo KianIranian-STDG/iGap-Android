@@ -20,8 +20,10 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -200,6 +202,31 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
             }
         });
 
+
+        edtPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (kindPassCode == PIN) {
+                    if (s.length() == 4) {
+                        txtOk.performClick();
+                    }
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         txtOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,10 +245,12 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
                     } else {
                         closeKeyboard(v);
                         error(getString(R.string.invalid_password));
+                        edtPassword.setText("");
                     }
                 } else {
                     closeKeyboard(v);
                     error(getString(R.string.enter_a_password));
+                    edtPassword.setText("");
                 }
             }
         });

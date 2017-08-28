@@ -16,8 +16,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +80,13 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         // Required empty public constructor
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -260,6 +269,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                 //titlePassCode.setText("PIN");
                 titlePassCode.setVisibility(View.GONE);
                 staticSpinner.setVisibility(View.VISIBLE);
+                txtSetPassword.setText(getResources().getString(R.string.enter_change_pass_code));
                 if (kindPassword == PIN) {
                     edtSetPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
                 } else {
@@ -342,6 +352,29 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             }
         });
 
+        edtSetPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (kindPassCode == PIN) {
+                    if (s.length() == 4) {
+                        rippleOk.performClick();
+                    }
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         rippleOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -416,11 +449,13 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     } else {
                         closeKeyboard(v);
                         error(getString(R.string.invalid_password));
+                        edtSetPassword.setText("");
                     }
 
                 } else {
                     closeKeyboard(v);
                     error(getString(R.string.enter_pass_code));
+                    edtSetPassword.setText("");
                 }
             }
         });
