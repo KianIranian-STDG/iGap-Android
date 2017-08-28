@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
@@ -178,8 +179,9 @@ public class FragmentShearedMedia extends BaseFragment {
 
         canUpdateAfterDownload = true;
 
-
         setListener();
+
+        ActivityMain.setMediaLayout();
     }
 
     @Override
@@ -201,6 +203,8 @@ public class FragmentShearedMedia extends BaseFragment {
         }
 
         MusicPlayer.shearedMediaLayout = null;
+
+        ActivityMain.setMediaLayout();
     }
 
     @Override

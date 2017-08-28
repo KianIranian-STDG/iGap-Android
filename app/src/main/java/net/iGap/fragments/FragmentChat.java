@@ -643,6 +643,9 @@ public class FragmentChat extends BaseFragment
                         //updateUnreadCountRealm.close();
                     }
                 });
+
+                ActivityMain.setMediaLayout();
+
             }
         }, Config.LOW_START_PAGE_TIME);
 
@@ -801,6 +804,8 @@ public class FragmentChat extends BaseFragment
         }
 
         MusicPlayer.chatLayout = null;
+
+        ActivityMain.setMediaLayout();
     }
 
     private void registerListener() {

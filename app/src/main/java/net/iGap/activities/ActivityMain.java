@@ -2120,6 +2120,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (drawer != null) {
             drawer.closeDrawer(GravityCompat.START);
         }
+
+        ActivityMain.setMediaLayout();
+
     }
 
     private void enterPassword() {
@@ -2527,7 +2530,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 }
 
-                setMediaLayout();
 
             }
         });
@@ -2537,7 +2539,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public static void setMediaLayout() {
 
-        G.handler.postDelayed(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
 
@@ -2584,7 +2586,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     Log.e("dddddd", "activity main  setMediaLayout " + e.toString());
                 }
             }
-        }, 250);
+        });
     }
 
     @Override
