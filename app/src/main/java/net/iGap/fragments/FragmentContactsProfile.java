@@ -287,10 +287,8 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
 
                     if (realmRoom != null) {
-
-                        new GoToChatActivity(realmRoom.getId()).startActivity();
-
                         popBackStackFragment();
+                        new GoToChatActivity(realmRoom.getId()).startActivity();
                     } else {
                         G.onChatGetRoom = new OnChatGetRoom() {
                             @Override
@@ -298,10 +296,8 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-
-                                        new GoToChatActivity(roomId).setPeerID(userId).startActivity();
-
                                         popBackStackFragment();
+                                        new GoToChatActivity(roomId).setPeerID(userId).startActivity();
                                         G.onChatGetRoom = null;
                                     }
                                 });

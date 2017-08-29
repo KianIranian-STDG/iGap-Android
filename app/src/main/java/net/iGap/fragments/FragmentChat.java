@@ -300,8 +300,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 
 public class FragmentChat extends BaseFragment
-    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
-    OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete {
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -499,20 +498,19 @@ public class FragmentChat extends BaseFragment
 
                     @Override
                     public void resendMessageNeedsUpload(RealmRoomMessage message) {
-                        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(),
-                            RealmRoomMessage.getReplyMessageId(message), new HelperUploadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(int progress, FileUploadStructure struct) {
-                                    if (canUpdateAfterDownload) {
-                                        insertItemAndUpdateAfterStartUpload(progress, struct);
-                                    }
+                        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(), RealmRoomMessage.getReplyMessageId(message), new HelperUploadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(int progress, FileUploadStructure struct) {
+                                if (canUpdateAfterDownload) {
+                                    insertItemAndUpdateAfterStartUpload(progress, struct);
                                 }
+                            }
 
-                                @Override
-                                public void OnError() {
+                            @Override
+                            public void OnError() {
 
-                                }
-                            });
+                            }
+                        });
                     }
 
                     @Override
@@ -804,6 +802,15 @@ public class FragmentChat extends BaseFragment
         ActivityMain.setStripLayoutCall();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Fragment fragment = HelperFragment.isFragmentVisible(FragmentChat.class.getName());
+        if (fragment != null) {
+            fragment.onResume();
+        }
+    }
+
     private void registerListener() {
 
         G.dispatchTochEventChat = new IDispatchTochEvent() {
@@ -949,13 +956,7 @@ public class FragmentChat extends BaseFragment
                         Uri uri = data.getData();
                         File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(HelperString.getRandomFileName(5), mActivity, uri);
                         mainVideoPath = tempFile.getPath();
-                        String savePathVideoCompress = Environment.getExternalStorageDirectory()
-                            + File.separator
-                            + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME
-                            + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR
-                            + "VIDEO_"
-                            + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date())
-                            + ".mp4";
+                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                         listPathString.add(savePathVideoCompress);
 
@@ -977,13 +978,7 @@ public class FragmentChat extends BaseFragment
                         File mediaStorageDir = new File(G.DIR_VIDEOS);
                         listPathString = new ArrayList<>();
 
-                        String savePathVideoCompress = Environment.getExternalStorageDirectory()
-                            + File.separator
-                            + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME
-                            + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR
-                            + "VIDEO_"
-                            + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date())
-                            + ".mp4";
+                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                         listPathString.add(savePathVideoCompress);
                         mainVideoPath = data.getData().getPath();
@@ -1010,13 +1005,7 @@ public class FragmentChat extends BaseFragment
 
                             mainVideoPath = listPathString.get(0);
 
-                            String savePathVideoCompress = Environment.getExternalStorageDirectory()
-                                + File.separator
-                                + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME
-                                + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR
-                                + "VIDEO_"
-                                + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date())
-                                + ".mp4";
+                            String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                             listPathString.set(0, savePathVideoCompress);
 
@@ -1378,8 +1367,7 @@ public class FragmentChat extends BaseFragment
                          * if user joined to this room set lastMessage for that
                          */
                         //+Realm realm = Realm.getDefaultInstance();
-                        final RealmResults<RealmRoomMessage> realmRoomMessages =
-                            getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                        final RealmResults<RealmRoomMessage> realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
                         if (realmRoomMessages.size() > 0 && realmRoomMessages.first() != null) {
                             getRealmChat().executeTransaction(new Realm.Transaction() {
                                 @Override
@@ -1770,7 +1758,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View view) {
                 ll_attach_text.setVisibility(View.GONE);
-                edtChat.setFilters(new InputFilter[] {});
+                edtChat.setFilters(new InputFilter[]{});
                 edtChat.setText(edtChat.getText());
                 edtChat.setSelection(edtChat.getText().length());
 
@@ -1918,34 +1906,24 @@ public class FragmentChat extends BaseFragment
                     public void onClick(View view) {
                         dialog.dismiss();
 
-                        new MaterialDialog.Builder(mActivity).title(R.string.clear_history)
-                            .content(R.string.clear_history_content)
-                            .positiveText(R.string.yes)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    onSelectRoomMenu("txtClearHistory", (int) mRoomId);
-                                }
-                            })
-                            .negativeText(R.string.no)
-                            .show();
+                        new MaterialDialog.Builder(mActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                onSelectRoomMenu("txtClearHistory", (int) mRoomId);
+                            }
+                        }).negativeText(R.string.no).show();
                     }
                 });
                 root3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        new MaterialDialog.Builder(mActivity).title(R.string.delete_chat)
-                            .content(R.string.delete_chat_content)
-                            .positiveText(R.string.yes)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
-                                }
-                            })
-                            .negativeText(R.string.no)
-                            .show();
+                        new MaterialDialog.Builder(mActivity).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
+                            }
+                        }).negativeText(R.string.no).show();
                     }
                 });
                 root4.setOnClickListener(new View.OnClickListener() {
@@ -1959,20 +1937,15 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        new MaterialDialog.Builder(mActivity).title(R.string.convert_chat_to_group_title)
-                            .content(R.string.convert_chat_to_group_content)
-                            .positiveText(R.string.yes)
-                            .negativeText(R.string.no)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    //finish();
-                                    finishChat();
-                                    dialog.dismiss();
-                                    G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
-                                }
-                            })
-                            .show();
+                        new MaterialDialog.Builder(mActivity).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                //finish();
+                                finishChat();
+                                dialog.dismiss();
+                                G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
+                            }
+                        }).show();
                     }
                 });
 
@@ -2121,8 +2094,7 @@ public class FragmentChat extends BaseFragment
                         unreadMessage.setUserId(-1);
                         unreadMessage.setMessage(countNewMessage + " " + getString(R.string.unread_message));
                         unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                        mAdapter.add(position,
-                            new UnreadMessage(getRealmChat(), FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), unreadMessage)).withIdentifier(SUID.id().get()));
+                        mAdapter.add(position, new UnreadMessage(getRealmChat(), FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), unreadMessage)).withIdentifier(SUID.id().get()));
 
                         LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
                         linearLayout.scrollToPositionWithOffset(position, 0);
@@ -2285,7 +2257,7 @@ public class FragmentChat extends BaseFragment
                     sendMessage(latestRequestCode, listPathString.get(0));
                     listPathString.clear();
                     ll_attach_text.setVisibility(View.GONE);
-                    edtChat.setFilters(new InputFilter[] {});
+                    edtChat.setFilters(new InputFilter[]{});
                     edtChat.setText("");
 
                     clearReplyView();
@@ -2402,9 +2374,7 @@ public class FragmentChat extends BaseFragment
                                          *  user wants to replay to a message
                                          */
                                         if (userTriesReplay()) {
-                                            RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class)
-                                                .equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID))
-                                                .findFirst();
+                                            RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
                                             if (messageToReplay != null) {
                                                 roomMessage.setReplyTo(messageToReplay);
                                             }
@@ -2442,8 +2412,7 @@ public class FragmentChat extends BaseFragment
                                         }
                                     });
                                 }
-                                mAdapter.add(
-                                    new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
+                                mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
 
                                 scrollToEnd();
 
@@ -2825,11 +2794,7 @@ public class FragmentChat extends BaseFragment
                         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         long _deletedMessageId = parseLong(messageInfo.messageID);
                         RealmRoomMessage realmRoomMessage = null;
-                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
-                            .equalTo(RealmRoomMessageFields.EDITED, false)
-                            .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-                            .lessThan(RealmRoomMessageFields.MESSAGE_ID, _deletedMessageId)
-                            .findAll();
+                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.EDITED, false).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, _deletedMessageId).findAll();
                         if (realmRoomMessages.size() > 0) {
                             realmRoomMessage = realmRoomMessages.last();
                         }
@@ -3044,31 +3009,30 @@ public class FragmentChat extends BaseFragment
 
         if (userTriesReplay()) {
             messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
-        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), StructMessageInfo.getReplyMessageId(messageInfo),
-            new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    if (canUpdateAfterDownload) {
-                        insertItemAndUpdateAfterStartUpload(progress, struct);
-                    }
+        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), StructMessageInfo.getReplyMessageId(messageInfo), new HelperUploadFile.UpdateListener() {
+            @Override
+            public void OnProgress(int progress, FileUploadStructure struct) {
+                if (canUpdateAfterDownload) {
+                    insertItemAndUpdateAfterStartUpload(progress, struct);
                 }
+            }
 
-                @Override
-                public void OnError() {
+            @Override
+            public void OnError() {
 
-                }
-            });
+            }
+        });
 
         messageInfo.attachment.duration = duration;
 
@@ -3187,11 +3151,7 @@ public class FragmentChat extends BaseFragment
          * if in current room client have new message that not seen yet
          * after first new message come in the view change view for unread count
          */
-        if (firstUnreadMessageInChat != null
-            && firstUnreadMessageInChat.isManaged()
-            && firstUnreadMessageInChat.isValid()
-            && !firstUnreadMessageInChat.isDeleted()
-            && firstUnreadMessageInChat.getMessageId() == parseLong(messageInfo.messageID)) {
+        if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isManaged() && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == parseLong(messageInfo.messageID)) {
             countNewMessage = 0;
             txtNewUnreadMessage.setVisibility(View.GONE);
             txtNewUnreadMessage.setText(countNewMessage + "");
@@ -3199,8 +3159,7 @@ public class FragmentChat extends BaseFragment
             firstUnreadMessageInChat = null;
         }
 
-        if (chatType != CHANNEL && (!messageInfo.isSenderMe() && messageInfo.status != null && !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) & !messageInfo.status.equals(
-            ProtoGlobal.RoomMessageStatus.LISTENED.toString()))) {
+        if (chatType != CHANNEL && (!messageInfo.isSenderMe() && messageInfo.status != null && !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) & !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString()))) {
 
             /**
              * set message status SEEN for avoid from run this block in each bindView
@@ -3216,11 +3175,7 @@ public class FragmentChat extends BaseFragment
                      * because in enter ro chat fetchMessage method will be send status so client shouldn't
                      * send status again
                      */
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class)
-                        .equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID))
-                        .notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString())
-                        .notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString())
-                        .findFirst();
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
                     if (realmRoomMessage != null) {
                         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
                         if (realmClientCondition != null) {
@@ -3615,8 +3570,7 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 dialog.dismiss();
 
-                final String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath
-                    : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+                final String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
 
                 if (new File(_dPath).exists()) {
 
@@ -3662,18 +3616,15 @@ public class FragmentChat extends BaseFragment
                                             public void run() {
                                                 if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
 
-                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download,
-                                                        R.string.file_save_to_download_folder);
+                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
                                                 } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
                                                     HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
                                                 } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
 
                                                     if (message.messageType.toString().contains("VIDEO")) {
-                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video,
-                                                            R.string.file_save_to_video_folder);
+                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
                                                     } else if (message.messageType.toString().contains("GIF")) {
-                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif,
-                                                            R.string.file_save_to_picture_folder);
+                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
                                                     } else {
                                                         HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
                                                     }
@@ -3868,8 +3819,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void run() {
                         if (!isCloudRoom) {
-                            imvUserPicture.setImageBitmap(
-                                net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }
                     }
                 });
@@ -4070,8 +4020,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void run() {
 
-                        imvUserPicture.setImageBitmap(
-                            net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
             }
@@ -4242,18 +4191,12 @@ public class FragmentChat extends BaseFragment
     private void showErrorDialog(final int time) {
 
         boolean wrapInScrollView = true;
-        final MaterialDialog dialogWait = new MaterialDialog.Builder(G.currentActivity).title(getResources().getString(R.string.title_limit_chat_to_unknown_contact))
-            .customView(R.layout.dialog_remind_time, wrapInScrollView)
-            .positiveText(R.string.B_ok)
-            .autoDismiss(false)
-            .canceledOnTouchOutside(true)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                }
-            })
-            .show();
+        final MaterialDialog dialogWait = new MaterialDialog.Builder(G.currentActivity).title(getResources().getString(R.string.title_limit_chat_to_unknown_contact)).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+            }
+        }).show();
 
         View v = dialogWait.getCustomView();
         if (v == null) {
@@ -4594,7 +4537,7 @@ public class FragmentChat extends BaseFragment
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
@@ -4756,7 +4699,7 @@ public class FragmentChat extends BaseFragment
 
                 ll_attach_text.setVisibility(View.VISIBLE);
                 // set maxLength  when layout attachment is visible
-                edtChat.setFilters(new InputFilter[] { new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH) });
+                edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
 
                 layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
                     @Override
@@ -4908,15 +4851,8 @@ public class FragmentChat extends BaseFragment
                             sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                         }
                     } else if (messageType == HelperGetDataFromOtherApp.FileType.video) {
-                        if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(
-                            SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
-                            String savePathVideoCompress = Environment.getExternalStorageDirectory()
-                                + File.separator
-                                + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME
-                                + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR
-                                + "VIDEO_"
-                                + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date())
-                                + ".mp4";
+                        if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
+                            String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                             mainVideoPath = getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
 
                             if (mainVideoPath == null) {
@@ -4947,15 +4883,8 @@ public class FragmentChat extends BaseFragment
                             if (fileType == HelperGetDataFromOtherApp.FileType.image) {
                                 sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                             } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
-                                if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(
-                                    SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
-                                    String savePathVideoCompress = Environment.getExternalStorageDirectory()
-                                        + File.separator
-                                        + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME
-                                        + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR
-                                        + "VIDEO_"
-                                        + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date())
-                                        + ".mp4";
+                                if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
+                                    String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                                     mainVideoPath = getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
 
                                     new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
@@ -4998,11 +4927,7 @@ public class FragmentChat extends BaseFragment
                     intent.setType("text/plain");
                     String messageContact;
                     if (messageInfo.forwardedFrom != null) {
-                        messageContact = messageInfo.forwardedFrom.getRoomMessageContact().getFirstName()
-                            + " "
-                            + messageInfo.forwardedFrom.getRoomMessageContact().getLastName()
-                            + "\n"
-                            + messageInfo.forwardedFrom.getRoomMessageContact().getLastPhoneNumber();
+                        messageContact = messageInfo.forwardedFrom.getRoomMessageContact().getFirstName() + " " + messageInfo.forwardedFrom.getRoomMessageContact().getLastName() + "\n" + messageInfo.forwardedFrom.getRoomMessageContact().getLastPhoneNumber();
                     } else {
                         messageContact = messageInfo.userInfo.firstName + "\n" + messageInfo.userInfo.phone;
                     }
@@ -5407,8 +5332,7 @@ public class FragmentChat extends BaseFragment
                                         @Override
                                         public void run() {
 
-                                            fotoapparatSwitcher =
-                                                Fotoapparat.with(mActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                            fotoapparatSwitcher = Fotoapparat.with(mActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
                                                     .photoSize(biggestSize())   // we want to have the biggest photo possible
                                                     .lensPosition(back())       // we want back camera
                                                     .build();
@@ -5451,8 +5375,7 @@ public class FragmentChat extends BaseFragment
                                     G.handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            fotoapparatSwitcher =
-                                                Fotoapparat.with(mActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                            fotoapparatSwitcher = Fotoapparat.with(mActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
                                                     .photoSize(biggestSize())   // we want to have the biggest photo possible
                                                     .lensPosition(back())       // we want back camera
                                                     .build();
@@ -6214,20 +6137,19 @@ public class FragmentChat extends BaseFragment
                             mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
                         }
 
-                        HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType,
-                            structUploadVideo.message, structUploadVideo.replyMessageId, new HelperUploadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(int progress, FileUploadStructure struct) {
-                                    if (canUpdateAfterDownload) {
-                                        insertItemAndUpdateAfterStartUpload(progress, struct);
-                                    }
+                        HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, structUploadVideo.replyMessageId, new HelperUploadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(int progress, FileUploadStructure struct) {
+                                if (canUpdateAfterDownload) {
+                                    insertItemAndUpdateAfterStartUpload(progress, struct);
                                 }
+                            }
 
-                                @Override
-                                public void OnError() {
+                            @Override
+                            public void OnError() {
 
-                                }
-                            });
+                            }
+                        });
                     }
                 }
             }
@@ -6252,7 +6174,7 @@ public class FragmentChat extends BaseFragment
         String fileName = null;
         long duration = 0;
         long fileSize = 0;
-        int[] imageDimens = { 0, 0 };
+        int[] imageDimens = {0, 0};
         final long senderID = G.userId;
 
         /**
@@ -6286,12 +6208,9 @@ public class FragmentChat extends BaseFragment
                 fileSize = new File(filePath).length();
                 imageDimens = AndroidUtils.getImageDimens(filePath);
                 if (userTriesReplay()) {
-                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo =
-                        new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
             case AttachFile.request_code_TAKE_PICTURE:
@@ -6314,12 +6233,9 @@ public class FragmentChat extends BaseFragment
                     messageType = ProtoGlobal.RoomMessageType.IMAGE;
                 }
                 if (userTriesReplay()) {
-                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo =
-                        new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
                 }
 
                 break;
@@ -6344,12 +6260,9 @@ public class FragmentChat extends BaseFragment
                 imageDimens = AndroidUtils.getImageDimens(filePath);
 
                 if (userTriesReplay()) {
-                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo =
-                        new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
 
@@ -6379,12 +6292,9 @@ public class FragmentChat extends BaseFragment
                 File videoFile = new File(filePath);
                 String videoFileMime = FileUtils.getMimeType(videoFile);
                 if (userTriesReplay()) {
-                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo =
-                        new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime);
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, videoFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_pic_audi:
@@ -6399,8 +6309,7 @@ public class FragmentChat extends BaseFragment
                 String songArtist = AndroidUtils.getAudioArtistName(filePath);
                 long songDuration = AndroidUtils.getAudioDuration(mActivity, filePath);
 
-                messageInfo = StructMessageInfo.buildForAudio(getRealmChat(), mRoomId, messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime,
-                    getWrittenMessage(), null, filePath, songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
+                messageInfo = StructMessageInfo.buildForAudio(getRealmChat(), mRoomId, messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath, songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_pic_file:
             case AttachFile.request_code_open_document:
@@ -6415,12 +6324,9 @@ public class FragmentChat extends BaseFragment
                 File fileFile = new File(filePath);
                 String fileFileMime = FileUtils.getMimeType(fileFile);
                 if (userTriesReplay()) {
-                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo =
-                        new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime);
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), getWrittenMessage(), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, fileFileMime, filePath, null, filePath, null, updateTime);
                 }
                 break;
             case AttachFile.request_code_contact_phone:
@@ -6431,8 +6337,7 @@ public class FragmentChat extends BaseFragment
                 String name = contactUtils.retrieveName();
                 String number = contactUtils.retrieveNumber();
                 messageType = CONTACT;
-                messageInfo = StructMessageInfo.buildForContact(getRealmChat(), mRoomId, messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, name, "", number,
-                    userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
+                messageInfo = StructMessageInfo.buildForContact(getRealmChat(), mRoomId, messageId, senderID, MyType.SendType.send, updateTime, ProtoGlobal.RoomMessageStatus.SENDING, name, "", number, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
             case AttachFile.request_code_paint:
                 fileName = new File(filePath).getName();
@@ -6444,12 +6349,9 @@ public class FragmentChat extends BaseFragment
                     messageType = ProtoGlobal.RoomMessageType.IMAGE;
                 }
                 if (userTriesReplay()) {
-                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType,
-                        MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
                 } else {
-                    messageInfo =
-                        new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(),
-                            messageType, MyType.SendType.send, null, filePath, updateTime);
+                    messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), getWrittenMessage(), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), messageType, MyType.SendType.send, null, filePath, updateTime);
                 }
                 break;
         }
@@ -6543,20 +6445,19 @@ public class FragmentChat extends BaseFragment
                         compress = compressedPath.get(finalFilePath);
                     }
                     if (compress) {
-                        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(),
-                            StructMessageInfo.getReplyMessageId(finalMessageInfo), new HelperUploadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(int progress, FileUploadStructure struct) {
-                                    {
-                                        insertItemAndUpdateAfterStartUpload(progress, struct);
-                                    }
+                        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), StructMessageInfo.getReplyMessageId(finalMessageInfo), new HelperUploadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(int progress, FileUploadStructure struct) {
+                                {
+                                    insertItemAndUpdateAfterStartUpload(progress, struct);
                                 }
+                            }
 
-                                @Override
-                                public void OnError() {
+                            @Override
+                            public void OnError() {
 
-                                }
-                            });
+                            }
+                        });
                     } else {
                         compressingFiles.put(finalMessageId, null);
                         StructUploadVideo uploadVideo = new StructUploadVideo();
@@ -6593,20 +6494,19 @@ public class FragmentChat extends BaseFragment
         if (finalMessageType != VIDEO && finalMessageType != VIDEO_TEXT) {
             if (finalMessageType != CONTACT) {
 
-                HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), StructMessageInfo.getReplyMessageId(finalMessageInfo),
-                    new HelperUploadFile.UpdateListener() {
-                        @Override
-                        public void OnProgress(int progress, FileUploadStructure struct) {
-                            if (canUpdateAfterDownload) {
-                                insertItemAndUpdateAfterStartUpload(progress, struct);
-                            }
+                HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, finalMessageId, finalMessageType, getWrittenMessage(), StructMessageInfo.getReplyMessageId(finalMessageInfo), new HelperUploadFile.UpdateListener() {
+                    @Override
+                    public void OnProgress(int progress, FileUploadStructure struct) {
+                        if (canUpdateAfterDownload) {
+                            insertItemAndUpdateAfterStartUpload(progress, struct);
                         }
+                    }
 
-                        @Override
-                        public void OnError() {
+                    @Override
+                    public void OnError() {
 
-                        }
-                    });
+                    }
+                });
             } else {
                 ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
                 messageUtil.contact(finalMessageInfo.userInfo.firstName, finalMessageInfo.userInfo.lastName, finalMessageInfo.userInfo.phone);
@@ -6665,8 +6565,7 @@ public class FragmentChat extends BaseFragment
                 roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
 
                 if (userTriesReplay()) {
-                    RealmRoomMessage realmRoomMessage =
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst();
                     if (realmRoomMessage != null) {
                         roomMessage.setReplyTo(realmRoomMessage);
                     }
@@ -6926,8 +6825,7 @@ public class FragmentChat extends BaseFragment
 
                     if (messageInfo.showTime) {
                         if (mAdapter.getItemCount() > 0) {
-                            if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDifferent(messageInfo.time,
-                                mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
+                            if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
                                 mAdapter.add(new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                             }
                         } else {
@@ -7119,13 +7017,7 @@ public class FragmentChat extends BaseFragment
             startFutureMessageIdUp = fetchMessageId;
 
             // we have firstUnreadMessage but for gapDetection method we need RealmResult so get this message with query; if we change gap detection method will be can use from firstUnreadMessage
-            resultsDown = getRealmChat().where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-                .notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0)
-                .equalTo(RealmRoomMessageFields.DELETED, false)
-                .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-                .equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId)
-                .findAll();
+            resultsDown = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findAll();
 
             addToView = false;
             direction = DOWN;
@@ -7134,22 +7026,12 @@ public class FragmentChat extends BaseFragment
             direction = UP;
         }
 
-        resultsUp = getRealmChat().where(RealmRoomMessage.class)
-            .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-            .notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0)
-            .equalTo(RealmRoomMessageFields.DELETED, false)
-            .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-            .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        resultsUp = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
         long gapMessageId;
         if (direction == DOWN) {
-            resultsUp = getRealmChat().where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-                .lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId)
-                .notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0)
-                .equalTo(RealmRoomMessageFields.DELETED, false)
-                .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-                .findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+            resultsUp =
+                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
@@ -7228,12 +7110,7 @@ public class FragmentChat extends BaseFragment
              */
             long oldMessageId = 0;
             if (direction == DOWN) {
-                RealmRoomMessage realmRoomMessage = getRealmChat().where(RealmRoomMessage.class)
-                    .equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId)
-                    .notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0)
-                    .equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true)
-                    .equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId)
-                    .findFirst();
+                RealmRoomMessage realmRoomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findFirst();
                 if (realmRoomMessage != null) {
                     oldMessageId = realmRoomMessage.getMessageId();
                 }
@@ -7427,11 +7304,7 @@ public class FragmentChat extends BaseFragment
                         sort = Sort.ASCENDING;
                         isWaitingForHistoryDown = false;
                     }
-                    realmRoomMessages = getRealmChat().where(RealmRoomMessage.class)
-                        .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                        .notEqualTo(RealmRoomMessageFields.DELETED, true)
-                        .between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId)
-                        .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, sort);
+                    realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, sort);
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, getRealmChat());
 
                     if (realmRoomMessages.size() > 0) {

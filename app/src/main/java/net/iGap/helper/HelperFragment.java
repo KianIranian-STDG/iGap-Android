@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -142,6 +143,24 @@ public class HelperFragment {
 
     public void popBackStack() {
         G.fragmentActivity.getSupportFragmentManager().popBackStack();
+    }
+
+    public static Fragment isFragmentVisible(String fragmentTag) {
+        FragmentChat fragment = (FragmentChat) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(fragmentTag);
+        if (fragment != null && fragment.isVisible()) {
+            return fragment;
+        }
+        return null;
+    }
+
+    public static Fragment isFragmentVisible(ArrayList<String> fragmentTags) {
+        for (String fragmentTag : fragmentTags) {
+            FragmentChat fragment = (FragmentChat) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(fragmentTag);
+            if (fragment != null && fragment.isVisible()) {
+                return fragment;
+            }
+        }
+        return null;
     }
 
     private boolean isChatFragment(String fragmentClassName) {
