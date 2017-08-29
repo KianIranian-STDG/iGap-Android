@@ -176,9 +176,7 @@ public class BaseFragment extends Fragment {
 
                 @Override
                 public void deny() {
-                    // G.fragmentManager.beginTransaction().remove(currentFragment).commit();
-
-                    HelperFragment.removeFreagment(currentFragment);
+                    removeFromBaseFragment();
                 }
             });
         } catch (IOException e) {
@@ -197,9 +195,15 @@ public class BaseFragment extends Fragment {
         }
     }
 
-    public void closeFragment() {
-        //  fragmentActivity.getSupportFragmentManager().popBackStack();
+    public void popBackStackFragment() {
+        fragmentActivity.getSupportFragmentManager().popBackStack();
+    }
 
-        HelperFragment.removeFreagment(currentFragment);
+    public void removeFromBaseFragment() {
+        new HelperFragment(currentFragment).remove();
+    }
+
+    public void removeFromBaseFragment(Fragment fragment) {
+        new HelperFragment(fragment).remove();
     }
 }

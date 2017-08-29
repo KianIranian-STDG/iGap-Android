@@ -142,9 +142,7 @@ public class MyInfoWindow extends InfoWindow {
                 HelperPublicMethod.goToChatRoom(false, userId, new HelperPublicMethod.OnComplete() {
                     @Override
                     public void complete() {
-                        //   mActivity.getSupportFragmentManager().beginTransaction().remove(fragmentiGapMap).commit();
-
-                        HelperFragment.removeFreagment(fragmentiGapMap);
+                        new HelperFragment(fragmentiGapMap).remove();
                     }
                 }, null);
             }

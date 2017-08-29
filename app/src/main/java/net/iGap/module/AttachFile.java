@@ -445,7 +445,7 @@ public class AttachFile {
                 bundle.putSerializable("Listener", (Serializable) listener);
                 fragment.setArguments(bundle);
 
-                HelperFragment.loadFragment(fragment);
+                new HelperFragment(fragment).load();
 
                 if (G.onHelperSetAction != null) {
                     G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_FILE);
@@ -477,7 +477,7 @@ public class AttachFile {
                 bundle.putString("Mode", "documnet");
                 fragment.setArguments(bundle);
 
-                HelperFragment.loadFragment(fragment);
+                new HelperFragment(fragment).load();
             }
 
             @Override

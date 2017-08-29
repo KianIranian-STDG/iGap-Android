@@ -82,7 +82,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
             public void onClick(View v) {
                 //  mActivity.getSupportFragmentManager().popBackStack();
 
-                closeFragment();
+                popBackStackFragment();
 
                 closeKeyboard(v);
             }
@@ -116,7 +116,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                 closeKeyboard(v);
                 //mActivity.getSupportFragmentManager().popBackStack();
 
-                closeFragment();
+                popBackStackFragment();
 
                 edtSetRePassword.setText("");
                 edtSetHintPassword.setText("");
@@ -222,7 +222,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                         closeKeyboard(v);
 
                         //mActivity.getSupportFragmentManager().popBackStack();
-                        closeFragment();
+                        popBackStackFragment();
 
                         edtSetPassword.setText("");
                         edtSetRePassword.setText("");
@@ -269,7 +269,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                     public void run() {
 
                         //mActivity.getSupportFragmentManager().popBackStack();
-                        closeFragment();
+                        popBackStackFragment();
 
                         edtSetRePassword.setText("");
                         edtSetHintPassword.setText("");

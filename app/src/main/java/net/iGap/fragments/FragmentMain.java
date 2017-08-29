@@ -41,7 +41,6 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperClientCondition;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnComplete;
@@ -914,12 +913,11 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                                 if (G.twoPaneMode) {
                                     Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
                                     if (fragment != null) {
-                                        HelperFragment.removeFreagment(fragment);
+                                        removeFromBaseFragment(fragment);
                                     }
                                 }
 
                                 new GoToChatActivity(mInfo.getId()).setFromCall(((ActivityMain) getActivity()).fromCall).startActivity();
-
 
                                 if (((ActivityMain) mActivity).arcMenu != null && ((ActivityMain) mActivity).arcMenu.isMenuOpened()) {
                                     ((ActivityMain) mActivity).arcMenu.toggleMenu();

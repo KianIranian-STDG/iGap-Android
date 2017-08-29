@@ -54,7 +54,7 @@ import net.iGap.request.RequestClientGetRoom;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
-public class FragmentCreateChannel extends Fragment implements OnChannelCheckUsername {
+public class FragmentCreateChannel extends BaseFragment implements OnChannelCheckUsername {
 
     private Long roomId;
     private String inviteLink;
@@ -108,9 +108,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
         TextView txtBack = (TextView) view.findViewById(R.id.fch_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
-
-                HelperFragment.removeFreagment(FragmentCreateChannel.this);
+                removeFromBaseFragment(FragmentCreateChannel.this);
             }
         });
 
@@ -119,7 +117,7 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
             @Override public void onClick(View view) {
                 //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
 
-                HelperFragment.removeFreagment(FragmentCreateChannel.this);
+                removeFromBaseFragment(FragmentCreateChannel.this);
             }
         });
 
@@ -310,19 +308,8 @@ public class FragmentCreateChannel extends Fragment implements OnChannelCheckUse
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);
 
-                                //mActivity.getSupportFragmentManager()
-                                //    .beginTransaction()
-                                //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                //    .replace(fragmentContainer, fragment, "contactGroup_fragment")
-                                //    .commitAllowingStateLoss();
-
-                                HelperFragment.loadFragment(fragment, true);
-
-                                //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
-
-                                HelperFragment.removeFreagment(FragmentCreateChannel.this);
-
-                                //ActivityMain.mLeftDrawerLayout.closeDrawer();
+                                new HelperFragment(fragment).setStateLoss(true).load();
+                                removeFromBaseFragment(FragmentCreateChannel.this);
                             }
                         });
                     }

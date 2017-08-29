@@ -798,10 +798,7 @@ public class HelperUrl {
                 bundle.putLong("RoomId", Roomid);
                 bundle.putString("enterFrom", GROUP.toString());
                 contactsProfile.setArguments(bundle);
-
-                HelperFragment.loadFragment(contactsProfile);
-
-
+                new HelperFragment(contactsProfile).load();
                 break;
         }
     }

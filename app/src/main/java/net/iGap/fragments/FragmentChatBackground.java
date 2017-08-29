@@ -83,7 +83,7 @@ public class FragmentChatBackground extends BaseFragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                closeFragment();
+                popBackStackFragment();
             }
         });
 
@@ -109,7 +109,7 @@ public class FragmentChatBackground extends BaseFragment {
                 editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
                 editor.apply();
 
-                closeFragment();
+                popBackStackFragment();
             }
         });
 
@@ -122,7 +122,7 @@ public class FragmentChatBackground extends BaseFragment {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, savePath);
                     editor.apply();
-                    closeFragment();
+                    popBackStackFragment();
                 }
             }
         });

@@ -89,7 +89,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 //finish();
                 // mActivity.getSupportFragmentManager().popBackStack();
 
-                closeFragment();
+                popBackStackFragment();
             }
         });
 
@@ -1054,10 +1054,8 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         editor.apply();
                         Toast.makeText(mActivity, getResources().getString(R.string.st_reset_all_notification), Toast.LENGTH_SHORT).show();
 
-                        HelperFragment.removeFreagment(FragmentNotificationAndSound.this);
-
-                        HelperFragment.loadFragment(new FragmentNotificationAndSound());
-
+                        removeFromBaseFragment(FragmentNotificationAndSound.this);
+                        new HelperFragment(new FragmentNotificationAndSound()).load();
 
                     }
                 }).show();

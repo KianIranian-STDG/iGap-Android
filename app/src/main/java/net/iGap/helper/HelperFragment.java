@@ -11,48 +11,202 @@ import net.iGap.fragments.FragmentChat;
 
 public class HelperFragment {
 
-    public static String chatName = FragmentChat.class.getName();
+    private Fragment fragment;
+    private boolean addToBackStack = true;
+    private boolean animated = true;
+    private boolean replace = true;
+    private boolean stateLoss;
+    private boolean hasCustomAnimation;
+    private String tag;
+    private int resourceContainer = 0;
+    private int enter;
+    private int exit;
+    private int popEnter;
+    private int popExit;
 
-    static class StructFrag {
-        String tag = null;
-        Fragment fragment;
+    private static String chatName = FragmentChat.class.getName();
+
+    public HelperFragment() {
     }
 
-    //*****************************************************************************************************************
-
-    public static void loadFragment(Fragment fragment) {
-
-        loadFragment(fragment, false);
+    public HelperFragment(Fragment fragment) {
+        this.fragment = fragment;
     }
 
-    public static void loadFragment(Fragment fragment, boolean stateLoose) {
+    public HelperFragment setFragment(Fragment fragment) {
+        this.fragment = fragment;
+        return this;
+    }
 
+    public HelperFragment setAddToBackStack(boolean addToBackStack) {
+        this.addToBackStack = addToBackStack;
+        return this;
+    }
+
+    public HelperFragment setAnimated(boolean animated) {
+        this.animated = animated;
+        return this;
+    }
+
+    public HelperFragment setReplace(boolean replace) {
+        this.replace = replace;
+        return this;
+    }
+
+    public HelperFragment setStateLoss(boolean stateLoss) {
+        this.stateLoss = stateLoss;
+        return this;
+    }
+
+    public HelperFragment setTag(String tag) {
+        this.tag = tag;
+        return this;
+    }
+
+    public HelperFragment setResourceContainer(int resourceContainer) {
+        this.resourceContainer = resourceContainer;
+        return this;
+    }
+
+    public HelperFragment setAnimation(int enter, int exit, int popEnter, int popExit) {
+        hasCustomAnimation = true;
+        this.enter = enter;
+        this.exit = exit;
+        this.popEnter = popEnter;
+        this.popExit = popExit;
+        return this;
+    }
+
+    public void load() {
         if (fragment == null) {
             return;
         }
-
         if (G.fragmentManager == null) {
-
-            HelperLog.setErrorLog("helper fragment    loadFragment     " + fragment.getClass().getName());
+            HelperLog.setErrorLog("helper fragment loadFragment -> " + fragment.getClass().getName());
             return;
         }
 
+        if (tag == null) {
+            tag = fragment.getClass().getName();
+        }
 
-        String tag = fragment.getClass().getName();
+        if (resourceContainer == 0) {
+            resourceContainer = getResContainer(tag);
+        }
 
-        int resId = getResContainer(tag);
+        FragmentTransaction fragmentTransaction = G.fragmentManager.beginTransaction();
 
-        FragmentTransaction ft = G.fragmentManager.beginTransaction();
+        if (addToBackStack) {
+            fragmentTransaction.addToBackStack(tag);
+        }
 
-        ft.addToBackStack(tag).add(resId, fragment, tag).
-            setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
+        if (animated) {
+            if (hasCustomAnimation) {
+                fragmentTransaction.setCustomAnimations(enter, exit, popEnter, popExit);
+            } else {
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
+            }
+        }
 
-        if (stateLoose) {
-            ft.commitAllowingStateLoss();
+        if (replace) {
+            fragmentTransaction.replace(resourceContainer, fragment, tag);
         } else {
-            ft.commit();
+            fragmentTransaction.add(resourceContainer, fragment, tag);
+        }
+
+        if (stateLoss) {
+            fragmentTransaction.commitAllowingStateLoss();
+        } else {
+            fragmentTransaction.commit();
         }
     }
+
+    public void remove() {
+        if (fragment == null) {
+            return;
+        }
+        G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        G.fragmentActivity.getSupportFragmentManager().popBackStack();
+        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
+    }
+
+    public void removeAll() {
+        for (Fragment f : G.fragmentActivity.getSupportFragmentManager().getFragments()) {
+            if (f != null) {
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(f).commit();
+            }
+        }
+        G.fragmentActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
+    }
+
+    public void popBackStack() {
+        G.fragmentActivity.getSupportFragmentManager().popBackStack();
+    }
+
+    private boolean isChatFragment(String fragmentClassName) {
+
+        if (fragmentClassName.equals(chatName)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private int getResContainer(String fragmentClassName) {
+
+        if (fragmentClassName == null || fragmentClassName.length() == 0) {
+            return 0;
+        }
+
+        int resId = 0;
+
+        if (G.twoPaneMode) {
+
+            if (isChatFragment(fragmentClassName)) {
+
+                resId = R.id.am_frame_chat_container;
+                ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.show);
+
+            } else {
+
+                resId = R.id.am_frame_fragment_container;
+
+                if (ActivityMain.frameFragmentBack != null) {
+                    ActivityMain.frameFragmentBack.setVisibility(View.VISIBLE);
+                }
+            }
+        } else {
+            resId = R.id.am_frame_main_container;
+        }
+
+        return resId;
+    }
+
+    //public static void removeAllFragment() {
+    //
+    //    for (Fragment f : G.fragmentManager.getFragments()) {
+    //        if (f != null) {
+    //            G.fragmentManager.beginTransaction().remove(f).commit();
+    //        }
+    //    }
+    //
+    //    G.fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    //
+    //    ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
+    //}
+    //
+    //public static void removeFreagment(Fragment fragment) {
+    //
+    //    if (G.fragmentManager == null || fragment == null) {
+    //        return;
+    //    }
+    //
+    //    G.fragmentManager.beginTransaction().remove(fragment).commit();
+    //    G.fragmentManager.popBackStack();
+    //
+    //    ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
+    //}
 
     //*****************************************************************************************************************
 
@@ -95,68 +249,4 @@ public class HelperFragment {
     //        }
     //    }
     //}
-
-    public static int getResContainer(String fragmentClassName) {
-
-        if (fragmentClassName == null || fragmentClassName.length() == 0) {
-            return 0;
-        }
-
-        int resId = 0;
-
-        if (G.twoPaneMode) {
-
-            if (isChatFragment(fragmentClassName)) {
-
-                resId = R.id.am_frame_chat_container;
-                ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.show);
-
-            } else {
-
-                resId = R.id.am_frame_fragment_container;
-
-                if (ActivityMain.frameFragmentBack != null) {
-                    ActivityMain.frameFragmentBack.setVisibility(View.VISIBLE);
-                }
-            }
-        } else {
-            resId = R.id.am_frame_main_container;
-        }
-
-        return resId;
-    }
-
-    public static void removeAllFragment() {
-
-        for (Fragment f : G.fragmentManager.getFragments()) {
-            if (f != null) {
-                G.fragmentManager.beginTransaction().remove(f).commit();
-            }
-        }
-
-        G.fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
-    }
-
-    private static boolean isChatFragment(String fragmentClassName) {
-
-        if (fragmentClassName.equals(chatName)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static void removeFreagment(Fragment fragment) {
-
-        if (G.fragmentManager == null || fragment == null) {
-            return;
-        }
-
-        G.fragmentManager.beginTransaction().remove(fragment).commit();
-        G.fragmentManager.popBackStack();
-
-        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
-    }
 }

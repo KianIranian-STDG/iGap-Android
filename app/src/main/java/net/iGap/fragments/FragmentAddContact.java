@@ -47,7 +47,7 @@ import net.iGap.request.RequestUserContactImport;
 
 import static net.iGap.G.context;
 
-public class FragmentAddContact extends android.support.v4.app.Fragment {
+public class FragmentAddContact extends BaseFragment {
 
     private EditText edtFirstName;
     private EditText edtLastName;
@@ -111,15 +111,8 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
         txtChooseCountry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //FragmentChooseCountry fragmentChooseCountry = new FragmentChooseCountry();
-                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer, fragmentChooseCountry, null).commit();
-
-                HelperFragment.loadFragment(new FragmentChooseCountry());
-
+                new HelperFragment(new FragmentChooseCountry()).load();
                 closeKeyboard(v);
-
             }
         });
 
@@ -278,13 +271,9 @@ public class FragmentAddContact extends android.support.v4.app.Fragment {
     }
 
     private void changePage(View view) {
-
         InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-        //  mActivity.getSupportFragmentManager().popBackStack();
-
-        HelperFragment.removeFreagment(FragmentAddContact.this);
+        removeFromBaseFragment(FragmentAddContact.this);
     }
 
     /**

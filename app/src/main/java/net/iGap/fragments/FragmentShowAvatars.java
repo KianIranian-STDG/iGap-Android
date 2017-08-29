@@ -135,9 +135,7 @@ public class FragmentShowAvatars extends BaseFragment {
         if (getIntentData(this.getArguments())) {
             initComponent(view);
         } else {
-            //   mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
-
-            closeFragment();
+            popBackStackFragment();
         }
     }
 
@@ -355,7 +353,7 @@ public class FragmentShowAvatars extends BaseFragment {
                         } else {
                             //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
 
-                            closeFragment();
+                            popBackStackFragment();
                         }
                     }
                 }

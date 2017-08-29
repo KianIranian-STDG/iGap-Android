@@ -477,9 +477,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                             fragmentCreateChannel.setArguments(bundle);
 
                             mActivity.onBackPressed();
-                            HelperFragment.loadFragment(fragmentCreateChannel, true);
-
-                            // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+                            new HelperFragment(fragmentCreateChannel).setStateLoss(true).load();
                         }
                     }
                 });
@@ -657,10 +655,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
                                     fragment.setArguments(bundle);
 
                                     mActivity.onBackPressed();
-                                    HelperFragment.loadFragment(fragment, true);
-
-                                    //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
-                                    //ActivityMain.mLeftDrawerLayout.closeDrawer();
+                                    new HelperFragment(fragment).setStateLoss(true).load();
                                 }
                             }
                         });
@@ -777,9 +772,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         fragment.setArguments(bundle);
 
         mActivity.onBackPressed();
-        HelperFragment.loadFragment(fragment, true);
-
-        // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+        new HelperFragment(fragment).setStateLoss(true).load();
     }
 
     private void startChannelRoom(long roomId) {
@@ -792,9 +785,7 @@ public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse,
         fragmentCreateChannel.setArguments(bundle);
 
         mActivity.onBackPressed();
-        HelperFragment.loadFragment(fragmentCreateChannel, true);
-
-        // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentNewGroup.this).commit();
+        new HelperFragment(fragmentCreateChannel).setStateLoss(true).load();
     }
 
     //=======================result for picture

@@ -220,7 +220,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         //channel info
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getChannelRoom() == null) {
-            closeFragment();
+            popBackStackFragment();
             return;
         }
         RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
@@ -343,7 +343,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                closeFragment();
+                popBackStackFragment();
             }
         });
         appBarLayout = (AppBarLayout) view.findViewById(R.id.pch_appbar);
@@ -394,19 +394,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         imgCircleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //+Realm realm = Realm.getDefaultInstance();
                 if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
-
-
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
                     fragment.appBarLayout = fab;
-
-                    //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                    //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, null).commit();
-
-                    HelperFragment.loadFragment(fragment);
+                    new HelperFragment(fragment).setReplace(false).load();
                 }
-                //realm.close();
             }
         });
 
@@ -415,7 +407,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         lytSharedMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HelperFragment.loadFragment(FragmentShearedMedia.newInstance(roomId));
+                new HelperFragment(FragmentShearedMedia.newInstance(roomId)).load();
             }
         });
 
@@ -650,6 +642,15 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        FragmentChat fragment = (FragmentChat) getFragmentManager().findFragmentByTag(FragmentChat.class.getSimpleName());
+        if (fragment != null && fragment.isVisible()) {
+            fragment.onResume();
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mActivity = (FragmentActivity) context;
@@ -829,12 +830,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
     private void showListForCustomRole(String SelectedRole) {
         FragmentShowMember fragment = FragmentShowMember.newInstance1(this.fragment, roomId, role.toString(), G.userId, SelectedRole, isNeedGetMemberList);
-
-        //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack("null").setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-        //    R.anim.slide_in_right, R.anim.slide_out_left).replace(R.id.fragmentContainer_channel_profile, fragment, "Show_member").commit();
-
-        HelperFragment.loadFragment(fragment);
-
+        new HelperFragment(fragment).load();
         isNeedGetMemberList = false;
     }
 
@@ -881,10 +877,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
 
-        //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
-        //    R.anim.slide_out_left).addToBackStack(null).replace(R.id.coordinator, fragment).commit();
-
-        HelperFragment.loadFragment(fragment);
+        new HelperFragment(fragment).load();
     }
 
     //****** create popup
@@ -1842,10 +1835,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         bundle.putLong("ID", roomId);
         fragmentNotification.setArguments(bundle);
 
-        //mActivity.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right,
-        //    R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer_channel_profile, fragmentNotification).commit();
-
-        HelperFragment.loadFragment(fragmentNotification);
+        new HelperFragment(fragmentNotification).load();
     }
 
     //*** onActivityResult

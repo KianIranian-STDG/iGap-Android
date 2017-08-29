@@ -167,6 +167,6 @@ public class FragmentRatingBar extends BaseFragment {
 
     private void closeDialog() {
         ratingBar.setIsIndicator(true);
-        closeFragment();
+        popBackStackFragment();
     }
 }

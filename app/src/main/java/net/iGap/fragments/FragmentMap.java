@@ -120,7 +120,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
     private void close() {
         //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentMap.this).commit();
 
-        closeFragment();
+        popBackStackFragment();
     }
 
     private void initComponent(View view) {

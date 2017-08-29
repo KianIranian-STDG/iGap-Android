@@ -167,7 +167,7 @@ public class FragmentNotification extends BaseFragment {
                 try {
                     //  mActivity.getSupportFragmentManager().popBackStack();
 
-                    closeFragment();
+                    popBackStackFragment();
 
                 } catch (IllegalStateException e) {
                     e.printStackTrace();

@@ -1021,11 +1021,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                                 Bundle bundle = new Bundle();
                                 bundle.putString("PHONE", phoneName);
                                 fragmentDeleteAccount.setArguments(bundle);
-                                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right,
-                                //    R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent,
-                                //    fragmentDeleteAccount, null).commit();
-
-                                HelperFragment.loadFragment(fragmentDeleteAccount);
+                                new HelperFragment(fragmentDeleteAccount).setReplace(false).load();
                             }
                         });
 
@@ -1094,11 +1090,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).count() > 0) {
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
                     fragment.appBarLayout = fab;
-
-                    //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                    //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragment, null).commit();
-
-                    HelperFragment.loadFragment(fragment);
+                    new HelperFragment(fragment).setReplace(false).load();
                 }
             }
         });
@@ -1123,13 +1115,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         ltLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //FragmentLanguage fragmentLanguage = new FragmentLanguage();
-                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left
-                //    , R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentLanguage, null).commit();
-
-                HelperFragment.loadFragment(new FragmentLanguage());
-
+                new HelperFragment(new FragmentLanguage()).setReplace(false).load();
             }
         });
 
@@ -1346,12 +1332,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         txtPrivacySecurity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentPrivacyAndSecurity fragmentPrivacyAndSecurity = new FragmentPrivacyAndSecurity();
-
-                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.st_layoutParent, fragmentPrivacyAndSecurity, null).commit();
-
-                HelperFragment.loadFragment(fragmentPrivacyAndSecurity);
+                new HelperFragment(new FragmentPrivacyAndSecurity()).setReplace(false).load();
             }
         });
 
@@ -1484,18 +1465,14 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             }
         });
 
-         /*
-          open page chat background
+        /**
+         * open page chat background
          */
         TextView txtChatBackground = (TextView) view.findViewById(R.id.st_txt_chatBackground);
         txtChatBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.st_layoutParent, FragmentChatBackground.newInstance()).commit();
-
-                HelperFragment.loadFragment(FragmentChatBackground.newInstance());
+                new HelperFragment(FragmentChatBackground.newInstance()).setReplace(false).load();
             }
         });
 
@@ -1668,14 +1645,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         txtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //startActivity(new Intent(mActivity, ActivitySettingNotification.class));
-
-                //FragmentNotificationAndSound fragmentNotificationAndSound = new FragmentNotificationAndSound();
-                //mActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.slide_in_right,
-                //    R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).add(R.id.st_layoutParent, fragmentNotificationAndSound).commit();
-
-                HelperFragment.loadFragment(new FragmentNotificationAndSound());
+                new HelperFragment(new FragmentNotificationAndSound()).setReplace(false).load();
 
             }
         });

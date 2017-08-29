@@ -234,7 +234,7 @@ public class FragmentIgapSearch extends BaseFragment {
 
                 //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIgapSearch.this).commit();
 
-                closeFragment();
+                popBackStackFragment();
 
                 return false;
             }
