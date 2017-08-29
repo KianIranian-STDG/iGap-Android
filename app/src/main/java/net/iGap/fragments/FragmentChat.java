@@ -4287,12 +4287,14 @@ public class FragmentChat extends BaseFragment
      * open profile for this room or user profile if room is chat
      */
     private void goToProfile() {
+        ActivityMain.lockNavigation();
         if (chatType == CHAT) {
             new HelperFragment(FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString())).setReplace(false).load();
         } else if (chatType == GROUP) {
 
             if (!isChatReadOnly) {
                 new HelperFragment(FragmentGroupProfile.newInstance(mRoomId)).setReplace(false).load();
+
             }
         } else if (chatType == CHANNEL) {
             new HelperFragment(FragmentChannelProfile.newInstance(mRoomId)).setReplace(false).load();

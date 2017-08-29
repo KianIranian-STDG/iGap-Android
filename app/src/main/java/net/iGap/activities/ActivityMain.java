@@ -1259,6 +1259,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     e.printStackTrace();
                 }
                 closeDrawer();
+                lockNavigation();
             }
         });
         ViewGroup itemQrCode = (ViewGroup) findViewById(R.id.lm_ll_qrCode);
@@ -1280,6 +1281,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     e.printStackTrace();
                 }
 
+                lockNavigation();
                 closeDrawer();
             }
         });
@@ -2374,7 +2376,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void run() {
                 if (G.twoPaneMode) {
-
+                    Log.i("CCCCCCCCCCCCCC", "8 desighnLayout: ");
                     if (frameFragmentContainer.getChildCount() == 0) {
                         frameFragmentBack.setVisibility(View.GONE);
                     }
@@ -2382,21 +2384,26 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     if (G.isLandscape) {
                         setWeight(frameChatContainer, 1);
                         setWeight(frameMainContainer, 1);
+                        openNavigation();
                     } else {
 
                         if (mode == chatLayoutMode.show) {
                             setWeight(frameChatContainer, 1);
                             setWeight(frameMainContainer, 0);
+                            lockNavigation();
                         } else if (mode == chatLayoutMode.hide) {
                             setWeight(frameChatContainer, 0);
                             setWeight(frameMainContainer, 1);
+                            openNavigation();
                         } else {
                             if (frameChatContainer.getChildCount() > 0) {
                                 setWeight(frameChatContainer, 1);
                                 setWeight(frameMainContainer, 0);
+                                lockNavigation();
                             } else {
                                 setWeight(frameChatContainer, 0);
                                 setWeight(frameMainContainer, 1);
+                                openNavigation();
                             }
                         }
                     }
