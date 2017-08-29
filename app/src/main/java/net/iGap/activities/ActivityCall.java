@@ -140,11 +140,14 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     @Override
     public void onBackPressed() throws IllegalStateException {
-        super.onBackPressed();
+        //super.onBackPressed();
+        //
+        //if (!isSendLeave) {
+        //    new WebRTC().leaveCall();
+        //}
 
-        if (!isSendLeave) {
-            new WebRTC().leaveCall();
-        }
+        startActivity(new Intent(ActivityCall.this, ActivityMain.class));
+
     }
 
     @Override

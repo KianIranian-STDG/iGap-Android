@@ -708,7 +708,7 @@ public class FragmentChat extends BaseFragment
             backGroundSeenList.clear();
         }
 
-        if (ActivityCall.isConnected) {
+        if (G.isInCall) {
             rootView.findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
 
             ActivityCall.txtTimeChat = (TextView) rootView.findViewById(R.id.cslcs_txt_timer);

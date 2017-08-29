@@ -1949,7 +1949,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             AppUtils.setProgresColler(contentLoading);
         }
 
-        if (ActivityCall.isConnected) {
+        if (G.isInCall) {
             findViewById(R.id.am_ll_strip_call).setVisibility(View.VISIBLE);
 
             ActivityCall.txtTimerMain = (TextView) findViewById(R.id.cslcs_txt_timer);
@@ -2481,7 +2481,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void run() {
 
-                if (ActivityCall.isConnected) {
+                if (G.isInCall) {
 
                     if (ActivityCall.stripLayoutChat != null) {
                         ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
